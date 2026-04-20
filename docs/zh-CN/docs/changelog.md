@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-20
+
+### CLI v0.17.1
+
+- **`completion` 命令** — 支持 bash、zsh、fish、elvish、powershell 的 Tab 补全
+- 所有 API 请求统一设置 `User-Agent: longbridge-cli/<version>` 并新增 `x-cli-cmd` 请求头
+
 ## 2026-04-17
 
 ### CLI v0.17.0

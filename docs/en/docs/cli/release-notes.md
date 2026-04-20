@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.17.1](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.1)
+
+- **`completion` command** — generate shell tab-completion scripts for bash, zsh, fish, elvish, and powershell; redirect stdout to the appropriate file then reload your shell to activate (e.g. `longbridge completion zsh > ~/.zfunc/_longbridge`)
+- Sets `User-Agent: longbridge-cli/<version>` on all HTTP and WebSocket requests
+- Adds `x-cli-cmd` request header identifying the active subcommand on every API call
+
 ### [v0.17.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.0)
 
 - **`dca` command** — recurring investment plans: create, update, pause, resume, stop, view trade history, stats summary, check symbol eligibility, and calculate next trade date; HK/SG accounts must agree to Terms and Conditions before creating a plan (`--agree-terms` to skip the interactive prompt)

@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.17.1](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.1)
+
+- **`completion` 命令** — 生成 bash、zsh、fish、elvish、powershell 的 Tab 补全脚本；将输出重定向到对应文件并重载 shell 即可启用（如 `longbridge completion zsh > ~/.zfunc/_longbridge`）
+- 所有 HTTP 及 WebSocket 请求统一设置 `User-Agent: longbridge-cli/<version>`
+- 每次 API 调用新增 `x-cli-cmd` 请求头，标识当前执行的子命令
+
 ### [v0.17.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.0)
 
 - **`dca` 命令** — 定投完整生命周期管理：创建、更新、暂停、恢复、停止、查看交易历史、统计概览、检查标的是否支持定投、计算下次交易日；港股及新加坡账户创建计划前须同意条款与条件（`--agree-terms` 可跳过交互提示）

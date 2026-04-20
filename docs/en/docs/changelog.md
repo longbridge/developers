@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-20
+
+### CLI v0.17.1
+
+- **`completion` command** — shell tab-completion for bash, zsh, fish, elvish, and powershell
+- Sets `User-Agent: longbridge-cli/<version>` and adds `x-cli-cmd` header on all API requests
+
 ## 2026-04-17
 
 ### CLI v0.17.0
