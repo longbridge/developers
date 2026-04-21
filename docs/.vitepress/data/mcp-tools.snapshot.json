@@ -1,0 +1,2522 @@
+{
+    "tools": [
+        {
+            "description": "Get account cash balance and asset summary",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "account_balance"
+        },
+        {
+            "description": "Get A/H share premium historical K-line data",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of K-lines to return (default: 100)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "period": {
+                        "description": "K-line period: \"1m\", \"5m\", \"15m\", \"30m\", \"60m\", \"day\" (default), \"week\", \"month\", \"year\"",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "AhPremiumParam",
+                "type": "object"
+            },
+            "name": "ah_premium"
+        },
+        {
+            "description": "Get A/H share premium intraday time-share data",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "ah_premium_intraday"
+        },
+        {
+            "description": "Add a price alert. condition: price_rise/price_fall/percent_rise/percent_fall",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "condition": {
+                        "description": "Alert condition: \"price_rise\", \"price_fall\", \"percent_rise\", \"percent_fall\"",
+                        "type": "string"
+                    },
+                    "frequency": {
+                        "description": "Alert frequency: \"once\" (trigger once then disable), \"daily\" (once per day), \"every\" (alert every time condition is met)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "price": {
+                        "description": "Threshold price or percentage value",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "condition",
+                    "price"
+                ],
+                "title": "AlertAddParam",
+                "type": "object"
+            },
+            "name": "alert_add"
+        },
+        {
+            "description": "Delete a price alert by alert_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "alert_id": {
+                        "description": "Alert indicator id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "alert_id"
+                ],
+                "title": "AlertIdParam",
+                "type": "object"
+            },
+            "name": "alert_delete"
+        },
+        {
+            "description": "Disable a price alert by alert_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "alert_id": {
+                        "description": "Alert indicator id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "alert_id"
+                ],
+                "title": "AlertIdParam",
+                "type": "object"
+            },
+            "name": "alert_disable"
+        },
+        {
+            "description": "Enable a price alert by alert_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "alert_id": {
+                        "description": "Alert indicator id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "alert_id"
+                ],
+                "title": "AlertIdParam",
+                "type": "object"
+            },
+            "name": "alert_enable"
+        },
+        {
+            "description": "Get all configured price alerts",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "alert_list"
+        },
+        {
+            "description": "Get market anomaly alerts (unusual price/volume changes)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "market": {
+                        "description": "Market code: HK, US, CN, SG",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "market"
+                ],
+                "title": "MarketParam",
+                "type": "object"
+            },
+            "name": "anomaly"
+        },
+        {
+            "description": "Get top broker holding data for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "period": {
+                        "description": "Period: \"rct_1\" (1 day, default), \"rct_5\" (5 days), \"rct_20\" (20 days), \"rct_60\" (60 days)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "BrokerHoldingParam",
+                "type": "object"
+            },
+            "name": "broker_holding"
+        },
+        {
+            "description": "Get daily holding history for a specific broker",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "broker_id": {
+                        "description": "Broker participant number",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "broker_id"
+                ],
+                "title": "BrokerHoldingDailyParam",
+                "type": "object"
+            },
+            "name": "broker_holding_daily"
+        },
+        {
+            "description": "Get full broker holding detail list",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "broker_holding_detail"
+        },
+        {
+            "description": "Get broker queue data",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "brokers"
+        },
+        {
+            "description": "Calculate financial indexes (PE, PB, dividend ratio, etc.) for symbols",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "indexes": {
+                        "description": "Calc indexes: LastDone, ChangeValue, ChangeRate, Volume, Turnover, YtdChangeRate, TurnoverRate, TotalMarketValue, CapitalFlow, Amplitude, VolumeRatio, PeTtmRatio, PbRatio, DividendRatioTtm, FiveDayChangeRate, TenDayChangeRate, HalfYearChangeRate, FiveMinutesChangeRate, ExpiryDate, StrikePrice, UpperStrikePrice, LowerStrikePrice, OutstandingQty, OutstandingRatio, Premium, ItmOtm, ImpliedVolatility, WarrantDelta, CallPrice, ToCallPrice, EffectiveLeverage, LeverageRatio, ConversionRatio, BalancePoint, OpenInterest, Delta, Gamma, Theta, Vega, Rho",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"700.HK\", \"AAPL.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "symbols",
+                    "indexes"
+                ],
+                "title": "CalcIndexesParam",
+                "type": "object"
+            },
+            "name": "calc_indexes"
+        },
+        {
+            "description": "Cancel an open order by order_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "order_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "order_id"
+                ],
+                "title": "OrderIdParam",
+                "type": "object"
+            },
+            "name": "cancel_order"
+        },
+        {
+            "description": "Get candlestick data (OHLCV). period: 1m/5m/15m/30m/60m/day/week/month/year. trade_sessions: intraday/all",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of candlesticks (max 1000)",
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer"
+                    },
+                    "forward_adjust": {
+                        "description": "Whether to forward-adjust for splits/dividends",
+                        "type": "boolean"
+                    },
+                    "period": {
+                        "description": "Period: 1m, 5m, 15m, 30m, 60m, day, week, month, year",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "type": "string"
+                    },
+                    "trade_sessions": {
+                        "description": "Trade sessions: \"intraday\" (regular hours only) or \"all\" (include pre-market and post-market)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "period",
+                    "count",
+                    "forward_adjust",
+                    "trade_sessions"
+                ],
+                "title": "CandlesticksParam",
+                "type": "object"
+            },
+            "name": "candlesticks"
+        },
+        {
+            "description": "Get capital distribution (large/medium/small holder flows)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "capital_distribution"
+        },
+        {
+            "description": "Get capital inflow/outflow time series",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "capital_flow"
+        },
+        {
+            "description": "Get cash flow records (deposits, withdrawals, dividends)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end_at": {
+                        "description": "End time (RFC3339)",
+                        "type": "string"
+                    },
+                    "start_at": {
+                        "description": "Start time (RFC3339)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "start_at",
+                    "end_at"
+                ],
+                "title": "CashFlowParam",
+                "type": "object"
+            },
+            "name": "cash_flow"
+        },
+        {
+            "description": "Get company overview (name, CEO, employees, profile)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "company"
+        },
+        {
+            "description": "Get financial consensus estimates (revenue, EPS, net income)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "consensus"
+        },
+        {
+            "description": "Get constituent stocks of an index (e.g. HSI.HK)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Index symbol, e.g. \"HSI.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "IndexSymbolParam",
+                "type": "object"
+            },
+            "name": "constituent"
+        },
+        {
+            "description": "Get corporate actions (splits, buybacks, name changes)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "corp_action"
+        },
+        {
+            "description": "Create a new watchlist group with optional initial securities",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "name": {
+                        "description": "Group name",
+                        "type": "string"
+                    },
+                    "securities": {
+                        "description": "Securities to add, e.g. [\"700.HK\", \"AAPL.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "name"
+                ],
+                "title": "CreateWatchlistGroupParam",
+                "type": "object"
+            },
+            "name": "create_watchlist_group"
+        },
+        {
+            "description": "Check whether given symbols support DCA recurring investment",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbols": {
+                        "description": "Security symbols to check, e.g. [\"AAPL.US\", \"TSLA.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "symbols"
+                ],
+                "title": "DcaCheckParam",
+                "type": "object"
+            },
+            "name": "dca_check"
+        },
+        {
+            "description": "Create a DCA recurring investment plan. frequency: Daily/Weekly/Monthly. day_of_week (Weekly): Mon/Tue/Wed/Thu/Fri. day_of_month (Monthly): 1-28.",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "allow_margin": {
+                        "description": "Allow margin financing (default false)",
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    },
+                    "amount": {
+                        "description": "Amount to invest per cycle, e.g. \"100\"",
+                        "type": "string"
+                    },
+                    "day_of_month": {
+                        "description": "Day of month for Monthly frequency (1-28)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "day_of_week": {
+                        "description": "Day of week for Weekly frequency: Mon, Tue, Wed, Thu, Fri",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "frequency": {
+                        "description": "Investment frequency: Daily, Weekly, Monthly",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"AAPL.US\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "amount",
+                    "frequency"
+                ],
+                "title": "DcaCreateParam",
+                "type": "object"
+            },
+            "name": "dca_create"
+        },
+        {
+            "description": "Get execution history records for a DCA plan by plan_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "limit": {
+                        "description": "Records per page (default 20)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "page": {
+                        "description": "Page number (default 1)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "plan_id": {
+                        "description": "Plan ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "plan_id"
+                ],
+                "title": "DcaHistoryParam",
+                "type": "object"
+            },
+            "name": "dca_history"
+        },
+        {
+            "description": "List DCA recurring investment plans. Filter by status (Active/Suspended/Finished) or symbol.",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "limit": {
+                        "description": "Records per page (default 20)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "page": {
+                        "description": "Page number (default 1)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "status": {
+                        "description": "Filter by status: Active, Suspended, Finished. Omit to return all.",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Filter by symbol, e.g. \"AAPL.US\". Omit to return all plans.",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "DcaListParam",
+                "type": "object"
+            },
+            "name": "dca_list"
+        },
+        {
+            "description": "Pause (suspend) a DCA recurring investment plan by plan_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "plan_id": {
+                        "description": "Plan ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "plan_id"
+                ],
+                "title": "DcaPlanIdParam",
+                "type": "object"
+            },
+            "name": "dca_pause"
+        },
+        {
+            "description": "Resume a suspended DCA recurring investment plan by plan_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "plan_id": {
+                        "description": "Plan ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "plan_id"
+                ],
+                "title": "DcaPlanIdParam",
+                "type": "object"
+            },
+            "name": "dca_resume"
+        },
+        {
+            "description": "Get DCA investment statistics summary. Optionally filter by symbol.",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Filter by symbol, e.g. \"AAPL.US\". Omit to return stats for all plans.",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "DcaStatsParam",
+                "type": "object"
+            },
+            "name": "dca_stats"
+        },
+        {
+            "description": "Permanently stop a DCA recurring investment plan by plan_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "plan_id": {
+                        "description": "Plan ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "plan_id"
+                ],
+                "title": "DcaPlanIdParam",
+                "type": "object"
+            },
+            "name": "dca_stop"
+        },
+        {
+            "description": "Update an existing DCA recurring investment plan by plan_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "allow_margin": {
+                        "description": "Allow margin financing",
+                        "type": [
+                            "boolean",
+                            "null"
+                        ]
+                    },
+                    "amount": {
+                        "description": "New investment amount per cycle",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "day_of_month": {
+                        "description": "Day of month for Monthly frequency (1-28)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "day_of_week": {
+                        "description": "Day of week for Weekly frequency: Mon, Tue, Wed, Thu, Fri",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "frequency": {
+                        "description": "New investment frequency: Daily, Weekly, Monthly",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "plan_id": {
+                        "description": "Plan ID to update",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "plan_id"
+                ],
+                "title": "DcaUpdateParam",
+                "type": "object"
+            },
+            "name": "dca_update"
+        },
+        {
+            "description": "Delete a watchlist group by id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Watchlist group id",
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "purge": {
+                        "description": "Whether to also remove the securities from other groups",
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "id",
+                    "purge"
+                ],
+                "title": "DeleteWatchlistGroupParam",
+                "type": "object"
+            },
+            "name": "delete_watchlist_group"
+        },
+        {
+            "description": "Get order book depth (bid/ask levels)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "depth"
+        },
+        {
+            "description": "Get dividend history for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "dividend"
+        },
+        {
+            "description": "Get detailed dividend distribution scheme",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "dividend_detail"
+        },
+        {
+            "description": "Estimate maximum buy/sell quantity for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "order_type": {
+                        "description": "Order type: LO (Limit Order) / ELO (Enhanced Limit Order) / MO (Market Order) / AO (At-auction) / ALO (At-auction Limit Order)",
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "side": {
+                        "description": "Buy or Sell",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "side",
+                    "order_type"
+                ],
+                "title": "EstimateMaxQtyParam",
+                "type": "object"
+            },
+            "name": "estimate_max_purchase_quantity"
+        },
+        {
+            "description": "Get exchange rates for all supported currencies",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "exchange_rate"
+        },
+        {
+            "description": "Get company executive and board member information",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "executive"
+        },
+        {
+            "description": "Get regulatory filings (8-K, 10-Q, 10-K, etc.)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "filings"
+        },
+        {
+            "description": "Get finance calendar events. category: financial/report/dividend/ipo/macrodata/closed",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "category": {
+                        "description": "Event category:\n- \"financial\": earnings/financial results announcements\n- \"report\": scheduled financial report release dates\n- \"dividend\": dividend ex-dates and payment dates\n- \"ipo\": IPO listing dates\n- \"macrodata\": macroeconomic data releases (GDP, CPI, etc.)\n- \"closed\": market holiday / trading halt dates",
+                        "type": "string"
+                    },
+                    "end": {
+                        "description": "End date (yyyy-mm-dd)",
+                        "type": "string"
+                    },
+                    "market": {
+                        "description": "Market code: HK, US, CN, SG",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "start": {
+                        "description": "Start date (yyyy-mm-dd)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "start",
+                    "end",
+                    "category"
+                ],
+                "title": "FinanceCalendarParam",
+                "type": "object"
+            },
+            "name": "finance_calendar"
+        },
+        {
+            "description": "Get financial reports for a symbol. report_type: annual or quarterly",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "kind": {
+                        "description": "Statement kind: \"IS\" (income statement), \"BS\" (balance sheet), \"CF\" (cash flow), \"ALL\" (default)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "report_type": {
+                        "description": "Report period: \"af\" (annual), \"saf\" (semi-annual), \"q1\"/\"q2\"/\"q3\" (quarterly), \"qf\" (quarterly full)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"AAPL.US\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "FinancialReportParam",
+                "type": "object"
+            },
+            "name": "financial_report"
+        },
+        {
+            "description": "Get EPS forecast and analyst estimate history",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "forecast_eps"
+        },
+        {
+            "description": "Get funds and ETFs that hold a given symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "fund_holder"
+        },
+        {
+            "description": "Get current fund positions",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "fund_positions"
+        },
+        {
+            "description": "Get historical candlestick data by date range. period: 1m/5m/15m/30m/60m/day/week/month/year",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end": {
+                        "description": "End date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "forward_adjust": {
+                        "description": "Whether to forward-adjust for splits/dividends",
+                        "type": "boolean"
+                    },
+                    "period": {
+                        "description": "Period: 1m, 5m, 15m, 30m, 60m, day, week, month, year",
+                        "type": "string"
+                    },
+                    "start": {
+                        "description": "Start date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "type": "string"
+                    },
+                    "trade_sessions": {
+                        "description": "Trade sessions: \"intraday\" (regular hours only) or \"all\" (include pre-market and post-market)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "period",
+                    "forward_adjust",
+                    "trade_sessions"
+                ],
+                "title": "HistoryCandlesticksByDateParam",
+                "type": "object"
+            },
+            "name": "history_candlesticks_by_date"
+        },
+        {
+            "description": "Get historical candlestick data by offset from a reference time. period: 1m/5m/15m/30m/60m/day/week/month/year",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of candlesticks (max 1000)",
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer"
+                    },
+                    "forward": {
+                        "description": "Whether to query forward in time (true) or backward (false)",
+                        "type": "boolean"
+                    },
+                    "forward_adjust": {
+                        "description": "Whether to forward-adjust for splits/dividends",
+                        "type": "boolean"
+                    },
+                    "period": {
+                        "description": "Period: 1m, 5m, 15m, 30m, 60m, day, week, month, year",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "type": "string"
+                    },
+                    "time": {
+                        "description": "Reference datetime (yyyy-mm-ddTHH:MM:SS), omit to start from latest",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "trade_sessions": {
+                        "description": "Trade sessions: \"intraday\" (regular hours only) or \"all\" (include pre-market and post-market)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "period",
+                    "forward_adjust",
+                    "forward",
+                    "count",
+                    "trade_sessions"
+                ],
+                "title": "HistoryCandlesticksByOffsetParam",
+                "type": "object"
+            },
+            "name": "history_candlesticks_by_offset"
+        },
+        {
+            "description": "Get historical trade executions between dates",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end_at": {
+                        "description": "End time (RFC3339)",
+                        "type": "string"
+                    },
+                    "start_at": {
+                        "description": "Start time (RFC3339)",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "description": "Filter by symbol (optional)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "start_at",
+                    "end_at"
+                ],
+                "title": "HistoryOrdersParam",
+                "type": "object"
+            },
+            "name": "history_executions"
+        },
+        {
+            "description": "Get historical market temperature time series",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end": {
+                        "description": "End date (yyyy-mm-dd)",
+                        "type": "string"
+                    },
+                    "market": {
+                        "description": "Market code: HK, US, CN, SG",
+                        "type": "string"
+                    },
+                    "start": {
+                        "description": "Start date (yyyy-mm-dd)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "market",
+                    "start",
+                    "end"
+                ],
+                "title": "MarketDateRangeParam",
+                "type": "object"
+            },
+            "name": "history_market_temperature"
+        },
+        {
+            "description": "Get historical orders between dates (excludes today)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end_at": {
+                        "description": "End time (RFC3339)",
+                        "type": "string"
+                    },
+                    "start_at": {
+                        "description": "Start time (RFC3339)",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "description": "Filter by symbol (optional)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "start_at",
+                    "end_at"
+                ],
+                "title": "HistoryOrdersParam",
+                "type": "object"
+            },
+            "name": "history_orders"
+        },
+        {
+            "description": "Get industry valuation comparison for peers",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "industry_valuation"
+        },
+        {
+            "description": "Get industry PE/PB/PS valuation distribution",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "industry_valuation_dist"
+        },
+        {
+            "description": "Get institution rating summary with analyst consensus and target price",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "institution_rating"
+        },
+        {
+            "description": "Get detailed historical institution ratings and target price history",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "institution_rating_detail"
+        },
+        {
+            "description": "Get intraday minute-by-minute price/volume data",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "intraday"
+        },
+        {
+            "description": "Get investor relations events and announcements",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "invest_relation"
+        },
+        {
+            "description": "Get margin ratio (initial/maintenance/forced liquidation)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "margin_ratio"
+        },
+        {
+            "description": "Get current market trading status for all markets",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "market_status"
+        },
+        {
+            "description": "Get current market sentiment temperature (0-100)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "market": {
+                        "description": "Market code: HK, US, CN, SG",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "market"
+                ],
+                "title": "MarketParam",
+                "type": "object"
+            },
+            "name": "market_temperature"
+        },
+        {
+            "description": "Get latest news articles for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "news"
+        },
+        {
+            "description": "Get current UTC time",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "now"
+        },
+        {
+            "description": "Get company operating metrics",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "operating"
+        },
+        {
+            "description": "Get option chain expiry dates for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "option_chain_expiry_date_list"
+        },
+        {
+            "description": "Get option chain strike prices and Greeks for an expiry date",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "date": {
+                        "description": "Date (yyyy-mm-dd)",
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "date"
+                ],
+                "title": "SymbolDateParam",
+                "type": "object"
+            },
+            "name": "option_chain_info_by_date"
+        },
+        {
+            "description": "Get option quotes (max 500 symbols)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"700.HK\", \"AAPL.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "symbols"
+                ],
+                "title": "SymbolsParam",
+                "type": "object"
+            },
+            "name": "option_quote"
+        },
+        {
+            "description": "Get real-time option call/put volume and put/call ratio for a US stock",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Underlying symbol (US market only), e.g. \"AAPL.US\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "OptionVolumeParam",
+                "type": "object"
+            },
+            "name": "option_volume"
+        },
+        {
+            "description": "Get daily historical option call/put volume, open interest, and put/call ratios for a US stock",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of trading days to return (default 20)",
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Underlying symbol (US market only), e.g. \"AAPL.US\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "OptionVolumeDailyParam",
+                "type": "object"
+            },
+            "name": "option_volume_daily"
+        },
+        {
+            "description": "Get detailed information about a specific order",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "order_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "order_id"
+                ],
+                "title": "OrderIdParam",
+                "type": "object"
+            },
+            "name": "order_detail"
+        },
+        {
+            "description": "Get market participant broker information",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "participants"
+        },
+        {
+            "description": "Get portfolio profit and loss analysis summary. start/end: optional date range in yyyy-mm-dd format. Both must be provided together \u2014 passing only one returns empty results.",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end": {
+                        "description": "End date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "start": {
+                        "description": "Start date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "ProfitAnalysisParam",
+                "type": "object"
+            },
+            "name": "profit_analysis"
+        },
+        {
+            "description": "Get detailed profit and loss analysis for a specific symbol. start/end: optional date range in yyyy-mm-dd format. Both must be provided together \u2014 passing only one returns empty results.",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end": {
+                        "description": "End date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "start": {
+                        "description": "Start date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "ProfitAnalysisDetailParam",
+                "type": "object"
+            },
+            "name": "profit_analysis_detail"
+        },
+        {
+            "description": "Get latest price quotes (last_done, open, high, low, volume, turnover)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"700.HK\", \"AAPL.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "symbols"
+                ],
+                "title": "SymbolsParam",
+                "type": "object"
+            },
+            "name": "quote"
+        },
+        {
+            "description": "Replace/modify an existing order",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "limit_offset": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "order_id": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "quantity": {
+                        "type": "string"
+                    },
+                    "trailing_amount": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "trailing_percent": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "trigger_price": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "order_id",
+                    "quantity"
+                ],
+                "title": "ReplaceOrderParam",
+                "type": "object"
+            },
+            "name": "replace_order"
+        },
+        {
+            "description": "Get security list for a market. category must be \"Overnight\"; other values or omitting it will cause an error. Currently only market=\"US\" is supported; other markets will also return an error",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "category": {
+                        "description": "Category filter. Currently only \"Overnight\" is supported; passing any other value or omitting this field will result in a param_error. Note: only \"US\" market is currently supported for the \"Overnight\" category; other markets will also return a param_error.",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "market": {
+                        "description": "Market code: HK, US, CN, SG",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "market"
+                ],
+                "title": "SecurityListParam",
+                "type": "object"
+            },
+            "name": "security_list"
+        },
+        {
+            "description": "Get institutional shareholders for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "shareholder"
+        },
+        {
+            "description": "Add securities to a community sharelist",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Sharelist ID",
+                        "type": "string"
+                    },
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"AAPL.US\", \"700.HK\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "id",
+                    "symbols"
+                ],
+                "title": "SharelistItemsParam",
+                "type": "object"
+            },
+            "name": "sharelist_add"
+        },
+        {
+            "description": "Create a new community sharelist",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "description": {
+                        "description": "List description (optional)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "name": {
+                        "description": "List name",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name"
+                ],
+                "title": "SharelistCreateParam",
+                "type": "object"
+            },
+            "name": "sharelist_create"
+        },
+        {
+            "description": "Delete a community sharelist by id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Sharelist ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "title": "SharelistIdParam",
+                "type": "object"
+            },
+            "name": "sharelist_delete"
+        },
+        {
+            "description": "Get community sharelist detail including constituent stocks and quotes by id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Sharelist ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "title": "SharelistIdParam",
+                "type": "object"
+            },
+            "name": "sharelist_detail"
+        },
+        {
+            "description": "List user's own and subscribed community sharelists",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of lists to return (default 20)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "SharelistCountParam",
+                "type": "object"
+            },
+            "name": "sharelist_list"
+        },
+        {
+            "description": "Get popular/trending community sharelists",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of lists to return (default 20)",
+                        "format": "uint32",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "SharelistCountParam",
+                "type": "object"
+            },
+            "name": "sharelist_popular"
+        },
+        {
+            "description": "Remove securities from a community sharelist",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Sharelist ID",
+                        "type": "string"
+                    },
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"AAPL.US\", \"700.HK\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "id",
+                    "symbols"
+                ],
+                "title": "SharelistItemsParam",
+                "type": "object"
+            },
+            "name": "sharelist_remove"
+        },
+        {
+            "description": "Reorder securities in a community sharelist (provide symbols in desired order)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Sharelist ID",
+                        "type": "string"
+                    },
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"AAPL.US\", \"700.HK\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "id",
+                    "symbols"
+                ],
+                "title": "SharelistItemsParam",
+                "type": "object"
+            },
+            "name": "sharelist_sort"
+        },
+        {
+            "description": "Get short interest data for a US stock (short ratio, short shares, days to cover). Only US market is supported.",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Number of records to return (1-100, default 20)",
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Security symbol (US market only), e.g. \"AAPL.US\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "ShortPositionsParam",
+                "type": "object"
+            },
+            "name": "short_positions"
+        },
+        {
+            "description": "Export account statement sections by file_key",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "file_key": {
+                        "description": "File key from statement_list",
+                        "type": "string"
+                    },
+                    "sections": {
+                        "description": "Sections to export. Valid values: \"asset\", \"account_balances\", \"equity_holdings\", \"account_balance_changes\", \"stock_trades\", \"equity_holding_changes\", \"account_balance_locks\", \"equity_holding_locks\", \"option_trades\", \"fund_trades\", \"ipo_trades\", \"virtual_trades\", \"interests\", \"lending_fees\", \"custodian_fees\", \"corps\", \"bond_equity_holdings\", \"otc_trades\", \"outstandings\", \"financing_transactions\", \"interest_deposits\", \"maintenance_fees\", \"cash_pluses\", \"gst_details\". Omit to export all sections.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "file_key"
+                ],
+                "title": "StatementExportParam",
+                "type": "object"
+            },
+            "name": "statement_export"
+        },
+        {
+            "description": "List available account statements (daily/monthly)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "limit": {
+                        "description": "Number of records to return",
+                        "format": "int32",
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "start_date": {
+                        "description": "Start date (yyyy-mm-dd), optional",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "statement_type": {
+                        "description": "Statement type: \"daily\" or \"monthly\"",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "title": "StatementListParam",
+                "type": "object"
+            },
+            "name": "statement_list"
+        },
+        {
+            "description": "Get basic information of securities (name, exchange, type, lot_size)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"700.HK\", \"AAPL.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "symbols"
+                ],
+                "title": "SymbolsParam",
+                "type": "object"
+            },
+            "name": "static_info"
+        },
+        {
+            "description": "Get current stock positions across all channels",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "stock_positions"
+        },
+        {
+            "description": "Submit a buy/sell order. order_type: LO (Limit) / ELO (Enhanced Limit, HK) / MO (Market) / AO (At-auction, HK) / ALO (At-auction Limit, HK) / ODD (Odd Lots, HK) / LIT (Limit If Touched) / MIT (Market If Touched) / TSLPAMT (Trailing Limit by Amount) / TSLPPCT (Trailing Limit by Percent) / SLO (Special Limit, HK). side: Buy/Sell. time_in_force: Day/GTC/GTD",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "expire_date": {
+                        "description": "Expiry date (yyyy-mm-dd). Required when time_in_force is GTD",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "limit_offset": {
+                        "description": "Limit offset from the trailing stop price. Required for: TSLPAMT, TSLPPCT",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "order_type": {
+                        "description": "Order type (HK supports all; US supports LO/MO/LIT/MIT/TSLPAMT/TSLPPCT only):\n- LO (Limit Order): requires submitted_price\n- ELO (Enhanced Limit Order, HK only): requires submitted_price\n- MO (Market Order): no price required\n- AO (At-auction Order, HK only): executed at auction price, no price required\n- ALO (At-auction Limit Order, HK only): requires submitted_price\n- ODD (Odd Lots Order, HK only): requires submitted_price, for non-standard lot sizes\n- LIT (Limit If Touched): requires submitted_price and trigger_price; activates when market price touches trigger_price\n- MIT (Market If Touched): requires trigger_price only; executes at market when trigger_price is touched\n- TSLPAMT (Trailing Limit If Touched by Amount): requires trailing_amount and limit_offset; trailing stop by fixed amount\n- TSLPPCT (Trailing Limit If Touched by Percent): requires trailing_percent (0-1) and limit_offset; trailing stop by percentage\n- SLO (Special Limit Order, HK only): requires submitted_price; cannot be replaced after submission",
+                        "type": "string"
+                    },
+                    "outside_rth": {
+                        "description": "Outside regular trading hours: \"RTH_ONLY\" (regular trading hours only), \"ANY_TIME\" (any time including pre/post market), \"OVERNIGHT\" (overnight session, US only)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "remark": {
+                        "description": "Order remark (max 255 characters)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "side": {
+                        "description": "Buy or Sell",
+                        "type": "string"
+                    },
+                    "submitted_price": {
+                        "description": "Limit price. Required for: LO, ELO, ALO, ODD, LIT, SLO",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "submitted_quantity": {
+                        "type": "string"
+                    },
+                    "symbol": {
+                        "type": "string"
+                    },
+                    "time_in_force": {
+                        "description": "Order validity: \"Day\" (Day Order, expires end of session), \"GTC\" (Good Til Canceled), \"GTD\" (Good Til Date, requires expire_date)",
+                        "type": "string"
+                    },
+                    "trailing_amount": {
+                        "description": "Trailing amount (absolute price distance). Required for TSLPAMT",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "trailing_percent": {
+                        "description": "Trailing percent as decimal (e.g. 0.05 = 5%). Required for TSLPPCT",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "trigger_price": {
+                        "description": "Trigger (activation) price. Required for: LIT, MIT, TSLPAMT, TSLPPCT",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "order_type",
+                    "side",
+                    "submitted_quantity",
+                    "time_in_force"
+                ],
+                "title": "SubmitOrderParam",
+                "type": "object"
+            },
+            "name": "submit_order"
+        },
+        {
+            "description": "Get today's trade executions (fills)",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "today_executions"
+        },
+        {
+            "description": "Get orders placed today",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "today_orders"
+        },
+        {
+            "description": "Get discussion topics for a symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "topic"
+        },
+        {
+            "description": "Create a new discussion topic",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "body": {
+                        "description": "Topic body content",
+                        "type": "string"
+                    },
+                    "symbols": {
+                        "description": "Related security symbols",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    },
+                    "title": {
+                        "description": "Topic title",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "title",
+                    "body"
+                ],
+                "title": "TopicCreateParam",
+                "type": "object"
+            },
+            "name": "topic_create"
+        },
+        {
+            "description": "Create a reply to a discussion topic",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "body": {
+                        "description": "Reply body content",
+                        "type": "string"
+                    },
+                    "topic_id": {
+                        "description": "Topic ID to reply to",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "topic_id",
+                    "body"
+                ],
+                "title": "TopicCreateReplyParam",
+                "type": "object"
+            },
+            "name": "topic_create_reply"
+        },
+        {
+            "description": "Get discussion topic detail by topic_id",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "topic_id": {
+                        "description": "Topic ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "topic_id"
+                ],
+                "title": "TopicIdParam",
+                "type": "object"
+            },
+            "name": "topic_detail"
+        },
+        {
+            "description": "Get replies to a discussion topic",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "topic_id": {
+                        "description": "Topic ID",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "topic_id"
+                ],
+                "title": "TopicIdParam",
+                "type": "object"
+            },
+            "name": "topic_replies"
+        },
+        {
+            "description": "Get trade statistics (buy/sell/neutral volume distribution)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "trade_stats"
+        },
+        {
+            "description": "Get recent trades (max 1000)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "count": {
+                        "description": "Maximum number of results (max 1000)",
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer"
+                    },
+                    "symbol": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "count"
+                ],
+                "title": "SymbolCountParam",
+                "type": "object"
+            },
+            "name": "trades"
+        },
+        {
+            "description": "Get trading days for a market between dates",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "end": {
+                        "description": "End date (yyyy-mm-dd)",
+                        "type": "string"
+                    },
+                    "market": {
+                        "description": "Market code: HK, US, CN, SG",
+                        "type": "string"
+                    },
+                    "start": {
+                        "description": "Start date (yyyy-mm-dd)",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "market",
+                    "start",
+                    "end"
+                ],
+                "title": "MarketDateRangeParam",
+                "type": "object"
+            },
+            "name": "trading_days"
+        },
+        {
+            "description": "Get trading session schedule for all markets",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "trading_session"
+        },
+        {
+            "description": "Update a watchlist group (rename or add/remove/replace securities)",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "id": {
+                        "description": "Watchlist group id",
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "mode": {
+                        "description": "Update mode for securities: \"add\", \"remove\", or \"replace\" (default: \"replace\")",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "name": {
+                        "description": "New group name (optional)",
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "securities": {
+                        "description": "Securities list (optional)",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "title": "UpdateWatchlistGroupParam",
+                "type": "object"
+            },
+            "name": "update_watchlist_group"
+        },
+        {
+            "description": "Get valuation overview with peer comparison",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "valuation"
+        },
+        {
+            "description": "Get detailed valuation history time series",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbol": {
+                        "description": "Security symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "symbol"
+                ],
+                "title": "SymbolParam",
+                "type": "object"
+            },
+            "name": "valuation_history"
+        },
+        {
+            "description": "Get warrant issuer information",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "warrant_issuers"
+        },
+        {
+            "description": "Get filtered warrant list for an underlying symbol",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "expiry_date": {
+                        "description": "Filter by expiry date range (optional): \"LT_3\" (<3 months), \"Between_3_6\" (3-6 months), \"Between_6_12\" (6-12 months), \"GT_12\" (>12 months)",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    },
+                    "issuer": {
+                        "description": "Filter by issuer ID (optional), use issuer_id from warrant_issuers tool",
+                        "items": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    },
+                    "price_type": {
+                        "description": "Filter by in/out of bounds (optional): \"In\" (in bounds), \"Out\" (out of bounds). Only for Inline warrants.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    },
+                    "sort_by": {
+                        "description": "Sort field: LastDone, ChangeRate, ChangeValue, Volume, Turnover, ExpiryDate, StrikePrice, UpperStrikePrice, LowerStrikePrice, OutstandingQuantity, OutstandingRatio, Premium, ItmOtm, ImpliedVolatility, Delta",
+                        "type": "string"
+                    },
+                    "sort_order": {
+                        "description": "Sort order: Ascending or Descending",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Filter by status (optional): \"Suspend\" (suspended), \"PrepareList\" (pending listing), \"Normal\" (normal trading)",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    },
+                    "symbol": {
+                        "description": "Underlying symbol, e.g. \"700.HK\"",
+                        "type": "string"
+                    },
+                    "warrant_type": {
+                        "description": "Filter by warrant type (optional): \"Call\", \"Put\", \"Bull\", \"Bear\", \"Inline\"",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": [
+                            "array",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "symbol",
+                    "sort_by",
+                    "sort_order"
+                ],
+                "title": "WarrantListParam",
+                "type": "object"
+            },
+            "name": "warrant_list"
+        },
+        {
+            "description": "Get warrant quotes",
+            "inputSchema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "properties": {
+                    "symbols": {
+                        "description": "Security symbols, e.g. [\"700.HK\", \"AAPL.US\"]",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "symbols"
+                ],
+                "title": "SymbolsParam",
+                "type": "object"
+            },
+            "name": "warrant_quote"
+        },
+        {
+            "description": "Get all watchlist groups and their securities",
+            "inputSchema": {
+                "properties": {},
+                "type": "object"
+            },
+            "name": "watchlist"
+        }
+    ]
+}
