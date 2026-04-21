@@ -185,7 +185,15 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 }
 
 .mcp-tools-list {
-  border-top: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  max-height: 545px;
+  overflow-y: auto;
+  padding: 0 0.75rem;
+}
+
+.mcp-tools-list :deep(.mcp-accordion-item:last-child) {
+  border-bottom: 0;
 }
 
 .mcp-tool-name {
