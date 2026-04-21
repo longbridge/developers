@@ -33,7 +33,7 @@ const { t } = useI18n()
             </a>
             <a href="/docs/cli" class="ab-tool">
               <span class="ab-tool-name">{{ $t('arch.cli.label') }}</span>
-              <span class="ab-tool-desc">50+ commands, TUI dashboard, JSON output</span>
+              <span class="ab-tool-desc">65+ commands, TUI dashboard, JSON output</span>
             </a>
             <a href="/docs/mcp" class="ab-tool">
               <span class="ab-tool-name">{{ $t('arch.mcp.label') }}</span>
