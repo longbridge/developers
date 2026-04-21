@@ -1,10 +1,8 @@
 ---
-sidebar_position: 2.2
-slug: /mcp
-sidebar_label: MCP
-sidebarCollapsed: true
+title: MCP
 id: mcp
-sidebar_icon: cpu
+slug: /mcp
+sidebar: false
 ---
 
 # Longbridge MCP Service
@@ -15,11 +13,6 @@ Longbridge provides a hosted HTTP MCP (Model Context Protocol) service that lets
 - Global: `https://openapi.longbridge.com/mcp`
 - Mainland China: `https://openapi.longbridge.cn/mcp` (faster access)
 :::
-
-## Prerequisites
-
-- An active Longbridge account with onboarding completed, or a paper trading account
-- An AI client that supports MCP OAuth 2.1 (see compatibility note below)
 
 ## Available capabilities
 
@@ -32,6 +25,15 @@ Once connected, MCP clients can call the following tools:
 | Trading actions | Place, modify, and cancel orders (subject to account permissions and regional restrictions) |
 
 Actual tool availability varies by region, account level, and granted scopes.
+
+## Available tools
+
+<McpTools />
+
+## Prerequisites
+
+- An active Longbridge account with onboarding completed, or a paper trading account
+- An AI client that supports MCP OAuth 2.1 (see compatibility note below)
 
 ## Client setup
 
