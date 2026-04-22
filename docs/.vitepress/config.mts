@@ -185,6 +185,7 @@ export default defineConfig(
             const res = await fetch(MCP_TOOLS_URL)
             if (!res.ok) throw new Error(`fetch mcp tools failed: HTTP ${res.status}`)
             const json = await res.json()
+            mkdirSync(dirname(MCP_TOOLS_DATA_PATH), { recursive: true })
             writeFileSync(MCP_TOOLS_DATA_PATH, JSON.stringify(json, null, 2))
             console.log('✓ mcp-tools.json fetched')
           },
