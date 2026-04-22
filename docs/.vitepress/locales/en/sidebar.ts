@@ -19,7 +19,14 @@ function buildCliSidebar(): DefaultTheme.SidebarItem[] {
   return items
 }
 
+function buildDocsSidebar(): DefaultTheme.SidebarItem[] {
+  return docsSidebar().filter((item) => {
+    const link = typeof item.link === 'string' ? item.link : ''
+    return !link.endsWith('/mcp')
+  })
+}
+
 export const sidebar: DefaultTheme.Sidebar = {
   '/docs/cli': buildCliSidebar(),
-  '/docs':     docsSidebar(),
+  '/docs':     buildDocsSidebar(),
 }

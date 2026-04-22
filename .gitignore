@@ -38,3 +38,6 @@ old_docs
 .superpowers
 docs/superpowers
 .claude/worktrees
+
+# generated at build time by fetch-mcp-tools plugin
+docs/.vitepress/data/mcp-tools.json
