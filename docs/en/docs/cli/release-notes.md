@@ -7,6 +7,13 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.17.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.3)
+
+- **Fix: token refresh hang** — when the access token expired on a flaky network, the CLI no longer waits 5 minutes before failing; it now fails immediately with a clear error and preserves the token file for the next retry
+- **`auth status` accuracy** — now shows three states: `valid` (green), `refresh pending` (yellow, access token expired but refresh token valid — next command auto-refreshes with no user action needed), `expired` (red, re-login required); previously `refresh pending` was incorrectly shown as `expired`
+- **Fix: `--auth-code` login** — browser OAuth flow now triggers correctly when no token file exists
+- **Fix: Windows browser launch** — OAuth URLs containing `&` parameters no longer get truncated on Windows; switched to the `open` crate for cross-platform browser launching
+
 ### [v0.17.1](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.1)
 
 - **`completion` command** — generate shell tab-completion scripts for bash, zsh, fish, elvish, and powershell; redirect stdout to the appropriate file then reload your shell to activate (e.g. `longbridge completion zsh > ~/.zfunc/_longbridge`)

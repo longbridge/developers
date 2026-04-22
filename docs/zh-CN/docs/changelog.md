@@ -6,6 +6,14 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-22
+
+### CLI v0.17.3
+
+- **修复：Token 刷新卡死** — 访问令牌过期且网络不稳定时立即报错，Token 文件保留供下次重试
+- **`auth status`** — 新增三态显示：`valid` / `refresh pending`（自动刷新）/ `expired`（之前 `refresh pending` 误显为 `expired`）
+- **修复：`--auth-code` 登录 + Windows 浏览器 URL** — 修复无 Token 文件时 OAuth 流程不触发及 Windows 上 URL `&` 参数被截断的问题
+
 ## 2026-04-20
 
 ### CLI v0.17.1

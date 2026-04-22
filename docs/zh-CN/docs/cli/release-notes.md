@@ -7,6 +7,13 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.17.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.3)
+
+- **修复：Token 刷新卡死** — 当访问令牌过期且网络不稳定时，CLI 不再等待 5 分钟才报错，现在立即失败并给出明确提示，同时保留 Token 文件供下次重试
+- **`auth status` 准确性改进** — 现在显示三种状态：`valid`（绿色）、`refresh pending`（黄色，访问令牌已过期但刷新令牌有效，下次命令自动刷新无需操作）、`expired`（红色，需重新登录）；之前 `refresh pending` 状态被错误显示为 `expired`
+- **修复：`--auth-code` 登录** — 在没有 Token 文件时，浏览器 OAuth 流程现在可以正常触发
+- **修复：Windows 浏览器启动** — 包含 `&` 参数的 OAuth URL 不再在 Windows 上被截断；改用 `open` crate 实现跨平台浏览器调用
+
 ### [v0.17.1](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.1)
 
 - **`completion` 命令** — 生成 bash、zsh、fish、elvish、powershell 的 Tab 补全脚本；将输出重定向到对应文件并重载 shell 即可启用（如 `longbridge completion zsh > ~/.zfunc/_longbridge`）

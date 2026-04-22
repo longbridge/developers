@@ -6,6 +6,14 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-22
+
+### CLI v0.17.3
+
+- **Fix: token refresh hang** — expired access token on a flaky network now fails immediately with a clear error; token file preserved for next retry
+- **`auth status`** — now shows three states: `valid` / `refresh pending` (auto-refreshes) / `expired` (was two states, `refresh pending` previously shown as `expired`)
+- **Fix: `--auth-code` login + Windows browser URL** — browser OAuth flow fixed when no token exists; Windows URL truncation on `&` parameters fixed
+
 ## 2026-04-20
 
 ### CLI v0.17.1
