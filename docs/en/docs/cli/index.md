@@ -7,7 +7,7 @@ sidebar_icon: book_open
 
 # Longbridge CLI
 
-Longbridge CLI (`longbridge`) is an AI-native command-line tool with 65+ commands covering every
+Longbridge CLI (`longbridge`) is an AI-native command-line tool with 120+ commands covering every
 Longbridge OpenAPI endpoint — real-time market data, fundamentals, account management, and trading.
 Designed for scripting, AI-agent tool-calling, and daily workflows from the terminal.
 

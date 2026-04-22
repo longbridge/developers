@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick, watch } from 'vue'
 import toolsData from '../../data/mcp-tools.json'
 import {
   Accordion,
@@ -46,6 +46,32 @@ interface ParamRow {
 const allTools: Tool[] = (toolsData as ToolsPayload).tools
 
 const query = ref('')
+const openValue = ref<string>('')
+const listRef = ref<HTMLElement | null>(null)
+
+watch(openValue, async (v) => {
+  if (!v || !listRef.value) return
+  await nextTick()
+  // Wait for accordion slide-down/up animation (~200ms) to settle
+  // before measuring — otherwise the previously open item still
+  // occupies its pre-collapse space and offsets are wrong.
+  await new Promise((resolve) => setTimeout(resolve, 220))
+  const container = listRef.value
+  if (!container) return
+  const openItem = container.querySelector<HTMLElement>(
+    '.mcp-accordion-item[data-state="open"]'
+  )
+  if (!openItem) return
+  const itemTop =
+    openItem.getBoundingClientRect().top -
+    container.getBoundingClientRect().top +
+    container.scrollTop
+  const itemBottom = itemTop + openItem.offsetHeight
+  const visibleTop = container.scrollTop
+  const visibleBottom = visibleTop + container.clientHeight
+  if (itemTop >= visibleTop && itemBottom <= visibleBottom) return
+  container.scrollTo({ top: itemTop, behavior: 'smooth' })
+})
 
 const filtered = computed<Tool[]>(() => {
   const q = query.value.trim().toLowerCase()
@@ -79,27 +105,84 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 <template>
   <div class="mcp-tools">
     <div class="mcp-tools-search">
-      <input
-        v-model="query"
-        type="text"
-        class="mcp-tools-input"
-        placeholder="Search tools by name or description..."
-      />
-      <span class="mcp-tools-count">{{ filtered.length }} of {{ allTools.length }}</span>
+      <div class="mcp-tools-input-wrap">
+        <svg
+          class="mcp-tools-search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input
+          v-model="query"
+          type="text"
+          class="mcp-tools-input"
+          placeholder="Search tools by name or description..."
+        />
+        <button
+          v-if="query"
+          type="button"
+          class="mcp-tools-clear"
+          aria-label="Clear search"
+          @click="query = ''"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <div v-if="filtered.length === 0" class="mcp-tools-empty">
       No tools match "{{ query }}"
     </div>
 
-    <Accordion v-else type="single" collapsible class="mcp-tools-list">
+    <div v-else ref="listRef" class="mcp-tools-list">
+    <Accordion v-model="openValue" type="single" collapsible>
       <AccordionItem
         v-for="tool in filtered"
         :key="tool.name"
         :value="tool.name"
       >
         <AccordionTrigger>
-          <code class="mcp-tool-name">{{ tool.name }}</code>
+          <span class="mcp-tool-title">
+            <svg
+              class="mcp-tool-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+            <code class="mcp-tool-name">{{ tool.name }}</code>
+          </span>
         </AccordionTrigger>
         <AccordionContent>
           <p class="mcp-tool-desc">{{ tool.description }}</p>
@@ -129,9 +212,6 @@ function getParams(schema?: ToolSchema): ParamRow[] {
                   <p v-if="p.default !== undefined" class="mcp-param-meta">
                     Default: {{ p.default }}
                   </p>
-                  <p v-if="p.format" class="mcp-param-meta">
-                    Format: {{ p.format }}
-                  </p>
                 </dd>
               </div>
             </dl>
@@ -139,6 +219,7 @@ function getParams(schema?: ToolSchema): ParamRow[] {
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+    </div>
   </div>
 </template>
 
@@ -158,24 +239,76 @@ function getParams(schema?: ToolSchema): ParamRow[] {
   z-index: 1;
   background: var(--vp-c-bg);
 }
+
+.mcp-tools-input-wrap {
+  width: 320px;
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mcp-tools-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--vp-c-text-3);
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+.mcp-tools-input-wrap:focus-within .mcp-tools-search-icon {
+  color: var(--vp-c-brand-1);
+}
+
 .mcp-tools-input {
-  flex: 1;
-  padding: 0.5rem 0.75rem;
+  width: 100%;
+  padding: 0.55rem 2.25rem 0.55rem 2.25rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-1);
   font-size: 0.9rem;
+  line-height: 1.25;
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
+
+.mcp-tools-input::placeholder {
+  color: var(--vp-c-text-3);
+}
+
+.mcp-tools-input:hover {
+  border-color: var(--vp-c-border);
+}
+
 .mcp-tools-input:focus {
   border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vp-c-brand-1) 18%, transparent);
 }
-.mcp-tools-count {
-  font-size: 0.85rem;
-  color: var(--vp-c-text-2);
-  white-space: nowrap;
+
+.mcp-tools-clear {
+  position: absolute;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
 }
+
+.mcp-tools-clear:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-default-soft);
+}
+
 
 .mcp-tools-empty {
   padding: 1rem;
@@ -187,13 +320,28 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 .mcp-tools-list {
   border: 1px solid var(--vp-c-divider);
   border-radius: 6px;
-  max-height: 545px;
+  max-height: 500px;
   overflow-y: auto;
   padding: 0 0.75rem;
 }
 
 .mcp-tools-list :deep(.mcp-accordion-item:last-child) {
   border-bottom: 0;
+}
+
+.mcp-tool-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mcp-tool-icon {
+  color: var(--vp-c-text-3);
+  flex-shrink: 0;
+}
+
+.mcp-tools-list :deep(.mcp-accordion-trigger[data-state='open']) .mcp-tool-icon {
+  color: var(--vp-c-brand-1);
 }
 
 .mcp-tool-name {
@@ -204,25 +352,29 @@ function getParams(schema?: ToolSchema): ParamRow[] {
   padding: 0;
 }
 
+.mcp-tools-list :deep(.mcp-accordion-trigger) {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
 .mcp-tool-desc {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.5rem;
   color: var(--vp-c-text-2);
+  font-size: 0.8rem;
 }
 
 .mcp-tool-no-params {
   margin: 0;
   color: var(--vp-c-text-3);
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .mcp-params-title {
-  margin: 0 0 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
 }
 
 .mcp-params {
@@ -231,25 +383,26 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 }
 
 .mcp-param {
-  padding: 0.5rem 0;
-  border-top: 1px dashed var(--vp-c-divider);
+  padding: 0.3rem 0;
 }
 .mcp-param:first-child {
-  border-top: 0;
   padding-top: 0;
+}
+.mcp-param:last-child {
+  padding-bottom: 0;
 }
 
 .mcp-param-head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.5rem;
-  margin: 0 0 0.25rem;
+  gap: 0.4rem;
+  margin: 0 0 0.2rem;
 }
 
 .mcp-param-name {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg-soft);
   padding: 0.05rem 0.35rem;
@@ -263,14 +416,12 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 }
 
 .mcp-param-required {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #ef4444;
   background: rgba(239, 68, 68, 0.1);
-  padding: 0.1rem 0.4rem;
+  padding: 0.08rem 0.35rem;
   border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .mcp-param-body {
@@ -279,9 +430,10 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 }
 
 .mcp-param-desc {
-  margin: 0 0 0.25rem;
+  margin: 0;
   color: var(--vp-c-text-2);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
 }
 
 .mcp-param-meta {

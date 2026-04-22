@@ -16,15 +16,18 @@ Longbridge provides a hosted HTTP MCP (Model Context Protocol) service that lets
 
 ## Available capabilities
 
-Once connected, MCP clients can call the following tools:
+Longbridge MCP exposes 100+ tools across six capability areas. Your client discovers them automatically on connect — no manual configuration.
 
-| Category | Description |
+| Capability | Coverage |
 | --- | --- |
-| Market data | Real-time quotes, candlesticks, historical data queries |
-| Account information | Account overview, assets, and position queries |
-| Trading actions | Place, modify, and cancel orders (subject to account permissions and regional restrictions) |
+| **Real-time market data** | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow |
+| **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium |
+| **Derivatives** | Option chains, warrant filters, issuers, warrant quotes |
+| **Account & portfolio** | Balances, positions, cash flow, watchlists and groups |
+| **Trading** | Place / modify / cancel orders, estimate max purchase quantity |
+| **Automation** | Price alerts, scheduled DCA (dollar-cost averaging) plans |
 
-Actual tool availability varies by region, account level, and granted scopes.
+Actual tool availability depends on your region, account level, and granted OAuth scopes.
 
 ## Available tools
 
