@@ -117,8 +117,23 @@ longbridge filing detail TSLA.US 610186794100660481 --file-index 0
 - **`quote`**: always returns `pre_market_quote` / `post_market_quote` / `overnight_quote` when available (US only). Table format appends an "Extended Hours" section; JSON includes them as nested objects.
 - **`intraday` / `kline` / `kline history`**: default to intraday session only; pass `--session all` to include pre/post-market data. `kline`/`kline history` add a **Session** column when `--session all` is used.
 
+## MCP Server (Local stdio)
+
+The CLI ships a built-in MCP server for connecting AI clients (Claude Desktop, Cursor, Continue) directly to live market data and trading APIs.
+
+```bash
+longbridge mcp serve    # Start the local stdio MCP server
+longbridge mcp guide    # Print client setup instructions
+```
+
+The MCP server exposes 13 tools: `quote`, `depth`, `trades`, `intraday`, `kline`, `static_info`, `positions`, `account_balance`, `orders`, `submit_order`, `cancel_order`, `subscribe_quote`, `unsubscribe_quote`.
+
+Real-time quote push is supported — subscribe via `subscribe_quote` and receive `notifications/message` events as prices change.
+
+For client configuration examples, run `longbridge mcp guide`.
+
 ## Rate Limits
 
 - Max **10 API calls/second**
 - Token is auto-refreshed; no manual renewal needed
-- WebSocket subscriptions are not available in the CLI (use SDK for real-time push)
+- WebSocket subscriptions available via `longbridge mcp serve` (subscribe_quote / unsubscribe_quote tools)
