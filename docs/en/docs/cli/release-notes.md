@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
+
+- **`--limit` alias for `--count`** — all commands that accept `--count` now also accept `--limit` as an alias, improving compatibility for AI agent tool-calling
+- **Fix: Unix self-update ETXTBUSY** — `longbridge update` no longer fails with "Text file busy" on Unix; the update now uses a staged temp file and atomic rename instead of writing directly to the running binary
+
 ### [v0.17.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.3)
 
 - **Fix: token refresh hang** — when the access token expired on a flaky network, the CLI no longer waits 5 minutes before failing; it now fails immediately with a clear error and preserves the token file for the next retry

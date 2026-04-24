@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
+
+- **`--limit` 別名** — 所有接受 `--count` 參數的指令現在也支援 `--limit` 作為別名，提升 AI agent 工具呼叫相容性
+- **修復：Unix 自更新 ETXTBUSY** — `longbridge update` 在 Unix 上不再因「Text file busy」報錯；更新流程改為先寫入暫存檔再原子重新命名，不再直接寫入正在執行中的二進位檔案
+
 ### [v0.17.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.3)
 
 - **修復：Token 刷新卡死** — 當存取令牌過期且網路不穩定時，CLI 不再等待 5 分鐘才報錯，現在立即失敗並給出明確提示，同時保留 Token 檔案供下次重試

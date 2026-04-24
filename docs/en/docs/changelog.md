@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-24
+
+### CLI v0.17.4
+
+- **`--limit` alias** — all `--count` parameters now accept `--limit` as an alias (AI agent tool-calling compatibility)
+- **Fix: Unix self-update** — `longbridge update` no longer fails with ETXTBUSY on Unix
+
 ## 2026-04-22
 
 ### CLI v0.17.3

@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-24
+
+### CLI v0.17.4
+
+- **`--limit` 別名** — 所有 `--count` 參數現支援 `--limit` 別名（改善 AI agent 工具呼叫相容性）
+- **修復：Unix 自更新** — `longbridge update` 在 Unix 上不再出現 ETXTBUSY 錯誤
+
 ## 2026-04-22
 
 ### CLI v0.17.3
