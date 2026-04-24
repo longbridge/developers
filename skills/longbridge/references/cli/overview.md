@@ -92,6 +92,10 @@ longbridge orders --format json | jq '.[] | select(.status == "New")'
 
 ## AI Agent Integration
 
+### Count / limit alias
+
+All commands with a `--count` flag also accept `--limit` as an alias. Both are equivalent — use whichever feels natural in generated commands.
+
 ### Parallel execution pattern
 
 Use `&` and `wait` to run multiple queries concurrently (faster results):
