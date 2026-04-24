@@ -370,7 +370,7 @@ x-pages:
     x-title-zh: 实时行情
     x-icon: activity
     content: |
-      > **Note:** Real-time market data is **not** part of this HTTP REST API. Quotes, price feeds, order book depth, broker queues, and trade ticks are delivered via **WebSocket / TCP long connection** through a dedicated quote gateway — see the [Socket Feed](/socket/hosts) documentation.
+      > **Note:** Real-time market data is **not** part of this HTTP REST API. Quotes, price feeds, order book depth, broker queues, and trade ticks are delivered via **WebSocket / TCP long connection** through a dedicated quote gateway — see the [Socket Feed](/docs/socket/hosts) documentation.
 
       ## Overview
 
@@ -399,11 +399,11 @@ x-pages:
 
       ## Further Reading
 
-      - [Socket Feed endpoints](/socket/hosts)
-      - [Subscribe to market data](/socket/subscribe_quote)
-      - [Protocol overview](/socket/protocol/overview)
+      - [Socket Feed endpoints](/docs/socket/hosts)
+      - [Subscribe to market data](/docs/socket/subscribe_quote)
+      - [Protocol overview](/docs/socket/protocol/overview)
     x-content-zh: |
-      > **注意：** 实时行情数据**不**属于本 HTTP REST API 的范围。报价、价格推送、盘口、经纪队列及成交明细通过专用行情网关以 **WebSocket / TCP 长连接**方式推送，详见 [Socket 实时推送](/socket/hosts) 文档。
+      > **注意：** 实时行情数据**不**属于本 HTTP REST API 的范围。报价、价格推送、盘口、经纪队列及成交明细通过专用行情网关以 **WebSocket / TCP 长连接**方式推送，详见 [Socket 实时推送](/docs/socket/hosts) 文档。
 
       ## 概述
 
@@ -432,9 +432,9 @@ x-pages:
 
       ## 相关文档
 
-      - [Socket 实时推送接入地址](/socket/hosts)
-      - [订阅行情推送](/socket/subscribe_quote)
-      - [协议概览](/socket/protocol/overview)
+      - [Socket 实时推送接入地址](/docs/socket/hosts)
+      - [订阅行情推送](/docs/socket/subscribe_quote)
+      - [协议概览](/docs/socket/protocol/overview)
   - id: error-codes
     title: Error Codes
     x-title-zh: 错误码

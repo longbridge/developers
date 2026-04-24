@@ -56,6 +56,6 @@ longbridge static NVDA.US
 
 **MCP（AI 工具整合）**
 
-如果你日常使用 Claude、Cursor、ChatGPT 等 AI 工具，可以接入 [Longbridge MCP 服務](/mcp)，設定完成後直接用自然語言向 AI 提問，由 AI 代你呼叫行情介面取得數據。
+如果你日常使用 Claude、Cursor、ChatGPT 等 AI 工具，可以接入 [Longbridge MCP 服務](/zh-HK/docs/mcp)，設定完成後直接用自然語言向 AI 提問，由 AI 代你呼叫行情介面取得數據。
 
 兩種方式均需擁有 Longbridge 帳戶。

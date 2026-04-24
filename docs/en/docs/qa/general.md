@@ -56,6 +56,6 @@ longbridge static NVDA.US
 
 **MCP (AI Tool Integration)**
 
-If you use AI tools like Claude, Cursor, or ChatGPT, connect the [Longbridge MCP service](/mcp). Once configured, simply ask in plain language and the AI will query market data on your behalf.
+If you use AI tools like Claude, Cursor, or ChatGPT, connect the [Longbridge MCP service](/docs/mcp). Once configured, simply ask in plain language and the AI will query market data on your behalf.
 
 Both methods require a Longbridge account.

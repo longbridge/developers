@@ -16,6 +16,21 @@ const md = new MarkdownIt({
 })
 const isZh = computed(() => locale.value.startsWith('zh'))
 
+// Rewrite absolute /docs/ links so zh-CN / zh-HK readers stay in their locale.
+// openapi.yaml shares a single Chinese content pool across both zh sites, so
+// baked-in locale prefixes would send zh-HK users to zh-CN (or vice versa);
+// we inject the prefix at render time based on the active locale instead.
+const localePrefix = computed(() => {
+  const l = locale.value
+  if (l.startsWith('zh-CN') || l === 'zh-Hans') return '/zh-CN'
+  if (l.startsWith('zh-HK') || l === 'zh-Hant') return '/zh-HK'
+  return ''
+})
+function localizeDocLinks(markdown: string): string {
+  if (!localePrefix.value) return markdown
+  return markdown.replace(/\]\(\/docs\//g, `](${localePrefix.value}/docs/`)
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface Parameter {
@@ -407,7 +422,7 @@ const selectedPageHtml = computed(() => {
   const page = selectedPage.value
   if (!page) return ''
   const content = isZh.value && page.contentZh ? page.contentZh : page.content
-  return content ? md.render(content) : ''
+  return content ? md.render(localizeDocLinks(content)) : ''
 })
 
 const selectedSections = computed((): Section[] => {
