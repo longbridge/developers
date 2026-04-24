@@ -10,7 +10,6 @@ sidebar_icon: newspaper
 ### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
 
 - **`--limit` 别名** — 所有接受 `--count` 参数的命令现在也支持 `--limit` 作为别名，提升 AI agent 工具调用兼容性
-- **JSON 输出清理** — `--format json` 不再输出 `aaid` 字段；影响 `exchange-rate`、`profit-analysis`、`portfolio` 等账户/资产类命令
 - **修复：Unix 自更新 ETXTBUSY** — `longbridge update` 在 Unix 上不再因"Text file busy"报错；更新流程改为先写入临时文件再原子重命名，不再直接写入正在运行的二进制文件
 
 ### [v0.17.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.3)

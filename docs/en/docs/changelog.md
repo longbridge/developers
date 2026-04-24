@@ -11,7 +11,6 @@ sidebar_icon: newspaper
 ### CLI v0.17.4
 
 - **`--limit` alias** — all `--count` parameters now accept `--limit` as an alias (AI agent tool-calling compatibility)
-- **JSON output cleanup** — `--format json` no longer emits the `aaid` field from account/asset commands
 - **Fix: Unix self-update** — `longbridge update` no longer fails with ETXTBUSY on Unix
 
 ## 2026-04-22

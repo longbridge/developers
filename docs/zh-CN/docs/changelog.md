@@ -11,7 +11,6 @@ sidebar_icon: newspaper
 ### CLI v0.17.4
 
 - **`--limit` 别名** — 所有 `--count` 参数现支持 `--limit` 别名（改善 AI agent 工具调用兼容性）
-- **JSON 输出清理** — `--format json` 不再输出账户/资产命令中的 `aaid` 字段
 - **修复：Unix 自更新** — `longbridge update` 在 Unix 上不再出现 ETXTBUSY 错误
 
 ## 2026-04-22

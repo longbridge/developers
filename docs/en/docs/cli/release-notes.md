@@ -10,7 +10,6 @@ sidebar_icon: newspaper
 ### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
 
 - **`--limit` alias for `--count`** — all commands that accept `--count` now also accept `--limit` as an alias, improving compatibility for AI agent tool-calling
-- **JSON output: strip non-public fields** — `--format json` no longer emits the `aaid` field; affects `exchange-rate`, `profit-analysis`, `portfolio`, and other account/asset commands
 - **Fix: Unix self-update ETXTBUSY** — `longbridge update` no longer fails with "Text file busy" on Unix; the update now uses a staged temp file and atomic rename instead of writing directly to the running binary
 
 ### [v0.17.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.3)
