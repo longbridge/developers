@@ -1,5 +1,5 @@
 <template>
-  <div v-if="breadcrumbItems.length > 0" class="breadcrumb-container">
+  <div v-if="!isCN && breadcrumbItems.length > 1" class="breadcrumb-container">
     <nav class="breadcrumb" aria-label="面包屑导航">
       <ol class="breadcrumb-list">
         <li
@@ -22,13 +22,15 @@
 
 <script setup lang="ts">
 import { useBreadcrumb } from '../../composables/useBreadcrumb'
+import { siteHostname } from '../../utils/region'
 
+const isCN = siteHostname.includes('longbridge.cn')
 const { breadcrumbItems } = useBreadcrumb()
 </script>
 
 <style scoped>
 .breadcrumb-container {
-  @apply mb-4 pb-2 border-b border-gray-200 dark:border-gray-700;
+  @apply mb-4 pb-2;
 }
 
 .breadcrumb {
@@ -44,7 +46,7 @@ const { breadcrumbItems } = useBreadcrumb()
 }
 
 .breadcrumb-link {
-  @apply text-[var(--vp-c-text-2)] hover:text-[var(--vp-c-brand-1)] transition-colors duration-200 no-underline;
+  @apply text-[var(--vp-c-text-2)] hover:text-[var(--vp-c-text-1)] transition-colors duration-200 no-underline;
 }
 
 .breadcrumb-text {
@@ -56,6 +58,6 @@ const { breadcrumbItems } = useBreadcrumb()
 }
 
 .breadcrumb-item.is-current .breadcrumb-text {
-  @apply text-[var(--vp-c-brand-1)] font-semibold;
+  @apply text-[var(--vp-c-text-1)] font-medium;
 }
 </style>

@@ -1,1 +1,8 @@
-{ "label": "内容", "collapsible": true, "collapsed": true, "link": null, "position": 4.5 }
+{
+  "label": "社区",
+  "collapsible": true,
+  "collapsed": true,
+  "link": null,
+  "position": 4.5,
+  "icon": "newspaper"
+}

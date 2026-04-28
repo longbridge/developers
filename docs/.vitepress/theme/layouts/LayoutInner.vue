@@ -4,6 +4,7 @@ import { computed, provide, useSlots } from 'vue'
 import VPBackdrop from 'vitepress/dist/client/theme-default/components/VPBackdrop.vue'
 import VPContent from 'vitepress/dist/client/theme-default/components/VPContent.vue'
 import VPFooter from 'vitepress/dist/client/theme-default/components/VPFooter.vue'
+import Footer from '../components/HomePage/Footer.vue'
 import VPLocalNav from 'vitepress/dist/client/theme-default/components/VPLocalNav.vue'
 import VPNav from 'vitepress/dist/client/theme-default/components/VPNav.vue'
 import VPSidebar from 'vitepress/dist/client/theme-default/components/VPSidebar.vue'
@@ -15,6 +16,7 @@ import { useTryItMode } from '../composables'
 import TryItContent from '../components/TryIt/Content.vue'
 import Content from './Content.vue'
 import 'vitepress/theme'
+import ApiReference from '../components/ApiReference.vue'
 
 const { isOpen: isSidebarOpen, open: openSidebar, close: closeSidebar } = useSidebarControl()
 
@@ -26,6 +28,7 @@ const slots = useSlots()
 const heroImageSlotExists = computed(() => !!slots['home-hero-image'])
 
 const { showTryIt } = useTryItMode()
+const isApiReference = computed(() => frontmatter.value.layout === 'api-reference')
 
 provide('hero-image-slot-exists', heroImageSlotExists)
 </script>
@@ -44,14 +47,14 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #nav-screen-content-before><slot name="nav-screen-content-before" /></template>
       <template #nav-screen-content-after><slot name="nav-screen-content-after" /></template>
     </VPNav>
-    <VPLocalNav :open="isSidebarOpen" @open-menu="openSidebar" />
+    <VPLocalNav v-if="!isApiReference" :open="isSidebarOpen" @open-menu="openSidebar" />
 
-    <VPSidebar :open="isSidebarOpen">
+    <VPSidebar v-if="!isApiReference" :open="isSidebarOpen">
       <template #sidebar-nav-before><slot name="sidebar-nav-before" /></template>
       <template #sidebar-nav-after><slot name="sidebar-nav-after" /></template>
     </VPSidebar>
 
-    <VPContent v-if="!showTryIt">
+    <VPContent v-if="!showTryIt && !isApiReference">
       <template #page-top><slot name="page-top" /></template>
       <template #page-bottom><slot name="page-bottom" /></template>
 
@@ -70,7 +73,10 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #doc-before><slot name="doc-before" /></template>
       <template #doc-after><slot name="doc-after" /></template>
       <template #doc-top><slot name="doc-top" /></template>
-      <template #doc-bottom><slot name="doc-bottom" /></template>
+      <template #doc-bottom>
+        <slot name="doc-bottom" />
+        <Footer />
+      </template>
 
       <template #aside-top><slot name="aside-top" /></template>
       <template #aside-bottom><slot name="aside-bottom" /></template>
@@ -79,10 +85,13 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #aside-ads-before><slot name="aside-ads-before" /></template>
       <template #aside-ads-after><slot name="aside-ads-after" /></template>
     </VPContent>
-    <ClientOnly v-else>
+    <ClientOnly v-else-if="showTryIt">
       <Content>
         <TryItContent />
       </Content>
+    </ClientOnly>
+    <ClientOnly v-else-if="isApiReference">
+      <ApiReference />
     </ClientOnly>
 
     <VPFooter />

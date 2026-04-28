@@ -11,6 +11,15 @@ sidebar_position: 20
 注意：本接口只能获取到最近 1000 根 K 线，如需获取较长的历史数据，请访问接口：获取标的历史 K 线。
 :::
 
+<CliCommand>
+# Tesla 日 K 线（最近 100 根）
+longbridge kline TSLA.US
+# Apple 周 K 线
+longbridge kline AAPL.US --period week
+# NVDA 最近 20 根日 K
+longbridge kline NVDA.US --period day --count 20
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="candlesticks" />
 
 :::info
@@ -29,7 +38,7 @@ sidebar_position: 20
 | period        | int32  | 是       | k 线周期，例如：`1000`，详见 [Period](../objects#period---k-线周期)          |
 | count         | int32  | 是       | 数据数量，例如：`100`<br /><br />**校验规则：** <br />请求数量最大为 `1000`  |
 | adjust_type   | int32  | 是       | 复权类型，例如：`0`，详见 [AdjustType](../objects#adjusttype---k-线复权类型) |
-| trade_session | int32  | 否       | 交易时段，0: 盘中，100: 所有（盘前，盘中，盘后，夜盘）                       |
+| trade_session | int32  | 否       | 交易时段，0: 盘中，100: 所有（盘前，盘中，盘后，夜盘）<br/><br/>注意：夜盘数据需购买「LV1 实时行情 (OpenAPI)」行情卡，且仅支持美股 |
 
 ### Protobuf
 
@@ -64,6 +73,29 @@ resp = ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust, trade_ses
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncQuoteContext, Config, Period, AdjustType, TradeSessions, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncQuoteContext.create(config)
+
+    # 获取 700.HK 的盘中 K 线
+    resp = await ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)
+    print(resp)
+
+    # 获取 700.HK 的所有 K 线
+    resp = await ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust, trade_session=TradeSessions.All)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
@@ -72,8 +104,8 @@ const { Config, QuoteContext, OAuth, Period, AdjustType, TradeSessions } = requi
 async function main() {
   const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
   const config = Config.fromOAuth(oauth)
-  const ctx = await QuoteContext.new(config)
-  const resp = await ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)
+  const ctx = QuoteContext.new(config)
+  const resp = await ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust, TradeSessions.Intraday)
   console.log(resp)
 }
 main().catch(console.error)
@@ -90,8 +122,8 @@ class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             QuoteContext ctx = QuoteContext.create(config).get()) {
-            Candlestick[] resp = ctx.getCandlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust).get();
+             QuoteContext ctx = QuoteContext.create(config)) {
+            Candlestick[] resp = ctx.getCandlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust, TradeSessions.Intraday).get();
             for (Candlestick c : resp) System.out.println(c);
         }
     }
@@ -103,14 +135,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, quote::QuoteContext, Config, quote::{Period, AdjustType}};
+use longbridge::{oauth::OAuthBuilder, quote::QuoteContext, Config, quote::{Period, AdjustType, TradeSessions}};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = QuoteContext::try_new(config).await?;
-    let resp = ctx.candlesticks("700.HK", Period::Day, 10, AdjustType::NoAdjust, None).await?;
+    let (ctx, _) = QuoteContext::new(config);
+    let resp = ctx.candlesticks("700.HK", Period::Day, 10, AdjustType::NoAdjust, TradeSessions::Intraday).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -122,32 +154,46 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```cpp
 #include <iostream>
 #include <longbridge.hpp>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
+
 using namespace longbridge;
 using namespace longbridge::quote;
 
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    QuoteContext ctx = QuoteContext::create(config);
+
+    ctx.candlesticks("700.HK", Period::Day, 10, AdjustType::NoAdjust, TradeSessions::Intraday, [](auto res) {
+        if (!res) { std::cout << "failed: " << *res.status().message() << std::endl; return; }
+        std::cout << "candlesticks: " << res->size() << std::endl;
+    });
+}
+
 int main(int argc, char const* argv[]) {
 #ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 #endif
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) { std::cout << "Open this URL to authorize: " << url << std::endl; },
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
     [](auto res) {
-      if (!res) { std::cout << "authorization failed: " << *res.status().message() << std::endl; return; }
-      Config config = Config::from_oauth(*res);
-      QuoteContext::create(config, [](auto res) {
-        if (!res) { std::cout << "failed to create quote context: " << *res.status().message() << std::endl; return; }
-        res.context().candlesticks("700.HK", Period::Day, 10, AdjustType::NoAdjust, TradeSessions::Intraday, [](auto res) {
-          if (!res) { std::cout << "failed: " << *res.status().message() << std::endl; return; }
-          std::cout << "candlesticks: " << res->size() << std::endl;
-        });
-      });
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
-  std::cin.get();
-  return 0;
+
+    std::cin.get();
+    return 0;
 }
 ```
 

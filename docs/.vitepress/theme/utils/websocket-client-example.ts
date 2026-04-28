@@ -1,5 +1,5 @@
 /**
- * Longbridge OpenAPI WebSocket 使用示例
+ * Longbridge Developers WebSocket 使用示例
  * 演示如何连接、订阅行情、处理推送数据等
  */
 

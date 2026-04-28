@@ -11,6 +11,13 @@ headingLevel: 2
 
 创建自选股分组
 
+<CliCommand>
+# 创建新的自选股分组
+longbridge watchlist create "My Portfolio"
+# 创建另一个分组
+longbridge watchlist create "Tech Stocks"
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="create_watchlist_group" />
 
 
@@ -48,6 +55,24 @@ print(group_id)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncQuoteContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncQuoteContext.create(config)
+    group_id = ctx.create_watchlist_group(name = "Watchlist1", securities = ["700.HK", "AAPL.US"])
+    print(group_id)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
@@ -56,7 +81,7 @@ const { Config, QuoteContext, OAuth } = require('longbridge')
 async function main() {
   const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
   const config = Config.fromOAuth(oauth)
-  const ctx = await QuoteContext.new(config)
+  const ctx = QuoteContext.new(config)
   const resp = await ctx.createWatchlistGroup("My Group", ["700.HK", "AAPL.US"])
   console.log(resp)
 }
@@ -74,7 +99,7 @@ class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             QuoteContext ctx = QuoteContext.create(config).get()) {
+             QuoteContext ctx = QuoteContext.create(config)) {
             WatchlistGroup resp = ctx.createWatchlistGroup("My Group", new String[] { "700.HK", "AAPL.US" }).get();
             System.out.println(resp);
         }
@@ -93,7 +118,7 @@ use longbridge::{oauth::OAuthBuilder, quote::QuoteContext, Config};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = QuoteContext::try_new(config).await?;
+    let (ctx, _) = QuoteContext::new(config);
     let resp = ctx.create_watchlist_group("My Group", vec!["700.HK".to_string(), "AAPL.US".to_string()]).await?;
     println!("{:?}", resp);
     Ok(())
@@ -106,33 +131,46 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```cpp
 #include <iostream>
 #include <longbridge.hpp>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
+
 using namespace longbridge;
 using namespace longbridge::quote;
 
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    QuoteContext ctx = QuoteContext::create(config);
+
+    ctx.create_watchlist_group("My Group", symbols, [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "created: " << res->name << std::endl;
+    });
+}
+
 int main(int argc, char const* argv[]) {
 #ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 #endif
-  const std::string client_id = "your-client-id";
-  std::vector<std::string> symbols = {"700.HK", "AAPL.US"};
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) { std::cout << "Open this URL to authorize: " << url << std::endl; },
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
     [](auto res) {
-      if (!res) { std::cout << "authorization failed" << std::endl; return; }
-      Config config = Config::from_oauth(*res);
-      QuoteContext::create(config, [](auto res) {
-        if (!res) { std::cout << "failed to create quote context" << std::endl; return; }
-        res.context().create_watchlist_group("My Group", symbols, [](auto res) {
-          if (!res) { std::cout << "failed" << std::endl; return; }
-          std::cout << "created: " << res->name << std::endl;
-        });
-      });
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
-  std::cin.get();
-  return 0;
+
+    std::cin.get();
+    return 0;
 }
 ```
 

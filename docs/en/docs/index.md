@@ -1,10 +1,11 @@
 ---
 sidebar_position: -999
-title: Introduction
-id: getting_started_introduce
+title: Overview
+id: overview
+sidebar_icon: book_open
 ---
 
-Longbridge OpenAPI provides programmatic quote trading interfaces for investors with research and development capabilities and assists them to build trading or quote strategy analysis tools based on their own investment strategies. The functions fall into the following categories:
+Longbridge Developers provides programmatic quote trading interfaces for investors with research and development capabilities and assists them to build trading or quote strategy analysis tools based on their own investment strategies. The functions fall into the following categories:
 
 - **Trading** - Create, amend, cancel orders, query today's/past orders and transaction details, etc.
 - **Quotes** - Real-time quotes, acquisition of historical quotes, etc.
@@ -30,6 +31,7 @@ Longbridge provides diversified access methods such as HTTP / WebSockets interfa
         <th>Symbol</th>
     </tr>
     </thead>
+    <tbody>
     <tr>
         <td width="160" rowspan="2">HK Market</td>
         <td>Securities (including equities, ETFs, Warrants, CBBCs)</td>
@@ -54,6 +56,7 @@ Longbridge provides diversified access methods such as HTTP / WebSockets interfa
     <tr>
         <td>Index</td>
     </tr>
+    </tbody>
 </table>
 
 ## Trading

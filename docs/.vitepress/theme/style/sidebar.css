@@ -1,23 +1,44 @@
+.VPNavBarTitle.has-sidebar .title {
+  border: 0;
+}
+
 .VPSidebar {
-  --at-apply: outline-none
+  --at-apply: outline-none;
+  border-right: 1px solid var(--vp-c-divider);
 }
 
 .VPSidebarItem:hover {
   color: var(--vp-c-brand-1);
 }
 
+.VPSidebarItem:not(.is-link) > .item {
+  --at-apply: px-2;
+}
+
 .VPSidebarItem .VPLink {
-  --at-apply: rounded-xl px-2 py-1;
+  --at-apply: rounded-lg px-4 py-1 flex items-center;
 }
 
 .VPSidebarItem.is-link .VPLink > p {
   --at-apply: py-0;
 }
 
-.VPSidebarItem.is-active {
-  --at-apply: bg-gray-600/5 dark:bg-gray-200/5
+.VPSidebarItem.is-active .VPLink {
+  background: color-mix(in oklab, var(--vp-c-brand-1) 10%, transparent);
 }
 
 :root {
-  --vp-sidebar-width: 300px
+  --vp-sidebar-width: 300px;
+}
+
+.sidebar-item-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+  color: var(--vp-c-text-3);
+  vertical-align: middle;
+}
+
+.VPSidebarItem.is-active .sidebar-item-icon {
+  color: var(--vp-c-brand-1);
 }

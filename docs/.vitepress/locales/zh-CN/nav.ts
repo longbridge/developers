@@ -1,13 +1,15 @@
 import type { DefaultTheme } from 'vitepress'
+import { filterNavItems } from '../../region-utils'
 
 export const nav = (lang: string): DefaultTheme.NavItem[] => {
-  return [
-    { text: '开发者认证', link: `/${lang}/`, activeMatch: `^/${lang}/$` },
-    { text: 'SDK', link: `/${lang}/sdk`, activeMatch: `^/${lang}/sdk` },
-    { text: '文档', link: `/${lang}/docs`, activeMatch: `^/${lang}/docs(?!/llm|/mcp|/cli)` },
-    { text: 'MCP', link: `/${lang}/docs/mcp`, activeMatch: `^/${lang}/docs/mcp` },
+  return filterNavItems([
+    { text: '首页', link: `/${lang}/`, activeMatch: `^/${lang}/$` },
+    { text: 'Skill', link: `/${lang}/skill`, activeMatch: `^/${lang}/skill` },
     { text: 'CLI', link: `/${lang}/docs/cli`, activeMatch: `^/${lang}/docs/cli` },
-    { text: 'LLM', link: `/${lang}/docs/llm`, activeMatch: `^/${lang}/docs/llm` },
-    { text: '讨论 & 反馈', link: 'https://github.com/longbridge/openapi/issues', target: '_blank' },
-  ]
+    { text: 'MCP', link: `/${lang}/docs/mcp`, activeMatch: `^/${lang}/docs/mcp` },
+    { text: '文档', link: `/${lang}/docs`, activeMatch: `^/${lang}/docs(?!/cli)(?!/api)(?!/mcp)` },
+    { text: 'API 参考', link: `/${lang}/docs/api`, activeMatch: `^/${lang}/docs/api` },
+    { text: 'SDK', link: `/${lang}/sdk`, activeMatch: `^/${lang}/sdk` },
+    { text: 'Feedback', link: 'https://github.com/longbridge/developers/issues', target: '_blank' },
+  ])
 }

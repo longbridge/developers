@@ -11,6 +11,11 @@ headingLevel: 2
 
 该接口用于修改订单的价格，数量。
 
+<CliCommand>
+# 将下方订单 ID 替换为实际的订单 ID
+longbridge replace 693664675163312128 --qty 200 --price 255.00
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="replace_order" />
 
 ## Request
@@ -62,16 +67,39 @@ ctx.replace_order(
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from decimal import Decimal
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+
+    ctx.replace_order(
+        order_id = "709043056541253632",
+        quantity = Decimal(100),
+        price = Decimal(50),
+    )
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, TradeContext, OAuth } = require('longbridge')
+const { Config, TradeContext, OAuth, Decimal } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
   const config = Config.fromOAuth(oauth)
-  const ctx = await TradeContext.new(config)
-  await ctx.replaceOrder("701276261045858304", 400, "60")
+  const ctx = TradeContext.new(config)
+  await ctx.replaceOrder({ orderId: "701276261045858304", quantity: new Decimal(400), price: new Decimal(60) })
   console.log("replaced")
 }
 main().catch(console.error)
@@ -88,8 +116,8 @@ class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             TradeContext ctx = TradeContext.create(config).get()) {
-            ctx.replaceOrder("701276261045858304", 400, new BigDecimal("60")).get();
+             TradeContext ctx = TradeContext.create(config)) {
+            ctx.replaceOrder(new ReplaceOrderOptions("701276261045858304", new BigDecimal("400")).setPrice(new BigDecimal("60"))).get();
             System.out.println("replaced");
         }
     }
@@ -101,15 +129,18 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+use longbridge::{oauth::OAuthBuilder, trade::{TradeContext, ReplaceOrderOptions}, Config};
 use rust_decimal::Decimal;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = TradeContext::try_new(config).await?;
-    ctx.replace_order("701276261045858304", 400, Decimal::from(60)).await?;
+    let (ctx, _) = TradeContext::new(config);
+    ctx.replace_order(
+        ReplaceOrderOptions::new("701276261045858304", Decimal::from(400))
+            .price(Decimal::from(60))
+    ).await?;
     println!("replaced");
     Ok(())
 }
@@ -121,33 +152,47 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```cpp
 #include <iostream>
 #include <longbridge.hpp>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
+
 using namespace longbridge;
 using namespace longbridge::trade;
 
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    TradeContext ctx = TradeContext::create(config);
+
+    ReplaceOrderOptions opts{"701276261045858304", 400, Decimal(60.0)};
+    ctx.replace_order(opts, [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "replaced" << std::endl;
+    });
+}
+
 int main(int argc, char const* argv[]) {
 #ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 #endif
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) { std::cout << "Open this URL to authorize: " << url << std::endl; },
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
     [](auto res) {
-      if (!res) { std::cout << "authorization failed" << std::endl; return; }
-      Config config = Config::from_oauth(*res);
-      TradeContext::create(config, [](auto res) {
-        if (!res) { std::cout << "failed" << std::endl; return; }
-        ReplaceOrderOptions opts{"701276261045858304", 400, Decimal(60.0)};
-        res.context().replace_order(opts, [](auto res) {
-          if (!res) { std::cout << "failed" << std::endl; return; }
-          std::cout << "replaced" << std::endl;
-        });
-      });
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
-  std::cin.get();
-  return 0;
+
+    std::cin.get();
+    return 0;
 }
 ```
 

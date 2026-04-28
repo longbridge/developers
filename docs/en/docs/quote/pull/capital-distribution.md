@@ -7,6 +7,15 @@ sidebar_position: 18
 
 This API is used to obtain the daily capital distribution of security.
 
+<CliCommand>
+# capital distribution snapshot for Tesla (large/medium/small)
+longbridge capital dist TSLA.US
+# capital distribution snapshot for Apple
+longbridge capital dist AAPL.US
+# capital distribution snapshot for NVDA
+longbridge capital dist NVDA.US
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="capital_distribution" />
 
 :::info
@@ -46,18 +55,37 @@ print(resp)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncQuoteContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncQuoteContext.create(config)
+
+    resp = await ctx.capital_distribution("700.HK")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
 const { Config, QuoteContext, OAuth } = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => {
-    console.log("Open this URL to authorize: " + url)
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = await QuoteContext.new(config)
-  const resp = await ctx.capitalDistribution("700.HK")
+  const ctx = QuoteContext.new(config)
+  const resp = await ctx.capitalDistribution('700.HK')
   console.log(resp)
 }
 main().catch(console.error)
@@ -76,7 +104,7 @@ class Main {
                 .build(url -> System.out.println("Open to authorize: " + url))
                 .get();
              Config config = Config.fromOAuth(oauth);
-             QuoteContext ctx = QuoteContext.create(config).get()) {
+             QuoteContext ctx = QuoteContext.create(config)) {
             CapitalDistributionResponse resp = ctx.getCapitalDistribution("700.HK").get();
             System.out.println(resp);
         }
@@ -97,7 +125,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build(|url| println!("Open this URL to authorize: {url}"))
         .await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = QuoteContext::try_new(config).await?;
+    let (ctx, _) = QuoteContext::new(config);
     let resp = ctx.capital_distribution("700.HK").await?;
     println!("{:?}", resp);
     Ok(())
@@ -118,39 +146,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 using namespace longbridge;
 using namespace longbridge::quote;
 
-int main(int argc, char const* argv[]) {
-#ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
-#endif
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    QuoteContext ctx = QuoteContext::create(config);
 
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) {
-      std::cout << "Open this URL to authorize: " << url << std::endl;
-    },
-    [](auto res) {
-      if (!res) {
-        std::cout << "authorization failed: " << *res.status().message() << std::endl;
-        return;
-      }
-      Config config = Config::from_oauth(*res);
-      QuoteContext::create(config, [](auto res) {
+    ctx.capital_distribution("700.HK", [](auto res) {
         if (!res) {
-          std::cout << "failed to create quote context: " << *res.status().message() << std::endl;
-          return;
-        }
-        res.context().capital_distribution("700.HK", [](auto res) {
-          if (!res) {
             std::cout << "failed: " << *res.status().message() << std::endl;
             return;
-          }
-          std::cout << "capital_distribution: " << res->symbol << std::endl;
-        });
-      });
+        }
+        std::cout << "capital_distribution: " << res->symbol << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
 
-  std::cin.get();
-  return 0;
+    std::cin.get();
+    return 0;
 }
 ```
 

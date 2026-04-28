@@ -7,6 +7,13 @@ sidebar_position: 12
 
 This API is used to obtain a list of option securities by the option chain expiry date.
 
+<CliCommand>
+# AAPL strike prices for 2026-04-17 expiry
+longbridge option chain AAPL.US --date 2026-04-17
+# TSLA strike prices for 2026-04-17 expiry
+longbridge option chain TSLA.US --date 2026-04-17
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="option_chain_info_by_date" />
 
 :::info
@@ -51,18 +58,38 @@ print(resp)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from datetime import date
+from longbridge.openapi import AsyncQuoteContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncQuoteContext.create(config)
+
+    resp = await ctx.option_chain_info_by_date("AAPL.US", date(2023, 1, 20))
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, QuoteContext, OAuth } = require('longbridge')
+const { Config, QuoteContext, OAuth, NaiveDate } = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => {
-    console.log("Open this URL to authorize: " + url)
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = await QuoteContext.new(config)
-  const resp = await ctx.optionChainInfoByDate("AAPL.US", "20230120")
+  const ctx = QuoteContext.new(config)
+  const resp = await ctx.optionChainInfoByDate('AAPL.US', new NaiveDate(2023, 1, 20))
   console.log(resp)
 }
 main().catch(console.error)
@@ -82,7 +109,7 @@ class Main {
                 .build(url -> System.out.println("Open to authorize: " + url))
                 .get();
              Config config = Config.fromOAuth(oauth);
-             QuoteContext ctx = QuoteContext.create(config).get()) {
+             QuoteContext ctx = QuoteContext.create(config)) {
             StrikePriceInfo[] resp = ctx.getOptionChainInfoByDate("AAPL.US", LocalDate.of(2023, 1, 20)).get();
             for (StrikePriceInfo o : resp) System.out.println(o);
         }
@@ -104,7 +131,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build(|url| println!("Open this URL to authorize: {url}"))
         .await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = QuoteContext::try_new(config).await?;
+    let (ctx, _) = QuoteContext::new(config);
     let resp = ctx.option_chain_info_by_date("AAPL.US", date!(2023 - 01 - 20)).await?;
     println!("{:?}", resp);
     Ok(())
@@ -125,39 +152,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 using namespace longbridge;
 using namespace longbridge::quote;
 
-int main(int argc, char const* argv[]) {
-#ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
-#endif
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    QuoteContext ctx = QuoteContext::create(config);
 
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) {
-      std::cout << "Open this URL to authorize: " << url << std::endl;
-    },
-    [](auto res) {
-      if (!res) {
-        std::cout << "authorization failed: " << *res.status().message() << std::endl;
-        return;
-      }
-      Config config = Config::from_oauth(*res);
-      QuoteContext::create(config, [](auto res) {
+    ctx.option_chain_info_by_date("AAPL.US", Date{2023, 1, 20}, [](auto res) {
         if (!res) {
-          std::cout << "failed to create quote context: " << *res.status().message() << std::endl;
-          return;
-        }
-        res.context().option_chain_info_by_date("AAPL.US", Date{2023, 1, 20}, [](auto res) {
-          if (!res) {
             std::cout << "failed: " << *res.status().message() << std::endl;
             return;
-          }
-          for (const auto& o : *res) std::cout << o.price << std::endl;
-        });
-      });
+        }
+        for (const auto& o : *res) std::cout << o.price << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
 
-  std::cin.get();
-  return 0;
+    std::cin.get();
+    return 0;
 }
 ```
 

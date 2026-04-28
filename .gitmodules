@@ -1,0 +1,9 @@
+[submodule "openapi"]
+	path = openapi
+	url = https://github.com/longbridge/openapi
+[submodule "openapi-go"]
+	path = openapi-go
+	url = https://github.com/longbridge/openapi-go
+[submodule "longbridge-terminal"]
+	path = longbridge-terminal
+	url = https://github.com/longbridge/longbridge-terminal

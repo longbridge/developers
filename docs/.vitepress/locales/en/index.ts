@@ -5,30 +5,22 @@ import { sidebar } from './sidebar'
 import { logoLink } from '../../theme/utils/link'
 export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   head: [
-    ['meta', { property: 'og:url', content: 'https://open.longbridge.com' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'Longbridge OpenAPI: Flexible Support for Programmatic Trading' }],
-    [
-      'meta',
-      {
-        property: 'og:description',
-        content:
-          'Access Longbridge OpenAPI for diversified and flexible support tailored to your programmatic trading needs. Enhance your trading strategies with ease.',
-      },
-    ],
     [
       'meta',
       {
         property: 'og:image',
-        content: 'https://assets.lbkrs.com/uploads/48641e8e-a157-4b0f-a58e-bd3998d10d54/group427321346.webp',
+        content: 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png',
       },
     ],
+    ['meta', { property: 'og:image:type', content: 'image/png' }],
+    ['meta', { property: 'og:image:alt', content: 'Longbridge Developers' }],
     ['meta', { property: 'og:locale', content: 'en' }],
-    ['meta', { property: 'og:site_name', content: 'OpenAPI | Longbridge' }],
+    ['meta', { property: 'og:site_name', content: 'Longbridge Developers' }],
   ],
-  title: 'Longbridge OpenAPI',
+  title: 'Longbridge Developers',
   description:
-    'Access Longbridge OpenAPI for diversified and flexible support tailored to your programmatic trading needs. Enhance your trading strategies with ease.',
+    'Explore the Longbridge Developers — open APIs, LLM integrations, MCP support, CLI tools, and more to power your financial applications.',
   themeConfig: {
     logoLink: logoLink(),
     nav: nav(),
@@ -43,7 +35,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     },
 
     outline: {
-      label: 'Page Navigation',
+      label: 'On this page',
     },
 
     lastUpdated: {

@@ -23,6 +23,8 @@ export function useBreadcrumb() {
     }
   }
 
+  const stripHtml = (html: string): string => html.replace(/<[^>]*>/g, '')
+
   // 递归查找匹配的面包屑路径
   const findBreadcrumbPath = (
     items: DefaultTheme.SidebarItem[],
@@ -33,7 +35,7 @@ export function useBreadcrumb() {
       // 确保 text 存在，如果不存在则跳过
       if (!item.text) continue
 
-      const newPath = [...currentPath, { text: item.text, link: item.link }]
+      const newPath = [...currentPath, { text: stripHtml(item.text), link: item.link }]
 
       // 如果当前项目的链接匹配目标路径
       if (item.link && normalizePath(item.link) === normalizePath(targetPath)) {

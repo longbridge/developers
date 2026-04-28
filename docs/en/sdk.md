@@ -16,7 +16,7 @@ The SDK package has been renamed from `longport` to `longbridge`. The old `longp
 
 </div>
 
-<div class="border-t-hidden flex flex-col md:flex-row max-w-4xl w-full justify-between md:text-left mx-auto px-6 md:px-0 py-4">
+<div class="border-t-hidden flex flex-col max-w-4xl w-full justify-between md:text-left mx-auto px-6 md:px-0 py-4">
 <Tabs groupId="programming-language">
 <TabItem value="python" label="Python" default>
 
@@ -80,7 +80,7 @@ Add the following line to your `Cargo.toml` file
 
 ```toml
 [dependencies]
-longbridge = "4.0.0"
+longbridge = "4.0.5"
 ```
 
 [https://crates.io/crates/longbridge](https://crates.io/crates/longbridge)
@@ -108,7 +108,7 @@ Add the following line to your `pom.xml` file
 <dependency>
   <groupId>io.github.longbridge</groupId>
   <artifactId>openapi-sdk</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.5</version>
 </dependency>
 ```
 
@@ -154,7 +154,7 @@ $ go get github.com/longbridge/openapi-go
 
 ### Download
 
-- [4.0.0](https://static.lbctrl.com/openapi-sdk/openapi-cpp-sdk-4.0.0.tar.gz)
+- [4.0.5](https://static.lbctrl.com/openapi-sdk/openapi-cpp-sdk-4.0.5.tar.gz)
 
 ### API Documents
 
@@ -167,6 +167,10 @@ $ go get github.com/longbridge/openapi-go
 </TabItem>
 </Tabs>
 
+</div>
+
+<div class="max-w-4xl mx-auto px-6 md:px-0">
+  <Footer />
 </div>
 
 <style scoped>

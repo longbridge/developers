@@ -1,10 +1,10 @@
 <template>
-  <div class="rounded-lg p-4 my-4 border-l-4 transition-colors duration-200" :class="containerClasses">
-    <div v-if="title" class="flex items-center mb-2 font-semibold">
-      <span class="mr-2 text-base">{{ getIcon(type) }}</span>
-      <span class="text-sm uppercase tracking-wider">{{ title }}</span>
+  <div class="tip-container rounded-lg p-4 my-1" :data-type="type">
+    <div v-if="title" class="flex items-center gap-2">
+      <div class="tip-icon flex-shrink-0" v-html="iconSvg" />
+      <div class="font-semibold text-sm leading-snug">{{ title }}</div>
     </div>
-    <div class="leading-relaxed prose prose-sm max-w-none">
+    <div class="tip-content text-sm leading-relaxed">
       <slot />
     </div>
   </div>
@@ -23,44 +23,131 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
 })
 
-const containerClasses = computed(() => {
-  const typeClasses = {
-    tip: 'bg-sky-50 dark:bg-sky-950/20 border-l-sky-500 text-sky-900 dark:text-sky-100',
-    warning: 'bg-amber-50 dark:bg-amber-950/20 border-l-amber-500 text-amber-900 dark:text-amber-100',
-    danger: 'bg-red-50 dark:bg-red-950/20 border-l-red-500 text-red-900 dark:text-red-100',
-    info: 'bg-emerald-50 dark:bg-emerald-950/20 border-l-emerald-500 text-emerald-900 dark:text-emerald-100',
-    caution: 'bg-orange-50 dark:bg-orange-950/20 border-l-orange-500 text-orange-900 dark:text-orange-100',
-    success: 'bg-green-50 dark:bg-green-950/20 border-l-green-500 text-green-900 dark:text-green-100',
-  }
-  return typeClasses[props.type]
-})
-
-function getIcon(type: string): string {
-  const icons = {
-    tip: '💡',
-    warning: '⚠️',
-    danger: '❌',
-    info: 'ℹ️',
-    caution: '⚠️',
-    success: '✅',
-  }
-  return icons[type as keyof typeof icons] || '💡'
+const icons: Record<string, string> = {
+  tip: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
+  warning: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+  danger: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`,
+  info: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+  caution: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+  success: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
 }
+
+const iconSvg = computed(() => icons[props.type] || icons.tip)
 </script>
 
 <style scoped>
-/* 确保嵌套内容的最后一个段落没有底部边距 */
-.prose :deep(p:last-child) {
-  @apply mb-0;
+.tip-container {
+  border: 1px solid;
 }
 
-/* 确保代码块在容器内有合适的样式 */
-.prose :deep(pre) {
-  @apply my-3;
+.tip-container p {
+  margin-bottom: 0.75rem;
 }
 
-/* 确保列表项有合适的间距 */
-.prose :deep(li) {
-  @apply my-1;
+/* tip */
+.tip-container[data-type='tip'] {
+  @apply border-blue-500/30 bg-blue-500/5 text-blue-700;
+}
+.tip-container[data-type='tip'] .tip-icon {
+  @apply text-blue-500;
+}
+:global(.dark) .tip-container[data-type='tip'] {
+  @apply border-blue-500/40 text-blue-300;
+}
+:global(.dark) .tip-container[data-type='tip'] .tip-icon {
+  @apply text-blue-400;
+}
+
+/* warning */
+.tip-container[data-type='warning'] {
+  @apply border-yellow-500/30 bg-yellow-500/5 text-yellow-700;
+}
+.tip-container[data-type='warning'] .tip-icon {
+  @apply text-yellow-500;
+}
+:global(.dark) .tip-container[data-type='warning'] {
+  @apply border-yellow-500/40 text-yellow-300;
+}
+:global(.dark) .tip-container[data-type='warning'] .tip-icon {
+  @apply text-yellow-400;
+}
+
+/* danger */
+.tip-container[data-type='danger'] {
+  @apply border-red-500/30 bg-red-500/5 text-red-700;
+}
+.tip-container[data-type='danger'] .tip-icon {
+  @apply text-red-500;
+}
+:global(.dark) .tip-container[data-type='danger'] {
+  @apply border-red-500/40 text-red-300;
+}
+:global(.dark) .tip-container[data-type='danger'] .tip-icon {
+  @apply text-red-400;
+}
+
+/* info */
+.tip-container[data-type='info'] {
+  @apply border-cyan-500/30 bg-cyan-500/5 text-cyan-700;
+}
+.tip-container[data-type='info'] .tip-icon {
+  @apply text-cyan-500;
+}
+:global(.dark) .tip-container[data-type='info'] {
+  @apply border-cyan-500/40 text-cyan-300;
+}
+:global(.dark) .tip-container[data-type='info'] .tip-icon {
+  @apply text-cyan-400;
+}
+
+/* caution */
+.tip-container[data-type='caution'] {
+  @apply border-orange-500/30 bg-orange-500/5 text-orange-700;
+}
+.tip-container[data-type='caution'] .tip-icon {
+  @apply text-orange-500;
+}
+:global(.dark) .tip-container[data-type='caution'] {
+  @apply border-orange-500/40 text-orange-300;
+}
+:global(.dark) .tip-container[data-type='caution'] .tip-icon {
+  @apply text-orange-400;
+}
+
+/* success */
+.tip-container[data-type='success'] {
+  @apply border-green-500/30 bg-green-500/5 text-green-700;
+}
+.tip-container[data-type='success'] .tip-icon {
+  @apply text-green-500;
+}
+:global(.dark) .tip-container[data-type='success'] {
+  @apply border-green-500/40 text-green-300;
+}
+:global(.dark) .tip-container[data-type='success'] .tip-icon {
+  @apply text-green-400;
+}
+
+.tip-icon {
+  display: inline-flex;
+  margin-top: 1px;
+}
+
+.tip-content :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.tip-content :deep(pre) {
+  margin: 0.75rem 0;
+}
+
+.tip-content :deep(ul),
+.tip-content :deep(ol) {
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+.tip-content :deep(li) {
+  margin: 0.25rem 0;
 }
 </style>

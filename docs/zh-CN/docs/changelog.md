@@ -3,7 +3,173 @@ id: changelog
 title: 更新日志
 slug: changelog
 sidebar_position: 7
+sidebar_icon: newspaper
 ---
+
+## 2026-04-28
+
+### CLI v0.18.0
+
+- **TUI 订单页面** — 交互式订单列表，支持快捷键和下单对话框，无需离开终端即可完成交易
+- **`dividend` 增强** — 新增 `--page` 翻页和 `--year` 年份筛选，每页 50 条（原为 30 条）
+
+## 2026-04-24
+
+### CLI v0.17.4
+
+- **`--limit` 别名** — 所有 `--count` 参数现支持 `--limit` 别名（改善 AI agent 工具调用兼容性）
+- **修复：Unix 自更新** — `longbridge update` 在 Unix 上不再出现 ETXTBUSY 错误
+
+## 2026-04-22
+
+### CLI v0.17.3
+
+- **修复：Token 刷新卡死** — 访问令牌过期且网络不稳定时立即报错，Token 文件保留供下次重试
+- **`auth status`** — 新增三态显示：`valid` / `refresh pending`（自动刷新）/ `expired`（之前 `refresh pending` 误显为 `expired`）
+- **修复：`--auth-code` 登录 + Windows 浏览器 URL** — 修复无 Token 文件时 OAuth 流程不触发及 Windows 上 URL `&` 参数被截断的问题
+
+## 2026-04-20
+
+### CLI v0.17.1
+
+- **`completion` 命令** — 支持 bash、zsh、fish、elvish、powershell 的 Tab 补全
+- 所有 API 请求统一设置 `User-Agent: longbridge-cli/<version>` 并新增 `x-cli-cmd` 请求头
+
+## 2026-04-17
+
+### CLI v0.17.0
+
+- **`dca`** — 完整定投生命周期：创建计划（日/周/双周/月频）、暂停/恢复/停止、查看交易历史、检查标的是否支持定投、计算下次交易日
+- **`sharelist`** — 社区股票列表：管理自己的列表，通过 `popular` 发现热门列表
+- **`short-positions`** — 美股做空数据：空头比例、平仓天数、空头股数（FINRA 双月更新）
+- **`option volume`** — 实时认购/认沽成交量及 P/C 比；`daily` 子命令查看历史数据
+- **`option chain`** 修复：不带 `--date` 时只返回到期日列表
+
+## 2026-04-16
+
+### CLI v0.16.3
+
+- **`auth` 子命令组** — `longbridge auth login` / `auth logout` / `auth status`；`auth status` 本地查看 Token 有效性和账户信息，无需网络
+- **`alert enable` / `alert disable`** — 切换价格提醒启用状态，无需删除重建
+- **修复：美股指数 symbol** — `.DJI.US`、`.VIX.US` 现已正确解析；美股指数需要前置点号
+- **"你是否想查询…" 提示** — 查询无结果时给出 symbol 格式建议
+
+## 2026-04-13
+
+### CLI v0.16.0
+
+- **新增 21+ 个命令** — `company`、`executive`、`industry-valuation`、`operating`、`corp-action`、`invest-relation`、`constituent`、`market-status`、`broker-holding`、`ah-premium`、`trade-stats`、`anomaly`、`alert`、`profit-analysis`
+- **`profit-analysis`** — 盈亏分析：总览、逐只股票分析、单只明细与交易流水、按市场筛选
+- **`update`** — 跨平台自更新，新增 Windows 支持和 CDN 加速；`--release-notes` 查看更新日志
+- **`intraday --date`** — 支持查询历史日期的分时数据
+
+## 2026-04-09
+
+### CLI v0.15.0
+
+- **`portfolio` 命令** — 组合总损益、各市场资产分布、持仓及现金明细
+- **`investors` 命令** — 基于 SEC 13F 数据的主动基金经理排行榜，按 CIK 查询指定投资者持仓（含实时价格）
+
+  ```
+  $ longbridge investors
+  | #  | name                                        | AUM      | period      | cik        |
+  |----|---------------------------------------------|----------|-------------|------------|
+  | 1  | Capital International Investors             | $637.97B | 31-DEC-2025 | 0001562230 |
+  | 2  | Capital Research Global Investors           | $541.73B | 31-DEC-2025 | 0001422848 |
+  | 3  | CTC LLC                                     | $404.44B | 31-DEC-2025 | 0001445893 |
+  | 4  | BERKSHIRE HATHAWAY INC                      | $274.16B | 31-DEC-2025 | 0001067983 |
+  | 5  | DODGE & COX                                 | $185.26B | 31-DEC-2025 | 0000200217 |
+
+  $ longbridge investors 0001067983
+  Period: 2025-12-31  (filed: 2026-02-17)
+
+  BERKSHIRE HATHAWAY INC (period: 2025-12-31)
+
+  Portfolio: 42 positions, total value ~$274.16B
+
+  | company                      | value    | shares  | weight |
+  |------------------------------|----------|---------|--------|
+  | APPLE INC                    | $61.96B  | 227.92M | 22.6%  |
+  | AMERICAN EXPRESS CO          | $56.09B  | 151.61M | 20.5%  |
+  | BANK AMERICA CORP            | $28.45B  | 517.30M | 10.4%  |
+  | COCA COLA CO                 | $27.96B  | 400.00M | 10.2%  |
+  | CHEVRON CORP NEW             | $19.84B  | 130.16M | 7.2%   |
+  | MOODYS CORP                  | $12.60B  | 24.67M  | 4.6%   |
+  | OCCIDENTAL PETE CORP         | $10.89B  | 264.94M | 4.0%   |
+  | CHUBB LIMITED                | $10.69B  | 34.25M  | 3.9%   |
+  | KRAFT HEINZ CO               | $7.90B   | 325.63M | 2.9%   |
+  | ALPHABET INC                 | $5.59B   | 17.85M  | 2.0%   |
+  ```
+
+- **`insider-trades`** — 查看任意标的的内部人士交易记录（SEC Form 4）
+
+  ```
+  $ longbridge insider-trades TSLA.US
+  Fetching 20 Form 4 filings...
+
+  | date       | filer        | title         | type     | shares | price   | value    | owned_after |
+  |------------|--------------|---------------|----------|--------|---------|----------|-------------|
+  | 2026-03-31 | Zhu Xiaotong | SVP           | EXERCISE | 20.00K | $20.57  | $411.40K | 20.00K      |
+  | 2025-09-11 | Zhu Xiaotong | SVP, APAC and | SELL     | 20.00K | $363.75 | $7.28M   | 47.60K      |
+  | 2025-06-12 | Zhu Xiaotong | SVP, APAC     | EXERCISE | 15.00K | $20.57  | $308.55K | 82.60K      |
+  | 2025-06-12 | Zhu Xiaotong | SVP, APAC     | SELL     | 15.00K | $323.81 | $4.86M   | 67.60K      |
+
+  Source: SEC EDGAR Form 4 — TSLA
+  ```
+
+- **`watchlist pin/unpin`** — 将标的置顶至自选股分组顶部
+- **`assets` 命令** — 原 `balance` 更名，展示完整资产概览：净资产、购买力、保证金、风险等级及分币种现金明细
+
+## 2026-04-08
+
+### CLI v0.14.2
+
+- **`--lang` 标志** — 为所有命令指定内容语言（`zh-CN`、`zh-HK`、`en`），自动回退到系统 `LANG` 环境变量
+
+## 2026-04-02
+
+### CLI v0.14.1
+
+- **CN 区域登录** — `longbridge auth login` 支持中国大陆区域路由
+- **`-v` 标志** — 快速查看版本号
+
+### CLI v0.14.0
+
+- **Device Auth** — Longbridge Developers 平台现已支持 OAuth Device Auth 授权流程；`longbridge auth login` 显示验证 URL 和 Code，可在任意设备完成授权，支持 SSH 和无头环境
+- **订单增强** — 支持追踪止损和 AO 订单类型；订单命令新增 `--expire-date`、`--outside-rth`、`--remark` 参数
+- **修复** — Linux 预构建二进制改为 musl，修复在部分发行版的 Segfault
+
+## 2026-04-01
+
+### CLI v0.13.0
+
+- 新增**基本面 & 分析**命令：
+  - `financial-report` — 财务报表，支持期间和类型筛选
+  - `valuation` — P/E、P/B、P/S、股息率快照，支持同行对比和历史模式
+  - `forecast-eps` — 分析师 EPS 预测一致预期
+  - `consensus` — 营收/利润/EPS 一致预期，带超预期/未达预期标注
+  - `institution-rating` / `institution-rating detail` — 评级分布及月度趋势
+  - `shareholder` — 机构持股，支持变动追踪和排序
+  - `fund-holder` — 持有该标的的基金和 ETF
+  - `dividend` / `dividend detail` — 分红历史和分配方案
+  - `finance-calendar` — 财务日历，支持按事件类型筛选（财务、报告、分红、IPO、宏观数据、停市）
+  - `exchange-rate` — 所有支持货币的汇率
+- CLI 命令按业务域重新分组命名
+
+## 2026-03-30
+
+- 新增结单 API：
+  - `GET /v1/statement/list` — 查询日结单或月结单列表
+  - `GET /v1/statement/download` — 获取指定结单文件的预签名下载地址
+
+## 2026-03-25
+
+- 新增社区 API：
+  - `GET /content/topics/mine` — 获取我发布的讨论列表
+  - `POST /content/topics` — 创建社区讨论
+  - `GET /content/topics/{id}` — 获取讨论详情
+  - `GET /content/topics/{topic_id}/comments` — 获取讨论回复列表
+  - `POST /content/topics/{topic_id}/comments` — 创建讨论回复
 
 ## 2025-06-17
 

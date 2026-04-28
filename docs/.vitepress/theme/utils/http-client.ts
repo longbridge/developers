@@ -1,5 +1,5 @@
 /**
- * Longbridge OpenAPI 请求库
+ * Longbridge Developers 请求库
  * 支持 HTTP API 和 WebSocket 连接
  */
 

@@ -222,8 +222,6 @@ export const GenTryItPlugin = (md: MarkdownIt) => {
 
       state.env.frontmatter.httpInfo = httpResult
       state.env.frontmatter.parametersTable = parametersResult || {}
-
-      addTryItComponent(state)
     }
 
     // 将解析结果写入 frontmatter 中供其他组件访问

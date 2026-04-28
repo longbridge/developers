@@ -1,1 +1,8 @@
-{ "label": "Content", "collapsible": true, "collapsed": true, "link": null, "position": 4.5 }
+{
+  "label": "Community",
+  "collapsible": true,
+  "collapsed": true,
+  "link": null,
+  "position": 4.5,
+  "icon": "newspaper"
+}

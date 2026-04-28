@@ -11,6 +11,10 @@ headingLevel: 2
 
 該接口用於獲取用戶每個幣種可用、可取、凍結、待結算金額、在途資金 (基金申購贖回) 信息。
 
+<CliCommand>
+longbridge assets
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="account_balance" />
 
 ## Request
@@ -46,6 +50,24 @@ print(resp)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.account_balance()
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
@@ -56,7 +78,7 @@ async function main() {
     console.log("Open this URL to authorize: " + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = await TradeContext.new(config)
+  const ctx = TradeContext.new(config)
   const resp = await ctx.accountBalance()
   for (const obj of resp) {
     console.log(obj.toString())
@@ -78,7 +100,7 @@ class Main {
                 .build(url -> System.out.println("Open to authorize: " + url))
                 .get();
              Config config = Config.fromOAuth(oauth);
-             TradeContext ctx = TradeContext.create(config).get()) {
+             TradeContext ctx = TradeContext.create(config)) {
             AccountBalance[] resp = ctx.getAccountBalance().get();
             for (AccountBalance obj : resp) {
                 System.out.println(obj);
@@ -101,7 +123,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build(|url| println!("Open this URL to authorize: {url}"))
         .await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = TradeContext::try_new(config).await?;
+    let (ctx, _) = TradeContext::new(config);
     let resp = ctx.account_balance(None).await?;
     println!("{:?}", resp);
     Ok(())
@@ -122,41 +144,43 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 using namespace longbridge;
 using namespace longbridge::trade;
 
-int main(int argc, char const* argv[]) {
-#ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
-#endif
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    TradeContext ctx = TradeContext::create(config);
 
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) {
-      std::cout << "Open this URL to authorize: " << url << std::endl;
-    },
-    [](auto res) {
-      if (!res) {
-        std::cout << "authorization failed: " << *res.status().message() << std::endl;
-        return;
-      }
-      Config config = Config::from_oauth(*res);
-      TradeContext::create(config, [](auto res) {
+    ctx.account_balance([](auto res) {
         if (!res) {
-          std::cout << "failed to create trade context: " << *res.status().message() << std::endl;
-          return;
-        }
-        res.context().account_balance([](auto res) {
-          if (!res) {
             std::cout << "failed: " << *res.status().message() << std::endl;
             return;
-          }
-          for (const auto& b : *res) {
+        }
+        for (const auto& b : *res) {
             std::cout << b.currency << " " << (double)b.available << std::endl;
-          }
-        });
-      });
+        }
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
 
-  std::cin.get();
-  return 0;
+    std::cin.get();
+    return 0;
 }
 ```
 

@@ -35,3 +35,9 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 old_docs
+.superpowers
+docs/superpowers
+.claude/worktrees
+
+# generated at build time by fetch-mcp-tools plugin
+docs/.vitepress/data/mcp-tools.json

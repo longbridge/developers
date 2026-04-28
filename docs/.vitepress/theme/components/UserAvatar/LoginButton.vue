@@ -55,4 +55,14 @@ const redirectPath = computed(() => {
   background-color: var(--vp-c-brand-1);
   color: var(--vp-c-white);
 }
+
+.dark .login-button {
+  background-color: var(--brand-60);
+  color: var(--vp-c-white);
+}
+
+.dark .login-button:hover {
+  background-color: var(--brand-70);
+  color: var(--vp-c-white);
+}
 </style>

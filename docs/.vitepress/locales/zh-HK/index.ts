@@ -5,28 +5,21 @@ import { sidebar } from './sidebar'
 import { logoLink } from '../../theme/utils/link'
 export const zhHKConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   head: [
-    ['meta', { property: 'og:url', content: 'https://open.longbridge.com' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'Longbridge OpenAPI：靈活支持程序化交易' }],
-    [
-      'meta',
-      {
-        property: 'og:description',
-        content: 'Longbridge OpenAPI 為您提供靈活多樣的接入服務，滿足您的量化交易需求，快速構建您的交易策略。',
-      },
-    ],
     [
       'meta',
       {
         property: 'og:image',
-        content: 'https://assets.lbkrs.com/uploads/48641e8e-a157-4b0f-a58e-bd3998d10d54/group427321346.webp',
+        content: 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png',
       },
     ],
+    ['meta', { property: 'og:image:type', content: 'image/png' }],
+    ['meta', { property: 'og:image:alt', content: 'Longbridge Developers' }],
     ['meta', { property: 'og:locale', content: 'zh-HK' }],
-    ['meta', { property: 'og:site_name', content: 'OpenAPI | Longbridge 開放平臺' }],
+    ['meta', { property: 'og:site_name', content: 'Longbridge Developers' }],
   ],
-  title: 'Longbridge API 文檔',
-  description: 'Longbridge OpenAPI 為您提供靈活多樣的接入服務，滿足您的量化交易需求，快速構建您的交易策略。',
+  title: 'Longbridge Developers',
+  description: '探索 Longbridge Developers，提供 API、LLM、MCP、CLI 等全方位開發資源，助力構建您的金融應用。',
 
   themeConfig: {
     logoLink: logoLink(),

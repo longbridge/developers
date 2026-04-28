@@ -6,3 +6,80 @@
     background-color: transparent;
   }
 }
+
+:root:root {
+  --vp-c-divider: rgba(0, 0, 0, 0.06);
+  --vp-c-gutter: var(--vp-c-divider);
+  --vp-navbar-bg: rgba(255, 255, 255, 0.7);
+  --vp-navbar-border: rgba(0, 0, 0, 0.08);
+  --vp-sidebar-bg-color: var(--vp-c-bg);
+}
+
+:root.dark:root {
+  --vp-c-divider: rgba(255, 255, 255, 0.06);
+  --vp-navbar-bg: rgba(27, 27, 31, 0.95);
+  --vp-navbar-border: rgba(255, 255, 255, 0.08);
+  --vp-sidebar-bg-color: var(--vp-c-bg);
+}
+
+// 滚动后导航栏玻璃模糊效果（VitePress 在顶部时添加 .top 类，滚动后移除）
+.VPNavBar:not(.top) {
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  background-color: var(--vp-navbar-bg) !important;
+  border-bottom: 1px solid var(--vp-navbar-border) !important;
+  transition:
+    background-color 0.25s,
+    backdrop-filter 0.25s !important;
+}
+
+// 滚动后让内部子元素背景透明，确保 backdrop-filter 效果穿透显示
+.VPNavBar:not(.top) .content-body,
+.VPNavBar:not(.top) .title {
+  background-color: transparent !important;
+}
+
+.VPNavBar:not(.top) .divider-line,
+.VPNavBar:not(.top) .divider {
+  background-color: transparent !important;
+}
+
+// 去掉右侧 padding 避免渐变被截断
+.VPContent.has-sidebar {
+  padding-right: 0 !important;
+}
+
+// VPDoc 内容区域品牌色镜像渐变背景
+.VPDoc {
+  position: relative;
+}
+
+.VPDoc::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    680px 320px at 50% 0%,
+    color-mix(in srgb, var(--vp-c-brand-1) 8%, transparent) 25%,
+    transparent 100%
+  );
+  z-index: 0;
+}
+
+// 搜索框圆角样式
+.VPNavBarSearchButton {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  border-radius: 20px !important;
+
+  .keys {
+    border: 0 !important;
+    font-size: 12px !important;
+    color: var(--vp-c-text-3) !important;
+  }
+}
+
+.DocSearch-Button {
+  border-radius: 20px !important;
+}

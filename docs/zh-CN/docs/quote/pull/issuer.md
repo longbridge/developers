@@ -7,6 +7,11 @@ sidebar_position: 13
 
 该接口用于获取轮证发行商 ID 数据 (可每天同步一次)。
 
+<CliCommand>
+# 港股权证发行商完整列表
+longbridge warrant issuers
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="warrant_issuers" />
 
 :::info
@@ -34,6 +39,25 @@ print(resp)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncQuoteContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncQuoteContext.create(config)
+
+    resp = await ctx.warrant_issuers()
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
@@ -44,7 +68,7 @@ async function main() {
     console.log("Open this URL to authorize: " + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = await QuoteContext.new(config)
+  const ctx = QuoteContext.new(config)
   const resp = await ctx.warrantIssuers()
   for (const obj of resp) {
     console.log(obj.toString())
@@ -66,7 +90,7 @@ class Main {
                 .build(url -> System.out.println("Open to authorize: " + url))
                 .get();
              Config config = Config.fromOAuth(oauth);
-             QuoteContext ctx = QuoteContext.create(config).get()) {
+             QuoteContext ctx = QuoteContext.create(config)) {
             IssuerInfo[] resp = ctx.getWarrantIssuers().get();
             for (IssuerInfo obj : resp) {
                 System.out.println(obj);
@@ -89,7 +113,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build(|url| println!("Open this URL to authorize: {url}"))
         .await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = QuoteContext::try_new(config).await?;
+    let (ctx, _) = QuoteContext::new(config);
     let resp = ctx.warrant_issuers().await?;
     println!("{:?}", resp);
     Ok(())
@@ -110,41 +134,43 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 using namespace longbridge;
 using namespace longbridge::quote;
 
-int main(int argc, char const* argv[]) {
-#ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
-#endif
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    QuoteContext ctx = QuoteContext::create(config);
 
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) {
-      std::cout << "Open this URL to authorize: " << url << std::endl;
-    },
-    [](auto res) {
-      if (!res) {
-        std::cout << "authorization failed: " << *res.status().message() << std::endl;
-        return;
-      }
-      Config config = Config::from_oauth(*res);
-      QuoteContext::create(config, [](auto res) {
+    ctx.warrant_issuers([](auto res) {
         if (!res) {
-          std::cout << "failed to create quote context: " << *res.status().message() << std::endl;
-          return;
-        }
-        res.context().warrant_issuers([](auto res) {
-          if (!res) {
             std::cout << "failed: " << *res.status().message() << std::endl;
             return;
-          }
-          for (const auto& i : *res) {
+        }
+        for (const auto& i : *res) {
             std::cout << i.id << " " << i.name_cn << " " << i.name_en << std::endl;
-          }
-        });
-      });
+        }
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
 
-  std::cin.get();
-  return 0;
+    std::cin.get();
+    return 0;
 }
 ```
 

@@ -1,8 +1,15 @@
 
 .vp-doc blockquote {
-  border-radius: 10px;
-  padding: 18px 20px 20px 15px;
-  position: relative;
-  background-color: var(--vp-c-gray-soft);
-  border-left: 6px solid var(--vp-c-green-2);
+  border-left: 2px solid var(--vp-c-divider);
+  padding: 0 0 0 1.25rem;
+  margin: 1.25rem 0;
+  background: none;
+  border-radius: 0;
+  color: var(--vp-c-text-2);
+  font-style: italic;
+}
+
+.vp-doc blockquote > p {
+  margin: 0;
+  line-height: 1.75;
 }

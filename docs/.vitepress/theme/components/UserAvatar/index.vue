@@ -20,41 +20,20 @@ const isLogin = ref(false)
 onMounted(() => {
   isLogin.value = window.longportInternal.isLogin()
 
-  function getCookie(name: string) {
-    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
-    return match ? match[2] : null
-  }
-  function getToken() {
-    return (
-      getCookie('x-bridge-token') || getCookie('x-bridge-token-h5') || sessionStorage.getItem('x-bridge-token') || ''
-    )
-  }
-
   const isProd = !endsWith(location.hostname, '.xyz')
   const loginUrl = createLoginRedirectPath({
     sw_open: '1',
   })
-  console.log('loginUrl', loginUrl)
   window.SupportWidgetConfig = {
     isLoggedIn: function () {
       return isLogin.value
     },
     loginUrl,
-    chatUrl: function () {
-      const chatUrl =
-        (isProd ? 'https://longbridge.app.wbrks.com' : 'https://app.longbridge.xyz') +
-        '/csp/chat?embedded=1&show_transfer=0&skip_agreement=1'
-      const state = btoa(chatUrl)
-      const t = encodeURIComponent(getToken())
-      return (
-        (isProd ? `https://longbridge.activity.wbrks.com` : 'https://activity.longbridge.xyz') +
-        `/pages/auth/callback?t=${t}&state=${state}`
-      )
-    },
+    proxy: isProd ? 'prod' : 'staging',
   }
 
   const script = document.createElement('script')
-  script.src = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.4.iife.js'
+  script.src = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
   script.async = true
   document.head.appendChild(script)
 })

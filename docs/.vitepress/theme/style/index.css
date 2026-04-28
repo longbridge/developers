@@ -9,29 +9,121 @@
 @import './custom.scss';
 @import './css-var.scss';
 
+.VPContent {
+  .VPHero .heading .text {
+    font-size: 3rem;
+  }
+
+  .VPHero .image-container {
+    @apply justify-end items-end transform-none;
+  }
+}
+
+/* Footer links — override .vp-doc a in all contexts */
+.vp-doc .footer-link,
+.vp-doc .beian-link,
+.vp-doc .github-link {
+  color: var(--vp-c-text-3) !important;
+  text-decoration: none !important;
+}
+
+.vp-doc .footer-link:hover,
+.vp-doc .beian-link:hover {
+  color: var(--vp-c-text-1) !important;
+  text-decoration: underline !important;
+}
+
+.vp-doc .github-link:hover {
+  color: var(--vp-c-text-1) !important;
+}
+
+/* Docs page links — Shadcn style: subdued, underline on hover only */
+.vp-doc a:not(.footer-link):not(.beian-link):not(.github-link) {
+  color: var(--vp-c-text-1);
+  text-decoration: underline;
+  text-decoration-color: var(--vp-c-divider);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s;
+}
+
+.vp-doc a:not(.footer-link):not(.beian-link):not(.github-link):hover {
+  text-decoration-color: var(--vp-c-text-1);
+}
+
 html:root {
   --vp-c-brand-1: var(--brand-100);
   --vp-c-brand-2: var(--brand-90);
   --vp-c-brand-3: var(--brand-80);
+  --vp-code-color: var(--vp-c-text-1);
+}
+
+/* Inline code — ensure text color, not brand color */
+.vp-doc :not(pre) > code {
+  color: var(--vp-c-text-1);
+}
+
+/* Doc footer: LLMs Text + Edit this page on same row */
+.VPDocFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.VPDocFooter > .edit-info {
+  flex: 1;
+  min-width: 0;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0 !important;
+}
+
+.VPDocFooter > .prev-next {
+  flex: 0 0 100%;
+  margin-top: 14px;
+}
+
+.llms-text-link {
+  display: inline-flex;
+  align-items: center;
+  line-height: 32px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+
+.llms-text-link:hover {
+  color: var(--vp-c-text-1);
+}
+
+/* Edit this page link — remove primary color */
+.edit-link-button {
+  color: var(--vp-c-text-2) !important;
+  font-weight: 400 !important;
+}
+
+.edit-link-button:hover {
+  color: var(--vp-c-text-1) !important;
+}
+
+/* Updated at — lighter */
+.VPLastUpdated {
+  color: var(--vp-c-text-3) !important;
+  font-size: 13px !important;
 }
 
 /**
  * Component: Home
  * -------------------------------------------------------------------------- */
 
- :root {
+:root {
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(
-    120deg,
-    #bd34fe 30%,
-    #41d1ff
-  );
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
 
-  --vp-home-hero-image-background-image: linear-gradient(
-    -45deg,
-    #bd34fe 50%,
-    #47caff 50%
-  );
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%);
   --vp-home-hero-image-filter: blur(44px);
 }
 
@@ -45,4 +137,80 @@ html:root {
   :root {
     --vp-home-hero-image-filter: blur(68px);
   }
+}
+
+.aside-container {
+  max-height: calc(100vh - 100px) !important;
+  height: auto !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
+}
+
+.aside-curtain {
+  display: none !important;
+}
+
+/* CLI Command block */
+.vp-cli-command {
+  margin: 16px 0 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vp-cli-command div[class*='language-'].vp-adaptive-theme {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-top: 0 !important;
+  margin: 0 !important;
+}
+
+.vp-cli-command div[class*='language-'].vp-adaptive-theme::before {
+  display: none;
+}
+
+.vp-cli-header {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px 6px 14px;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid var(--vp-code-block-divider-color, rgba(128, 128, 128, 0.15));
+  background-color: var(--vp-code-block-bg);
+}
+
+.vp-cli-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+  user-select: none;
+}
+
+.vp-cli-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.vp-cli-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  color: var(--vp-c-text-3);
+  text-decoration: none !important;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+}
+
+.vp-cli-action:hover {
+  color: var(--vp-c-text-1);
+  background-color: var(--vp-c-default-soft);
 }

@@ -5,6 +5,9 @@ on:
       - main
       - release
       - feat/lb
+      - feat/deploy_cn
+      - cloudflare-pages
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -39,9 +42,52 @@ jobs:
         env:
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://m.lbkrs.com'
 
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 335162bab35b74f065a0351212011d5a
+          command: pages deploy docs/.vitepress/dist --project-name=longbridge-developers --branch=main
+
       - name: Upload to Aliyun OSS
         run: |
-          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.txt" --meta=Cache-Control:max-age=31536000
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.txt" --exclude "*.zip" --meta=Cache-Control:max-age=31536000
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.zip" --meta "Cache-Control:no-cache#Content-type:application/zip;charset=utf-8"
           ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.md" --meta "Cache-Control:no-cache#Content-type:text/markdown;charset=utf-8"
           ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.txt" --meta "Cache-Control:no-cache#Content-type:text/plain;charset=utf-8"
           ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.html" --meta "Cache-Control:no-cache#Content-type:text/html;charset=utf-8"
+
+  deploy_cn:
+    name: build-cn
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download ossutils zip
+        run: |
+          wget https://github.com/aliyun/ossutil/releases/download/v1.7.17/ossutil-v1.7.17-linux-amd64.zip
+          unzip ossutil-v1.7.17-linux-amd64.zip && cp ./ossutil-v1.7.17-linux-amd64/ossutil ${{github.workspace}}/ && chmod +x ${{github.workspace}}/ossutil
+
+      - name: Test ossutil
+        run: |
+          ${{github.workspace}}/ossutil --version
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependency
+        run: bun install
+
+      - name: Build CN
+        run: bun run build:cn
+
+      - name: Upload to Aliyun OSS (CN)
+        run: |
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.cn/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.txt" --exclude "*.zip" --meta=Cache-Control:max-age=31536000
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.txt" --exclude "*.zip" --meta=Cache-Control:max-age=31536000
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.cn/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.zip" --meta "Cache-Control:no-cache#Content-type:application/zip;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/release/open.longbridge.cn/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.md" --meta "Cache-Control:no-cache#Content-type:text/markdown;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/release/open.longbridge.cn/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.txt" --meta "Cache-Control:no-cache#Content-type:text/plain;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist/ oss://lb-assets/github/release/open.longbridge.cn/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.html" --meta "Cache-Control:no-cache#Content-type:text/html;charset=utf-8"

@@ -18,6 +18,7 @@ import extractorMdc from '@unocss/extractor-mdc'
 
 export default defineConfig({
   presets: [presetWind3()],
+  safelist: [],
   theme: {
     breakpoints: {
       md: '768px',

@@ -11,6 +11,11 @@ headingLevel: 2
 
 This API is used to submit order for HK and US stocks, warrant and option.
 
+<CliCommand>
+longbridge buy TSLA.US 100 --price 250.00
+longbridge sell TSLA.US 100 --price 260.00
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="submit_order" />
 
 ## Request
@@ -26,24 +31,24 @@ This API is used to submit order for HK and US stocks, warrant and option.
 
 > Content-Type: application/json; charset=utf-8
 
-| Name               | Type   | Required | Description                                                                                                                                                                    |
-| ------------------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| symbol             | string | YES      | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                                                                                   |
-| order_type         | string | YES      | [Order Type](../trade-definition#ordertype)                                                                                                                                    |
-| submitted_price    | string | NO       | Submitted price, example: `388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` Order Required                                                                                |
-| submitted_quantity | string | YES      | Submitted quantity, example: `100`                                                                                                                                             |
-| trigger_price      | string | NO       | Trigger price, example: `388.5`<br/><br/> `LIT` / `MIT` Order Required                                                                                                         |
-| limit_offset       | string | NO       | Limit offset amount<br/><br/> `TSLPAMT` / `TSLPPCT` Order Required when`limit_depth_level` is set to 0                                                                                              |
-| trailing_amount    | string | NO       | Trailing amount<br/><br/> `TSLPAMT` Order Required                                                                                                                             |
-| trailing_percent   | string | NO       | Trailing percent<br/><br/> `TSLPPCT` Order Required                                                                                                                            |
-| expire_date        | string | NO       | Long term order expire date, format `YYYY-MM-DD`, example: `2022-12-05`<br/><br/> Required when `time_in_force` is `GTD`                                                       |
-| side               | string | YES      | Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                                                                                                    |
-| outside_rth        | string | NO       | Enable or disable outside regular trading hours<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - regular trading hour only<br/> `ANY_TIME` - any time<br/> `OVERNIGHT` - Overnight  |
-| time_in_force      | string | YES      | Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order                                      |
-| remark             | string | NO       | remark (Maximum 255 characters)                                                                                                                                                 |
+| Name               | Type   | Required | Description                                                                                                                                                                                                                                                                                                                     |
+| ------------------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol             | string | YES      | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                                                                                                                                                                                                                                    |
+| order_type         | string | YES      | [Order Type](../trade-definition#ordertype)                                                                                                                                                                                                                                                                                     |
+| submitted_price    | string | NO       | Submitted price, example: `388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` Order Required                                                                                                                                                                                                                                 |
+| submitted_quantity | string | YES      | Submitted quantity, example: `100`                                                                                                                                                                                                                                                                                              |
+| trigger_price      | string | NO       | Trigger price, example: `388.5`<br/><br/> `LIT` / `MIT` Order Required                                                                                                                                                                                                                                                          |
+| limit_offset       | string | NO       | Limit offset amount<br/><br/> `TSLPAMT` / `TSLPPCT` Order Required when`limit_depth_level` is set to 0                                                                                                                                                                                                                          |
+| trailing_amount    | string | NO       | Trailing amount<br/><br/> `TSLPAMT` Order Required                                                                                                                                                                                                                                                                              |
+| trailing_percent   | string | NO       | Trailing percent<br/><br/> `TSLPPCT` Order Required                                                                                                                                                                                                                                                                             |
+| expire_date        | string | NO       | Long term order expire date, format `YYYY-MM-DD`, example: `2022-12-05`<br/><br/> Required when `time_in_force` is `GTD`                                                                                                                                                                                                        |
+| side               | string | YES      | Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                                                                                                                                                                                                                                                     |
+| outside_rth        | string | NO       | Enable or disable outside regular trading hours<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - regular trading hour only<br/> `ANY_TIME` - any time<br/> `OVERNIGHT` - Overnight                                                                                                                                                   |
+| time_in_force      | string | YES      | Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order                                                                                                                                                                                       |
+| remark             | string | NO       | remark (Maximum 255 characters)                                                                                                                                                                                                                                                                                                 |
 | limit_depth_level  | int32  | NO       | Specifies the bid/ask depth level. Value range is -5 ~ 0 ~ 5. <br/>Negative numbers indicate bid levels (e.g., -1 means best bid level 1),<br/>positive numbers indicate ask levels (e.g., 1 means best ask level 1).<br/>When set to 0, the `limit_offset` parameter takes effect.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders. |
-| monitor_price      | string |  NO      | Monitoring price. <br/>Monitoring starts only after reaching this price, updating the reference price.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders. |
-| trigger_count      | int32  |  NO      | Number of triggers. Value range is 0 ~ 3.<br/>Specifies that within 1 minute, the order will only be placed after being triggered multiple times.<br/>Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders. |
+| monitor_price      | string | NO       | Monitoring price. <br/>Monitoring starts only after reaching this price, updating the reference price.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders.                                                                                                                                                                              |
+| trigger_count      | int32  | NO       | Number of triggers. Value range is 0 ~ 3.<br/>Specifies that within 1 minute, the order will only be placed after being triggered multiple times.<br/>Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders.                                                                                                                   |
 
 ### Request Example
 
@@ -66,16 +71,49 @@ print(resp)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from decimal import Decimal
+from longbridge.openapi import AsyncTradeContext, Config, OrderType, OrderSide, TimeInForceType, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+
+    # Create a context for trade APIs
+    ctx = AsyncTradeContext.create(config)
+
+    # Submit order
+    resp = await ctx.submit_order("700.HK", OrderType.LO, OrderSide.Buy, Decimal(500), TimeInForceType.Day, submitted_price=Decimal(50), remark="Hello from Python SDK")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, TradeContext, OAuth, OrderType, OrderSide, TimeInForceType } = require('longbridge')
+const { Config, TradeContext, OAuth, OrderType, OrderSide, TimeInForceType, Decimal } = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
   const config = Config.fromOAuth(oauth)
-  const ctx = await TradeContext.new(config)
-  const resp = await ctx.submitOrder("700.HK", OrderType.LO, OrderSide.Buy, 500, TimeInForceType.Day, { submittedPrice: "50", remark: "Hello" })
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.submitOrder({
+    symbol: '700.HK',
+    orderType: OrderType.LO,
+    side: OrderSide.Buy,
+    submittedQuantity: new Decimal(500),
+    timeInForce: TimeInForceType.Day,
+    submittedPrice: new Decimal(50),
+    remark: 'Hello',
+  })
   console.log(resp)
 }
 main().catch(console.error)
@@ -92,8 +130,8 @@ class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             TradeContext ctx = TradeContext.create(config).get()) {
-            SubmitOrderResponse resp = ctx.submitOrder(SubmitOrderOptions.builder().symbol("700.HK").orderType(OrderType.LO).side(OrderSide.Buy).quantity(500).timeInForce(TimeInForceType.Day).submittedPrice(new BigDecimal("50")).remark("Hello").build()).get();
+             TradeContext ctx = TradeContext.create(config)) {
+            SubmitOrderResponse resp = ctx.submitOrder(new SubmitOrderOptions("700.HK", OrderType.LO, OrderSide.Buy, new BigDecimal("500"), TimeInForceType.Day).setSubmittedPrice(new BigDecimal("50")).setRemark("Hello")).get();
             System.out.println(resp.orderId);
         }
     }
@@ -105,15 +143,19 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+use longbridge::{oauth::OAuthBuilder, trade::{TradeContext, SubmitOrderOptions, OrderType, OrderSide, TimeInForceType}, Config};
 use rust_decimal::Decimal;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let (ctx, _) = TradeContext::try_new(config).await?;
-    let resp = ctx.submit_order(longbridge::trade::SubmitOrderOptions::builder().symbol("700.HK").order_type(longbridge::trade::OrderType::LO).side(longbridge::trade::OrderSide::Buy).quantity(500).time_in_force(longbridge::trade::TimeInForceType::Day).submitted_price(Decimal::from(50)).remark("Hello").build()).await?;
+    let (ctx, _) = TradeContext::new(config);
+    let resp = ctx.submit_order(
+        SubmitOrderOptions::new("700.HK", OrderType::LO, OrderSide::Buy, Decimal::from(500), TimeInForceType::Day)
+            .submitted_price(Decimal::from(50))
+            .remark("Hello")
+    ).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -125,33 +167,47 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```cpp
 #include <iostream>
 #include <longbridge.hpp>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
+
 using namespace longbridge;
 using namespace longbridge::trade;
 
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    TradeContext ctx = TradeContext::create(config);
+
+    SubmitOrderOptions opts{"700.HK", OrderType::LO, OrderSide::Buy, 200, TimeInForceType::Day, Decimal(50.0), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
+    ctx.submit_order(opts, [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "order_id: " << res->order_id << std::endl;
+    });
+}
+
 int main(int argc, char const* argv[]) {
 #ifdef WIN32
-  SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 #endif
-  const std::string client_id = "your-client-id";
-  OAuthBuilder(client_id).build(
-    [](const std::string& url) { std::cout << "Open this URL to authorize: " << url << std::endl; },
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
     [](auto res) {
-      if (!res) { std::cout << "authorization failed" << std::endl; return; }
-      Config config = Config::from_oauth(*res);
-      TradeContext::create(config, [](auto res) {
-        if (!res) { std::cout << "failed" << std::endl; return; }
-        SubmitOrderOptions opts{"700.HK", OrderType::LO, OrderSide::Buy, 200, TimeInForceType::Day, Decimal(50.0), std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt, std::nullopt};
-        res.context().submit_order(opts, [](auto res) {
-          if (!res) { std::cout << "failed" << std::endl; return; }
-          std::cout << "order_id: " << res->order_id << std::endl;
-        });
-      });
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
     });
-  std::cin.get();
-  return 0;
+
+    std::cin.get();
+    return 0;
 }
 ```
 
@@ -205,7 +261,6 @@ func main() {
 
   </TabItem>
 </Tabs>
-
 
 ## Response
 

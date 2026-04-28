@@ -1,0 +1,2811 @@
+openapi: 3.0.3
+info:
+  title: Longbridge OpenAPI
+  description: |
+    Longbridge OpenAPI provides programmatic access to market data, trading, account management,
+    watchlist management, and content queries for the Longbridge trading platform.
+  version: '1.0.0'
+x-pages:
+  - id: overview
+    title: Overview
+    x-title-zh: 概览
+    x-icon: book
+    content: |
+      This page is reorganized as a practical **OAuth 2.0 access flow** for new integrations.
+
+      > **Tip:** Prefer using SDKs for faster integration: https://open.longbridge.com/sdk
+
+      ## Notes
+
+      | Precautions                                  | Reference                                                             |
+      | -------------------------------------------- | --------------------------------------------------------------------- |
+      | Prefer SDKs over raw HTTP when possible      | [SDK Quick Start](/docs/getting-started)                              |
+      | Enable required OpenAPI services first       | [How to enable OpenAPI](/docs/#how-to-enable-openapi)                 |
+      | Understand permissions and restrictions      | [Permissions and restrictions](/docs/#permissions-and-restrictions)   |
+      | Check common error codes for troubleshooting | [Error Codes](/docs/error-codes)                                      |
+
+      ## OAuth 2.0 (Default)
+
+      For new integrations, OAuth 2.0 is the default path.
+
+      API-key signature mode can remain as a fallback for legacy compatibility, but it is not the default.
+
+      ### Discovery endpoints
+
+      - Production: `https://openapi.longbridge.com/.well-known/oauth-authorization-server`
+      - China: `https://openapi.longbridge.cn/.well-known/oauth-authorization-server`
+
+      Supported grant types (from discovery):
+
+      - `authorization_code`
+      - `refresh_token`
+
+      ## OAuth 2.0 flow (step-by-step)
+
+      ### 1) Register OAuth client
+
+      If there is no UI for client creation in your environment, register dynamically:
+
+      ```shell
+      curl -X POST https://openapi.longbridge.com/oauth2/register \
+        -H "Content-Type: application/json" \
+        -d '{
+          "client_name": "my-openapi-app",
+          "redirect_uris": ["https://your-app.com/callback"],
+          "grant_types": ["authorization_code", "refresh_token"],
+          "response_types": ["code"]
+        }'
+      ```
+
+      > Registration may return only `client_id` (public client, no `client_secret`). In this case, use PKCE and do not send `client_secret` in token requests.
+
+      ### 2) Build authorization URL and get `code`
+
+      ```text
+      https://openapi.longbridge.com/oauth2/authorize
+        ?response_type=code
+        &client_id=YOUR_CLIENT_ID
+        &redirect_uri=YOUR_REDIRECT_URI
+        &scope=3
+        &state=YOUR_RANDOM_STATE
+        &code_challenge=YOUR_CODE_CHALLENGE
+        &code_challenge_method=S256
+      ```
+
+      After user consent, callback receives:
+
+      ```text
+      YOUR_REDIRECT_URI?code=AUTH_CODE&state=YOUR_RANDOM_STATE
+      ```
+
+      ### 3) Exchange `code` for `access_token`
+
+      ```shell
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=authorization_code" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "redirect_uri=YOUR_REDIRECT_URI" \
+        -d "code=AUTH_CODE" \
+        -d "code_verifier=YOUR_CODE_VERIFIER"
+      # only when your client has secret:
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ### 4) Call API with Bearer token (TSLA.US example)
+
+      ```shell
+      curl -X GET "https://openapi.longbridge.com/v1/quote/get_security_list?market=US&category=Overnight" \
+        -H "Authorization: Bearer ACCESS_TOKEN"
+      ```
+
+      Real response (excerpt, keeping `TSLA.US` row):
+
+      ```json
+      {
+        "code": 0,
+        "message": "success",
+        "data": {
+          "list": [
+            {
+              "symbol": "TSLA.US",
+              "name_cn": "特斯拉",
+              "name_hk": "",
+              "name_en": ""
+            }
+          ]
+        }
+      }
+      ```
+
+      ### 5) Refresh token
+
+      Use OAuth token endpoint for refresh (details in Refresh Token section below):
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=refresh_token" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "refresh_token=REFRESH_TOKEN"
+      # only when your client has secret:
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ## Relationship with legacy docs
+
+      - This page: OAuth 2.0 main flow for new integrations.
+      - Refresh Token section below: refresh step details only, to avoid duplication.
+
+      ---
+
+      # Refresh Token (OAuth 2.0)
+
+      This page focuses only on the OAuth 2.0 **refresh token** step.
+
+      - If you have not completed the full flow yet, read the Authentication section above first.
+      - This page does not repeat client registration / authorization code steps.
+
+      ## Recommended refresh method (OAuth 2.0)
+
+      Use OAuth token endpoint:
+
+      - `POST https://openapi.longbridge.com/oauth2/token`
+      - or China: `POST https://openapi.longbridge.cn/oauth2/token`
+
+      ### Request parameters (`application/x-www-form-urlencoded`)
+
+      | Name | Required | Description |
+      | --- | --- | --- |
+      | grant_type | Yes | Must be `refresh_token` |
+      | client_id | Yes | OAuth client id |
+      | refresh_token | Yes | Previously issued refresh token |
+      | client_secret | Optional | Required only for confidential clients; omit for public clients |
+
+      ### Refresh example
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=refresh_token" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "refresh_token=YOUR_REFRESH_TOKEN"
+      # only when your client has secret:
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ### Response example
+
+      ```json
+      {
+        "access_token": "...",
+        "refresh_token": "...",
+        "expires_in": 2592000,
+        "token_type": "Bearer"
+      }
+      ```
+
+      ## Compatibility note
+
+      Legacy `/v1/token/refresh` remains for backward compatibility.
+      For new integrations, use OAuth 2.0 token endpoint as default.
+    x-content-zh: |
+      本页按 **OAuth 2.0 实际接入流程** 重新整理，用于新接入用户快速走通。
+
+      > **提示：** 优先使用 SDK，接入更简单：https://open.longbridge.com/sdk
+
+      ## API 须知
+
+      | 注意事项                                     | 参考文档                                          |
+      | -------------------------------------------- | ------------------------------------------------- |
+      | 推荐使用各自语言的 SDK，而不是调用原生的接口 | [SDK 快速开始页面](/docs/getting-started)         |
+      | 阅读 OpenAPI 介绍中开通相应服务              | [OpenAPI 如何开通](/docs/#如何开通)               |
+      | 阅读 OpenAPI 介绍中使用权限及限制            | [OpenAPI 使用权限及限制](/docs/#使用权限及限制)   |
+      | 了解通用错误码，便于查找调用接口出错的原因   | [通用错误码](/docs/error-codes)                   |
+
+      ## OAuth 2.0（推荐方案）
+
+      新接入默认使用 OAuth 2.0。API Key 签名方式作为备选兼容方案可保留（例如在 SDK/历史实现中），但不作为默认接入方式。
+
+      ### Discovery 地址
+
+      - 生产环境：`https://openapi.longbridge.com/.well-known/oauth-authorization-server`
+      - 中国内地：`https://openapi.longbridge.cn/.well-known/oauth-authorization-server`
+
+      支持授权类型（以 Discovery 返回为准）：
+
+      - `authorization_code`
+      - `refresh_token`
+
+      ## OAuth 2.0 接入流程（一步一步）
+
+      ### 1）注册 OAuth 客户端
+
+      如果没有可视化后台入口，可通过接口动态注册：
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/register \
+        -H "Content-Type: application/json" \
+        -d '{
+          "client_name": "my-openapi-app",
+          "redirect_uris": ["https://your-app.com/callback"],
+          "grant_types": ["authorization_code", "refresh_token"],
+          "response_types": ["code"]
+        }'
+      ```
+
+      > 注册返回可能仅包含 `client_id`（public client，不返回 `client_secret`）。这种情况下请使用 PKCE，并在 token 请求里不传 `client_secret`。
+
+      ### 2）构造授权链接并获取 code
+
+      ```text
+      https://openapi.longbridge.com/oauth2/authorize
+        ?response_type=code
+        &client_id=YOUR_CLIENT_ID
+        &redirect_uri=YOUR_REDIRECT_URI
+        &scope=3
+        &state=YOUR_RANDOM_STATE
+        &code_challenge=YOUR_CODE_CHALLENGE
+        &code_challenge_method=S256
+      ```
+
+      用户授权后，回调地址会收到：
+
+      ```text
+      YOUR_REDIRECT_URI?code=AUTH_CODE&state=YOUR_RANDOM_STATE
+      ```
+
+      ### 3）用 code 换 access_token
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=authorization_code" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "redirect_uri=YOUR_REDIRECT_URI" \
+        -d "code=AUTH_CODE" \
+        -d "code_verifier=YOUR_CODE_VERIFIER"
+      # 仅当客户端有 secret 时再加：
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ### 4）用 Bearer token 调 API（TSLA.US 实例）
+
+      ```bash
+      curl -X GET "https://openapi.longbridge.com/v1/quote/get_security_list?market=US&category=Overnight" \
+        -H "Authorization: Bearer ACCESS_TOKEN"
+      ```
+
+      实际返回（节选，保留 `TSLA.US` 项）：
+
+      ```json
+      {
+        "code": 0,
+        "message": "success",
+        "data": {
+          "list": [
+            {
+              "symbol": "TSLA.US",
+              "name_cn": "特斯拉",
+              "name_hk": "",
+              "name_en": ""
+            }
+          ]
+        }
+      }
+      ```
+
+      ### 5）刷新 token
+
+      通过 OAuth token endpoint 刷新（详见下方"刷新 Token"部分）：
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=refresh_token" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "refresh_token=REFRESH_TOKEN"
+      # 仅当客户端有 secret 时再加：
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ## 与旧文档的关系
+
+      - 本页：只讲 **OAuth 2.0 主流程**（新接入默认看这里）。
+      - 下方"刷新 Token"部分：只讲刷新步骤细节与常见问题，避免重复。
+
+      ---
+
+      # 刷新 Token（OAuth 2.0）
+
+      本页仅说明 OAuth 2.0 的 **refresh token** 刷新步骤。
+
+      - 如果你还没走完完整授权流程，请先看上方认证部分。
+      - 本页不重复注册 client / 获取 code 的流程，只关注"刷新"这一步
+
+      ## 推荐刷新方式（OAuth 2.0）
+
+      使用 OAuth token endpoint：
+
+      - `POST https://openapi.longbridge.com/oauth2/token`
+      - 或中国内地：`POST https://openapi.longbridge.cn/oauth2/token`
+
+      ### 请求参数（`application/x-www-form-urlencoded`）
+
+      | 名称          | 必须 | 说明 |
+      | ------------- | ---- | ---- |
+      | grant_type    | 是   | 固定为 `refresh_token` |
+      | client_id     | 是   | OAuth client id |
+      | refresh_token | 是   | 上一次签发的 refresh token |
+      | client_secret | 否   | 仅机密客户端需要；public client 不传 |
+
+      ### 刷新示例
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=refresh_token" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "refresh_token=YOUR_REFRESH_TOKEN"
+      # 仅当你的客户端有 secret 时再加：
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ### 响应示例
+
+      ```json
+      {
+        "access_token": "...",
+        "refresh_token": "...",
+        "expires_in": 2592000,
+        "token_type": "Bearer"
+      }
+      ```
+
+      ## 兼容说明
+
+      历史接口 `/v1/token/refresh` 属于旧方案兼容路径，不建议新接入继续采用。新接入请统一使用 OAuth 2.0 token endpoint。
+  - id: real-time-data
+    title: Real-Time Market Data
+    x-title-zh: 实时行情
+    x-icon: activity
+    content: |
+      > **Note:** Real-time market data is **not** part of this HTTP REST API. Quotes, price feeds, order book depth, broker queues, and trade ticks are delivered via **WebSocket / TCP long connection** through a dedicated quote gateway — see the [Socket Feed](/docs/socket/hosts) documentation.
+
+      ## Overview
+
+      The HTTP REST API (documented on this page) covers trading operations, account management, and historical/snapshot data queries. Real-time streaming data — all market quote subscriptions and push feeds — is a separate system:
+
+      | Data Type | Access Method |
+      |-----------|---------------|
+      | Trading orders, account info, watchlist | HTTP REST API (this page) |
+      | Real-time quotes, depth, trade ticks | WebSocket / TCP Socket Feed |
+
+      ## Connecting to the Quote Gateway
+
+      Connect to Longbridge's quote gateway directly via WebSocket or TCP:
+
+      **WebSocket:** `wss://openapi-quote.longbridge.com`
+
+      **TCP:** `openapi-quote.longbridge.com:2020`
+
+      > Mainland China users: `wss://openapi-quote.longbridge.cn` / `openapi-quote.longbridge.cn:2020`
+
+      ## Subscribing to Market Data
+
+      After connecting, authenticate with your API credentials, then send a subscribe command specifying symbols and subscription types (price, depth, broker queue, trade ticks). The server will then push real-time data as it arrives.
+
+      The SDK handles connection lifecycle and subscriptions automatically — for most integrations the SDK is the recommended approach: https://open.longbridge.com/sdk
+
+      ## Further Reading
+
+      - [Socket Feed endpoints](/docs/socket/hosts)
+      - [Subscribe to market data](/docs/socket/subscribe_quote)
+      - [Protocol overview](/docs/socket/protocol/overview)
+    x-content-zh: |
+      > **注意：** 实时行情数据**不**属于本 HTTP REST API 的范围。报价、价格推送、盘口、经纪队列及成交明细通过专用行情网关以 **WebSocket / TCP 长连接**方式推送，详见 [Socket 实时推送](/docs/socket/hosts) 文档。
+
+      ## 概述
+
+      本 HTTP REST API（即本页面记录的接口）涵盖交易操作、账户管理及历史/快照数据查询。实时流式数据——所有行情订阅与推送——属于独立的系统：
+
+      | 数据类型 | 接入方式 |
+      |----------|----------|
+      | 交易委托、账户信息、自选股 | HTTP REST API（本页） |
+      | 实时报价、盘口、成交明细 | WebSocket / TCP Socket Feed |
+
+      ## 连接行情网关
+
+      通过 WebSocket 或 TCP 直连 Longbridge 行情网关：
+
+      **WebSocket：** `wss://openapi-quote.longbridge.com`
+
+      **TCP：** `openapi-quote.longbridge.com:2020`
+
+      > 中国大陆用户：`wss://openapi-quote.longbridge.cn` / `openapi-quote.longbridge.cn:2020`
+
+      ## 订阅行情
+
+      连接后，使用 API 凭证完成鉴权，然后发送订阅指令，指定标的和订阅类型（价格、盘口、经纪队列、成交明细）。服务端将实时推送订阅的行情数据。
+
+      SDK 已完整实现连接生命周期管理与订阅功能，推荐大多数接入场景直接使用 SDK：https://open.longbridge.com/sdk
+
+      ## 相关文档
+
+      - [Socket 实时推送接入地址](/docs/socket/hosts)
+      - [订阅行情推送](/docs/socket/subscribe_quote)
+      - [协议概览](/docs/socket/protocol/overview)
+  - id: error-codes
+    title: Error Codes
+    x-title-zh: 错误码
+    x-icon: alert-circle
+    content: |
+      ## Error Codes
+
+      | HTTP Status | Code   | Message                | Description                                                        |
+      | ----------- | ------ | ---------------------- | ------------------------------------------------------------------ |
+      | 403         | 403201 | signature invalid      | signature is invalid                                               |
+      | 403         | 403202 | duplicate request      | Repeat request, same request without replacement `x-timestamp`     |
+      | 403         | 403203 | apikey illegal         | `App Key` is illegal                                               |
+      | 403         | 403205 | ip is not allowed      | IP address is not authorized to access                             |
+      | 401         | 401003 | token expired          | Access token expired. Legacy API Key: obtain a new token from [https://open.longbridge.com/](https://open.longbridge.com/). OAuth: use the refresh token flow. |
+      | 429         | 429001 | ip request ratelimit   | Too frequent requests as a same IP address, please try again later |
+      | 429         | 429002 | api request is limited | Too frequent requests on an API, please try again later            |
+      | 500         | 500000 | internal error         | server internal error, please contact customer support             |
+    x-content-zh: |
+      ## 错误码
+
+      | HTTP Status | code   | message                | 说明                                     |
+      | ----------- | ------ | ---------------------- | ---------------------------------------- |
+      | 403         | 403201 | signature invalid      | 签名无效                                 |
+      | 403         | 403202 | duplicate request      | 重复请求，同一个请求没有更换 X-Timestamp |
+      | 403         | 403203 | apikey illegal         | App Key 无效                             |
+      | 403         | 403205 | ip is not allowed      | IP 地址无权访问                          |
+      | 401         | 401003 | token expired          | Access Token 已过期。旧版 API Key：请在 [https://open.longbridge.com/](https://open.longbridge.com/) 重新获取；OAuth：请使用 refresh token 流程刷新。 |
+      | 429         | 429001 | ip request ratelimit   | IP 访问过于频繁，请稍后再试              |
+      | 429         | 429002 | api request is limited | 接口访问过于频繁，请稍后再试             |
+      | 500         | 500000 | internal error         | 服务内部错误，请联系客户经理进行处理         |
+servers:
+  - url: https://openapi.longbridge.com
+    description: Global
+  - url: https://openapi.longbridge.cn
+    description: China mainland
+tags:
+  - name: Watchlist Management
+    x-name-zh: 自选股管理
+    description: Manage user watchlist groups (list/create/update/delete) and query the securities contained in each group. Supports adding, removing, or replacing securities within a group.
+  - name: Market Temperature
+    x-name-zh: 市场情绪
+    description: Query the Market Temperature indicator (a fear-gauge-like sentiment thermometer, scored 0–100 where higher means more bullish) across equity markets. Supports fetching the current snapshot and historical time series for sentiment measurement, trend visualization, and comparative analysis.
+  - name: Portfolio & Cash
+    x-name-zh: 持仓与资金
+    description: Provides read access to account asset and cash information, including fund holdings, stock holdings, account cash balance, and cash flow history for portfolio overview, position display, and reconciliation analysis.
+  - name: News & Filings
+    x-name-zh: 新闻与公告
+    description: Query regulatory filings, news articles, and community discussion topics for a given symbol. Suitable for investment research, news monitoring, and content aggregation.
+  - name: Community
+    x-name-zh: 社区互动
+    description: Interact with the Longbridge community. Supports listing your published topics with pagination and type filtering, and creating new topics (long-form articles or short posts) with associated tickers, hashtags, and license settings.
+  - name: Trade Execution & Order Management
+    x-name-zh: 交易与订单管理
+    description: Full order lifecycle management including order detail queries, today's and historical order queries, today's and historical execution reports, order modification, order cancellation, and pre-order maximum purchasable quantity estimation.
+  - name: Statement
+    x-name-zh: 结单
+    description: Query and download account statements (daily or monthly). Statements contain detailed breakdowns of assets, holdings, trades, fees, and corporate actions.
+security:
+  - oauth2:
+      - openapi
+paths:
+  /watchlist/groups:
+    get:
+      operationId: list_watchlist_groups
+      summary: Get Watchlists
+      x-summary-zh: 获取自选股分组列表
+      description: |
+        Get all watchlist groups for the current user. Each group contains an ID, name, and a list
+        of securities with the price and timestamp at which each security was added.
+      x-description-zh: 获取当前用户的所有自选股分组，每个分组包含 ID、名称及其中的证券列表（含加入价格和时间戳）。
+      tags:
+        - Watchlist Management
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge watchlist
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  groups:
+                    - id: '2630'
+                      name: My Watchlist
+                      securities:
+                        - symbol: AAPL.US
+                          market: US
+                          name: Apple Inc.
+                          watched_price: '211.59'
+                          watched_at: '1741690995'
+                          is_pinned: true
+                        - symbol: 700.HK
+                          market: HK
+                          name: 腾讯控股
+                          watched_price: '460.00'
+                          watched_at: '1725511157'
+                          is_pinned: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: create_watchlist_group
+      summary: Create Watchlist
+      x-summary-zh: 创建自选股分组
+      description: |
+        Create a new watchlist group, optionally pre-populated with securities.
+      x-description-zh: 创建新的自选股分组，可选择在创建时预填充证券。
+      tags:
+        - Watchlist Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  description: Group name. Must be at least 1 character and within the system name length limit.
+                securities:
+                  type: array
+                  nullable: true
+                  description: Optional list of security symbols to pre-populate the group on creation (e.g. `["AAPL.US", "700.HK"]`).
+                  items:
+                    type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge watchlist create "NAME"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  id: '4303353'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: update_watchlist_group
+      summary: Update Watchlist
+      x-summary-zh: 更新自选股分组
+      description: |
+        Update the name or member list of a watchlist group. Use `mode` to control how
+        `securities` are applied: `add` appends, `remove` removes, `replace` overwrites the entire list.
+      x-description-zh: 更新自选股分组的名称或成员列表。使用 `mode` 控制 `securities` 的操作方式：`add` 追加、`remove` 移除、`replace` 替换全部。
+      tags:
+        - Watchlist Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: ID of the group to update (required).
+                name:
+                  type: string
+                  nullable: true
+                  description: New group name. Omit to keep the existing name.
+                mode:
+                  type: string
+                  nullable: true
+                  enum:
+                    - add
+                    - remove
+                    - replace
+                  description: |
+                    Operation mode for the `securities` list. One of:
+                    - `add` — append securities to the group
+                    - `remove` — remove securities from the group
+                    - `replace` — replace all securities in the group
+                securities:
+                  type: array
+                  nullable: true
+                  description: List of security symbols affected by the operation (e.g. `["AAPL.US", "700.HK"]`).
+                  items:
+                    type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge watchlist update <ID>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: delete_watchlist_group
+      summary: Delete Watchlist
+      x-summary-zh: 删除自选股分组
+      description: |
+        Delete the specified watchlist group. Set `purge=true` to also clear all securities
+        from the group before deletion.
+      x-description-zh: 删除指定的自选股分组。设置 `purge=true` 可在删除前清空分组中的所有证券。
+      tags:
+        - Watchlist Management
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID of the group to delete.
+          schema:
+            type: string
+        - name: purge
+          in: query
+          required: false
+          description: If `true`, clears all securities from the group before deleting. Defaults to `false`.
+          schema:
+            type: boolean
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge watchlist delete <ID>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /quote/get_security_list:
+    get:
+      operationId: list_securities
+      summary: Query Tradable Securities List
+      x-summary-zh: 查询可交易证券列表
+      description: |
+        Query the list of tradable securities filtered by market and category. Primarily used to
+        retrieve securities eligible for extended-hours (pre-market / after-hours) trading sessions.
+        Both `market` and `category` are required parameters.
+      x-description-zh: 按市场和类别筛选可交易证券列表，主要用于获取符合盘前/盘后延长交易时段条件的证券。`market` 和 `category` 均为必填参数。
+      tags:
+        - Watchlist Management
+      parameters:
+        - name: market
+          in: query
+          required: true
+          description: Market code. One of `US`, `HK`.
+          schema:
+            type: string
+        - name: category
+          in: query
+          required: true
+          description: Security category filter for the target trading session (e.g. `overnight` for US overnight-tradable securities).
+          schema:
+            type: string
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge security-list
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - symbol: AAPL.US
+                      name_cn: 苹果
+                      name_hk: 蘋果
+                      name_en: Apple Inc.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /quote/history_market_temperature:
+    get:
+      operationId: list_market_temperature
+      summary: Get Historical Market Temperature
+      x-summary-zh: 获取历史市场情绪
+      description: |
+        Get the historical market temperature time series for the specified market within a date range.
+        Each data point contains the daily temperature, valuation, and sentiment scores (all scored 0–100).
+      x-description-zh: 获取指定市场在日期范围内的历史市场情绪时间序列，每个数据点包含当日情绪温度、估值和情绪分项评分（均为 0–100 分制）。
+      tags:
+        - Market Temperature
+      parameters:
+        - name: market
+          in: query
+          required: true
+          description: |
+            Market code. One of:
+            - `HK` — Hong Kong
+            - `US` — United States
+            - `CN` — A-shares
+            - `SG` — Singapore
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: true
+          description: Start date in `YYYYMMDD` format (e.g. `20250101`).
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: true
+          description: End date in `YYYYMMDD` format (e.g. `20250110`).
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge market-temp [MARKET] --history --start YYYY-MM-DD --end YYYY-MM-DD
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - timestamp: '1735794000'
+                      temperature: 58
+                      valuation: 54
+                      sentiment: 61
+                    - timestamp: '1735880400'
+                      temperature: 59
+                      valuation: 56
+                      sentiment: 63
+                  type: day
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /quote/market_temperature:
+    get:
+      operationId: market_temperature
+      summary: Get Current Market Temperature
+      x-summary-zh: 获取当前市场情绪
+      description: |
+        Get the current sentiment temperature snapshot for the specified market.
+        Scores range from 0–100; a higher value indicates a more bullish market.
+      x-description-zh: 获取指定市场的当前情绪温度快照。评分范围 0–100，数值越高表示市场越乐观。
+      tags:
+        - Market Temperature
+      parameters:
+        - name: market
+          in: query
+          required: true
+          description: |
+            Market code. One of:
+            - `HK` — Hong Kong
+            - `US` — United States
+            - `CN` — A-shares
+            - `SG` — Singapore
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge market-temp [MARKET]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  temperature: 70
+                  description: 温度温暖并快速上升中
+                  valuation: 59
+                  sentiment: 82
+                  updated_at: '1774317902'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asset/cashflow:
+    get:
+      operationId: list_cash_flow
+      summary: Cash Flow
+      x-summary-zh: 资金流水查询
+      description: |
+        Query account cash flow history. Covers deposit, withdrawal, dividends, settlement,
+        and other business types. Supports time range and pagination.
+      x-description-zh: 查询账户资金流水历史，涵盖入金、出金、分红、结算等业务类型，支持时间范围筛选和分页。
+      tags:
+        - Portfolio & Cash
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          description: Query range start time as a Unix timestamp (seconds).
+          schema:
+            type: integer
+            nullable: true
+        - name: end_time
+          in: query
+          required: false
+          description: Query range end time as a Unix timestamp (seconds).
+          schema:
+            type: integer
+            nullable: true
+        - name: business_type
+          in: query
+          required: false
+          description: Business type filter (integer). Omit to return all types.
+          schema:
+            type: integer
+            nullable: true
+        - name: symbol
+          in: query
+          required: false
+          description: Filter by security symbol (e.g. `AAPL.US`). Supports multiple values.
+          schema:
+            type: array
+            nullable: true
+            items:
+              type: string
+        - name: page
+          in: query
+          required: false
+          description: Page number (1-based). Defaults to `1`.
+          schema:
+            type: integer
+            nullable: true
+        - name: size
+          in: query
+          required: false
+          description: Number of records per page. Defaults to `20`.
+          schema:
+            type: integer
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge cash-flow
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - transaction_flow_name: 在途分红
+                      direction: 1
+                      business_type: 0
+                      balance: '13.65'
+                      currency: USD
+                      business_time: '1771826509'
+                      symbol: MSFT.US
+                      description: 'MSFT.US Cash Dividend: 0.91 USD per share(in transit)'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asset/account:
+    get:
+      operationId: account_cash
+      summary: Account Cash
+      x-summary-zh: 账户现金
+      description: |
+        Query account cash balance, buying power, margin details, and per-currency cash breakdown.
+      x-description-zh: 查询账户现金余额、购买力、保证金详情及各币种资金明细。
+      tags:
+        - Portfolio & Cash
+      parameters:
+        - name: currency
+          in: query
+          required: false
+          description: Filter by currency code (e.g. `USD`, `HKD`). Omit to return all currencies.
+          schema:
+            type: string
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge balance
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - total_cash: '456943.18'
+                      max_finance_amount: '3200000.00'
+                      remaining_finance_amount: '3654289.90'
+                      risk_level: '0'
+                      margin_call: '0'
+                      currency: HKD
+                      net_assets: '962678.11'
+                      init_margin: '141090.88'
+                      maintenance_margin: '123141.91'
+                      buy_power: '821587.22'
+                      frozen_transaction_fees: []
+                      cash_infos:
+                        - currency: USD
+                          withdraw_cash: '-38665.68'
+                          available_cash: '-38665.68'
+                          frozen_cash: '332.19'
+                          settling_cash: '-10108.02'
+                          redemption_cash: '0.00'
+                        - currency: HKD
+                          withdraw_cash: '755592.21'
+                          available_cash: '755592.21'
+                          frozen_cash: '64.69'
+                          settling_cash: '-27760.00'
+                          redemption_cash: '0.00'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asset/stock:
+    get:
+      operationId: list_stock_positions
+      summary: Stock Position
+      x-summary-zh: 股票持仓
+      description: |
+        Query all stock (equity) positions, grouped by sub-account channel.
+      x-description-zh: 查询所有股票（权益类）持仓，按子账户渠道分组返回。
+      tags:
+        - Portfolio & Cash
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          description: Filter by security symbol (e.g. `AAPL.US`). Supports multiple values. Omit to return all positions.
+          schema:
+            type: array
+            nullable: true
+            items:
+              type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge positions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - account_channel: lb_papertrading
+                      stock_info:
+                        - symbol: NVDA.US
+                          symbol_name: 英伟达
+                          currency: USD
+                          quantity: '101'
+                          available_quantity: '101'
+                          cost_price: '50.229'
+                          market: US
+                          init_quantity: '101'
+                        - symbol: AAPL.US
+                          symbol_name: 苹果
+                          currency: USD
+                          quantity: '133'
+                          available_quantity: '133'
+                          cost_price: '211.589'
+                          market: US
+                          init_quantity: '133'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /asset/fund:
+    get:
+      operationId: list_fund_positions
+      summary: Fund Position
+      x-summary-zh: 基金持仓
+      description: |
+        Query all public fund positions, grouped by sub-account channel.
+      x-description-zh: 查询所有公募基金持仓，按子账户渠道分组返回。
+      tags:
+        - Portfolio & Cash
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          description: Filter by fund symbol. Supports multiple values. Omit to return all fund positions.
+          schema:
+            type: array
+            nullable: true
+            items:
+              type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge fund-positions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - fund_info:
+                        - symbol: HK0000676533
+                          symbol_name: 某只基金
+                          holding_units: '1000.00'
+                          current_net_asset_value: '1.2345'
+                          cost_net_asset_value: '1.1000'
+                          net_asset_value_day: '1774310400'
+                          currency: HKD
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/statement/list:
+    get:
+      operationId: list_statements
+      summary: List Statements
+      x-summary-zh: 查询结单列表
+      description: |
+        Query available account statements (daily or monthly). Returns a list of statement
+        dates and file keys that can be used with the download endpoint.
+      x-description-zh: 查询可用的账户结单（日结单或月结单），返回结单日期和文件标识列表，可用于下载接口。
+      tags:
+        - Statement
+      parameters:
+        - name: statement_type
+          in: query
+          required: false
+          description: 'Statement type: 1 = daily (default), 2 = monthly.'
+          schema:
+            type: integer
+            enum: [1, 2]
+            default: 1
+        - name: page
+          in: query
+          required: false
+          description: Page number for pagination.
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          required: false
+          description: Number of results per page.
+          schema:
+            type: integer
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge statement list
+            longbridge statement list --type monthly
+            longbridge statement list --start-date 20260101 --limit 10
+      responses:
+        '200':
+          description: Statement list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      description: Statement date (string, e.g. "20260327").
+                    file_key:
+                      type: string
+                      description: File key used to request the download URL.
+              example:
+                - date: "20260327"
+                  file_key: "/statement_data/data/lb/1/20260327/10000104.json"
+                - date: "20260324"
+                  file_key: "/statement_data/data/lb/1/20260324/10000104.json"
+                - date: "20260323"
+                  file_key: "/statement_data/data/lb/1/20260323/10000104.json"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/statement/download:
+    get:
+      operationId: get_statement_download_url
+      summary: Get Statement Download URL
+      x-summary-zh: 获取结单下载地址
+      description: |
+        Get a presigned download URL for a specific statement file. The URL returns a JSON
+        document containing the full statement content with all sections.
+      x-description-zh: 获取指定结单文件的预签名下载地址，返回包含结单全部板块的 JSON 文档。
+      tags:
+        - Statement
+      parameters:
+        - name: file_key
+          in: query
+          required: true
+          description: File key obtained from the list statements endpoint.
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge statement export --file-key abc123xyz456 --section equity_holdings
+            longbridge statement export --file-key abc123xyz456 --section stock_trades -o trades.csv
+            longbridge statement export --file-key abc123xyz456 --all -o ./report/
+      responses:
+        '200':
+          description: Download URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: Presigned URL to download the statement JSON.
+              example:
+                url: "https://storage.example.com/statements/abc123xyz456.json?X-Amz-Signature=..."
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /quote/filings:
+    get:
+      operationId: list_filings
+      summary: Get Filings by Symbol
+      x-summary-zh: 获取标的监管文件
+      description: |
+        Get the list of regulatory filings or disclosure documents for the specified symbol.
+        Each filing includes a title, file name, download URLs, and publication timestamp.
+      x-description-zh: 获取指定标的的监管文件或信息披露文件列表，每条记录包含标题、文件名、下载链接和发布时间戳。
+      tags:
+        - News & Filings
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          description: 'Security symbol to query filings for (e.g. `AAPL.US`, `700.HK`).'
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge filing list <SYMBOL>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '627391979864985729'
+                      title: 苹果 | 4 - Apple Inc. (0000320193) (Issuer)
+                      description: ''
+                      file_name: 4 - Apple Inc. (0000320193) (Issuer)
+                      file_urls:
+                        - https://www.sec.gov/Archives/edgar/data/320193/.../wk-form4_1773786674.xml
+                      publish_at: '1773786677'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /content/{symbol}/news:
+    get:
+      operationId: list_news
+      summary: Get News by Symbol
+      x-summary-zh: 获取标的新闻
+      description: |
+        Get the latest news articles for the specified symbol.
+      x-description-zh: 获取指定标的的最新新闻资讯列表。
+      tags:
+        - News & Filings
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          description: 'Security symbol to query news for (e.g. `AAPL.US`, `700.HK`).'
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge news <SYMBOL>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '280228333'
+                      title: 苹果拟在地图应用引入广告
+                      description: 苹果计划在其地图应用中引入广告，以推动服务业务增长...
+                      url: https://longbridge.com/news/280228333
+                      published_at: '1774310775'
+                      comments_count: 0
+                      likes_count: 0
+                      shares_count: 0
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /content/{symbol}/topics:
+    get:
+      operationId: list_topics
+      summary: List Community Topics by Symbol
+      x-summary-zh: 按标的获取社区讨论
+      description: |
+        Get the list of community discussion topics for the specified symbol.
+      x-description-zh: 获取指定标的的社区讨论。
+      tags:
+        - Community
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          description: 'Security symbol to query topics for (e.g. `AAPL.US`, `700.HK`).'
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topics <SYMBOL>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '39469738'
+                      title: ''
+                      description: 期待苹果的 AI。我相信在用户端侧，苹果能把 AI 做得很好。
+                      url: https://longbridge.com/topics/39469738
+                      published_at: '1774325592'
+                      comments_count: 0
+                      likes_count: 0
+                      shares_count: 0
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /content/topics/mine:
+    get:
+      operationId: list_my_topics
+      summary: List My Published Topics
+      x-summary-zh: 获取我发布的讨论
+      description: |
+        Get the list of topics published by the current authenticated user.
+        Supports pagination and filtering by topic type.
+      x-description-zh: 获取当前认证用户已发布的讨论列表，支持分页和按讨论类型筛选。
+      tags:
+        - Community
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic mine
+            longbridge topic mine --type article
+            longbridge topic mine --type post --size 10 --page 2
+            longbridge topic mine --format json
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number (1-based). Defaults to `1`.
+          schema:
+            type: integer
+            nullable: true
+        - name: size
+          in: query
+          required: false
+          description: Number of items per page, range 1–500. Defaults to `50`.
+          schema:
+            type: integer
+            nullable: true
+        - name: topic_type
+          in: query
+          required: false
+          description: |
+            Filter by topic type. One of:
+            - `article` — long-form article (has title)
+            - `post` — short post
+
+            Omit to return all types.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - article
+              - post
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '39304657'
+                      title: My Analysis on AAPL
+                      description: A brief summary of my article...
+                      body: Full markdown content here...
+                      topic_type: article
+                      likes_count: 12
+                      comments_count: 3
+                      views_count: 200
+                      shares_count: 1
+                      tickers:
+                        - AAPL.US
+                      hashtags:
+                        - earnings
+                      license: 1
+                      detail_url: https://longbridge.com/topics/39304657
+                      created_at: '1742000000'
+                      updated_at: '1742000000'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /content/topics:
+    post:
+      operationId: create_topic
+      summary: Create Topic
+      x-summary-zh: 创建社区讨论
+      description: |
+        Create a new community topic. Two content types are supported:
+
+        - `post` (default): Plain text only, Markdown is **not** rendered — appears as literal characters.
+        - `article`: This should with `title` params, suppports Markdown with headers, tables, bold, code blocks, etc.
+
+        Only users who have opened a **Longbridge account and hold assets** are allowed.
+
+        Symbols mentioned in the body (e.g. `TSLA.US`, `700.HK`) are automatically recognized and linked as related stocks. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+
+        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+
+        **Rate limit:** Max 3 topics per user per minute, 10 per 24 hours. Exceeding the limit returns `429`.
+
+        > Rate limit thresholds are for reference only and may be adjusted at any time.
+      x-description-zh: |
+        创建新的社区讨论，根据 `topic_type` 支持两种类型的发布：
+
+        - `post`:（默认），仅支持**纯文本**, 不支持 Markdown。
+        - `article`: 选择这项类型，`title` 字段必填，支持 Markdown 格式包含标题、表格、加粗等格式支持。
+
+        仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。
+
+        正文中提到的标的代码（如 `TSLA.US`, `700.HK`）会被平台自动识别并关联。`tickers` 用于补充正文中未显式提及的标的。
+
+        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+
+        **频率限制：** 同一用户每分钟最多创建 3 篇，24 小时内最多 10 篇，超出返回 `429`。
+
+        > 频率限制规则仅供参考，平台可能随时进行内部调整。
+      tags:
+        - Community
+      x-codeSamples:
+        - lang: Bash
+          label: CLI
+          source: |
+            # Short post (plain text, Markdown not rendered)
+            longbridge topic create --body "Bullish on 700.HK today"
+
+            # Short post with tickers
+            longbridge topic create --body "NVDA GTC highlights" --tickers NVDA.US,700.HK
+
+            # Article (Markdown, title required)
+            longbridge topic create --title "My Analysis" --body "**Bullish** on 700.HK because..." --type article
+
+            # Article from file
+            longbridge topic create --title "Q4 Preview" --body "$(cat analysis.md)" --type article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - body
+              properties:
+                title:
+                  type: string
+                  description: Topic title. Required when `topic_type` is `article`; optional for `post`.
+                body:
+                  type: string
+                  description: |
+                    Topic body.
+
+                    - `post`: plain text only — Markdown is not rendered.
+                    - `article`: Markdown is supported.
+                topic_type:
+                  type: string
+                  nullable: true
+                  enum:
+                    - article
+                    - post
+                  description: |
+                    Topic type. One of:
+                    - `article` — long-form article with a title
+                    - `post` — short post (default)
+                tickers:
+                  type: array
+                  nullable: true
+                  description: 'Associated security symbols, format `{symbol}.{market}` (e.g. `["AAPL.US", "700.HK"]`). Maximum 10.'
+                  items:
+                    type: string
+                hashtags:
+                  type: array
+                  nullable: true
+                  description: Associated hashtag names (e.g. `["earnings", "fed"]`). Maximum 1.
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  item:
+                    id: '39304657'
+                    title: My View on AAPL
+                    description: Brief plain-text summary...
+                    body: '**Bullish** on AAPL because...'
+                    topic_type: article
+                    tickers:
+                      - AAPL.US
+                    hashtags:
+                      - earnings
+                    images: []
+                    likes_count: 0
+                    comments_count: 0
+                    views_count: 0
+                    shares_count: 0
+                    detail_url: https://longbridge.com/topics/39304657
+                    author:
+                      member_id: '10086'
+                      name: Jane Doe
+                      avatar: https://example.com/avatar.jpg
+                    created_at: '1742000000'
+                    updated_at: '1742000000'
+        '403':
+          description: Forbidden — user has not opened a Longbridge account or has no assets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too Many Requests — rate limit exceeded (3/min or 10/24h per user).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /content/topics/{id}:
+    get:
+      operationId: topic_detail
+      summary: Topic Detail
+      x-summary-zh: 获取讨论详情
+      description: |
+        Get the full details of a community topic by its ID.
+
+        The response includes:
+        - Full body text (Markdown for `article` type, plain text for `post`)
+        - Author profile (member ID, display name, avatar)
+        - Associated tickers and hashtags
+        - Engagement counts (likes, replies, views, shares)
+        - Direct URL to the topic page
+      x-description-zh: |
+        根据 ID 获取社区讨论的完整详情。
+
+        返回内容包括：
+        - 完整正文（`article` 类型为 Markdown，`post` 类型为纯文本）
+        - 作者信息（member ID、昵称、头像）
+        - 关联标的代码和标签
+        - 互动数据（点赞、回复、浏览、分享数）
+        - 讨论页面直链
+      tags:
+        - Community
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 'Topic ID (e.g. `6993508780031016960`).'
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |
+            longbridge topic detail 6993508780031016960
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  item:
+                    id: '6993508780031016960'
+                    title: My Analysis on AAPL
+                    description: A brief plain-text summary of the topic.
+                    body: '**Bullish** on AAPL because...'
+                    topic_type: article
+                    author:
+                      member_id: '1000001'
+                      name: Jane Doe
+                      avatar: https://cdn.longbridge.com/avatars/1000001.jpg
+                    tickers:
+                      - AAPL.US
+                    hashtags:
+                      - earnings
+                    images:
+                      - url: https://cdn.longbridge.com/img/abc.jpg
+                        sm: https://cdn.longbridge.com/img/abc_sm.jpg
+                        lg: https://cdn.longbridge.com/img/abc_lg.jpg
+                    likes_count: 42
+                    comments_count: 7
+                    views_count: 1500
+                    shares_count: 3
+                    detail_url: https://longbridge.com/topics/6993508780031016960
+                    created_at: '1742000000'
+                    updated_at: '1742001000'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /content/topics/{topic_id}/comments:
+    get:
+      operationId: list_topic_replies
+      summary: List Topic Replies
+      x-summary-zh: 获取讨论回复列表
+      description: |
+        Get the reply list for a specific topic, with pagination.
+
+        Each reply includes:
+        - Author profile (member ID, display name, avatar)
+        - Body (plain text)
+        - Engagement counts (likes, nested replies)
+        - `reply_to_id`: `"0"` means a top-level reply; any other value is the ID of the parent reply it is nested under.
+      x-description-zh: |
+        获取指定讨论下的回复列表，支持分页。
+
+        每条回复包含：
+        - 作者信息（member ID、昵称、头像）
+        - 正文（纯文本）
+        - 互动数据（点赞数、嵌套回复数）
+        - `reply_to_id`：`"0"` 表示顶层回复，其他值表示对指定回复的嵌套回复
+      tags:
+        - Community
+      parameters:
+        - name: topic_id
+          in: path
+          required: true
+          description: 'Topic ID (e.g. `6993508780031016960`).'
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: Page number (1-based). Defaults to `1`.
+          schema:
+            type: integer
+            nullable: true
+        - name: size
+          in: query
+          required: false
+          description: Number of items per page, range 1–50. Defaults to `20`.
+          schema:
+            type: integer
+            nullable: true
+            minimum: 1
+            maximum: 50
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |
+            longbridge topic replies 6993508780031016960
+            longbridge topic replies 6993508780031016960 --page 2 --size 20
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '7001234567890123456'
+                      topic_id: '6993508780031016960'
+                      body: Great analysis, fully agree!
+                      reply_to_id: '0'
+                      author:
+                        member_id: '1000002'
+                        name: John Smith
+                        avatar: https://cdn.longbridge.com/avatars/1000002.jpg
+                      images: []
+                      likes_count: 5
+                      comments_count: 2
+                      created_at: '1742001500'
+                    - id: '7001234567890123457'
+                      topic_id: '6993508780031016960'
+                      body: I disagree on the valuation part.
+                      reply_to_id: '7001234567890123456'
+                      author:
+                        member_id: '1000003'
+                        name: Alice Lee
+                        avatar: https://cdn.longbridge.com/avatars/1000003.jpg
+                      images: []
+                      likes_count: 1
+                      comments_count: 0
+                      created_at: '1742001800'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: create_topic_reply
+      summary: Create Topic Reply
+      x-summary-zh: 创建讨论回复
+      description: |
+        Post a reply to a community topic. Supports nesting under an existing reply.
+
+        Plain text only — HTML and Markdown are **not** rendered.
+
+        Only users who have opened a **Longbridge account and hold assets** are allowed.
+
+        Symbols mentioned in the body (e.g. `TSLA.US`, `700.HK`) are automatically recognized and linked as related stocks. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+
+        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+
+        **Rate limit:** The first 3 replies per user per topic have no wait requirement. After that, each subsequent reply must wait an incrementally longer interval:
+
+        | Reply # (after 3rd) | Required wait |
+        | ------------------- | ------------- |
+        | 4th                 | 3 s           |
+        | 5th                 | 5 s           |
+        | 6th                 | 8 s           |
+        | 7th                 | 13 s          |
+        | 8th                 | 21 s          |
+        | 9th                 | 34 s          |
+        | 10th+               | 55 s (cap)    |
+
+        Exceeding the rate limit returns `429`.
+
+        > Rate limit thresholds are for reference only and may be adjusted at any time.
+      x-description-zh: |
+        在指定讨论下发布回复，支持嵌套回复已有回复。
+
+        **正文格式：** 仅支持纯文本，不支持 HTML 或 Markdown。
+
+        仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。
+
+        正文中提到的标的代码（如 `TSLA.US`, `700.HK`）会被平台自动识别并关联。`tickers` 用于补充正文中未显式提及的标的。
+
+        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+
+        **频率限制：** 同一用户在同一讨论下，前 3 条无间隔限制；第 4 条起须与上一条间隔递增：
+
+        | 回复条数（第 3 条后）| 须等待时长 |
+        | -------------------- | ---------- |
+        | 第 4 条              | 3 秒       |
+        | 第 5 条              | 5 秒       |
+        | 第 6 条              | 8 秒       |
+        | 第 7 条              | 13 秒      |
+        | 第 8 条              | 21 秒      |
+        | 第 9 条              | 34 秒      |
+        | 第 10 条起           | 55 秒（上限）|
+
+        超出限制返回 `429`。
+
+        > 频率限制规则仅供参考，平台可能随时进行内部调整。
+      tags:
+        - Community
+      parameters:
+        - name: topic_id
+          in: path
+          required: true
+          description: 'Topic ID to reply to (e.g. `6993508780031016960`).'
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Top-level reply
+            longbridge topic create-reply 6993508780031016960 --body "Great post!"
+
+            # Reply to an existing comment
+            longbridge topic create-reply 6993508780031016960 --body "Agreed!" --reply-to 7001234567890123456
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - body
+              properties:
+                body:
+                  type: string
+                  description: |
+                    The reply body content.
+
+                    Plain text only — HTML and Markdown are **not** rendered.
+                reply_to_id:
+                  type: string
+                  nullable: true
+                  description: |
+                    ID of the comment to reply to.
+
+                    Omit or set to `"0"` to post a top-level comment.
+                    When set to a valid comment ID, the new comment will be treated as a reply to that comment.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  item:
+                    id: '7001234567890123460'
+                    topic_id: '6993508780031016960'
+                    body: Great post!
+                    reply_to_id: '0'
+                    author:
+                      member_id: '1000001'
+                      name: Jane Doe
+                      avatar: https://cdn.longbridge.com/avatars/1000001.jpg
+                    images: []
+                    likes_count: 0
+                    comments_count: 0
+                    created_at: '1742002000'
+        '403':
+          description: Forbidden — the authenticated user has not opened a Longbridge account or does not hold assets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too Many Requests — rate limit exceeded for this user in this topic. Wait for the required interval before retrying.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /trade/execution/history:
+    get:
+      operationId: list_history_executions
+      summary: Historical Execution
+      x-summary-zh: 历史成交查询
+      description: |
+        Query historical execution (fill) records. Supports filtering by time range, order ID,
+        and symbol, with pagination.
+      x-description-zh: 查询历史成交（成交明细）记录，支持按时间范围、订单 ID 和标的筛选，并支持分页。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: start_at
+          in: query
+          required: false
+          description: Query range start time as a Unix timestamp (seconds).
+          schema:
+            type: integer
+            nullable: true
+        - name: end_at
+          in: query
+          required: false
+          description: Query range end time as a Unix timestamp (seconds).
+          schema:
+            type: integer
+            nullable: true
+        - name: order_id
+          in: query
+          required: false
+          description: Filter by order ID.
+          schema:
+            type: string
+            nullable: true
+        - name: symbol
+          in: query
+          required: false
+          description: 'Filter by security symbol (e.g. `NVDA.US`).'
+          schema:
+            type: string
+            nullable: true
+            maxLength: 32
+            minLength: 4
+            pattern: '^([\w.]*\.[A-Za-z][A-Za-z])$'
+        - name: page
+          in: query
+          required: false
+          description: Page number (1-based).
+          schema:
+            type: integer
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge executions --history
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  trades:
+                    - trade_id: '218942971868942337'
+                      order_id: '218942971868942336'
+                      symbol: NVDA.US
+                      price: '177.50'
+                      quantity: '10'
+                      trade_done_at: '1774330500'
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /trade/order:
+    get:
+      operationId: order_detail
+      summary: Order Detail
+      x-summary-zh: 订单详情查询
+      description: |
+        Query full details of a single order by order ID, including fee breakdown and status history.
+      x-description-zh: 通过订单 ID 查询单笔订单的完整详情，包括费用明细和状态变更历史。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: order_id
+          in: query
+          required: true
+          description: Order ID to query.
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge order <ORDER_ID>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  order_id: '1220968184320942080'
+                  status: CanceledStatus
+                  stock_name: 英伟达
+                  quantity: '10'
+                  executed_quantity: '0'
+                  price: ''
+                  executed_price: '0'
+                  submitted_at: '1774330299'
+                  side: Buy
+                  symbol: NVDA.US
+                  order_type: MIT
+                  last_done: ''
+                  trigger_price: '177.88'
+                  msg: ''
+                  tag: Normal
+                  time_in_force: Day
+                  expire_date: '2026-03-24'
+                  updated_at: '1774330401'
+                  trigger_at: '0'
+                  trailing_amount: ''
+                  trailing_percent: ''
+                  limit_offset: ''
+                  trigger_status: DEACTIVE
+                  outside_rth: RTH_ONLY
+                  currency: USD
+                  remark: ''
+                  limit_depth_level: 0
+                  trigger_count: 0
+                  monitor_price: ''
+                  free_status: None
+                  free_amount: ''
+                  free_currency: ''
+                  deductions_status: NONE
+                  deductions_amount: ''
+                  deductions_currency: ''
+                  platform_deducted_status: NONE
+                  platform_deducted_amount: ''
+                  platform_deducted_currency: ''
+                  history: []
+                  charge_detail:
+                    items:
+                      - code: BROKER_FEES
+                        name: 收费明细
+                        fees: []
+                    total_amount: '0.00'
+                    currency: USD
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: replace_order
+      summary: Modify Order
+      x-summary-zh: 修改订单
+      description: |
+        Modify the parameters of a pending order. Only orders in `NewStatus` or `PartialFilledStatus`
+        can be modified.
+      x-description-zh: 修改待成交订单的参数。仅 `NewStatus`（已报）或 `PartialFilledStatus`（部分成交）状态的订单可修改。
+      tags:
+        - Trade Execution & Order Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: ID of the order to modify (required).
+                quantity:
+                  type: string
+                  nullable: true
+                  description: New quantity.
+                  pattern: '^([1-9]\d*(\.\d+)?)$'
+                price:
+                  type: string
+                  nullable: true
+                  description: New limit price.
+                  pattern: '^(0\.\d*[1-9]\d*|[1-9]\d*(\.\d+)?)$'
+                trigger_price:
+                  type: string
+                  nullable: true
+                  description: New trigger price (for MIT/LIT orders).
+                  pattern: '^(0\.\d*[1-9]\d*|[1-9]\d*(\.\d+)?)$'
+                limit_offset:
+                  type: string
+                  nullable: true
+                  description: New limit offset (for LIT orders).
+                  pattern: '^(\d*)$|^([0-9]\d*\.?\d*[1-9])$'
+                trailing_amount:
+                  type: string
+                  nullable: true
+                  description: New trailing amount (for TSLPAMT/TSMAMT orders).
+                  pattern: '^(0\.\d*[1-9]\d*|[1-9]\d*(\.\d+)?)$'
+                trailing_percent:
+                  type: string
+                  nullable: true
+                  description: New trailing percentage (for TSMPCT/TSLPPCT orders).
+                  pattern: '^(0\.\d*[1-9]\d*|[1-9]\d*(\.\d+)?)$'
+                limit_depth_level:
+                  type: integer
+                  nullable: true
+                  description: New limit depth level (for ELO orders).
+                trigger_count:
+                  type: integer
+                  nullable: true
+                  description: New trigger count.
+                monitor_price:
+                  type: string
+                  nullable: true
+                  description: New monitor price.
+                remark:
+                  type: string
+                  nullable: true
+                  maxLength: 255
+                  description: Order remark (max 255 characters).
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: cancel_order
+      summary: Cancel Order
+      x-summary-zh: 撤销订单
+      description: |
+        Cancel a pending order. Only orders in `NewStatus` or `PartialFilledStatus` can be cancelled.
+        After successful cancellation the order status changes to `CanceledStatus`.
+      x-description-zh: 撤销待成交订单。仅 `NewStatus`（已报）或 `PartialFilledStatus`（部分成交）状态的订单可撤销，撤销成功后订单状态变更为 `CanceledStatus`（已撤销）。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: order_id
+          in: query
+          required: true
+          description: ID of the order to cancel.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /trade/estimate/buy_limit:
+    get:
+      operationId: estimate_max_buy_quantity
+      summary: Estimate Maximum Buy Quantity
+      x-summary-zh: 估算最大可买数量
+      description: |
+        Estimate the maximum purchasable quantity for a security based on the current account
+        balance and margin, given a specific order type and price.
+      x-description-zh: 根据当前账户余额和保证金，在指定订单类型和价格条件下，估算某只证券的最大可买数量。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          description: 'Security symbol (e.g. `AAPL.US`, `700.HK`).'
+          schema:
+            type: string
+            maxLength: 32
+            minLength: 4
+            pattern: '^([\w.]*\.[A-Za-z][A-Za-z])$'
+        - name: order_type
+          in: query
+          required: true
+          description: |
+            Order type. One of:
+            `LO` (Limit), `ELO` (Enhanced Limit), `MO` (Market), `LIT` (Limit If Touched),
+            `MIT` (Market If Touched), `TSLPAMT` (Trailing Stop Limit by Amount),
+            `TSMAMT` (Trailing Stop Market by Amount), `TSMPCT` (Trailing Stop Market by Percent),
+            `TSLPPCT` (Trailing Stop Limit by Percent), `AO` (Auction), `ALO` (Auction Limit),
+            `ODD` (Odd Lot), `SLO` (Special Limit).
+          schema:
+            type: string
+            enum:
+              - LO
+              - ELO
+              - MO
+              - LIT
+              - MIT
+              - TSLPAMT
+              - TSMAMT
+              - TSMPCT
+              - UnknownOrderType
+              - AO
+              - ALO
+              - ODD
+              - TSLPPCT
+              - SLO
+        - name: side
+          in: query
+          required: true
+          description: Order side. One of `Buy`, `Sell`.
+          schema:
+            type: string
+            enum:
+              - UnknownSide
+              - Buy
+              - Sell
+        - name: price
+          in: query
+          required: false
+          description: Limit price. Required for limit order types (e.g. `LO`, `LIT`).
+          schema:
+            type: string
+            nullable: true
+        - name: currency
+          in: query
+          required: false
+          description: Settlement currency override (e.g. `USD`, `HKD`).
+          schema:
+            type: string
+            nullable: true
+        - name: market
+          in: query
+          required: false
+          description: Market override. One of `US`, `HK`, `SH`, `SZ`, `SG`, `AU`, `JP`, `UK`, `DE`.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - UnknownMarket
+              - DE
+              - JP
+              - SH
+              - SZ
+              - UK
+              - AU
+              - HK
+              - SG
+              - US
+        - name: fractional_shares
+          in: query
+          required: false
+          description: Whether to allow fractional share quantities in the estimate.
+          schema:
+            type: boolean
+            nullable: true
+        - name: order_id
+          in: query
+          required: false
+          description: Original order ID when estimating for an order modification scenario.
+          schema:
+            type: string
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge max-qty <SYMBOL> --side buy --price <PRICE>
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  cash_max_qty: '0'
+                  margin_max_qty: '1859'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /trade/order/history:
+    get:
+      operationId: list_history_orders
+      summary: Historical Order
+      x-summary-zh: 历史订单查询
+      description: |
+        Query historical order records with pagination. Supports filtering by time range, symbol,
+        market, side, and status.
+      x-description-zh: 分页查询历史订单记录，支持按时间范围、标的、市场、方向和状态筛选。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: start_at
+          in: query
+          required: false
+          description: Query range start time as a Unix timestamp (seconds).
+          schema:
+            type: integer
+            nullable: true
+        - name: end_at
+          in: query
+          required: false
+          description: Query range end time as a Unix timestamp (seconds).
+          schema:
+            type: integer
+            nullable: true
+        - name: symbol
+          in: query
+          required: false
+          description: 'Filter by security symbol (e.g. `AAPL.US`).'
+          schema:
+            type: string
+            nullable: true
+            maxLength: 32
+            minLength: 4
+            pattern: '^([\w.]*\.[A-Za-z][A-Za-z])$'
+        - name: market
+          in: query
+          required: false
+          description: Filter by market. One of `US`, `HK`, `SH`, `SZ`, `SG`, `AU`, `JP`, `UK`, `DE`.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - UnknownMarket
+              - AU
+              - DE
+              - HK
+              - SH
+              - SZ
+              - US
+              - JP
+              - SG
+              - UK
+        - name: side
+          in: query
+          required: false
+          description: Filter by order side. One of `Buy`, `Sell`.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - UnknownSide
+              - Buy
+              - Sell
+        - name: status
+          in: query
+          required: false
+          description: Filter by one or more order statuses.
+          schema:
+            type: array
+            nullable: true
+            items:
+              type: string
+              enum:
+                - NotReported
+                - VarietiesNotReported
+                - FilledStatus
+                - WaitToNew
+                - ReplacedStatus
+                - PartialFilledStatus
+                - CanceledStatus
+                - ExpiredStatus
+                - UnknownOrderStatus
+                - RejectedStatus
+                - PartialWithdrawal
+                - ReplacedNotReported
+                - ProtectedNotReported
+                - NewStatus
+                - WaitToReplace
+                - PendingReplaceStatus
+                - PendingCancelStatus
+                - WaitToCancel
+        - name: page
+          in: query
+          required: false
+          description: Page number (1-based).
+          schema:
+            type: integer
+            nullable: true
+        - name: size
+          in: query
+          required: false
+          description: Number of records per page.
+          schema:
+            type: integer
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge orders --history
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  orders:
+                    - order_id: '1220968184320942080'
+                      status: FilledStatus
+                      stock_name: 苹果
+                      quantity: '10'
+                      executed_quantity: '10'
+                      price: '200.00'
+                      executed_price: '199.85'
+                      submitted_at: '1770000000'
+                      side: Buy
+                      symbol: AAPL.US
+                      order_type: LO
+                      last_done: '199.85'
+                      trigger_price: ''
+                      msg: ''
+                      tag: Normal
+                      time_in_force: Day
+                      expire_date: '2026-02-01'
+                      updated_at: '1770000600'
+                      trigger_at: '0'
+                      trailing_amount: ''
+                      trailing_percent: ''
+                      limit_offset: ''
+                      trigger_status: DEACTIVE
+                      outside_rth: RTH_ONLY
+                      currency: USD
+                      remark: ''
+                      limit_depth_level: 0
+                      trigger_count: 0
+                      monitor_price: ''
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /trade/execution/today:
+    get:
+      operationId: list_today_executions
+      summary: Today's Execution
+      x-summary-zh: 当日成交查询
+      description: |
+        Query today's execution (fill) records. Supports filtering by order ID and symbol.
+      x-description-zh: 查询当日成交（成交明细）记录，支持按订单 ID 和标的筛选。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: order_id
+          in: query
+          required: false
+          description: Filter by order ID.
+          schema:
+            type: string
+            nullable: true
+        - name: symbol
+          in: query
+          required: false
+          description: 'Filter by security symbol (e.g. `NVDA.US`).'
+          schema:
+            type: string
+            nullable: true
+            maxLength: 32
+            minLength: 4
+            pattern: '^([\w.]*\.[A-Za-z][A-Za-z])$'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge executions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  trades:
+                    - trade_id: '218942971868942337'
+                      order_id: '218942971868942336'
+                      symbol: NVDA.US
+                      price: '177.50'
+                      quantity: '10'
+                      trade_done_at: '1774330500'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /trade/order/today:
+    get:
+      operationId: list_today_orders
+      summary: Today's Order
+      x-summary-zh: 当日订单查询
+      description: |
+        Query today's orders with support for multi-condition filtering.
+      x-description-zh: 查询当日订单，支持多条件组合筛选。
+      tags:
+        - Trade Execution & Order Management
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          description: 'Filter by security symbol (e.g. `NVDA.US`).'
+          schema:
+            type: string
+            nullable: true
+            maxLength: 32
+            minLength: 4
+            pattern: '^([\w.]*\.[A-Za-z][A-Za-z])$'
+        - name: market
+          in: query
+          required: false
+          description: Filter by market. One of `US`, `HK`, `SH`, `SZ`, `SG`, `AU`, `JP`, `UK`, `DE`.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - UnknownMarket
+              - DE
+              - SH
+              - US
+              - AU
+              - HK
+              - JP
+              - SZ
+              - SG
+              - UK
+        - name: side
+          in: query
+          required: false
+          description: Filter by order side. One of `Buy`, `Sell`.
+          schema:
+            type: string
+            nullable: true
+            enum:
+              - UnknownSide
+              - Buy
+              - Sell
+        - name: status
+          in: query
+          required: false
+          description: Filter by one or more order statuses.
+          schema:
+            type: array
+            nullable: true
+            items:
+              type: string
+              enum:
+                - UnknownOrderStatus
+                - VarietiesNotReported
+                - WaitToCancel
+                - NotReported
+                - ReplacedNotReported
+                - NewStatus
+                - PendingReplaceStatus
+                - RejectedStatus
+                - CanceledStatus
+                - PartialWithdrawal
+                - FilledStatus
+                - WaitToReplace
+                - PartialFilledStatus
+                - PendingCancelStatus
+                - ExpiredStatus
+                - ProtectedNotReported
+                - WaitToNew
+                - ReplacedStatus
+        - name: order_id
+          in: query
+          required: false
+          description: Filter by order ID.
+          schema:
+            type: string
+            nullable: true
+        - name: page
+          in: query
+          required: false
+          description: Page number (1-based).
+          schema:
+            type: integer
+            nullable: true
+        - name: size
+          in: query
+          required: false
+          description: Number of records per page.
+          schema:
+            type: integer
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge orders
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  orders:
+                    - order_id: '1220968184320942080'
+                      status: CanceledStatus
+                      stock_name: 英伟达
+                      quantity: '10'
+                      executed_quantity: '0'
+                      price: ''
+                      executed_price: '0'
+                      submitted_at: '1774330299'
+                      side: Buy
+                      symbol: NVDA.US
+                      order_type: MIT
+                      last_done: ''
+                      trigger_price: '177.88'
+                      msg: ''
+                      tag: Normal
+                      time_in_force: Day
+                      expire_date: '2026-03-24'
+                      updated_at: '1774330401'
+                      trigger_at: '0'
+                      trailing_amount: ''
+                      trailing_percent: ''
+                      limit_offset: ''
+                      trigger_status: DEACTIVE
+                      outside_rth: RTH_ONLY
+                      currency: USD
+                      remark: ''
+                      limit_depth_level: 0
+                      trigger_count: 0
+                      monitor_price: ''
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://openapi.longbridge.com/oauth2/authorize
+          tokenUrl: https://openapi.longbridge.com/oauth2/token
+          scopes:
+            openapi: Full OpenAPI access
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code.
+        message:
+          type: string
+          description: Error message.
+        data:
+          nullable: true
+          description: Always `null` for error responses.
+    Order:
+      type: object
+      description: Standard order object returned in order list endpoints.
+      properties:
+        order_id:
+          type: string
+          nullable: true
+          description: Order ID.
+        status:
+          type: string
+          nullable: true
+          description: Order status (e.g. `NewStatus`, `FilledStatus`, `CanceledStatus`).
+        stock_name:
+          type: string
+          nullable: true
+          description: Security display name.
+        quantity:
+          type: string
+          nullable: true
+          description: Ordered quantity.
+        executed_quantity:
+          type: string
+          nullable: true
+          description: Filled quantity.
+        price:
+          type: string
+          nullable: true
+          description: Limit price (empty for market orders).
+        executed_price:
+          type: string
+          nullable: true
+          description: Average fill price.
+        submitted_at:
+          type: string
+          nullable: true
+          description: Unix timestamp (seconds) when the order was submitted.
+        side:
+          type: string
+          nullable: true
+          description: Order side. One of `Buy`, `Sell`.
+        symbol:
+          type: string
+          nullable: true
+          description: Security symbol.
+        order_type:
+          type: string
+          nullable: true
+          description: Order type (e.g. `LO`, `MO`, `MIT`).
+        last_done:
+          type: string
+          nullable: true
+          description: Last execution price.
+        trigger_price:
+          type: string
+          nullable: true
+          description: Trigger price for MIT/LIT orders.
+        msg:
+          type: string
+          nullable: true
+          description: Order message or rejection reason.
+        tag:
+          type: string
+          nullable: true
+          description: Order tag (e.g. `Normal`, `GTC`).
+        time_in_force:
+          type: string
+          nullable: true
+          description: Time-in-force (e.g. `Day`, `GTC`, `GTD`).
+        expire_date:
+          type: string
+          nullable: true
+          description: Order expiry date in `YYYY-MM-DD` format (for GTD orders).
+        updated_at:
+          type: string
+          nullable: true
+          description: Unix timestamp (seconds) of the last status update.
+        trigger_at:
+          type: string
+          nullable: true
+          description: Unix timestamp (seconds) when the trigger condition was met.
+        trailing_amount:
+          type: string
+          nullable: true
+          description: Trailing stop amount.
+        trailing_percent:
+          type: string
+          nullable: true
+          description: Trailing stop percentage.
+        limit_offset:
+          type: string
+          nullable: true
+          description: Limit offset for LIT orders.
+        trigger_status:
+          type: string
+          nullable: true
+          description: Trigger status (e.g. `ACTIVE`, `DEACTIVE`, `TRIGGERED`).
+        outside_rth:
+          type: string
+          nullable: true
+          description: Extended-hours setting. One of `RTH_ONLY`, `ANY_TIME`, `OVERNIGHT`.
+        currency:
+          type: string
+          nullable: true
+          description: Settlement currency.
+        remark:
+          type: string
+          nullable: true
+          description: Order remark.
+        limit_depth_level:
+          type: integer
+          nullable: true
+          description: Limit depth level (for ELO orders).
+        trigger_count:
+          type: integer
+          nullable: true
+          description: Number of times the trigger has fired.
+        monitor_price:
+          type: string
+          nullable: true
+          description: Monitor price for conditional orders.

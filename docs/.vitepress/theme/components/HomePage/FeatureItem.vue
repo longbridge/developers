@@ -6,10 +6,7 @@
     <div class="text flex-1">
       <div class="text-xl font-semibold">
         <h3 class="title">{{ $t(titleKey) }}</h3>
-        <img
-          class="w-24 mt-4 inline-block"
-          src="https://pub.pbkrs.com/files/202204/bQRcDkfn6s6puF9z/Group_626442__1_.png"
-          alt="" />
+        <img class="w-24 mt-4 inline-block" src="/assets/bar.svg" alt="" />
       </div>
       <p class="mt-4 text-base desc">
         <span v-for="(descKey, index) in descriptionKeys" :key="descKey">

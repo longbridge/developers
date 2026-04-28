@@ -1,61 +1,147 @@
-Longbridge OpenAPI Documentation
+# Longbridge Developers
 
-https://open.longbridge.com
+**https://open.longbridge.com**
 
-## CONTRIBUTING
+Longbridge Developers is the official developer platform for Longbridge — providing programmatic access to real-time market data, trading, account management, and AI integrations across HK, US, and CN markets.
 
-请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md) 文档。
-
-Please following the [CONTRIBUTING.md](./CONTRIBUTING.md) document.
-
-## Style Guide
-
-### 文档需要遵守以下规范：
-
-- 遵循中英文书写规范，中英文加空格间隔，正确使用标点符号，正确用词，精确专业术语用词、大小写。
-- Longbridge 员工请阅读内部：[文案书写指导](https://longbridge.feishu.cn/wiki/wikcnqOEWHe43bdSLMP0S42vvvg) 与 [OpenAPI 接口规范](https://longbridge.feishu.cn/wiki/wikcnb0RtZ8OEuAodGBXaOL6Nxh)。
-- Markdown 文档需要提供规范的 Meta 信息。
-
-### Markdown Meta 信息格式
-
-在每个 `.md` 文件的开头添加内容（示例）：
-
-```yml
 ---
-title: '开放平台文档标题'
-id: $category_$file_name # category 指文檔分類 file_name 指文档的文件名以中横线分隔的字符串
-slug: '/xxx' # 注意前面必须加上 /，例如 /trade-order-create 这样的 slug 保持和 id 一致
-sidebar_position: 1 // 显示的顺序，数字越小越靠前
----
+
+## Repository structure
+
+```
+/
+├── docs/                        # Site content and VitePress config
+│   ├── .vitepress/              # Theme, components, markdown plugins, locale configs
+│   ├── en/                      # English content (root locale)
+│   ├── zh-CN/                   # Simplified Chinese content
+│   └── zh-HK/                   # Traditional Chinese content
+├── openapi/                     # Submodule: OpenAPI spec + SDK source (openapi, Python, Rust, etc.)
+├── openapi-go/                  # Submodule: Go SDK
+├── longbridge-terminal/         # Submodule: CLI binary source (longbridge)
+├── skills/longbridge/           # AI Skill — knowledge base for AI agents
+├── scripts/                     # Build scripts (llms.txt generation, markdown normalization)
+├── openapi.yaml                 # Canonical API specification (source of truth for API Reference)
+└── CONTRIBUTING.md              # Contribution guidelines for AI agents and humans
 ```
 
-#### Markdown 文档分类
+---
 
-为了将文档进行分类需要在 docs 中每个子目录添加 _category_.json 配置文件，文件内容如下：
+## What you can build
 
-```json5
+- Automated trading strategies and order management
+- Real-time quote dashboards and data pipelines
+- Portfolio trackers and risk monitoring tools
+- AI agents with live market data and trading capabilities
+
+## Access methods
+
+| Method                                                       | Best for                                             |
+| ------------------------------------------------------------ | ---------------------------------------------------- |
+| [SDK](https://open.longbridge.com/sdk)                       | Python, Rust, Node.js, Go, Java, C++ apps            |
+| [HTTP / WebSocket API](https://open.longbridge.com/docs/api) | Any language, custom integrations                    |
+| [CLI](https://open.longbridge.com/docs/cli) (`longbridge`)   | Terminal workflows, scripting, AI tool-calling       |
+| [MCP](https://open.longbridge.com/docs/mcp)                  | AI coding assistants (Cursor, Claude, ChatGPT, etc.) |
+| [Skill](https://open.longbridge.com/skill)                   | Give any AI direct knowledge of Longbridge APIs      |
+
+## Quick start
+
+### 1. Open a Longbridge account
+
+Download the [Longbridge App](https://longbridge.com/download) and complete account onboarding.
+
+### 2. Enable OpenAPI access
+
+Log in to [open.longbridge.com](https://open.longbridge.com), complete developer verification, and obtain your API token.
+
+### 3. Choose your integration
+
+**CLI — fastest way to get started:**
+
+```bash
+brew install --cask longbridge/tap/longbridge-terminal
+longbridge auth login
+longbridge quote TSLA.US NVDA.US 700.HK
+```
+
+**Python SDK:**
+
+```bash
+pip install longbridge
+```
+
+**MCP for AI assistants** — add to your MCP client config:
+
+```json
 {
-  position: 1, // 显示的顺序，数字越小越靠前
-  label: 'OpenAPI 介绍', // 文档分类名称，显示在左边栏
-  link: null,
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://openapi.longbridge.com/mcp"
+    }
+  }
 }
 ```
 
-#### 特别提示
+**AI Skill** — give your AI full knowledge of Longbridge APIs:
 
-Markdown 涉及到的静态资源例如：图片、视频等都需要上传到 CDN 再引用，不要放到项目中引用。
-
-不推荐的写法（这样定义会导致加载资源失败的情况）
-
-```md
-![流程图片](../../static/xxxx.png)
+```bash
+npx skills add longbridge/developers -g -y
 ```
 
-推荐的写法（从后台上传到 CDN 拿到 CDN 地址，然后在 Markdown 中引用）
+## Market coverage
 
-```md
-![流程图片](https://pub.pbkrs.com/xxx/xxx.png)
+| Market        | Instruments                                      |
+| ------------- | ------------------------------------------------ |
+| Hong Kong     | Equities, ETFs, Warrants, CBBCs, Hang Seng Index |
+| United States | Stocks, ETFs, OPRA Options, Nasdaq Index         |
+| China A-share | Stocks, ETFs, Index                              |
+
+## Documentation
+
+- **Getting Started** — https://open.longbridge.com/docs/getting-started
+- **API Reference** — https://open.longbridge.com/docs/api
+- **SDK Reference** — https://open.longbridge.com/sdk
+- **CLI Reference** — https://open.longbridge.com/docs/cli
+- **MCP Setup** — https://open.longbridge.com/docs/mcp
+- **LLM / AI Integration** — https://open.longbridge.com/docs/llm
+- **Changelog** — https://open.longbridge.com/docs/changelog
+
+## LLM-friendly docs
+
+All documentation pages are available as Markdown by appending `.md` to any URL:
+
+```
+https://open.longbridge.com/docs/getting-started.md
+https://open.longbridge.com/docs/quote/pull/static.md
 ```
 
-> Before commit you should be run `autocorrect --fix .` first
-> [How to use autocorrect](https://github.com/huacnlee/autocorrect)
+A machine-readable index is available at:
+
+```
+https://open.longbridge.com/llms.txt
+```
+
+## Pricing
+
+OpenAPI access is free for Longbridge Integrated Account holders. No additional fees for activating or using the API. Standard brokerage transaction fees apply to trades.
+
+## Contributing
+
+### Local development setup
+
+```bash
+git clone --recurse-submodules https://github.com/longbridge/developers.git
+cd developers
+bun install
+bun run dev
+```
+
+If you already cloned without `--recurse-submodules`:
+
+```bash
+git submodule update --init --recursive
+bun run dev
+```
+
+The dev server starts at `http://localhost:5173` and connects to the canary API. Use `bun run dev:prod` to connect to the production API instead.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for full contribution guidelines.

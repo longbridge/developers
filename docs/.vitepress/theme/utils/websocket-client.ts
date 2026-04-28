@@ -1,5 +1,5 @@
 /**
- * Longbridge OpenAPI WebSocket 客户端
+ * Longbridge Developers WebSocket 客户端
  * 支持二进制协议、握手认证、行情订阅等功能
  */
 

@@ -1,14 +1,26 @@
 <template>
   <div class="my-4">
-    <div class="flex border-b border-gray-200 mb-4 overflow-x-auto gap-4">
+    <!-- line variant -->
+    <div v-if="variant === 'line'" class="flex border-b border-[var(--vp-c-divider)] mb-4 overflow-x-auto gap-1">
+      <button
+        v-for="tab in tabs"
+        :key="tab.value"
+        class="tab-line-btn"
+        :class="tab.value === activeTab ? 'tab-line-active' : 'tab-line-inactive'"
+        @click="setActiveTab(tab.value)">
+        {{ tab.label }}
+      </button>
+    </div>
+    <!-- pill variant -->
+    <div v-else class="inline-flex items-center rounded-md bg-[var(--vp-c-bg-soft)] p-1 mb-4 overflow-x-auto gap-1">
       <button
         v-for="tab in tabs"
         :key="tab.value"
         :class="[
-          'py-2 bg-transparent cursor-pointer text-base font-medium whitespace-nowrap border-b-2  transition-color duration-200 border border-solid  border-transparent',
+          'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all cursor-pointer border-0',
           tab.value === activeTab
-            ? 'text-[--vp-c-brand-1] border-b-[--vp-c-brand-1]'
-            : 'text-gray-400 dark:text-gray-400 hover:text-[--vp-c-brand-1]',
+            ? 'bg-[var(--vp-c-bg)] text-[var(--vp-c-text-1)] shadow-sm'
+            : 'text-[var(--vp-c-text-2)] hover:text-[var(--vp-c-text-1)]',
         ]"
         @click="setActiveTab(tab.value)">
         {{ tab.label }}
@@ -31,9 +43,12 @@ interface Tab {
 
 interface Props {
   groupId?: string
+  variant?: 'line' | 'pill'
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'line',
+})
 
 const tabs = ref<Tab[]>([])
 const activeTab = ref<string>('')
@@ -138,3 +153,32 @@ onMounted(() => {
 provide('tabs-register', registerTab)
 provide('tabs-active', activeTab)
 </script>
+
+<style scoped>
+.tab-line-btn {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.tab-line-active {
+  color: var(--vp-c-text-1);
+  border-bottom-color: var(--vp-c-text-1);
+}
+
+.tab-line-inactive {
+  color: var(--vp-c-text-2);
+}
+
+.tab-line-inactive:hover {
+  color: var(--vp-c-text-1);
+}
+</style>
