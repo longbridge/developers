@@ -2537,7 +2537,8 @@ const currentMessages = computed(() => {
   isolation: isolate;
   cursor: pointer;
   display: block;
-  text-decoration: none;
+  text-decoration: none !important;
+  color: #fff !important;
   transition: opacity 200ms ease;
 }
 .uc-banner:hover { opacity: 0.88; }
@@ -2547,7 +2548,6 @@ const currentMessages = computed(() => {
   pointer-events: none;
   z-index: -1;
   background:
-    radial-gradient(560px 240px at 88% 50%, rgba(255, 199, 0, 0.22), transparent 70%),
     radial-gradient(480px 220px at 12% 110%, rgba(0, 184, 184, 0.34), transparent 70%);
 }
 .uc-banner-inner {
