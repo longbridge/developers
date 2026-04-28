@@ -12,7 +12,8 @@ const isHK = computed(() => lang.value === 'zh-HK')
 const installGuideUrl = computed(() => (isEN.value ? '/skill/install' : `/${lang.value}/skill/install`))
 
 function topicUrl(id: string) {
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://longbridge.com'
+  const isCN = typeof window !== 'undefined' && window.location.hostname.endsWith('.cn')
+  const origin = isCN ? 'https://longbridge.cn' : 'https://longbridge.com'
   const langPrefix = isEN.value ? '' : `/${lang.value}`
   return `${origin}${langPrefix}/topics/${id}`
 }
@@ -2213,7 +2214,7 @@ const currentMessages = computed(() => {
       </div>
 
       <!-- Award Banner -->
-      <div class="uc-banner">
+      <a class="uc-banner" :href="topicUrl('39630019')" target="_blank">
         <div class="uc-banner-glow"></div>
         <div class="uc-banner-inner">
           <div>
@@ -2267,7 +2268,7 @@ const currentMessages = computed(() => {
             </div>
           </div>
         </div>
-      </div>
+      </a>
 
       <!-- Cards -->
       <div class="uc-grid">
@@ -2534,7 +2535,12 @@ const currentMessages = computed(() => {
   background: linear-gradient(135deg, #0A0E19 0%, #14202E 60%, #0E2A2C 100%);
   color: #fff;
   isolation: isolate;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  transition: opacity 200ms ease;
 }
+.uc-banner:hover { opacity: 0.88; }
 .uc-banner-glow {
   position: absolute;
   inset: 0;
