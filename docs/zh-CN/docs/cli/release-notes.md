@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.18.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.18.0)
+
+- **TUI：订单页面** — 交互式订单列表，支持快捷键操作和下单对话框，无需离开终端即可完成交易
+- **`dividend --page` / `--year`** — 支持翻页浏览大量分红历史记录，并按年份过滤；每页获取 50 条记录（原为 30 条）
+
 ### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
 
 - **`--limit` 别名** — 所有接受 `--count` 参数的命令现在也支持 `--limit` 作为别名，提升 AI agent 工具调用兼容性

@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-04-28
+
+### CLI v0.18.0
+
+- **TUI Orders page** — interactive orders table with trading shortcuts and order entry dialog for in-terminal trading
+- **`dividend` enhancements** — `--page` pagination and `--year` filter; 50 records per page (up from 30)
+
 ## 2026-04-24
 
 ### CLI v0.17.4

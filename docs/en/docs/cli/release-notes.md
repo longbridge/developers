@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.18.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.18.0)
+
+- **TUI: Orders page** — interactive orders table with trading shortcuts and an order entry dialog for placing trades without leaving the terminal
+- **`dividend --page` / `--year`** — paginate through large dividend histories and filter by year; fetches 50 records per page (up from 30)
+
 ### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
 
 - **`--limit` alias for `--count`** — all commands that accept `--count` now also accept `--limit` as an alias, improving compatibility for AI agent tool-calling

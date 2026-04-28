@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.18.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.18.0)
+
+- **TUI：訂單頁面** — 互動式訂單列表，支援快捷鍵操作和下單對話框，無需離開終端即可完成交易
+- **`dividend --page` / `--year`** — 支援翻頁瀏覽大量股息歷史記錄，並按年份篩選；每頁獲取 50 筆記錄（原為 30 筆）
+
 ### [v0.17.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.17.4)
 
 - **`--limit` 別名** — 所有接受 `--count` 參數的指令現在也支援 `--limit` 作為別名，提升 AI agent 工具呼叫相容性
