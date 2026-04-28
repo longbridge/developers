@@ -24,14 +24,25 @@ const i18n = createI18n<[typeof en, typeof zhCN, typeof zhHK], 'en' | 'zh-CN' | 
   },
 })
 
+function saveInviteCodeFromUrl() {
+  const inviteCode = new URLSearchParams(window.location.search).get('invite-code')
+  if (inviteCode) {
+    const expires = new Date()
+    expires.setDate(expires.getDate() + 7)
+    document.cookie = `invite-code=${encodeURIComponent(inviteCode)};expires=${expires.toUTCString()};path=/;SameSite=Lax`
+  }
+}
+
 export default {
   Layout,
-  async enhanceApp({ app }) {
+  async enhanceApp({ app, router }) {
     app.use(i18n)
     if (!import.meta.env.SSR) {
       const FloatingVue = await import('floating-vue')
       await import('floating-vue/dist/style.css')
       app.use(FloatingVue.default)
+      saveInviteCodeFromUrl()
+      router.onAfterRouteChange = saveInviteCodeFromUrl
     }
     for (const component of Object.keys(components)) {
       app.component(component, components[component])
