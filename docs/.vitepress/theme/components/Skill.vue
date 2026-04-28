@@ -2283,10 +2283,12 @@ const currentMessages = computed(() => {
           <div class="uc-card-shine"></div>
           <div class="uc-card-top">
             <span class="uc-rank">{{ c.rank }}</span>
-            <div class="uc-winner-tag">
-              <span class="uc-winner-name">{{ c.author }}</span>
-              <span class="uc-winner-id">ID {{ c.authorId }}</span>
-            </div>
+            <span class="uc-cta">
+              {{ isEN ? 'Read case' : isHK ? '查看案例' : '查看案例' }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12 H19 M13 6 L19 12 L13 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
           <h3 class="uc-case-title">{{ isEN ? c.titleEn : isHK ? c.titleHK : c.title }}</h3>
           <p class="uc-case-summary">{{ isEN ? c.summaryEn : isHK ? c.summaryHK : c.summary }}</p>
@@ -2295,12 +2297,6 @@ const currentMessages = computed(() => {
               <span class="uc-metric-value">{{ c.metricValue }}</span>
               <span class="uc-metric-label">{{ isEN ? c.metricLabelEn : isHK ? c.metricLabelHK : c.metricLabel }}</span>
             </div>
-            <span class="uc-cta">
-              {{ isEN ? 'Read case' : isHK ? '查看案例' : '查看案例' }}
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12 H19 M13 6 L19 12 L13 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
           </div>
         </a>
       </div>
@@ -2680,17 +2676,6 @@ const currentMessages = computed(() => {
 .uc-accent-orange .uc-rank { color: #FF5000; }
 .uc-accent-red    .uc-rank { color: #F5B800; }
 .uc-accent-yellow .uc-rank { color: #C99500; }
-.uc-winner-tag {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: var(--vp-c-bg-soft);
-}
-.uc-winner-name { font-size: 0.8125rem; font-weight: 600; color: var(--vp-c-text-1); }
-.uc-winner-id   { font-size: 0.6875rem; color: var(--vp-c-text-2); letter-spacing: 0.02em; }
 .uc-case-title {
   font-size: 1.0625rem;
   font-weight: 600;
