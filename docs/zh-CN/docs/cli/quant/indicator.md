@@ -60,8 +60,6 @@ plot(basis - dev, "Lower")
 '
 ```
 
-> **注意** — OpenPine 没有内置的 `ta.bbands`。如上所示，使用 `ta.sma` + `ta.stdev` 手动计算布林带。
-
 ## EMA 均线组合
 
 <QuantChart type="ema" />

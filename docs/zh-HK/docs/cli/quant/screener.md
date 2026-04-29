@@ -1,16 +1,16 @@
 ---
-title: 'Stock Screening'
-sidebar_label: 'Stock Screening'
+title: '選股'
+sidebar_label: '選股'
 sidebar_position: 4
 ---
 
-# Stock Screening
+# 選股
 
-Stock screening finds symbols that satisfy a set of technical conditions on the most recent bar. The workflow is:
+選股的目標是從一批標的中找出最近一根 K 線滿足特定技術條件的股票。基本流程：
 
-1. Write an `indicator()` script that plots `1.0` when your condition is met and `0.0` otherwise
-2. Run it against each symbol with `--format json`
-3. Collect symbols where the last signal value is `1`
+1. 編寫一個 `indicator()` 腳本：條件成立時 `plot(1.0, "Signal")`，否則 `plot(0.0, "Signal")`
+2. 對每隻股票執行，加 `--format json`
+3. 收集信號最後一個值為 `1` 的股票
 
 ```bash
 last=$(longbridge quant run "$sym" --start ... --end ... \
@@ -19,11 +19,11 @@ last=$(longbridge quant run "$sym" --start ... --end ... \
 [ "$last" = "1" ] && echo "$sym"
 ```
 
-The screening runs only against the symbols you explicitly list. Define your watchlist in the `symbols` array and adjust it to suit your needs.
+篩選只在 `symbols` 數組中列出的股票池內進行，按需修改這個列表即可。
 
-## RSI Oversold
+## RSI 超賣
 
-Screen for stocks where RSI(14) closed below 35 on the latest bar.
+篩選最新一根 K 線 RSI(14) 低於 35 的股票。
 
 ```bash
 symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
@@ -42,9 +42,9 @@ for sym in "${symbols[@]}"; do
 done
 ```
 
-## EMA Bullish Alignment
+## EMA 多頭排列
 
-Screen for stocks with all three EMAs stacked bullishly: EMA8 > EMA21 > EMA55.
+篩選三條均線形成多頭排列（EMA8 > EMA21 > EMA55）的股票。
 
 ```bash
 symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
@@ -65,9 +65,9 @@ for sym in "${symbols[@]}"; do
 done
 ```
 
-## Bollinger Band Squeeze
+## 布林帶收窄
 
-Screen for stocks where the band width (Upper − Lower) hit its 20-bar minimum — a classic volatility contraction signal.
+篩選帶寬（上軌 − 下軌）處於 20 根 K 線最低點的股票——經典的波動率收縮信號。
 
 ```bash
 symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)

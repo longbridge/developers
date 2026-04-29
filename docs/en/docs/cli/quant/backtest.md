@@ -10,10 +10,36 @@ Use `strategy()` mode to simulate a trading strategy over historical data. The s
 
 ## How It Works
 
-- Replace `indicator()` with `strategy()`
+- Declare your script with `strategy()` instead of `indicator()`
 - Use `strategy.entry()` and `strategy.close()` (or `strategy.exit()`) to simulate trades
 - Use `--format json` to get the full performance report
-- Parse the report with `jq`: `.data.report_json | fromjson | .performanceAll`
+- Parse the report with `jq`: `.data.report_json | fromjson`
+
+## Strategy Settings
+
+Common parameters for the `strategy()` declaration and their defaults:
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
+| `initial_capital` | `1000000` | Starting capital |
+| `commission_type` | `strategy.commission.percent` | Commission calculation method |
+| `commission_value` | `0` | Commission rate / amount (0 = no commission) |
+| `slippage` | `0` | Slippage in ticks per fill |
+| `default_qty_type` | `strategy.fixed` | How position size is specified: `strategy.fixed` (contracts), `strategy.percent_of_equity`, `strategy.cash` |
+| `default_qty_value` | `1` | Default position size |
+| `pyramiding` | `0` | Max simultaneous entries in the same direction (0 = one at a time) |
+| `risk_free_rate` | `2` | Annual risk-free rate (%) for Sharpe / Sortino |
+
+Example with custom settings:
+
+```pine
+strategy("My Strategy",
+    initial_capital    = 50000,
+    commission_type    = strategy.commission.percent,
+    commission_value   = 0.1,
+    default_qty_type   = strategy.percent_of_equity,
+    default_qty_value  = 10)
+```
 
 ## EMA Crossover Strategy
 
@@ -36,16 +62,20 @@ if ta.crossunder(fast, slow)
 
 ```json
 {
-  "netProfit": 42.31,
+  "netProfit": 4231.00,
   "netProfitPercent": 42.31,
-  "totalTrades": 18,
-  "winRate": 0.50,
-  "profitFactor": 1.74,
-  "maxDrawdown": -28.15,
+  "grossProfit": 7850.00,
+  "grossLoss": 3619.00,
+  "profitFactor": 2.17,
+  "buyHoldReturnPercent": 31.20,
   "maxDrawdownPercent": -28.15,
   "sharpeRatio": 0.87,
-  "avgWin": 12.43,
-  "avgLoss": -7.14
+  "sortinoRatio": 1.24,
+  "totalClosedTrades": 18,
+  "percentProfitable": 50.0,
+  "avgWinningTradePercent": 8.72,
+  "avgLosingTradePercent": -4.02,
+  "commissionPaid": 180.00
 }
 ```
 
@@ -67,32 +97,169 @@ if ta.crossover(r, 55)
 ' | jq '.data.report_json | fromjson | .performanceAll'
 ```
 
-```json
-{
-  "netProfit": 23.87,
-  "netProfitPercent": 23.87,
-  "totalTrades": 9,
-  "winRate": 0.67,
-  "profitFactor": 2.11,
-  "maxDrawdown": -11.42,
-  "maxDrawdownPercent": -11.42,
-  "sharpeRatio": 1.23,
-  "avgWin": 8.91,
-  "avgLoss": -4.22
-}
+## Report Reference
+
+Parse the full report object:
+
+```bash
+longbridge quant run NVDA.US ... --format json --script '...' \
+  | jq '.data.report_json | fromjson'
 ```
 
-## Understanding the Report Fields
+### Top-Level Structure
 
 | Field | Description |
 | ----- | ----------- |
-| `netProfitPercent` | Total return (%) for the period |
-| `totalTrades` | Number of completed round-trips |
-| `winRate` | Fraction of profitable trades (0–1) |
+| `performanceAll` | Performance metrics across all trades |
+| `performanceLong` | Performance metrics for long trades only |
+| `performanceShort` | Performance metrics for short trades only |
+| `closedTrades` | Array of completed trade records |
+| `openTrades` | Array of unrealized positions at backtest end |
+| `equityCurve` | Per-bar account equity |
+| `drawdownCurve` | Per-bar drawdown from equity peak |
+| `buyHoldCurve` | Per-bar buy-and-hold benchmark equity |
+| `config` | Strategy configuration snapshot |
+
+### Performance Metrics
+
+`performanceAll`, `performanceLong`, and `performanceShort` share the same shape. Fields marked **all only** are always `0` / `null` in `performanceLong` and `performanceShort` — they reflect the combined equity curve and cannot be split by direction.
+
+**Profit & Loss**
+
+| Field | Description |
+| ----- | ----------- |
+| `netProfit` | Net profit in account currency |
+| `netProfitPercent` | Net profit % of initial capital |
+| `grossProfit` | Total profit from winning trades |
+| `grossProfitPercent` | Gross profit % |
+| `grossLoss` | Total loss from losing trades (positive number) |
+| `grossLossPercent` | Gross loss % |
 | `profitFactor` | Gross profit ÷ gross loss |
-| `maxDrawdownPercent` | Largest peak-to-trough decline (%) |
-| `sharpeRatio` | Risk-adjusted return (annualized) |
-| `avgWin` / `avgLoss` | Average gain / average loss per trade (%) |
+| `buyHoldReturn` | Buy-and-hold return in account currency *(all only)* |
+| `buyHoldReturnPercent` | Buy-and-hold return % *(all only)* |
+
+**Drawdown & Runup** *(all only)*
+
+| Field | Description |
+| ----- | ----------- |
+| `maxDrawdown` | Largest equity drawdown in account currency |
+| `maxDrawdownPercent` | Max drawdown % |
+| `maxRunup` | Largest equity runup in account currency |
+| `maxRunupPercent` | Max runup % |
+
+**Risk-Adjusted Returns** *(all only)*
+
+| Field | Description |
+| ----- | ----------- |
+| `sharpeRatio` | Annualized Sharpe ratio |
+| `sortinoRatio` | Annualized Sortino ratio |
+
+**Trade Statistics**
+
+| Field | Description |
+| ----- | ----------- |
+| `totalClosedTrades` | Completed trades |
+| `totalOpenTrades` | Unrealized positions at end of backtest |
+| `numWinningTrades` | Trades with profit > 0 |
+| `numLosingTrades` | Trades with profit < 0 |
+| `numEvenTrades` | Break-even trades *(all only)* |
+| `percentProfitable` | Win rate (0–100) |
+
+**Average Trade**
+
+| Field | Description |
+| ----- | ----------- |
+| `avgTrade` | Average P&L per trade |
+| `avgTradePercent` | Average P&L % per trade |
+| `avgWinningTrade` | Average profit of winning trades |
+| `avgWinningTradePercent` | Average winning trade profit % |
+| `avgLosingTrade` | Average loss of losing trades |
+| `avgLosingTradePercent` | Average losing trade loss % |
+| `ratioAvgWinLoss` | Avg winning trade ÷ avg losing trade |
+| `largestWinningTrade` | Single largest profit |
+| `largestWinningTradePercent` | Single largest profit % |
+| `largestLosingTrade` | Single largest loss |
+| `largestLosingTradePercent` | Single largest loss % |
+
+**Holding Period**
+
+| Field | Description |
+| ----- | ----------- |
+| `avgBarsInTrades` | Average bars held per trade |
+| `avgBarsInWinningTrades` | Average bars held for winning trades |
+| `avgBarsInLosingTrades` | Average bars held for losing trades |
+
+**Other**
+
+| Field | Description |
+| ----- | ----------- |
+| `commissionPaid` | Total commissions paid |
+| `maxContractsHeld` | Peak simultaneous contracts held |
+| `marginCalls` | Number of margin calls triggered |
+
+### Trade History
+
+Each entry in `closedTrades` is a completed round-trip:
+
+| Field | Description |
+| ----- | ----------- |
+| `tradeNum` | Trade number (0-based) |
+| `entrySide` | `"Long"` or `"Short"` |
+| `entryId` | Entry order ID |
+| `entryPrice` | Entry fill price |
+| `entryTime` | Entry timestamp (Unix ms) |
+| `exitId` | Exit order ID |
+| `exitPrice` | Exit fill price |
+| `exitTime` | Exit timestamp (Unix ms) |
+| `quantity` | Contracts / shares traded |
+| `profit` | Realized P&L after commission |
+| `profitPercent` | Realized P&L % relative to entry value |
+| `cumulativeProfit` | Running total P&L including this trade |
+| `cumulativeProfitPercent` | Running total P&L % vs. initial capital |
+| `maxRunup` / `maxRunupPercent` | Best unrealized gain during the trade |
+| `maxDrawdown` / `maxDrawdownPercent` | Worst unrealized loss during the trade |
+| `commission` | Total commission for this trade (entry + exit) |
+
+```bash
+# Print a trade-by-trade summary
+longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 \
+  --format json --script '...' \
+  | jq -r '.data.report_json | fromjson | .closedTrades[]
+    | "#\(.tradeNum) \(.entrySide)  entry=\(.entryPrice)  exit=\(.exitPrice)  P&L=\(.profitPercent)%"'
+```
+
+`openTrades` uses the same shape minus exit fields, and `profit` reflects current unrealized P&L.
+
+### Equity Curves
+
+Three parallel arrays, one value per bar (index 0 = first bar):
+
+| Field | Description |
+| ----- | ----------- |
+| `equityCurve` | Account equity at bar close |
+| `drawdownCurve` | Drawdown from equity peak (always ≥ 0) |
+| `buyHoldCurve` | Hypothetical buy-and-hold equity (benchmark) |
+
+```bash
+# Final equity
+jq '.data.report_json | fromjson | .equityCurve[-1]'
+
+# Worst drawdown value
+jq '.data.report_json | fromjson | .drawdownCurve | max'
+```
+
+### Strategy Config
+
+`config` captures the declared `strategy()` settings:
+
+| Field | Description |
+| ----- | ----------- |
+| `initialCapital` | Starting account equity |
+| `commissionType` | `PerContract`, `PerTrade`, or `PercentOfValue` |
+| `commissionValue` | Commission amount |
+| `slippage` | Order slippage in ticks |
+| `pyramiding` | Max simultaneous entries in the same direction |
+| `riskFreeRate` | Annual risk-free rate used for Sharpe/Sortino (%) |
 
 ## Table Output (Quick Review)
 

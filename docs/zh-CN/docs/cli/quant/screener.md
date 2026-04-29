@@ -1,90 +1,32 @@
 ---
-title: 'Screener'
-sidebar_label: 'Screener'
+title: '选股'
+sidebar_label: '选股'
 sidebar_position: 4
 ---
 
-# 选股筛选
+# 选股
 
-使用带布尔信号的 `indicator()` 进行选股。条件成立时绘制 `1.0`，否则绘制 `0.0` — 通过 JSON 输出的最后一个值判断最近一根 K 线是否满足条件。
+选股的目标是从一批标的中找出最近一根 K 线满足特定技术条件的股票。基本流程：
 
-## 基本模式
-
-```pine
-indicator()
-signal = <你的条件>
-plot(signal ? 1.0 : 0.0, "Signal")
-```
-
-配合 `--format json` 读取最新值：
+1. 编写一个 `indicator()` 脚本：条件成立时 `plot(1.0, "Signal")`，否则 `plot(0.0, "Signal")`
+2. 对每只股票执行，加 `--format json`
+3. 收集信号最后一个值为 `1` 的股票
 
 ```bash
-longbridge quant run SYMBOL.US --start ... --end ... \
-  --format json --script '...' | \
-  jq '.data.series[] | select(.name == "Signal") | .values[-1]'
+last=$(longbridge quant run "$sym" --start ... --end ... \
+  --format json --script "$script" 2>/dev/null | \
+  jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
+[ "$last" = "1" ] && echo "$sym"
 ```
 
-返回 `1` 表示最新一根 K 线满足条件。
+筛选只在 `symbols` 数组中列出的股票池内进行，按需修改这个列表即可。
 
-## RSI 超卖筛选
+## RSI 超卖
 
-找出 RSI(14) 当前低于 35 的股票。
-
-```bash
-longbridge quant run AAPL.US \
-  --start 2026-01-01 --end 2026-04-28 \
-  --format json \
-  --script '
-indicator()
-r = ta.rsi(close, 14)
-plot(r < 35 ? 1.0 : 0.0, "Oversold")
-' | jq '.data.series[] | select(.name == "Oversold") | .values[-1]'
-```
-
-## EMA 多头排列筛选
-
-三条均线形成多头排列：EMA8 > EMA21 > EMA55。
+筛选最新一根 K 线 RSI(14) 低于 35 的股票。
 
 ```bash
-longbridge quant run NVDA.US \
-  --start 2026-01-01 --end 2026-04-28 \
-  --format json \
-  --script '
-indicator()
-e8  = ta.ema(close, 8)
-e21 = ta.ema(close, 21)
-e55 = ta.ema(close, 55)
-bullish = e8 > e21 and e21 > e55
-plot(bullish ? 1.0 : 0.0, "Aligned")
-' | jq '.data.series[] | select(.name == "Aligned") | .values[-1]'
-```
-
-## 布林带收窄筛选
-
-检测布林带宽度（上轨 − 下轨）是否处于 20 根 K 线的最低点 — 经典的波动率收缩信号。
-
-```bash
-longbridge quant run TSLA.US \
-  --start 2026-01-01 --end 2026-04-28 \
-  --format json \
-  --script '
-indicator()
-length = input.int(20)
-mult   = input.float(2.0)
-basis  = ta.sma(close, length)
-dev    = mult * ta.stdev(close, length)
-bw     = (basis + dev) - (basis - dev)
-squeeze = bw <= ta.lowest(bw, 20)
-plot(squeeze ? 1.0 : 0.0, "Squeeze")
-' | jq '.data.series[] | select(.name == "Squeeze") | .values[-1]'
-```
-
-## 批量筛选
-
-将 CLI 与 Shell 循环结合，批量筛选多只股票：
-
-```bash
-symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US)
+symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
 script='
 indicator()
 r = ta.rsi(close, 14)
@@ -94,10 +36,56 @@ plot(r < 35 ? 1.0 : 0.0, "Signal")
 for sym in "${symbols[@]}"; do
   last=$(longbridge quant run "$sym" \
     --start 2026-01-01 --end 2026-04-28 \
-    --format json \
-    --script "$script" 2>/dev/null | \
+    --format json --script "$script" 2>/dev/null | \
     jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
+  [ "$last" = "1" ] && echo "$sym"
+done
+```
 
-  [ "$last" = "1" ] && echo "$sym PASSED"
+## EMA 多头排列
+
+筛选三条均线形成多头排列（EMA8 > EMA21 > EMA55）的股票。
+
+```bash
+symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
+script='
+indicator()
+e8  = ta.ema(close, 8)
+e21 = ta.ema(close, 21)
+e55 = ta.ema(close, 55)
+plot(e8 > e21 and e21 > e55 ? 1.0 : 0.0, "Signal")
+'
+
+for sym in "${symbols[@]}"; do
+  last=$(longbridge quant run "$sym" \
+    --start 2026-01-01 --end 2026-04-28 \
+    --format json --script "$script" 2>/dev/null | \
+    jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
+  [ "$last" = "1" ] && echo "$sym"
+done
+```
+
+## 布林带收窄
+
+筛选带宽（上轨 − 下轨）处于 20 根 K 线最低点的股票——经典的波动率收缩信号。
+
+```bash
+symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
+script='
+indicator()
+length = input.int(20)
+mult   = input.float(2.0)
+basis  = ta.sma(close, length)
+dev    = mult * ta.stdev(close, length)
+bw     = (basis + dev) - (basis - dev)
+plot(bw <= ta.lowest(bw, 20) ? 1.0 : 0.0, "Signal")
+'
+
+for sym in "${symbols[@]}"; do
+  last=$(longbridge quant run "$sym" \
+    --start 2026-01-01 --end 2026-04-28 \
+    --format json --script "$script" 2>/dev/null | \
+    jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
+  [ "$last" = "1" ] && echo "$sym"
 done
 ```

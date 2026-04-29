@@ -1,56 +1,56 @@
 ---
 title: 'quant run'
-sidebar_label: 'Overview'
+sidebar_label: '概覽'
 sidebar_position: 1
 ---
 
 # longbridge quant run
 
-Run server-side quantitative scripts against historical K-line data. Returns indicator values, backtest performance reports, or binary screening signals.
+在歷史 K 線數據上運行服務端量化腳本，返回指標值、回測績效報告或篩選信號。
 
-## Command
+## 命令
 
 ```bash
 longbridge quant run <SYMBOL> \
   --start YYYY-MM-DD \
   --end   YYYY-MM-DD \
   [--period day|week|1h|30m|15m|5m|1m|month|year]
-  [--script "..."]       # inline script text
-  [--input '[14,2.0]']   # override input.*() defaults
-  [--format table|json]  # table = human chart (default); json = machine
+  [--script "..."]       # 內聯腳本
+  [--input '[14,2.0]']   # 覆蓋 input.*() 預設值
+  [--format table|json]  # table = 可讀圖表（預設）；json = 結構化數據
 ```
 
-Pipe a file instead of using `--script`:
+也可以通過管道傳入腳本文件，無需使用 `--script`：
 
 ```bash
 cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-12-31
 ```
 
-## Script Language — OpenPine
+## 腳本語言 — OpenPine
 
-Scripts are written in **OpenPine** — an independent indicator scripting language compatible with most **PineScript V6** syntax. Existing Pine scripts work with little to no modification.
+腳本使用 **OpenPine** 編寫 — 一種獨立的指標腳本語言，兼容大部分 **PineScript V6** 語法，現有 Pine 腳本無需或只需少量修改即可直接運行。
 
-### Script Types
+### 腳本類型
 
-Every OpenPine script must begin with one of these declarations — it determines the execution mode:
+每個 OpenPine 腳本必須以其中一個聲明開頭，它決定了腳本的執行模式：
 
-| Declaration | Purpose |
-| ----------- | ------- |
-| `indicator()` | Plot indicators, compute screener signals |
-| `strategy()` | Backtest with entry / exit orders |
+| 聲明 | 用途 |
+| ---- | ---- |
+| `indicator()` | 繪製指標、計算篩選信號 |
+| `strategy()` | 帶開平倉指令的回測 |
 
-### Core Concepts
+### 核心概念
 
-**Time series** — every variable is a bar-by-bar stream. `close[1]` is the previous bar's close; `close[N]` goes N bars back. Most `ta.*` outputs are also series.
+**時間序列** — 每個變量都是逐 K 線的流式數據。`close[1]` 是上一根 K 線的收盤價，`close[N]` 向前回溯 N 根。`ta.*` 的大多數輸出也是序列。
 
-**Persistent state** — use `var` to initialize once and carry the value across bars:
+**跨 K 線狀態** — 使用 `var` 只初始化一次並在 K 線間保持值：
 
 ```pine
 var float peak = na
 peak := na(peak) ? high : math.max(peak, high)
 ```
 
-**Inputs** — expose tunable parameters:
+**參數輸入** — 通過 `input.*()` 暴露可調參數：
 
 ```pine
 len  = input.int(14, "Length", minval=1)
@@ -58,29 +58,29 @@ src  = input.source(close, "Source")
 mult = input.float(2.0, "Multiplier")
 ```
 
-**Collections** — `array<T>`, `map<K,V>`, and `matrix<T>` are available for advanced per-bar computation.
+**集合類型** — 支持 `array<T>`、`map<K,V>`、`matrix<T>`，可用於高級逐 K 線計算。
 
-### Built-in Libraries
+### 內置庫
 
-| Namespace | Key functions |
-| --------- | ------------- |
+| 命名空間 | 常用函數 |
+| -------- | -------- |
 | `ta.*` | `sma`, `ema`, `rma`, `wma`, `rsi`, `macd`, `bb`, `kc`, `atr`, `tr`, `stoch`, `sar`, `supertrend`, `vwap`, `crossover`, `crossunder`, `highest`, `lowest`, `stdev`, `barssince`, `valuewhen` |
 | `math.*` | `abs`, `ceil`, `floor`, `round`, `sqrt`, `pow`, `exp`, `log`, `max`, `min`, `avg` |
 | `str.*` | `tostring`, `format`, `length`, `contains`, `replace`, `split` |
 | `array.*` | `new`, `push`, `pop`, `avg`, `sum`, `min`, `max`, `sort`, `includes` |
 | `map.*` | `new`, `get`, `put`, `keys`, `values`, `contains` |
 
-### Outputs
+### 輸出
 
-| Expression | Effect |
-| ---------- | ------ |
-| `plot(series, "name")` | Named series — shown in the results table / sparkline |
-| `plotshape(cond, ...)` | Mark a signal shape on a specific bar |
-| `bgcolor(cond ? color.green : na)` | Highlight bar background |
-| `strategy.entry("L", strategy.long)` | Place a backtest long entry |
-| `strategy.exit("L", stop=..., limit=...)` | Close with stop / take-profit |
+| 表達式 | 效果 |
+| ------ | ---- |
+| `plot(series, "name")` | 命名序列 — 顯示在結果表格 / sparkline 中 |
+| `plotshape(cond, ...)` | 在指定 K 線上繪製信號形狀 |
+| `bgcolor(cond ? color.green : na)` | 高亮 K 線背景色 |
+| `strategy.entry("L", strategy.long)` | 下一個回測多頭入場指令 |
+| `strategy.exit("L", stop=..., limit=...)` | 帶止損/止盈平倉 |
 
-### Quick Example
+### 快速示例
 
 ```pine
 indicator("MA Cross", overlay=true)
@@ -97,9 +97,9 @@ plotshape(ta.crossover(fast, slow),  title="Buy",  style=shape.triangleup,   loc
 plotshape(ta.crossunder(fast, slow), title="Sell", style=shape.triangledown, location=location.abovebar, color=color.red)
 ```
 
-## Output
+## 輸出
 
-**Table format** (default) — human-readable chart with sparklines:
+**表格格式**（預設）— 帶 sparkline 的可讀圖表：
 
 ```
 ────────────────────────────────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ Histogram             │    79│     +0.00│     +2.40│     -1.41│     +3
   3 series  ·  79 bars
 ```
 
-**JSON format** — for scripting and backtests:
+**JSON 格式** — 用於腳本處理和回測：
 
 ```bash
 longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 \
@@ -120,18 +120,18 @@ longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 \
   jq '.data.report_json | fromjson | .performanceAll'
 ```
 
-## Supported Periods
+## 支持的週期
 
-| Flag | Description |
-| ---- | ----------- |
-| `day` | Daily bars (default) |
-| `week` | Weekly bars |
-| `month` | Monthly bars |
-| `year` | Yearly bars |
-| `1h` | 1-hour bars |
-| `30m` | 30-minute bars |
-| `15m` | 15-minute bars |
-| `5m` | 5-minute bars |
-| `1m` | 1-minute bars |
+| 參數 | 說明 |
+| ---- | ---- |
+| `day` | 日線（預設） |
+| `week` | 週線 |
+| `month` | 月線 |
+| `year` | 年線 |
+| `1h` | 1 小時線 |
+| `30m` | 30 分鐘線 |
+| `15m` | 15 分鐘線 |
+| `5m` | 5 分鐘線 |
+| `1m` | 1 分鐘線 |
 
-Intraday periods accept datetime: `--start "2024-01-02 09:30" --end "2024-01-02 16:00"`.
+分鐘/小時級別支持日期時間格式：`--start "2024-01-02 09:30" --end "2024-01-02 16:00"`。

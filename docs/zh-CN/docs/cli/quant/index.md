@@ -30,13 +30,72 @@ cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-1
 
 脚本使用 **OpenPine** 编写 — 一种独立的指标脚本语言，兼容大部分 **PineScript V6** 语法，现有 Pine 脚本无需或只需少量修改即可直接运行。
 
-| 特性 | 说明 |
+### 脚本类型
+
+每个 OpenPine 脚本必须以其中一个声明开头，它决定了脚本的执行模式：
+
+| 声明 | 用途 |
 | ---- | ---- |
-| **Series** | 每个变量都是时间序列；`close[1]` 表示上一根 K 线的收盘价 |
-| **`ta.*` 库** | `ta.ema`, `ta.sma`, `ta.rsi`, `ta.macd`, `ta.sar`, `ta.stoch`, `ta.atr`, `ta.stdev`, `ta.lowest`, `ta.highest`, `ta.crossover`, `ta.crossunder` |
-| **两种模式** | `indicator()` 用于分析/筛选；`strategy()` 用于回测 |
-| **`input.*()` 函数** | `input.int`, `input.float` — 暴露可调参数 |
-| **`plot(value, "name")`** | 输出一个命名序列，显示在结果表格中 |
+| `indicator()` | 绘制指标、计算筛选信号 |
+| `strategy()` | 带开平仓指令的回测 |
+
+### 核心概念
+
+**时间序列** — 每个变量都是逐 K 线的流式数据。`close[1]` 是上一根 K 线的收盘价，`close[N]` 向前回溯 N 根。`ta.*` 的大多数输出也是序列。
+
+**跨 K 线状态** — 使用 `var` 只初始化一次并在 K 线间保持值：
+
+```pine
+var float peak = na
+peak := na(peak) ? high : math.max(peak, high)
+```
+
+**参数输入** — 通过 `input.*()` 暴露可调参数：
+
+```pine
+len  = input.int(14, "Length", minval=1)
+src  = input.source(close, "Source")
+mult = input.float(2.0, "Multiplier")
+```
+
+**集合类型** — 支持 `array<T>`、`map<K,V>`、`matrix<T>`，可用于高级逐 K 线计算。
+
+### 内置库
+
+| 命名空间 | 常用函数 |
+| -------- | -------- |
+| `ta.*` | `sma`, `ema`, `rma`, `wma`, `rsi`, `macd`, `bb`, `kc`, `atr`, `tr`, `stoch`, `sar`, `supertrend`, `vwap`, `crossover`, `crossunder`, `highest`, `lowest`, `stdev`, `barssince`, `valuewhen` |
+| `math.*` | `abs`, `ceil`, `floor`, `round`, `sqrt`, `pow`, `exp`, `log`, `max`, `min`, `avg` |
+| `str.*` | `tostring`, `format`, `length`, `contains`, `replace`, `split` |
+| `array.*` | `new`, `push`, `pop`, `avg`, `sum`, `min`, `max`, `sort`, `includes` |
+| `map.*` | `new`, `get`, `put`, `keys`, `values`, `contains` |
+
+### 输出
+
+| 表达式 | 效果 |
+| ------ | ---- |
+| `plot(series, "name")` | 命名序列 — 显示在结果表格 / sparkline 中 |
+| `plotshape(cond, ...)` | 在指定 K 线上绘制信号形状 |
+| `bgcolor(cond ? color.green : na)` | 高亮 K 线背景色 |
+| `strategy.entry("L", strategy.long)` | 下一个回测多头入场指令 |
+| `strategy.exit("L", stop=..., limit=...)` | 带止损/止盈平仓 |
+
+### 快速示例
+
+```pine
+indicator("MA Cross", overlay=true)
+
+fastLen = input.int(10, "Fast", minval=1)
+slowLen = input.int(20, "Slow", minval=1)
+
+fast = ta.ema(close, fastLen)
+slow = ta.ema(close, slowLen)
+
+plot(fast, "Fast", color=color.orange)
+plot(slow, "Slow", color=color.blue)
+plotshape(ta.crossover(fast, slow),  title="Buy",  style=shape.triangleup,   location=location.belowbar, color=color.green)
+plotshape(ta.crossunder(fast, slow), title="Sell", style=shape.triangledown, location=location.abovebar, color=color.red)
+```
 
 ## 输出
 
