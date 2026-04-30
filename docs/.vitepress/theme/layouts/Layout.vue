@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import UserAvatar from '../components/UserAvatar/index.vue'
 import DashboardNavLink from '../components/DashboardNavLink.vue'
+import MockLoginPanel from '../components/MockLoginPanel.vue'
 import Breadcrumb from '../components/Breadcrumb/index.vue'
 import Layout from './LayoutInner.vue'
 import { useI18nSync, useHighlighter, useLLMMarkdownLink } from '../composables'
+
+const isDev = import.meta.env.DEV
 
 // 使用抽离的 hooks
 useI18nSync()
@@ -18,6 +21,10 @@ const { llmMarkdownLink } = useLLMMarkdownLink()
       <DashboardNavLink />
       <UserAvatar />
     </template>
+    <template #layout-bottom>
+      <MockLoginPanel v-if="isDev" />
+    </template>
+
     <template #doc-top>
       <div class="-mt-4">
         <Breadcrumb />
