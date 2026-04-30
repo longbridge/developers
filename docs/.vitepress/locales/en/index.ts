@@ -57,5 +57,6 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     lightModeSwitchTitle: 'Switch to Light Mode',
     darkModeSwitchTitle: 'Switch to Dark Mode',
     skipToContentLabel: 'Skip to Content',
+
   },
 }

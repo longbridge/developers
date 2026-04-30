@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import UserAvatar from '../components/UserAvatar/index.vue'
+import DashboardNavLink from '../components/DashboardNavLink.vue'
 import Breadcrumb from '../components/Breadcrumb/index.vue'
 import Layout from './LayoutInner.vue'
 import { useI18nSync, useHighlighter, useLLMMarkdownLink } from '../composables'
@@ -14,6 +15,7 @@ const { llmMarkdownLink } = useLLMMarkdownLink()
 <template>
   <Layout>
     <template #nav-bar-content-after>
+      <DashboardNavLink />
       <UserAvatar />
     </template>
     <template #doc-top>

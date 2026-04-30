@@ -2,6 +2,7 @@
 title: '選股'
 sidebar_label: '選股'
 sidebar_position: 4
+slug: '/cli/quant/screener'
 ---
 
 # 選股

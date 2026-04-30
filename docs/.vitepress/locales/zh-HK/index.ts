@@ -56,5 +56,6 @@ export const zhHKConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     lightModeSwitchTitle: '切換到淺色模式',
     darkModeSwitchTitle: '切換到深色模式',
     skipToContentLabel: '跳轉到內容',
+
   },
 }

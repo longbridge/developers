@@ -10,6 +10,5 @@ export const nav = (): DefaultTheme.NavItem[] => {
     { text: 'Docs', link: '/docs', activeMatch: '^(/en)?/docs(?!/cli)(?!/api)(?!/mcp)' },
     { text: 'API Reference', link: '/docs/api', activeMatch: '^(/en)?/docs/api' },
     { text: 'SDK', link: '/sdk', activeMatch: '^(/en)?/sdk' },
-    { text: 'Feedback', link: 'https://github.com/longbridge/developers/issues', target: '_blank' },
   ])
 }
