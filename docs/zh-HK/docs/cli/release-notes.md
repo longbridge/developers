@@ -13,7 +13,7 @@ sidebar_icon: newspaper
 - **TUI：撤單與改單** — 在今日訂單列表按 `c` 撤單、`m` 改單，提交前有確認步驟
 - **`auth status` 行情套餐** — 以表格形式展示已訂閱的行情套餐（市場、套餐名稱、有效期），並輸出二維碼供 Longbridge App 掃碼進入行情商城
 - **`calc-index` 欄位別名** — 常用欄位支援短別名：`iv`、`oi`、`vol`、`mktcap`、`exp`、`strike`；`--help` 將欄位分為通用和期權兩組展示
-- **`quant run` 指令** — 服務端執行兼容 PineScript V6 語法的量化指標腳本，基於歷史 K 線資料計算；支援 `--script` 內聯或 stdin 管道傳入；結果以 JSON 格式輸出
+- **`quant run` 指令** — 服務端執行量化指標腳本，基於歷史 K 線資料計算；支援 `--script` 內聯或 stdin 管道傳入；結果以 JSON 格式輸出
 - **`update` Release Notes** — `longbridge update` 完成後僅顯示最近 10 條更新記錄；binary 位於 `/usr/local/bin` 時會提示使用 `sudo`
 
 ### [v0.18.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.18.0)

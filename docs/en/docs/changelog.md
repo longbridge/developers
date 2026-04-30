@@ -12,7 +12,7 @@ sidebar_icon: newspaper
 
 - **TUI: History orders + cancel/modify** — `Tab` on the Orders page switches between Today and History; `c`/`m` cancel or modify active orders in-terminal
 - **`auth status` quote packages** — displays subscribed quote packages and a QR code to the quote mall
-- **`quant run`** — run PineScript V6-compatible indicator scripts server-side against historical K-line data
+- **`quant run`** — run indicator scripts server-side against historical K-line data
 - **`calc-index` field aliases** — short aliases (`iv`, `oi`, `vol`, `mktcap`, `exp`, `strike`) and improved grouped `--help`
 
 ## 2026-04-28

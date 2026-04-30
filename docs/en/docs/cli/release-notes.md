@@ -13,7 +13,7 @@ sidebar_icon: newspaper
 - **TUI: Cancel and modify orders** — press `c` to cancel or `m` to modify an active today order directly from the orders table; a confirmation step is shown before submitting
 - **`auth status` quote packages** — displays a formatted table of subscribed quote packages (market, name, validity period) and prints a QR code to open the quote mall in the Longbridge App
 - **`calc-index` field aliases** — short aliases for common fields: `iv` (implied_volatility), `oi` (open_interest), `vol` (volume), `mktcap` (total_market_value), `exp` (expiry_date), `strike` (strike_price); `--help` now groups fields into General and Options/Warrants sections
-- **`quant run` command** — run a PineScript V6-compatible indicator script server-side against historical K-line data; supply the script inline with `--script` or pipe via stdin; outputs computed plot values as JSON
+- **`quant run` command** — run a quant indicator script server-side against historical K-line data; supply the script inline with `--script` or pipe via stdin; outputs computed plot values as JSON
 - **`update` release notes** — only the 10 most recent entries are shown after `longbridge update` completes; `sudo` is suggested when the binary lives in `/usr/local/bin`
 
 ### [v0.18.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.18.0)
