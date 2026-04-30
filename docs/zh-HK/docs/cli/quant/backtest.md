@@ -2,6 +2,7 @@
 title: '回測'
 sidebar_label: '回測'
 sidebar_position: 3
+slug: '/cli/quant/backtest'
 ---
 
 # 回測

@@ -2,6 +2,7 @@
 title: 'quant run'
 sidebar_label: '概览'
 sidebar_position: 1
+slug: '/cli/quant'
 ---
 
 # longbridge quant run

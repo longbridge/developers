@@ -1,7 +1,8 @@
 ---
 title: 'Backtest'
-sidebar_label: 'Backtest'
+sidebar_label: 'backtest'
 sidebar_position: 3
+slug: '/cli/quant/backtest'
 ---
 
 # Backtesting

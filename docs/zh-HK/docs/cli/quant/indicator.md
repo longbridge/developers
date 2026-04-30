@@ -2,6 +2,7 @@
 title: '指標'
 sidebar_label: '指標'
 sidebar_position: 2
+slug: '/cli/quant/indicator'
 ---
 
 # 指標

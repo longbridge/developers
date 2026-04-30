@@ -1,7 +1,8 @@
 ---
 title: 'Indicator'
-sidebar_label: 'Indicator'
+sidebar_label: 'indicator'
 sidebar_position: 2
+slug: '/cli/quant/indicator'
 ---
 
 # Indicators

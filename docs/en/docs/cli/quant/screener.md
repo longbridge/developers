@@ -1,7 +1,8 @@
 ---
 title: 'Stock Screening'
-sidebar_label: 'Stock Screening'
+sidebar_label: 'screener'
 sidebar_position: 4
+slug: '/cli/quant/screener'
 ---
 
 # Stock Screening

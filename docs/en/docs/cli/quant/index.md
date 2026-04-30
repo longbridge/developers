@@ -1,7 +1,8 @@
 ---
 title: 'quant run'
-sidebar_label: 'Overview'
+sidebar_label: 'overview'
 sidebar_position: 1
+slug: '/cli/quant'
 ---
 
 # longbridge quant run
