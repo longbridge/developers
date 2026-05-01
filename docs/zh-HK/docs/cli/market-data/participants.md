@@ -8,6 +8,8 @@ sidebar_position: 13
 
 取得港股市場的完整券商/參與者目錄——將券商 ID 映射到機構名稱，用於解讀 `brokers` 命令的輸出。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

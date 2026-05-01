@@ -7,6 +7,8 @@ sidebar_position: 11
 
 该接口用于获取标的的期权链到期日列表。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # AAPL 期权到期日列表
 longbridge option chain AAPL.US

@@ -8,6 +8,8 @@ sidebar_position: 8
 
 计算任意标的的财务指标——市盈率、市净率、股息率、换手率、期权希腊值等。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

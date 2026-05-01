@@ -8,6 +8,8 @@ sidebar_position: 6
 
 Fetch candlestick (K-line) data for any symbol. Supports multiple periods and historical date ranges.
 
+<QuotePermission level="basic" />
+
 ## Basic Usage
 
 ```bash

@@ -7,6 +7,8 @@ sidebar_position: 9
 
 该接口用于获取标的的当日分时数据。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # Tesla 今日分时数据
 longbridge intraday TSLA.US

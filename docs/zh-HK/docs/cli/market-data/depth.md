@@ -8,6 +8,8 @@ sidebar_position: 2
 
 查看某標的的 Level 2 盤口——買賣雙方前 10 檔價位的委託單數量和掛單量。
 
+<QuotePermission level="lv2" />
+
 ## 基本用法
 
 ```bash

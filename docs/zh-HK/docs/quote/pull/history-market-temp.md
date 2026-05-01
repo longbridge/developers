@@ -6,6 +6,8 @@ sidebar_position: 22
 
 該接口用於獲取歷史市場溫度。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 港股 2025 年 Q1 歷史溫度
 longbridge market-temp HK --history --start 2025-01-01 --end 2025-03-31

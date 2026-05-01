@@ -11,6 +11,8 @@ headingLevel: 2
 
 獲取標的列表
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 美股夜盤可交易標的列表
 longbridge security-list

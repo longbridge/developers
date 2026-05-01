@@ -8,6 +8,8 @@ sidebar_position: 13
 
 查看指数或 ETF 的成分股——支持排序选项和涨跌统计。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

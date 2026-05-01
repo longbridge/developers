@@ -8,6 +8,8 @@ sidebar_position: 5
 
 Get minute-by-minute price and volume data (intraday line) for any symbol — today's live data or a historical date.
 
+<QuotePermission level="basic" />
+
 ## Basic Usage
 
 ```bash

@@ -7,6 +7,8 @@ sidebar_position: 8
 
 This API is used to obtain the trades data of security.
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # recent tick-by-tick trades for Tesla
 longbridge trades TSLA.US

@@ -7,6 +7,8 @@ sidebar_position: 1
 
 该接口用于获取标的的基础信息。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # Tesla 静态信息（名称、手数、股本等）
 longbridge static TSLA.US

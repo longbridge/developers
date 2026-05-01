@@ -8,6 +8,8 @@ sidebar_position: 15
 
 查看港股经纪商持仓——买卖方排行、完整持仓明细，以及指定经纪商的每日持仓变化。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

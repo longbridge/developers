@@ -7,6 +7,8 @@ sidebar_position: 17
 
 该接口用于获取标的当日的资金流向。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # Tesla 今日资金流向时序
 longbridge capital flow TSLA.US

@@ -7,6 +7,8 @@ sidebar_position: 13
 
 This API is used to obtain the warrant issuer IDs data (which can be synchronized once a day).
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # list all warrant issuers in the HK market
 longbridge warrant issuers

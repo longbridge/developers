@@ -7,6 +7,8 @@ sidebar_position: 1
 
 This API is used to obtain the basic information of securities.
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # static info for Tesla (name, lot size, shares, etc.)
 longbridge static TSLA.US

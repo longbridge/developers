@@ -7,6 +7,8 @@ sidebar_position: 14
 
 This API is used to obtain the quotes of HK warrants, and supports sorting and filtering.
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # list warrants linked to Tencent
 longbridge warrant list 700.HK

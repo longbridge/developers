@@ -8,6 +8,8 @@ sidebar_position: 13
 
 Get the complete broker/participant directory for the HK market — maps broker IDs to firm names, letting you decode the `brokers` command output.
 
+<QuotePermission level="basic" />
+
 ## Basic Usage
 
 ```bash

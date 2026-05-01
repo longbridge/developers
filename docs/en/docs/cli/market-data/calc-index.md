@@ -8,6 +8,8 @@ sidebar_position: 8
 
 Compute financial indexes for any symbol — P/E, P/B, dividend yield, turnover rate, options greeks, and more.
 
+<QuotePermission level="basic" />
+
 ## Basic Usage
 
 ```bash

@@ -7,6 +7,8 @@ sidebar_position: 5
 
 该接口用于获取标的的盘口数据。
 
+<QuotePermission level="lv2" />
+
 <CliCommand>
 # Tesla Level 2 盘口
 longbridge depth TSLA.US

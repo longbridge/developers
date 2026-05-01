@@ -8,6 +8,8 @@ sidebar_position: 1
 
 取得一個或多個標的代碼的即時行情——價格、成交量、較前收盤的漲跌幅，以及美股的盤前盤後數據。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

@@ -8,6 +8,8 @@ sidebar_position: 2
 
 查看某标的的 Level 2 盘口——买卖双方前 10 档价位的委托单数量和挂单量。
 
+<QuotePermission level="lv2" />
+
 ## 基本用法
 
 ```bash

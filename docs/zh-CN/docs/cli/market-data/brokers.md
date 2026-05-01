@@ -8,6 +8,8 @@ sidebar_position: 3
 
 查看港股盘口各价位的券商 ID 分布，适合识别机构资金的委托流向。
 
+<QuotePermission level="lv2" market="HK only" />
+
 ## 基本用法
 
 ```bash

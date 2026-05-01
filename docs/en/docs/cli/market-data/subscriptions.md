@@ -8,6 +8,8 @@ sidebar_position: 14
 
 List your current active real-time quote subscriptions.
 
+<QuotePermission level="basic" />
+
 ## Basic Usage
 
 ```bash

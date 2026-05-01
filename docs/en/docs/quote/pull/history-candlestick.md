@@ -7,6 +7,8 @@ sidebar_position: 10
 
 This API is used to obtain the history candlestick data of security.
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # Q1 2025 daily bars
 longbridge kline history TSLA.US --start 2025-01-01 --end 2025-03-31

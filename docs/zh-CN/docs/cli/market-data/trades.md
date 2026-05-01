@@ -8,6 +8,8 @@ sidebar_position: 4
 
 获取某标的的最近逐笔成交记录，包括价格、成交量、时间和成交方向。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

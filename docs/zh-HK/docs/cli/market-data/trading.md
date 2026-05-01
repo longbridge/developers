@@ -8,6 +8,8 @@ sidebar_position: 11
 
 查詢任意市場的交易時段安排和交易日曆。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

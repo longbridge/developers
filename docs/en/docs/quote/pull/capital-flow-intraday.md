@@ -7,6 +7,8 @@ sidebar_position: 17
 
 This API is used to obtain the daily capital flow intraday of security.
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # intraday capital flow time series for Tesla
 longbridge capital flow TSLA.US

@@ -8,6 +8,8 @@ sidebar_position: 7
 
 Get static reference data for any symbol — name, exchange, currency, lot size, shares outstanding, EPS, BPS, and dividend yield.
 
+<QuotePermission level="basic" />
+
 ## Basic Usage
 
 ```bash

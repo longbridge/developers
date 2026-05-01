@@ -7,6 +7,8 @@ sidebar_position: 10
 
 该接口用于获取标的的历史 K 线数据。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 2025 年 Q1 日 K
 longbridge kline history TSLA.US --start 2025-01-01 --end 2025-03-31

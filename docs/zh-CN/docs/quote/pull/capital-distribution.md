@@ -7,6 +7,8 @@ sidebar_position: 18
 
 该接口用于获取标的当日的资金分布。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # Tesla 资金分布快照（大/中/小单）
 longbridge capital dist TSLA.US

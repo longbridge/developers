@@ -7,6 +7,8 @@ sidebar_position: 2
 
 This API is used to unsubscribe quote.
 
+<QuotePermission level="basic" />
+
 <SDKLinks module="quote" klass="QuoteContext" method="unsubscribe" />
 
 :::info

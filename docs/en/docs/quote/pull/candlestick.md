@@ -11,6 +11,8 @@ This API is used to obtain the candlestick data of security.
 Note: This interface can only retrieve the last 1000 candlesticks. To obtain longer historical data, please visit the interface: Get Security History Candlesticks.
 :::
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # daily candlestick for Tesla (last 100 bars)
 longbridge kline TSLA.US

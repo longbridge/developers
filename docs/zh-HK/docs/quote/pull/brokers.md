@@ -7,6 +7,8 @@ sidebar_position: 6
 
 該接口用於獲取標的的實時經紀隊列數據。
 
+<QuotePermission level="lv2" market="HK only" />
+
 <CliCommand>
 # 騰訊經紀商佇列（僅港股）
 longbridge brokers 700.HK

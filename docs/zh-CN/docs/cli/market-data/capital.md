@@ -8,6 +8,8 @@ sidebar_position: 9
 
 追踪盘中资金流向——通过 `flow` 子命令逐分钟查看大、中、小资金的流入流出，或通过 `dist` 子命令查看资金分布快照。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

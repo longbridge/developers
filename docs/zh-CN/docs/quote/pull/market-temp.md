@@ -6,6 +6,8 @@ sidebar_position: 21
 
 获取当前市场温度
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 港股市场温度
 longbridge market-temp HK

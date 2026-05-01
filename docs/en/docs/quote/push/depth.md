@@ -7,6 +7,8 @@ sidebar_position: 2
 
 Real-time depth data push of the subscribed security.
 
+<QuotePermission level="lv2" />
+
 <SDKLinks module="quote" klass="QuoteContext" method="set_on_depth" go="OnDepth" />
 
 :::info

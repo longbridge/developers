@@ -8,6 +8,8 @@ sidebar_position: 6
 
 获取任意标的的 K 线数据，支持多种周期和历史日期范围。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

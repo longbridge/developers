@@ -8,6 +8,8 @@ sidebar_position: 14
 
 列出当前所有有效的实时行情订阅。
 
+<QuotePermission level="basic" />
+
 ## 基本用法
 
 ```bash

@@ -7,6 +7,8 @@ sidebar_position: 6
 
 该接口用于获取标的的实时经纪队列数据。
 
+<QuotePermission level="lv2" market="HK only" />
+
 <CliCommand>
 # 腾讯经纪商队列（仅港股）
 longbridge brokers 700.HK
