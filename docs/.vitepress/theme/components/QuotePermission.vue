@@ -1,17 +1,24 @@
 <template>
-  <div class="qp-card rounded-lg p-4 my-4 border border-cyan-500/30 bg-cyan-500/5">
-    <div class="flex items-start gap-3">
-      <div class="qp-icon flex-shrink-0 text-cyan-500 mt-0.5" v-html="keyIcon" />
-      <div class="flex-1">
-        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span class="text-sm font-semibold text-cyan-700 dark:text-cyan-300">{{ title }}</span>
-          <span class="text-xs font-medium px-2 py-0.5 rounded text-white" :class="badgeClass">{{ badgeLabel }}</span>
-          <span v-if="market" class="text-xs text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 px-2 py-0.5 rounded">{{ market }}</span>
-        </div>
-        <p class="text-sm text-cyan-700/80 dark:text-cyan-300/80 m-0 mb-1">{{ description }}</p>
-        <a :href="linkUrl" target="_blank" rel="noopener noreferrer" class="text-sm text-cyan-600 dark:text-cyan-400 hover:underline">{{ linkText }} →</a>
-        <p class="text-xs text-cyan-600/60 dark:text-cyan-400/60 m-0 mt-2">{{ separateNote }}</p>
+  <div class="qp-alert" :data-level="level">
+    <!-- Header: label + prominent badge -->
+    <div class="qp-header">
+      <div class="qp-header-left">
+        <span class="qp-key-icon" v-html="keyIcon" />
+        <span class="qp-label">{{ title }}</span>
+        <span v-if="market" class="qp-market-tag">{{ market }}</span>
       </div>
+      <span class="qp-badge">{{ badgeLabel }}</span>
+    </div>
+    <!-- Description -->
+    <p class="qp-desc">{{ description }}</p>
+    <!-- Footer: action link + separation note -->
+    <div class="qp-footer">
+      <a :href="linkUrl" target="_blank" rel="noopener noreferrer" class="qp-link">
+        <span class="qp-link-icon" v-html="level === 'basic' ? externalLinkIcon : shoppingBagIcon" />
+        {{ linkText }}
+      </a>
+      <span class="qp-sep">·</span>
+      <span class="qp-note">{{ separateNote }}</span>
     </div>
   </div>
 </template>
@@ -31,12 +38,16 @@ const { lang } = useData()
 const isZhCN = computed(() => lang.value === 'zh-CN')
 const isZhHK = computed(() => lang.value === 'zh-HK')
 
-const keyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`
+const keyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`
+
+const externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`
+
+const shoppingBagIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`
 
 const title = computed(() => {
   if (isZhCN.value) return '行情权限要求'
   if (isZhHK.value) return '行情權限要求'
-  return 'Quote Permission Required'
+  return 'Quote Permission'
 })
 
 const badgeLabel = computed(() => {
@@ -49,34 +60,27 @@ const badgeLabel = computed(() => {
   return map[props.level]?.[lang.value] ?? map[props.level]?.en ?? props.level
 })
 
-const badgeClass = computed(() => ({
-  'bg-green-500': props.level === 'basic',
-  'bg-blue-500': props.level === 'lv1',
-  'bg-orange-500': props.level === 'lv2',
-  'bg-yellow-500': props.level === 'overnight',
-}))
-
 const description = computed(() => {
   const map: Record<string, Record<string, string>> = {
     basic: {
-      en: 'Included with OpenAPI activation. No additional purchase needed.',
+      en: 'Included with OpenAPI activation — no extra purchase needed.',
       'zh-CN': '开通 OpenAPI 后自动获得，无需额外购买。',
       'zh-HK': '開通 OpenAPI 後自動獲得，無需額外購買。',
     },
     lv1: {
-      en: 'HK real-time quotes require a LV1 Real-time Quote subscription. Purchase via Quote Store in the Longbridge App.',
-      'zh-CN': '港股实时报价需要购买 LV1 实时行情卡，通过 Longbridge App 行情商城购买。',
-      'zh-HK': '港股實時報價需要購買 LV1 實時行情卡，通過 Longbridge App 行情商城購買。',
+      en: 'HK real-time quotes require a LV1 Real-time Quote subscription.',
+      'zh-CN': '港股实时报价需要单独购买 LV1 实时行情卡。',
+      'zh-HK': '港股實時報價需要單獨購買 LV1 實時行情卡。',
     },
     lv2: {
-      en: 'Level 2 order book data requires a LV2 subscription. Purchase via Quote Store in the Longbridge App.',
-      'zh-CN': 'Level 2 买卖盘数据需要购买 LV2 订阅卡，通过 Longbridge App 行情商城购买。',
-      'zh-HK': 'Level 2 買賣盤數據需要購買 LV2 訂閱卡，通過 Longbridge App 行情商城購買。',
+      en: 'Level 2 order book requires a separate LV2 subscription.',
+      'zh-CN': 'Level 2 买卖盘数据需要单独购买 LV2 订阅。',
+      'zh-HK': 'Level 2 買賣盤數據需要單獨購買 LV2 訂閱。',
     },
     overnight: {
-      en: 'US extended-hours data requires: (1) purchase "LV1 Real-time Quote (OpenAPI)" via Quote Store, and (2) set LONGBRIDGE_ENABLE_OVERNIGHT=true or enable_overnight=True in config.',
-      'zh-CN': '美股盘前/盘后数据需要：(1) 通过行情商城购买「LV1 Real-time Quote (OpenAPI)」；(2) 设置 LONGBRIDGE_ENABLE_OVERNIGHT=true 或在 Config 中传入 enable_overnight=True。',
-      'zh-HK': '美股盤前/盤後數據需要：(1) 通過行情商城購買「LV1 Real-time Quote (OpenAPI)」；(2) 設置 LONGBRIDGE_ENABLE_OVERNIGHT=true 或在 Config 中傳入 enable_overnight=True。',
+      en: 'US extended hours require LV1 purchase + set LONGBRIDGE_ENABLE_OVERNIGHT=true.',
+      'zh-CN': '美股盘前/盘后需购买 LV1 行情卡，并设置 LONGBRIDGE_ENABLE_OVERNIGHT=true。',
+      'zh-HK': '美股盤前/盤後需購買 LV1 行情卡，並設置 LONGBRIDGE_ENABLE_OVERNIGHT=true。',
     },
   }
   return map[props.level]?.[lang.value] ?? map[props.level]?.en ?? ''
@@ -89,33 +93,212 @@ const linkUrl = computed(() => {
 
 const linkText = computed(() => {
   if (props.level === 'basic') {
-    if (isZhCN.value) return '前往开发者中心查看权限'
-    if (isZhHK.value) return '前往開發者中心查看權限'
-    return 'Check at Developer Center'
+    if (isZhCN.value) return '开发者中心'
+    if (isZhHK.value) return '開發者中心'
+    return 'Developer Center'
   }
-  if (isZhCN.value) return '前往 Longbridge App 行情商城购买'
-  if (isZhHK.value) return '前往 Longbridge App 行情商城購買'
-  return 'Purchase via Quote Store in Longbridge App'
+  if (isZhCN.value) return '行情商城'
+  if (isZhHK.value) return '行情商城'
+  return 'Quote Store'
 })
 
 const separateNote = computed(() => {
-  if (isZhCN.value) return 'OpenAPI 行情权限与手机客户端/PC/网页端权限完全独立，需单独开通。'
-  if (isZhHK.value) return 'OpenAPI 行情權限與手機客戶端/PC/網頁端權限完全獨立，需單獨開通。'
-  return 'OpenAPI permissions are separate from App/PC/Web permissions and must be purchased independently.'
+  if (isZhCN.value) return 'OpenAPI 权限 ≠ App/Web 权限'
+  if (isZhHK.value) return 'OpenAPI 權限 ≠ App/Web 權限'
+  return 'OpenAPI perms ≠ App/Web perms'
 })
 </script>
 
 <style scoped>
-.qp-card {
+.qp-alert {
   border: 1px solid;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  margin: 1rem 0;
 }
 
-.qp-icon {
+/* ── level colors ── */
+.qp-alert[data-level='basic'] {
+  @apply border-green-500/30 bg-green-500/5;
+}
+.qp-alert[data-level='basic'] .qp-key-icon,
+.qp-alert[data-level='basic'] .qp-label {
+  @apply text-green-600 dark:text-green-400;
+}
+.qp-alert[data-level='basic'] .qp-badge {
+  @apply bg-green-500/15 text-green-700 dark:bg-green-500/20 dark:text-green-300 ring-1 ring-green-500/30;
+}
+.qp-alert[data-level='basic'] .qp-desc {
+  @apply text-green-800/80 dark:text-green-300/80;
+}
+.qp-alert[data-level='basic'] .qp-link {
+  @apply text-green-700 dark:text-green-400 hover:text-green-900 dark:hover:text-green-200;
+}
+.qp-alert[data-level='basic'] .qp-note,
+.qp-alert[data-level='basic'] .qp-sep {
+  @apply text-green-600/50 dark:text-green-500/50;
+}
+.qp-alert[data-level='basic'] .qp-market-tag {
+  @apply text-green-600/70 dark:text-green-400/70 ring-1 ring-green-500/30;
+}
+
+.qp-alert[data-level='lv1'] {
+  @apply border-blue-500/30 bg-blue-500/5;
+}
+.qp-alert[data-level='lv1'] .qp-key-icon,
+.qp-alert[data-level='lv1'] .qp-label {
+  @apply text-blue-600 dark:text-blue-400;
+}
+.qp-alert[data-level='lv1'] .qp-badge {
+  @apply bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 ring-1 ring-blue-500/30;
+}
+.qp-alert[data-level='lv1'] .qp-desc {
+  @apply text-blue-800/80 dark:text-blue-300/80;
+}
+.qp-alert[data-level='lv1'] .qp-link {
+  @apply text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-200;
+}
+.qp-alert[data-level='lv1'] .qp-note,
+.qp-alert[data-level='lv1'] .qp-sep {
+  @apply text-blue-600/50 dark:text-blue-500/50;
+}
+.qp-alert[data-level='lv1'] .qp-market-tag {
+  @apply text-blue-600/70 dark:text-blue-400/70 ring-1 ring-blue-500/30;
+}
+
+.qp-alert[data-level='lv2'] {
+  @apply border-orange-500/30 bg-orange-500/5;
+}
+.qp-alert[data-level='lv2'] .qp-key-icon,
+.qp-alert[data-level='lv2'] .qp-label {
+  @apply text-orange-600 dark:text-orange-400;
+}
+.qp-alert[data-level='lv2'] .qp-badge {
+  @apply bg-orange-500/15 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300 ring-1 ring-orange-500/30;
+}
+.qp-alert[data-level='lv2'] .qp-desc {
+  @apply text-orange-800/80 dark:text-orange-300/80;
+}
+.qp-alert[data-level='lv2'] .qp-link {
+  @apply text-orange-700 dark:text-orange-400 hover:text-orange-900 dark:hover:text-orange-200;
+}
+.qp-alert[data-level='lv2'] .qp-note,
+.qp-alert[data-level='lv2'] .qp-sep {
+  @apply text-orange-600/50 dark:text-orange-500/50;
+}
+.qp-alert[data-level='lv2'] .qp-market-tag {
+  @apply text-orange-600/70 dark:text-orange-400/70 ring-1 ring-orange-500/30;
+}
+
+.qp-alert[data-level='overnight'] {
+  @apply border-yellow-500/30 bg-yellow-500/5;
+}
+.qp-alert[data-level='overnight'] .qp-key-icon,
+.qp-alert[data-level='overnight'] .qp-label {
+  @apply text-yellow-700 dark:text-yellow-400;
+}
+.qp-alert[data-level='overnight'] .qp-badge {
+  @apply bg-yellow-500/15 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-300 ring-1 ring-yellow-500/30;
+}
+.qp-alert[data-level='overnight'] .qp-desc {
+  @apply text-yellow-900/80 dark:text-yellow-300/80;
+}
+.qp-alert[data-level='overnight'] .qp-link {
+  @apply text-yellow-700 dark:text-yellow-400 hover:text-yellow-900 dark:hover:text-yellow-200;
+}
+.qp-alert[data-level='overnight'] .qp-note,
+.qp-alert[data-level='overnight'] .qp-sep {
+  @apply text-yellow-700/50 dark:text-yellow-500/50;
+}
+.qp-alert[data-level='overnight'] .qp-market-tag {
+  @apply text-yellow-700/70 dark:text-yellow-400/70 ring-1 ring-yellow-500/30;
+}
+
+/* ── structural styles ── */
+.qp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+.qp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.qp-key-icon {
   display: inline-flex;
-  margin-top: 1px;
+  flex-shrink: 0;
 }
 
-:global(.dark) .qp-card {
-  @apply border-cyan-500/40;
+.qp-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.qp-market-tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0 0.375rem;
+  border-radius: 9999px;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.qp-badge {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 0.2rem 0.625rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.01em;
+}
+
+.qp-desc {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+}
+
+.qp-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.qp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.qp-link:hover {
+  text-decoration: underline;
+}
+
+.qp-link-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.qp-sep {
+  font-size: 0.75rem;
+}
+
+.qp-note {
+  font-size: 0.7rem;
+  opacity: 0.8;
 }
 </style>
