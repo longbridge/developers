@@ -68,14 +68,14 @@ const description = computed(() => {
       'zh-HK': '開通 OpenAPI 後自動獲得，無需額外購買。',
     },
     lv1: {
-      en: 'HK real-time quotes require a LV1 Real-time Quote subscription.',
-      'zh-CN': '港股实时报价需要单独购买 LV1 实时行情卡。',
-      'zh-HK': '港股實時報價需要單獨購買 LV1 實時行情卡。',
+      en: 'Enables real-time HK stock quotes and WebSocket quote push.',
+      'zh-CN': '开启港股实时报价，支持行情数据实时推送。',
+      'zh-HK': '開啟港股實時報價，支持行情數據實時推送。',
     },
     lv2: {
-      en: 'Level 2 order book requires a separate LV2 subscription.',
-      'zh-CN': 'Level 2 买卖盘数据需要单独购买 LV2 订阅。',
-      'zh-HK': 'Level 2 買賣盤數據需要單獨購買 LV2 訂閱。',
+      en: 'Provides top-10 bid/ask order book depth and real-time depth push.',
+      'zh-CN': '提供十档买卖盘口数据，支持深度行情实时推送。',
+      'zh-HK': '提供十檔買賣盤口數據，支持深度行情實時推送。',
     },
     overnight: {
       en: 'US extended hours require LV1 purchase + set LONGBRIDGE_ENABLE_OVERNIGHT=true.',
