@@ -1,16 +1,15 @@
 <template>
   <div class="qp-alert" :data-level="level">
-    <!-- Header: label + prominent badge -->
+    <!-- Header: icon + label -->
     <div class="qp-header">
-      <div class="qp-header-left">
-        <span class="qp-key-icon" v-html="keyIcon" />
-        <span class="qp-label">{{ title }}</span>
-        <span v-if="market" class="qp-market-tag">{{ market }}</span>
-      </div>
-      <span class="qp-badge">{{ badgeLabel }}</span>
+      <span class="qp-icon" v-html="shieldCheckIcon" />
+      <span class="qp-label">{{ title }}</span>
+      <span v-if="market" class="qp-market-tag">{{ market }}</span>
     </div>
-    <!-- Description -->
-    <p class="qp-desc">{{ description }}</p>
+    <!-- Badge inline before description for visual continuity -->
+    <p class="qp-desc">
+      <span class="qp-badge">{{ badgeLabel }}</span>{{ description }}
+    </p>
     <!-- Footer: action link + separation note -->
     <div class="qp-footer">
       <a :href="linkUrl" target="_blank" rel="noopener noreferrer" class="qp-link">
@@ -38,7 +37,7 @@ const { lang } = useData()
 const isZhCN = computed(() => lang.value === 'zh-CN')
 const isZhHK = computed(() => lang.value === 'zh-HK')
 
-const keyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`
+const shieldCheckIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.76 8.95a1 1 0 0 1-.48 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`
 
 const externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`
 
@@ -121,7 +120,7 @@ const separateNote = computed(() => {
 .qp-alert[data-level='basic'] {
   @apply border-green-500/30 bg-green-500/5;
 }
-.qp-alert[data-level='basic'] .qp-key-icon,
+.qp-alert[data-level='basic'] .qp-icon,
 .qp-alert[data-level='basic'] .qp-label {
   @apply text-green-600 dark:text-green-400;
 }
@@ -145,7 +144,7 @@ const separateNote = computed(() => {
 .qp-alert[data-level='lv1'] {
   @apply border-blue-500/30 bg-blue-500/5;
 }
-.qp-alert[data-level='lv1'] .qp-key-icon,
+.qp-alert[data-level='lv1'] .qp-icon,
 .qp-alert[data-level='lv1'] .qp-label {
   @apply text-blue-600 dark:text-blue-400;
 }
@@ -169,7 +168,7 @@ const separateNote = computed(() => {
 .qp-alert[data-level='lv2'] {
   @apply border-orange-500/30 bg-orange-500/5;
 }
-.qp-alert[data-level='lv2'] .qp-key-icon,
+.qp-alert[data-level='lv2'] .qp-icon,
 .qp-alert[data-level='lv2'] .qp-label {
   @apply text-orange-600 dark:text-orange-400;
 }
@@ -193,7 +192,7 @@ const separateNote = computed(() => {
 .qp-alert[data-level='overnight'] {
   @apply border-yellow-500/30 bg-yellow-500/5;
 }
-.qp-alert[data-level='overnight'] .qp-key-icon,
+.qp-alert[data-level='overnight'] .qp-icon,
 .qp-alert[data-level='overnight'] .qp-label {
   @apply text-yellow-700 dark:text-yellow-400;
 }
@@ -230,7 +229,7 @@ const separateNote = computed(() => {
   min-width: 0;
 }
 
-.qp-key-icon {
+.qp-icon {
   display: inline-flex;
   flex-shrink: 0;
 }
@@ -253,13 +252,14 @@ const separateNote = computed(() => {
 }
 
 .qp-badge {
+  display: inline;
   font-size: 0.8125rem;
   font-weight: 700;
-  padding: 0.2rem 0.625rem;
-  border-radius: 9999px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
   white-space: nowrap;
-  flex-shrink: 0;
   letter-spacing: 0.01em;
+  margin-right: 0.375rem;
 }
 
 .qp-desc {
