@@ -7,11 +7,11 @@ sidebar_position: 20
 
 該接口用於獲取標的的 K 線數據。
 
+<QuotePermission level="basic" />
+
 :::info
 注意：本介面只能獲取到最近 1000 根 K 線，如需獲取較長的歷史數據，請訪問介面：獲取標的歷史 K 線。
 :::
-
-<QuotePermission level="basic" />
 
 <CliCommand>
 # Tesla 日 K 線（最近 100 根）
