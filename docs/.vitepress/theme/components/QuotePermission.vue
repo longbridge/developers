@@ -13,7 +13,6 @@
     <!-- Footer: action link + separation note -->
     <div class="qp-footer">
       <a :href="linkUrl" target="_blank" rel="noopener noreferrer" class="qp-link">
-        <span class="qp-link-icon" v-html="level === 'basic' ? externalLinkIcon : shoppingBagIcon" />
         {{ linkText }}
       </a>
       <span class="qp-sep">·</span>
@@ -38,10 +37,6 @@ const isZhCN = computed(() => lang.value === 'zh-CN')
 const isZhHK = computed(() => lang.value === 'zh-HK')
 
 const shieldCheckIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.76 8.95a1 1 0 0 1-.48 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`
-
-const externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`
-
-const shoppingBagIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`
 
 const title = computed(() => {
   if (isZhCN.value) return '行情权限要求'
@@ -85,10 +80,7 @@ const description = computed(() => {
   return map[props.level]?.[lang.value] ?? map[props.level]?.en ?? ''
 })
 
-const linkUrl = computed(() => {
-  if (props.level === 'basic') return 'https://open.longbridge.com/account'
-  return 'https://longbridge.com/download'
-})
+const linkUrl = computed(() => 'https://open.longbridge.com/account')
 
 const linkText = computed(() => {
   if (props.level === 'basic') {
@@ -217,16 +209,8 @@ const separateNote = computed(() => {
 .qp-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.375rem;
-}
-
-.qp-header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  min-width: 0;
+  margin-bottom: 0.75rem;
 }
 
 .qp-icon {
@@ -286,11 +270,6 @@ const separateNote = computed(() => {
 }
 .qp-link:hover {
   text-decoration: underline;
-}
-
-.qp-link-icon {
-  display: inline-flex;
-  align-items: center;
 }
 
 .qp-sep {
