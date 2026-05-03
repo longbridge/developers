@@ -24,6 +24,8 @@ longbridge corp-action 700.HK
 ...
 ```
 
+Returns the 30 most recent records by default. Use `--all` to retrieve the full history.
+
 ## Examples
 
 ### View corporate actions
@@ -33,10 +35,19 @@ longbridge corp-action 700.HK
 longbridge corp-action AAPL.US
 ```
 
-Lists historical corporate actions including stock splits, dividend distributions, and rights offerings.
+Lists the 30 most recent corporate actions including stock splits, dividend distributions, and rights offerings.
+
+### View full history
+
+```bash
+longbridge corp-action 700.HK --all
+```
+
+Returns all available corporate action records.
 
 ### JSON output
 
 ```bash
 longbridge corp-action TSLA.US --format json
+longbridge corp-action TSLA.US --all --format json
 ```

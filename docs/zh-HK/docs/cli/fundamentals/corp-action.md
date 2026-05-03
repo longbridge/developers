@@ -24,6 +24,8 @@ longbridge corp-action 700.HK
 ...
 ```
 
+預設返回最近 30 條記錄。使用 `--all` 可獲取完整歷史。
+
 ## 示例
 
 ### 查看公司行動
@@ -33,10 +35,19 @@ longbridge corp-action 700.HK
 longbridge corp-action AAPL.US
 ```
 
-列出歷史公司行動，包括股份拆細、股息分派和供股配售。
+列出最近 30 條公司行動，包括股份拆細、股息分派和供股配售。
+
+### 查看完整歷史
+
+```bash
+longbridge corp-action 700.HK --all
+```
+
+返回所有可用的公司行動記錄。
 
 ### JSON 輸出
 
 ```bash
 longbridge corp-action TSLA.US --format json
+longbridge corp-action TSLA.US --all --format json
 ```
