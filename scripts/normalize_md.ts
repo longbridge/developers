@@ -2,8 +2,18 @@ import fs from 'fs-extra'
 import path from 'path'
 import { globSync } from 'glob'
 import { rewriteMarkdownPath } from '../docs/.vitepress/utils'
+import {
+  QUOTE_PERMISSION_TITLE,
+  QUOTE_BADGE_LABELS,
+  QUOTE_DESCRIPTIONS,
+  QUOTE_LINK_URL,
+  QUOTE_LINK_TEXT,
+  QUOTE_SEPARATE_NOTE,
+  QUOTE_MARKET_LABELS,
+  type QuoteLocale,
+} from '../docs/.vitepress/theme/components/QuotePermissionData'
 
-type Locale = 'en' | 'zh-CN' | 'zh-HK'
+type Locale = QuoteLocale
 
 /**
  * Process Markdown file
@@ -17,6 +27,7 @@ function processMarkdownFile(filePath: string, outputPath: string, locale: Local
   // Parse SDKLinks elements and replace them
   // Need to implement regex to match <SDKLinks ... /> tags and replace with Markdown tables
   content = parseSDKLinks(content, locale)
+  content = parseQuotePermission(content, locale)
 
   const relativePath = path.relative(docsDir, filePath)
 
@@ -272,5 +283,30 @@ function parseSDKLinks(content: string, locale: Locale): string {
     }
   )
 }
+/**
+ * Parse QuotePermission tags and replace with readable Markdown text
+ */
+function parseQuotePermission(content: string, locale: Locale): string {
+  const regex = /<QuotePermission\s+level="([^"]+)"(?:\s+market="([^"]+)")?\s*\/>/g
+  const l = (map: Record<string, string>) => map[locale] ?? map['en']
+
+  return content.replace(regex, (_match, level: string, market?: string) => {
+    const levelName = l(QUOTE_BADGE_LABELS[level as keyof typeof QUOTE_BADGE_LABELS] ?? { en: level })
+    const marketSuffix = market ? ` (${l(QUOTE_MARKET_LABELS[market] ?? { en: market })})` : ''
+    const desc = l(QUOTE_DESCRIPTIONS[level as keyof typeof QUOTE_DESCRIPTIONS] ?? { en: '' })
+    const title = l(QUOTE_PERMISSION_TITLE)
+    const linkUrl = QUOTE_LINK_URL[level as keyof typeof QUOTE_LINK_URL]
+    const linkText = l(QUOTE_LINK_TEXT[level as keyof typeof QUOTE_LINK_TEXT] ?? { en: 'Activate' })
+    const note = l(QUOTE_SEPARATE_NOTE)
+
+    return [
+      `> **${title}: ${levelName}${marketSuffix}**`,
+      `> ${desc}`,
+      `> [${linkText}](${linkUrl})`,
+      `> ${note}`,
+    ].join('\n')
+  })
+}
+
 // call main function
 main()

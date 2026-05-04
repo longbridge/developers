@@ -157,6 +157,11 @@ export default defineConfig(
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ''),
           },
+          '/lb-api': {
+            target: process.env.VITE_PORTAL_API_BASE_URL || 'https://m.longbridge.xyz',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/lb-api/, '/api'),
+          },
         },
       },
       optimizeDeps: {
