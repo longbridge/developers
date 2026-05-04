@@ -2227,7 +2227,7 @@ const currentMessages = computed(() => {
             </div>
             <p class="uc-banner-title">
               {{ isEN ? 'Each winner receives' : isHK ? '每人獲得' : '每人获得' }}
-              <span class="uc-banner-coin">{{ isEN ? '10,000 Task Coins' : '10,000 任务币' }}</span>
+              <span class="uc-banner-coin">{{ isEN ? '10,000 Task Coins' : isHK ? '10,000 任務幣' : '10,000 任务币' }}</span>
               {{ isEN ? '+' : '+' }}
               <span class="uc-banner-pod">1 × AirPods 4</span>
             </p>
@@ -2249,7 +2249,7 @@ const currentMessages = computed(() => {
               </div>
               <div>
                 <div class="uc-prize-value">10,000</div>
-                <div class="uc-prize-label">{{ isEN ? 'TASK COINS' : '任务币' }}</div>
+                <div class="uc-prize-label">{{ isEN ? 'TASK COINS' : isHK ? '任務幣' : '任务币' }}</div>
               </div>
             </div>
             <div class="uc-prize">
