@@ -8,7 +8,7 @@ sidebar_position: 14
 
 List your current active real-time quote subscriptions.
 
-<QuotePermission level="basic" />
+<QuotePermission command="subscriptions" />
 
 ## Basic Usage
 

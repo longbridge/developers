@@ -8,7 +8,7 @@ sidebar_position: 14
 
 查看各交易所當前的開市/收市狀態。
 
-<QuotePermission level="basic" />
+<QuotePermission command="market-status" />
 
 ## 基本用法
 

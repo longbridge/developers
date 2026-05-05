@@ -8,7 +8,7 @@ sidebar_position: 7
 
 获取任意标的的静态基本资料——名称、交易所、货币、手数、总股本、EPS、BPS 和股息率。
 
-<QuotePermission level="basic" />
+<QuotePermission command="static" />
 
 ## 基本用法
 

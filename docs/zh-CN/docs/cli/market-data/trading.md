@@ -8,7 +8,7 @@ sidebar_position: 11
 
 查询任意市场的交易时段安排和交易日历。
 
-<QuotePermission level="basic" />
+<QuotePermission command="trading" />
 
 ## 基本用法
 

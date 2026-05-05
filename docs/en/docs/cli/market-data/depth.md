@@ -8,7 +8,7 @@ sidebar_position: 2
 
 View the Level 2 order book for a symbol — the top 10 bid and ask prices with order counts and volumes.
 
-<QuotePermission level="lv2" />
+<QuotePermission command="depth" />
 
 ## Basic Usage
 

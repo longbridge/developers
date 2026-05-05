@@ -8,7 +8,7 @@ sidebar_position: 3
 
 查看港股盤口各價位的券商 ID 分佈，適合識別機構資金的委託流向。
 
-<QuotePermission level="lv2" market="HK only" />
+<QuotePermission command="brokers" />
 
 ## 基本用法
 

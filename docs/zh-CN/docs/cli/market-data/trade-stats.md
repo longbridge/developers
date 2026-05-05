@@ -8,7 +8,7 @@ sidebar_position: 17
 
 查看交易统计——按成交量展示价格分布。
 
-<QuotePermission level="basic" />
+<QuotePermission command="trade-stats" />
 
 ## 基本用法
 

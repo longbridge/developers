@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Get real-time quotes for one or more symbols — price, volume, change from previous close, and extended-hours data for US stocks.
 
-<QuotePermission level="basic" />
+<QuotePermission command="quote" />
 
 ## Basic Usage
 

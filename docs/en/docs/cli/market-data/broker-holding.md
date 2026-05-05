@@ -8,7 +8,7 @@ sidebar_position: 15
 
 View broker holding positions for HK-listed stocks — top buyers/sellers, full detail list, and daily history per broker.
 
-<QuotePermission level="basic" />
+<QuotePermission command="broker-holding" />
 
 ## Basic Usage
 

@@ -1,10 +1,11 @@
 <template>
-  <div class="qp-alert" :data-level="level" :data-status="permissionStatus">
-    <!-- Header: icon + label + market tag; status badge is client-only -->
+  <div class="qp-alert" :data-level="effectiveLevel" :data-status="permissionStatus">
+    <!-- Header: icon + label + market tag + badge (right) + status badge (client-only) -->
     <div class="qp-header">
       <span class="qp-icon" v-html="shieldCheckIcon" />
       <span class="qp-label">{{ title }}</span>
-      <span v-if="market" class="qp-market-tag">{{ marketLabel }}</span>
+      <span v-if="effectiveMarket" class="qp-market-tag">{{ marketLabel }}</span>
+      <span class="qp-badge">{{ badgeLabel }}</span>
       <ClientOnly>
         <span v-if="permissionStatus === 'activated'" class="qp-status-badge qp-status-activated">
           <span v-html="checkIcon" class="qp-status-icon" />{{ activatedLabel }}
@@ -16,10 +17,11 @@
       </ClientOnly>
     </div>
 
-    <!-- Badge + description (always rendered, AI-readable) -->
-    <p class="qp-desc">
-      <span class="qp-badge">{{ badgeLabel }}</span>{{ description }}
-    </p>
+    <!-- Description: list when multi-line, paragraph when single -->
+    <ul v-if="descriptionLines.length > 1" class="qp-list">
+      <li v-for="line in descriptionLines" :key="line" class="qp-list-item">{{ line }}</li>
+    </ul>
+    <p v-else-if="descriptionLines.length === 1" class="qp-desc">{{ descriptionLines[0] }}</p>
 
     <!-- Footer: action link always rendered for SSR/AI; activated note injected client-side -->
     <div class="qp-footer">
@@ -39,6 +41,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useData } from 'vitepress'
 import {
+  QUOTE_COMMANDS,
   QUOTE_PERMISSION_TITLE,
   QUOTE_BADGE_LABELS,
   QUOTE_DESCRIPTIONS,
@@ -54,7 +57,8 @@ import {
 } from './QuotePermissionData'
 
 interface Props {
-  level: QuoteLevel
+  command?: string
+  level?: QuoteLevel
   market?: string
 }
 
@@ -62,19 +66,29 @@ const props = defineProps<Props>()
 const { lang } = useData()
 
 const locale = computed(() => lang.value as QuoteLocale)
-const l = <T extends Record<QuoteLocale, string>>(map: T) => map[locale.value] ?? map['en']
+const l = <T extends Record<string, string>>(map: T) => map[locale.value] ?? map['en']
+
+const cmdEntry = computed(() => (props.command ? QUOTE_COMMANDS[props.command] : null))
+
+const effectiveLevel = computed<QuoteLevel>(() => cmdEntry.value?.level ?? props.level ?? 'basic')
+const effectiveMarket = computed(() => props.market ?? cmdEntry.value?.market)
 
 const shieldCheckIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.76 8.95a1 1 0 0 1-.48 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`
 const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`
 
 const title = computed(() => l(QUOTE_PERMISSION_TITLE))
-const badgeLabel = computed(() => l(QUOTE_BADGE_LABELS[props.level]))
-const description = computed(() => l(QUOTE_DESCRIPTIONS[props.level]))
-const linkUrl = computed(() => QUOTE_LINK_URL[props.level])
-const linkText = computed(() => l(QUOTE_LINK_TEXT[props.level]))
+const badgeLabel = computed(() => l(QUOTE_BADGE_LABELS[effectiveLevel.value]))
+const description = computed(() => {
+  const cmdDesc = cmdEntry.value?.description
+  if (cmdDesc) return cmdDesc[locale.value] ?? cmdDesc['en'] ?? ''
+  return l(QUOTE_DESCRIPTIONS[effectiveLevel.value])
+})
+const descriptionLines = computed(() => description.value.split('\n').filter(Boolean))
+const linkUrl = computed(() => QUOTE_LINK_URL[effectiveLevel.value])
+const linkText = computed(() => l(QUOTE_LINK_TEXT[effectiveLevel.value]))
 const separateNote = computed(() => l(QUOTE_SEPARATE_NOTE))
 const marketLabel = computed(() =>
-  props.market ? (QUOTE_MARKET_LABELS[props.market]?.[locale.value] ?? props.market) : ''
+  effectiveMarket.value ? (QUOTE_MARKET_LABELS[effectiveMarket.value]?.[locale.value] ?? effectiveMarket.value) : ''
 )
 
 const activatedLabel = computed(() => l(QUOTE_ACTIVATED_LABEL))
@@ -123,6 +137,10 @@ function isLevelActivated(level: string, applyState: number, quotation: any): bo
     return perms.some((p: any) => p?.is_current && p?.quote_tag?.includes('overnight'))
   }
 
+  if (level === 'opra') {
+    return perms.some((p: any) => p?.is_current && p?.quote_tag?.toLowerCase().includes('opra'))
+  }
+
   const tagLevelMap: Record<string, number> = { lv1: 1, lv2: 2 }
   const targetTagLevel = tagLevelMap[level]
   if (!targetTagLevel) return false
@@ -155,7 +173,7 @@ onMounted(async () => {
     return
   }
 
-  permissionStatus.value = isLevelActivated(props.level, devInfo.apply_state, devInfo.quotation)
+  permissionStatus.value = isLevelActivated(effectiveLevel.value, devInfo.apply_state, devInfo.quotation)
     ? 'activated'
     : 'not_activated'
 })
@@ -180,7 +198,8 @@ onMounted(async () => {
 .qp-alert[data-level='basic'] .qp-badge {
   @apply bg-green-500/15 text-green-700 dark:bg-green-500/20 dark:text-green-300 ring-1 ring-green-500/30;
 }
-.qp-alert[data-level='basic'] .qp-desc {
+.qp-alert[data-level='basic'] .qp-desc,
+.qp-alert[data-level='basic'] .qp-list-item {
   @apply text-green-800/80 dark:text-green-300/80;
 }
 .qp-alert[data-level='basic'] .qp-link,
@@ -205,7 +224,8 @@ onMounted(async () => {
 .qp-alert[data-level='lv1'] .qp-badge {
   @apply bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 ring-1 ring-blue-500/30;
 }
-.qp-alert[data-level='lv1'] .qp-desc {
+.qp-alert[data-level='lv1'] .qp-desc,
+.qp-alert[data-level='lv1'] .qp-list-item {
   @apply text-blue-800/80 dark:text-blue-300/80;
 }
 .qp-alert[data-level='lv1'] .qp-link,
@@ -230,7 +250,8 @@ onMounted(async () => {
 .qp-alert[data-level='lv2'] .qp-badge {
   @apply bg-orange-500/15 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300 ring-1 ring-orange-500/30;
 }
-.qp-alert[data-level='lv2'] .qp-desc {
+.qp-alert[data-level='lv2'] .qp-desc,
+.qp-alert[data-level='lv2'] .qp-list-item {
   @apply text-orange-800/80 dark:text-orange-300/80;
 }
 .qp-alert[data-level='lv2'] .qp-link,
@@ -255,7 +276,8 @@ onMounted(async () => {
 .qp-alert[data-level='overnight'] .qp-badge {
   @apply bg-yellow-500/15 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-300 ring-1 ring-yellow-500/30;
 }
-.qp-alert[data-level='overnight'] .qp-desc {
+.qp-alert[data-level='overnight'] .qp-desc,
+.qp-alert[data-level='overnight'] .qp-list-item {
   @apply text-yellow-900/80 dark:text-yellow-300/80;
 }
 .qp-alert[data-level='overnight'] .qp-link,
@@ -268,6 +290,32 @@ onMounted(async () => {
 }
 .qp-alert[data-level='overnight'] .qp-market-tag {
   @apply text-yellow-700/70 dark:text-yellow-400/70 ring-1 ring-yellow-500/30;
+}
+
+.qp-alert[data-level='opra'] {
+  @apply border-purple-500/30 bg-purple-500/5;
+}
+.qp-alert[data-level='opra'] .qp-icon,
+.qp-alert[data-level='opra'] .qp-label {
+  @apply text-purple-600 dark:text-purple-400;
+}
+.qp-alert[data-level='opra'] .qp-badge {
+  @apply bg-purple-500/15 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300 ring-1 ring-purple-500/30;
+}
+.qp-alert[data-level='opra'] .qp-desc,
+.qp-alert[data-level='opra'] .qp-list-item {
+  @apply text-purple-800/80 dark:text-purple-300/80;
+}
+.qp-alert[data-level='opra'] .qp-link,
+.qp-alert[data-level='opra'] .qp-activated-note {
+  @apply text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-200;
+}
+.qp-alert[data-level='opra'] .qp-note,
+.qp-alert[data-level='opra'] .qp-sep {
+  @apply text-purple-600/50 dark:text-purple-500/50;
+}
+.qp-alert[data-level='opra'] .qp-market-tag {
+  @apply text-purple-600/70 dark:text-purple-400/70 ring-1 ring-purple-500/30;
 }
 
 /* ── structural styles ── */
@@ -302,20 +350,32 @@ onMounted(async () => {
 }
 
 .qp-badge {
-  display: inline;
+  display: inline-block;
   font-size: 0.8125rem;
   font-weight: 700;
   padding: 0.2rem 0.5rem;
   border-radius: 0.25rem;
   white-space: nowrap;
   letter-spacing: 0.01em;
-  margin-right: 0.375rem;
+  margin-left: auto;
 }
 
 .qp-desc {
   font-size: 0.8125rem;
   line-height: 1.5;
   margin: 0 0 0.5rem 0;
+}
+
+.qp-list {
+  margin: 0 0 0.5rem 0;
+  padding-left: 1.125rem;
+  list-style: disc;
+}
+
+.qp-list-item {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .qp-footer {
@@ -357,7 +417,6 @@ onMounted(async () => {
   padding: 0.15rem 0.45rem;
   border-radius: 9999px;
   white-space: nowrap;
-  margin-left: auto;
 }
 
 .qp-status-icon {

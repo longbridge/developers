@@ -8,7 +8,7 @@ sidebar_position: 13
 
 查看指數或 ETF 的成份股——支援排序選項和升跌統計。
 
-<QuotePermission level="basic" />
+<QuotePermission command="constituent" />
 
 ## 基本用法
 

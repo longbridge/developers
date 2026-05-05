@@ -3,6 +3,7 @@ import path from 'path'
 import { globSync } from 'glob'
 import { rewriteMarkdownPath } from '../docs/.vitepress/utils'
 import {
+  QUOTE_COMMANDS,
   QUOTE_PERMISSION_TITLE,
   QUOTE_BADGE_LABELS,
   QUOTE_DESCRIPTIONS,
@@ -287,21 +288,31 @@ function parseSDKLinks(content: string, locale: Locale): string {
  * Parse QuotePermission tags and replace with readable Markdown text
  */
 function parseQuotePermission(content: string, locale: Locale): string {
-  const regex = /<QuotePermission\s+level="([^"]+)"(?:\s+market="([^"]+)")?\s*\/>/g
+  const regex = /<QuotePermission\s+(?:command="([^"]+)"|level="([^"]+)")(?:\s+market="([^"]+)")?\s*\/>/g
   const l = (map: Record<string, string>) => map[locale] ?? map['en']
 
-  return content.replace(regex, (_match, level: string, market?: string) => {
+  return content.replace(regex, (_match, command?: string, levelProp?: string, marketProp?: string) => {
+    const cmdEntry = command ? QUOTE_COMMANDS[command] : null
+    const level = cmdEntry?.level ?? levelProp ?? 'basic'
+    const market = marketProp ?? cmdEntry?.market
+
     const levelName = l(QUOTE_BADGE_LABELS[level as keyof typeof QUOTE_BADGE_LABELS] ?? { en: level })
     const marketSuffix = market ? ` (${l(QUOTE_MARKET_LABELS[market] ?? { en: market })})` : ''
-    const desc = l(QUOTE_DESCRIPTIONS[level as keyof typeof QUOTE_DESCRIPTIONS] ?? { en: '' })
+    const cmdDesc = cmdEntry?.description
+    const desc = cmdDesc ? (cmdDesc[locale] ?? cmdDesc['en'] ?? '') : l(QUOTE_DESCRIPTIONS[level as keyof typeof QUOTE_DESCRIPTIONS] ?? { en: '' })
     const title = l(QUOTE_PERMISSION_TITLE)
     const linkUrl = QUOTE_LINK_URL[level as keyof typeof QUOTE_LINK_URL]
     const linkText = l(QUOTE_LINK_TEXT[level as keyof typeof QUOTE_LINK_TEXT] ?? { en: 'Activate' })
     const note = l(QUOTE_SEPARATE_NOTE)
 
+    const descLines = desc.split('\n').filter(Boolean)
+    const descMd = descLines.length > 1
+      ? descLines.map((line) => `> - ${line}`).join('\n')
+      : `> ${desc}`
+
     return [
       `> **${title}: ${levelName}${marketSuffix}**`,
-      `> ${desc}`,
+      descMd,
       `> [${linkText}](${linkUrl})`,
       `> ${note}`,
     ].join('\n')

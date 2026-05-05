@@ -8,7 +8,7 @@ sidebar_position: 14
 
 Check the current open/close status for each exchange.
 
-<QuotePermission level="basic" />
+<QuotePermission command="market-status" />
 
 ## Basic Usage
 

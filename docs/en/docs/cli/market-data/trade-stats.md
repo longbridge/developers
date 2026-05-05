@@ -8,7 +8,7 @@ sidebar_position: 17
 
 View trade statistics — price distribution by volume for a stock.
 
-<QuotePermission level="basic" />
+<QuotePermission command="trade-stats" />
 
 ## Basic Usage
 

@@ -8,7 +8,7 @@ sidebar_position: 10
 
 获取 Longbridge 市场温度指数——结合估值与市场情绪的综合 0–100 情绪量表。数值越高表示市场越偏多头。
 
-<QuotePermission level="basic" />
+<QuotePermission command="market-temp" />
 
 ## 基本用法
 

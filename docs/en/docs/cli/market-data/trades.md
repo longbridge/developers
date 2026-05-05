@@ -8,7 +8,7 @@ sidebar_position: 4
 
 Fetch recent tick-by-tick trade records for a symbol, including price, volume, time, and trade direction.
 
-<QuotePermission level="basic" />
+<QuotePermission command="trades" />
 
 ## Basic Usage
 

@@ -8,7 +8,7 @@ sidebar_position: 1
 
 获取一个或多个标的代码的实时行情——价格、成交量、较前收盘的涨跌幅，以及美股的盘前盘后数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="quote" />
 
 ## 基本用法
 

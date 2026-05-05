@@ -11,6 +11,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 import { rewriteMarkdownPath } from './utils'
 import { getRegionConfig, computeSrcExclude } from './region-utils'
 import * as cheerio from 'cheerio'
+import yaml from 'js-yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const docsRoot = resolve(__dirname, '..')
@@ -184,6 +185,14 @@ export default defineConfig(
         ],
       },
       plugins: [
+        {
+          name: 'yaml-transform',
+          transform(src: string, id: string) {
+            if (!id.endsWith('.yaml') && !id.endsWith('.yml')) return
+            const data = yaml.load(src)
+            return { code: `export default ${JSON.stringify(data)}`, map: null }
+          },
+        },
         {
           name: 'fetch-mcp-tools',
           async buildStart() {

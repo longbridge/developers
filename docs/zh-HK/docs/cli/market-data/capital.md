@@ -8,7 +8,7 @@ sidebar_position: 9
 
 追蹤盤中資金流向——通過 `flow` 子命令逐分鐘查看大、中、小資金的流入流出，或通過 `dist` 子命令查看資金分佈快照。
 
-<QuotePermission level="basic" />
+<QuotePermission command="capital" />
 
 ## 基本用法
 

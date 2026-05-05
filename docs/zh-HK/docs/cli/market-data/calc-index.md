@@ -8,7 +8,7 @@ sidebar_position: 8
 
 計算任意標的的財務指標——市盈率、市淨率、股息率、換手率、期權希臘值等。
 
-<QuotePermission level="basic" />
+<QuotePermission command="calc-index" />
 
 ## 基本用法
 

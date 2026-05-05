@@ -8,7 +8,7 @@ sidebar_position: 14
 
 列出當前所有有效的即時行情訂閱。
 
-<QuotePermission level="basic" />
+<QuotePermission command="subscriptions" />
 
 ## 基本用法
 

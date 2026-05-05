@@ -8,7 +8,7 @@ sidebar_position: 18
 
 偵測異常市場動態和報價異常——價格急升、成交量暴增及其他異常活動。
 
-<QuotePermission level="basic" />
+<QuotePermission command="anomaly" />
 
 ## 基本用法
 

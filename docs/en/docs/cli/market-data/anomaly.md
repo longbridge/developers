@@ -8,7 +8,7 @@ sidebar_position: 18
 
 Detect unusual market movements and quote anomalies — price spikes, volume surges, and other abnormal activity.
 
-<QuotePermission level="basic" />
+<QuotePermission command="anomaly" />
 
 ## Basic Usage
 
