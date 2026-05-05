@@ -12,18 +12,6 @@ ui:
     en: 'OpenAPI quote perms are separate from App/Web perms'
     zh-CN: 'OpenAPI 行情权限独立于 App/Web 行情权限'
     zh-HK: 'OpenAPI 行情權限獨立於 App/Web 行情權限'
-  activated_label:
-    en: 'Activated'
-    zh-CN: '已开通'
-    zh-HK: '已開通'
-  not_activated_label:
-    en: 'Not activated'
-    zh-CN: '未开通'
-    zh-HK: '未開通'
-  already_activated_note:
-    en: 'You already have this permission'
-    zh-CN: '您已开通此权限'
-    zh-HK: '您已開通此權限'
   market_labels:
     HK: { en: 'HK', zh-CN: '港股', zh-HK: '港股' }
     US: { en: 'US', zh-CN: '美股', zh-HK: '美股' }
@@ -46,7 +34,7 @@ levels:
       zh-HK: '開啟港股實時報價，支持行情數據實時推送。需在行情商城購買 LV1 行情卡。'
     link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
   lv2:
-    label: { en: 'LV2 Subscription', zh-CN: 'LV2 订阅', zh-HK: 'LV2 訂閱' }
+    label: { en: 'LV2 Advanced', zh-CN: 'LV2 高级行情', zh-HK: 'LV2 高級行情' }
     description:
       en: 'Provides top-10 bid/ask order book depth and real-time depth push. Purchase LV2 in the Quote Store.'
       zh-CN: '提供十档买卖盘口数据，支持深度行情实时推送。需在行情商城购买 LV2 行情卡。'
@@ -95,7 +83,7 @@ commands:
 
   # ── 盘口深度 ─────────────────────────────────────────────────
   depth:
-    level: lv2
+    level: lv1
     description:
       en: |-
         US stocks: Nasdaq Basic 1-level bid/ask included by default; overnight requires LV1.

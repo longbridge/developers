@@ -18,9 +18,6 @@ export const QUOTE_COMMANDS: Record<string, CommandEntry> = commands
 export const QUOTE_LINK_URL: string = ui.link_url
 export const QUOTE_PERMISSION_TITLE: L10n = ui.permission_title
 export const QUOTE_SEPARATE_NOTE: L10n = ui.separate_note
-export const QUOTE_ACTIVATED_LABEL: L10n = ui.activated_label
-export const QUOTE_NOT_ACTIVATED_LABEL: L10n = ui.not_activated_label
-export const QUOTE_ALREADY_ACTIVATED_NOTE: L10n = ui.already_activated_note
 export const QUOTE_MARKET_LABELS: Record<string, L10n> = ui.market_labels
 
 export const QUOTE_BADGE_LABELS: Record<QuoteLevel, L10n> = Object.fromEntries(
