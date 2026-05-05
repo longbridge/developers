@@ -147,7 +147,7 @@ All Quote APIs require OpenAPI quote permissions. These are **separate from App/
 | Level | What's Included | How to Get |
 |---|---|---|
 | **Basic** | LV1 US/CN/SG real-time; HK BMP (~15 min delay, no push) | Included with OpenAPI activation |
-| **LV1 Real-time** (HK) | HK real-time quotes + WebSocket push support | Purchase "LV1 Real-time Quote (OpenAPI)" via Quote Store |
+| **LV1 Real-time** (HK) | HK real-time quotes + WebSocket push support | Purchase "LV1 Real-time Quotes (OpenAPI)" via Quote Store |
 | **LV2 Subscription** | Level 2 order book (depth), HK broker queue | Purchase LV2 subscription via Quote Store |
 | **Overnight** (US) | US pre/post-market extended-hours data | Purchase LV1 card + set `LONGBRIDGE_ENABLE_OVERNIGHT=true` |
 

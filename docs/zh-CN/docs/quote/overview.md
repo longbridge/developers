@@ -148,7 +148,7 @@ slug: overview
 | 权限等级 | 包含内容 | 获取方式 |
 |---|---|---|
 | **基础行情** | 美/A/新加坡股实时报价；港股 BMP（约 15 分钟延迟，不支持推送） | 开通 OpenAPI 后自动获得 |
-| **LV1 实时**（港股） | 港股实时报价 + WebSocket 推送支持 | 通过行情商城购买「LV1 Real-time Quote (OpenAPI)」 |
+| **LV1 实时**（港股） | 港股实时报价 + WebSocket 推送支持 | 通过行情商城购买「LV1 实时行情 (OpenAPI)」 |
 | **LV2 订阅** | Level 2 买卖盘（depth）、港股经纪商队列（brokers） | 通过行情商城购买 LV2 订阅卡 |
 | **盘前盘后**（美股） | 美股盘前/盘后延伸时段数据 | 购买 LV1 卡 + 设置 `LONGBRIDGE_ENABLE_OVERNIGHT=true` |
 
