@@ -8,6 +8,8 @@ sidebar_position: 9
 
 追蹤盤中資金流向——默認顯示大、中、小資金分佈快照，加 `--flow` 參數可獲取逐分鐘時序數據。
 
+<QuotePermission command="capital" />
+
 ## 基本用法
 
 ```bash

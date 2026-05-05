@@ -8,6 +8,8 @@ sidebar_position: 3
 
 美股做空数据——空头比例、空头股数、需几日平仓（days-to-cover）及日均成交量。仅支持美股及 ETF，数据由 FINRA 每两周更新一次。
 
+<QuotePermission command="short-positions" />
+
 ## 基本用法
 
 ```bash

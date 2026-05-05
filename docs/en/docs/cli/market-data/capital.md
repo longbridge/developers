@@ -8,6 +8,8 @@ sidebar_position: 9
 
 Track intraday capital flow — view a snapshot distribution of large/medium/small money (default), or get a minute-by-minute time series with `--flow`.
 
+<QuotePermission command="capital" />
+
 ## Basic Usage
 
 ```bash

@@ -12,6 +12,8 @@ headingLevel: 2
 
 Get the filings list for a specified security.
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # regulatory filings for Apple
 longbridge filing list AAPL.US

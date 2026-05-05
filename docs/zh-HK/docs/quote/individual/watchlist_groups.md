@@ -11,6 +11,8 @@ headingLevel: 2
 
 獲取關注分組
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 查看所有自選股分組及標的
 longbridge watchlist

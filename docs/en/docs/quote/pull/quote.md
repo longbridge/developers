@@ -7,6 +7,8 @@ sidebar_position: 2
 
 This API is used to obtain the real-time quotes of securities, and supports all types of securities.
 
+<QuotePermission command="quote" />
+
 <CliCommand>
 # real-time quote for Tesla
 longbridge quote TSLA.US

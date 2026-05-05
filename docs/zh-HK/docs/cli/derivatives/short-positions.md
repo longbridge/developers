@@ -8,6 +8,8 @@ sidebar_position: 3
 
 美股放空資料——空頭比例、空頭股數、平倉天數（days-to-cover）及日均成交量。僅支援美股及 ETF，資料由 FINRA 每兩週更新一次。
 
+<QuotePermission command="short-positions" />
+
 ## 基本用法
 
 ```bash

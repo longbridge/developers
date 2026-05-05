@@ -8,6 +8,8 @@ sidebar_position: 5
 
 取得任意標的逐分鐘的價格和成交量數據（分時線）——今日即時數據或歷史日期的數據。
 
+<QuotePermission command="intraday" />
+
 ## 基本用法
 
 ```bash

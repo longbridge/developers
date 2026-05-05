@@ -139,3 +139,16 @@ We use the [Protobuf](https://developers.google.cn/protocol-buffers) protocol to
 - Strongger version forward and backward compatibility.
 
 Quote Protobuf protocol document [download link](https://github.com/longbridge/openapi-protobufs/blob/main/quote/api.proto).
+
+## Quote Permission Levels
+
+All Quote APIs require OpenAPI quote permissions. These are **separate from App/PC/Web permissions** and must be activated independently.
+
+| Level | What's Included | How to Get |
+|---|---|---|
+| **Basic** | LV1 US/CN/SG real-time; HK BMP (~15 min delay, no push) | Included with OpenAPI activation |
+| **LV1 Real-time** (HK) | HK real-time quotes + WebSocket push support | Purchase "LV1 Real-time Quote (OpenAPI)" via Quote Store |
+| **LV2 Subscription** | Level 2 order book (depth), HK broker queue | Purchase LV2 subscription via Quote Store |
+| **Overnight** (US) | US pre/post-market extended-hours data | Purchase LV1 card + set `LONGBRIDGE_ENABLE_OVERNIGHT=true` |
+
+Check your current permissions at [Developer Center](https://open.longbridge.com/account). Purchase quote cards via **Longbridge App → My → My Quotes → Quote Store**.

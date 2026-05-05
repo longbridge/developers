@@ -7,6 +7,8 @@ sidebar_position: 4
 
 该接口用于获取港股轮证标的的实时行情，包括轮证的特有数据。
 
+<QuotePermission command="warrant" />
+
 <CliCommand>
 # 腾讯相关权证实时行情
 longbridge warrant quote 25228.HK

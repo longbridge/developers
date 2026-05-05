@@ -8,6 +8,8 @@ sidebar_position: 9
 
 追踪盘中资金流向——默认显示大、中、小资金分布快照，加 `--flow` 参数可获取逐分钟时序数据。
 
+<QuotePermission command="capital" />
+
 ## 基本用法
 
 ```bash

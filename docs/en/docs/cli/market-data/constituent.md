@@ -8,6 +8,8 @@ sidebar_position: 13
 
 View constituent stocks of an index or ETF — with sorting options and rise/fall statistics.
 
+<QuotePermission command="constituent" />
+
 ## Basic Usage
 
 ```bash

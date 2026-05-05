@@ -8,6 +8,8 @@ sidebar_position: 18
 
 检测异常市场波动和行情异动——价格急涨急跌、成交量异常放大等异常活动。
 
+<QuotePermission command="anomaly" />
+
 ## 基本用法
 
 ```bash

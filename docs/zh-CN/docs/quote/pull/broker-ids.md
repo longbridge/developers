@@ -7,6 +7,8 @@ sidebar_position: 7
 
 该接口用于获取券商席位 ID 数据 (可每天同步一次)。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 港股所有做市商券商 ID 和名称
 longbridge participants

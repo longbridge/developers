@@ -8,6 +8,8 @@ sidebar_position: 1
 
 查詢美股期權合約的即時行情、瀏覽完整期權鏈，以及查看認購/認沽成交量統計。
 
+<QuotePermission command="option" />
+
 ## 基本用法
 
 ```bash
