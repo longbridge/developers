@@ -7,7 +7,7 @@ sidebar_position: 1
 
 該接口用於獲取標的的基礎信息。
 
-<QuotePermission level="basic" />
+<QuotePermission command="static" />
 
 <CliCommand>
 # Tesla 靜態資訊（名稱、手數、股本等）

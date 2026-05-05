@@ -7,7 +7,7 @@ sidebar_position: 4
 
 该接口用于获取港股轮证标的的实时行情，包括轮证的特有数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="warrant" />
 
 <CliCommand>
 # 腾讯相关权证实时行情

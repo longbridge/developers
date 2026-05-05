@@ -7,7 +7,7 @@ sidebar_position: 1
 
 Real-time quote push of the subscribed security. In the pushed data structure, only the fields that have changed will be filled with data.
 
-<QuotePermission level="basic" />
+<QuotePermission command="quote" />
 
 <SDKLinks module="quote" klass="QuoteContext" method="set_on_quote" go="OnQuote" />
 

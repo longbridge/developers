@@ -6,7 +6,7 @@ sidebar_position: 21
 
 Get Current Market Temperature
 
-<QuotePermission level="basic" />
+<QuotePermission command="market-temp" />
 
 <CliCommand>
 # HK market sentiment temperature

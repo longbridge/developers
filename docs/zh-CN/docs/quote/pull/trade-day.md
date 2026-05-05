@@ -7,7 +7,7 @@ sidebar_position: 16
 
 该接口用于获取市场的交易日信息。
 
-<QuotePermission level="basic" />
+<QuotePermission command="trading" />
 
 <CliCommand>
 # 港股未来交易日

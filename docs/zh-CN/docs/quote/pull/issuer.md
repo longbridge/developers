@@ -7,7 +7,7 @@ sidebar_position: 13
 
 该接口用于获取轮证发行商 ID 数据 (可每天同步一次)。
 
-<QuotePermission level="basic" />
+<QuotePermission command="warrant" />
 
 <CliCommand>
 # 港股权证发行商完整列表

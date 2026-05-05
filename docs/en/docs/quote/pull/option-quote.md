@@ -7,7 +7,7 @@ sidebar_position: 3
 
 This API is used to obtain the real-time quotes of US stock options, including the option-specific data.
 
-<QuotePermission level="basic" />
+<QuotePermission command="option" />
 
 <CliCommand>
 # AAPL call option $250 strike expiry 2026-04-17

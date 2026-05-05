@@ -7,7 +7,7 @@ sidebar_position: 10
 
 This API is used to obtain the history candlestick data of security.
 
-<QuotePermission level="basic" />
+<QuotePermission command="kline" />
 
 <CliCommand>
 # Q1 2025 daily bars

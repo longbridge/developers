@@ -7,7 +7,7 @@ sidebar_position: 1
 
 This API is used to obtain the basic information of securities.
 
-<QuotePermission level="basic" />
+<QuotePermission command="static" />
 
 <CliCommand>
 # static info for Tesla (name, lot size, shares, etc.)

@@ -7,7 +7,7 @@ sidebar_position: 17
 
 該接口用於獲取標的當日的資金流向。
 
-<QuotePermission level="basic" />
+<QuotePermission command="capital" />
 
 <CliCommand>
 # Tesla 今日資金流向時序

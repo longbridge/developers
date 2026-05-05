@@ -7,7 +7,7 @@ sidebar_position: 19
 
 This API is used to obtain the calculate indexes of securities.
 
-<QuotePermission level="basic" />
+<QuotePermission command="calc-index" />
 
 <CliCommand>
 # PE, PB, EPS and other indexes

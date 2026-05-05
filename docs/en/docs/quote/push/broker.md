@@ -7,7 +7,7 @@ sidebar_position: 3
 
 Real-time brokers data push of the subscribed security.
 
-<QuotePermission level="lv2" market="HK only" />
+<QuotePermission command="brokers" />
 
 <SDKLinks module="quote" klass="QuoteContext" method="set_on_brokers" go="OnBrokers" />
 

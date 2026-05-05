@@ -7,7 +7,7 @@ sidebar_position: 9
 
 该接口用于获取标的的当日分时数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="intraday" />
 
 <CliCommand>
 # Tesla 今日分时数据

@@ -7,7 +7,7 @@ sidebar_position: 9
 
 This API is used to obtain the intraday data of security.
 
-<QuotePermission level="basic" />
+<QuotePermission command="intraday" />
 
 <CliCommand>
 # minute-by-minute intraday data for Tesla

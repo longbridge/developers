@@ -11,7 +11,7 @@ headingLevel: 2
 
 Retrieve the List of Securities
 
-<QuotePermission level="basic" />
+<QuotePermission command="security-list" />
 
 <CliCommand>
 # list of US overnight-eligible securities

@@ -6,7 +6,7 @@ sidebar_position: 21
 
 獲取當前市場溫度
 
-<QuotePermission level="basic" />
+<QuotePermission command="market-temp" />
 
 <CliCommand>
 # 港股市場溫度

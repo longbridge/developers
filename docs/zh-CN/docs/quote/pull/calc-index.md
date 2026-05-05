@@ -7,7 +7,7 @@ sidebar_position: 19
 
 该接口用于获取标的计算指标数据，根据请求指定的计算指标返回数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="calc-index" />
 
 <CliCommand>
 # PE、PB、EPS 等核心指标

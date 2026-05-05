@@ -7,7 +7,7 @@ sidebar_position: 15
 
 該接口用於獲取各市場當日交易時段。
 
-<QuotePermission level="basic" />
+<QuotePermission command="market-status" />
 
 <CliCommand>
 # 所有市場今日交易時段（美股、港股、A 股、新加坡）

@@ -7,7 +7,7 @@ sidebar_position: 1
 
 已订阅标的的实时价格推送，推送的数据结构中，只有有变化的字段才会填充数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="quote" />
 
 <SDKLinks module="quote" klass="QuoteContext" method="set_on_quote" go="OnQuote" />
 

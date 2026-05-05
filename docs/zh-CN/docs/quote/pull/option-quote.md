@@ -7,7 +7,7 @@ sidebar_position: 3
 
 该接口用于获取美股期权标的的实时行情，包括期权的特有数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="option" />
 
 <CliCommand>
 # AAPL 看涨期权 $250 行权价 2026-04-17 到期

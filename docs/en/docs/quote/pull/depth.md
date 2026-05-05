@@ -7,7 +7,7 @@ sidebar_position: 5
 
 This API is used to obtain the depth data of security.
 
-<QuotePermission level="lv2" />
+<QuotePermission command="depth" />
 
 <CliCommand>
 # Level 2 order book for Tesla

@@ -11,7 +11,7 @@ headingLevel: 2
 
 獲取標的列表
 
-<QuotePermission level="basic" />
+<QuotePermission command="security-list" />
 
 <CliCommand>
 # 美股夜盤可交易標的列表

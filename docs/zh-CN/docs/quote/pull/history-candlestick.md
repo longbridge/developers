@@ -7,7 +7,7 @@ sidebar_position: 10
 
 该接口用于获取标的的历史 K 线数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="kline" />
 
 <CliCommand>
 # 2025 年 Q1 日 K

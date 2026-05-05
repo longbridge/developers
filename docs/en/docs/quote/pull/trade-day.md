@@ -7,7 +7,7 @@ sidebar_position: 16
 
 This API is used to obtain the trading days of the market.
 
-<QuotePermission level="basic" />
+<QuotePermission command="trading" />
 
 <CliCommand>
 # upcoming HK trading days

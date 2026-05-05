@@ -7,7 +7,7 @@ sidebar_position: 3
 
 This API is used to obtain the subscription information.
 
-<QuotePermission level="basic" />
+<QuotePermission command="subscriptions" />
 
 <CliCommand>
 # list active real-time WebSocket subscriptions

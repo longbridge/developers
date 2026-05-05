@@ -7,7 +7,7 @@ sidebar_position: 3
 
 该接口用于获取当前连接已订阅的标的行情。
 
-<QuotePermission level="basic" />
+<QuotePermission command="subscriptions" />
 
 <CliCommand>
 # 查看当前 WebSocket 实时订阅状态

@@ -7,7 +7,7 @@ sidebar_position: 3
 
 該接口用於獲取美股期權標的的實時行情，包括期權的特有數據。
 
-<QuotePermission level="basic" />
+<QuotePermission command="option" />
 
 <CliCommand>
 # AAPL 認購期權 $250 行權價 2026-04-17 到期

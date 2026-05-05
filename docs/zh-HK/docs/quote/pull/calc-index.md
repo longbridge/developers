@@ -7,7 +7,7 @@ sidebar_position: 19
 
 該接口用於獲取標的計算指標數據，根據請求指定的計算指標返回數據。
 
-<QuotePermission level="basic" />
+<QuotePermission command="calc-index" />
 
 <CliCommand>
 # PE、PB、EPS 等核心指標

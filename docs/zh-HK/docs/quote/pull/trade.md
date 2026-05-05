@@ -7,7 +7,7 @@ sidebar_position: 8
 
 該接口用於獲取標的的成交明細數據。
 
-<QuotePermission level="basic" />
+<QuotePermission command="trades" />
 
 <CliCommand>
 # Tesla 最新逐筆成交

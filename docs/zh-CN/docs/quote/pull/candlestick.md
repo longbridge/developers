@@ -7,7 +7,7 @@ sidebar_position: 20
 
 该接口用于获取标的的 K 线数据。
 
-<QuotePermission level="basic" />
+<QuotePermission command="kline" />
 
 :::info
 注意：本接口只能获取到最近 1000 根 K 线，如需获取较长的历史数据，请访问接口：获取标的历史 K 线。

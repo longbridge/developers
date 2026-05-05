@@ -7,7 +7,7 @@ sidebar_position: 8
 
 This API is used to obtain the trades data of security.
 
-<QuotePermission level="basic" />
+<QuotePermission command="trades" />
 
 <CliCommand>
 # recent tick-by-tick trades for Tesla

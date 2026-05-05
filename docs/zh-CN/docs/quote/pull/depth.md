@@ -7,7 +7,7 @@ sidebar_position: 5
 
 该接口用于获取标的的盘口数据。
 
-<QuotePermission level="lv2" />
+<QuotePermission command="depth" />
 
 <CliCommand>
 # Tesla Level 2 盘口

@@ -7,7 +7,7 @@ sidebar_position: 2
 
 该接口用于获取标的的实时行情 (支持所有类型标的）。
 
-<QuotePermission level="basic" />
+<QuotePermission command="quote" />
 
 <CliCommand>
 # Tesla 实时行情

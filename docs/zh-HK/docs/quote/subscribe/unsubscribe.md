@@ -7,7 +7,7 @@ sidebar_position: 2
 
 該接口用於取消訂閱標的行情數據。
 
-<QuotePermission level="basic" />
+<QuotePermission command="subscriptions" />
 
 <SDKLinks module="quote" klass="QuoteContext" method="unsubscribe" />
 

@@ -7,7 +7,7 @@ sidebar_position: 4
 
 已订阅的标的的实时逐笔成交明细推送。
 
-<QuotePermission level="basic" />
+<QuotePermission command="trades" />
 
 <SDKLinks module="quote" klass="QuoteContext" method="set_on_trades" go="OnTrade" />
 
