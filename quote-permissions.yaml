@@ -272,6 +272,9 @@ commands:
   anomaly:
     level: basic
 
+  filings:
+    level: basic
+
   # ── 衍生品 ───────────────────────────────────────────────────
   option:
     level: opra
