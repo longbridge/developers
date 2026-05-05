@@ -1,10 +1,73 @@
 # 行情权限说明 - CLI 命令级别的行情权限要求
 # 来源：产品整理（CLI 行情权限说明.xlsx）
-# 字段说明：
-#   level: 用于组件样式 (basic | lv1 | lv2 | opra)
-#   market: 可选，限定市场范围（如 "HK only"）
-#   description: 各语言的权限说明文字（省略则使用 level 默认文案）
 
+# ── UI 文案 ─────────────────────────────────────────────────────
+ui:
+  link_url: 'https://open.longbridge.com/account'
+  permission_title:
+    en: 'Quote Permission Required'
+    zh-CN: '行情权限要求'
+    zh-HK: '行情權限要求'
+  separate_note:
+    en: 'OpenAPI quote perms are separate from App/Web perms'
+    zh-CN: 'OpenAPI 行情权限独立于 App/Web 行情权限'
+    zh-HK: 'OpenAPI 行情權限獨立於 App/Web 行情權限'
+  activated_label:
+    en: 'Activated'
+    zh-CN: '已开通'
+    zh-HK: '已開通'
+  not_activated_label:
+    en: 'Not activated'
+    zh-CN: '未开通'
+    zh-HK: '未開通'
+  already_activated_note:
+    en: 'You already have this permission'
+    zh-CN: '您已开通此权限'
+    zh-HK: '您已開通此權限'
+  market_labels:
+    HK: { en: 'HK', zh-CN: '港股', zh-HK: '港股' }
+    US: { en: 'US', zh-CN: '美股', zh-HK: '美股' }
+    'HK only': { en: 'HK only', zh-CN: '仅港股', zh-HK: '僅港股' }
+
+# ── 权限等级定义 ─────────────────────────────────────────────────
+levels:
+  basic:
+    label: { en: 'Basic', zh-CN: '基础行情', zh-HK: '基礎行情' }
+    description:
+      en: 'Included with OpenAPI activation — no extra purchase needed.'
+      zh-CN: '开通 OpenAPI 后自动获得，无需额外购买。'
+      zh-HK: '開通 OpenAPI 後自動獲得，無需額外購買。'
+    link_text: { en: 'My Quotes', zh-CN: '我的行情权限', zh-HK: '我的行情權限' }
+  lv1:
+    label: { en: 'LV1 Real-time', zh-CN: 'LV1 实时', zh-HK: 'LV1 實時' }
+    description:
+      en: 'Enables real-time HK stock quotes and WebSocket quote push. Purchase LV1 in the Quote Store.'
+      zh-CN: '开启港股实时报价，支持行情数据实时推送。需在行情商城购买 LV1 行情卡。'
+      zh-HK: '開啟港股實時報價，支持行情數據實時推送。需在行情商城購買 LV1 行情卡。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+  lv2:
+    label: { en: 'LV2 Subscription', zh-CN: 'LV2 订阅', zh-HK: 'LV2 訂閱' }
+    description:
+      en: 'Provides top-10 bid/ask order book depth and real-time depth push. Purchase LV2 in the Quote Store.'
+      zh-CN: '提供十档买卖盘口数据，支持深度行情实时推送。需在行情商城购买 LV2 行情卡。'
+      zh-HK: '提供十檔買賣盤口數據，支持深度行情實時推送。需在行情商城購買 LV2 行情卡。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+  overnight:
+    label: { en: 'Overnight', zh-CN: '盘前盘后', zh-HK: '盤前盤後' }
+    description:
+      en: 'US extended hours (pre/post-market) data. Requires LV1 purchase and environment variable LONGBRIDGE_ENABLE_OVERNIGHT=true.'
+      zh-CN: '美股盘前/盘后行情数据。需购买 LV1 行情卡，并设置环境变量 LONGBRIDGE_ENABLE_OVERNIGHT=true。'
+      zh-HK: '美股盤前/盤後行情數據。需購買 LV1 行情卡，並設置環境變量 LONGBRIDGE_ENABLE_OVERNIGHT=true。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+  opra:
+    label: { en: 'OPRA', zh-CN: 'OPRA 期权', zh-HK: 'OPRA 期權' }
+    description:
+      en: 'US options real-time quotes. Purchase "OPRA US Options Quotes (OpenAPI)" in the Quote Store.'
+      zh-CN: '美股期权实时行情。需在行情商店购买「OPRA US Options Quotes (OpenAPI)」行情卡。'
+      zh-HK: '美股期權實時行情。需在行情商店購買「OPRA US Options Quotes (OpenAPI)」行情卡。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+
+# ── 命令级权限（level 默认文案可省略，自动 fallback 到 levels 节）──
 commands:
   # ── 实时行情 ─────────────────────────────────────────────────
   quote:

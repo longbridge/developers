@@ -301,7 +301,7 @@ function parseQuotePermission(content: string, locale: Locale): string {
     const cmdDesc = cmdEntry?.description
     const desc = cmdDesc ? (cmdDesc[locale] ?? cmdDesc['en'] ?? '') : l(QUOTE_DESCRIPTIONS[level as keyof typeof QUOTE_DESCRIPTIONS] ?? { en: '' })
     const title = l(QUOTE_PERMISSION_TITLE)
-    const linkUrl = QUOTE_LINK_URL[level as keyof typeof QUOTE_LINK_URL]
+    const linkUrl = QUOTE_LINK_URL
     const linkText = l(QUOTE_LINK_TEXT[level as keyof typeof QUOTE_LINK_TEXT] ?? { en: 'Activate' })
     const note = l(QUOTE_SEPARATE_NOTE)
 

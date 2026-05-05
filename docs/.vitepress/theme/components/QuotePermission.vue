@@ -84,7 +84,7 @@ const description = computed(() => {
   return l(QUOTE_DESCRIPTIONS[effectiveLevel.value])
 })
 const descriptionLines = computed(() => description.value.split('\n').filter(Boolean))
-const linkUrl = computed(() => QUOTE_LINK_URL[effectiveLevel.value])
+const linkUrl = computed(() => QUOTE_LINK_URL)
 const linkText = computed(() => l(QUOTE_LINK_TEXT[effectiveLevel.value]))
 const separateNote = computed(() => l(QUOTE_SEPARATE_NOTE))
 const marketLabel = computed(() =>
