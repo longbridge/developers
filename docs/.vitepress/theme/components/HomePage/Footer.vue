@@ -68,6 +68,7 @@ const rightLinks = [
   { href: '/docs/mcp', label: 'MCP' },
   { href: '/docs/cli', label: 'CLI' },
   { href: '/docs/llm', label: 'LLM' },
+  { href: 'https://github.com/longbridge/developers/issues', label: 'Feedback' },
 ]
 </script>
 

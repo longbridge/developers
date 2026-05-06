@@ -1,0 +1,285 @@
+# 行情权限说明 - CLI 命令级别的行情权限要求
+# 来源：产品整理（CLI 行情权限说明.xlsx）
+
+# ── UI 文案 ─────────────────────────────────────────────────────
+ui:
+  link_url: 'https://open.longbridge.com/account'
+  permission_title:
+    en: 'Quote Permission Required'
+    zh-CN: '行情权限要求'
+    zh-HK: '行情權限要求'
+  separate_note:
+    en: 'OpenAPI quote perms are separate from App/Web perms'
+    zh-CN: 'OpenAPI 行情权限独立于 App/Web 行情权限'
+    zh-HK: 'OpenAPI 行情權限獨立於 App/Web 行情權限'
+  market_labels:
+    HK: { en: 'HK', zh-CN: '港股', zh-HK: '港股' }
+    US: { en: 'US', zh-CN: '美股', zh-HK: '美股' }
+    'HK only': { en: 'HK only', zh-CN: '仅港股', zh-HK: '僅港股' }
+
+# ── 权限等级定义 ─────────────────────────────────────────────────
+levels:
+  basic:
+    label: { en: 'Basic', zh-CN: '基础行情', zh-HK: '基礎行情' }
+    description:
+      en: 'Included with OpenAPI activation — no extra purchase needed.'
+      zh-CN: '开通 OpenAPI 后自动获得，无需额外购买。'
+      zh-HK: '開通 OpenAPI 後自動獲得，無需額外購買。'
+    link_text: { en: 'My Quotes', zh-CN: '我的行情权限', zh-HK: '我的行情權限' }
+  lv1:
+    label: { en: 'LV1 Real-time', zh-CN: 'LV1 实时', zh-HK: 'LV1 實時' }
+    description:
+      en: 'Enables real-time HK stock quotes and WebSocket quote push. Purchase LV1 in the Quote Store.'
+      zh-CN: '开启港股实时报价，支持行情数据实时推送。需在行情商城购买 LV1 行情卡。'
+      zh-HK: '開啟港股實時報價，支持行情數據實時推送。需在行情商城購買 LV1 行情卡。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+  lv2:
+    label: { en: 'LV2 Advanced', zh-CN: 'LV2 高级行情', zh-HK: 'LV2 高級行情' }
+    description:
+      en: 'Provides top-10 bid/ask order book depth and real-time depth push. Purchase LV2 in the Quote Store.'
+      zh-CN: '提供十档买卖盘口数据，支持深度行情实时推送。需在行情商城购买 LV2 行情卡。'
+      zh-HK: '提供十檔買賣盤口數據，支持深度行情實時推送。需在行情商城購買 LV2 行情卡。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+  overnight:
+    label: { en: 'Overnight', zh-CN: '盘前盘后', zh-HK: '盤前盤後' }
+    description:
+      en: 'US extended hours (pre/post-market) data. Requires LV1 purchase and environment variable LONGBRIDGE_ENABLE_OVERNIGHT=true.'
+      zh-CN: '美股盘前/盘后行情数据。需购买 LV1 行情卡，并设置环境变量 LONGBRIDGE_ENABLE_OVERNIGHT=true。'
+      zh-HK: '美股盤前/盤後行情數據。需購買 LV1 行情卡，並設置環境變量 LONGBRIDGE_ENABLE_OVERNIGHT=true。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+  opra:
+    label: { en: 'OPRA', zh-CN: 'OPRA 期权', zh-HK: 'OPRA 期權' }
+    description:
+      en: 'US options real-time quotes. Purchase "OPRA US Options Quotes (OpenAPI)" in the Quote Store.'
+      zh-CN: '美股期权实时行情。需在行情商店购买「OPRA 美股期权行情 (OpenAPI)」行情卡。'
+      zh-HK: '美股期權實時行情。需在行情商店購買「OPRA 美股期權行情 (OpenAPI)」行情卡。'
+    link_text: { en: 'Go to Quote Store', zh-CN: '前往行情商城', zh-HK: '前往行情商城' }
+
+# ── 命令级权限（level 默认文案可省略，自动 fallback 到 levels 节）──
+commands:
+  # ── 实时行情 ─────────────────────────────────────────────────
+  quote:
+    level: basic
+    description:
+      en: |-
+        US stocks: Nasdaq Basic included by default (pre-market, regular, and after-hours sessions); overnight quotes require purchasing "LV1 Real-time Quotes (OpenAPI)" and enabling overnight configuration (see Q6 & Q7 in the Broker FAQ).
+        HK stocks: LV1 real-time quotes included by default.
+        US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)" in the Quote Store.
+      zh-CN: |-
+        美股：默认赠送 Nasdaq Basic 实时行情（含盘前、盘中、盘后时段）；如需夜盘行情，需购买「LV1 实时行情 (OpenAPI)」行情卡，并开启夜盘配置（详见 Broker FAQ Q6、Q7）。
+        港股：默认赠送 LV1 实时行情。
+        美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡。
+      zh-HK: |-
+        美股：預設贈送 Nasdaq Basic 實時行情（含盤前、盤中、盤後時段）；如需夜盤行情，需購買「LV1 實時行情 (OpenAPI)」行情卡，並開啟夜盤配置（詳見 Broker FAQ Q6、Q7）。
+        港股：預設贈送 LV1 實時行情。
+        美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡。
+    store_cards:
+      en: |
+        US stocks (overnight): LV1 Real-time Quotes (OpenAPI) — Nasdaq real-time quotes with best bid and offer (including overnight trading), for OpenAPI only
+        US options: OPRA US Options Quotes (OpenAPI) — OPRA US options real-time quotes with best bid and offer, for OpenAPI only
+      zh-CN: |
+        美股（夜盘）：LV1 实时行情 (OpenAPI) — 纳斯达克实时成交行情及最优买卖一档报价（含夜盘），适用于 OpenAPI
+        美股期权：OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI
+
+  # ── 盘口深度 ─────────────────────────────────────────────────
+  depth:
+    level: lv1
+    description:
+      en: |-
+        US stocks: Nasdaq Basic 1-level bid/ask included by default; overnight requires LV1.
+        HK stocks: LV1 1-level bid/ask included by default; 10-level order book requires "LV2 Advanced Quotes - Plus (OpenAPI)".
+        US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)".
+      zh-CN: |-
+        美股：默认赠送 Nasdaq Basic 一档买卖盘报价；夜盘报价需购买 LV1。
+        港股：默认赠送 LV1 一档买卖盘报价；十档买卖盘需购买「LV2 高级行情 - Plus (OpenAPI)」行情卡。
+        美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡。
+      zh-HK: |-
+        美股：預設贈送 Nasdaq Basic 一檔買賣盤報價；夜盤報價需購買 LV1。
+        港股：預設贈送 LV1 一檔買賣盤報價；十檔買賣盤需購買「LV2 高級行情 - Plus (OpenAPI)」行情卡。
+        美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡。
+    store_cards:
+      en: |
+        US stocks (overnight): LV1 Real-time Quotes (OpenAPI) — Nasdaq real-time quotes with best bid and offer (including overnight trading), for OpenAPI only
+        HK stocks (LV2): LV2 Advanced Quotes - Plus (OpenAPI) — HKEX stocks real-time quotes with 10 levels bid & ask (OpenAPI only)
+        US options: OPRA US Options Quotes (OpenAPI) — OPRA US options real-time quotes with best bid and offer, for OpenAPI only
+      zh-CN: |
+        美股（夜盘）：LV1 实时行情 (OpenAPI) — 纳斯达克实时成交行情及最优买卖一档报价（含夜盘），适用于 OpenAPI
+        港股（LV2）：LV2 高级行情 - Plus (OpenAPI) — 港交所股票实时成交行情及十档买卖盘报价，适用于 OpenAPI
+        美股期权：OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI
+
+  # ── 经纪队列 ─────────────────────────────────────────────────
+  brokers:
+    level: lv2
+    market: "HK only"
+    description:
+      en: |-
+        HK-specific data: provides the top 40 bid/ask broker queues.
+        No permission included by default — purchase "LV2 Advanced Quotes - Plus (OpenAPI)" in the Quote Store.
+      zh-CN: |-
+        港股特有数据，提供前 40 个买卖盘经纪队列。
+        默认无权限，需到行情商店购买「LV2 高级行情 - Plus (OpenAPI)」行情卡。
+      zh-HK: |-
+        港股特有數據，提供前 40 個買賣盤經紀隊列。
+        預設無權限，需到行情商店購買「LV2 高級行情 - Plus (OpenAPI)」行情卡。
+    store_cards:
+      en: "LV2 Advanced Quotes - Plus (OpenAPI) — HKEX stocks real-time quotes with 10 levels bid & ask (OpenAPI only)"
+      zh-CN: "LV2 高级行情 - Plus (OpenAPI) — 港交所股票实时成交行情及十档买卖盘报价，适用于 OpenAPI"
+
+  # ── 逐笔成交 ─────────────────────────────────────────────────
+  trades:
+    level: basic
+    description:
+      en: |-
+        US stocks: Nasdaq Basic included by default (last ~1,000 ticks during pre-market, regular, and after-hours sessions); overnight trades require LV1 purchase.
+        HK stocks: LV1 included by default (last ~1,000 ticks).
+        US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)".
+      zh-CN: |-
+        美股：默认赠送 Nasdaq Basic 实时行情（近 1000 笔，含盘前、盘中、盘后时段）；夜盘数据需购买 LV1。
+        港股：默认赠送 LV1 实时行情（近 1000 笔）。
+        美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡，最多可获取近 1000 笔。
+      zh-HK: |-
+        美股：預設贈送 Nasdaq Basic 實時行情（近 1000 筆，含盤前、盤中、盤後時段）；夜盤數據需購買 LV1。
+        港股：預設贈送 LV1 實時行情（近 1000 筆）。
+        美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡，最多可獲取近 1000 筆。
+    store_cards:
+      en: |
+        US stocks (overnight): LV1 Real-time Quotes (OpenAPI) — Nasdaq real-time quotes with best bid and offer (including overnight trading), for OpenAPI only
+        US options: OPRA US Options Quotes (OpenAPI) — OPRA US options real-time quotes with best bid and offer, for OpenAPI only
+      zh-CN: |
+        美股（夜盘）：LV1 实时行情 (OpenAPI) — 纳斯达克实时成交行情及最优买卖一档报价（含夜盘），适用于 OpenAPI
+        美股期权：OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI
+
+  # ── 分时数据 ─────────────────────────────────────────────────
+  intraday:
+    level: basic
+    description:
+      en: |-
+        US stocks: Nasdaq Basic included by default (pre-market, regular, and after-hours sessions); overnight data requires LV1 purchase.
+        HK stocks: LV1 real-time quotes included by default.
+        US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)".
+      zh-CN: |-
+        美股：默认赠送 Nasdaq Basic 实时行情（含盘前、盘中、盘后时段）；夜盘数据需购买 LV1。
+        港股：默认赠送 LV1 实时行情。
+        美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡。
+      zh-HK: |-
+        美股：預設贈送 Nasdaq Basic 實時行情（含盤前、盤中、盤後時段）；夜盤數據需購買 LV1。
+        港股：預設贈送 LV1 實時行情。
+        美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡。
+    store_cards:
+      en: |
+        US stocks (overnight): LV1 Real-time Quotes (OpenAPI) — Nasdaq real-time quotes with best bid and offer (including overnight trading), for OpenAPI only
+        US options: OPRA US Options Quotes (OpenAPI) — OPRA US options real-time quotes with best bid and offer, for OpenAPI only
+      zh-CN: |
+        美股（夜盘）：LV1 实时行情 (OpenAPI) — 纳斯达克实时成交行情及最优买卖一档报价（含夜盘），适用于 OpenAPI
+        美股期权：OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI
+
+  # ── 历史 K 线 ─────────────────────────────────────────────────
+  kline:
+    level: basic
+    description:
+      en: |-
+        Quota-based access: 100–3,000 unique symbols per calendar month depending on account tier (resets monthly; see quota table in the docs).
+        US stocks: Nasdaq Basic included by default; overnight requires LV1.
+        HK stocks: LV1 included by default.
+        US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)".
+      zh-CN: |-
+        按账户等级配额，每自然月可查询 100–3,000 个标的（每月重置，详见文档中的配额表）。
+        美股：默认赠送 Nasdaq Basic 行情；夜盘需购买 LV1。
+        港股：默认赠送 LV1 行情。
+        美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡。
+      zh-HK: |-
+        按帳戶等級配額，每自然月可查詢 100–3,000 個標的（每月重置，詳見文檔中的配額表）。
+        美股：預設贈送 Nasdaq Basic 行情；夜盤需購買 LV1。
+        港股：預設贈送 LV1 行情。
+        美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡。
+    store_cards:
+      en: |
+        US stocks (overnight): LV1 Real-time Quotes (OpenAPI) — Nasdaq real-time quotes with best bid and offer (including overnight trading), for OpenAPI only
+        US options: OPRA US Options Quotes (OpenAPI) — OPRA US options real-time quotes with best bid and offer, for OpenAPI only
+      zh-CN: |
+        美股（夜盘）：LV1 实时行情 (OpenAPI) — 纳斯达克实时成交行情及最优买卖一档报价（含夜盘），适用于 OpenAPI
+        美股期权：OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI
+
+  # ── 静态数据（无需额外权限）─────────────────────────────────
+  static:
+    level: basic
+
+  calc-index:
+    level: basic
+
+  capital:
+    level: basic
+
+  market-temp:
+    level: basic
+
+  trading:
+    level: basic
+
+  security-list:
+    level: basic
+
+  constituent:
+    level: basic
+
+  participants:
+    level: basic
+
+  market-status:
+    level: basic
+
+  subscriptions:
+    level: basic
+
+  broker-holding:
+    level: basic
+
+  ah-premium:
+    level: basic
+
+  # ── 交易统计 ─────────────────────────────────────────────────
+  trade-stats:
+    level: basic
+    description:
+      en: |-
+        US stocks: Nasdaq Basic included by default (pre-market, regular, and after-hours sessions); overnight data requires LV1 purchase.
+        HK stocks: LV1 real-time quotes included by default.
+        US options: not supported.
+      zh-CN: |-
+        美股：默认赠送 Nasdaq Basic 实时行情（含盘前、盘中、盘后时段）；夜盘数据需购买 LV1。
+        港股：默认赠送 LV1 实时行情。
+        美股期权：不支持该接口。
+      zh-HK: |-
+        美股：預設贈送 Nasdaq Basic 實時行情（含盤前、盤中、盤後時段）；夜盤數據需購買 LV1。
+        港股：預設贈送 LV1 實時行情。
+        美股期權：不支持該接口。
+    store_cards:
+      en: "US stocks (overnight): LV1 Real-time Quotes (OpenAPI) — Nasdaq real-time quotes with best bid and offer (including overnight trading), for OpenAPI only"
+      zh-CN: "美股（夜盘）：LV1 实时行情 (OpenAPI) — 纳斯达克实时成交行情及最优买卖一档报价（含夜盘），适用于 OpenAPI"
+
+  anomaly:
+    level: basic
+
+  filings:
+    level: basic
+
+  # ── 衍生品 ───────────────────────────────────────────────────
+  option:
+    level: opra
+    description:
+      en: |-
+        No US options quote permission by default for new funded accounts.
+        Purchase "OPRA US Options Quotes (OpenAPI)" in the Quote Store to access US options real-time data.
+      zh-CN: |-
+        新入金客户默认无美股期权行情权限，需到行情商店购买「OPRA 美股期权行情 (OpenAPI)」行情卡，以获取美股期权实时数据。
+      zh-HK: |-
+        新入金客戶預設無美股期權行情權限，需到行情商店購買「OPRA 美股期權行情 (OpenAPI)」行情卡，以獲取美股期權實時數據。
+    store_cards:
+      en: "OPRA US Options Quotes (OpenAPI) — OPRA US options real-time quotes with best bid and offer, for OpenAPI only"
+      zh-CN: "OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI"
+
+  warrant:
+    level: basic
+
+  short-positions:
+    level: basic

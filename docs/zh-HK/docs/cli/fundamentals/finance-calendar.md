@@ -6,37 +6,52 @@ sidebar_position: 6
 
 # longbridge finance-calendar
 
-瀏覽即將到來的財經事件——財報發布、股息派發、IPO 及宏觀經濟數據發布，支持按標的、市場或事件類型篩選。
+瀏覽即將到來的財經事件——財報發布、股息派發、拆合股、IPO 及宏觀經濟數據，支援按標的、自選股、市場或事件類型篩選。
 
-## 基本用法
+## 子命令
 
-```bash
-longbridge finance-calendar financial --symbol TSLA.US
-```
-
-```
-2026.01.28 (ET)  [Financials]  US  Tesla (TSLA.US)
-  Q4 FY2025 Earnings Release
-  EPS: Est 0.3466 / Act 0.24  |  Revenue: Est $24.8B / Act $24.9B
-```
+| 子命令      | 說明                         |
+| ----------- | ---------------------------- |
+| `report`    | 財報日曆（即將和最新發布）   |
+| `dividend`  | 股息公告                     |
+| `split`     | 拆股與合股                   |
+| `ipo`       | IPO 上市                     |
+| `macrodata` | 宏觀經濟數據發布             |
+| `closed`    | 市場休市日                   |
 
 ## 示例
 
-### 查看某股票的即將財報
+### 即將發布的財報
 
 ```bash
-longbridge finance-calendar financial --symbol TSLA.US
+longbridge finance-calendar report
 ```
 
-顯示特斯拉即將到來的財報日期及分析師對 EPS 和營收的預測。使用 `--symbol` 縮小到特定股票。
+顯示從今天起即將發布的財報事件，同時展示近期已發布季度的 EPS 和營收預估值與實際值。
 
-### 查看美股今日股息事件
+### 自選股中的美股財報
 
 ```bash
-longbridge finance-calendar dividend --market US
+longbridge finance-calendar report --filter watchlist --market US
 ```
 
-列出所有美股今日股息相關事件（除息日、派息日）。適用於追蹤哪些股票即將除息。
+將財報日曆限定為自選股中的美股。使用 `--filter positions` 則限定為當前持倉。
+
+### 持倉股票的派息事件
+
+```bash
+longbridge finance-calendar dividend --filter positions
+```
+
+只顯示當前持倉股票的股息事件，適合追蹤即將到來的除息日和派息日。
+
+### 港股拆合股事件
+
+```bash
+longbridge finance-calendar split --market HK
+```
+
+顯示港股的拆股和合股事件。
 
 ### 高重要性宏觀事件
 

@@ -38,8 +38,8 @@ longbridge filing TSLA.US --format json
 ### 閱讀完整申報內容
 
 ```bash
-# 使用申報列表中的 id 讀取完整文件
-longbridge filing detail 633214836329945345
+# 使用標的和申報列表中的 id 讀取完整文件
+longbridge filing detail TSLA.US 633214836329945345
 ```
 
 返回申報文件的完整文本內容。適用於提取特定披露資訊，或將內容傳入 AI 模型進行分析。

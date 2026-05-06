@@ -6,6 +6,23 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-05
+
+### CLI v0.19.2
+
+- **`finance-calendar` 重构** — 改为子命令结构：`report`、`dividend`、`split`、`ipo`、`macrodata`、`closed`；新增 `--filter watchlist|positions` 按自选股或持仓筛选事件
+- **TUI 增强** — 支持鼠标操作；个股详情页新增折线图 / K 线图切换
+- **`quote`** — 新增「涨跌幅」列；`corp-action` 默认 30 条，`--all` 获取全部；`update --force` 跳过版本检查
+
+## 2026-04-30
+
+### CLI v0.19.0
+
+- **TUI 历史订单 + 撤单/改单** — 订单页面按 `Tab` 切换今日/历史；`c`/`m` 直接在终端撤单或改单
+- **`auth status` 行情套餐** — 展示已订阅套餐详情及行情商城二维码
+- **`quant run`** — 服务端执行量化指标脚本，基于历史 K 线数据计算
+- **`calc-index` 字段别名** — 支持短别名（`iv`、`oi`、`vol` 等），`--help` 分组展示
+
 ## 2026-04-28
 
 ### CLI v0.18.0

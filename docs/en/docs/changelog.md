@@ -6,6 +6,23 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-05
+
+### CLI v0.19.2
+
+- **`finance-calendar` revamp** — restructured into subcommands: `report`, `dividend`, `split`, `ipo`, `macrodata`, `closed`; new `--filter watchlist|positions` scopes events to your watchlist or holdings
+- **TUI enhancements** — full mouse support; chart type toggle (line / candlestick) in stock detail view
+- **`quote`** — new "Last Chg%" column; `corp-action` defaults to 30 items with `--all` for full list; `update --force` skips version check
+
+## 2026-04-30
+
+### CLI v0.19.0
+
+- **TUI: History orders + cancel/modify** — `Tab` on the Orders page switches between Today and History; `c`/`m` cancel or modify active orders in-terminal
+- **`auth status` quote packages** — displays subscribed quote packages and a QR code to the quote mall
+- **`quant run`** — run indicator scripts server-side against historical K-line data
+- **`calc-index` field aliases** — short aliases (`iv`, `oi`, `vol`, `mktcap`, `exp`, `strike`) and improved grouped `--help`
+
 ## 2026-04-28
 
 ### CLI v0.18.0

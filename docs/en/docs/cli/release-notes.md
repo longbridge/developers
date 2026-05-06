@@ -7,6 +7,23 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.19.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.2)
+
+- **`finance-calendar` revamp** — restructured into subcommands (`report`, `dividend`, `split`, `ipo`, `macrodata`, `closed`); new `--filter watchlist|positions` scopes events to your watchlist or holdings
+- **`quote`** — new "Last Chg%" column showing price change vs previous close
+- **`corp-action`** — defaults to 30 items; add `--all` to retrieve all records
+- **`update --force`** — skip version check and force reinstall; auto-retries with `sudo` on permission error
+- **TUI** — full mouse support; chart type toggle (line / candlestick) in stock detail view
+
+### [v0.19.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.0)
+
+- **TUI: History orders tab** — press `Tab` on the Orders page to switch between Today and History; History mode fetches the last 30 days by default; press `f` to open a date-range filter popup
+- **TUI: Cancel and modify orders** — press `c` to cancel or `m` to modify an active today order directly from the orders table; a confirmation step is shown before submitting
+- **`auth status` quote packages** — displays a formatted table of subscribed quote packages (market, name, validity period) and prints a QR code to open the quote mall in the Longbridge App
+- **`calc-index` field aliases** — short aliases for common fields: `iv` (implied_volatility), `oi` (open_interest), `vol` (volume), `mktcap` (total_market_value), `exp` (expiry_date), `strike` (strike_price); `--help` now groups fields into General and Options/Warrants sections
+- **`quant run` command** — run a quant indicator script server-side against historical K-line data; supply the script inline with `--script` or pipe via stdin; outputs computed plot values as JSON
+- **`update` release notes** — only the 10 most recent entries are shown after `longbridge update` completes; `sudo` is suggested when the binary lives in `/usr/local/bin`
+
 ### [v0.18.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.18.0)
 
 - **TUI: Orders page** — interactive orders table with trading shortcuts and an order entry dialog for placing trades without leaving the terminal

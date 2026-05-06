@@ -8,6 +8,8 @@ sidebar_position: 14
 
 查看各交易所当前的开市/休市状态。
 
+<QuotePermission command="market-status" />
+
 ## 基本用法
 
 ```bash

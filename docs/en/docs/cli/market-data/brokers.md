@@ -8,6 +8,8 @@ sidebar_position: 3
 
 See which broker IDs are present at each price level in the HK order book. Useful for identifying institutional order flow.
 
+<QuotePermission command="brokers" />
+
 ## Basic Usage
 
 ```bash

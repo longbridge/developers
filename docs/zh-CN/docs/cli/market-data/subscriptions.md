@@ -8,6 +8,8 @@ sidebar_position: 14
 
 列出当前所有有效的实时行情订阅。
 
+<QuotePermission command="subscriptions" />
+
 ## 基本用法
 
 ```bash

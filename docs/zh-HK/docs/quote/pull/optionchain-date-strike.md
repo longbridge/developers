@@ -7,6 +7,8 @@ sidebar_position: 12
 
 該接口用於獲取標的的期權鏈到期日期權標的列表。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # AAPL 2026-04-17 到期的行權價列表
 longbridge option chain AAPL.US --date 2026-04-17

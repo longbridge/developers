@@ -12,6 +12,8 @@ headingLevel: 2
 
 获取指定股票的公告列表。
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # Apple 监管文件和公告
 longbridge filing list AAPL.US

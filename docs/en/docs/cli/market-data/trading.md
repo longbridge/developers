@@ -8,6 +8,8 @@ sidebar_position: 11
 
 Look up trading session schedules and trading day calendars for any market.
 
+<QuotePermission command="trading" />
+
 ## Basic Usage
 
 ```bash
