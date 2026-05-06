@@ -85,8 +85,8 @@ export default defineConfig(
       const skillsDir = resolve(__dirname, '../../skills')
       const outSkillDir = resolve(siteConfig.outDir, 'skill')
       mkdirSync(outSkillDir, { recursive: true })
-      execSync(`zip -r "${outSkillDir}/longbridge.zip" longbridge`, { cwd: skillsDir })
-      console.log('✓ skill/longbridge.zip generated')
+      execSync(`zip -r "${outSkillDir}/longbridge-all.zip" longbridge`, { cwd: skillsDir })
+      console.log('✓ skill/longbridge-all.zip generated')
 
       // Region URL rewriting for static assets
       if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {

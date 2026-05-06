@@ -33,13 +33,13 @@ bunx skills add longbridge/developers -g -y
 
 **Or download the ZIP and install manually:**
 
-Download [longbridge.zip](https://open.longbridge.com/skill/longbridge.zip) and unzip it, then place the files in your AI tool's Skill directory (Claude Code: `.claude/skills/`, Cursor: paste into the Rules editor, other tools: see the README).
+Download [longbridge-all.zip](https://open.longbridge.com/skill/longbridge-all.zip) and unzip it, then place the files in your AI tool's Skill directory (Claude Code: `.claude/skills/`, Cursor: paste into the Rules editor, other tools: see the README).
 
 **OpenClaw** — send this message in chat and it handles everything automatically:
 
 ```
 Install the Longbridge Developers Skill from this zip file:
-https://open.longbridge.com/skill/longbridge.zip
+https://open.longbridge.com/skill/longbridge-all.zip
 ```
 
 ---
