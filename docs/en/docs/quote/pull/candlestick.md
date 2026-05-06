@@ -7,6 +7,8 @@ sidebar_position: 20
 
 This API is used to obtain the candlestick data of security.
 
+<QuotePermission command="kline" />
+
 :::info
 Note: This interface can only retrieve the last 1000 candlesticks. To obtain longer historical data, please visit the interface: Get Security History Candlesticks.
 :::
@@ -38,7 +40,7 @@ longbridge kline NVDA.US --period day --count 20
 | period        | int32  | Yes      | Candlestick period, for example: `1000`, see [Period](../objects#period---candlestick-period)                                                                                             |
 | count         | int32  | Yes      | Count of cancdlestick, for example: `100`<br /><br />**Check rules:** <br />maximum count is `1000`                                                                                       |
 | adjust_type   | int32  | Yes      | Adjustment type, for example: `0`, see [AdjustType](../objects#adjusttype---candlestick-adjustment-type)                                                                                  |
-| trade_session | int32  | No       | Trading session, 0: intraday, 100: All (pre, intraday, post, overnight)<br/><br/>Note: Overnight data requires purchasing the "LV1 Real-time Quote (OpenAPI)" quote card. US stocks only. |
+| trade_session | int32  | No       | Trading session, 0: intraday, 100: All (pre, intraday, post, overnight)<br/><br/>Note: Overnight data requires purchasing the "LV1 Real-time Quotes (OpenAPI)" quote card. US stocks only. |
 
 ### Protobuf
 

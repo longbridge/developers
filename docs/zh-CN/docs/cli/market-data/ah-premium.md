@@ -8,6 +8,8 @@ sidebar_position: 16
 
 查看 A/H 股溢价率——K 线历史数据或分时数据。
 
+<QuotePermission command="ah-premium" />
+
 ## 基本用法
 
 ```bash

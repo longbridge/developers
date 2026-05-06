@@ -6,6 +6,8 @@ sidebar_position: 21
 
 Get Current Market Temperature
 
+<QuotePermission command="market-temp" />
+
 <CliCommand>
 # HK market sentiment temperature
 longbridge market-temp HK

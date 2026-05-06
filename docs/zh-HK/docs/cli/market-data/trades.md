@@ -8,6 +8,8 @@ sidebar_position: 4
 
 取得某標的的最近逐筆成交記錄，包括價格、成交量、時間和成交方向。
 
+<QuotePermission command="trades" />
+
 ## 基本用法
 
 ```bash

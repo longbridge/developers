@@ -6,23 +6,20 @@ sidebar_position: 9
 
 # longbridge capital
 
-追蹤盤中資金流向——通過 `flow` 子命令逐分鐘查看大、中、小資金的流入流出，或通過 `dist` 子命令查看資金分佈快照。
+追蹤盤中資金流向——默認顯示大、中、小資金分佈快照，加 `--flow` 參數可獲取逐分鐘時序數據。
+
+<QuotePermission command="capital" />
 
 ## 基本用法
 
 ```bash
-longbridge capital flow TSLA.US
+longbridge capital TSLA.US
 ```
 
 ```
-| Time                | Inflow   |
-|---------------------|----------|
-| 2026-04-09 13:30:00 | 1100.46  |
-| 2026-04-09 13:31:00 | 1129.09  |
-| 2026-04-09 13:32:00 | 1711.27  |
-| 2026-04-09 13:33:00 | 1955.54  |
-| 2026-04-09 13:34:00 | 1609.27  |
-...
+| large_in   | medium_in   | small_in    | large_out  | medium_out  | small_out   |
+|------------|-------------|-------------|------------|-------------|-------------|
+| 30160.97   | 131976.32   | 134017.99   | 21801.89   | 132803.77   | 124441.20   |
 ```
 
 ## 示例
@@ -30,7 +27,7 @@ longbridge capital flow TSLA.US
 ### 逐分鐘追蹤大資金淨流入
 
 ```bash
-longbridge capital flow TSLA.US --format json
+longbridge capital TSLA.US --flow --format json
 ```
 
 ```json
@@ -46,7 +43,7 @@ longbridge capital flow TSLA.US --format json
 ### 快照：大中小資金分佈
 
 ```bash
-longbridge capital dist TSLA.US --format json
+longbridge capital TSLA.US --format json
 ```
 
 ```json

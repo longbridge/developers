@@ -11,6 +11,8 @@ headingLevel: 2
 
 Update watched group
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # add symbols to a group
 longbridge watchlist update <id> --add TSLA.US AAPL.US
