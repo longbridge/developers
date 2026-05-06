@@ -25,6 +25,7 @@ interface ToolSchema {
 
 interface Tool {
   name: string
+  title?: string
   description: string
   inputSchema?: ToolSchema
 }
@@ -79,6 +80,7 @@ const filtered = computed<Tool[]>(() => {
   return allTools.filter(
     (t) =>
       t.name.toLowerCase().includes(q) ||
+      t.title?.toLowerCase().includes(q) ||
       t.description.toLowerCase().includes(q)
   )
 })
@@ -181,7 +183,10 @@ function getParams(schema?: ToolSchema): ParamRow[] {
             >
               <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
             </svg>
-            <code class="mcp-tool-name">{{ tool.name }}</code>
+            <span class="mcp-tool-header">
+              <span class="mcp-tool-label">{{ tool.title || tool.name }}</span>
+              <code v-if="tool.title" class="mcp-tool-scope">{{ tool.name }}</code>
+            </span>
           </span>
         </AccordionTrigger>
         <AccordionContent>
@@ -329,16 +334,29 @@ function getParams(schema?: ToolSchema): ParamRow[] {
   color: var(--vp-c-brand-1);
 }
 
-.mcp-tool-name {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+.mcp-tool-header {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+}
+
+.mcp-tool-label {
   font-size: 1rem;
   color: var(--vp-c-text-1);
+  line-height: 1.3;
+}
+
+.mcp-tool-scope {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 0.7rem;
+  color: var(--vp-c-text-3);
   background: transparent;
   padding: 0;
 }
 
 .mcp-tools-list :deep(.mcp-accordion-trigger) {
-  padding: 0.5rem 0;
+  padding: 0.6rem 0;
   font-size: 1rem;
 }
 
