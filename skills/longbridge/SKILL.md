@@ -16,14 +16,17 @@ For setup and authentication details, see [references/setup.md](references/setup
 
 ## Data Query Priority
 
-**Always try CLI first.** Use MCP only if the CLI lacks the needed command or capability.
+**Always use the CLI for data queries. Use MCP only if the CLI cannot fulfill the request.**
 
-```
-CLI available?  →  Use CLI
-CLI missing?    →  Use MCP
-```
+**CLI covers** (use these first):
+- Market data: quotes, K-line history, intraday, extended hours
+- News, filings, topics, market sentiment
+- Account: positions, portfolio, assets, orders, statements
+- Institutional: investors (SEC 13F), insider trades
 
-This applies to all data queries: quotes, positions, news, filings, account info, etc.
+**Fall back to MCP only when:**
+- `longbridge --help` confirms no command exists for the required data
+- The user's environment has no CLI installed or accessible
 
 ---
 
