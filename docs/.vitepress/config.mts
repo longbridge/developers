@@ -4,7 +4,7 @@ import Unocss from 'unocss/vite'
 import { markdownConfig } from './config/markdown'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { localesConfig } from './config/locales'
 import { withMermaid } from 'vitepress-plugin-mermaid'
@@ -82,32 +82,11 @@ export default defineConfig(
     },
 
     buildEnd(siteConfig) {
+      const skillsDir = resolve(__dirname, '../../skills')
       const outSkillDir = resolve(siteConfig.outDir, 'skill')
       mkdirSync(outSkillDir, { recursive: true })
-
-      // Pull skills from longbridge/skills@main and pack into longbridge.zip.
-      // Fail the build if the clone or `skills/` directory is missing.
-      const tmpDir = resolve(__dirname, '../../.tmp-longbridge-skills')
-      rmSync(tmpDir, { recursive: true, force: true })
-      try {
-        execSync(
-          `git clone --depth 1 --branch main https://github.com/longbridge/skills.git "${tmpDir}"`,
-          { stdio: 'inherit' }
-        )
-      } catch (err) {
-        throw new Error(
-          `Failed to clone longbridge/skills@main for longbridge.zip: ${(err as Error).message}`
-        )
-      }
-      const skillsSrcDir = resolve(tmpDir, 'skills')
-      if (!existsSync(skillsSrcDir)) {
-        throw new Error(
-          `longbridge/skills@main is missing the "skills/" directory; cannot build longbridge.zip`
-        )
-      }
-      execSync(`zip -r "${outSkillDir}/longbridge.zip" .`, { cwd: skillsSrcDir })
-      rmSync(tmpDir, { recursive: true, force: true })
-      console.log('✓ skill/longbridge.zip generated from longbridge/skills@main')
+      execSync(`zip -r "${outSkillDir}/longbridge.zip" longbridge`, { cwd: skillsDir })
+      console.log('✓ skill/longbridge.zip generated')
 
       // Region URL rewriting for static assets
       if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {
