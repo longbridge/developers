@@ -9,7 +9,7 @@ import ProductSkill from './ProductSkill.vue'
 import ProductMCP from './ProductMCP.vue'
 import ProductOpenAPI from './ProductOpenAPI.vue'
 import GetStarted from './GetStarted.vue'
-import Footer from './Footer.vue'
+import Footer from '../HomePage/Footer.vue'
 // import MarketCoverage from './MarketCoverage.vue'
 </script>
 
