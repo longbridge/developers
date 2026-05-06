@@ -2571,7 +2571,7 @@ const currentMessages = computed(() => {
             <span class="skill-tag">{{ t.recommended.value }}</span>
           </div>
           <p class="skill-install-panel-hint">{{ t.manualInstallHint.value }}</p>
-          <a href="/skill/longbridge.zip" download class="skill-btn-primary">
+          <a href="/skill/longbridge-all.zip" download class="skill-btn-primary">
             {{ t.downloadZip.value }}
           </a>
           <p class="skill-also-available">

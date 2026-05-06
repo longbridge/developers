@@ -4,7 +4,7 @@ import Unocss from 'unocss/vite'
 import { markdownConfig } from './config/markdown'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { localesConfig } from './config/locales'
 import { withMermaid } from 'vitepress-plugin-mermaid'
@@ -83,11 +83,43 @@ export default defineConfig(
     },
 
     buildEnd(siteConfig) {
-      const skillsDir = resolve(__dirname, '../../skills')
       const outSkillDir = resolve(siteConfig.outDir, 'skill')
       mkdirSync(outSkillDir, { recursive: true })
-      execSync(`zip -r "${outSkillDir}/longbridge.zip" longbridge`, { cwd: skillsDir })
-      console.log('✓ skill/longbridge.zip generated')
+
+      // Clone longbridge/skills@main and pack zips.
+      // Fail the build if the clone or `skills/` directory is missing.
+      const tmpDir = resolve(__dirname, '../../.tmp-longbridge-skills')
+      rmSync(tmpDir, { recursive: true, force: true })
+      try {
+        execSync(
+          `git clone --depth 1 --branch main https://github.com/longbridge/skills.git "${tmpDir}"`,
+          { stdio: 'inherit' }
+        )
+      } catch (err) {
+        throw new Error(
+          `Failed to clone longbridge/skills@main: ${(err as Error).message}`
+        )
+      }
+      const skillsSrcDir = resolve(tmpDir, 'skills')
+      if (!existsSync(skillsSrcDir)) {
+        throw new Error(
+          `longbridge/skills@main is missing the "skills/" directory; cannot build skill zips`
+        )
+      }
+
+      // Pack all skills into longbridge-all.zip
+      execSync(`zip -r "${outSkillDir}/longbridge-all.zip" .`, { cwd: skillsSrcDir })
+      console.log('✓ skill/longbridge-all.zip generated from longbridge/skills@main')
+
+      // Pack each skill subdirectory into its own zip
+      for (const name of readdirSync(skillsSrcDir)) {
+        if (statSync(resolve(skillsSrcDir, name)).isDirectory()) {
+          execSync(`zip -r "${outSkillDir}/${name}.zip" "${name}"`, { cwd: skillsSrcDir })
+          console.log(`✓ skill/${name}.zip generated`)
+        }
+      }
+
+      rmSync(tmpDir, { recursive: true, force: true })
 
       // Region URL rewriting for static assets
       if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {
