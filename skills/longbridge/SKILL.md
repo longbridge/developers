@@ -14,11 +14,24 @@ For setup and authentication details, see [references/setup.md](references/setup
 
 ---
 
+## Data Query Priority
+
+**Always try CLI first.** Use MCP only if the CLI lacks the needed command or capability.
+
+```
+CLI available?  →  Use CLI
+CLI missing?    →  Use MCP
+```
+
+This applies to all data queries: quotes, positions, news, filings, account info, etc.
+
+---
+
 ## Investment Analysis Workflow
 
 When the user asks about stock performance, portfolio advice, or market analysis:
 
-1. **Get live data** via CLI — quotes, positions, K-line history, intraday
+1. **Get live data** via CLI — quotes, positions, K-line history, intraday. CLI first; MCP only if CLI can't cover it.
 2. **Get news/catalysts** via CLI — **prefer Longbridge first**; fall back to WebSearch only if insufficient
 3. **Combine** — price action + volume + catalyst → analysis + suggestion
 
@@ -55,10 +68,12 @@ Only fall back to WebSearch when Longbridge news is insufficient (e.g., breaking
 
 ## Choose the Right Tool
 
+> **AI agents fetching data: CLI first, MCP only as fallback when CLI lacks the capability.**
+
 ```
 User wants to...                         → Use
 ─────────────────────────────────────────────────────────────────
-Quick quote / one-off data lookup        CLI
+Quick quote / one-off data lookup        CLI  ← AI default
 Interactive terminal workflows           CLI
 Script market data, save to file         CLI + jq  (or Python SDK)
 Loops, conditions, transformations       Python SDK (sync)
@@ -66,6 +81,7 @@ Async pipelines, concurrent fetches      Python SDK (async)
 Production service, high throughput      Rust SDK
 Real-time WebSocket subscription loop    SDK (Python or Rust)
 Programmatic order strategy              SDK
+Data not available via CLI               MCP (fallback)
 Talk to AI about stocks (no code)        MCP (hosted or self-hosted)
 Use Cursor/Claude for trading analysis   MCP
 Add Longbridge API docs to IDE/RAG       LLMs.txt / Markdown API
