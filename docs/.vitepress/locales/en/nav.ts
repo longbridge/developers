@@ -9,6 +9,5 @@ export const nav = (): DefaultTheme.NavItem[] => {
     { text: 'CLI', link: '/docs/cli', activeMatch: '^(/en)?/docs/cli' },
     { text: 'MCP', link: '/docs/mcp', activeMatch: '^(/en)?/docs/mcp' },
     { text: 'Docs', link: '/docs', activeMatch: '^(/en)?/docs(?!/cli)(?!/api)(?!/mcp)' },
-    { text: 'API Reference', link: '/docs/api', activeMatch: '^(/en)?/docs/api' },
   ])
 }
