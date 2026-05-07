@@ -1,5 +1,5 @@
 ---
-title: 'Market Data Pricing'
+title: 'Pricing'
 id: pricing
 layout: page
 sidebar: false

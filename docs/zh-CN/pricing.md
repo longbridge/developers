@@ -1,5 +1,5 @@
 ---
-title: '行情权限定价'
+title: '定价'
 id: pricing
 layout: page
 sidebar: false

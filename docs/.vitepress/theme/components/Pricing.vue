@@ -294,7 +294,7 @@ const t = computed(() => {
         </div>
         <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
           <span
-            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em] [font-feature-settings:'tnum']"
+            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em]" style="font-feature-settings:'tnum'"
             :style="{ color: LEVEL_COLORS.lv1.hex }"
             >HK${{ priceOf('us_lv1') }}</span
           >
@@ -365,7 +365,7 @@ const t = computed(() => {
         <div class="text-[0.68rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2GlobalLabel }}</div>
         <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
           <span
-            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em] [font-feature-settings:'tnum']"
+            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em]" style="font-feature-settings:'tnum'"
             :style="{ color: LEVEL_COLORS.lv2.hex }"
             >HK${{ priceOf('hk_lv2_global') }}</span
           >
@@ -445,7 +445,7 @@ const t = computed(() => {
         </div>
         <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
           <span
-            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em] [font-feature-settings:'tnum']"
+            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em]" style="font-feature-settings:'tnum'"
             :style="{ color: LEVEL_COLORS.opra.hex }"
             >HK${{ priceOf('opra') }}</span
           >

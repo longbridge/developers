@@ -10,6 +10,7 @@ function gatedTailwind() {
   return {
     postcssPlugin: 'gated-tailwindcss',
     prepare(result) {
+      if (!result.root) return {}
       const css = result.root.toString()
       // Only run Tailwind if the file imports tailwindcss
       if (!css.includes('@import "tailwindcss"') && !css.includes("@import 'tailwindcss'")) {
