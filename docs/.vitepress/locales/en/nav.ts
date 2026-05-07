@@ -3,7 +3,7 @@ import { filterNavItems } from '../../region-utils'
 
 export const nav = (): DefaultTheme.NavItem[] => {
   return filterNavItems([
-    { text: 'Home', link: '/', activeMatch: '^(/en)?/$' },
+    { component: 'FeaturesMenu' } as DefaultTheme.NavItem,
     { text: 'Skill', link: '/skill', activeMatch: '^(/en)?/skill' },
     { text: 'CLI', link: '/docs/cli', activeMatch: '^(/en)?/docs/cli' },
     { text: 'MCP', link: '/docs/mcp', activeMatch: '^(/en)?/docs/mcp' },
