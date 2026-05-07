@@ -1,5 +1,8 @@
 <template>
-  <div class="qp-alert" :data-level="effectiveLevel">
+  <div
+    class="qp-alert"
+    :data-level="effectiveLevel"
+    :style="{ '--lc-border': levelColor.border, '--lc-bg': levelColor.bg }">
     <!-- Header: icon + label + market tag + badge (right) -->
     <div class="qp-header">
       <span class="qp-icon" v-html="shieldCheckIcon" />
@@ -34,6 +37,7 @@ import {
   QUOTE_LINK_TEXT,
   QUOTE_SEPARATE_NOTE,
   QUOTE_MARKET_LABELS,
+  LEVEL_COLORS,
   type QuoteLevel,
   type QuoteLocale,
 } from './QuotePermissionData'
@@ -54,6 +58,7 @@ const cmdEntry = computed(() => (props.command ? QUOTE_COMMANDS[props.command] :
 
 const effectiveLevel = computed<QuoteLevel>(() => cmdEntry.value?.level ?? props.level ?? 'basic')
 const effectiveMarket = computed(() => props.market ?? cmdEntry.value?.market)
+const levelColor = computed(() => LEVEL_COLORS[effectiveLevel.value])
 
 const shieldCheckIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.76 8.95a1 1 0 0 1-.48 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`
 
@@ -75,7 +80,8 @@ const marketLabel = computed(() =>
 
 <style scoped>
 .qp-alert {
-  border: 1px solid;
+  border: 1px solid var(--lc-border);
+  background: var(--lc-bg);
   border-radius: 0.5rem;
   padding: 0.875rem 1rem;
   margin: 1rem 0;
@@ -83,7 +89,6 @@ const marketLabel = computed(() =>
 
 /* ── level colors ── */
 .qp-alert[data-level='basic'] {
-  @apply border-green-500/30 bg-green-500/5;
 }
 .qp-alert[data-level='basic'] .qp-icon,
 .qp-alert[data-level='basic'] .qp-label {
@@ -108,7 +113,6 @@ const marketLabel = computed(() =>
 }
 
 .qp-alert[data-level='lv1'] {
-  @apply border-blue-500/30 bg-blue-500/5;
 }
 .qp-alert[data-level='lv1'] .qp-icon,
 .qp-alert[data-level='lv1'] .qp-label {
@@ -133,7 +137,6 @@ const marketLabel = computed(() =>
 }
 
 .qp-alert[data-level='lv2'] {
-  @apply border-orange-500/30 bg-orange-500/5;
 }
 .qp-alert[data-level='lv2'] .qp-icon,
 .qp-alert[data-level='lv2'] .qp-label {
@@ -158,7 +161,6 @@ const marketLabel = computed(() =>
 }
 
 .qp-alert[data-level='overnight'] {
-  @apply border-yellow-500/30 bg-yellow-500/5;
 }
 .qp-alert[data-level='overnight'] .qp-icon,
 .qp-alert[data-level='overnight'] .qp-label {
@@ -183,7 +185,6 @@ const marketLabel = computed(() =>
 }
 
 .qp-alert[data-level='opra'] {
-  @apply border-purple-500/30 bg-purple-500/5;
 }
 .qp-alert[data-level='opra'] .qp-icon,
 .qp-alert[data-level='opra'] .qp-label {

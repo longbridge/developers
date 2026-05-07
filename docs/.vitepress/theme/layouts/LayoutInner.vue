@@ -56,7 +56,12 @@ provide('hero-image-slot-exists', heroImageSlotExists)
 
     <VPContent v-if="!showTryIt && !isApiReference">
       <template #page-top><slot name="page-top" /></template>
-      <template #page-bottom><slot name="page-bottom" /></template>
+      <template #page-bottom>
+        <slot name="page-bottom" />
+        <div class="max-w-[1200px] mx-auto px-8">
+          <Footer />
+        </div>
+      </template>
 
       <template #not-found><slot name="not-found" /></template>
       <template #home-hero-before><slot name="home-hero-before" /></template>

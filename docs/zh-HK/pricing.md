@@ -1,7 +1,7 @@
 ---
-title: '行情权限定价'
+title: '行情權限定價'
 id: pricing
-slug: '/pricing'
+layout: page
 sidebar: false
 ---
 

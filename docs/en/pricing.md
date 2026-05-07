@@ -1,7 +1,7 @@
 ---
 title: 'Market Data Pricing'
 id: pricing
-slug: '/pricing'
+layout: page
 sidebar: false
 ---
 
