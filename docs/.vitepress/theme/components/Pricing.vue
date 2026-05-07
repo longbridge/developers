@@ -24,275 +24,180 @@ function closeDialog() {
   showDialog.value = false
 }
 
-interface Tier {
-  id: string
-  name: string
-  badge?: string
-  price: string
-  priceSub: string
-  description: string
-  highlight: boolean
-  cta: string
-  ctaHref: string
-  color: string // 500: accent, icon, badge bg
-  colorText: string // 600: text on light bg
-  colorBg: string
-  colorBorder: string
-  purchaseViaApp: boolean
+type BillingPeriod = 'continuous' | 'monthly' | 'quarterly' | 'yearly'
+const billing = ref<BillingPeriod>('continuous')
+
+const PRICES = {
+  us_lv1: { continuous: 558, monthly: 718, quarterly: 1748, yearly: 5788 },
+  opra: { continuous: 22, monthly: 40, quarterly: 83, yearly: 269 },
+  hk_lv2_global: { continuous: 558, monthly: 718, quarterly: 1428, yearly: 5288 },
+  hk_lv2_mainland: { continuous: 269, monthly: 313, quarterly: 618, yearly: 1999 },
+} as const
+
+function priceOf(key: keyof typeof PRICES): number {
+  return PRICES[key][billing.value]
 }
 
-interface FeatureRow {
-  category: string
-  name: string
-  marketColor?: string
-  tiers: Record<string, boolean | string>
+function perMonthOf(key: keyof typeof PRICES): string | null {
+  const unit = lang.value.startsWith('zh') ? '/月' : '/mo'
+  if (billing.value === 'quarterly') return `≈ HK$${Math.round(PRICES[key].quarterly / 3)}${unit}`
+  if (billing.value === 'yearly') return `≈ HK$${Math.round(PRICES[key].yearly / 12)}${unit}`
+  return null
 }
+
+function savingsOf(key: keyof typeof PRICES): string | null {
+  const monthly = PRICES[key].monthly
+  if (billing.value === 'monthly') return null
+  if (billing.value === 'continuous') {
+    const pct = Math.round((1 - PRICES[key].continuous / monthly) * 100)
+    return pct > 0 ? `-${pct}%` : null
+  }
+  if (billing.value === 'quarterly') {
+    const pct = Math.round((1 - PRICES[key].quarterly / (monthly * 3)) * 100)
+    return pct > 0 ? `-${pct}%` : null
+  }
+  if (billing.value === 'yearly') {
+    const pct = Math.round((1 - PRICES[key].yearly / (monthly * 12)) * 100)
+    return pct > 0 ? `-${pct}%` : null
+  }
+  return null
+}
+
+const billingUnit = computed(() => {
+  const zh = lang.value.startsWith('zh')
+  if (billing.value === 'quarterly') return zh ? '/季度' : '/quarter'
+  if (billing.value === 'yearly') return zh ? '/年' : '/year'
+  return zh ? '/月' : '/mo'
+})
 
 const t = computed(() => {
   const zh = lang.value.startsWith('zh')
   return {
-    heroBadge: zh ? '行情权限' : 'Market Data',
-    heroTitle: zh ? '行情权限定价' : 'Market Data Pricing',
+    heroTitle: zh ? '开发者平台定价' : 'Developer Platform Pricing',
     heroSubtitle: zh
-      ? '按需选择行情权限，解锁更多 OpenAPI 数据能力'
-      : 'Choose the market data plan that fits your needs and unlock more OpenAPI capabilities',
-    noteTitle: zh ? '说明' : 'Note',
-    noteText: zh
-      ? 'OpenAPI 行情权限独立于 App / PC / Web，需单独购买。'
-      : 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately.',
-    featureTableTitle: zh ? '功能对比' : 'Feature Comparison',
-    addonTitle: zh ? 'OPRA 美股期权行情' : 'OPRA US Options Quotes',
-    addonBadge: zh ? '加购项' : 'Add-on',
-    addonPrice: 'HK$22',
-    addonPriceSub: zh ? '/月起' : '/ mo. from',
-    addonDesc: zh
-      ? 'OPRA 美股期权实时成交行情及最优买卖一档报价，独立于基础行情档位，需额外单独购买。'
-      : 'OPRA US options real-time quotes with best bid/ask — sold separately, independent of base quote tiers.',
-    addonFeatures: zh
+      ? '核心 API 功能完全免费，只有实时行情数据需要按需订阅'
+      : 'Core API features are completely free — subscribe to real-time market data only when you need it',
+
+    freeSectionTitle: zh ? '免费' : 'FREE',
+    freeItems: zh
+      ? [
+          { name: '交易 & 账户 API', note: '个股基本面、分析、资讯、资产、订单等基础 API 功能免费' },
+          { name: '基础行情', note: 'Nasdaq Basic、港股 LV1、沪深 LV1' },
+          { name: '数据推送 & 拉取', note: 'WebSocket 实时推送、REST API 主动拉取，无限制' },
+        ]
+      : [
+          { name: 'Trading & Account APIs', note: 'Fundamentals, analysis, news, assets, orders — core APIs free' },
+          { name: 'Basic Market Data', note: 'Nasdaq Basic, HK LV1, CN LV1' },
+          { name: 'Push & Pull Data', note: 'WebSocket real-time push and REST API pull — unlimited' },
+        ],
+
+    billingPeriods: [
+      { id: 'continuous' as BillingPeriod, label: zh ? '连续包月' : 'Auto-renew' },
+      { id: 'monthly' as BillingPeriod, label: zh ? '月付' : 'Monthly' },
+      { id: 'quarterly' as BillingPeriod, label: zh ? '季付' : 'Quarterly' },
+      { id: 'yearly' as BillingPeriod, label: zh ? '年付' : 'Annual', badge: zh ? '最省' : 'Best', badgeGreen: true },
+    ],
+
+    usLv1Title: zh ? '美股 LV1 实时行情' : 'US LV1 Real-time',
+    usLv1Market: zh ? '美股市场' : 'US Market',
+    usLv1Desc: zh
+      ? '纳斯达克实时成交行情及最优买卖一档报价（含盘前盘后夜盘），专属美股市场'
+      : 'Nasdaq LV1 real-time quotes with best bid/ask incl. pre/post-market — US market only',
+    usLv1Features: zh
+      ? ['Nasdaq LV1 实时报价', '盘前盘后（夜盘）行情', 'WebSocket 实时推送']
+      : ['Nasdaq LV1 real-time quotes', 'Pre/post-market (overnight)', 'WebSocket real-time push'],
+
+    hkLv2Title: zh ? '港股 LV2 高级行情' : 'HK LV2 Advanced',
+    hkLv2Market: zh ? '港股市场' : 'HK Market',
+    hkLv2Desc: zh
+      ? '港交所股票实时成交行情及十档买卖盘报价，专属港股市场（不含美股）'
+      : 'HKEX real-time quotes with 10-level order book — HK market only (excludes US)',
+    hkLv2Features: zh
+      ? ['十档买卖盘口深度', '深度行情实时推送', '券商持仓队列（港股）']
+      : ['10-level bid/ask depth', 'Real-time depth push', 'Broker queue (HK)'],
+    hkLv2GlobalLabel: zh ? '全球版（含香港）' : 'Global (incl. HK)',
+    hkLv2MainlandLabel: zh ? '中国大陆用户优惠价' : 'Mainland China price',
+    hkLv2MainlandNote: zh
+      ? '港交所对中国大陆用户的特批优惠，以实际购买页面为准'
+      : 'Special HKEx rate for mainland China users — subject to verification',
+
+    opraTitle: zh ? 'OPRA 美股期权行情' : 'OPRA US Options',
+    opraMarket: zh ? '美股期权' : 'US Options',
+    opraBadge: zh ? '加购项' : 'Add-on',
+    opraDesc: zh
+      ? '美股期权实时成交行情及最优买卖报价，独立于基础行情，可单独加购'
+      : 'US options real-time quotes with best bid/ask — sold separately, any tier',
+    opraFeatures: zh
       ? ['期权链查询', '期权实时报价', '期权行情推送']
       : ['Option chain lookup', 'Real-time option quotes', 'Option quote push'],
-    addonCta: zh ? '前往购买' : 'Purchase',
+
+    cta: zh ? '前往购买' : 'Purchase',
+    noteText: zh
+      ? 'OpenAPI 行情权限独立于 App / PC / Web，需单独购买。在 Longbridge App「我的」→「行情商店」购买后自动激活。'
+      : 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate via Longbridge App "Me" → "Quote Store".',
     qrTitle: zh ? '购买行情权限' : 'Purchase Quote Packages',
     qrDesc: zh
       ? '在 Longbridge App「我的」中使用扫码功能，或前往「我的」→「行情商店」。'
       : 'In the Longbridge App, use the QR scanner in the "Me" tab, or go to "Me" → "Quote Store".',
+
+    compareTitle: zh ? '权益对比' : 'Feature Comparison',
+    // column order: nasdaq_basic | us_lv1 | opra | hk_lv1 | hk_lv2 | cn_lv1
+    compareColumns: [
+      { id: 'nasdaq_basic', label: 'Nasdaq Basic', badge: zh ? '免费' : 'Free', color: LEVEL_COLORS.basic },
+      { id: 'us_lv1', label: zh ? '美股 LV1' : 'US LV1', badge: zh ? '付费' : 'Paid', color: LEVEL_COLORS.lv1 },
+      { id: 'opra', label: 'OPRA', badge: zh ? '付费' : 'Paid', color: null },
+      {
+        id: 'hk_lv1',
+        label: zh ? '港股 LV1' : 'HK LV1',
+        badge: zh ? '推广免费' : 'Free (promo)',
+        color: LEVEL_COLORS.basic,
+      },
+      { id: 'hk_lv2', label: zh ? '港股 LV2' : 'HK LV2', badge: zh ? '付费' : 'Paid', color: LEVEL_COLORS.lv2 },
+      {
+        id: 'cn_lv1',
+        label: zh ? '沪深 LV1' : 'CN LV1',
+        badge: zh ? '推广免费' : 'Free (promo)',
+        color: LEVEL_COLORS.basic,
+      },
+    ] as Array<{ id: string; label: string; badge: string; color: typeof LEVEL_COLORS.basic | null }>,
+    compareRows: (zh
+      ? [
+          { feature: '基础 API', values: [true, true, true, true, true, true] },
+          { feature: 'WebSocket 实时行情推送', values: [true, true, true, true, true, true] },
+          { feature: 'Pull 主动拉取行情', values: [true, true, true, true, true, true] },
+          { feature: '美股实时行情（买卖一档）', values: [true, true, false, false, false, false] },
+          { feature: '盘前盘后（夜盘）行情', values: [false, true, false, false, false, false] },
+          { feature: '期权链 & 实时报价', values: [false, false, true, false, false, false] },
+          { feature: '港股实时行情（基础）', values: [false, false, false, true, true, false] },
+          { feature: '恒生指数行情', values: [false, false, false, true, true, false] },
+          { feature: '十档买卖盘口深度', values: [false, false, false, false, true, false] },
+          { feature: '深度实时行情', values: [false, false, false, false, true, false] },
+          { feature: '券商持仓队列（港股）', values: [false, false, false, false, true, false] },
+          { feature: '沪深 A 股实时行情', values: [false, false, false, false, false, true] },
+        ]
+      : [
+          { feature: 'Basic APIs', values: [true, true, true, true, true, true] },
+          { feature: 'WebSocket Real-time Quote Push', values: [true, true, true, true, true, true] },
+          { feature: 'Pull Quote (REST API)', values: [true, true, true, true, true, true] },
+          { feature: 'US Quotes (Best Bid/Ask)', values: [true, true, false, false, false, false] },
+          { feature: 'Pre/post-market (overnight)', values: [false, true, false, false, false, false] },
+          { feature: 'Options Chain & Real-time Quotes', values: [false, false, true, false, false, false] },
+          { feature: 'HK Real-time (basic)', values: [false, false, false, true, true, false] },
+          { feature: 'Hang Seng Index', values: [false, false, false, true, true, false] },
+          { feature: 'HK 10-level Order Book', values: [false, false, false, false, true, false] },
+          { feature: 'Real-time Depth Push', values: [false, false, false, false, true, false] },
+          { feature: 'Broker Queue (HK)', values: [false, false, false, false, true, false] },
+          { feature: 'CN A-shares Real-time', values: [false, false, false, false, false, true] },
+        ]) as Array<{ feature: string; values: boolean[] }>,
   }
 })
-
-const tiers = computed<Tier[]>(() => {
-  const zh = lang.value.startsWith('zh')
-  return [
-    {
-      id: 'free',
-      name: zh ? '免费' : 'Free',
-      price: zh ? '$0' : '$0',
-      priceSub: zh ? '开通账户即享' : 'included with account',
-      description: zh
-        ? '开通 OpenAPI 自动获得：Nasdaq Basic 实时行情（美股）及 LV1 实时行情（港股），无需额外购买'
-        : 'Included with OpenAPI activation: Nasdaq Basic real-time (US) and LV1 real-time (HK) at no extra cost',
-      highlight: false,
-      cta: '',
-      ctaHref: '',
-      color: LEVEL_COLORS.basic.hex,
-      colorText: LEVEL_COLORS.basic.text,
-      colorBg: LEVEL_COLORS.basic.bg,
-      colorBorder: LEVEL_COLORS.basic.border,
-      purchaseViaApp: false,
-    },
-    {
-      id: 'lv1',
-      name: zh ? 'LV1 实时行情' : 'LV1 Real-time',
-      badge: zh ? '推荐' : 'Popular',
-      price: 'HK$482',
-      priceSub: zh ? '/月起' : '/ mo. from',
-      description: zh
-        ? '纳斯达克实时成交行情及最优买卖一档报价（含夜盘），仅适用于美股'
-        : 'Nasdaq real-time quotes with best bid/ask including overnight — US market only',
-      highlight: true,
-      cta: zh ? '前往购买' : 'Purchase',
-      ctaHref: 'https://open.longbridge.com',
-      color: LEVEL_COLORS.lv1.hex,
-      colorText: LEVEL_COLORS.lv1.text,
-      colorBg: LEVEL_COLORS.lv1.bg,
-      colorBorder: LEVEL_COLORS.lv1.border,
-      purchaseViaApp: true,
-    },
-    {
-      id: 'lv2',
-      name: zh ? 'LV2 高级行情' : 'LV2 Advanced',
-      price: 'HK$167',
-      priceSub: zh ? '/月起' : '/ mo. from',
-      description: zh
-        ? '港交所股票实时成交行情及十档买卖盘报价，仅适用于港股。全球版（Plus）HK$441/月起'
-        : 'HKEX real-time quotes with 10-level order book — HK market only. Global (Plus) from HK$441/mo',
-      highlight: false,
-      cta: zh ? '前往购买' : 'Purchase',
-      ctaHref: 'https://open.longbridge.com',
-      color: LEVEL_COLORS.lv2.hex,
-      colorText: LEVEL_COLORS.lv2.text,
-      colorBg: LEVEL_COLORS.lv2.bg,
-      colorBorder: LEVEL_COLORS.lv2.border,
-      purchaseViaApp: true,
-    },
-  ]
-})
-
-const featureRows = computed<FeatureRow[]>(() => {
-  const zh = lang.value.startsWith('zh')
-  return [
-    {
-      category: zh ? '数据范围' : 'Data Coverage',
-      name: zh ? '港股市场' : 'HK Market',
-      marketColor: '#ff3a9d',
-      tiers: {
-        free: zh ? 'LV1 实时' : 'LV1 Real-time',
-        lv1: zh ? 'LV1 实时' : 'LV1 Real-time',
-        lv2: zh ? 'LV2 高级' : 'LV2 Advanced',
-      },
-    },
-    {
-      category: zh ? '数据范围' : 'Data Coverage',
-      name: zh ? '美股市场' : 'US Market',
-      marketColor: '#2A99FE',
-      tiers: {
-        free: 'Nasdaq Basic',
-        lv1: zh ? 'LV1 Nasdaq 实时' : 'LV1 Nasdaq Real-time',
-        lv2: 'Nasdaq Basic',
-      },
-    },
-    {
-      category: zh ? '数据范围' : 'Data Coverage',
-      name: zh ? 'A股市场' : 'CN Market',
-      marketColor: '#ff3a3a',
-      tiers: {
-        free: zh ? '基础' : 'Basic',
-        lv1: zh ? 'LV1 实时' : 'LV1 Real-time',
-        lv2: zh ? '基础' : 'Basic',
-      },
-    },
-    {
-      category: zh ? '数据范围' : 'Data Coverage',
-      name: zh ? '新加坡市场' : 'SG Market',
-      marketColor: '#3ad8ff',
-      tiers: {
-        free: zh ? '基础' : 'Basic',
-        lv1: zh ? 'LV1 实时' : 'LV1 Real-time',
-        lv2: zh ? '基础' : 'Basic',
-      },
-    },
-    {
-      category: zh ? '数据范围' : 'Data Coverage',
-      name: zh ? '美股夜盘' : 'US Overnight',
-      marketColor: '#6366f1',
-      tiers: { free: false, lv1: true, lv2: false },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '证券基础信息' : 'Security Static Info',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '实时报价' : 'Real-time Quote',
-      tiers: { free: zh ? '延迟/快照' : 'Delayed/Snapshot', lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? 'K线 / 历史行情' : 'Candlestick / History',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '分时走势' : 'Intraday Timeline',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '逐笔成交' : 'Tick Trades',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '十档深度盘口' : '10-Level Order Book Depth',
-      tiers: { free: false, lv1: false, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '券商持仓队列（港股）' : 'Broker Queue (HK only)',
-      tiers: { free: false, lv1: false, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '资金流向' : 'Capital Flow',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '计算指标' : 'Calc Indexes',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '拉取接口' : 'Pull APIs',
-      name: zh ? '权证数据' : 'Warrant Data',
-      tiers: { free: true, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '推送 / 订阅' : 'Push / Subscribe',
-      name: zh ? '实时报价推送' : 'Real-time Quote Push',
-      tiers: { free: false, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '推送 / 订阅' : 'Push / Subscribe',
-      name: zh ? '逐笔成交推送' : 'Tick Trade Push',
-      tiers: { free: false, lv1: true, lv2: true },
-    },
-    {
-      category: zh ? '推送 / 订阅' : 'Push / Subscribe',
-      name: zh ? '深度盘口推送' : 'Order Book Depth Push',
-      tiers: { free: false, lv1: false, lv2: true },
-    },
-    {
-      category: zh ? '推送 / 订阅' : 'Push / Subscribe',
-      name: zh ? '券商队列推送（港股）' : 'Broker Queue Push (HK)',
-      tiers: { free: false, lv1: false, lv2: true },
-    },
-  ]
-})
-
-const categories = computed(() => {
-  const seen = new Set<string>()
-  const result: string[] = []
-  for (const row of featureRows.value) {
-    if (!seen.has(row.category)) {
-      seen.add(row.category)
-      result.push(row.category)
-    }
-  }
-  return result
-})
-
-function rowsForCategory(cat: string) {
-  return featureRows.value.filter((r) => r.category === cat)
-}
-
-function cellText(val: boolean | string): string {
-  if (val === true) return ''
-  if (val === false) return '–'
-  return String(val)
-}
-
-function cellClass(val: boolean | string): string {
-  if (val === true) return 'text-center whitespace-nowrap'
-  if (val === false) return 'text-center whitespace-nowrap text-[var(--vp-c-text-3)] text-lg font-light'
-  return 'text-center whitespace-nowrap text-[var(--vp-c-text-2)] text-[0.82rem]'
-}
 </script>
 
 <template>
-  <div class="max-w-[1200px] mx-auto px-8 pt-8 pb-16">
+  <div class="max-w-300 mx-auto px-8 pt-8 pb-16">
     <!-- Hero -->
     <div class="text-center mb-12 pt-6">
-      <h1 class="!text-[2.8rem] !font-bold !leading-tight !mb-4 !border-none !p-0 !mt-0">
+      <h1 class="text-[2.8rem]! font-bold! leading-tight! mb-4! border-none! p-0! mt-0!">
         {{ t.heroTitle }}
       </h1>
       <p class="text-[1.05rem] text-[var(--vp-c-text-2)] m-0 mx-auto leading-relaxed">
@@ -300,139 +205,275 @@ function cellClass(val: boolean | string): string {
       </p>
     </div>
 
-    <!-- Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-      <div
-        v-for="tier in tiers"
-        :key="tier.id"
-        class="pricing-card relative flex flex-col gap-3 rounded-xl p-6"
-        :style="{
-          '--tier-color': tier.color,
-          border: `1px solid ${tier.colorBorder}`,
-          background: tier.colorBg,
-        }">
-        <div class="text-[1.1rem] font-semibold" :style="{ color: tier.colorText }">{{ tier.name }}</div>
-        <div class="text-base font-bold text-[var(--vp-c-text-1)] flex items-baseline gap-1.5">
-          {{ tier.price }}
-          <span class="text-[0.8rem] font-normal text-[var(--vp-c-text-3)]">{{ tier.priceSub }}</span>
+    <!-- Free included -->
+    <div class="free-panel mb-8">
+      <div v-for="(item, i) in t.freeItems" :key="item.name" class="free-item" :class="{ 'free-item--sep': i > 0 }">
+        <div class="flex items-center gap-1.5 mb-1.5">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.18" />
+            <path
+              d="M6 10.5l2.5 2.5 5.5-5.5"
+              stroke="#198f28"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span class="free-item-name">{{ item.name }}</span>
+          <span class="free-item-badge">{{ t.freeSectionTitle }}</span>
         </div>
-        <p class="text-sm text-[var(--vp-c-text-2)] m-0 leading-[1.55]">{{ tier.description }}</p>
+        <div class="free-item-note">{{ item.note }}</div>
+      </div>
+    </div>
+
+    <!-- Billing period selector -->
+    <div class="flex items-center gap-3 mb-6">
+      <div class="flex gap-0.5 p-0.5 rounded-lg bg-[var(--vp-c-default-soft)]">
         <button
-          v-if="tier.purchaseViaApp"
-          class="pricing-card-cta mt-auto block w-full text-center px-4 py-2 rounded-lg text-[0.9rem] font-medium transition-[background,color] duration-150 cursor-pointer"
-          :style="{ border: `1px solid ${tier.colorBorder}`, color: tier.colorText, background: 'transparent' }"
-          @click="openDialog">
-          {{ tier.cta }}
+          v-for="p in t.billingPeriods"
+          :key="p.id"
+          class="relative px-3.5 py-1.5 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer whitespace-nowrap"
+          :class="
+            billing === p.id
+              ? 'bg-[var(--vp-c-bg)] shadow-sm text-[var(--vp-c-text-1)]'
+              : 'text-[var(--vp-c-text-3)] hover:text-[var(--vp-c-text-2)]'
+          "
+          @click="billing = p.id">
+          {{ p.label
+          }}<span
+            v-if="p.badge"
+            class="ml-1 text-[0.6rem] font-bold"
+            :style="{ color: p.badgeGreen ? '#22c55e' : '#f97316' }"
+            >{{ p.badge }}</span
+          >
         </button>
       </div>
     </div>
 
-    <!-- Addon -->
-    <div class="rounded-lg px-5 py-4 mb-12 border border-dashed border-[var(--vp-c-border)]">
-      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-2">
-        <span
-          class="text-[0.65rem] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-2)]">
-          {{ t.addonBadge }}
-        </span>
-        <span class="text-sm font-semibold text-[var(--vp-c-text-1)]">{{ t.addonTitle }}</span>
-        <div class="ml-auto flex items-center gap-2 shrink-0">
-          <span class="font-bold text-sm text-[var(--vp-c-text-1)]">
-            {{ t.addonPrice }}<span class="font-normal text-xs text-[var(--vp-c-text-3)]">{{ t.addonPriceSub }}</span>
-          </span>
-          <button
-            class="addon-cta shrink-0 inline-block px-3 py-1 rounded-md text-xs font-medium transition-[background,color] duration-150 whitespace-nowrap cursor-pointer border border-[var(--vp-c-text-3)] text-[var(--vp-c-text-1)]"
-            style="background: transparent"
-            @click="openDialog">
-            {{ t.addonCta }}
+    <!-- Product cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <!-- US LV1 -->
+      <div
+        class="pricing-card"
+        :style="{
+          '--card-accent': LEVEL_COLORS.lv1.hex,
+          background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
+        }">
+        <div class="card-top">
+          <span
+            class="market-tag"
+            :style="{
+              background: `color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 13%, transparent)`,
+              color: LEVEL_COLORS.lv1.text,
+            }"
+            >{{ t.usLv1Market }}</span
+          >
+          <button class="card-buy" :style="{ color: LEVEL_COLORS.lv1.text }" @click="openDialog">
+            {{ t.cta }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12H19M13 6l6 6-6 6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
           </button>
         </div>
+        <div class="card-title">{{ t.usLv1Title }}</div>
+        <div class="card-price-block">
+          <span class="price-num" :style="{ color: LEVEL_COLORS.lv1.hex }">HK${{ priceOf('us_lv1') }}</span>
+          <span class="price-unit">{{ billingUnit }}</span>
+          <span v-if="savingsOf('us_lv1')" class="price-savings">{{ savingsOf('us_lv1') }}</span>
+        </div>
+        <div v-if="perMonthOf('us_lv1')" class="price-approx">{{ perMonthOf('us_lv1') }}</div>
+        <div class="card-divider"></div>
+        <p class="card-desc">{{ t.usLv1Desc }}</p>
+        <ul class="card-features">
+          <li v-for="f in t.usLv1Features" :key="f">
+            <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
+              <path
+                d="M6 10.5l2.5 2.5 5.5-5.5"
+                stroke="#198f28"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            {{ f }}
+          </li>
+        </ul>
       </div>
-      <p class="text-xs text-[var(--vp-c-text-2)] m-0 mb-2 leading-relaxed">{{ t.addonDesc }}</p>
-      <div class="flex flex-wrap gap-2">
-        <span
-          v-for="f in t.addonFeatures"
-          :key="f"
-          class="text-[0.7rem] px-1 py-0.5 leading-4 rounded-md bg-[var(--vp-c-default-soft)] text-[var(--vp-c-text-2)]"
-          >{{ f }}</span
-        >
+
+      <!-- HK LV2 -->
+      <div
+        class="pricing-card"
+        :style="{
+          '--card-accent': LEVEL_COLORS.lv2.hex,
+          background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
+        }">
+        <div class="card-top">
+          <span
+            class="market-tag"
+            :style="{
+              background: `color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 13%, transparent)`,
+              color: LEVEL_COLORS.lv2.text,
+            }"
+            >{{ t.hkLv2Market }}</span
+          >
+          <button class="card-buy" :style="{ color: LEVEL_COLORS.lv2.text }" @click="openDialog">
+            {{ t.cta }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12H19M13 6l6 6-6 6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="card-title">{{ t.hkLv2Title }}</div>
+        <!-- Global price -->
+        <div class="text-[0.68rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2GlobalLabel }}</div>
+        <div class="card-price-block">
+          <span class="price-num" :style="{ color: LEVEL_COLORS.lv2.hex }">HK${{ priceOf('hk_lv2_global') }}</span>
+          <span class="price-unit">{{ billingUnit }}</span>
+          <span v-if="savingsOf('hk_lv2_global')" class="price-savings">{{ savingsOf('hk_lv2_global') }}</span>
+        </div>
+        <div v-if="perMonthOf('hk_lv2_global')" class="price-approx">{{ perMonthOf('hk_lv2_global') }}</div>
+        <!-- Mainland price, zh only -->
+        <div v-if="lang.startsWith('zh')" class="mainland-price">
+          <div class="text-[0.65rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2MainlandLabel }}</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-[1rem] font-bold leading-none text-[var(--vp-c-text-2)]"
+              >HK${{ priceOf('hk_lv2_mainland') }}</span
+            >
+            <span class="text-[0.72rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
+          </div>
+          <div class="text-[0.63rem] text-[var(--vp-c-text-3)] mt-1 leading-snug">{{ t.hkLv2MainlandNote }}</div>
+        </div>
+        <div class="card-divider"></div>
+        <p class="card-desc">{{ t.hkLv2Desc }}</p>
+        <ul class="card-features">
+          <li v-for="f in t.hkLv2Features" :key="f">
+            <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
+              <path
+                d="M6 10.5l2.5 2.5 5.5-5.5"
+                stroke="#198f28"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            {{ f }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- OPRA -->
+      <div
+        class="pricing-card"
+        :style="{
+          '--card-accent': LEVEL_COLORS.opra.hex,
+
+          background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
+        }">
+        <div class="card-top">
+          <span class="market-tag" :style="{ background: `color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 13%, transparent)`, color: LEVEL_COLORS.opra.text }">{{ t.opraMarket }}</span>
+          <button class="card-buy" :style="{ color: LEVEL_COLORS.opra.text }" @click="openDialog">
+            {{ t.cta }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12H19M13 6l6 6-6 6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="card-title">{{ t.opraTitle }}</div>
+        <div class="card-price-block">
+          <span class="price-num" :style="{ color: LEVEL_COLORS.opra.hex }">HK${{ priceOf('opra') }}</span>
+          <span class="price-unit">{{ billingUnit }}</span>
+          <span v-if="savingsOf('opra')" class="price-savings">{{ savingsOf('opra') }}</span>
+        </div>
+        <div v-if="perMonthOf('opra')" class="price-approx">{{ perMonthOf('opra') }}</div>
+        <div class="card-divider"></div>
+        <p class="card-desc">{{ t.opraDesc }}</p>
+        <ul class="card-features">
+          <li v-for="f in t.opraFeatures" :key="f">
+            <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
+              <path
+                d="M6 10.5l2.5 2.5 5.5-5.5"
+                stroke="#198f28"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            {{ f }}
+          </li>
+        </ul>
       </div>
     </div>
 
-    <!-- Table -->
-    <h2 class="!text-[1.35rem] !font-semibold !mb-4 !text-[var(--vp-c-text-1)]">{{ t.featureTableTitle }}</h2>
-
-    <div class="overflow-x-auto rounded-xl border border-[var(--vp-c-divider)] bg-[var(--vp-c-bg)]">
-      <table class="w-full border-collapse table table-fixed text-sm">
+    <!-- Feature comparison table -->
+    <div class="mb-10 overflow-x-auto rounded-xl border border-[var(--vp-c-divider)]">
+      <table class="w-full text-sm border-collapse" style="min-width: 580px">
         <thead>
-          <tr class="border-b-1 border-[var(--vp-c-divider)] bg-[var(--vp-c-default-soft)]">
-            <th class="w-[38%] text-left px-5 py-4 font-semibold text-[var(--vp-c-text-1)] whitespace-nowrap"></th>
+          <tr>
             <th
-              v-for="tier in tiers"
-              :key="tier.id"
-              class="text-center px-5 py-3 whitespace-nowrap"
-              :style="{ width: 'calc(62% / 3)', color: tier.colorText }">
-              <div class="font-semibold text-sm">{{ tier.name }}</div>
-              <div v-if="tier.id !== 'free'" class="text-xs font-normal opacity-70 mt-0.5">
-                {{ tier.price }}<span>{{ tier.priceSub }}</span>
+              class="text-left py-2.5 px-3 text-[0.8rem] font-medium text-[var(--vp-c-text-3)] border-b border-[var(--vp-c-divider)] w-[30%]"></th>
+            <th
+              v-for="col in t.compareColumns"
+              :key="col.id"
+              class="py-2.5 pt-10 px-2 text-center border-b border-[var(--vp-c-divider)]">
+              <div class="flex flex-col items-center gap-1">
+                <span
+                  class="text-[0.7rem] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+                  :style="
+                    col.color
+                      ? { background: `color-mix(in srgb, ${col.color.hex} 15%, transparent)`, color: col.color.text }
+                      : { background: 'var(--vp-c-default-soft)', color: 'var(--vp-c-text-2)' }
+                  ">
+                  {{ col.label }}
+                </span>
+                <span class="text-[0.65rem] text-[var(--vp-c-text-3)] whitespace-nowrap">{{ col.badge }}</span>
               </div>
-              <div v-else class="text-xs font-normal opacity-70 mt-0.5">{{ tier.priceSub }}</div>
             </th>
           </tr>
         </thead>
         <tbody>
-          <template v-for="cat in categories" :key="cat">
-            <tr class="border-b border-[var(--vp-c-divider)]">
-              <td
-                :colspan="tiers.length + 1"
-                class="px-5 py-2 text-[0.72rem] font-bold uppercase tracking-[0.07em] text-[var(--vp-c-text-3)]">
-                {{ cat }}
-              </td>
-            </tr>
-            <tr
-              v-for="row in rowsForCategory(cat)"
-              :key="row.name"
-              class="border-b border-[var(--vp-c-divider)] last:border-b-0 hover:bg-[var(--vp-c-default-soft)] transition-colors duration-100">
-              <td class="px-5 py-[0.7rem] align-middle text-sm text-[var(--vp-c-text-2)]">
-                <span
-                  v-if="row.marketColor"
-                  class="inline-block w-[7px] h-[7px] rounded-full mr-2 align-middle shrink-0"
-                  :style="{ background: row.marketColor }"></span
-                >{{ row.name }}
-              </td>
-              <td
-                v-for="tier in tiers"
-                :key="tier.id"
-                :class="['px-5 py-[0.7rem] align-middle', cellClass(row.tiers[tier.id])]">
-                <svg
-                  v-if="row.tiers[tier.id] === true"
-                  class="inline-block w-4 h-4 align-middle"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  aria-hidden="true">
-                  <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
-                  <path
-                    d="M6 10.5l2.5 2.5 5.5-5.5"
-                    stroke="#198f28"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
-                <span v-else>{{ cellText(row.tiers[tier.id]) }}</span>
-              </td>
-            </tr>
-          </template>
+          <tr
+            v-for="row in t.compareRows"
+            :key="row.feature"
+            class="border-b border-[var(--vp-c-divider)] last:border-0 odd:bg-[var(--vp-c-default-soft)]">
+            <td class="py-2.5 px-3 text-[0.82rem] text-[var(--vp-c-text-2)]">{{ row.feature }}</td>
+            <td v-for="(val, i) in row.values" :key="i" class="py-2.5 px-2 text-center">
+              <svg v-if="val" class="w-4 h-4 mx-auto" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
+                <path
+                  d="M6 10.5l2.5 2.5 5.5-5.5"
+                  stroke="#198f28"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span v-else class="text-[var(--vp-c-text-3)] text-base leading-none">—</span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Note -->
-    <div class="flex items-center gap-2 mt-8 text-xs text-[var(--vp-c-text-3)] leading-relaxed">
+    <div class="flex items-start gap-2 text-xs text-[var(--vp-c-text-3)] leading-relaxed">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="shrink-0 mt-[1px] w-3.5 h-3.5"
         viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true">
+        fill="currentColor">
         <path
           fill-rule="evenodd"
           d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -451,8 +492,8 @@ function cellClass(val: boolean | string): string {
         <button
           class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full text-[var(--vp-c-text-3)] hover:bg-[var(--vp-c-default-soft)] transition-colors cursor-pointer"
           style="background: transparent; border: none"
-          @click="closeDialog"
-          aria-label="Close">
+          aria-label="Close"
+          @click="closeDialog">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
             <path
               fill-rule="evenodd"
@@ -472,12 +513,175 @@ function cellClass(val: boolean | string): string {
 </template>
 
 <style scoped>
-.pricing-card-cta:hover {
-  background: var(--tier-color) !important;
-  color: #fff !important;
+/* ── Free panel ── */
+.free-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--vp-c-default-soft);
+  border-radius: 14px;
+  overflow: hidden;
 }
-.addon-cta:hover {
-  background: var(--vp-c-text-1) !important;
-  color: var(--vp-c-bg) !important;
+.free-item {
+  padding: 18px 20px;
+}
+.free-item--sep {
+  border-left: 1px solid var(--vp-c-divider);
+}
+.free-item-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+.free-item-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #22c55e;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  margin-left: 2px;
+}
+.free-item-note {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  line-height: 1.55;
+  padding-left: 22px;
+}
+
+/* ── Pricing card ── */
+.pricing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pricing-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 16px 36px -10px rgba(10, 14, 25, 0.13),
+    0 3px 12px -5px rgba(10, 14, 25, 0.06);
+}
+.pricing-card--addon {
+  border-style: dashed;
+}
+
+/* ── Card layout ── */
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.market-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.market-tag--neutral {
+  background: var(--vp-c-default-soft);
+  color: var(--vp-c-text-2);
+}
+.card-buy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: gap 180ms ease;
+}
+.card-buy:hover {
+  gap: 8px;
+}
+.card-buy--neutral {
+  color: var(--vp-c-text-2);
+}
+.card-title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  margin-bottom: 12px;
+  letter-spacing: -0.005em;
+}
+.card-price-block {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.price-num {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum';
+}
+.price-num--neutral {
+  color: var(--vp-c-text-1);
+}
+.price-unit {
+  font-size: 0.82rem;
+  color: var(--vp-c-text-3);
+}
+.price-savings {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #f97316;
+}
+.price-approx {
+  font-size: 0.73rem;
+  color: var(--vp-c-text-3);
+  margin-bottom: 4px;
+}
+.mainland-price {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--vp-c-default-soft);
+}
+.card-divider {
+  border-top: 1px dashed var(--vp-c-divider);
+  margin: 14px 0;
+}
+.card-desc {
+  font-size: 0.82rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+.card-features {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.card-features li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  color: var(--vp-c-text-2);
+}
+.check-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 </style>

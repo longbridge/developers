@@ -97,7 +97,7 @@ const i18n: Record<string, FeatureItem[]> = {
       icon: icons.consensus,
     },
     { title: '公司新闻', desc: '实时财经资讯与市场动态', link: '/docs/cli/content/news', icon: icons.news },
-    { title: '监管文件', desc: '年报、季报及监管申报文件', link: '/docs/cli/content/filing', icon: icons.filing },
+    { title: '年报公告', desc: '年报、季报及监管申报文件', link: '/docs/cli/content/filing', icon: icons.filing },
     {
       title: '机构持仓',
       desc: '基金持仓明细与仓位变动数据',
@@ -133,7 +133,7 @@ const i18n: Record<string, FeatureItem[]> = {
       icon: icons.consensus,
     },
     { title: '公司新聞', desc: '實時財經資訊與市場動態', link: '/docs/cli/content/news', icon: icons.news },
-    { title: '監管文件', desc: '年報、季報及監管申報文件', link: '/docs/cli/content/filing', icon: icons.filing },
+    { title: '年報財報', desc: '年報、季報及監管申報文件', link: '/docs/cli/content/filing', icon: icons.filing },
     {
       title: '機構持倉',
       desc: '基金持倉明細與倉位變動數據',
