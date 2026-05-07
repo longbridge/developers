@@ -206,8 +206,12 @@ const t = computed(() => {
     </div>
 
     <!-- Free included -->
-    <div class="free-panel mb-8">
-      <div v-for="(item, i) in t.freeItems" :key="item.name" class="free-item" :class="{ 'free-item--sep': i > 0 }">
+    <div class="grid grid-cols-3 bg-[var(--vp-c-default-soft)] rounded-[14px] overflow-hidden mb-8">
+      <div
+        v-for="(item, i) in t.freeItems"
+        :key="item.name"
+        class="p-[18px_20px]"
+        :class="{ 'border-l-2 border-dashed border-[var(--vp-c-divider)]': i > 0 }">
         <div class="flex items-center gap-1.5 mb-1.5">
           <svg class="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none">
             <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.18" />
@@ -218,20 +222,23 @@ const t = computed(() => {
               stroke-linecap="round"
               stroke-linejoin="round" />
           </svg>
-          <span class="free-item-name">{{ item.name }}</span>
-          <span class="free-item-badge">{{ t.freeSectionTitle }}</span>
+          <span class="text-[0.875rem] font-semibold text-[var(--vp-c-text-1)]">{{ item.name }}</span>
+          <span
+            class="text-[0.65rem] ml-2 tracking-[0.03em text-[#198f28] leading-4 px-2 py-0 rounded-[3px] bg-[#22c53844] shrink-0"
+            >Free</span
+          >
         </div>
-        <div class="free-item-note">{{ item.note }}</div>
+        <div class="text-[0.75rem] text-[var(--vp-c-text-3)] leading-[1.55] pl-[22px]">{{ item.note }}</div>
       </div>
     </div>
 
     <!-- Billing period selector -->
-    <div class="flex items-center gap-3 mb-6">
-      <div class="flex gap-0.5 p-0.5 rounded-lg bg-[var(--vp-c-default-soft)]">
+    <div class="flex justify-center items-center gap-3 mb-6">
+      <div class="flex gap-0.5 p-1 rounded-lg bg-[var(--vp-c-default-soft)]">
         <button
           v-for="p in t.billingPeriods"
           :key="p.id"
-          class="relative px-3.5 py-1.5 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer whitespace-nowrap"
+          class="relative px-3.5 py-1.5 min-w-28 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer whitespace-nowrap"
           :class="
             billing === p.id
               ? 'bg-[var(--vp-c-bg)] shadow-sm text-[var(--vp-c-text-1)]'
@@ -253,21 +260,24 @@ const t = computed(() => {
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
       <!-- US LV1 -->
       <div
-        class="pricing-card"
+        class="relative flex flex-col p-6 border border-[var(--vp-c-divider)] rounded-[18px] overflow-hidden isolate transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_36px_-10px_rgba(10,14,25,0.13),0_3px_12px_-5px_rgba(10,14,25,0.06)]"
         :style="{
           '--card-accent': LEVEL_COLORS.lv1.hex,
           background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
         }">
-        <div class="card-top">
+        <div class="flex items-center justify-between mb-[18px]">
           <span
-            class="market-tag"
+            class="text-[0.68rem] font-semibold px-2 py-[2px] rounded-full whitespace-nowrap"
             :style="{
               background: `color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 13%, transparent)`,
               color: LEVEL_COLORS.lv1.text,
             }"
             >{{ t.usLv1Market }}</span
           >
-          <button class="card-buy" :style="{ color: LEVEL_COLORS.lv1.text }" @click="openDialog">
+          <button
+            class="inline-flex items-center gap-[5px] text-[0.78rem] font-medium bg-transparent border-none cursor-pointer p-0 transition-[gap] duration-[180ms] hover:gap-2"
+            :style="{ color: LEVEL_COLORS.lv1.text }"
+            @click="openDialog">
             {{ t.cta }}
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
               <path
@@ -279,18 +289,31 @@ const t = computed(() => {
             </svg>
           </button>
         </div>
-        <div class="card-title">{{ t.usLv1Title }}</div>
-        <div class="card-price-block">
-          <span class="price-num" :style="{ color: LEVEL_COLORS.lv1.hex }">HK${{ priceOf('us_lv1') }}</span>
-          <span class="price-unit">{{ billingUnit }}</span>
-          <span v-if="savingsOf('us_lv1')" class="price-savings">{{ savingsOf('us_lv1') }}</span>
+        <div class="text-[1.0625rem] font-semibold text-[var(--vp-c-text-1)] mb-3 tracking-[-0.005em]">
+          {{ t.usLv1Title }}
         </div>
-        <div v-if="perMonthOf('us_lv1')" class="price-approx">{{ perMonthOf('us_lv1') }}</div>
-        <div class="card-divider"></div>
-        <p class="card-desc">{{ t.usLv1Desc }}</p>
-        <ul class="card-features">
-          <li v-for="f in t.usLv1Features" :key="f">
-            <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+        <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
+          <span
+            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em] [font-feature-settings:'tnum']"
+            :style="{ color: LEVEL_COLORS.lv1.hex }"
+            >HK${{ priceOf('us_lv1') }}</span
+          >
+          <span class="text-[0.82rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
+          <span v-if="savingsOf('us_lv1')" class="text-[0.7rem] font-bold text-orange-500">{{
+            savingsOf('us_lv1')
+          }}</span>
+        </div>
+        <div v-if="perMonthOf('us_lv1')" class="text-[0.73rem] text-[var(--vp-c-text-3)] mb-1">
+          {{ perMonthOf('us_lv1') }}
+        </div>
+        <div class="border-t border-dashed border-[var(--vp-c-divider)] my-[14px]"></div>
+        <p class="text-[0.82rem] text-[var(--vp-c-text-2)] leading-[1.6] m-0 mb-[14px]">{{ t.usLv1Desc }}</p>
+        <ul class="m-0 p-0 list-none flex flex-col gap-[7px]">
+          <li
+            v-for="f in t.usLv1Features"
+            :key="f"
+            class="flex items-center gap-[7px] text-[0.82rem] text-[var(--vp-c-text-2)]">
+            <svg class="w-[14px] h-[14px] shrink-0" viewBox="0 0 20 20" fill="none">
               <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
               <path
                 d="M6 10.5l2.5 2.5 5.5-5.5"
@@ -306,21 +329,24 @@ const t = computed(() => {
 
       <!-- HK LV2 -->
       <div
-        class="pricing-card"
+        class="relative flex flex-col p-6 border border-[var(--vp-c-divider)] rounded-[18px] overflow-hidden isolate transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_36px_-10px_rgba(10,14,25,0.13),0_3px_12px_-5px_rgba(10,14,25,0.06)]"
         :style="{
           '--card-accent': LEVEL_COLORS.lv2.hex,
           background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
         }">
-        <div class="card-top">
+        <div class="flex items-center justify-between mb-[18px]">
           <span
-            class="market-tag"
+            class="text-[0.68rem] font-semibold px-2 py-[2px] rounded-full whitespace-nowrap"
             :style="{
               background: `color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 13%, transparent)`,
               color: LEVEL_COLORS.lv2.text,
             }"
             >{{ t.hkLv2Market }}</span
           >
-          <button class="card-buy" :style="{ color: LEVEL_COLORS.lv2.text }" @click="openDialog">
+          <button
+            class="inline-flex items-center gap-[5px] text-[0.78rem] font-medium bg-transparent border-none cursor-pointer p-0 transition-[gap] duration-[180ms] hover:gap-2"
+            :style="{ color: LEVEL_COLORS.lv2.text }"
+            @click="openDialog">
             {{ t.cta }}
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
               <path
@@ -332,17 +358,27 @@ const t = computed(() => {
             </svg>
           </button>
         </div>
-        <div class="card-title">{{ t.hkLv2Title }}</div>
+        <div class="text-[1.0625rem] font-semibold text-[var(--vp-c-text-1)] mb-3 tracking-[-0.005em]">
+          {{ t.hkLv2Title }}
+        </div>
         <!-- Global price -->
         <div class="text-[0.68rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2GlobalLabel }}</div>
-        <div class="card-price-block">
-          <span class="price-num" :style="{ color: LEVEL_COLORS.lv2.hex }">HK${{ priceOf('hk_lv2_global') }}</span>
-          <span class="price-unit">{{ billingUnit }}</span>
-          <span v-if="savingsOf('hk_lv2_global')" class="price-savings">{{ savingsOf('hk_lv2_global') }}</span>
+        <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
+          <span
+            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em] [font-feature-settings:'tnum']"
+            :style="{ color: LEVEL_COLORS.lv2.hex }"
+            >HK${{ priceOf('hk_lv2_global') }}</span
+          >
+          <span class="text-[0.82rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
+          <span v-if="savingsOf('hk_lv2_global')" class="text-[0.7rem] font-bold text-orange-500">{{
+            savingsOf('hk_lv2_global')
+          }}</span>
         </div>
-        <div v-if="perMonthOf('hk_lv2_global')" class="price-approx">{{ perMonthOf('hk_lv2_global') }}</div>
+        <div v-if="perMonthOf('hk_lv2_global')" class="text-[0.73rem] text-[var(--vp-c-text-3)] mb-1">
+          {{ perMonthOf('hk_lv2_global') }}
+        </div>
         <!-- Mainland price, zh only -->
-        <div v-if="lang.startsWith('zh')" class="mainland-price">
+        <div v-if="lang.startsWith('zh')" class="mt-[10px] px-3 py-[10px] rounded-[10px] bg-[var(--vp-c-default-soft)]">
           <div class="text-[0.65rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2MainlandLabel }}</div>
           <div class="flex items-baseline gap-1">
             <span class="text-[1rem] font-bold leading-none text-[var(--vp-c-text-2)]"
@@ -352,11 +388,14 @@ const t = computed(() => {
           </div>
           <div class="text-[0.63rem] text-[var(--vp-c-text-3)] mt-1 leading-snug">{{ t.hkLv2MainlandNote }}</div>
         </div>
-        <div class="card-divider"></div>
-        <p class="card-desc">{{ t.hkLv2Desc }}</p>
-        <ul class="card-features">
-          <li v-for="f in t.hkLv2Features" :key="f">
-            <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+        <div class="border-t border-dashed border-[var(--vp-c-divider)] my-[14px]"></div>
+        <p class="text-[0.82rem] text-[var(--vp-c-text-2)] leading-[1.6] m-0 mb-[14px]">{{ t.hkLv2Desc }}</p>
+        <ul class="m-0 p-0 list-none flex flex-col gap-[7px]">
+          <li
+            v-for="f in t.hkLv2Features"
+            :key="f"
+            class="flex items-center gap-[7px] text-[0.82rem] text-[var(--vp-c-text-2)]">
+            <svg class="w-[14px] h-[14px] shrink-0" viewBox="0 0 20 20" fill="none">
               <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
               <path
                 d="M6 10.5l2.5 2.5 5.5-5.5"
@@ -372,15 +411,24 @@ const t = computed(() => {
 
       <!-- OPRA -->
       <div
-        class="pricing-card"
+        class="relative flex flex-col p-6 border border-[var(--vp-c-divider)] rounded-[18px] overflow-hidden isolate transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_36px_-10px_rgba(10,14,25,0.13),0_3px_12px_-5px_rgba(10,14,25,0.06)]"
         :style="{
           '--card-accent': LEVEL_COLORS.opra.hex,
-
           background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
         }">
-        <div class="card-top">
-          <span class="market-tag" :style="{ background: `color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 13%, transparent)`, color: LEVEL_COLORS.opra.text }">{{ t.opraMarket }}</span>
-          <button class="card-buy" :style="{ color: LEVEL_COLORS.opra.text }" @click="openDialog">
+        <div class="flex items-center justify-between mb-[18px]">
+          <span
+            class="text-[0.68rem] font-semibold px-2 py-[2px] rounded-full whitespace-nowrap"
+            :style="{
+              background: `color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 13%, transparent)`,
+              color: LEVEL_COLORS.opra.text,
+            }"
+            >{{ t.opraMarket }}</span
+          >
+          <button
+            class="inline-flex items-center gap-[5px] text-[0.78rem] font-medium bg-transparent border-none cursor-pointer p-0 transition-[gap] duration-[180ms] hover:gap-2"
+            :style="{ color: LEVEL_COLORS.opra.text }"
+            @click="openDialog">
             {{ t.cta }}
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
               <path
@@ -392,18 +440,29 @@ const t = computed(() => {
             </svg>
           </button>
         </div>
-        <div class="card-title">{{ t.opraTitle }}</div>
-        <div class="card-price-block">
-          <span class="price-num" :style="{ color: LEVEL_COLORS.opra.hex }">HK${{ priceOf('opra') }}</span>
-          <span class="price-unit">{{ billingUnit }}</span>
-          <span v-if="savingsOf('opra')" class="price-savings">{{ savingsOf('opra') }}</span>
+        <div class="text-[1.0625rem] font-semibold text-[var(--vp-c-text-1)] mb-3 tracking-[-0.005em]">
+          {{ t.opraTitle }}
         </div>
-        <div v-if="perMonthOf('opra')" class="price-approx">{{ perMonthOf('opra') }}</div>
-        <div class="card-divider"></div>
-        <p class="card-desc">{{ t.opraDesc }}</p>
-        <ul class="card-features">
-          <li v-for="f in t.opraFeatures" :key="f">
-            <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+        <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
+          <span
+            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em] [font-feature-settings:'tnum']"
+            :style="{ color: LEVEL_COLORS.opra.hex }"
+            >HK${{ priceOf('opra') }}</span
+          >
+          <span class="text-[0.82rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
+          <span v-if="savingsOf('opra')" class="text-[0.7rem] font-bold text-orange-500">{{ savingsOf('opra') }}</span>
+        </div>
+        <div v-if="perMonthOf('opra')" class="text-[0.73rem] text-[var(--vp-c-text-3)] mb-1">
+          {{ perMonthOf('opra') }}
+        </div>
+        <div class="border-t border-dashed border-[var(--vp-c-divider)] my-[14px]"></div>
+        <p class="text-[0.82rem] text-[var(--vp-c-text-2)] leading-[1.6] m-0 mb-[14px]">{{ t.opraDesc }}</p>
+        <ul class="m-0 p-0 list-none flex flex-col gap-[7px]">
+          <li
+            v-for="f in t.opraFeatures"
+            :key="f"
+            class="flex items-center gap-[7px] text-[0.82rem] text-[var(--vp-c-text-2)]">
+            <svg class="w-[14px] h-[14px] shrink-0" viewBox="0 0 20 20" fill="none">
               <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
               <path
                 d="M6 10.5l2.5 2.5 5.5-5.5"
@@ -511,177 +570,3 @@ const t = computed(() => {
     </div>
   </Teleport>
 </template>
-
-<style scoped>
-/* ── Free panel ── */
-.free-panel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  background: var(--vp-c-default-soft);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.free-item {
-  padding: 18px 20px;
-}
-.free-item--sep {
-  border-left: 1px solid var(--vp-c-divider);
-}
-.free-item-name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-.free-item-badge {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #22c55e;
-  padding: 1px 5px;
-  border-radius: 999px;
-  background: rgba(34, 197, 94, 0.12);
-  margin-left: 2px;
-}
-.free-item-note {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
-  line-height: 1.55;
-  padding-left: 22px;
-}
-
-/* ── Pricing card ── */
-.pricing-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 18px;
-  overflow: hidden;
-  isolation: isolate;
-  transition:
-    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.pricing-card:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 16px 36px -10px rgba(10, 14, 25, 0.13),
-    0 3px 12px -5px rgba(10, 14, 25, 0.06);
-}
-.pricing-card--addon {
-  border-style: dashed;
-}
-
-/* ── Card layout ── */
-.card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-.market-tag {
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-.market-tag--neutral {
-  background: var(--vp-c-default-soft);
-  color: var(--vp-c-text-2);
-}
-.card-buy {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: gap 180ms ease;
-}
-.card-buy:hover {
-  gap: 8px;
-}
-.card-buy--neutral {
-  color: var(--vp-c-text-2);
-}
-.card-title {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  margin-bottom: 12px;
-  letter-spacing: -0.005em;
-}
-.card-price-block {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-.price-num {
-  font-size: 1.9rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  font-feature-settings: 'tnum';
-}
-.price-num--neutral {
-  color: var(--vp-c-text-1);
-}
-.price-unit {
-  font-size: 0.82rem;
-  color: var(--vp-c-text-3);
-}
-.price-savings {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #f97316;
-}
-.price-approx {
-  font-size: 0.73rem;
-  color: var(--vp-c-text-3);
-  margin-bottom: 4px;
-}
-.mainland-price {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--vp-c-default-soft);
-}
-.card-divider {
-  border-top: 1px dashed var(--vp-c-divider);
-  margin: 14px 0;
-}
-.card-desc {
-  font-size: 0.82rem;
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-  margin: 0 0 14px;
-}
-.card-features {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.card-features li {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.82rem;
-  color: var(--vp-c-text-2);
-}
-.check-icon {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-</style>
