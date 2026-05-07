@@ -379,12 +379,12 @@ const t = computed(() => {
         </div>
         <!-- Mainland price, zh only -->
         <div v-if="lang.startsWith('zh')" class="mt-[10px] px-3 py-[10px] rounded-[10px] bg-[var(--vp-c-default-soft)]">
-          <div class="text-[0.65rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2MainlandLabel }}</div>
           <div class="flex items-baseline gap-1">
             <span class="text-[1rem] font-bold leading-none text-[var(--vp-c-text-2)]"
               >HK${{ priceOf('hk_lv2_mainland') }}</span
             >
             <span class="text-[0.72rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
+            <span class="ml-3 text-[0.72rem] text-[var(--vp-c-text-3)]">{{ t.hkLv2MainlandLabel }}</span>
           </div>
           <div class="text-[0.63rem] text-[var(--vp-c-text-3)] mt-1 leading-snug">{{ t.hkLv2MainlandNote }}</div>
         </div>
