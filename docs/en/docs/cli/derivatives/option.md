@@ -8,6 +8,8 @@ sidebar_position: 1
 
 Look up real-time quotes for US option contracts, browse the full option chain, and view call/put volume statistics.
 
+<QuotePermission command="option" />
+
 ## Basic Usage
 
 ```bash

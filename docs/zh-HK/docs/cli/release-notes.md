@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.19.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.2)
+
+- **`finance-calendar` 重構** — 改為子命令結構（`report`、`dividend`、`split`、`ipo`、`macrodata`、`closed`）；新增 `--filter watchlist|positions` 按自選股或持倉篩選事件
+- **`quote`** — 新增「漲跌幅」欄，顯示相較上一收盤價的變動幅度
+- **`corp-action`** — 預設返回 30 條，加 `--all` 取得全部記錄
+- **`update --force`** — 跳過版本檢查強制重裝；權限不足時自動透過 `sudo` 重試
+- **TUI** — 支援滑鼠操作；個股詳情頁新增折線圖 / K 線圖切換
+
 ### [v0.19.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.0)
 
 - **TUI：歷史訂單 Tab** — 在訂單頁面按 `Tab` 切換今日 / 歷史兩個檢視；歷史模式預設獲取最近 30 天；按 `f` 開啟日期範圍篩選彈窗

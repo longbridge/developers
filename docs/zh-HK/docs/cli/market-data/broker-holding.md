@@ -8,6 +8,8 @@ sidebar_position: 15
 
 查看港股經紀商持倉——最大買入/賣出經紀商、完整持倉明細，以及指定經紀商的逐日變動。
 
+<QuotePermission command="broker-holding" />
+
 ## 基本用法
 
 ```bash

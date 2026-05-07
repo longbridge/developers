@@ -8,6 +8,8 @@ sidebar_position: 16
 
 View the A/H premium ratio for dual-listed stocks — K-line history or intraday timeshare data.
 
+<QuotePermission command="ah-premium" />
+
 ## Basic Usage
 
 ```bash

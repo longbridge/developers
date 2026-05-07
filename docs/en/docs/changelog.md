@@ -6,6 +6,14 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-05
+
+### CLI v0.19.2
+
+- **`finance-calendar` revamp** — restructured into subcommands: `report`, `dividend`, `split`, `ipo`, `macrodata`, `closed`; new `--filter watchlist|positions` scopes events to your watchlist or holdings
+- **TUI enhancements** — full mouse support; chart type toggle (line / candlestick) in stock detail view
+- **`quote`** — new "Last Chg%" column; `corp-action` defaults to 30 items with `--all` for full list; `update --force` skips version check
+
 ## 2026-04-30
 
 ### CLI v0.19.0

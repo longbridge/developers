@@ -7,6 +7,8 @@ sidebar_position: 14
 
 該接口用於獲取輪證行情列表數據，支持按不同字段排序和篩選輪證。
 
+<QuotePermission command="warrant" />
+
 <CliCommand>
 # 騰訊相關窩輪列表
 longbridge warrant list 700.HK

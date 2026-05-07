@@ -8,6 +8,8 @@ sidebar_position: 17
 
 View trade statistics — price distribution by volume for a stock.
 
+<QuotePermission command="trade-stats" />
+
 ## Basic Usage
 
 ```bash

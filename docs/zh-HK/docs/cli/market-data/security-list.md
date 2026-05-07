@@ -8,6 +8,8 @@ sidebar_position: 12
 
 列出 Longbridge 支援夜盤交易的美股標的。
 
+<QuotePermission command="security-list" />
+
 ## 基本用法
 
 ```bash

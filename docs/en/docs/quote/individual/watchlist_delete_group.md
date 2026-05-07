@@ -11,6 +11,8 @@ headingLevel: 2
 
 Delete watched group
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # delete a watchlist group by ID (get ID from: longbridge watchlist)
 longbridge watchlist delete <id>

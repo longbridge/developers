@@ -8,6 +8,8 @@ sidebar_position: 3
 
 US stock short selling data — short interest, short ratio, days to cover, and average daily volume. Only supports US-listed stocks and ETFs. Records are updated bi-monthly by FINRA.
 
+<QuotePermission command="short-positions" />
+
 ## Basic Usage
 
 ```bash

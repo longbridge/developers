@@ -7,6 +7,8 @@ sidebar_position: 4
 
 Real-time trades data push of the subscribed security.
 
+<QuotePermission command="trades" />
+
 <SDKLinks module="quote" klass="QuoteContext" method="set_on_trades" go="OnTrade" />
 
 :::info

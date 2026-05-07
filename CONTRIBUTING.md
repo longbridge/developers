@@ -114,7 +114,9 @@ These components are globally registered and can be used directly in any `.md` f
 | `<TipContainer>`       | Callout/tip boxes          |
 | `<TryIt>`              | Interactive API playground |
 | `<SDKLinks>` / `<SDK>` | SDK download links         |
+| `<CliCommand>`         | CLI command block with syntax highlighting |
 | `<Skill>`              | AI Skill feature showcase  |
+| `<McpTools>`           | MCP tools showcase         |
 | `<HomePage>`           | Homepage layout            |
 
 To add a new component: create the Vue file in `docs/.vitepress/theme/components/` and export it from `index.ts`.

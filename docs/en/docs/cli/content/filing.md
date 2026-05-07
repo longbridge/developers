@@ -38,8 +38,8 @@ Lists the most recent filings for the symbol with titles, form types, and public
 ### Read a full filing
 
 ```bash
-# Use the id from the filing list to read the full document
-longbridge filing detail 633214836329945345
+# Use the symbol and id from the filing list to read the full document
+longbridge filing detail TSLA.US 633214836329945345
 ```
 
 Returns the full text content of the filing. Useful for extracting specific disclosures or feeding to an AI model for analysis.

@@ -11,6 +11,8 @@ headingLevel: 2
 
 Get watched groups
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # list all watchlist groups and their symbols
 longbridge watchlist

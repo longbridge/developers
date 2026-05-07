@@ -3,7 +3,7 @@ import { filterNavItems } from '../../region-utils'
 
 export const nav = (lang: string): DefaultTheme.NavItem[] => {
   return filterNavItems([
-    { text: '首頁', link: `/${lang}/`, activeMatch: `^/${lang}/$` },
+    { component: 'FeaturesMenu' } as DefaultTheme.NavItem,
     { text: 'Skill', link: `/${lang}/skill`, activeMatch: `^/${lang}/skill` },
     { text: 'CLI', link: `/${lang}/docs/cli`, activeMatch: `^/${lang}/docs/cli` },
     { text: 'MCP', link: `/${lang}/docs/mcp`, activeMatch: `^/${lang}/docs/mcp` },

@@ -8,6 +8,8 @@ sidebar_position: 8
 
 Compute financial indexes for any symbol — P/E, P/B, dividend yield, turnover rate, options greeks, and more.
 
+<QuotePermission command="calc-index" />
+
 ## Basic Usage
 
 ```bash
@@ -25,8 +27,8 @@ longbridge calc-index TSLA.US
 ### Check P/E and P/B ratios
 
 ```bash
-longbridge calc-index TSLA.US NVDA.US --index pe pb
-longbridge calc-index TSLA.US NVDA.US --index pe pb --format json
+longbridge calc-index TSLA.US NVDA.US --fields pe,pb
+longbridge calc-index TSLA.US NVDA.US --fields pe,pb --format json
 ```
 
 Calculates the specified indexes for each symbol. Multiple symbols and multiple indexes can be requested in a single call. Only indexes that have data appear in the JSON output — indexes with no value are omitted.
@@ -37,18 +39,22 @@ Calculates the specified indexes for each symbol. Multiple symbols and multiple 
 longbridge calc-index TSLA.US
 ```
 
-When `--index` is omitted, the default set is returned: `pe`, `pb`, `dps_rate`, `turnover_rate`, `total_market_value`.
+When `--fields` is omitted, the default set is returned: `pe`, `pb`, `dps_rate`, `turnover_rate`, `mktcap`.
 
 ### Options greeks for a derivative
 
 ```bash
-longbridge calc-index 24760.HK --index delta gamma vega theta
+longbridge calc-index 24760.HK --fields delta,gamma,vega,theta
 ```
 
 For options and warrants, request greeks directly. Only indexes applicable to the instrument type will appear in the output. Greek values are only meaningful for option/warrant symbols — passing a plain stock symbol returns no greek data.
 
 ## Notes
 
-Full list of supported index names: `last_done`, `change_value`, `change_rate`, `volume`, `turnover`, `ytd_change_rate`, `turnover_rate`, `total_market_value`, `capital_flow`, `amplitude`, `volume_ratio`, `pe` (alias: `pe_ttm`), `pb`, `dps_rate` (alias: `dividend_yield`), `five_day_change_rate`, `ten_day_change_rate`, `half_year_change_rate`, `five_minutes_change_rate`, `implied_volatility`, `delta`, `gamma`, `theta`, `vega`, `rho`, `open_interest`, `expiry_date`, `strike_price`.
+Full list of supported field names:
 
-Unknown index names are silently ignored — double-check spelling if an expected field is missing from the output.
+**General:** `last_done`, `change_value`, `change_rate`, `vol`, `turnover`, `ytd_change_rate`, `turnover_rate`, `mktcap`, `capital_flow`, `amplitude`, `volume_ratio`, `pe`, `pb`, `dps_rate`, `five_day_change_rate`, `ten_day_change_rate`, `half_year_change_rate`, `five_minutes_change_rate`
+
+**Options / Warrants:** `iv`, `delta`, `gamma`, `theta`, `vega`, `rho`, `oi`, `exp`, `strike`, `upper_strike_price`, `lower_strike_price`, `outstanding_qty`, `outstanding_ratio`, `premium`, `itm_otm`, `warrant_delta`, `call_price`, `to_call_price`, `effective_leverage`, `leverage_ratio`, `conversion_ratio`, `balance_point`
+
+Unknown field names are silently ignored — double-check spelling if an expected field is missing from the output.

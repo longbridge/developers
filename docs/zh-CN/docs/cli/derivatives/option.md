@@ -8,6 +8,8 @@ sidebar_position: 1
 
 查询美股期权合约的实时行情、浏览完整期权链，以及查看认购/认沽成交量统计。
 
+<QuotePermission command="option" />
+
 ## 基本用法
 
 ```bash

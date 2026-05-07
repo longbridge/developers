@@ -11,6 +11,8 @@ headingLevel: 2
 
 获取自选股分组
 
+<QuotePermission level="basic" />
+
 <CliCommand>
 # 查看所有自选股分组及标的
 longbridge watchlist

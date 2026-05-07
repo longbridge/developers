@@ -703,6 +703,7 @@ paths:
   /quote/get_security_list:
     get:
       operationId: list_securities
+      x-quote-command: security-list
       summary: Query Tradable Securities List
       x-summary-zh: 查询可交易证券列表
       description: |
@@ -754,6 +755,7 @@ paths:
   /quote/history_market_temperature:
     get:
       operationId: list_market_temperature
+      x-quote-command: market-temp
       summary: Get Historical Market Temperature
       x-summary-zh: 获取历史市场情绪
       description: |
@@ -819,6 +821,7 @@ paths:
   /quote/market_temperature:
     get:
       operationId: market_temperature
+      x-quote-command: market-temp
       summary: Get Current Market Temperature
       x-summary-zh: 获取当前市场情绪
       description: |
@@ -1235,6 +1238,7 @@ paths:
   /quote/filings:
     get:
       operationId: list_filings
+      x-quote-command: filings
       summary: Get Filings by Symbol
       x-summary-zh: 获取标的监管文件
       description: |

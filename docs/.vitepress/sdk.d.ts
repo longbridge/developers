@@ -125,3 +125,8 @@ declare global {
 }
 
 export default longportInternal
+
+declare module '*.yaml' {
+  const content: any
+  export default content
+}

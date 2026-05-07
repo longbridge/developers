@@ -6,6 +6,14 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-05
+
+### CLI v0.19.2
+
+- **`finance-calendar` 重构** — 改为子命令结构：`report`、`dividend`、`split`、`ipo`、`macrodata`、`closed`；新增 `--filter watchlist|positions` 按自选股或持仓筛选事件
+- **TUI 增强** — 支持鼠标操作；个股详情页新增折线图 / K 线图切换
+- **`quote`** — 新增「涨跌幅」列；`corp-action` 默认 30 条，`--all` 获取全部；`update --force` 跳过版本检查
+
 ## 2026-04-30
 
 ### CLI v0.19.0

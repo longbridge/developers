@@ -8,6 +8,8 @@ sidebar_position: 2
 
 Browse HK warrants — list all warrants on an underlying, get real-time quotes for individual warrant contracts, or look up issuer information.
 
+<QuotePermission command="warrant" />
+
 ## Basic Usage
 
 ```bash

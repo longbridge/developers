@@ -8,6 +8,8 @@ sidebar_position: 7
 
 取得任意標的的靜態基本資料——名稱、交易所、貨幣、手數、總股本、EPS、BPS 和股息率。
 
+<QuotePermission command="static" />
+
 ## 基本用法
 
 ```bash

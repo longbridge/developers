@@ -140,3 +140,16 @@ slug: overview
 - 较强的版本前向后向兼容性
 
 行情 Protobuf 协议文档[下载地址](https://github.com/longbridge/openapi-protobufs/blob/main/quote/api.proto)。
+
+## 行情权限等级
+
+所有行情接口均需要 OpenAPI 行情权限。**OpenAPI 行情权限与手机客户端/PC/网页端权限完全独立**，需单独开通。
+
+| 权限等级 | 包含内容 | 获取方式 |
+|---|---|---|
+| **基础行情** | 美/A/新加坡股实时报价；港股 BMP（约 15 分钟延迟，不支持推送） | 开通 OpenAPI 后自动获得 |
+| **LV1 实时**（港股） | 港股实时报价 + WebSocket 推送支持 | 通过行情商城购买「LV1 实时行情 (OpenAPI)」 |
+| **LV2 订阅** | Level 2 买卖盘（depth）、港股经纪商队列（brokers） | 通过行情商城购买 LV2 订阅卡 |
+| **盘前盘后**（美股） | 美股盘前/盘后延伸时段数据 | 购买 LV1 卡 + 设置 `LONGBRIDGE_ENABLE_OVERNIGHT=true` |
+
+查看当前权限：[开发者中心](https://open.longbridge.com/account)。购买行情卡：**Longbridge App → 我的 → 我的行情 → 行情商城**。

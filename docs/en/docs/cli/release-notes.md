@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.19.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.2)
+
+- **`finance-calendar` revamp** — restructured into subcommands (`report`, `dividend`, `split`, `ipo`, `macrodata`, `closed`); new `--filter watchlist|positions` scopes events to your watchlist or holdings
+- **`quote`** — new "Last Chg%" column showing price change vs previous close
+- **`corp-action`** — defaults to 30 items; add `--all` to retrieve all records
+- **`update --force`** — skip version check and force reinstall; auto-retries with `sudo` on permission error
+- **TUI** — full mouse support; chart type toggle (line / candlestick) in stock detail view
+
 ### [v0.19.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.0)
 
 - **TUI: History orders tab** — press `Tab` on the Orders page to switch between Today and History; History mode fetches the last 30 days by default; press `f` to open a date-range filter popup

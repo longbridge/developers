@@ -4,6 +4,7 @@ import MarkdownIt from 'markdown-it'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import spec from '../../../../openapi.yaml?raw'
+import QuotePermission from './QuotePermission.vue'
 
 const { t, locale } = useI18n()
 const md = new MarkdownIt({
@@ -69,6 +70,7 @@ interface Operation {
   'x-summary-zh'?: string
   description?: string
   'x-description-zh'?: string
+  'x-quote-command'?: string
   tags?: string[]
   parameters?: Parameter[]
   'x-codeSamples'?: CodeSample[]
@@ -706,6 +708,12 @@ onUnmounted(() => {
           </button>
         </div>
 
+        <QuotePermission
+          v-if="selectedEndpoint.operation['x-quote-command']"
+          :command="selectedEndpoint.operation['x-quote-command']"
+          class="ep-quote-permission"
+        />
+
         <div v-if="selectedProse" class="prose vp-doc" v-html="selectedProse" />
 
         <section v-for="section in selectedSections" :key="section.key" class="api-section">
@@ -1011,6 +1019,10 @@ onUnmounted(() => {
 .path-param {
   color: var(--vp-c-brand-1);
   font-weight: 600;
+}
+
+.ep-quote-permission {
+  margin-bottom: 24px;
 }
 
 .prose {

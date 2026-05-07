@@ -8,6 +8,8 @@ sidebar_position: 2
 
 浏览港股窝轮——列出某标的的所有窝轮、获取单只窝轮的实时行情，或查询发行商信息。
 
+<QuotePermission command="warrant" />
+
 ## 基本用法
 
 ```bash

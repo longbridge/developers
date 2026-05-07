@@ -7,6 +7,8 @@ sidebar_position: 19
 
 該接口用於獲取標的計算指標數據，根據請求指定的計算指標返回數據。
 
+<QuotePermission command="calc-index" />
+
 <CliCommand>
 # PE、PB、EPS 等核心指標
 longbridge calc-index TSLA.US NVDA.US

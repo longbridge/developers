@@ -11,6 +11,8 @@ headingLevel: 2
 
 Retrieve the List of Securities
 
+<QuotePermission command="security-list" />
+
 <CliCommand>
 # list of US overnight-eligible securities
 longbridge security-list

@@ -7,6 +7,8 @@ sidebar_position: 2
 
 This API is used to obtain the real-time quotes of securities, and supports all types of securities.
 
+<QuotePermission command="quote" />
+
 <CliCommand>
 # real-time quote for Tesla
 longbridge quote TSLA.US
@@ -266,7 +268,7 @@ func main() {
 | ∟∟ high             | string   | High                                                                                                                                                                                                        |
 | ∟∟ low              | string   | Low                                                                                                                                                                                                         |
 | ∟∟ prev_close       | string   | Close of the last trade session                                                                                                                                                                             |
-| ∟ over_night_quote  | object   | Quote of US overnight market<br/><br/>Note: Requires purchasing the "LV1 Real-time Quote (OpenAPI)" quote card in the Longbridge App and enabling the `enable_overnight` parameter. Returns null otherwise. |
+| ∟ over_night_quote  | object   | Quote of US overnight market<br/><br/>Note: Requires purchasing the "LV1 Real-time Quotes (OpenAPI)" quote card in the Longbridge App and enabling the `enable_overnight` parameter. Returns null otherwise. |
 | ∟∟ last_done        | string   | Latest price                                                                                                                                                                                                |
 | ∟∟ timestamp        | int64    | Time of latest price                                                                                                                                                                                        |
 | ∟∟ volume           | int64    | Volume                                                                                                                                                                                                      |

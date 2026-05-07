@@ -7,6 +7,8 @@ sidebar_position: 18
 
 This API is used to obtain the daily capital distribution of security.
 
+<QuotePermission command="capital" />
+
 <CliCommand>
 # capital distribution snapshot for Tesla (large/medium/small)
 longbridge capital dist TSLA.US

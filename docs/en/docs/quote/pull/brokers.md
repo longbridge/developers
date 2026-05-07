@@ -7,6 +7,8 @@ sidebar_position: 6
 
 This API is used to obtain the real-time broker queue data of security.
 
+<QuotePermission command="brokers" />
+
 <CliCommand>
 # broker queue for Tencent (HK market only)
 longbridge brokers 700.HK

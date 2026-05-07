@@ -8,6 +8,8 @@ sidebar_position: 12
 
 List US securities that are eligible for overnight trading on Longbridge.
 
+<QuotePermission command="security-list" />
+
 ## Basic Usage
 
 ```bash

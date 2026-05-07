@@ -90,7 +90,7 @@ The security code uses the `ticker.region` format, `ticker` represents the code 
 
 ## Q6: How to enable Overnight quote
 
-- **Overnight quote data is not available by default.** You need to purchase the **"LV1 Real-time Quote (OpenAPI)"** quote card in the "Quote Store" of the Longbridge mobile app to access overnight data.
+- **Overnight quote data is not available by default.** You need to purchase the **"LV1 Real-time Quotes (OpenAPI)"** quote card in the "Quote Store" of the Longbridge mobile app to access overnight data.
 - Overnight quotes are currently **only available for US stocks**. Hong Kong stocks do not support overnight quotes.
 - After obtaining the overnight quote permission, you still need to actively enable it by filling in the key `need_over_night_quote`, value `true` in the `metadata` field of the authentication interface.
 

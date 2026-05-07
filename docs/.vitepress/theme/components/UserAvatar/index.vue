@@ -7,6 +7,7 @@ import { localePath } from '../../utils/i18n'
 import { createLoginRedirectPath } from '../../utils/navigate'
 import { useI18n } from 'vue-i18n'
 import { useAvatar } from './uesAvatar'
+import { isLoginState, initLoginState } from '../../composables/useLoginState'
 import endsWith from 'lodash/endsWith'
 
 const { t } = useI18n()
@@ -15,12 +16,12 @@ const open = ref(false)
 const el = ref<HTMLElement>()
 const dropdownRef = ref<InstanceType<typeof Dropdown>>()
 const closeTimer = ref<NodeJS.Timeout | null>(null)
-const isLogin = ref(false)
+const isLogin = isLoginState
 
 onMounted(() => {
-  isLogin.value = window.longportInternal.isLogin()
+  initLoginState()
 
-  const isProd = !endsWith(location.hostname, '.xyz')
+  const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
   const loginUrl = createLoginRedirectPath({
     sw_open: '1',
   })
@@ -127,15 +128,6 @@ onUnmounted(() => {
   margin-right: -8px;
 }
 
-@media (min-width: 768px) {
-  .VPFlyout::before {
-    margin: 0 16px;
-    width: 1px;
-    height: 24px;
-    background-color: var(--vp-c-divider);
-    content: '';
-  }
-}
 
 .VPFlyout:hover {
   color: var(--vp-c-brand-1);
