@@ -5,9 +5,8 @@ import NumberTicker from '../inspira/NumberTicker.vue'
 
 const { t } = useI18n()
 
-// Logo-inspired stat colors: teal, yellow/gold, orange, cyan
+// Logo-inspired stat colors: teal, yellow/gold, orange, dark
 let statColors = ['#00b8b8', '#d4a800', '#c34607', '#505050']
-// if dark
 if (document.querySelector('html')?.classList.contains('dark')) {
   statColors = ['#00dbb6', '#ffe000', '#fc5200', '#AAAAAA']
 }

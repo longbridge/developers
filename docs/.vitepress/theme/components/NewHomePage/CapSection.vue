@@ -84,7 +84,7 @@ const caps = [
 <style scoped>
 .cap-section {
   padding: 4rem 0;
-  background: var(--vp-c-bg-soft);
+  background: var(--vp-c-bg);
 }
 .cap-content {
   max-width: 64rem;

@@ -316,6 +316,8 @@ function copyInstall() {
 .cli-section {
   padding: 4rem 0;
   background: var(--vp-c-bg-soft);
+  border-top: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .cli-container {
@@ -374,11 +376,11 @@ function copyInstall() {
 }
 .cli-feat.active {
   background: var(--vp-c-bg);
-  border-color: var(--brand-color);
+  border-color: var(--vp-c-text-2);
   color: var(--vp-c-text-1);
 }
 .cli-feat.active .cli-feat-icon {
-  color: var(--brand-color);
+  color: var(--vp-c-text-2);
 }
 
 .cli-feat-icon {

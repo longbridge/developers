@@ -344,7 +344,14 @@ function copyCli() {
 <style scoped>
 .skill-section {
   padding: 4rem 0;
-  background: var(--vp-c-bg);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in srgb, #00dbb6 7%, transparent), transparent 70%),
+    var(--vp-c-bg);
+}
+:root.dark .skill-section {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in srgb, #00dbb6 12%, transparent), transparent 70%),
+    var(--vp-c-bg);
 }
 
 /* Header */
@@ -396,7 +403,7 @@ function copyCli() {
   padding: 0.75rem 1rem;
   border-radius: 0.625rem;
   border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
+  background: color-mix(in srgb, var(--vp-c-bg-soft) 60%, transparent);
 }
 
 .skill-install-ai-text {
@@ -441,7 +448,7 @@ function copyCli() {
   border: 1px solid var(--vp-c-divider);
   border-radius: 0.5rem;
   overflow: hidden;
-  background: var(--vp-c-bg-soft);
+  background: color-mix(in srgb, var(--vp-c-bg-soft) 60%, transparent);
 }
 
 .skill-install-tabs {
@@ -564,7 +571,7 @@ function copyCli() {
   border-radius: 0.75rem;
   border: 1px solid var(--vp-c-divider);
   overflow: hidden;
-  background: var(--vp-c-bg-soft);
+  background: color-mix(in srgb, var(--vp-c-bg-soft) 55%, transparent);
 }
 .skill-mock-bar {
   display: flex;
@@ -710,9 +717,9 @@ function copyCli() {
   font-size: 0.875rem;
   font-family: var(--vp-font-family-mono);
   color: var(--vp-c-text-2);
-  padding: 0.25rem 0.625rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 0.25rem;
-  background: var(--vp-c-bg);
+  background: color-mix(in srgb, var(--vp-c-divider) 30%, transparent);
   border: 1px solid var(--vp-c-divider);
 }
 .skill-mock-streaming {

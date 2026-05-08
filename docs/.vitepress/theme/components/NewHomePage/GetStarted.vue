@@ -62,18 +62,15 @@ const entries = [
   position: relative;
   padding: 4rem 0;
   overflow: hidden;
+  border-top: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
 /* Gradient background */
 .gs-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--brand-color) 8%, var(--vp-c-bg-soft)) 0%,
-    var(--vp-c-bg-soft) 40%,
-    color-mix(in srgb, var(--cyan-60, #66d5c2) 6%, var(--vp-c-bg-soft)) 100%
-  );
+  background: var(--vp-c-bg-soft);
   z-index: 0;
 }
 

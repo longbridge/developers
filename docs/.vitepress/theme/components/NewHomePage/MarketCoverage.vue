@@ -74,7 +74,7 @@ const markets = [
 </template>
 
 <style scoped>
-.mc-section { padding: 3rem 0 4rem; background: var(--vp-c-bg-soft); }
+.mc-section { padding: 3rem 0 4rem; background: var(--vp-c-bg-soft); border-top: 1px solid var(--vp-c-divider); border-bottom: 1px solid var(--vp-c-divider); }
 
 .mc-grid {
   display: grid;

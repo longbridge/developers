@@ -494,7 +494,7 @@ function copyInstall() {
 .sdk-cell {
   border-radius: 0.75rem;
   border: 1px solid var(--vp-c-divider);
-  background: radial-gradient(200px 120px at 100% 0%, color-mix(in srgb, var(--brand-color) 8%, transparent), transparent 70%), var(--vp-c-bg-soft);
+  background: radial-gradient(200px 120px at 100% 0%, color-mix(in srgb, var(--brand-color) 13%, transparent), transparent 70%), var(--vp-c-bg-soft);
   padding: 1rem;
   transition: border-color 0.2s, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }

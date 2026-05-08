@@ -33,8 +33,8 @@ const links: Record<string, string> = {
 const accents: Record<string, string> = {
   skill: '#00dbb6',
   cli: '#fc5200',
-  mcp: '#6366f1',
-  sdk: '#00b8b8',
+  mcp: '#3b82f6',
+  sdk: '#22c55e',
   paper: '#f59e0b',
   llm: '#a855f7',
 }

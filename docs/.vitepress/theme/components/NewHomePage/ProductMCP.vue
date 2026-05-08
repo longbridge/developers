@@ -346,6 +346,8 @@ function copyCmd() {
 .mcp-section {
   padding: 4rem 1rem;
   background: var(--vp-c-bg-soft);
+  border-top: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--vp-c-divider);
   overflow: hidden;
 }
 
