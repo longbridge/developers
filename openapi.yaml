@@ -496,7 +496,7 @@ security:
   - oauth2:
       - openapi
 paths:
-  /watchlist/groups:
+  /v1/watchlist/groups:
     get:
       operationId: list_watchlist_groups
       summary: Get Watchlists
@@ -700,7 +700,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /quote/get_security_list:
+  /v1/quote/get_security_list:
     get:
       operationId: list_securities
       x-quote-command: security-list
@@ -752,7 +752,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /quote/history_market_temperature:
+  /v1/quote/history_market_temperature:
     get:
       operationId: list_market_temperature
       x-quote-command: market-temp
@@ -818,7 +818,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /quote/market_temperature:
+  /v1/quote/market_temperature:
     get:
       operationId: market_temperature
       x-quote-command: market-temp
@@ -867,7 +867,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /asset/cashflow:
+  /v1/asset/cashflow:
     get:
       operationId: list_cash_flow
       summary: Cash Flow
@@ -952,7 +952,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /asset/account:
+  /v1/asset/account:
     get:
       operationId: account_cash
       summary: Account Cash
@@ -1015,7 +1015,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /asset/stock:
+  /v1/asset/stock:
     get:
       operationId: list_stock_positions
       summary: Stock Position
@@ -1074,7 +1074,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /asset/fund:
+  /v1/asset/fund:
     get:
       operationId: list_fund_positions
       summary: Fund Position
@@ -1235,7 +1235,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /quote/filings:
+  /v1/quote/filings:
     get:
       operationId: list_filings
       x-quote-command: filings
@@ -1282,7 +1282,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /content/{symbol}/news:
+  /v1/content/{symbol}/news:
     get:
       operationId: list_news
       summary: Get News by Symbol
@@ -1328,7 +1328,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /content/{symbol}/topics:
+  /v1/content/{symbol}/topics:
     get:
       operationId: list_topics
       summary: List Community Topics by Symbol
@@ -1374,7 +1374,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /content/topics/mine:
+  /v1/content/topics/mine:
     get:
       operationId: list_my_topics
       summary: List My Published Topics
@@ -1456,7 +1456,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /content/topics:
+  /v1/content/topics:
     post:
       operationId: create_topic
       summary: Create Topic
@@ -1598,7 +1598,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /content/topics/{id}:
+  /v1/content/topics/{id}:
     get:
       operationId: topic_detail
       summary: Topic Detail
@@ -1675,7 +1675,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /content/topics/{topic_id}/comments:
+  /v1/content/topics/{topic_id}/comments:
     get:
       operationId: list_topic_replies
       summary: List Topic Replies
@@ -1904,7 +1904,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /trade/execution/history:
+  /v1/trade/execution/history:
     get:
       operationId: list_history_executions
       summary: Historical Execution
@@ -1982,7 +1982,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /trade/order:
+  /v1/trade/order:
     get:
       operationId: order_detail
       summary: Order Detail
@@ -2181,7 +2181,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /trade/estimate/buy_limit:
+  /v1/trade/estimate/buy_limit:
     get:
       operationId: estimate_max_buy_quantity
       summary: Estimate Maximum Buy Quantity
@@ -2307,7 +2307,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /trade/order/history:
+  /v1/trade/order/history:
     get:
       operationId: list_history_orders
       summary: Historical Order
@@ -2465,7 +2465,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /trade/execution/today:
+  /v1/trade/execution/today:
     get:
       operationId: list_today_executions
       summary: Today's Execution
@@ -2520,7 +2520,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /trade/order/today:
+  /v1/trade/order/today:
     get:
       operationId: list_today_orders
       summary: Today's Order
