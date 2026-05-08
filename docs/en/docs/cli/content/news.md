@@ -45,3 +45,20 @@ longbridge news detail 282276051
 ```
 
 Fetches the full Markdown content of a single article by its ID. Article IDs are available in the `id` field of the list output.
+
+### Search news by keyword
+
+```bash
+longbridge news search "AI stocks"
+longbridge news search TSLA --count 10
+```
+
+```
+| id        | title                                                  | time                 |
+|-----------|--------------------------------------------------------|----------------------|
+| 285710139 | Why stocks hit new highs amid ceasefire bets           | 2026-05-08T10:53:18Z |
+| 285708897 | Why Akamai stock jumped 26%                            | 2026-05-08T09:54:55Z |
+...
+```
+
+Searches news articles by keyword across all markets. Use `--count` to control the number of results (default: 20).

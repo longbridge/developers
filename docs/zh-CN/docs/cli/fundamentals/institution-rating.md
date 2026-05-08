@@ -50,6 +50,40 @@ longbridge institution-rating detail TSLA.US
 
 `detail` 子命令列出按周统计的历史评级分布及各分析师目标价，便于追踪情绪随时间的变化趋势。
 
+### 评级及目标价历史
+
+```bash
+longbridge institution-rating TSLA.US --history
+```
+
+展示分析师评级分布与一致性目标价随时间的变化情况，便于追踪分析师情绪的转变。
+
+### 行业排名
+
+```bash
+longbridge institution-rating TSLA.US --industry-rank
+# 翻页
+longbridge institution-rating TSLA.US --industry-rank --page 2 --limit 20
+```
+
+```
+| key             | value      |
+|-----------------|------------|
+| industry_name   | 汽车制造商 |
+| industry_rank   | 1          |
+| industry_mean   | 10         |
+| industry_total  | 30         |
+
+items:
+| symbol   | name   | buy | hold | sell | total | rank |
+|----------|--------|-----|------|------|-------|------|
+| TSLA.US  | 特斯拉 | 23  | 17   | 10   | 51    | 1    |
+| GM.US    | 通用汽车| 20 | 5    | 1    | 27    | 2    |
+...
+```
+
+将同行业所有股票按分析师覆盖数量排名，直观了解你的持仓在行业内的研究关注度。
+
 ### JSON 输出用于监控
 
 ```bash

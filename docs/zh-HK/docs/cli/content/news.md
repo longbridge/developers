@@ -45,3 +45,12 @@ longbridge news detail 282276051
 ```
 
 透過 ID 取得單篇文章的完整 Markdown 內容。文章 ID 來自列表輸出的 `id` 字段。
+
+### 按關鍵詞搜尋資訊
+
+```bash
+longbridge news search "AI 股票"
+longbridge news search TSLA --count 10
+```
+
+按關鍵詞全局搜尋資訊文章。使用 `--count` 控制返回條數（預設 20）。

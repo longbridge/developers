@@ -7,6 +7,20 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.20.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.0)
+
+- **`ipo` command group** — comprehensive IPO tools: `subscriptions`, `wait-listing`, `listed`, `calendar`, `detail`, `orders`, `profit-loss` for HK market; `us-subscriptions`, `us-wait-listing`, `us-listed` for US market; `orders detail <id>` for full order detail
+- **`financial-statement`** — detailed, hierarchical financial statements (income statement, balance sheet, cash flow) with full line-item breakdown and YoY comparison; supports `--kind IS/BS/CF/ALL` and `--report af/saf/qf/cumul`
+- **`financial-report --latest`** — new flag to fetch the latest report summary (key indicators: revenue, net profit, EPS, ROE, total assets) without fetching the full statement
+- **`valuation-rank`** — daily PE/PB/PS industry percentile rank over a date range, showing `rank/total` for each metric
+- **`analyst-estimates`** — EPS analyst consensus estimates (high/low/mean/median, coverage count) across historical and forward periods
+- **`institution-rating --history` / `--industry-rank`** — new flags: `--history` shows how analyst ratings and price targets have changed over time; `--industry-rank` ranks all stocks in the same industry by analyst coverage
+- **`news search` / `topic search`** — keyword search across news articles and community topics
+- **`bank-cards`** — list bank cards linked to your account
+- **`withdrawals`** / **`deposits`** — view withdrawal and deposit history with date formatting and optional state/currency filters
+- **`portfolio short-margin`** — short-selling margin deposit details per position
+- **Fix: paper-trading account channel** — `auth status` and quote mall QR links now correctly reflect the account channel for paper-trading accounts (`lb_papertrading`), resolved from the access token JWT rather than hardcoded
+
 ### [v0.19.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.2)
 
 - **`finance-calendar` revamp** — restructured into subcommands (`report`, `dividend`, `split`, `ipo`, `macrodata`, `closed`); new `--filter watchlist|positions` scopes events to your watchlist or holdings

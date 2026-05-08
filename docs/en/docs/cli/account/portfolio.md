@@ -45,6 +45,14 @@ longbridge portfolio --format json
 
 Displays total asset value, total and today's P/L, and a breakdown of market value per market.
 
+### Short margin deposit
+
+```bash
+longbridge portfolio short-margin
+```
+
+Shows the short-selling margin deposit details for your account, including per-position margin requirements and deposit amounts.
+
 ## Requirements
 
 OAuth account permission required. See the [account permission setup](/docs/trade/) guide.

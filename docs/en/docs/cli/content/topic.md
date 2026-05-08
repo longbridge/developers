@@ -35,6 +35,15 @@ longbridge topic NVDA.US
 
 Lists community posts and discussions related to the symbol, including titles, descriptions, and engagement metrics.
 
+### Search topics by keyword
+
+```bash
+longbridge topic search TSLA
+longbridge topic search "AI stocks" --count 10
+```
+
+Searches community topics by keyword. Returns posts matching the keyword with title, author excerpt, and engagement stats. Use `--count` to control the number of results (default: 20).
+
 ### Read the full content of a post
 
 ```bash

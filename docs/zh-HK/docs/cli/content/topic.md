@@ -35,6 +35,15 @@ longbridge topic NVDA.US
 
 列出與該標的相關的社區帖子，包含標題、摘要及互動數據。
 
+### 按關鍵詞搜尋話題
+
+```bash
+longbridge topic search TSLA
+longbridge topic search "AI 股票" --count 10
+```
+
+按關鍵詞搜尋社區話題。返回匹配帖子的標題、作者摘要及互動數據。使用 `--count` 控制返回條數（預設 20）。
+
 ### 閱讀帖子完整內容
 
 ```bash

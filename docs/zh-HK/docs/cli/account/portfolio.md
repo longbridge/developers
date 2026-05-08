@@ -45,6 +45,14 @@ longbridge portfolio --format json
 
 展示總資產價值、總盈虧及今日盈虧，以及各市場市值分佈。
 
+### 融券保證金明細
+
+```bash
+longbridge portfolio short-margin
+```
+
+顯示帳戶的融券保證金明細，包含各持倉的保證金要求及存入金額。
+
 ## 權限要求
 
 需要 OAuth 帳戶權限。參見[帳戶權限設置](/zh-HK/docs/trade/)。

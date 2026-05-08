@@ -50,6 +50,40 @@ longbridge institution-rating detail TSLA.US
 
 The `detail` subcommand lists the historical rating distribution by week and individual analyst price targets, so you can track how sentiment has shifted over time.
 
+### Rating history with target price changes
+
+```bash
+longbridge institution-rating TSLA.US --history
+```
+
+Shows how the rating distribution and consensus price target have changed over time — useful for tracking momentum shifts in analyst sentiment.
+
+### Industry-wide ranking
+
+```bash
+longbridge institution-rating TSLA.US --industry-rank
+# Paginate
+longbridge institution-rating TSLA.US --industry-rank --page 2 --limit 20
+```
+
+```
+| key             | value      |
+|-----------------|------------|
+| industry_name   | Automobile Manufacturers |
+| industry_rank   | 1          |
+| industry_mean   | 10         |
+| industry_total  | 30         |
+
+items:
+| symbol   | name   | buy | hold | sell | total | rank |
+|----------|--------|-----|------|------|-------|------|
+| TSLA.US  | Tesla  | 23  | 17   | 10   | 51    | 1    |
+| GM.US    | GM     | 20  | 5    | 1    | 27    | 2    |
+...
+```
+
+Ranks every stock in the same industry by total analyst coverage, so you can see where your stock stands relative to peers.
+
 ### JSON for monitoring
 
 ```bash

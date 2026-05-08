@@ -45,6 +45,14 @@ longbridge portfolio --format json
 
 展示总资产价值、总盈亏及今日盈亏，以及各市场市值分布。
 
+### 融券保证金明细
+
+```bash
+longbridge portfolio short-margin
+```
+
+显示账户的融券保证金明细，包含各持仓的保证金要求及存入金额。
+
 ## 权限要求
 
 需要 OAuth 账户权限。参见[账户权限设置](/zh-CN/docs/trade/)。

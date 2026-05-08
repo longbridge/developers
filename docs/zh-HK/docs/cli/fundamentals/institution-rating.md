@@ -50,6 +50,24 @@ longbridge institution-rating detail TSLA.US
 
 `detail` 子命令列出按周統計的歷史評級分佈及各分析師目標價，便於追蹤情緒隨時間的變化趨勢。
 
+### 評級及目標價歷史
+
+```bash
+longbridge institution-rating TSLA.US --history
+```
+
+展示分析師評級分佈與一致性目標價隨時間的變化情況，便於追蹤分析師情緒的轉變。
+
+### 行業排名
+
+```bash
+longbridge institution-rating TSLA.US --industry-rank
+# 翻頁
+longbridge institution-rating TSLA.US --industry-rank --page 2 --limit 20
+```
+
+將同行業所有股票按分析師覆蓋數量排名，直觀了解持倉在行業內的研究關注度。
+
 ### JSON 輸出用於監控
 
 ```bash

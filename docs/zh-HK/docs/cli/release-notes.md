@@ -7,6 +7,20 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.20.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.0)
+
+- **`ipo` 指令組** — 完整 IPO 工具：港股支持 `subscriptions`（招股中）、`wait-listing`（暗盤）、`listed`（近期上市）、`calendar`（日曆）、`detail`（詳情）、`orders`（訂單）、`profit-loss`（盈虧）；美股支持 `us-subscriptions`、`us-wait-listing`、`us-listed`
+- **`financial-statement`** — 完整逐行財務報表（損益表/資產負債表/現金流量表），含層級結構與 YoY 對比；支持 `--kind IS/BS/CF/ALL` 和 `--report af/saf/qf/cumul`
+- **`financial-report --latest`** — 新增 `--latest` 參數，快速獲取最新財報關鍵指標摘要（營收、淨利潤、EPS、ROE、總資產）
+- **`valuation-rank`** — 每日 PE/PB/PS 行業百分位排名，以「排名/總數」形式展示，支持自訂日期範圍
+- **`analyst-estimates`** — 分析師 EPS 一致性預期（高/低/均值/中位數、覆蓋數），含歷史與未來各期數據
+- **`institution-rating --history` / `--industry-rank`** — 新增參數：`--history` 查看評級及目標價隨時間的變化；`--industry-rank` 查看行業內所有股票的分析師覆蓋排名
+- **`news search` / `topic search`** — 按關鍵詞搜尋資訊和社區話題
+- **`bank-cards`** — 查看賬戶綁定的銀行卡列表
+- **`withdrawals`** / **`deposits`** — 查看出入金歷史記錄，支持按狀態和貨幣篩選
+- **`portfolio short-margin`** — 融券保證金逐倉明細
+- **修正：模擬盤賬戶渠道識別** — `auth status` 及行情商城二維碼鏈接現在能正確識別模擬盤賬戶（`lb_papertrading`）的渠道，從 Access Token JWT 動態解析，不再硬編碼
+
 ### [v0.19.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.19.2)
 
 - **`finance-calendar` 重構** — 改為子命令結構（`report`、`dividend`、`split`、`ipo`、`macrodata`、`closed`）；新增 `--filter watchlist|positions` 按自選股或持倉篩選事件
