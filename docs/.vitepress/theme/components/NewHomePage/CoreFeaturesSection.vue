@@ -30,6 +30,15 @@ const links: Record<string, string> = {
   llm: '/docs/llm',
 }
 
+const accents: Record<string, string> = {
+  skill: '#00dbb6',
+  cli: '#fc5200',
+  mcp: '#6366f1',
+  sdk: '#00b8b8',
+  paper: '#f59e0b',
+  llm: '#a855f7',
+}
+
 const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
 </script>
 
@@ -41,15 +50,30 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
     </div>
 
     <div class="core-grid">
-      <a v-for="key in products" :key="key" :href="links[key]" class="core-card">
+      <a
+        v-for="key in products"
+        :key="key"
+        :href="links[key]"
+        class="core-card"
+        :style="{
+          '--card-accent': accents[key],
+          background: `radial-gradient(280px 140px at 100% 0%, color-mix(in srgb, ${accents[key]} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
+        }">
         <div class="core-card-inner">
           <div class="core-card-top">
-            <span class="core-icon" v-html="icons[key as keyof typeof icons]" />
+            <span class="core-icon" :style="{ color: accents[key] }" v-html="icons[key as keyof typeof icons]" />
             <span class="core-card-title">{{ $t(`core.${key}.title`) }}</span>
           </div>
           <p class="core-card-desc">{{ $t(`core.${key}.desc`) }}</p>
           <div class="core-tags">
-            <span v-for="tag in tags[key]" :key="tag" class="core-tag">{{ tag }}</span>
+            <span
+              v-for="tag in tags[key]"
+              :key="tag"
+              class="core-tag"
+              :style="{
+                background: `color-mix(in srgb, ${accents[key]} 10%, transparent)`,
+                color: accents[key],
+              }">{{ tag }}</span>
           </div>
         </div>
       </a>
@@ -82,7 +106,6 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
   display: flex;
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--brand-color);
   flex-shrink: 0;
 }
 .core-icon :deep(svg) {
@@ -101,8 +124,6 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
   font-size: 0.62rem;
   font-weight: 600;
   font-family: var(--vp-font-family-mono);
-  background: color-mix(in srgb, var(--brand-color) 10%, transparent);
-  color: var(--brand-color);
 }
 
 /* Grid */
@@ -129,18 +150,18 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
   position: relative;
   border-radius: 1rem;
   border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
   text-decoration: none !important;
   overflow: hidden;
-  transition: border-color 0.2s, transform 0.2s;
+  isolation: isolate;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 220ms;
 }
 :root.dark .core-card {
-  background: var(--vp-c-bg-soft);
   border-color: color-mix(in srgb, var(--vp-c-divider) 80%, transparent);
 }
 .core-card:hover {
-  border-color: var(--brand-color);
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--card-accent, var(--brand-color)) 50%, var(--vp-c-divider));
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -10px rgba(10, 14, 25, 0.13), 0 3px 12px -5px rgba(10, 14, 25, 0.06);
 }
 
 .core-card-inner {

@@ -130,6 +130,10 @@ longbridge quote AAPL.US NVDA.US
 
 `docs/.vitepress/utils.ts` 的 `rewriteMarkdownPath` 处理 URL 生成。`slug` frontmatter 覆盖默认路径：绝对 slug（`/foo`）替换整个路径；相对 slug 相对文件目录解析。
 
+## 独立页面路径结构
+
+新增独立页面（如 pricing、about 等顶级页面）必须使用文件夹结构：`docs/pricing/index.md`，而不是 `docs/pricing.md`。Nginx 解析 `/pricing` 时查找的是 `pricing/index.html`，用 `pricing.md` 生成的是 `pricing.html`，会导致 404。
+
 ## 静态资源
 
 所有图片/静态文件必须上传 CDN 后引用 URL，不得放入仓库。

@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FlickeringGrid from '../inspira/FlickeringGrid.vue'
 import ColourfulText from '../inspira/ColourfulText.vue'
-import InteractiveHoverButton from '../inspira/InteractiveHoverButton.vue'
+import ShimmerButton from '../inspira/ShimmerButton.vue'
 
 const { t } = useI18n()
 
@@ -108,18 +108,21 @@ const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
       <!-- CTA Buttons -->
       <div class="hero-cta">
         <a href="https://open.longbridge.com/account" class="hero-link">
-          <InteractiveHoverButton
-            :text="ctaGetStarted"
-            dot-color="var(--brand-10)"
-            hover-text-color="var(--brand-100)"
-            class="hero-btn-primary" />
+          <ShimmerButton
+            :shimmer-color="'rgba(255,255,255,0.6)'"
+            shimmer-size="0.04em"
+            shimmer-duration="2.5s"
+            border-radius="100px"
+            :background="'var(--brand-100)'"
+            class="hero-btn-primary">
+            {{ ctaGetStarted }}
+          </ShimmerButton>
         </a>
-        <a href="/docs/" class="hero-link">
-          <InteractiveHoverButton
-            :text="ctaReadDocs"
-            dot-color="var(--brand-100)"
-            hover-text-color="var(--brand-10)"
-            class="hero-btn-secondary" />
+        <a href="/docs/" class="hero-cta-secondary">
+          {{ ctaReadDocs }}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
         </a>
       </div>
     </div>
@@ -280,21 +283,46 @@ const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
   text-decoration: none !important;
 }
 
-.hero-btn-primary,
-.hero-btn-secondary {
-  padding: 0.625rem 2rem;
-  font-size: 1rem;
-}
-
 .hero-btn-primary {
-  border: 1.5px solid var(--brand-100);
-  background: var(--brand-100);
-  color: var(--brand-10);
+  padding: 0.7rem 2.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff !important;
+  letter-spacing: 0.01em;
 }
 
-.hero-btn-secondary {
-  background: var(--brand-10);
-  border: 1.5px solid var(--brand-100);
+:root.dark .hero-btn-primary {
+  color: #fff !important;
+}
+
+.hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--brand-100);
+  text-decoration: none !important;
+  border-radius: 100px;
+  border: 1.5px solid color-mix(in srgb, var(--brand-100) 40%, transparent);
+  transition: gap 0.2s, border-color 0.2s, background 0.2s;
+  background: transparent;
+}
+
+.hero-cta-secondary:hover {
+  gap: 0.625rem;
+  border-color: var(--brand-100);
+  background: color-mix(in srgb, var(--brand-100) 6%, transparent);
+}
+
+:root.dark .hero-cta-secondary {
+  color: var(--brand-80, var(--brand-100));
+  border-color: color-mix(in srgb, var(--brand-80, var(--brand-100)) 35%, transparent);
+}
+
+:root.dark .hero-cta-secondary:hover {
+  border-color: var(--brand-80, var(--brand-100));
+  background: color-mix(in srgb, var(--brand-80, var(--brand-100)) 8%, transparent);
 }
 </style>

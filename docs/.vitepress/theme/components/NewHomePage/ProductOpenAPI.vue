@@ -494,12 +494,14 @@ function copyInstall() {
 .sdk-cell {
   border-radius: 0.75rem;
   border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
+  background: radial-gradient(200px 120px at 100% 0%, color-mix(in srgb, var(--brand-color) 8%, transparent), transparent 70%), var(--vp-c-bg-soft);
   padding: 1rem;
-  transition: all 0.25s;
+  transition: border-color 0.2s, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.sdk-cell:hover {
-  border-color: color-mix(in srgb, var(--brand-color) 30%, var(--vp-c-divider));
+.sdk-cell:not(.sdk-cell-hero):hover {
+  border-color: color-mix(in srgb, var(--brand-color) 40%, var(--vp-c-divider));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -6px rgba(10, 14, 25, 0.10);
 }
 
 /* Hero code cell */
@@ -511,6 +513,11 @@ function copyInstall() {
   padding: 0;
   display: flex;
   flex-direction: column;
+  background: var(--vp-c-bg) !important;
+}
+
+:root.dark .sdk-cell-hero {
+  background: var(--vp-c-bg-elv, var(--vp-c-bg)) !important;
 }
 
 .sdk-hero-tabs {
@@ -543,7 +550,7 @@ function copyInstall() {
   background: transparent; border: none; cursor: pointer; transition: all 0.2s;
 }
 .sdk-cap-tab:hover { color: var(--vp-c-text-2); }
-.sdk-cap-tab.active { color: var(--vp-c-text-1); background: var(--vp-c-bg); }
+.sdk-cap-tab.active { color: var(--vp-c-text-1); background: var(--vp-c-bg-soft); }
 
 .sdk-code-wrap { position: relative; flex: 1; overflow: auto; padding: 0.75rem; }
 .sdk-code :deep(pre) { margin: 0; font-size: 0.72rem; line-height: 1.6; font-family: var(--vp-font-family-mono); background: transparent !important; }
