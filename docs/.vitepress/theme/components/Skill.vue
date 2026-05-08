@@ -2700,10 +2700,6 @@ const currentExample = computed(() => {
                 <code><span class="sc-plugin-kw">/plugin</span> marketplace add longbridge/skills</code>
                 <code><span class="sc-plugin-kw">/plugin</span> install longbridge@longbridge-skills</code>
               </div>
-              <button class="sc-plugin-cmd-copy" @click="copyPluginCmd1" :title="isEN ? 'Copy' : '复制'">
-                <svg v-if="copiedPluginCmd1" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00b88a" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
-                <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-              </button>
             </div>
           </div>
         </div>
@@ -2915,6 +2911,7 @@ const currentExample = computed(() => {
               <div class="sc-modal-client-tabs">
                 <button
                   v-for="(v, key) in INSTALL_CLIENTS"
+                  v-show="key === 'cli' || key === 'manual'"
                   :key="key"
                   class="sc-modal-client-tab"
                   :class="{ 'sc-modal-client-tab--active': installClient === key }"
@@ -5482,15 +5479,16 @@ const currentExample = computed(() => {
     0 20px 60px -10px rgba(0, 0, 0, 0.35),
     0 8px 24px rgba(0, 0, 0, 0.18);
   color: var(--vp-c-text-1);
-  overflow: hidden;
+  overflow: clip;
 }
 /* Header */
 .sc-modal-head {
   padding: 24px 28px 20px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   background: linear-gradient(135deg, rgba(0, 184, 184, 0.1) 0%, transparent 70%);
   border-bottom: 1px solid var(--vp-c-divider);
+  flex-shrink: 0;
 }
 .dark .sc-modal-head {
   background: linear-gradient(135deg, rgba(0, 184, 184, 0.18) 0%, transparent 70%);
@@ -5811,28 +5809,6 @@ const currentExample = computed(() => {
 }
 .sc-plugin-kw {
   color: #e09765;
-}
-.sc-plugin-cmd-copy {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 22px;
-  height: 22px;
-  border-radius: 4px;
-  border: 0;
-  background: transparent;
-  color: var(--vp-c-text-3);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-}
-.sc-plugin-cmd-copy:hover {
-  background: rgba(0, 0, 0, 0.08);
-}
-.dark .sc-plugin-cmd-copy:hover {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Transitions */
