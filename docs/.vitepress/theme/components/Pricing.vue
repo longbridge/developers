@@ -197,12 +197,12 @@ const t = computed(() => {
     </div>
 
     <!-- Free included -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 bg-[var(--vp-c-default-soft)] rounded-[14px] overflow-hidden mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 bg-[var(--vp-c-default-soft)] rounded-[14px] overflow-hidden mb-8">
       <div
         v-for="(item, i) in t.freeItems"
         :key="item.name"
         class="p-[18px_20px]"
-        :class="{ 'border-t-2 sm:border-t-0 sm:border-l-2 border-dashed border-[var(--vp-c-divider)]': i > 0 }">
+        :class="{ 'border-t-2 md:border-t-0 md:border-l-2 border-dashed border-[var(--vp-c-divider)]': i > 0 }">
         <div class="flex items-center gap-1.5 mb-1.5">
           <svg class="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none">
             <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.18" />
@@ -225,11 +225,11 @@ const t = computed(() => {
 
     <!-- Billing period selector -->
     <div class="flex justify-center items-center gap-3 mb-6">
-      <div class="grid grid-cols-2 sm:flex gap-0.5 p-1 rounded-lg bg-[var(--vp-c-default-soft)]">
+      <div class="flex gap-0.5 p-1 rounded-lg bg-[var(--vp-c-default-soft)]">
         <button
           v-for="p in t.billingPeriods"
           :key="p.id"
-          class="relative px-3.5 py-1.5 sm:min-w-28 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer whitespace-nowrap"
+          class="relative px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm sm:min-w-28 rounded-md font-medium transition-all duration-150 cursor-pointer whitespace-nowrap"
           :class="
             billing === p.id
               ? 'bg-[var(--vp-c-bg)] shadow-sm text-[var(--vp-c-text-1)]'
