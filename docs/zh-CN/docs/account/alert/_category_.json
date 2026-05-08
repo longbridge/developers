@@ -1,1 +1,7 @@
-{ "position": 2, "label": "Alerts", "collapsed": false }
+{
+  "position": 2,
+  "label": "价格提醒",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}

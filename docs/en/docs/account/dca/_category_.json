@@ -1,1 +1,7 @@
-{ "position": 3, "label": "DCA", "collapsed": false }
+{
+  "position": 3,
+  "label": "DCA",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}

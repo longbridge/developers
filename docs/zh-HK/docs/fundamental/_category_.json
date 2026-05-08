@@ -1,1 +1,7 @@
-{ "position": 5, "label": "Fundamental", "collapsed": false }
+{
+  "position": 5,
+  "label": "基本面",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}

@@ -1,1 +1,7 @@
-{ "position": 4, "label": "Sharelist", "collapsed": false }
+{
+  "position": 4,
+  "label": "自选股",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}

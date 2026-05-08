@@ -1,1 +1,7 @@
-{ "position": 3, "label": "Calendar", "collapsed": false }
+{
+  "position": 3,
+  "label": "Calendar",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}

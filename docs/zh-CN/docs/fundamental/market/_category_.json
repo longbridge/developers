@@ -1,1 +1,7 @@
-{ "position": 2, "label": "Market", "collapsed": false }
+{
+  "position": 2,
+  "label": "市场",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}

@@ -1,1 +1,7 @@
-{ "position": 3, "label": "Calendar", "collapsed": false }
+{
+  "position": 3,
+  "label": "日历",
+  "collapsible": true,
+  "collapsed": false,
+  "link": null
+}
