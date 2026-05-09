@@ -38,8 +38,9 @@ export default defineConfig(
     metaChunk: true,
     ignoreDeadLinks: true,
     base: '/',
+    buildConcurrency: 10,
 
-    srcExclude: ['README.md', ...regionSrcExclude],
+    srcExclude: ['README.md', 'superpowers/**', ...regionSrcExclude],
     rewrites: rewriteMarkdownPath,
     markdown: markdownConfig,
     transformHtml(code) {
@@ -180,7 +181,7 @@ export default defineConfig(
 
     vite: {
       ssr: {
-        noExternal: ['vue-i18n'],
+        noExternal: ['vue-i18n', 'mark.js'],
       },
       server: {
         port: 8000,
@@ -203,6 +204,18 @@ export default defineConfig(
       },
       build: {
         chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                if (id.includes('shiki') || id.includes('shikiji')) return 'shiki'
+                if (id.includes('@vue') || id.includes('vue-demi')) return 'vue-vendor'
+                if (id.includes('unocss') || id.includes('@unocss')) return 'unocss'
+                return 'vendor'
+              }
+            },
+          },
+        },
       },
       resolve: {
         alias: [
@@ -217,6 +230,15 @@ export default defineConfig(
         ],
       },
       plugins: [
+        {
+          name: 'gc-between-bundles',
+          buildEnd() {
+            if (typeof global.gc === 'function') {
+              global.gc()
+              console.log('✓ GC triggered after bundle')
+            }
+          },
+        },
         {
           name: 'yaml-transform',
           transform(src: string, id: string) {
