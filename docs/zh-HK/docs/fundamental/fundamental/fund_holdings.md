@@ -34,19 +34,11 @@ longbridge fund-holder AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge fund-holder TSLA.US
-longbridge fund-holder AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -230,8 +222,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [fund_holdings_rsp](#fund_holdings_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [fund_holdings_rsp](#fund_holdings_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -241,8 +233,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Fund holder list |
-| ∟ fund_name | string | true | Fund name |
-| ∟ shares | string | true | Number of shares held |
-| ∟ percentage | string | true | Ownership percentage |
-| ∟ date | string | false | Report date |
+| list | object[] | 是 | 基金持有人列表 |
+| ∟ fund_name | string | 是 | 基金名稱 |
+| ∟ shares | string | 是 | 持股數量 |
+| ∟ percentage | string | 是 | 持股比例 |
+| ∟ date | string | 否 | 報告日期 |

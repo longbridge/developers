@@ -38,13 +38,6 @@ longbridge market-status
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge market-status
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

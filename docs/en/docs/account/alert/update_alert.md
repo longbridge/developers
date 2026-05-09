@@ -40,14 +40,6 @@ longbridge alert disable 112326
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert enable 112326
-longbridge alert disable 112326
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

@@ -40,14 +40,6 @@ longbridge profit-analysis --start 2026-01-01
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge profit-analysis
-longbridge profit-analysis --start 2026-01-01
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

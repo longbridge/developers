@@ -2,6 +2,6 @@
   "position": 3,
   "label": "DCA",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "link": null
 }

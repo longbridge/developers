@@ -39,14 +39,6 @@ longbridge shareholder AAPL.US
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge shareholder TSLA.US
-longbridge shareholder AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

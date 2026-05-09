@@ -41,14 +41,6 @@ longbridge profit-analysis detail AAPL.US
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge profit-analysis detail TSLA.US
-longbridge profit-analysis detail AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

@@ -1,7 +1,7 @@
 ---
-slug: capital-flow
-title: 资金流水
-sidebar_position: 5
+slug: operating
+title: 經營數據
+sidebar_position: 19
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,21 +10,21 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-查询账户资金流水历史，包含入金、出金、分红和结算等。
+按財報期獲取經營數據及核心財務指標摘要。
 
 <CliCommand>
-longbridge cash-flow
-longbridge cash-flow --format json
+longbridge operating AAPL.US
+longbridge operating TSLA.US
 </CliCommand>
 
-<SDKLinks module="portfolio" klass="PortfolioContext" method="capital_flow" />
+<SDKLinks module="fundamental" klass="FundamentalContext" method="operating" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/capital_flow</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/fundamental/operating</td></tr>
 </tbody>
 </table>
 
@@ -34,34 +34,22 @@ longbridge cash-flow --format json
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start_time | integer | NO | Start time as Unix timestamp (seconds) |
-| end_time | integer | NO | End time as Unix timestamp (seconds) |
-| business_type | integer | NO | Business type filter. Omit for all types. |
-| symbol | string | NO | Filter by security symbol |
-| page | integer | NO | Page number (1-based, default: 1) |
-| size | integer | NO | Records per page (default: 20) |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
+| period | string | 否 | 財報期篩選，如 `q1`、`q2`、`q3`、`q4`、`annual` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge cash-flow
-longbridge cash-flow --format json
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import PortfolioContext, Config, OAuthBuilder
+from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
-ctx = PortfolioContext(config)
+ctx = FundamentalContext(config)
 
-resp = ctx.capital_flow()
+resp = ctx.operating("AAPL.US")
 print(resp)
 ```
 
@@ -70,14 +58,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncPortfolioContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncFundamentalContext, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
-    ctx = AsyncPortfolioContext.create(config)
+    ctx = AsyncFundamentalContext.create(config)
 
-    resp = await ctx.capital_flow()
+    resp = await ctx.operating("AAPL.US")
     print(resp)
 
 if __name__ == "__main__":
@@ -88,15 +76,15 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, PortfolioContext, OAuth } = require('longbridge')
+const { Config, FundamentalContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
     console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = PortfolioContext.new(config)
-  const resp = await ctx.capital_flow()
+  const ctx = FundamentalContext.new(config)
+  const resp = await ctx.operating('AAPL.US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -107,14 +95,14 @@ main().catch(console.error)
 
 ```java
 import com.longbridge.*;
-import com.longbridge.portfolio.*;
+import com.longbridge.fundamental.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             PortfolioContext ctx = PortfolioContext.create(config)) {
-            var resp = ctx.getCapitalFlow().get();
+             FundamentalContext ctx = FundamentalContext.create(config)) {
+            var resp = ctx.getOperating("AAPL.US").get();
             System.out.println(resp);
         }
     }
@@ -126,14 +114,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, portfolio::PortfolioContext, Config};
+use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let ctx = PortfolioContext::new(config);
-    let resp = ctx.capital_flow().await?;
+    let ctx = FundamentalContext::new(config);
+    let resp = ctx.operating("AAPL.US").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -147,7 +135,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #include <longbridge.hpp>
 
 using namespace longbridge;
-using namespace longbridge::portfolio;
+using namespace longbridge::fundamental;
 
 int main() {
     OAuthBuilder("your-client-id").build(
@@ -155,8 +143,8 @@ int main() {
         [](auto res) {
             if (!res) return;
             Config config = Config::from_oauth(*res);
-            PortfolioContext ctx = PortfolioContext::create(config);
-            ctx.capital_flow([](auto resp) {
+            FundamentalContext ctx = FundamentalContext::create(config);
+            ctx.operating("AAPL.US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -177,7 +165,7 @@ import (
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/portfolio"
+	"github.com/longbridge/openapi-go/fundamental"
 )
 
 func main() {
@@ -190,12 +178,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := portfolio.NewFromCfg(conf)
+	c, err := fundamental.NewFromCfg(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.CapitalFlow(context.Background())
+	resp, err := c.Operating(context.Background(), "AAPL.US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -219,15 +207,17 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "symbol": "AAPL.US",
     "list": [
       {
-        "transaction_flow_name": "Cash Dividend",
-        "direction": 1,
-        "business_type": 2,
-        "balance": "25.00",
-        "currency": "USD",
-        "business_time": "1774310400",
-        "symbol": "AAPL.US"
+        "period": "Q1 2024",
+        "revenue": 119575000000,
+        "gross_profit": 54856000000,
+        "operating_income": 40372000000,
+        "net_income": 33916000000,
+        "gross_margin": 0.4588,
+        "operating_margin": 0.3377,
+        "net_margin": 0.2837
       }
     ]
   }
@@ -238,22 +228,24 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [capital_flow_rsp](#capital_flow_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [OperatingList](#OperatingList) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### capital_flow_rsp
+### OperatingList
 
-<a id="capital_flow_rsp"></a>
+<a id="OperatingList"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Cash flow records |
-| ∟ transaction_flow_name | string | true | Flow type description |
-| ∟ direction | int32 | true | `1` = inflow, `-1` = outflow |
-| ∟ business_type | int32 | true | Business type code |
-| ∟ balance | string | true | Amount |
-| ∟ currency | string | true | Currency |
-| ∟ business_time | string | true | Transaction time as Unix timestamp |
-| ∟ symbol | string | false | Associated security symbol |
+| symbol | string | 是 | 證券代碼 |
+| list | object[] | 是 | 經營數據記錄列表 |
+| list[].period | string | 否 | 財報期（如 Q1 2024、Annual 2023） |
+| list[].revenue | int64 | 否 | 總營收 |
+| list[].gross_profit | int64 | 否 | 毛利潤 |
+| list[].operating_income | int64 | 否 | 營業利潤 |
+| list[].net_income | int64 | 否 | 淨利潤 |
+| list[].gross_margin | double | 否 | 毛利率 |
+| list[].operating_margin | double | 否 | 營業利潤率 |
+| list[].net_margin | double | 否 | 淨利潤率 |

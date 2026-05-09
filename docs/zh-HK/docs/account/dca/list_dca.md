@@ -34,20 +34,12 @@ longbridge dca --status Active
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| status | string | NO | Filter by plan status: `Active`, `Suspended`, `Finished` |
-| symbol | string | NO | Filter by security symbol |
+| status | string | 否 | 按計劃狀態篩選：`Active`（進行中）、`Suspended`（已暫停）、`Finished`（已結束） |
+| symbol | string | 否 | 按證券代碼篩選 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca
-longbridge dca --status Active
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -234,8 +226,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [list_dca_rsp](#list_dca_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [list_dca_rsp](#list_dca_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -245,11 +237,11 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | DCA plan list |
-| ∟ id | string | true | Plan ID |
-| ∟ symbol | string | true | Security symbol |
-| ∟ status | string | true | Plan status: `Active`, `Suspended`, `Finished` |
-| ∟ amount | string | true | Recurring investment amount |
-| ∟ frequency | string | true | Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly` |
-| ∟ day_of_week | string | false | Day of week for weekly/fortnightly plans |
-| ∟ next_trade_date | string | false | Next scheduled trade date (ISO 8601) |
+| list | object[] | true | 定投計劃列表 |
+| ∟ id | string | true | 計劃 ID |
+| ∟ symbol | string | true | 證券代碼 |
+| ∟ status | string | true | 計劃狀態：`Active`（進行中）、`Suspended`（已暫停）、`Finished`（已結束） |
+| ∟ amount | string | true | 定投金額 |
+| ∟ frequency | string | true | 頻率：`Daily`（每日）、`Weekly`（每週）、`Fortnightly`（每兩週）、`Monthly`（每月） |
+| ∟ day_of_week | string | false | 每週/每兩週計劃的執行星期 |
+| ∟ next_trade_date | string | false | 下次計劃交易日期（ISO 8601） |

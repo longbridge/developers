@@ -34,21 +34,13 @@ longbridge profit-analysis detail AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `TSLA.US` |
-| start_date | string | NO | Analysis start date in `YYYY-MM-DD` format |
-| end_date | string | NO | Analysis end date in `YYYY-MM-DD` format |
+| symbol | string | 是 | 证券代码，例如 `TSLA.US` |
+| start_date | string | 否 | 分析开始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 分析结束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge profit-analysis detail TSLA.US
-longbridge profit-analysis detail AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -231,8 +223,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [profit_analysis_detail_rsp](#profit_analysis_detail_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [profit_analysis_detail_rsp](#profit_analysis_detail_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -242,10 +234,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| name | string | true | Security name |
-| pnl | string | true | Total P&L |
-| pnl_pct | string | true | P&L percentage |
-| cost | string | true | Total cost basis |
-| market_value | string | false | Current market value |
-| currency | string | true | Currency |
+| symbol | string | true | 证券代码 |
+| name | string | true | 证券名称 |
+| pnl | string | true | 总盈亏金额 |
+| pnl_pct | string | true | 盈亏百分比 |
+| cost | string | true | 总成本 |
+| market_value | string | false | 当前市值 |
+| currency | string | true | 货币 |

@@ -34,19 +34,11 @@ longbridge alert TSLA.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | NO | Filter by security symbol, e.g. `TSLA.US` |
+| symbol | string | 否 | 按證券代碼篩選，例如 `TSLA.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert
-longbridge alert TSLA.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -232,8 +224,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [list_alerts_rsp](#list_alerts_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [list_alerts_rsp](#list_alerts_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -243,10 +235,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Alert list |
-| ∟ id | int64 | true | Alert ID |
-| ∟ symbol | string | true | Security symbol |
-| ∟ price | string | true | Target price |
-| ∟ direction | string | true | Direction: `rise` or `fall` |
-| ∟ enabled | bool | true | Whether alert is enabled |
-| ∟ frequency | string | true | Trigger frequency: `once` or `every` |
+| list | object[] | true | 提醒列表 |
+| ∟ id | int64 | true | 提醒 ID |
+| ∟ symbol | string | true | 證券代碼 |
+| ∟ price | string | true | 目標價格 |
+| ∟ direction | string | true | 方向：`rise`（上漲）或 `fall`（下跌） |
+| ∟ enabled | bool | true | 提醒是否啟用 |
+| ∟ frequency | string | true | 觸發頻率：`once`（僅一次）或 `every`（每次） |

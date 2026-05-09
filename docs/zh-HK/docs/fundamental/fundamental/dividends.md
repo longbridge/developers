@@ -1,6 +1,6 @@
 ---
 slug: dividends
-title: 分紅歷史
+title: 股息歷史
 sidebar_position: 3
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取指定證券的分紅歷史及即將公布的分紅資訊。
+獲取指定證券的股息歷史及即將公布的股息信息。
 
 <CliCommand>
 longbridge dividend TSLA.US
@@ -34,21 +34,13 @@ longbridge dividend AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
+| start_date | string | 否 | 開始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 結束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dividend TSLA.US
-longbridge dividend AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -233,8 +225,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dividends_rsp](#dividends_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [dividends_rsp](#dividends_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -244,9 +236,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Dividend records |
-| ∟ ex_date | string | true | Ex-dividend date |
-| ∟ pay_date | string | false | Payment date |
-| ∟ amount | string | true | Dividend amount per share |
-| ∟ currency | string | true | Currency |
-| ∟ type | string | true | Dividend type, e.g. `Cash`, `Stock` |
+| list | object[] | 是 | 股息記錄列表 |
+| ∟ ex_date | string | 是 | 除息日 |
+| ∟ pay_date | string | 否 | 派息日 |
+| ∟ amount | string | 是 | 每股股息金額 |
+| ∟ currency | string | 是 | 貨幣 |
+| ∟ type | string | 是 | 股息類型，例如 `Cash`（現金）、`Stock`（股票） |

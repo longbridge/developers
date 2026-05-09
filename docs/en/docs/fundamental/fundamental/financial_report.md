@@ -41,14 +41,6 @@ longbridge financial-report AAPL.US
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge financial-report TSLA.US --kind IS
-longbridge financial-report AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

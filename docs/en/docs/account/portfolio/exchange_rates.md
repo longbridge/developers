@@ -38,13 +38,6 @@ longbridge exchange-rate
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge exchange-rate
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

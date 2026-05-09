@@ -33,20 +33,13 @@ longbridge dca history 1225781523156889600
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | YES | Plan ID (path parameter) |
-| page | integer | NO | Page number (1-based, default: 1) |
-| size | integer | NO | Records per page (default: 20) |
+| id | string | 是 | 計劃 ID（路徑參數） |
+| page | integer | 否 | 頁碼（從 1 開始，默認：1） |
+| size | integer | 否 | 每頁數量（默認：20） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca history 1225781523156889600
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -232,8 +225,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dca_history_rsp](#dca_history_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [dca_history_rsp](#dca_history_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -243,10 +236,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Trade history records |
-| ∟ trade_date | string | true | Trade execution date (ISO 8601) |
-| ∟ symbol | string | true | Security symbol |
-| ∟ amount | string | true | Invested amount |
-| ∟ price | string | false | Execution price |
-| ∟ quantity | string | false | Quantity purchased |
-| ∟ status | string | true | Trade status: `Filled`, `Failed` |
+| list | object[] | true | 交易歷史紀錄 |
+| ∟ trade_date | string | true | 交易執行日期（ISO 8601） |
+| ∟ symbol | string | true | 證券代碼 |
+| ∟ amount | string | true | 投入金額 |
+| ∟ price | string | false | 成交價格 |
+| ∟ quantity | string | false | 買入數量 |
+| ∟ status | string | true | 交易狀態：`Filled`（已成交）、`Failed`（失敗） |

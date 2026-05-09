@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取指定證券的成交統計數據，展示成交量的價格分佈。
+獲取指定證券的成交統計數據，展示成交量的價格分布。
 
 <CliCommand>
 longbridge trade-stats 700.HK
@@ -34,19 +34,11 @@ longbridge trade-stats TSLA.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `700.HK` |
+| symbol | string | 是 | 證券代碼，例如 `700.HK` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge trade-stats 700.HK
-longbridge trade-stats TSLA.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -230,8 +222,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [trading_stats_rsp](#trading_stats_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [trading_stats_rsp](#trading_stats_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -241,12 +233,12 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| prev_close | string | true | Previous close price |
-| avg_price | string | true | Average trading price |
-| trades | int32 | true | Number of trades |
-| volume | string | true | Total volume |
-| turnover | string | true | Total turnover |
-| distribution | object[] | true | Price-volume distribution |
-| ∟ price | string | true | Price level |
-| ∟ volume | string | true | Volume at this price |
-| ∟ pct | string | true | Percentage of total volume |
+| prev_close | string | 是 | 前收盤價 |
+| avg_price | string | 是 | 平均成交價 |
+| trades | int32 | 是 | 成交筆數 |
+| volume | string | 是 | 總成交量 |
+| turnover | string | 是 | 總成交額 |
+| distribution | object[] | 是 | 價格-成交量分布 |
+| ∟ price | string | 是 | 價格檔位 |
+| ∟ volume | string | 是 | 該價格的成交量 |
+| ∟ pct | string | 是 | 占總成交量的百分比 |

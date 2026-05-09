@@ -34,19 +34,11 @@ longbridge broker-holding 9988.HK
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | HK security symbol, e.g. `700.HK` |
+| symbol | string | 是 | 港股证券代码，例如 `700.HK` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge broker-holding 700.HK
-longbridge broker-holding 9988.HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -232,8 +224,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [broker_positions_rsp](#broker_positions_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [broker_positions_rsp](#broker_positions_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -243,10 +235,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| updated_at | string | true | Last updated Unix timestamp |
-| participants | object[] | true | Broker position list |
-| ∟ broker_id | int32 | true | Broker ID |
-| ∟ broker_name | string | true | Broker name |
-| ∟ buy_qty | string | true | Buy quantity |
-| ∟ sell_qty | string | true | Sell quantity |
-| ∟ net_qty | string | true | Net quantity (buy - sell) |
+| updated_at | string | 是 | 最后更新的 Unix 时间戳 |
+| participants | object[] | 是 | 经纪商持仓列表 |
+| ∟ broker_id | int32 | 是 | 经纪商 ID |
+| ∟ broker_name | string | 是 | 经纪商名称 |
+| ∟ buy_qty | string | 是 | 买入数量 |
+| ∟ sell_qty | string | 是 | 卖出数量 |
+| ∟ net_qty | string | 是 | 净持仓数量（买入 - 卖出） |

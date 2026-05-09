@@ -34,19 +34,11 @@ longbridge constituent SPY.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Index or ETF symbol, e.g. `HSI.HK`, `SPY.US` |
+| symbol | string | 是 | 指數或 ETF 代碼，例如 `HSI.HK`、`SPY.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge constituent HSI.HK
-longbridge constituent SPY.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -234,8 +226,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [index_components_rsp](#index_components_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [index_components_rsp](#index_components_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -245,12 +237,12 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| total | int32 | true | Total number of components |
-| rise | int32 | true | Number of rising components |
-| fall | int32 | true | Number of falling components |
-| flat | int32 | true | Number of flat components |
-| components | object[] | true | Component list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Security name |
-| ∟ price | string | false | Current price |
-| ∟ change_pct | string | false | Percentage change |
+| total | int32 | 是 | 成分股總數 |
+| rise | int32 | 是 | 上漲成分股數量 |
+| fall | int32 | 是 | 下跌成分股數量 |
+| flat | int32 | 是 | 平盤成分股數量 |
+| components | object[] | 是 | 成分股列表 |
+| ∟ symbol | string | 是 | 證券代碼 |
+| ∟ name | string | 是 | 證券名稱 |
+| ∟ price | string | 否 | 當前價格 |
+| ∟ change_pct | string | 否 | 漲跌幅 |

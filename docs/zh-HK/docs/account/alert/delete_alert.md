@@ -34,19 +34,11 @@ longbridge alert delete 112326
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | YES | Alert ID (path parameter) |
+| id | int64 | 是 | 提醒 ID（路徑參數） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert delete 486469
-longbridge alert delete 112326
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -221,8 +213,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [delete_alert_rsp](#delete_alert_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [delete_alert_rsp](#delete_alert_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -230,4 +222,4 @@ func main() {
 
 <a id="delete_alert_rsp"></a>
 
-No response body fields.
+無響應體字段。

@@ -34,19 +34,11 @@ longbridge executive AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge executive TSLA.US
-longbridge executive AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -230,8 +222,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [executives_rsp](#executives_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [executives_rsp](#executives_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -241,8 +233,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Executive list |
-| ∟ name | string | true | Executive name |
-| ∟ title | string | true | Job title |
-| ∟ age | int32 | false | Age |
-| ∟ since | string | false | Year appointed |
+| list | object[] | 是 | 高管列表 |
+| ∟ name | string | 是 | 高管姓名 |
+| ∟ title | string | 是 | 职位 |
+| ∟ age | int32 | 否 | 年龄 |
+| ∟ since | string | 否 | 任职年份 |

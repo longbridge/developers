@@ -2,6 +2,6 @@
   "position": 3,
   "label": "Calendar",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "link": null
 }

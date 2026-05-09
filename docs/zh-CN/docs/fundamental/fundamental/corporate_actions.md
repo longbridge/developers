@@ -34,21 +34,13 @@ longbridge corp-action AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
+| start_date | string | 否 | 开始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 结束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge corp-action TSLA.US
-longbridge corp-action AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -232,8 +224,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [corporate_actions_rsp](#corporate_actions_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [corporate_actions_rsp](#corporate_actions_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -243,8 +235,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Corporate action list |
-| ∟ type | string | true | Action type: `Split`, `Merger`, `Spinoff`, `Rights` |
-| ∟ date | string | true | Effective date |
-| ∟ ratio | string | false | Split/merge ratio |
-| ∟ description | string | false | Action description |
+| list | object[] | 是 | 公司行动列表 |
+| ∟ type | string | 是 | 行动类型：`Split`（拆股）、`Merger`（合并）、`Spinoff`（分拆）、`Rights`（配股） |
+| ∟ date | string | 是 | 生效日期 |
+| ∟ ratio | string | 否 | 拆股/合并比例 |
+| ∟ description | string | 否 | 行动描述 |

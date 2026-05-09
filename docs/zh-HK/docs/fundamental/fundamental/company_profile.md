@@ -34,19 +34,11 @@ longbridge company AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge company TSLA.US
-longbridge company AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -229,8 +221,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [company_profile_rsp](#company_profile_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [company_profile_rsp](#company_profile_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -240,10 +232,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| name | string | true | Company name |
-| symbol | string | true | Security symbol |
-| founded | string | false | Founding year |
-| ceo | string | false | Current CEO |
-| employees | int32 | false | Number of employees |
-| website | string | false | Company website |
-| description | string | false | Business description |
+| name | string | 是 | 公司名稱 |
+| symbol | string | 是 | 證券代碼 |
+| founded | string | 否 | 成立年份 |
+| ceo | string | 否 | 現任 CEO |
+| employees | int32 | 否 | 員工人數 |
+| website | string | 否 | 公司官網 |
+| description | string | 否 | 業務描述 |

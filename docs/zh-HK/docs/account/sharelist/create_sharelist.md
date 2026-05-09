@@ -1,6 +1,6 @@
 ---
 slug: create-sharelist
-title: 建立自選列表
+title: 創建自選列表
 sidebar_position: 2
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-建立新的社群自選股列表，可選擇預設初始證券。
+創建新的社區自選股列表，可選擇預設初始證券。
 
 <CliCommand>
 longbridge sharelist create --name "AI Picks" --description "Top AI infrastructure stocks"
@@ -33,20 +33,13 @@ longbridge sharelist create --name "AI Picks" --description "Top AI infrastructu
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| name | string | YES | Sharelist name |
-| description | string | NO | Description |
-| securities | string[] | NO | Initial list of security symbols, e.g. `["AAPL.US", "NVDA.US"]` |
+| name | string | 是 | 股單名稱 |
+| description | string | 否 | 描述 |
+| securities | string[] | 否 | 初始證券代碼列表，例如 `["AAPL.US", "NVDA.US"]` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist create --name "AI Picks" --description "Top AI infrastructure stocks"
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -223,8 +216,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_sharelist_rsp](#create_sharelist_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [create_sharelist_rsp](#create_sharelist_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -234,4 +227,4 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | ID of the newly created sharelist |
+| id | int64 | true | 新創建股單的 ID |

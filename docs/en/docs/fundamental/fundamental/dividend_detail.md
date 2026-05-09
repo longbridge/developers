@@ -1,7 +1,7 @@
 ---
-slug: capital-flow
-title: 資金流水
-sidebar_position: 5
+slug: dividend-detail
+title: Dividend Detail
+sidebar_position: 12
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,21 +10,16 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-查詢賬戶資金流水歷史，包含入金、出金、分紅和結算等。
+Get detailed dividend information including declared, ex-dividend, and payment dates.
 
-<CliCommand>
-longbridge cash-flow
-longbridge cash-flow --format json
-</CliCommand>
-
-<SDKLinks module="portfolio" klass="PortfolioContext" method="capital_flow" />
+<SDKLinks module="fundamental" klass="FundamentalContext" method="dividend_detail" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/capital_flow</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/fundamental/dividend_detail</td></tr>
 </tbody>
 </table>
 
@@ -34,34 +29,21 @@ longbridge cash-flow --format json
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start_time | integer | NO | Start time as Unix timestamp (seconds) |
-| end_time | integer | NO | End time as Unix timestamp (seconds) |
-| business_type | integer | NO | Business type filter. Omit for all types. |
-| symbol | string | NO | Filter by security symbol |
-| page | integer | NO | Page number (1-based, default: 1) |
-| size | integer | NO | Records per page (default: 20) |
+| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge cash-flow
-longbridge cash-flow --format json
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import PortfolioContext, Config, OAuthBuilder
+from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
-ctx = PortfolioContext(config)
+ctx = FundamentalContext(config)
 
-resp = ctx.capital_flow()
+resp = ctx.dividend_detail("AAPL.US")
 print(resp)
 ```
 
@@ -70,14 +52,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncPortfolioContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncFundamentalContext, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
-    ctx = AsyncPortfolioContext.create(config)
+    ctx = AsyncFundamentalContext.create(config)
 
-    resp = await ctx.capital_flow()
+    resp = await ctx.dividend_detail("AAPL.US")
     print(resp)
 
 if __name__ == "__main__":
@@ -88,15 +70,15 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, PortfolioContext, OAuth } = require('longbridge')
+const { Config, FundamentalContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
     console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = PortfolioContext.new(config)
-  const resp = await ctx.capital_flow()
+  const ctx = FundamentalContext.new(config)
+  const resp = await ctx.dividendDetail('AAPL.US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -107,14 +89,14 @@ main().catch(console.error)
 
 ```java
 import com.longbridge.*;
-import com.longbridge.portfolio.*;
+import com.longbridge.fundamental.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             PortfolioContext ctx = PortfolioContext.create(config)) {
-            var resp = ctx.getCapitalFlow().get();
+             FundamentalContext ctx = FundamentalContext.create(config)) {
+            var resp = ctx.getDividendDetail("AAPL.US").get();
             System.out.println(resp);
         }
     }
@@ -126,14 +108,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, portfolio::PortfolioContext, Config};
+use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let ctx = PortfolioContext::new(config);
-    let resp = ctx.capital_flow().await?;
+    let ctx = FundamentalContext::new(config);
+    let resp = ctx.dividend_detail("AAPL.US").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -147,7 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #include <longbridge.hpp>
 
 using namespace longbridge;
-using namespace longbridge::portfolio;
+using namespace longbridge::fundamental;
 
 int main() {
     OAuthBuilder("your-client-id").build(
@@ -155,8 +137,8 @@ int main() {
         [](auto res) {
             if (!res) return;
             Config config = Config::from_oauth(*res);
-            PortfolioContext ctx = PortfolioContext::create(config);
-            ctx.capital_flow([](auto resp) {
+            FundamentalContext ctx = FundamentalContext::create(config);
+            ctx.dividend_detail("AAPL.US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -177,7 +159,7 @@ import (
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/portfolio"
+	"github.com/longbridge/openapi-go/fundamental"
 )
 
 func main() {
@@ -190,12 +172,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := portfolio.NewFromCfg(conf)
+	c, err := fundamental.NewFromCfg(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.CapitalFlow(context.Background())
+	resp, err := c.DividendDetail(context.Background(), "AAPL.US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -221,13 +203,14 @@ func main() {
   "data": {
     "list": [
       {
-        "transaction_flow_name": "Cash Dividend",
-        "direction": 1,
-        "business_type": 2,
-        "balance": "25.00",
+        "symbol": "AAPL.US",
+        "dividend_type": "cash",
+        "amount": 0.24,
         "currency": "USD",
-        "business_time": "1774310400",
-        "symbol": "AAPL.US"
+        "declared_date": "2024-02-01",
+        "ex_date": "2024-02-09",
+        "record_date": "2024-02-12",
+        "payment_date": "2024-02-15"
       }
     ]
   }
@@ -238,22 +221,23 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [capital_flow_rsp](#capital_flow_rsp) |
+| 200    | Success     | [DividendList](#DividendList) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### capital_flow_rsp
+### DividendList
 
-<a id="capital_flow_rsp"></a>
+<a id="DividendList"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Cash flow records |
-| ∟ transaction_flow_name | string | true | Flow type description |
-| ∟ direction | int32 | true | `1` = inflow, `-1` = outflow |
-| ∟ business_type | int32 | true | Business type code |
-| ∟ balance | string | true | Amount |
-| ∟ currency | string | true | Currency |
-| ∟ business_time | string | true | Transaction time as Unix timestamp |
-| ∟ symbol | string | false | Associated security symbol |
+| list | object[] | true | List of dividend records |
+| list[].symbol | string | true | Security symbol |
+| list[].dividend_type | string | false | Dividend type (e.g. cash, stock) |
+| list[].amount | double | false | Dividend amount per share |
+| list[].currency | string | false | Currency code |
+| list[].declared_date | string | false | Declaration date (YYYY-MM-DD) |
+| list[].ex_date | string | false | Ex-dividend date (YYYY-MM-DD) |
+| list[].record_date | string | false | Record date (YYYY-MM-DD) |
+| list[].payment_date | string | false | Payment date (YYYY-MM-DD) |

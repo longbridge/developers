@@ -17,14 +17,14 @@ longbridge finance-calendar macrodata
 longbridge finance-calendar macrodata --market US
 </CliCommand>
 
-<SDKLinks module="calendar" klass="CalendarContext" method="macro_calendar" />
+<SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/calendar/macro</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
 </tbody>
 </table>
 
@@ -34,21 +34,13 @@ longbridge finance-calendar macrodata --market US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| country | string | NO | Country code: `US`, `CN`, `EU`, `JP`. Omit for global. |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| start | string | YES | Start date, YYYY-MM-DD |
+| end | string | YES | End date, YYYY-MM-DD |
+| market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge finance-calendar macrodata
-longbridge finance-calendar macrodata --market US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

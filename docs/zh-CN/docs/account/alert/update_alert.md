@@ -34,20 +34,12 @@ longbridge alert disable 112326
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | YES | Alert ID (path parameter) |
-| enabled | bool | YES | Set to `true` to enable or `false` to disable |
+| id | int64 | 是 | 提醒 ID（路径参数） |
+| enabled | bool | 是 | 设为 `true` 启用，`false` 禁用 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert enable 112326
-longbridge alert disable 112326
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -222,8 +214,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [update_alert_rsp](#update_alert_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [update_alert_rsp](#update_alert_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -231,4 +223,4 @@ func main() {
 
 <a id="update_alert_rsp"></a>
 
-No response body fields.
+无响应体字段。

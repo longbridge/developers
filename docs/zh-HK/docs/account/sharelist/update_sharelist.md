@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-在自選股列表中新增、移除或重排證券，或對列表重新命名。
+在自選股列表中添加、移除或重排證券，或對列表重命名。
 
 <CliCommand>
 longbridge sharelist add 15921 TSLA.US NVDA.US AAPL.US
@@ -34,22 +34,14 @@ longbridge sharelist remove 15921 AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | YES | Sharelist ID (path parameter) |
-| name | string | NO | New name. Omit to keep existing. |
-| mode | string | NO | Operation mode for securities: `add`, `remove`, or `replace` |
-| securities | string[] | NO | Security symbols affected by the operation |
+| id | int64 | 是 | 股單 ID（路徑參數） |
+| name | string | 否 | 新名稱，不傳則保持原名 |
+| mode | string | 否 | 證券操作模式：`add`（添加）、`remove`（移除）或 `replace`（替換） |
+| securities | string[] | 否 | 受操作影響的證券代碼列表 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist add 15921 TSLA.US NVDA.US AAPL.US
-longbridge sharelist remove 15921 AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -224,8 +216,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [update_sharelist_rsp](#update_sharelist_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [update_sharelist_rsp](#update_sharelist_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -233,4 +225,4 @@ func main() {
 
 <a id="update_sharelist_rsp"></a>
 
-No response body fields.
+無響應體字段。

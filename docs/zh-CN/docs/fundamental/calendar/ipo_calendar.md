@@ -17,14 +17,14 @@ longbridge finance-calendar ipo
 longbridge finance-calendar ipo --market US
 </CliCommand>
 
-<SDKLinks module="calendar" klass="CalendarContext" method="ipo_calendar" />
+<SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/calendar/ipos</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
 </tbody>
 </table>
 
@@ -34,21 +34,13 @@ longbridge finance-calendar ipo --market US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | NO | Market filter |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| start | string | YES | 开始日期，格式 YYYY-MM-DD |
+| end | string | YES | 结束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市场筛选：US、HK、SH、SZ，不填则返回所有市场 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge finance-calendar ipo
-longbridge finance-calendar ipo --market US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -234,8 +226,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ipo_calendar_rsp](#ipo_calendar_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [ipo_calendar_rsp](#ipo_calendar_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -245,10 +237,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | IPO event list |
-| ∟ symbol | string | false | Security symbol (assigned after listing) |
-| ∟ name | string | true | Company name |
-| ∟ listing_date | string | true | Expected listing date |
-| ∟ offer_price | string | false | IPO offer price |
-| ∟ currency | string | false | Currency |
-| ∟ market | string | true | Market code |
+| list | object[] | 是 | IPO 事件列表 |
+| ∟ symbol | string | 否 | 证券代码（上市后分配） |
+| ∟ name | string | 是 | 公司名称 |
+| ∟ listing_date | string | 是 | 预计上市日期 |
+| ∟ offer_price | string | 否 | 新股发行价 |
+| ∟ currency | string | 否 | 货币 |
+| ∟ market | string | 是 | 市场代码 |

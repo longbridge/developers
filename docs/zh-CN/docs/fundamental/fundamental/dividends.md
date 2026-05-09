@@ -34,21 +34,13 @@ longbridge dividend AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
+| start_date | string | 否 | 开始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 结束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dividend TSLA.US
-longbridge dividend AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -233,8 +225,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dividends_rsp](#dividends_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [dividends_rsp](#dividends_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -244,9 +236,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Dividend records |
-| ∟ ex_date | string | true | Ex-dividend date |
-| ∟ pay_date | string | false | Payment date |
-| ∟ amount | string | true | Dividend amount per share |
-| ∟ currency | string | true | Currency |
-| ∟ type | string | true | Dividend type, e.g. `Cash`, `Stock` |
+| list | object[] | 是 | 分红记录列表 |
+| ∟ ex_date | string | 是 | 除息日 |
+| ∟ pay_date | string | 否 | 派息日 |
+| ∟ amount | string | 是 | 每股分红金额 |
+| ∟ currency | string | 是 | 货币 |
+| ∟ type | string | 是 | 分红类型，例如 `Cash`（现金）、`Stock`（股票） |

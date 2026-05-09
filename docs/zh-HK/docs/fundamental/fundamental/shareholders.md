@@ -34,19 +34,11 @@ longbridge shareholder AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge shareholder TSLA.US
-longbridge shareholder AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -230,8 +222,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [shareholders_rsp](#shareholders_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [shareholders_rsp](#shareholders_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -241,8 +233,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Shareholder list |
-| ∟ name | string | true | Shareholder name |
-| ∟ shares | string | true | Number of shares held |
-| ∟ percentage | string | true | Ownership percentage |
-| ∟ type | string | false | `Institution` or `Individual` |
+| list | object[] | 是 | 股東列表 |
+| ∟ name | string | 是 | 股東名稱 |
+| ∟ shares | string | 是 | 持股數量 |
+| ∟ percentage | string | 是 | 持股比例 |
+| ∟ type | string | 否 | `Institution`（機構）或 `Individual`（個人） |

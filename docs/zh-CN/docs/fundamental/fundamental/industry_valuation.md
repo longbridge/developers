@@ -1,7 +1,7 @@
 ---
-slug: capital-flow
-title: Capital Flow
-sidebar_position: 5
+slug: industry-valuation
+title: 行业估值对比
+sidebar_position: 16
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,21 +10,21 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Query account cash flow history including deposits, withdrawals, dividends, and settlements.
+获取同行业内的同类公司估值对比数据。
 
 <CliCommand>
-longbridge cash-flow
-longbridge cash-flow --format json
+longbridge industry-valuation TSLA.US
+longbridge industry-valuation AAPL.US
 </CliCommand>
 
-<SDKLinks module="portfolio" klass="PortfolioContext" method="capital_flow" />
+<SDKLinks module="fundamental" klass="FundamentalContext" method="industry_valuation" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/capital_flow</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/fundamental/industry_valuation</td></tr>
 </tbody>
 </table>
 
@@ -34,34 +34,21 @@ longbridge cash-flow --format json
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start_time | integer | NO | Start time as Unix timestamp (seconds) |
-| end_time | integer | NO | End time as Unix timestamp (seconds) |
-| business_type | integer | NO | Business type filter. Omit for all types. |
-| symbol | string | NO | Filter by security symbol |
-| page | integer | NO | Page number (1-based, default: 1) |
-| size | integer | NO | Records per page (default: 20) |
+| symbol | string | 是 | 证券代码，例如 `TSLA.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge cash-flow
-longbridge cash-flow --format json
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import PortfolioContext, Config, OAuthBuilder
+from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
-ctx = PortfolioContext(config)
+ctx = FundamentalContext(config)
 
-resp = ctx.capital_flow()
+resp = ctx.industry_valuation("TSLA.US")
 print(resp)
 ```
 
@@ -70,14 +57,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncPortfolioContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncFundamentalContext, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
-    ctx = AsyncPortfolioContext.create(config)
+    ctx = AsyncFundamentalContext.create(config)
 
-    resp = await ctx.capital_flow()
+    resp = await ctx.industry_valuation("TSLA.US")
     print(resp)
 
 if __name__ == "__main__":
@@ -88,15 +75,15 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, PortfolioContext, OAuth } = require('longbridge')
+const { Config, FundamentalContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
     console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = PortfolioContext.new(config)
-  const resp = await ctx.capital_flow()
+  const ctx = FundamentalContext.new(config)
+  const resp = await ctx.industryValuation('TSLA.US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -107,14 +94,14 @@ main().catch(console.error)
 
 ```java
 import com.longbridge.*;
-import com.longbridge.portfolio.*;
+import com.longbridge.fundamental.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             PortfolioContext ctx = PortfolioContext.create(config)) {
-            var resp = ctx.getCapitalFlow().get();
+             FundamentalContext ctx = FundamentalContext.create(config)) {
+            var resp = ctx.getIndustryValuation("TSLA.US").get();
             System.out.println(resp);
         }
     }
@@ -126,14 +113,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, portfolio::PortfolioContext, Config};
+use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let ctx = PortfolioContext::new(config);
-    let resp = ctx.capital_flow().await?;
+    let ctx = FundamentalContext::new(config);
+    let resp = ctx.industry_valuation("TSLA.US").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -147,7 +134,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #include <longbridge.hpp>
 
 using namespace longbridge;
-using namespace longbridge::portfolio;
+using namespace longbridge::fundamental;
 
 int main() {
     OAuthBuilder("your-client-id").build(
@@ -155,8 +142,8 @@ int main() {
         [](auto res) {
             if (!res) return;
             Config config = Config::from_oauth(*res);
-            PortfolioContext ctx = PortfolioContext::create(config);
-            ctx.capital_flow([](auto resp) {
+            FundamentalContext ctx = FundamentalContext::create(config);
+            ctx.industry_valuation("TSLA.US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -177,7 +164,7 @@ import (
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/portfolio"
+	"github.com/longbridge/openapi-go/fundamental"
 )
 
 func main() {
@@ -190,12 +177,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := portfolio.NewFromCfg(conf)
+	c, err := fundamental.NewFromCfg(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.CapitalFlow(context.Background())
+	resp, err := c.IndustryValuation(context.Background(), "TSLA.US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -219,15 +206,16 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "symbol": "TSLA.US",
+    "industry": "Automobiles",
     "list": [
       {
-        "transaction_flow_name": "Cash Dividend",
-        "direction": 1,
-        "business_type": 2,
-        "balance": "25.00",
-        "currency": "USD",
-        "business_time": "1774310400",
-        "symbol": "AAPL.US"
+        "symbol": "TSLA.US",
+        "name": "Tesla Inc.",
+        "pe": 55.2,
+        "pb": 12.1,
+        "ps": 6.8,
+        "market_cap": 700000000000
       }
     ]
   }
@@ -238,22 +226,23 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [capital_flow_rsp](#capital_flow_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [IndustryValuationList](#IndustryValuationList) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
-### capital_flow_rsp
+### IndustryValuationList
 
-<a id="capital_flow_rsp"></a>
+<a id="IndustryValuationList"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Cash flow records |
-| ∟ transaction_flow_name | string | true | Flow type description |
-| ∟ direction | int32 | true | `1` = inflow, `-1` = outflow |
-| ∟ business_type | int32 | true | Business type code |
-| ∟ balance | string | true | Amount |
-| ∟ currency | string | true | Currency |
-| ∟ business_time | string | true | Transaction time as Unix timestamp |
-| ∟ symbol | string | false | Associated security symbol |
+| symbol | string | 是 | 证券代码 |
+| industry | string | 否 | 行业分类 |
+| list | object[] | 是 | 同行公司列表 |
+| list[].symbol | string | 否 | 同行证券代码 |
+| list[].name | string | 否 | 公司名称 |
+| list[].pe | double | 否 | 市盈率 |
+| list[].pb | double | 否 | 市净率 |
+| list[].ps | double | 否 | 市销率 |
+| list[].market_cap | int64 | 否 | 市值 |

@@ -40,13 +40,6 @@ longbridge sharelist create --name "AI Picks" --description "Top AI infrastructu
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist create --name "AI Picks" --description "Top AI infrastructure stocks"
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

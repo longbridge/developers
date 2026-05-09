@@ -40,14 +40,6 @@ longbridge dca --status Active
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca
-longbridge dca --status Active
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

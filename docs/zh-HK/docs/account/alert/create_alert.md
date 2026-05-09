@@ -1,6 +1,6 @@
 ---
 slug: create-alert
-title: 建立價格提醒
+title: 創建價格提醒
 sidebar_position: 2
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-為指定證券建立價格提醒，當價格高於或低於目標價時觸發通知。
+為指定證券創建價格提醒，當價格高於或低於目標價時觸發通知。
 
 <CliCommand>
 longbridge alert add TSLA.US --price 300 --direction rise
@@ -34,22 +34,14 @@ longbridge alert add AAPL.US --price 150 --direction fall
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `TSLA.US` |
-| price | string | YES | Target price |
-| direction | string | YES | Alert direction: `rise` or `fall` |
-| frequency | string | NO | Trigger frequency: `once` (default) or `every` |
+| symbol | string | 是 | 證券代碼，例如 `TSLA.US` |
+| price | string | 是 | 目標價格 |
+| direction | string | 是 | 提醒方向：`rise`（上漲）或 `fall`（下跌） |
+| frequency | string | 否 | 觸發頻率：`once`（僅一次，默認）或 `every`（每次） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert add TSLA.US --price 300 --direction rise
-longbridge alert add AAPL.US --price 150 --direction fall
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -226,8 +218,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_alert_rsp](#create_alert_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [create_alert_rsp](#create_alert_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -237,4 +229,4 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | ID of the newly created alert |
+| id | int64 | true | 新創建提醒的 ID |

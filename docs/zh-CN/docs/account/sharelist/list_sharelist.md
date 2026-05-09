@@ -34,19 +34,11 @@ longbridge sharelist --format json
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| type | string | NO | Filter: `mine` or `subscribed`. Omit for both. |
+| type | string | 否 | 筛选：`mine`（我创建的）或 `subscribed`（我订阅的），不传则返回两者 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist
-longbridge sharelist --format json
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -233,8 +225,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [list_sharelist_rsp](#list_sharelist_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [list_sharelist_rsp](#list_sharelist_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -244,11 +236,11 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| mine | object[] | true | Sharelists created by the user |
-| subscribed | object[] | true | Sharelists subscribed by the user |
-| ∟ id | int64 | true | Sharelist ID |
-| ∟ name | string | true | Sharelist name |
-| ∟ type | string | true | Type: `Regular`, `Official` |
-| ∟ day_change | string | false | Day change percentage |
-| ∟ ytd_change | string | false | Year-to-date change |
-| ∟ subscribers | int32 | false | Subscriber count |
+| mine | object[] | true | 用户创建的股单 |
+| subscribed | object[] | true | 用户订阅的股单 |
+| ∟ id | int64 | true | 股单 ID |
+| ∟ name | string | true | 股单名称 |
+| ∟ type | string | true | 类型：`Regular`（普通）、`Official`（官方） |
+| ∟ day_change | string | false | 当日涨跌幅 |
+| ∟ ytd_change | string | false | 年初至今涨跌幅 |
+| ∟ subscribers | int32 | false | 订阅人数 |

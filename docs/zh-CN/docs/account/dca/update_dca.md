@@ -34,20 +34,12 @@ longbridge dca resume 1225781523156889600
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | YES | Plan ID (path parameter) |
-| action | string | YES | Action to perform: `pause` or `resume` |
+| id | string | 是 | 计划 ID（路径参数） |
+| action | string | 是 | 执行操作：`pause`（暂停）或 `resume`（恢复） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca pause 1225781523156889600
-longbridge dca resume 1225781523156889600
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -222,8 +214,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [update_dca_rsp](#update_dca_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [update_dca_rsp](#update_dca_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -231,4 +223,4 @@ func main() {
 
 <a id="update_dca_rsp"></a>
 
-No response body fields.
+无响应体字段。

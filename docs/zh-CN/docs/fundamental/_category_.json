@@ -2,6 +2,7 @@
   "position": 5,
   "label": "基本面",
   "collapsible": true,
-  "collapsed": false,
-  "link": null
+  "collapsed": true,
+  "link": null,
+  "icon": "book-open"
 }

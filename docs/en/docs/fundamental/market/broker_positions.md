@@ -39,14 +39,6 @@ longbridge broker-holding 9988.HK
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge broker-holding 700.HK
-longbridge broker-holding 9988.HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

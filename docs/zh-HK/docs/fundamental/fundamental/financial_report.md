@@ -34,21 +34,13 @@ longbridge financial-report AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| kind | string | NO | Statement type: `IS` (income), `BS` (balance sheet), `CF` (cash flow), `ALL` (default) |
-| report | string | NO | Reporting period: `af` (annual), `saf` (semi-annual), `qf` (quarterly) |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
+| kind | string | 否 | 報表類型：`IS`（利潤表）、`BS`（資產負債表）、`CF`（現金流量表）、`ALL`（默認） |
+| report | string | 否 | 報告期：`af`（年報）、`saf`（半年報）、`qf`（季報） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge financial-report TSLA.US --kind IS
-longbridge financial-report AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -234,8 +226,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [financial_report_rsp](#financial_report_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [financial_report_rsp](#financial_report_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -245,10 +237,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of financial statement records |
-| ∟ type | string | true | Statement type: `IS`, `BS`, `CF` |
-| ∟ period | string | true | Reporting period label |
-| ∟ eps | string | false | Earnings per share |
-| ∟ revenue | string | false | Total revenue |
-| ∟ net_income | string | false | Net income |
-| ∟ gross_margin | string | false | Gross margin ratio |
+| list | object[] | 是 | 財務報表記錄列表 |
+| ∟ type | string | 是 | 報表類型：`IS`、`BS`、`CF` |
+| ∟ period | string | 是 | 報告期標簽 |
+| ∟ eps | string | 否 | 每股收益 |
+| ∟ revenue | string | 否 | 總營收 |
+| ∟ net_income | string | 否 | 凈利潤 |
+| ∟ gross_margin | string | 否 | 毛利率 |

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg
+    width="184px"
+    height="8px"
+    viewBox="0 0 184 8"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+>
+  <g id="bar" fill-rule="nonzero">
+    <rect x="0" y="0" width="60" height="8" fill="#00f0c4" />
+    <rect x="60" y="0" width="53" height="8" fill="#FFE000" />
+    <rect x="113" y="0" width="41" height="8" fill="#000000" />
+    <rect x="154" y="0" width="30" height="8" fill="#FC5200" />
+  </g>
+</svg>

@@ -34,19 +34,11 @@ longbridge institution-rating AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge institution-rating TSLA.US
-longbridge institution-rating AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -231,8 +223,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ratings_rsp](#ratings_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [ratings_rsp](#ratings_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -242,9 +234,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of analyst ratings |
-| ∟ broker_name | string | true | Institution name |
-| ∟ rating | string | true | Rating: `Buy`, `Hold`, `Sell` |
-| ∟ target_price | string | false | Target price |
-| ∟ currency | string | false | Currency |
-| ∟ date | string | true | Rating date in `YYYY-MM-DD` format |
+| list | object[] | 是 | 分析师评级列表 |
+| ∟ broker_name | string | 是 | 机构名称 |
+| ∟ rating | string | 是 | 评级：`Buy`（买入）、`Hold`（持有）、`Sell`（卖出） |
+| ∟ target_price | string | 否 | 目标价 |
+| ∟ currency | string | 否 | 货币 |
+| ∟ date | string | 是 | 评级日期，格式 `YYYY-MM-DD` |

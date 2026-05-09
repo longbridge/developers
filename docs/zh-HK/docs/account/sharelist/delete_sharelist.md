@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-永久刪除您建立的自選股列表，此操作不可撤銷。
+永久刪除您創建的自選股列表，此操作不可撤銷。
 
 <CliCommand>
 longbridge sharelist delete 15921
@@ -33,18 +33,11 @@ longbridge sharelist delete 15921
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | YES | Sharelist ID (path parameter) |
+| id | int64 | 是 | 股單 ID（路徑參數） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist delete 15921
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -219,8 +212,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [delete_sharelist_rsp](#delete_sharelist_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [delete_sharelist_rsp](#delete_sharelist_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -228,4 +221,4 @@ func main() {
 
 <a id="delete_sharelist_rsp"></a>
 
-No response body fields.
+無響應體字段。

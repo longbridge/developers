@@ -2,6 +2,6 @@
   "position": 2,
   "label": "價格提醒",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "link": null
 }

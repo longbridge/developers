@@ -39,14 +39,6 @@ longbridge constituent SPY.US
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge constituent HSI.HK
-longbridge constituent SPY.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

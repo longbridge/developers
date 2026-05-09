@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取當前估值指標（市盈率、市淨率、市銷率、股息率）及 5 年歷史區間數據。
+獲取當前估值指標（市盈率、市凈率、市銷率、股息率）及 5 年歷史區間數據。
 
 <CliCommand>
 longbridge valuation TSLA.US --indicator pe
@@ -34,20 +34,12 @@ longbridge valuation AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| indicator | string | NO | Indicator filter: `pe`, `pb`, `ps`, `dvd_yld` |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
+| indicator | string | 否 | 指標篩選：`pe`、`pb`、`ps`、`dvd_yld` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge valuation TSLA.US --indicator pe
-longbridge valuation AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -227,8 +219,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [valuations_rsp](#valuations_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [valuations_rsp](#valuations_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -238,9 +230,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| metrics | object | true | Valuation metrics map |
-| ∟ pe | object | false | P/E ratio data |
-| ∟∟ current | string | true | Current value |
-| ∟∟ high | string | true | 5-year high |
-| ∟∟ low | string | true | 5-year low |
-| ∟∟ median | string | true | 5-year median |
+| metrics | object | 是 | 估值指標映射 |
+| ∟ pe | object | 否 | 市盈率數據 |
+| ∟∟ current | string | 是 | 當前值 |
+| ∟∟ high | string | 是 | 5 年最高值 |
+| ∟∟ low | string | 是 | 5 年最低值 |
+| ∟∟ median | string | 是 | 5 年中位值 |

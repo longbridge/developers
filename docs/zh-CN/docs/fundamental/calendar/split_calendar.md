@@ -17,14 +17,14 @@ longbridge finance-calendar split
 longbridge finance-calendar split --market HK
 </CliCommand>
 
-<SDKLinks module="calendar" klass="CalendarContext" method="split_calendar" />
+<SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/calendar/splits</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
 </tbody>
 </table>
 
@@ -34,21 +34,13 @@ longbridge finance-calendar split --market HK
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | NO | Market filter |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| start | string | YES | 开始日期，格式 YYYY-MM-DD |
+| end | string | YES | 结束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市场筛选：US、HK、SH、SZ，不填则返回所有市场 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge finance-calendar split
-longbridge finance-calendar split --market HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -233,8 +225,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [split_calendar_rsp](#split_calendar_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [split_calendar_rsp](#split_calendar_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -244,9 +236,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Split event list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Company name |
-| ∟ date | string | true | Effective date |
-| ∟ ratio | string | true | Split ratio, e.g. `10:1` |
-| ∟ type | string | true | `Split` or `ReverseSplit` |
+| list | object[] | 是 | 拆股事件列表 |
+| ∟ symbol | string | 是 | 证券代码 |
+| ∟ name | string | 是 | 公司名称 |
+| ∟ date | string | 是 | 生效日期 |
+| ∟ ratio | string | 是 | 拆股比例，例如 `10:1` |
+| ∟ type | string | 是 | `Split`（拆股）或 `ReverseSplit`（合股） |

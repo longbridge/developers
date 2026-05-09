@@ -17,14 +17,14 @@ longbridge finance-calendar macrodata
 longbridge finance-calendar macrodata --market US
 </CliCommand>
 
-<SDKLinks module="calendar" klass="CalendarContext" method="macro_calendar" />
+<SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/calendar/macro</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
 </tbody>
 </table>
 
@@ -34,21 +34,13 @@ longbridge finance-calendar macrodata --market US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| country | string | NO | Country code: `US`, `CN`, `EU`, `JP`. Omit for global. |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| start | string | YES | 開始日期，格式 YYYY-MM-DD |
+| end | string | YES | 結束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge finance-calendar macrodata
-longbridge finance-calendar macrodata --market US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -235,8 +227,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [macro_calendar_rsp](#macro_calendar_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [macro_calendar_rsp](#macro_calendar_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -246,11 +238,11 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Macro event list |
-| ∟ event | string | true | Event name |
-| ∟ country | string | true | Country code |
-| ∟ release_date | string | true | Release date |
-| ∟ actual | string | false | Actual value (null if not yet released) |
-| ∟ forecast | string | false | Consensus forecast |
-| ∟ previous | string | false | Previous period value |
-| ∟ importance | string | false | Importance level: `High`, `Medium`, `Low` |
+| list | object[] | 是 | 宏觀事件列表 |
+| ∟ event | string | 是 | 事件名稱 |
+| ∟ country | string | 是 | 國家/地區代碼 |
+| ∟ release_date | string | 是 | 發布日期 |
+| ∟ actual | string | 否 | 實際值（未發布時為 null） |
+| ∟ forecast | string | 否 | 市場預期值 |
+| ∟ previous | string | 否 | 前期值 |
+| ∟ importance | string | 否 | 重要程度：`High`（高）、`Medium`（中）、`Low`（低） |

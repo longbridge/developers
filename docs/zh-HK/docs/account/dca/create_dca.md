@@ -1,6 +1,6 @@
 ---
 slug: create-dca
-title: 建立定期投資計劃
+title: 創建定期投資計劃
 sidebar_position: 2
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-為指定證券建立新的定期投資計劃。
+為指定證券創建新的定期投資計劃。
 
 <CliCommand>
 longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
@@ -34,23 +34,15 @@ longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| amount | string | YES | Recurring investment amount |
-| frequency | string | YES | Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly` |
-| day_of_week | string | NO | Day of week for weekly/fortnightly plans: `mon`–`fri` |
-| day_of_month | integer | NO | Day of month for monthly plans (1–28) |
+| symbol | string | 是 | 證券代碼，例如 `AAPL.US` |
+| amount | string | 是 | 定投金額 |
+| frequency | string | 是 | 頻率：`Daily`（每日）、`Weekly`（每週）、`Fortnightly`（每兩週）、`Monthly`（每月） |
+| day_of_week | string | 否 | 每週/每兩週計劃的執行星期：`mon`–`fri` |
+| day_of_month | integer | 否 | 每月計劃的執行日期（1–28） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
-longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -227,8 +219,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_dca_rsp](#create_dca_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [create_dca_rsp](#create_dca_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -238,4 +230,4 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | true | ID of the newly created plan |
+| id | string | true | 新創建計劃的 ID |

@@ -34,19 +34,11 @@ longbridge ah-premium 0939.HK
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | H-share symbol of a dual-listed stock, e.g. `939.HK` |
+| symbol | string | 是 | A+H 两地上市股票的 H 股代码，例如 `939.HK` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge ah-premium 939.HK
-longbridge ah-premium 0939.HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -231,8 +223,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ah_premium_rsp](#ah_premium_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [ah_premium_rsp](#ah_premium_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -242,9 +234,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | A/H premium records |
-| ∟ date | string | true | Date in `YYYY-MM-DD` format |
-| ∟ a_price | string | true | A-share price in CNY |
-| ∟ h_price | string | true | H-share price in HKD |
-| ∟ premium | string | true | A/H premium ratio |
-| ∟ fx_rate | string | true | CNH/HKD exchange rate |
+| list | object[] | 是 | A/H 溢价记录列表 |
+| ∟ date | string | 是 | 日期，格式 `YYYY-MM-DD` |
+| ∟ a_price | string | 是 | A 股价格（人民币） |
+| ∟ h_price | string | 是 | H 股价格（港币） |
+| ∟ premium | string | 是 | A/H 溢价比率 |
+| ∟ fx_rate | string | 是 | CNH/HKD 汇率 |

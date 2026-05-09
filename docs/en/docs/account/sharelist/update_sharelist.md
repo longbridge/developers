@@ -42,14 +42,6 @@ longbridge sharelist remove 15921 AAPL.US
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist add 15921 TSLA.US NVDA.US AAPL.US
-longbridge sharelist remove 15921 AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

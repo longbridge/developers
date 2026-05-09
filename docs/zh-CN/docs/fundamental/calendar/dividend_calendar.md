@@ -17,14 +17,14 @@ longbridge finance-calendar dividend
 longbridge finance-calendar dividend --filter positions
 </CliCommand>
 
-<SDKLinks module="calendar" klass="CalendarContext" method="dividend_calendar" />
+<SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/calendar/dividends</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
 </tbody>
 </table>
 
@@ -34,21 +34,13 @@ longbridge finance-calendar dividend --filter positions
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | NO | Market filter |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| start | string | YES | 开始日期，格式 YYYY-MM-DD |
+| end | string | YES | 结束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市场筛选：US、HK、SH、SZ，不填则返回所有市场 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge finance-calendar dividend
-longbridge finance-calendar dividend --filter positions
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -234,8 +226,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dividend_calendar_rsp](#dividend_calendar_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [dividend_calendar_rsp](#dividend_calendar_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -245,10 +237,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Dividend event list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Company name |
-| ∟ ex_date | string | true | Ex-dividend date |
-| ∟ pay_date | string | false | Payment date |
-| ∟ amount | string | true | Dividend amount per share |
-| ∟ currency | string | true | Currency |
+| list | object[] | 是 | 分红事件列表 |
+| ∟ symbol | string | 是 | 证券代码 |
+| ∟ name | string | 是 | 公司名称 |
+| ∟ ex_date | string | 是 | 除息日 |
+| ∟ pay_date | string | 否 | 派息日 |
+| ∟ amount | string | 是 | 每股分红金额 |
+| ∟ currency | string | 是 | 货币 |

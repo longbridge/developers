@@ -33,18 +33,11 @@ longbridge exchange-rate
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| base | string | NO | Base currency, e.g. `USD`. Omit for all pairs. |
+| base | string | 否 | 基础货币，例如 `USD`，不传则返回所有货币对 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge exchange-rate
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -228,8 +221,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [exchange_rates_rsp](#exchange_rates_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [exchange_rates_rsp](#exchange_rates_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -239,8 +232,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Exchange rate list |
-| ∟ pair | string | true | Currency pair, e.g. `HKD/USD` |
-| ∟ bid_rate | string | true | Bid rate |
-| ∟ offer_rate | string | true | Offer rate |
-| ∟ average_rate | string | true | Average rate |
+| list | object[] | true | 汇率列表 |
+| ∟ pair | string | true | 货币对，例如 `HKD/USD` |
+| ∟ bid_rate | string | true | 买入汇率 |
+| ∟ offer_rate | string | true | 卖出汇率 |
+| ∟ average_rate | string | true | 中间汇率 |

@@ -34,20 +34,12 @@ longbridge profit-analysis --start 2026-01-01
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start_date | string | NO | Analysis start date in `YYYY-MM-DD` format |
-| end_date | string | NO | Analysis end date in `YYYY-MM-DD` format |
+| start_date | string | 否 | 分析开始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 分析结束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge profit-analysis
-longbridge profit-analysis --start 2026-01-01
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -232,8 +224,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [profit_analysis_summary_rsp](#profit_analysis_summary_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [profit_analysis_summary_rsp](#profit_analysis_summary_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -243,12 +235,12 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| currency | string | true | Settlement currency |
-| total_asset | string | true | Total asset value |
-| invest_amount | string | true | Total invested amount |
-| total_pnl | string | true | Total P&L |
-| simple_yield | string | true | Simple yield ratio |
-| twr | string | true | Time-weighted return |
-| stocks_traded | int32 | true | Number of stocks traded |
-| start_date | string | true | Analysis start date |
-| end_date | string | true | Analysis end date |
+| currency | string | true | 结算货币 |
+| total_asset | string | true | 总资产价值 |
+| invest_amount | string | true | 总投入金额 |
+| total_pnl | string | true | 总盈亏金额 |
+| simple_yield | string | true | 简单收益率 |
+| twr | string | true | 时间加权收益率 |
+| stocks_traded | int32 | true | 已交易股票数量 |
+| start_date | string | true | 分析开始日期 |
+| end_date | string | true | 分析结束日期 |

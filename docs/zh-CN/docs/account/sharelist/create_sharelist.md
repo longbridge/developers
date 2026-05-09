@@ -33,20 +33,13 @@ longbridge sharelist create --name "AI Picks" --description "Top AI infrastructu
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| name | string | YES | Sharelist name |
-| description | string | NO | Description |
-| securities | string[] | NO | Initial list of security symbols, e.g. `["AAPL.US", "NVDA.US"]` |
+| name | string | 是 | 股单名称 |
+| description | string | 否 | 描述 |
+| securities | string[] | 否 | 初始证券代码列表，例如 `["AAPL.US", "NVDA.US"]` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist create --name "AI Picks" --description "Top AI infrastructure stocks"
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -223,8 +216,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_sharelist_rsp](#create_sharelist_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [create_sharelist_rsp](#create_sharelist_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -234,4 +227,4 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | ID of the newly created sharelist |
+| id | int64 | true | 新创建股单的 ID |

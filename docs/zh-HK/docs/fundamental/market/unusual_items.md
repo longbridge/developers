@@ -34,19 +34,11 @@ longbridge anomaly --market HK
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | YES | Market code: `US`, `HK`, `SH`, `SZ`, `SG` |
+| market | string | 是 | 市場代碼：`US`、`HK`、`SH`、`SZ`、`SG` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge anomaly --market US
-longbridge anomaly --market HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -231,8 +223,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [unusual_items_rsp](#unusual_items_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [unusual_items_rsp](#unusual_items_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -242,9 +234,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Unusual item list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Security name |
-| ∟ alert | string | true | Alert description |
-| ∟ emotion | string | false | Market sentiment: `Bullish`, `Bearish` |
-| ∟ time | string | true | Alert time as Unix timestamp |
+| list | object[] | 是 | 異動列表 |
+| ∟ symbol | string | 是 | 證券代碼 |
+| ∟ name | string | 是 | 證券名稱 |
+| ∟ alert | string | 是 | 異動描述 |
+| ∟ emotion | string | 否 | 市場情緒：`Bullish`（看多）、`Bearish`（看空） |
+| ∟ time | string | 是 | 異動時間（Unix 時間戳） |

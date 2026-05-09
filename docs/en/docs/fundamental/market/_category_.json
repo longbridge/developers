@@ -2,6 +2,6 @@
   "position": 2,
   "label": "Market",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "link": null
 }

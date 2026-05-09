@@ -34,20 +34,12 @@ longbridge valuation AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| indicator | string | NO | Indicator filter: `pe`, `pb`, `ps`, `dvd_yld` |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
+| indicator | string | 否 | 指标筛选：`pe`、`pb`、`ps`、`dvd_yld` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge valuation TSLA.US --indicator pe
-longbridge valuation AAPL.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -227,8 +219,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [valuations_rsp](#valuations_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [valuations_rsp](#valuations_rsp) |
+| 400    | 请求错误 | None   |
 
 ## Schemas
 
@@ -238,9 +230,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| metrics | object | true | Valuation metrics map |
-| ∟ pe | object | false | P/E ratio data |
-| ∟∟ current | string | true | Current value |
-| ∟∟ high | string | true | 5-year high |
-| ∟∟ low | string | true | 5-year low |
-| ∟∟ median | string | true | 5-year median |
+| metrics | object | 是 | 估值指标映射 |
+| ∟ pe | object | 否 | 市盈率数据 |
+| ∟∟ current | string | 是 | 当前值 |
+| ∟∟ high | string | 是 | 5 年最高值 |
+| ∟∟ low | string | 是 | 5 年最低值 |
+| ∟∟ median | string | 是 | 5 年中位值 |

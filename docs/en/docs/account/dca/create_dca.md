@@ -43,14 +43,6 @@ longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
-longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

@@ -40,13 +40,6 @@ longbridge dca history 1225781523156889600
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca history 1225781523156889600
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

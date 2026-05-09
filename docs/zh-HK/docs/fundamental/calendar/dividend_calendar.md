@@ -1,6 +1,6 @@
 ---
 slug: dividend-calendar
-title: 分紅日曆
+title: 股息日曆
 sidebar_position: 2
 language_tabs: false
 toc_footers: []
@@ -10,21 +10,21 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取即將到來和歷史分紅事件，包含除息日、派息日和分紅金額。
+獲取即將到來和歷史股息事件，包含除息日、派息日和股息金額。
 
 <CliCommand>
 longbridge finance-calendar dividend
 longbridge finance-calendar dividend --filter positions
 </CliCommand>
 
-<SDKLinks module="calendar" klass="CalendarContext" method="dividend_calendar" />
+<SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/calendar/dividends</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
 </tbody>
 </table>
 
@@ -34,21 +34,13 @@ longbridge finance-calendar dividend --filter positions
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | NO | Market filter |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| start | string | YES | 開始日期，格式 YYYY-MM-DD |
+| end | string | YES | 結束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge finance-calendar dividend
-longbridge finance-calendar dividend --filter positions
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -234,8 +226,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dividend_calendar_rsp](#dividend_calendar_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [dividend_calendar_rsp](#dividend_calendar_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -245,10 +237,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Dividend event list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Company name |
-| ∟ ex_date | string | true | Ex-dividend date |
-| ∟ pay_date | string | false | Payment date |
-| ∟ amount | string | true | Dividend amount per share |
-| ∟ currency | string | true | Currency |
+| list | object[] | 是 | 股息事件列表 |
+| ∟ symbol | string | 是 | 證券代碼 |
+| ∟ name | string | 是 | 公司名稱 |
+| ∟ ex_date | string | 是 | 除息日 |
+| ∟ pay_date | string | 否 | 派息日 |
+| ∟ amount | string | 是 | 每股股息金額 |
+| ∟ currency | string | 是 | 貨幣 |

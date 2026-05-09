@@ -2,6 +2,6 @@
   "position": 2,
   "label": "市场",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "link": null
 }

@@ -2,6 +2,6 @@
   "position": 3,
   "label": "日历",
   "collapsible": true,
-  "collapsed": false,
+  "collapsed": true,
   "link": null
 }

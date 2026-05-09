@@ -38,13 +38,6 @@ longbridge sharelist delete 15921
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge sharelist delete 15921
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

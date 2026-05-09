@@ -34,23 +34,15 @@ longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| amount | string | YES | Recurring investment amount |
-| frequency | string | YES | Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly` |
-| day_of_week | string | NO | Day of week for weekly/fortnightly plans: `mon`–`fri` |
-| day_of_month | integer | NO | Day of month for monthly plans (1–28) |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
+| amount | string | 是 | 定投金额 |
+| frequency | string | 是 | 频率：`Daily`（每日）、`Weekly`（每周）、`Fortnightly`（每两周）、`Monthly`（每月） |
+| day_of_week | string | 否 | 每周/每两周计划的执行星期：`mon`–`fri` |
+| day_of_month | integer | 否 | 每月计划的执行日期（1–28） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
-longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -227,8 +219,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_dca_rsp](#create_dca_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [create_dca_rsp](#create_dca_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -238,4 +230,4 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | true | ID of the newly created plan |
+| id | string | true | 新创建计划的 ID |

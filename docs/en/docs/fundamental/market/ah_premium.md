@@ -39,14 +39,6 @@ longbridge ah-premium 0939.HK
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge ah-premium 939.HK
-longbridge ah-premium 0939.HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

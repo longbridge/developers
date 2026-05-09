@@ -42,14 +42,6 @@ longbridge alert add AAPL.US --price 150 --direction fall
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert add TSLA.US --price 300 --direction rise
-longbridge alert add AAPL.US --price 150 --direction fall
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

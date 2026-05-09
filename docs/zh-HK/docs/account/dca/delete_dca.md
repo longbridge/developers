@@ -33,18 +33,11 @@ longbridge dca stop 1225781523156889600
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | YES | Plan ID (path parameter) |
+| id | string | 是 | 計劃 ID（路徑參數） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge dca stop 1225781523156889600
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -219,8 +212,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [delete_dca_rsp](#delete_dca_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [delete_dca_rsp](#delete_dca_rsp) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
@@ -228,4 +221,4 @@ func main() {
 
 <a id="delete_dca_rsp"></a>
 
-No response body fields.
+無響應體字段。

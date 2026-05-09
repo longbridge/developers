@@ -39,14 +39,6 @@ longbridge anomaly --market HK
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge anomaly --market US
-longbridge anomaly --market HK
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

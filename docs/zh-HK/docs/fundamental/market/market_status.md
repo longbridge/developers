@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取各交易所當前的開市/收市狀態。
+獲取各交易所當前的開市/休市狀態。
 
 <CliCommand>
 longbridge market-status
@@ -33,18 +33,11 @@ longbridge market-status
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | NO | Market code: `US`, `HK`, `SH`, `SZ`, `SG`. Omit for all markets. |
+| market | string | 否 | 市場代碼：`US`、`HK`、`SH`、`SZ`、`SG`。不填則返回全部市場。 |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge market-status
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -232,8 +225,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [market_status_rsp](#market_status_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功     | [market_status_rsp](#market_status_rsp) |
+| 400    | 請求錯誤 | None   |
 
 ## Schemas
 
@@ -243,7 +236,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Market status list |
-| ∟ market | string | true | Market code |
-| ∟ status | string | true | Status: `normal_trading`, `closed`, `pre_trading`, `after_trading` |
-| ∟ trade_session | string | false | Current trading session |
+| list | object[] | 是 | 市場狀態列表 |
+| ∟ market | string | 是 | 市場代碼 |
+| ∟ status | string | 是 | 狀態：`normal_trading`（正常交易）、`closed`（已收市）、`pre_trading`（盤前）、`after_trading`（盤後） |
+| ∟ trade_session | string | 否 | 當前交易時段 |

@@ -39,14 +39,6 @@ longbridge trade-stats TSLA.US
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge trade-stats 700.HK
-longbridge trade-stats TSLA.US
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python

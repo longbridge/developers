@@ -34,22 +34,14 @@ longbridge alert add AAPL.US --price 150 --direction fall
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `TSLA.US` |
-| price | string | YES | Target price |
-| direction | string | YES | Alert direction: `rise` or `fall` |
-| frequency | string | NO | Trigger frequency: `once` (default) or `every` |
+| symbol | string | 是 | 证券代码，例如 `TSLA.US` |
+| price | string | 是 | 目标价格 |
+| direction | string | 是 | 提醒方向：`rise`（上涨）或 `fall`（下跌） |
+| frequency | string | 否 | 触发频率：`once`（仅一次，默认）或 `every`（每次） |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge alert add TSLA.US --price 300 --direction rise
-longbridge alert add AAPL.US --price 150 --direction fall
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -226,8 +218,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_alert_rsp](#create_alert_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [create_alert_rsp](#create_alert_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -237,4 +229,4 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | ID of the newly created alert |
+| id | int64 | true | 新创建提醒的 ID |

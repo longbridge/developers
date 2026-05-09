@@ -34,20 +34,12 @@ longbridge profit-analysis --start 2026-01-01
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start_date | string | NO | Analysis start date in `YYYY-MM-DD` format |
-| end_date | string | NO | Analysis end date in `YYYY-MM-DD` format |
+| start_date | string | 否 | 分析开始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 分析结束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
 <Tabs groupId="request-example">
-  <TabItem value="cli" label="CLI" default>
-
-<CliCommand>
-longbridge profit-analysis --format json
-longbridge profit-analysis --start 2026-01-01
-</CliCommand>
-
-  </TabItem>
   <TabItem value="python" label="Python">
 
 ```python
@@ -239,8 +231,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [profit_analysis_by_market_rsp](#profit_analysis_by_market_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [profit_analysis_by_market_rsp](#profit_analysis_by_market_rsp) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -250,9 +242,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | P&L by market list |
-| ∟ market | string | true | Market code |
-| ∟ pnl | string | true | P&L for this market |
-| ∟ pnl_pct | string | true | P&L percentage |
-| ∟ market_value | string | false | Market value |
-| ∟ currency | string | true | Settlement currency |
+| list | object[] | true | 按市场盈亏列表 |
+| ∟ market | string | true | 市场代码 |
+| ∟ pnl | string | true | 该市场盈亏金额 |
+| ∟ pnl_pct | string | true | 盈亏百分比 |
+| ∟ market_value | string | false | 市值 |
+| ∟ currency | string | true | 结算货币 |
