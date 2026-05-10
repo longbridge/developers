@@ -40,7 +40,7 @@ export default defineConfig(
     base: '/',
     buildConcurrency: 10,
 
-    srcExclude: ['README.md', 'superpowers/**', ...regionSrcExclude],
+    srcExclude: ['README.md', ...regionSrcExclude],
     rewrites: rewriteMarkdownPath,
     markdown: markdownConfig,
     transformHtml(code) {
