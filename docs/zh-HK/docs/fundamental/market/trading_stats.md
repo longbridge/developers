@@ -238,7 +238,7 @@ func main() {
 | trades | int32 | 是 | 成交筆數 |
 | volume | string | 是 | 總成交量 |
 | turnover | string | 是 | 總成交額 |
-| distribution | object[] | 是 | 價格-成交量分布 |
+| distribution | object[] | 是 | 價格 - 成交量分布 |
 | ∟ price | string | 是 | 價格檔位 |
 | ∟ volume | string | 是 | 該價格的成交量 |
 | ∟ pct | string | 是 | 占總成交量的百分比 |
