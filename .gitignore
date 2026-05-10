@@ -41,3 +41,4 @@ docs/superpowers
 
 # generated at build time by fetch-mcp-tools plugin
 docs/.vitepress/data/mcp-tools.json
+docs/.vitepress/.temp/
