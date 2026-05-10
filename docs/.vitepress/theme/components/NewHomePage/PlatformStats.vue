@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import NumberTicker from '../inspira/NumberTicker.vue'
 
 const { t } = useI18n()
 
-// Logo-inspired stat colors: teal, yellow/gold, orange, dark
-let statColors = ['#00b8b8', '#d4a800', '#c34607', '#505050']
-if (document.querySelector('html')?.classList.contains('dark')) {
-  statColors = ['#00dbb6', '#ffe000', '#fc5200', '#AAAAAA']
-}
+const lightColors = ['#00b8b8', '#d4a800', '#c34607', '#505050']
+const darkColors = ['#00dbb6', '#ffe000', '#fc5200', '#AAAAAA']
+const statColors = ref(lightColors)
+
+onMounted(() => {
+  if (document.querySelector('html')?.classList.contains('dark')) {
+    statColors.value = darkColors
+  }
+})
 
 const stats = computed(() => [
   {
@@ -17,7 +21,7 @@ const stats = computed(() => [
     label: t('stats.ainative'),
     suffix: '+',
     link: '/docs/mcp',
-    color: statColors[0],
+    color: statColors.value[0],
     card: {
       title: t('stats.ainative'),
       items: [
@@ -53,7 +57,7 @@ const stats = computed(() => [
     label: t('stats.markets'),
     suffix: '+',
     link: '/docs/',
-    color: statColors[1],
+    color: statColors.value[1],
     card: {
       title: t('stats.markets'),
       items: [
@@ -85,7 +89,7 @@ const stats = computed(() => [
     label: t('stats.sdks'),
     suffix: '+',
     link: '/sdk',
-    color: statColors[2],
+    color: statColors.value[2],
     card: {
       title: t('stats.sdks'),
       items: [
@@ -127,7 +131,7 @@ const stats = computed(() => [
     label: t('stats.endpoints'),
     suffix: '+',
     link: '/docs/api',
-    color: statColors[3],
+    color: statColors.value[3],
     card: {
       title: t('stats.endpoints'),
       items: [
