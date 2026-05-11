@@ -195,13 +195,38 @@ func main() {
 
 ## Schemas
 
-### SharelistDetail
+### SharelistDetailResponse
 
-<a id="SharelistDetail"></a>
+<a id="SharelistDetailResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | Sharelist ID |
-| name | string | true | Sharelist name |
+| sharelist | object | true | Sharelist information |
+| scopes | object | false | Subscription scope info |
+
+### SharelistInfo
+
+<a id="SharelistInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | integer | true | Sharelist ID |
+| name | string | false | Name |
 | description | string | false | Description |
-| securities | string[] | true | List of security symbols |
+| cover | string | false | Cover image URL |
+| subscribers_count | integer | false | Number of subscribers |
+| chg | string | false | Day change percentage |
+| this_year_chg | string | false | Year-to-date change |
+| subscribed | boolean | false | Whether subscribed |
+| sharelist_type | integer | false | Type: `0`=regular, `3`=official, `4`=industry |
+| industry_code | string | false | Industry code |
+| stocks | object[] | false | Constituent stocks |
+
+### SharelistScopes
+
+<a id="SharelistScopes"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| is_self | boolean | false | Whether the current user is the creator |
+| subscription | boolean | false | Whether the current user is subscribed |

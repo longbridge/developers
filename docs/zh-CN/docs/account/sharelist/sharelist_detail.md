@@ -195,13 +195,38 @@ func main() {
 
 ## Schemas
 
-### SharelistDetail
+### SharelistDetailResponse
 
-<a id="SharelistDetail"></a>
+<a id="SharelistDetailResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | 股单 ID |
-| name | string | true | 股单名称 |
+| sharelist | object | true | 股单详情 |
+| scopes | object | false | 订阅权限信息 |
+
+### SharelistInfo
+
+<a id="SharelistInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | integer | true | 股单 ID |
+| name | string | false | 名称 |
 | description | string | false | 描述 |
-| securities | string[] | true | 标的代码列表 |
+| cover | string | false | 封面图 URL |
+| subscribers_count | integer | false | 订阅人数 |
+| chg | string | false | 当日涨跌幅 |
+| this_year_chg | string | false | 年初至今涨跌幅 |
+| subscribed | boolean | false | 是否已订阅 |
+| sharelist_type | integer | false | 类型：`0`=普通，`3`=官方，`4`=行业 |
+| industry_code | string | false | 行业代码 |
+| stocks | object[] | false | 成分股列表 |
+
+### SharelistScopes
+
+<a id="SharelistScopes"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| is_self | boolean | false | 是否为创建者 |
+| subscription | boolean | false | 是否已订阅 |
