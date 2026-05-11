@@ -12,8 +12,8 @@ headingLevel: 2
 This API is used to submit order for HK and US stocks, warrant and option.
 
 <CliCommand>
-longbridge buy TSLA.US 100 --price 250.00
-longbridge sell TSLA.US 100 --price 260.00
+longbridge order buy TSLA.US 100 --price 250.00
+longbridge order sell TSLA.US 100 --price 260.00
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="submit_order" />

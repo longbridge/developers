@@ -13,7 +13,7 @@ This API is used for order detail query
 
 <CliCommand>
 # Replace the order ID below with your actual order ID
-longbridge order 693664675163312128
+longbridge order detail 693664675163312128
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="order_detail" />

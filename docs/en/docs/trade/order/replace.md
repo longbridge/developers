@@ -13,7 +13,7 @@ This API is used to replace order, modify quantity or price.
 
 <CliCommand>
 # Replace the order ID below with your actual order ID
-longbridge replace 693664675163312128 --qty 200 --price 255.00
+longbridge order replace 693664675163312128 --qty 200 --price 255.00
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="replace_order" />

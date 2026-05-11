@@ -15,7 +15,7 @@ Update watched group
 
 <CliCommand>
 # add symbols to a group
-longbridge watchlist update <id> --add TSLA.US AAPL.US
+longbridge watchlist update <id> --add TSLA.US --add AAPL.US
 # remove a symbol from a group
 longbridge watchlist update <id> --remove NVDA.US
 # add and remove at the same time

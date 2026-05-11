@@ -31,9 +31,9 @@ Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically
 
 <CliCommand>
 # publish a topic for Tesla
-longbridge topic create TSLA.US "Tesla Q1 earnings analysis"
+longbridge topic create --body "Tesla Q1 earnings analysis" --tickers TSLA.US
 # publish a topic for Apple
-longbridge topic create AAPL.US "Apple WWDC preview"
+longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
 </CliCommand>
 
 <SDKLinks module="content" klass="ContentContext" method="create_topic" />

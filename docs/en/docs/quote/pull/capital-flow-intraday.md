@@ -11,11 +11,11 @@ This API is used to obtain the daily capital flow intraday of security.
 
 <CliCommand>
 # intraday capital flow time series for Tesla
-longbridge capital flow TSLA.US
+longbridge capital TSLA.US --flow
 # intraday capital flow time series for Apple
-longbridge capital flow AAPL.US
+longbridge capital AAPL.US --flow
 # intraday capital flow time series for NVDA
-longbridge capital flow NVDA.US
+longbridge capital NVDA.US --flow
 </CliCommand>
 
 <SDKLinks module="quote" klass="QuoteContext" method="capital_flow" />

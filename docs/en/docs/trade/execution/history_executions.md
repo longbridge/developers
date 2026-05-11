@@ -12,7 +12,7 @@ headingLevel: 2
 This API is used to get history executions, including the sell and buy records, and does not support querying today's execution details.
 
 <CliCommand>
-longbridge executions --history
+longbridge order executions --history
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="history_executions" />
