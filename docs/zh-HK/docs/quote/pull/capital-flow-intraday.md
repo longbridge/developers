@@ -11,11 +11,11 @@ sidebar_position: 17
 
 <CliCommand>
 # Tesla 今日資金流向時序
-longbridge capital flow TSLA.US
+longbridge capital TSLA.US --flow
 # Apple 今日資金流向時序
-longbridge capital flow AAPL.US
+longbridge capital AAPL.US --flow
 # NVDA 今日資金流向時序
-longbridge capital flow NVDA.US
+longbridge capital NVDA.US --flow
 </CliCommand>
 
 <SDKLinks module="quote" klass="QuoteContext" method="capital_flow" />

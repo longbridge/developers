@@ -13,7 +13,7 @@ headingLevel: 2
 
 <CliCommand>
 # 將下方訂單 ID 替換為實際的訂單 ID
-longbridge cancel 693664675163312128
+longbridge order cancel 693664675163312128
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="cancel_order" />

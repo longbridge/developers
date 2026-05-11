@@ -13,7 +13,7 @@ headingLevel: 2
 
 <CliCommand>
 # 将下方订单 ID 替换为实际的订单 ID
-longbridge order 693664675163312128
+longbridge order detail 693664675163312128
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="order_detail" />

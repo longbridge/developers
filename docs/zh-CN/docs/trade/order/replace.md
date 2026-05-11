@@ -13,7 +13,7 @@ headingLevel: 2
 
 <CliCommand>
 # 将下方订单 ID 替换为实际的订单 ID
-longbridge replace 693664675163312128 --qty 200 --price 255.00
+longbridge order replace 693664675163312128 --qty 200 --price 255.00
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="replace_order" />

@@ -15,7 +15,7 @@ headingLevel: 2
 
 <CliCommand>
 # 向分組添加標的
-longbridge watchlist update <id> --add TSLA.US AAPL.US
+longbridge watchlist update <id> --add TSLA.US --add AAPL.US
 # 從分組移除標的
 longbridge watchlist update <id> --remove NVDA.US
 # 同時添加和移除

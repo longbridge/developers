@@ -14,11 +14,11 @@ headingLevel: 2
 
 <CliCommand>
 # Tesla 社区讨论帖子
-longbridge topics TSLA.US
+longbridge topic TSLA.US
 # Apple 社区讨论帖子
-longbridge topics AAPL.US
+longbridge topic AAPL.US
 # NVDA 社区讨论帖子
-longbridge topics NVDA.US
+longbridge topic NVDA.US
 </CliCommand>
 
 <SDKLinks module="content" klass="ContentContext" method="topics" />

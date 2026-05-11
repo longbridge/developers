@@ -12,7 +12,7 @@ headingLevel: 2
 该接口用于获取历史订单的成交明细，包括买入和卖出的成交记录，不支持当日成交明细查询。
 
 <CliCommand>
-longbridge executions --history
+longbridge order executions --history
 </CliCommand>
 
 <SDKLinks module="trade" klass="TradeContext" method="history_executions" />

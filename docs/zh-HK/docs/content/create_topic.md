@@ -31,9 +31,9 @@ headingLevel: 2
 
 <CliCommand>
 # 發佈 Tesla 相關話題
-longbridge topic create TSLA.US "Tesla Q1 財報分析"
+longbridge topic create --body "Tesla Q1 財報分析" --tickers TSLA.US
 # 發佈 Apple 相關話題
-longbridge topic create AAPL.US "Apple WWDC 前瞻"
+longbridge topic create --body "Apple WWDC 前瞻" --tickers AAPL.US
 </CliCommand>
 
 <SDKLinks module="content" klass="ContentContext" method="create_topic" />

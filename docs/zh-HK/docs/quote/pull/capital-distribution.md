@@ -11,11 +11,11 @@ sidebar_position: 18
 
 <CliCommand>
 # Tesla 資金分佈快照（大/中/小單）
-longbridge capital dist TSLA.US
+longbridge capital TSLA.US
 # Apple 資金分佈快照
-longbridge capital dist AAPL.US
+longbridge capital AAPL.US
 # NVDA 資金分佈快照
-longbridge capital dist NVDA.US
+longbridge capital NVDA.US
 </CliCommand>
 
 <SDKLinks module="quote" klass="QuoteContext" method="capital_distribution" />
