@@ -87,7 +87,7 @@ https://openapi.longbridge.com/mcp
 | Gemini CLI     | `~/.gemini/settings.json` 中的 `mcpServers` 字段                                                                                           |
 | Warp           | Settings → AI → MCP Servers → Add                                                                                                          |
 
-首次提问时客户端会自动弹出浏览器完成 OAuth 授权，无需配置 API Key。
+首次提问时客户端会自动弹出浏览器完成 OAuth 授权。
 
 ---
 
@@ -178,7 +178,7 @@ Codex 的 **Cloud 模式**存在同样的网络白名单限制。启动新会话
 
 **查询数据时需要授权**
 
-在终端中运行 `longbridge auth login` 完成 OAuth 授权即可，无需配置 API Key。
+在终端中运行 `longbridge auth login` 完成 OAuth 授权即可。
 
 **交易操作无法执行**
 

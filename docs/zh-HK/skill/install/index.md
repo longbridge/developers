@@ -178,7 +178,7 @@ Codex 的 **Cloud 模式**存在同樣的網絡白名單限制。啟動新會話
 
 **查詢數據時需要授權**
 
-在終端中運行 `longbridge auth login` 完成 OAuth 授權即可，無需配置 API Key。
+在終端中運行 `longbridge auth login` 完成 OAuth 授權即可。
 
 **交易操作無法執行**
 

@@ -180,7 +180,7 @@ Some clients require a restart or a new conversation to load the Skill. Confirm 
 
 **Prompted for authorization when querying data**
 
-Run `longbridge auth login` in your terminal and complete the OAuth flow — no API Key required.
+Run `longbridge auth login` in your terminal and complete the OAuth flow.
 
 **Trading operations not working**
 
