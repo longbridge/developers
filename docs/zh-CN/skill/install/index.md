@@ -16,9 +16,84 @@ description: 在 OpenClaw、Claude Code、Cursor、Codex 等 AI 工具中安装 
 
 ---
 
-## 第一步：安装 Skill
+最快的上手方式是使用终端类 AI 工具——Claude Code、Codex、opencode 或 OpenClaw。安装好 CLI、完成一次授权，AI 就能直接代你运行 `longbridge` 命令。
 
-Skill 是一组指令文件，告诉 AI 助手 Longbridge 能做什么。安装方式有三种：
+如果不想在本地安装软件，也可以通过 MCP 接入——只需在 AI 工具的配置中填入一个 URL 即可。
+
+两种方式都建议同时安装 Skill：一组指令文件，告诉 AI 助手 Longbridge 能做什么、怎么用。
+
+---
+
+## 第一步：连接 Longbridge 平台
+
+CLI 和 MCP 都是接入 Longbridge Developers 平台的方式，两者均可，选其一即可：
+
+- **CLI**：体验最佳，AI 直接在终端运行 `longbridge` 命令；需要在系统上安装软件
+- **MCP**：接入更简便，只需在 AI 工具配置中填入一个 URL；无需本地安装
+
+### 方式 A：CLI（推荐）
+
+适用于 Claude Code、Codex（Work locally 模式）、opencode、OpenClaw、Gemini CLI、Warp 等可在终端执行命令的工具。
+
+```bash
+# macOS（需要 Homebrew，未安装请先访问 https://brew.sh）
+brew install --cask longbridge/tap/longbridge-terminal
+
+# macOS / Linux
+curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
+```
+
+**Windows**（[Scoop](https://scoop.sh)）：
+
+```powershell
+scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
+```
+
+**Windows**（PowerShell）：
+
+```powershell
+iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
+```
+
+**授权登录：**
+
+```bash
+longbridge auth login
+```
+
+完成后，AI 即可代你调用 `longbridge` 命令。
+
+> 详细安装说明及完整命令列表参见 [CLI 文档](/zh-CN/docs/cli)。
+
+### 方式 B：MCP
+
+适用于 Claude Desktop、Cursor、Zed、Gemini CLI、Warp 等支持 MCP 的工具。
+
+在 AI 工具的 MCP 配置中添加以下服务器地址：
+
+```
+https://openapi.longbridge.com/mcp
+```
+
+> 中国大陆用户可使用加速地址：`https://openapi.longbridge.cn/mcp`
+
+各工具配置入口：
+
+| 工具           | 配置位置                                                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Claude Desktop | 编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`（macOS）或 `%APPDATA%\Claude\claude_desktop_config.json`（Windows） |
+| Cursor         | Settings → MCP Servers → Add Remote MCP Server                                                                                             |
+| Zed            | `~/.config/zed/settings.json` 中的 `context_servers` 字段                                                                                  |
+| Gemini CLI     | `~/.gemini/settings.json` 中的 `mcpServers` 字段                                                                                           |
+| Warp           | Settings → AI → MCP Servers → Add                                                                                                          |
+
+首次提问时客户端会自动弹出浏览器完成 OAuth 授权，无需配置 API Key。
+
+---
+
+## 第二步：安装 Skill
+
+Skill 是一组指令文件，告诉 AI 助手 Longbridge 能做什么。
 
 **通过 Claude Code 插件安装（Claude Code 用户推荐）：**
 
@@ -55,71 +130,29 @@ https://open.longbridge.com/skill/longbridge-all.zip
 
 ---
 
-## 第二步：连接 Longbridge 账户
+## 各工具的已知限制
 
-Skill 只是让 AI 知道能做什么，要真正获取行情数据或执行交易，还需要连接 Longbridge 账户。根据你的 AI 工具选择接入方式：
+部分环境存在网络白名单或沙箱限制，会阻止 CLI 安装和 MCP 服务器连接。遇到问题请先查阅本节。
 
-### 方式 A：安装 CLI（适用于有 shell 执行能力的工具）
+### Claude Desktop — 切换到 Code 标签页
 
-Claude Code、Codex、Gemini CLI、Warp 等可以直接在终端执行命令的工具适用此方式。
+Claude Desktop 的 **Chat 模式**存在网络限制，无法安装 CLI 或连接 MCP 服务器。不要在 Chat 模式下反复尝试，这样不会成功。
 
-```bash
-# macOS（需要 Homebrew，未安装请先访问 https://brew.sh）
-brew install --cask longbridge/tap/longbridge-terminal
+切换到 Claude Desktop 的 **Code 标签页**（即 App 内嵌的 Claude Code）。在 Code 标签页下，你拥有完整的终端访问权限，可以在同一个会话中完成 CLI 安装、MCP 连接和 Skill 安装。
 
-# macOS / Linux
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
-```
+<img src="https://assets.lbctrl.com/uploads/76a34f28-9000-4e3e-8250-e992c516ce80/claude.png" alt="Claude Desktop — 切换到 Code 标签页" />
 
-**Windows**（[Scoop](https://scoop.sh)）：
+### Codex — 选择「Work locally」
 
-```powershell
-scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
-```
+Codex 的 **Cloud 模式**存在同样的网络白名单限制。启动新会话时，请选择 **Work locally** 而非 Cloud。本地模式下 AI 可完整访问你的 shell 和网络。
 
-**Windows**（PowerShell）：
+<img src="https://assets.lbctrl.com/uploads/ccd412df-d312-45c3-a926-e3d466c9a479/codex.png" alt="Codex — 选择 Work locally" />
 
-```powershell
-iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
-```
+### Claude.ai 和 ChatGPT.com（网页版）
 
-```bash
-longbridge auth login
-```
+基于浏览器的界面无法访问本地系统，既不能执行 shell 命令，也无法连接外部 MCP 服务器。
 
-> 详细安装说明及完整命令列表参见 [CLI 文档](/zh-CN/docs/cli)。
-
-### 方式 B：连接 MCP 服务器（适用于支持 MCP 的工具）
-
-Claude Desktop、Cursor、Zed、Gemini CLI、Warp 等支持 MCP 的工具适用此方式。
-
-在 AI 工具的 MCP 配置中添加以下服务器地址：
-
-```
-https://openapi.longbridge.com/mcp
-```
-
-> 中国大陆用户可使用加速地址：`https://openapi.longbridge.cn/mcp`
-
-各工具配置入口：
-
-| 工具           | 配置位置                                                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Claude Desktop | 编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`（macOS）或 `%APPDATA%\Claude\claude_desktop_config.json`（Windows） |
-| Cursor         | Settings → MCP Servers → Add Remote MCP Server                                                                                             |
-| Zed            | `~/.config/zed/settings.json` 中的 `context_servers` 字段                                                                                  |
-| Gemini CLI     | `~/.gemini/settings.json` 中的 `mcpServers` 字段                                                                                           |
-| Warp           | Settings → AI → MCP Servers → Add                                                                                                          |
-
-首次提问时客户端会自动弹出浏览器完成 OAuth 授权，无需配置 API Key。
-
----
-
-## 为什么 Claude.ai 和 ChatGPT.com 无法使用
-
-**Claude.ai**（网页版）和 **ChatGPT.com**（网页版）是基于浏览器的界面，无法访问你的本地系统，既不能执行 shell 命令，也无法连接外部 MCP 服务器，因此 Skill 无法获取实时行情或执行交易。
-
-如果你使用 Claude，请安装 [Claude Desktop](https://claude.ai/download) 并通过上方的 MCP 方式接入。
+如果你使用 Claude，请安装 [Claude Desktop](https://claude.ai/download) 并切换到 **Code 标签页**。
 
 ---
 

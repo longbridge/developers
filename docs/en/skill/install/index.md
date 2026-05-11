@@ -16,9 +16,86 @@ Once installed, you can say things like this to your AI assistant and get real a
 
 ---
 
-## Step 1 — Install the Skill
+The quickest way to get started is with a terminal-based AI tool — Claude Code, Codex, opencode, or OpenClaw. Install the CLI, authenticate once, and the AI runs `longbridge` commands on your behalf.
 
-The Skill is a set of instruction files that tell your AI assistant what Longbridge can do. Three ways to install:
+If you'd rather not install local software, connect via MCP instead — just add a URL to your AI tool's config.
+
+Either way, also install the Skill: a set of instruction files that tells your AI what Longbridge can do and how to use it.
+
+---
+
+## Step 1 — Connect to the Longbridge platform
+
+CLI and MCP are both ways to access the Longbridge Developers platform. Pick one:
+
+- **CLI** — best experience; the AI runs `longbridge` commands directly in your terminal; requires installing software on your system
+- **MCP** — easier to connect; just add a URL to your AI tool's config; no local install needed
+
+### Method A — CLI (recommended)
+
+Works with Claude Code, Codex (Work locally), opencode, OpenClaw, Gemini CLI, Warp, and any tool that can run shell commands.
+
+**Install the CLI:**
+
+```bash
+# macOS (requires Homebrew — install at https://brew.sh if not already installed)
+brew install --cask longbridge/tap/longbridge-terminal
+
+# macOS / Linux
+curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
+```
+
+**Windows** ([Scoop](https://scoop.sh)):
+
+```powershell
+scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
+```
+
+**Windows** (PowerShell):
+
+```powershell
+iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
+```
+
+**Authenticate:**
+
+```bash
+longbridge auth login
+```
+
+That's it. The AI can now call `longbridge` commands on your behalf.
+
+> See the [CLI reference](/docs/cli) for the full command list and installation details.
+
+### Method B — MCP
+
+Works with Claude Desktop, Cursor, Zed, Gemini CLI, Warp, and any tool that supports MCP.
+
+Add the following as a remote MCP server in your AI tool:
+
+```
+https://openapi.longbridge.com/mcp
+```
+
+> Users in mainland China can use the accelerated endpoint: `https://openapi.longbridge.cn/mcp`
+
+Where to find the MCP configuration in each client:
+
+| Client         | Where to configure                                                                                                                        |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Desktop | Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows) |
+| Cursor         | Settings → MCP Servers → Add Remote MCP Server                                                                                            |
+| Zed            | `context_servers` key in `~/.config/zed/settings.json`                                                                                    |
+| Gemini CLI     | `mcpServers` key in `~/.gemini/settings.json`                                                                                             |
+| Warp           | Settings → AI → MCP Servers → Add                                                                                                         |
+
+The first time you ask a Longbridge question, your client will open a browser tab for OAuth authorization — no API key required.
+
+---
+
+## Step 2 — Install the Skill
+
+The Skill is a set of instruction files that tell your AI assistant what Longbridge can do.
 
 **Via Claude Code plugin (recommended for Claude Code users):**
 
@@ -55,78 +132,29 @@ https://open.longbridge.com/skill/longbridge-all.zip
 
 ---
 
-## Step 2 — Connect your Longbridge account
+## Known restrictions by tool
 
-The Skill tells the AI what's possible. To actually fetch live data or execute trades, you need one of two capabilities:
+Some environments have network whitelists or sandboxing that block CLI installation and MCP server connections. If things aren't working, check here first.
 
-- **Shell execution** — the AI runs `longbridge` commands directly in a terminal
-- **MCP integration** — the AI connects to the Longbridge MCP server over the network
+### Claude Desktop — use the Code tab
 
-### Method A — Install the CLI
+**Chat mode** in Claude Desktop has network restrictions that prevent CLI installation and MCP server connections. Do not try to install from Chat mode — it will not work no matter how many times you retry.
 
-For AI tools that can execute shell commands (Claude Code, Codex, Gemini CLI, Warp, etc.).
+Switch to the **Code** tab in Claude Desktop (this is Claude Code embedded in the app). From the Code tab, you have full terminal access — you can install the CLI, connect MCP, and install the Skill all in one session.
 
-**Install the CLI:**
+<img src="https://assets.lbctrl.com/uploads/76a34f28-9000-4e3e-8250-e992c516ce80/claude.png" alt="Claude Desktop — switch to the Code tab" />
 
-```bash
-# macOS (requires Homebrew — install at https://brew.sh if not already installed)
-brew install --cask longbridge/tap/longbridge-terminal
+### Codex — select "Work locally"
 
-# macOS / Linux
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
-```
+Codex in **Cloud** mode has the same network whitelist restrictions. When starting a new session, select **Work locally** instead of Cloud. This gives the agent full access to your shell and network.
 
-**Windows** ([Scoop](https://scoop.sh)):
+<img src="https://assets.lbctrl.com/uploads/ccd412df-d312-45c3-a926-e3d466c9a479/codex.png" alt="Codex — select Work locally" />
 
-```powershell
-scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
-```
+### Claude.ai and ChatGPT.com (web)
 
-**Windows** (PowerShell):
+Browser-based interfaces have no access to your local system. They cannot run shell commands or connect to external MCP servers.
 
-```powershell
-iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
-```
-
-**Connect your Longbridge account:**
-
-```bash
-longbridge auth login
-```
-
-That's it. The AI can now call `longbridge` commands on your behalf.
-
-> See the [CLI reference](/docs/cli) for the full command list and installation details.
-
-### Method B — Connect the MCP server
-
-For AI tools that support MCP (Claude Desktop, Cursor, Zed, Gemini CLI, Warp, etc.).
-
-Add the following as a remote MCP server in your AI tool:
-
-```
-https://openapi.longbridge.com/mcp
-```
-
-Where to find the MCP configuration in each client:
-
-| Client         | Where to configure                                                                                                                        |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Desktop | Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows) |
-| Cursor         | Settings → MCP Servers → Add Remote MCP Server                                                                                            |
-| Zed            | `context_servers` key in `~/.config/zed/settings.json`                                                                                    |
-| Gemini CLI     | `mcpServers` key in `~/.gemini/settings.json`                                                                                             |
-| Warp           | Settings → AI → MCP Servers → Add                                                                                                         |
-
-The first time you ask a Longbridge question, your client will open a browser tab for OAuth authorization — no API key required.
-
----
-
-## Why Claude.ai and ChatGPT.com don't work
-
-**Claude.ai** (web) and **ChatGPT.com** (web) are browser-based interfaces with no access to your local system. They cannot run shell commands or connect to external MCP servers, so the Skill has no way to fetch live market data or execute trades.
-
-If you use Claude, install [Claude Desktop](https://claude.ai/download) and use the MCP method above.
+For Claude, use [Claude Desktop](https://claude.ai/download) and switch to the **Code** tab.
 
 ---
 
