@@ -18,7 +18,6 @@ sidebar_icon: newspaper
 - **`financial-statement`** — 完整逐行财务报表（利润表/资产负债表/现金流量表），含层级结构与 YoY 对比；支持 `--kind IS/BS/CF/ALL` 和 `--report af/saf/qf/cumul`
 - **`financial-report --latest`** — 新增 `--latest` 参数，快速获取最新财报关键指标摘要（营收、净利润、EPS、ROE、总资产）
 - **`valuation-rank`** — 每日 PE/PB/PS 行业百分位排名，以 `排名/总数` 形式展示，支持自定义日期范围
-- **`analyst-estimates`** — 分析师 EPS 一致性预期（高/低/均值/中位数、覆盖数），含历史与未来各期数据
 - **`institution-rating --history` / `--industry-rank`** — 新增参数：`--history` 查看评级及目标价随时间的变化；`--industry-rank` 查看行业内所有股票的分析师覆盖排名
 - **`news search` / `topic search`** — 按关键词搜索资讯和社区话题
 - **`bank-cards`** — 查看账户绑定的银行卡列表

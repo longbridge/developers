@@ -8,6 +8,10 @@ sidebar_position: 11
 
 查看公司經營回顧——按報告期展示關鍵財務指標和管理層評述。
 
+:::info
+此命令僅支援港股。
+:::
+
 ## 基本用法
 
 ```bash
@@ -30,8 +34,8 @@ Currency: HKD
 ### 查看經營回顧
 
 ```bash
-longbridge operating AAPL.US
 longbridge operating 700.HK
+longbridge operating 9988.HK
 ```
 
 展示財務指標表格和管理層回顧摘要。
@@ -40,9 +44,9 @@ longbridge operating 700.HK
 
 ```bash
 # 年報
-longbridge operating AAPL.US --report af
+longbridge operating 700.HK --report af
 # 第一季報告
-longbridge operating TSLA.US --report q1
+longbridge operating 700.HK --report q1
 ```
 
 支援的報告類型：`af`（年報）、`saf`（半年報）、`q1`（第一季）、`q3`（第三季）。可用逗號分隔多個類型。
@@ -50,5 +54,5 @@ longbridge operating TSLA.US --report q1
 ### JSON 輸出
 
 ```bash
-longbridge operating TSLA.US --format json
+longbridge operating 700.HK --format json
 ```

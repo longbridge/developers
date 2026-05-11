@@ -8,6 +8,10 @@ sidebar_position: 11
 
 View a company's operating reviews — key financial indicators and management commentary by report period.
 
+:::info
+This command only supports Hong Kong stocks.
+:::
+
 ## Basic Usage
 
 ```bash
@@ -31,8 +35,8 @@ Currency: HKD
 ### View operating review
 
 ```bash
-longbridge operating AAPL.US
 longbridge operating 700.HK
+longbridge operating 9988.HK
 ```
 
 Displays financial indicator tables and management review summaries.
@@ -41,9 +45,9 @@ Displays financial indicator tables and management review summaries.
 
 ```bash
 # Annual report
-longbridge operating AAPL.US --report af
+longbridge operating 700.HK --report af
 # Q1 report
-longbridge operating TSLA.US --report q1
+longbridge operating 700.HK --report q1
 ```
 
 Supported report types: `af` (annual), `saf` (semi-annual), `q1` (Q1), `q3` (Q3). Multiple types can be comma-separated.
@@ -51,5 +55,5 @@ Supported report types: `af` (annual), `saf` (semi-annual), `q1` (Q1), `q3` (Q3)
 ### JSON output
 
 ```bash
-longbridge operating TSLA.US --format json
+longbridge operating 700.HK --format json
 ```

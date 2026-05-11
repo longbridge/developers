@@ -18,7 +18,6 @@ sidebar_icon: newspaper
 - **`financial-statement`** — detailed, hierarchical financial statements (income statement, balance sheet, cash flow) with full line-item breakdown and YoY comparison; supports `--kind IS/BS/CF/ALL` and `--report af/saf/qf/cumul`
 - **`financial-report --latest`** — new flag to fetch the latest report summary (key indicators: revenue, net profit, EPS, ROE, total assets) without fetching the full statement
 - **`valuation-rank`** — daily PE/PB/PS industry percentile rank over a date range, showing `rank/total` for each metric
-- **`analyst-estimates`** — EPS analyst consensus estimates (high/low/mean/median, coverage count) across historical and forward periods
 - **`institution-rating --history` / `--industry-rank`** — new flags: `--history` shows how analyst ratings and price targets have changed over time; `--industry-rank` ranks all stocks in the same industry by analyst coverage
 - **`news search` / `topic search`** — keyword search across news articles and community topics
 - **`bank-cards`** — list bank cards linked to your account
