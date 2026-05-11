@@ -203,15 +203,21 @@ func main() {
 
 ## Schemas
 
-### BrokerHoldingDailyResponse
+### BrokerHoldingDailyHistoryResponse
 
-<a id="BrokerHoldingDailyResponse"></a>
+<a id="BrokerHoldingDailyHistoryResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 港股代码 |
-| broker_id | string | 是 | 经纪商参与者 ID |
-| broker_name | string | 是 | 经纪商名称 |
-| history | object[] | 是 | 每日持仓历史 |
-| ∟ date | string | 是 | 日期（YYYY-MM-DD） |
-| ∟ holding_qty | string | 是 | 当日持仓数量 |
+| list | object[] | true | 每日持仓历史记录 |
+
+### BrokerHoldingDailyItem
+
+<a id="BrokerHoldingDailyItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | true | 日期（如 `2026.05.05`） |
+| holding | string | false | 总持股数 |
+| ratio | string | false | 持仓比率 |
+| chg | string | false | 日变动量 |

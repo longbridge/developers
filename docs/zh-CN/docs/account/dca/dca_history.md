@@ -236,10 +236,22 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 交易历史记录 |
-| ∟ trade_date | string | true | 交易执行日期（ISO 8601） |
-| ∟ symbol | string | true | 证券代码 |
-| ∟ amount | string | true | 投入金额 |
-| ∟ price | string | false | 成交价格 |
-| ∟ quantity | string | false | 买入数量 |
-| ∟ status | string | true | 交易状态：`Filled`（已成交）、`Failed`（失败） |
+| records | object[] | true | 执行记录列表 |
+| has_more | boolean | false | 是否有更多记录 |
+
+### DcaHistoryRecord
+
+<a id="DcaHistoryRecord"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 证券代码 |
+| order_id | string | false | 关联订单 ID |
+| status | string | false | 执行状态 |
+| action | string | false | 操作类型 |
+| order_type | string | false | 订单类型 |
+| executed_qty | string | false | 成交数量 |
+| executed_price | string | false | 成交价格 |
+| executed_amount | string | false | 成交金额 |
+| created_at | string | false | 执行时间 |
+| rejected_reason | string | false | 拒绝原因（如有） |

@@ -236,10 +236,22 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Trade history records |
-| ∟ trade_date | string | true | Trade execution date (ISO 8601) |
-| ∟ symbol | string | true | Security symbol |
-| ∟ amount | string | true | Invested amount |
-| ∟ price | string | false | Execution price |
-| ∟ quantity | string | false | Quantity purchased |
-| ∟ status | string | true | Trade status: `Filled`, `Failed` |
+| records | object[] | true | List of execution records |
+| has_more | boolean | false | Whether more records exist |
+
+### DcaHistoryRecord
+
+<a id="DcaHistoryRecord"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Security symbol |
+| order_id | string | false | Associated order ID |
+| status | string | false | Execution status |
+| action | string | false | Action type |
+| order_type | string | false | Order type |
+| executed_qty | string | false | Executed quantity |
+| executed_price | string | false | Executed price |
+| executed_amount | string | false | Executed amount |
+| created_at | string | false | Execution time |
+| rejected_reason | string | false | Rejection reason (if any) |

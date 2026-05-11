@@ -243,6 +243,8 @@ func main() {
 | end_date | string | false | End date |
 | default_tag | integer | false | Default display tag |
 | underlying_details | object | false | Underlying asset P&L breakdown |
+| updated_at | string | false | Last update timestamp |
+| updated_date | string | false | Last update date |
 | derivative_pnl_details | object | false | Derivatives P&L breakdown |
 
 ### ProfitDetails

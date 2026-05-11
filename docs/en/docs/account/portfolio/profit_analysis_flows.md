@@ -239,11 +239,20 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Cash flow records |
-| ∟ transaction_flow_name | string | true | Flow type description |
-| ∟ direction | int32 | true | `1` = inflow, `-1` = outflow |
-| ∟ business_type | int32 | true | Business type code |
-| ∟ balance | string | true | Amount |
-| ∟ currency | string | true | Currency |
-| ∟ business_time | string | true | Transaction time as Unix timestamp |
-| ∟ symbol | string | false | Associated security symbol |
+| flows_list | object[] | true | Paginated list of flow items |
+| has_more | boolean | false | Whether there are more pages |
+
+### FlowItem
+
+<a id="FlowItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| executed_date | string | true | Execution date (e.g. `2024-01-15`) |
+| executed_timestamp | string | false | Execution timestamp |
+| code | string | false | Security code |
+| direction | string | false | Direction: `In` or `Out` |
+| executed_quantity | string | false | Executed quantity |
+| executed_price | string | false | Executed price |
+| executed_cost | string | false | Executed cost |
+| describe | string | false | Human-readable description |

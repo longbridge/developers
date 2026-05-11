@@ -203,15 +203,21 @@ func main() {
 
 ## Schemas
 
-### BrokerHoldingDailyResponse
+### BrokerHoldingDailyHistoryResponse
 
-<a id="BrokerHoldingDailyResponse"></a>
+<a id="BrokerHoldingDailyHistoryResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | HK security symbol |
-| broker_id | string | true | Broker participant ID |
-| broker_name | string | true | Broker name |
-| history | object[] | true | Daily holding history |
-| ∟ date | string | true | Date (YYYY-MM-DD) |
-| ∟ holding_qty | string | true | Holding quantity on that date |
+| list | object[] | true | Daily holding history records |
+
+### BrokerHoldingDailyItem
+
+<a id="BrokerHoldingDailyItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | true | Date (e.g. `2026.05.05`) |
+| holding | string | false | Total shares held |
+| ratio | string | false | Holding ratio |
+| chg | string | false | Daily change |

@@ -243,6 +243,8 @@ func main() {
 | end_date | string | false | 結束日期 |
 | default_tag | integer | false | 默認顯示標簽 |
 | underlying_details | object | false | 正股盈虧明細 |
+| updated_at | string | false | 最後更新時間 |
+| updated_date | string | false | 最後更新日期 |
 | derivative_pnl_details | object | false | 衍生品盈虧明細 |
 
 ### ProfitDetails

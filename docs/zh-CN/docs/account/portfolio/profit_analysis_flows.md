@@ -239,11 +239,20 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 资金流水记录 |
-| ∟ transaction_flow_name | string | true | 流水类型描述 |
-| ∟ direction | int32 | true | `1` 表示入账，`-1` 表示出账 |
-| ∟ business_type | int32 | true | 业务类型编码 |
-| ∟ balance | string | true | 金额 |
-| ∟ currency | string | true | 货币 |
-| ∟ business_time | string | true | 交易时间，Unix 时间戳 |
-| ∟ symbol | string | false | 关联证券代码 |
+| flows_list | object[] | true | 资金流水列表（分页） |
+| has_more | boolean | false | 是否有更多页 |
+
+### FlowItem
+
+<a id="FlowItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| executed_date | string | true | 执行日期（如 `2024-01-15`） |
+| executed_timestamp | string | false | 执行时间戳 |
+| code | string | false | 证券代码 |
+| direction | string | false | 方向：`In`（买入）或 `Out`（卖出） |
+| executed_quantity | string | false | 成交数量 |
+| executed_price | string | false | 成交价格 |
+| executed_cost | string | false | 成交成本 |
+| describe | string | false | 描述说明 |

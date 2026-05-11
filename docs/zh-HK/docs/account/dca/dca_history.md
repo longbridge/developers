@@ -236,10 +236,22 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 交易歷史紀錄 |
-| ∟ trade_date | string | true | 交易執行日期（ISO 8601） |
-| ∟ symbol | string | true | 證券代碼 |
-| ∟ amount | string | true | 投入金額 |
-| ∟ price | string | false | 成交價格 |
-| ∟ quantity | string | false | 買入數量 |
-| ∟ status | string | true | 交易狀態：`Filled`（已成交）、`Failed`（失敗） |
+| records | object[] | true | 執行紀錄列表 |
+| has_more | boolean | false | 是否有更多紀錄 |
+
+### DcaHistoryRecord
+
+<a id="DcaHistoryRecord"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 證券代碼 |
+| order_id | string | false | 關聯訂單 ID |
+| status | string | false | 執行狀態 |
+| action | string | false | 操作類型 |
+| order_type | string | false | 訂單類型 |
+| executed_qty | string | false | 成交數量 |
+| executed_price | string | false | 成交價格 |
+| executed_amount | string | false | 成交金額 |
+| created_at | string | false | 執行時間 |
+| rejected_reason | string | false | 拒絕原因（如有） |
