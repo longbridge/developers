@@ -233,19 +233,48 @@ func main() {
 
 ## Schemas
 
-### OperatingList
+### OperatingListResponse
 
-<a id="OperatingList"></a>
+<a id="OperatingListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| list | object[] | true | List of operating metric records |
-| list[].period | string | false | Report period (e.g. Q1 2024, Annual 2023) |
-| list[].revenue | int64 | false | Total revenue |
-| list[].gross_profit | int64 | false | Gross profit |
-| list[].operating_income | int64 | false | Operating income |
-| list[].net_income | int64 | false | Net income |
-| list[].gross_margin | double | false | Gross margin ratio |
-| list[].operating_margin | double | false | Operating margin ratio |
-| list[].net_margin | double | false | Net margin ratio |
+| list | object[] | true | List of operating summary reports |
+
+### OperatingItem
+
+<a id="OperatingItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | Internal report ID |
+| report | string | false | Report period code (e.g. `af` = annual) |
+| title | string | false | Report title |
+| txt | string | false | Management discussion text |
+| latest | boolean | false | Whether this is the most recent report |
+| web_url | string | false | URL to the full report page |
+| financial | object | false | Key financial metrics |
+
+### OperatingFinancial
+
+<a id="OperatingFinancial"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| code | string | false | Ticker code |
+| name | string | false | Company name |
+| currency | string | false | Reporting currency |
+| region | string | false | Market region |
+| report | string | false | Report period code |
+| indicators | object[] | false | Financial indicators |
+
+### OperatingIndicator
+
+<a id="OperatingIndicator"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| field_name | string | true | Field name key (e.g. `operating_revenue`) |
+| indicator_name | string | false | Display name |
+| indicator_value | string | false | Formatted value |
+| yoy | string | false | Year-over-year change rate |

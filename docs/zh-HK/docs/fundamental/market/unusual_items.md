@@ -234,5 +234,18 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| all_off | boolean | 否 | 是否所有異動提醒已關閉 |
-| changes | object[] | 否 | 異動列表 |
+| all_off | boolean | false | 是否全局關閉異動提醒 |
+| changes | object[] | false | 市場異動事件列表 |
+
+### AnomalyItem
+
+<a id="AnomalyItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 證券代碼 |
+| name | string | false | 證券名稱 |
+| alert_name | string | false | 異動類型名稱 |
+| alert_time | integer | false | 異動時間（Unix 時間戳，毫秒） |
+| emotion | integer | false | 情緒方向：`1`=正面/上漲，`2`=負面/下跌 |
+| change_values | string[] | false | 變化數值字符串列表 |

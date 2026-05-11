@@ -203,3 +203,6 @@ func main() {
 | total_invested | string | true | 总投入金额 |
 | total_profit_loss | string | true | 总盈亏金额 |
 | total_profit_loss_rate | string | true | 总盈亏比率 |
+| nearest_plans | object[] | false | 最近即将执行的定投计划（见 DcaPlan） |
+
+> `nearest_plans` 的子项结构与 [查看定投计划](./list-dca) 中的 `DcaPlan` 一致。

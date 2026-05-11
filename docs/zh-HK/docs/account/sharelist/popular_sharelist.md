@@ -203,4 +203,37 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | sharelists | object[] | false | 用戶自建股單列表 |
 | subscribed_sharelists | object[] | false | 已訂閱股單列表 |
-| tail_mark | string | false | 分頁游標 |
+| tail_mark | string | false | 已訂閱列表的分頁游標 |
+
+### SharelistInfo
+
+<a id="SharelistInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | integer | true | 股單 ID |
+| name | string | false | 股單名稱 |
+| description | string | false | 描述 |
+| cover | string | false | 封面圖片 URL |
+| subscribers_count | integer | false | 訂閱人數 |
+| chg | string | false | 日漲跌幅 |
+| this_year_chg | string | false | 今年以來漲跌幅 |
+| subscribed | boolean | false | 當前用戶是否已訂閱 |
+| sharelist_type | integer | false | 類型：`0`=普通，`3`=官方，`4`=行業 |
+| industry_code | string | false | 行業代碼（行業股單適用） |
+| stocks | object[] | false | 成份股列表 |
+
+### SharelistStock
+
+<a id="SharelistStock"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 證券代碼 |
+| code | string | false | 股票代碼 |
+| name | string | false | 證券名稱 |
+| market | string | false | 市場 |
+| intro | string | false | 簡介 |
+| last_done | string | false | 最新價格 |
+| change | string | false | 日漲跌幅 |
+| trade_status | integer | false | 交易狀態碼 |

@@ -233,19 +233,48 @@ func main() {
 
 ## Schemas
 
-### OperatingList
+### OperatingListResponse
 
-<a id="OperatingList"></a>
+<a id="OperatingListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 證券代碼 |
-| list | object[] | 是 | 經營數據記錄列表 |
-| list[].period | string | 否 | 財報期（如 Q1 2024、Annual 2023） |
-| list[].revenue | int64 | 否 | 總營收 |
-| list[].gross_profit | int64 | 否 | 毛利潤 |
-| list[].operating_income | int64 | 否 | 營業利潤 |
-| list[].net_income | int64 | 否 | 淨利潤 |
-| list[].gross_margin | double | 否 | 毛利率 |
-| list[].operating_margin | double | 否 | 營業利潤率 |
-| list[].net_margin | double | 否 | 淨利潤率 |
+| list | object[] | true | 經營數據報告列表 |
+
+### OperatingItem
+
+<a id="OperatingItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | 內部報告 ID |
+| report | string | false | 報告期代碼（如 `af` = 年報） |
+| title | string | false | 報告標題 |
+| txt | string | false | 管理層討論文本 |
+| latest | boolean | false | 是否為最新報告 |
+| web_url | string | false | 完整報告頁面連結 |
+| financial | object | false | 關鍵財務指標 |
+
+### OperatingFinancial
+
+<a id="OperatingFinancial"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| code | string | false | 股票代碼 |
+| name | string | false | 公司名稱 |
+| currency | string | false | 報告貨幣 |
+| region | string | false | 市場地區 |
+| report | string | false | 報告期代碼 |
+| indicators | object[] | false | 財務指標列表 |
+
+### OperatingIndicator
+
+<a id="OperatingIndicator"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| field_name | string | true | 欄位名稱（如 `operating_revenue`） |
+| indicator_name | string | false | 顯示名稱 |
+| indicator_value | string | false | 格式化數值 |
+| yoy | string | false | 同比變化率 |

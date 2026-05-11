@@ -203,3 +203,6 @@ func main() {
 | total_invested | string | true | Total invested amount |
 | total_profit_loss | string | true | Total profit/loss amount |
 | total_profit_loss_rate | string | true | Total profit/loss rate |
+| nearest_plans | object[] | false | Nearest upcoming DCA plans (see DcaPlan) |
+
+> `nearest_plans` items use the same `DcaPlan` structure as [List DCA Plans](./list-dca).

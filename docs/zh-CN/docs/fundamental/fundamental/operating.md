@@ -233,19 +233,48 @@ func main() {
 
 ## Schemas
 
-### OperatingList
+### OperatingListResponse
 
-<a id="OperatingList"></a>
+<a id="OperatingListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 证券代码 |
-| list | object[] | 是 | 经营数据记录列表 |
-| list[].period | string | 否 | 财报期（如 Q1 2024、Annual 2023） |
-| list[].revenue | int64 | 否 | 总营收 |
-| list[].gross_profit | int64 | 否 | 毛利润 |
-| list[].operating_income | int64 | 否 | 营业利润 |
-| list[].net_income | int64 | 否 | 净利润 |
-| list[].gross_margin | double | 否 | 毛利率 |
-| list[].operating_margin | double | 否 | 营业利润率 |
-| list[].net_margin | double | 否 | 净利润率 |
+| list | object[] | true | 经营数据报告列表 |
+
+### OperatingItem
+
+<a id="OperatingItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | 内部报告 ID |
+| report | string | false | 报告期代码（如 `af` = 年报） |
+| title | string | false | 报告标题 |
+| txt | string | false | 管理层讨论文本 |
+| latest | boolean | false | 是否为最新报告 |
+| web_url | string | false | 完整报告页面链接 |
+| financial | object | false | 关键财务指标 |
+
+### OperatingFinancial
+
+<a id="OperatingFinancial"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| code | string | false | 股票代码 |
+| name | string | false | 公司名称 |
+| currency | string | false | 报告货币 |
+| region | string | false | 市场地区 |
+| report | string | false | 报告期代码 |
+| indicators | object[] | false | 财务指标列表 |
+
+### OperatingIndicator
+
+<a id="OperatingIndicator"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| field_name | string | true | 字段名称（如 `operating_revenue`） |
+| indicator_name | string | false | 显示名称 |
+| indicator_value | string | false | 格式化数值 |
+| yoy | string | false | 同比变化率 |

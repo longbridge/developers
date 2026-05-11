@@ -236,6 +236,39 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| sharelists | object[] | false | User's own share lists |
-| subscribed_sharelists | object[] | false | Subscribed share lists |
-| tail_mark | string | false | Pagination cursor |
+| sharelists | object[] | false | User's own sharelists |
+| subscribed_sharelists | object[] | false | Subscribed sharelists |
+| tail_mark | string | false | Pagination cursor for subscribed list |
+
+### SharelistInfo
+
+<a id="SharelistInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | integer | true | Sharelist ID |
+| name | string | false | Sharelist name |
+| description | string | false | Description |
+| cover | string | false | Cover image URL |
+| subscribers_count | integer | false | Number of subscribers |
+| chg | string | false | Day change percentage |
+| this_year_chg | string | false | Year-to-date change percentage |
+| subscribed | boolean | false | Whether the current user is subscribed |
+| sharelist_type | integer | false | Type: `0`=regular, `3`=official, `4`=industry |
+| industry_code | string | false | Industry code (for industry sharelists) |
+| stocks | object[] | false | Constituent stocks |
+
+### SharelistStock
+
+<a id="SharelistStock"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Security symbol |
+| code | string | false | Ticker code |
+| name | string | false | Security name |
+| market | string | false | Market |
+| intro | string | false | Brief description |
+| last_done | string | false | Latest price |
+| change | string | false | Day change percentage |
+| trade_status | integer | false | Trade status code |
