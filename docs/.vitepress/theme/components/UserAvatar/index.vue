@@ -25,16 +25,17 @@ onMounted(() => {
   const loginUrl = createLoginRedirectPath({
     sw_open: '1',
   })
-  window.SupportWidgetConfig = {
-    isLoggedIn: function () {
-      return isLogin.value
-    },
-    loginUrl,
-    proxy: isProd ? 'prod' : 'staging',
+  window.HeloraConfig = {
+    proxy: 'staging',
+    source: 'web_openapi',
+    configPlatform: 'web',
+    configKey: 'helora',
+    agentId: 'openapi-agent-id',
+    agentOnly: true
   }
 
   const script = document.createElement('script')
-  script.src = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
+  script.src = 'https://assets.lbkrs.com/h5hub/helora-embed/helora-embed-0.1.0.dev.iife.js'
   script.async = true
   document.head.appendChild(script)
 })
