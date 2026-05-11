@@ -234,7 +234,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 市场状态列表 |
+| market_time | object[] | 是 | 市场状态列表 |
 
 ### MarketTimeItem
 
@@ -242,5 +242,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | 是 | 市场代码：`US`、`HK`、`CN`、`SG` |
-| status | string | 是 | 当前状态：`Pre-Market`、`Trading`、`Post-Market`、`Closed` |
+| market | string | 是 | 市场：`US`、`HK`、`CN`、`SG`、`Crypto` |
+| delay_sub_status | integer | 否 | 延迟订阅状态 |
+| delay_timestamp | string | 否 | 延迟时间戳 |
+| delay_trade_status | integer | 否 | 延迟交易状态 |

@@ -224,21 +224,46 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [ListAlertsResponse](#ListAlertsResponse) |
+| 200    | 成功        | [AlertListResponse](#AlertListResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### ListAlertsResponse
+### AlertListResponse
 
-<a id="ListAlertsResponse"></a>
+<a id="AlertListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 提醒列表 |
-| ∟ id | int64 | true | 提醒 ID |
-| ∟ symbol | string | true | 证券代码 |
-| ∟ price | string | true | 目标价格 |
-| ∟ direction | string | true | 方向：`rise`（上涨）或 `fall`（下跌） |
-| ∟ enabled | bool | true | 提醒是否启用 |
-| ∟ frequency | string | true | 触发频率：`once`（仅一次）或 `every`（每次） |
+| lists | object[] | true | 按标的分组的提醒列表 |
+
+### AlertSymbolGroup
+
+<a id="AlertSymbolGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 证券代码 |
+| code | string | false | 证券简码 |
+| name | string | false | 证券名称 |
+| market | string | false | 市场 |
+| product | string | false | 产品类型 |
+| price | string | false | 当前价格 |
+| chg | string | false | 价格变动 |
+| p_chg | string | false | 涨跌幅 |
+| indicators | object[] | true | 提醒指标列表 |
+
+### AlertItem
+
+<a id="AlertItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | true | 提醒 ID |
+| indicator_id | string | false | 指标 ID |
+| text | string | false | 提醒描述 |
+| enabled | boolean | false | 是否启用 |
+| frequency | integer | false | 触发频率 |
+| scope | integer | false | 作用范围 |
+| value_map | object | false | 提醒条件值 |
+| state | integer[] | false | 提醒状态标志 |

@@ -191,22 +191,24 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [DcaSupportList](#DcaSupportList) |
+| 200    | 成功        | [DcaSupportListResponse](#DcaSupportListResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### DcaSupportList
+### DcaSupportListResponse
 
-<a id="DcaSupportList"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| list | DcaSupportItem[] | true | 支持情况列表 |
-
-### DcaSupportItem
+<a id="DcaSupportListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | 标的代码 |
-| support | boolean | true | 是否支持定投 |
+| infos | object[] | true | 定投支持情况列表 |
+
+### DcaSupportInfo
+
+<a id="DcaSupportInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 证券代码 |
+| support_regular_saving | boolean | true | 是否支持定投 |

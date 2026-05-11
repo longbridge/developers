@@ -267,28 +267,36 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| analyst | object | true | Analyst rating summary |
-| analyst.evaluate | object | true | Rating distribution (buy/hold/sell counts) |
-| analyst.evaluate.buy | integer | false | Buy ratings count |
-| analyst.evaluate.hold | integer | false | Hold ratings count |
-| analyst.evaluate.sell | integer | false | Sell ratings count |
-| analyst.evaluate.over | integer | false | Outperform ratings count |
-| analyst.evaluate.under | integer | false | Underperform ratings count |
-| analyst.evaluate.no_opinion | integer | false | No opinion count |
-| analyst.evaluate.total | integer | false | Total analyst count |
-| analyst.industry_id | integer | false | Industry ID |
-| analyst.industry_name | string | false | Industry name |
-| analyst.industry_rank | integer | false | Rank within industry |
-| analyst.industry_total | integer | false | Total stocks in industry |
-| analyst.industry_mean | number | false | Industry mean rating |
-| analyst.industry_median | number | false | Industry median rating |
-| analyst.target | object | false | Price target range |
-| analyst.target.highest_price | string | false | Highest target price |
-| analyst.target.lowest_price | string | false | Lowest target price |
-| analyst.target.prev_close | string | false | Previous close price |
-| instratings | object | false | Consensus rating snapshot |
-| instratings.recommend | string | false | Overall recommendation |
-| instratings.change | string | false | Rating change |
-| instratings.ccy_symbol | string | false | Currency symbol |
-| instratings.target | object | false | Consensus price target |
-| instratings.updated_at | string | false | Last update timestamp |
+| latest | object | true | Latest analyst rating snapshot |
+| latest.evaluate | object | true | Rating distribution |
+| latest.evaluate.buy | integer | false | Buy ratings count |
+| latest.evaluate.hold | integer | false | Hold ratings count |
+| latest.evaluate.sell | integer | false | Sell ratings count |
+| latest.evaluate.over | integer | false | Outperform count |
+| latest.evaluate.under | integer | false | Underperform count |
+| latest.evaluate.no_opinion | integer | false | No opinion count |
+| latest.evaluate.total | integer | false | Total analyst count |
+| latest.evaluate.start_date | string | false | Period start date |
+| latest.evaluate.end_date | string | false | Period end date |
+| latest.industry_id | integer | false | Industry ID |
+| latest.industry_name | string | false | Industry name |
+| latest.industry_rank | integer | false | Rank within industry |
+| latest.industry_total | integer | false | Total stocks in industry |
+| latest.industry_mean | integer | false | Industry mean rating |
+| latest.industry_median | integer | false | Industry median rating |
+| latest.target | object | false | Price target range |
+| latest.target.highest_price | string | false | Highest target price |
+| latest.target.lowest_price | string | false | Lowest target price |
+| latest.target.prev_close | string | false | Previous close price |
+| latest.target.start_date | string | false | Period start date |
+| latest.target.end_date | string | false | Period end date |
+| summary | object | false | Consensus rating snapshot |
+| summary.recommend | string | false | Overall recommendation |
+| summary.change | string | false | Rating change |
+| summary.ccy_symbol | string | false | Currency symbol |
+| summary.evaluate | object | false | Rating distribution (same as latest.evaluate) |
+| summary.target | object | false | Consensus price target |
+| summary.target.average_target | string | false | Average target price |
+| summary.target.highest_price | string | false | Highest target price |
+| summary.target.lowest_price | string | false | Lowest target price |
+| summary.updated_at | string | false | Last update timestamp |

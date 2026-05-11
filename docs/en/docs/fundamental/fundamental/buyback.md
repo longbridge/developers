@@ -219,21 +219,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [BuybackData](#BuybackData) |
+| 200    | Success     | [BuybackDataResponse](#BuybackDataResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### BuybackData
+### BuybackDataResponse
 
-<a id="BuybackData"></a>
+<a id="BuybackDataResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| list | object[] | true | List of buyback records |
-| list[].period | string | false | Fiscal period (e.g. FY2023, Q3 2024) |
-| list[].buyback_amount | int64 | false | Total buyback amount |
-| list[].buyback_shares | int64 | false | Number of shares repurchased |
-| list[].buyback_ratio | double | false | Buyback as a ratio of shares outstanding |
-| list[].currency | string | false | Currency code |
+| buyback_history | object[] | false | Annual buyback history |
+| buyback_ratios | object[] | false | Buyback ratio history |
+| recent_buybacks | object | false | Trailing 12-month buyback summary |
+
+### BuybackHistoryItem
+
+<a id="BuybackHistoryItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| fiscal_year | string | false | Fiscal year |
+| fiscal_year_range | string | false | Fiscal year date range |
+| currency | string | false | Currency |
+| net_buyback | string | false | Net buyback amount |
+| net_buyback_growth_rate | string | false | Buyback growth rate |
+| net_buyback_yield | string | false | Buyback yield |
+
+### BuybackRatios
+
+<a id="BuybackRatios"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| net_buyback_payout_ratio | string | false | Buyback payout ratio |
+| net_buyback_to_cashflow_ratio | string | false | Buyback to free cash flow ratio |
+
+### RecentBuybacks
+
+<a id="RecentBuybacks"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| currency | string | false | Currency |
+| net_buyback_ttm | string | false | Net buyback (trailing 12 months) |
+| net_buyback_yield_ttm | string | false | Buyback yield (trailing 12 months) |

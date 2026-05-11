@@ -225,20 +225,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [SplitCalendarResponse](#SplitCalendarResponse) |
+| 200    | Success     | [CalendarEventsResponse](#CalendarEventsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### SplitCalendarResponse
+### CalendarEventsResponse
 
-<a id="SplitCalendarResponse"></a>
+<a id="CalendarEventsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Split event list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Company name |
-| ∟ date | string | true | Effective date |
-| ∟ ratio | string | true | Split ratio, e.g. `10:1` |
-| ∟ type | string | true | `Split` or `ReverseSplit` |
+| date | string | false | Response date |
+| list | object[] | true | List of calendar date groups |
+
+### CalendarDateGroup
+
+<a id="CalendarDateGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | true | Date |
+| count | integer | false | Number of events on this date |
+| infos | object[] | true | List of calendar events |
+
+### CalendarEventInfo
+
+<a id="CalendarEventInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | Event ID |
+| symbol | string | false | Security symbol |
+| market | string | false | Market |
+| counter_name | string | false | Security name |
+| event_type | string | false | Event type |
+| activity_type | string | false | Activity type |
+| date | string | false | Event date |
+| datetime | string | false | Event datetime |
+| date_type | string | false | Date type |
+| content | string | false | Event content description |
+| currency | string | false | Currency |
+| star | integer | false | Importance rating (1-3) |
+| icon | string | false | Icon URL |
+| chart_uid | string | false | Chart identifier |
+| financial_market_time | string | false | Financial market time |
+| data_kv | object[] | false | Key-value data pairs |

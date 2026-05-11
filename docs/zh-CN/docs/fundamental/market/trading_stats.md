@@ -222,23 +222,36 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [TradingStatsResponse](#TradingStatsResponse) |
+| 200    | 成功     | [TradeStatsResponse](#TradeStatsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### TradingStatsResponse
+### TradeStatsResponse
 
-<a id="TradingStatsResponse"></a>
+<a id="TradeStatsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| prev_close | string | 是 | 前收盘价 |
-| avg_price | string | 是 | 平均成交价 |
-| trades | int32 | 是 | 成交笔数 |
-| volume | string | 是 | 总成交量 |
-| turnover | string | 是 | 总成交额 |
-| distribution | object[] | 是 | 价格 - 成交量分布 |
-| ∟ price | string | 是 | 价格档位 |
-| ∟ volume | string | 是 | 该价格的成交量 |
-| ∟ pct | string | 是 | 占总成交量的百分比 |
+| statistics | object | 是 | 成交统计汇总 |
+| statistics.avgprice | string | 否 | 平均成交价 |
+| statistics.buy | string | 否 | 总买入成交量 |
+| statistics.sell | string | 否 | 总卖出成交量 |
+| statistics.neutral | string | 否 | 总中性成交量 |
+| statistics.total_amount | string | 否 | 总成交额 |
+| statistics.trades_count | string | 否 | 总成交笔数 |
+| statistics.preclose | string | 否 | 前收盘价 |
+| statistics.timestamp | string | 否 | 统计时间戳 |
+| statistics.trade_date | string[] | 否 | 涵盖的交易日期 |
+| trades | object[] | 否 | 按价位的成交分布 |
+
+### TradePriceLevel
+
+<a id="TradePriceLevel"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| price | string | 是 | 价位 |
+| buy_amount | string | 否 | 该价位买入成交额 |
+| sell_amount | string | 否 | 该价位卖出成交额 |
+| neutral_amount | string | 否 | 该价位中性成交额 |

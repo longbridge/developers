@@ -224,23 +224,40 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [ProfitAnalysisSummaryResponse](#ProfitAnalysisSummaryResponse) |
+| 200    | 成功        | [ProfitAnalysisResponse](#ProfitAnalysisResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### ProfitAnalysisSummaryResponse
+### ProfitAnalysisResponse
 
-<a id="ProfitAnalysisSummaryResponse"></a>
+<a id="ProfitAnalysisResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| currency | string | true | 結算貨幣 |
-| total_asset | string | true | 總資產價值 |
-| invest_amount | string | true | 總投入金額 |
-| total_pnl | string | true | 總盈虧金額 |
-| simple_yield | string | true | 簡單收益率 |
-| twr | string | true | 時間加權收益率 |
-| stocks_traded | int32 | true | 已交易股票數量 |
-| start_date | string | true | 分析開始日期 |
-| end_date | string | true | 分析結束日期 |
+| summary | object | false | 整體盈虧匯總 |
+| sublist | object | false | 詳細盈虧分析 |
+| sublist.start | string | false | 統計期開始 |
+| sublist.end | string | false | 統計期結束 |
+| sublist.start_date | string | false | 開始日期 |
+| sublist.end_date | string | false | 結束日期 |
+| sublist.items | object[] | false | 按持倉的盈虧明細 |
+
+### ProfitAnalysisItem
+
+<a id="ProfitAnalysisItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | 證券代碼 |
+| name | string | false | 證券名稱 |
+| market | string | false | 市場 |
+| currency | string | false | 貨幣 |
+| profit | string | false | 總盈虧 |
+| profit_rate | string | false | 盈虧比率 |
+| underlying_profit | string | false | 正股盈虧 |
+| derivatives_profit | string | false | 衍生品盈虧 |
+| holding_period | string | false | 持倉周期 |
+| clearance_times | integer | false | 已平倉次數 |
+| is_holding | boolean | false | 是否當前持有 |
+| item_type | string | false | 資產類型：`Stock`、`Fund`、`Crypto` |

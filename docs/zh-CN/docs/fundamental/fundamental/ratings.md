@@ -218,20 +218,23 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [RatingsResponse](#RatingsResponse) |
+| 200    | 成功     | [StockRatingsResponse](#StockRatingsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### RatingsResponse
+### StockRatingsResponse
 
-<a id="RatingsResponse"></a>
+<a id="StockRatingsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 分析师评级列表 |
-| ∟ broker_name | string | 是 | 机构名称 |
-| ∟ rating | string | 是 | 评级：`Buy`（买入）、`Hold`（持有）、`Sell`（卖出） |
-| ∟ target_price | string | 否 | 目标价 |
-| ∟ currency | string | 否 | 货币 |
-| ∟ date | string | 是 | 评级日期，格式 `YYYY-MM-DD` |
+| industry_name | string | 否 | 行业名称 |
+| industry_rank | integer | 否 | 行业内排名 |
+| multi_letter | string | 否 | 评级字母等级 |
+| multi_score | string | 否 | 综合评分 |
+| multi_score_change | integer | 否 | 评分变化 |
+| report_period_txt | string | 否 | 报告期描述 |
+| scale_txt_name | string | 否 | 评级量表名称 |
+| style_txt_name | string | 否 | 评级风格名称 |
+| ratings_json | string | 否 | 原始评级详情 JSON |

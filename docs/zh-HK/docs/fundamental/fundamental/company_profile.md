@@ -236,7 +236,7 @@ func main() {
 | company_name | string | 否 | 完整公司名稱 |
 | ticker | string | 否 | 股票代碼 |
 | market | string | 否 | 上市交易所 |
-| sector | string | 否 | 行業 |
+| sector | integer | 否 | 行業 |
 | category | string | 否 | 公司類別 |
 | founded | string | 否 | 成立年份 |
 | listing_date | string | 否 | 上市日期 |
@@ -255,7 +255,7 @@ func main() {
 | issue_price | string | 否 | 發行價格 |
 | year_end | string | 否 | 財年截止日 |
 | zip_code | string | 否 | 郵政編碼 |
-| Phone | string | 否 | 電話號碼 |
+| phone | string | 否 | 電話號碼 |
 | fax | string | 否 | 傳真 |
 | legal_repr | string | 否 | 法定代表人 |
 | legal_counsel | string | 否 | 法律顧問 |

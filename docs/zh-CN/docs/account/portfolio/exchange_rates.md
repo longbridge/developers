@@ -232,8 +232,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 汇率列表 |
-| ∟ pair | string | true | 货币对，例如 `HKD/USD` |
-| ∟ bid_rate | string | true | 买入汇率 |
-| ∟ offer_rate | string | true | 卖出汇率 |
-| ∟ average_rate | string | true | 中间汇率 |
+| exchanges | object[] | true | 汇率列表 |
+
+### ExchangeRate
+
+<a id="ExchangeRate"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| base_currency | string | true | 基准货币 |
+| other_currency | string | true | 报价货币 |
+| bid_rate | number | false | 买入汇率 |
+| offer_rate | number | false | 卖出汇率 |
+| average_rate | number | false | 平均汇率 |

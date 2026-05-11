@@ -224,23 +224,40 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ProfitAnalysisSummaryResponse](#ProfitAnalysisSummaryResponse) |
+| 200    | Success     | [ProfitAnalysisResponse](#ProfitAnalysisResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### ProfitAnalysisSummaryResponse
+### ProfitAnalysisResponse
 
-<a id="ProfitAnalysisSummaryResponse"></a>
+<a id="ProfitAnalysisResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| currency | string | true | Settlement currency |
-| total_asset | string | true | Total asset value |
-| invest_amount | string | true | Total invested amount |
-| total_pnl | string | true | Total P&L |
-| simple_yield | string | true | Simple yield ratio |
-| twr | string | true | Time-weighted return |
-| stocks_traded | int32 | true | Number of stocks traded |
-| start_date | string | true | Analysis start date |
-| end_date | string | true | Analysis end date |
+| summary | object | false | Overall profit summary |
+| sublist | object | false | Detailed profit analysis |
+| sublist.start | string | false | Period start |
+| sublist.end | string | false | Period end |
+| sublist.start_date | string | false | Start date |
+| sublist.end_date | string | false | End date |
+| sublist.items | object[] | false | Per-position profit items |
+
+### ProfitAnalysisItem
+
+<a id="ProfitAnalysisItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Security symbol |
+| name | string | false | Security name |
+| market | string | false | Market |
+| currency | string | false | Currency |
+| profit | string | false | Total profit/loss |
+| profit_rate | string | false | Profit/loss rate |
+| underlying_profit | string | false | Underlying asset profit |
+| derivatives_profit | string | false | Derivatives profit |
+| holding_period | string | false | Holding period |
+| clearance_times | integer | false | Number of times closed |
+| is_holding | boolean | false | Whether currently holding |
+| item_type | string | false | Asset type: `Stock`, `Fund`, `Crypto` |

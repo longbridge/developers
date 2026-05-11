@@ -219,21 +219,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [BuybackData](#BuybackData) |
+| 200    | 成功        | [BuybackDataResponse](#BuybackDataResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### BuybackData
+### BuybackDataResponse
 
-<a id="BuybackData"></a>
+<a id="BuybackDataResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 证券代码 |
-| list | object[] | 是 | 回购记录列表 |
-| list[].period | string | 否 | 财报期（如 FY2023、Q3 2024） |
-| list[].buyback_amount | int64 | 否 | 回购总金额 |
-| list[].buyback_shares | int64 | 否 | 回购股份数量 |
-| list[].buyback_ratio | double | 否 | 回购占总股本比例 |
-| list[].currency | string | 否 | 货币代码 |
+| buyback_history | object[] | 否 | 年度回购历史 |
+| buyback_ratios | object[] | 否 | 回购比率历史 |
+| recent_buybacks | object | 否 | 近 12 个月回购汇总 |
+
+### BuybackHistoryItem
+
+<a id="BuybackHistoryItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| fiscal_year | string | 否 | 财年 |
+| fiscal_year_range | string | 否 | 财年日期区间 |
+| currency | string | 否 | 货币 |
+| net_buyback | string | 否 | 净回购金额 |
+| net_buyback_growth_rate | string | 否 | 回购增长率 |
+| net_buyback_yield | string | 否 | 回购收益率 |
+
+### BuybackRatios
+
+<a id="BuybackRatios"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| net_buyback_payout_ratio | string | 否 | 回购支付比率 |
+| net_buyback_to_cashflow_ratio | string | 否 | 回购占自由现金流比率 |
+
+### RecentBuybacks
+
+<a id="RecentBuybacks"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| currency | string | 否 | 货币 |
+| net_buyback_ttm | string | 否 | 净回购金额（近 12 个月） |
+| net_buyback_yield_ttm | string | 否 | 回购收益率（近 12 个月） |

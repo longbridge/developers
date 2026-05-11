@@ -224,21 +224,28 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [BrokerPositionsResponse](#BrokerPositionsResponse) |
+| 200    | Success     | [BrokerHoldingResponse](#BrokerHoldingResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### BrokerPositionsResponse
+### BrokerHoldingResponse
 
-<a id="BrokerPositionsResponse"></a>
+<a id="BrokerHoldingResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| updated_at | string | true | Last updated Unix timestamp |
-| participants | object[] | true | Broker position list |
-| ∟ broker_id | int32 | true | Broker ID |
-| ∟ broker_name | string | true | Broker name |
-| ∟ buy_qty | string | true | Buy quantity |
-| ∟ sell_qty | string | true | Sell quantity |
-| ∟ net_qty | string | true | Net quantity (buy - sell) |
+| buy | object[] | false | Top buying brokers |
+| sell | object[] | false | Top selling brokers |
+| updated_at | string | false | Last update timestamp |
+
+### BrokerHoldingEntry
+
+<a id="BrokerHoldingEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| parti_number | string | true | Broker participant number |
+| name | string | false | Broker name |
+| chg | string | false | Position change |
+| strong | boolean | false | Whether marked as strong holder |

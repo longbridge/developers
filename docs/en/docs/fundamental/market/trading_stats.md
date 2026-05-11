@@ -222,23 +222,36 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [TradingStatsResponse](#TradingStatsResponse) |
+| 200    | Success     | [TradeStatsResponse](#TradeStatsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### TradingStatsResponse
+### TradeStatsResponse
 
-<a id="TradingStatsResponse"></a>
+<a id="TradeStatsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| prev_close | string | true | Previous close price |
-| avg_price | string | true | Average trading price |
-| trades | int32 | true | Number of trades |
-| volume | string | true | Total volume |
-| turnover | string | true | Total turnover |
-| distribution | object[] | true | Price-volume distribution |
-| ∟ price | string | true | Price level |
-| ∟ volume | string | true | Volume at this price |
-| ∟ pct | string | true | Percentage of total volume |
+| statistics | object | true | Aggregate trade statistics |
+| statistics.avgprice | string | false | Average trade price |
+| statistics.buy | string | false | Total buy volume |
+| statistics.sell | string | false | Total sell volume |
+| statistics.neutral | string | false | Total neutral volume |
+| statistics.total_amount | string | false | Total traded amount |
+| statistics.trades_count | string | false | Total trade count |
+| statistics.preclose | string | false | Previous close price |
+| statistics.timestamp | string | false | Statistics timestamp |
+| statistics.trade_date | string[] | false | Trading dates included |
+| trades | object[] | false | Price-level trade distribution |
+
+### TradePriceLevel
+
+<a id="TradePriceLevel"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| price | string | true | Price level |
+| buy_amount | string | false | Buy amount at this price |
+| sell_amount | string | false | Sell amount at this price |
+| neutral_amount | string | false | Neutral amount at this price |

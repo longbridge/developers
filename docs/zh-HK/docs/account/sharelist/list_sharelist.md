@@ -225,22 +225,17 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [ListSharelistResponse](#ListSharelistResponse) |
+| 200    | 成功        | [SharelistListResponse](#SharelistListResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### ListSharelistResponse
+### SharelistListResponse
 
-<a id="ListSharelistResponse"></a>
+<a id="SharelistListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| mine | object[] | true | 用戶創建的股單 |
-| subscribed | object[] | true | 用戶訂閱的股單 |
-| ∟ id | int64 | true | 股單 ID |
-| ∟ name | string | true | 股單名稱 |
-| ∟ type | string | true | 類型：`Regular`（普通）、`Official`（官方） |
-| ∟ day_change | string | false | 當日漲跌幅 |
-| ∟ ytd_change | string | false | 年初至今漲跌幅 |
-| ∟ subscribers | int32 | false | 訂閱人數 |
+| sharelists | object[] | false | 用戶自建股單列表 |
+| subscribed_sharelists | object[] | false | 已訂閱股單列表 |
+| tail_mark | string | false | 分頁游標 |

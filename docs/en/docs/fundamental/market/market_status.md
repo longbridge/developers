@@ -234,7 +234,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of market statuses |
+| market_time | object[] | true | List of market status items |
 
 ### MarketTimeItem
 
@@ -242,5 +242,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market | string | true | Market code: `US`, `HK`, `CN`, `SG` |
-| status | string | true | Current status: `Pre-Market`, `Trading`, `Post-Market`, `Closed` |
+| market | string | true | Market: `US`, `HK`, `CN`, `SG`, `Crypto` |
+| delay_sub_status | integer | false | Delayed subscription status |
+| delay_timestamp | string | false | Delay timestamp |
+| delay_trade_status | integer | false | Delayed trading status |

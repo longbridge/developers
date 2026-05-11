@@ -223,20 +223,16 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [UnusualItemsResponse](#UnusualItemsResponse) |
+| 200    | 成功     | [AnomalyResponse](#AnomalyResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### UnusualItemsResponse
+### AnomalyResponse
 
-<a id="UnusualItemsResponse"></a>
+<a id="AnomalyResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 異動列表 |
-| ∟ symbol | string | 是 | 證券代碼 |
-| ∟ name | string | 是 | 證券名稱 |
-| ∟ alert | string | 是 | 異動描述 |
-| ∟ emotion | string | 否 | 市場情緒：`Bullish`（看多）、`Bearish`（看空） |
-| ∟ time | string | 是 | 異動時間（Unix 時間戳） |
+| all_off | boolean | 否 | 是否所有異動提醒已關閉 |
+| changes | object[] | 否 | 異動列表 |

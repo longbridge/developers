@@ -225,22 +225,17 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ListSharelistResponse](#ListSharelistResponse) |
+| 200    | Success     | [SharelistListResponse](#SharelistListResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### ListSharelistResponse
+### SharelistListResponse
 
-<a id="ListSharelistResponse"></a>
+<a id="SharelistListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| mine | object[] | true | Sharelists created by the user |
-| subscribed | object[] | true | Sharelists subscribed by the user |
-| ∟ id | int64 | true | Sharelist ID |
-| ∟ name | string | true | Sharelist name |
-| ∟ type | string | true | Type: `Regular`, `Official` |
-| ∟ day_change | string | false | Day change percentage |
-| ∟ ytd_change | string | false | Year-to-date change |
-| ∟ subscribers | int32 | false | Subscriber count |
+| sharelists | object[] | false | User's own share lists |
+| subscribed_sharelists | object[] | false | Subscribed share lists |
+| tail_mark | string | false | Pagination cursor |

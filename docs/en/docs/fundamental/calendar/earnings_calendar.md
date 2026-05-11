@@ -226,21 +226,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [EarningsCalendarResponse](#EarningsCalendarResponse) |
+| 200    | Success     | [CalendarEventsResponse](#CalendarEventsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### EarningsCalendarResponse
+### CalendarEventsResponse
 
-<a id="EarningsCalendarResponse"></a>
+<a id="CalendarEventsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Earnings event list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Company name |
-| ∟ report_date | string | true | Expected report date |
-| ∟ eps_estimate | string | false | EPS estimate |
-| ∟ eps_actual | string | false | Actual EPS (null if not yet reported) |
-| ∟ revenue_estimate | string | false | Revenue estimate |
+| date | string | false | Response date |
+| list | object[] | true | List of calendar date groups |
+
+### CalendarDateGroup
+
+<a id="CalendarDateGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | true | Date |
+| count | integer | false | Number of events on this date |
+| infos | object[] | true | List of calendar events |
+
+### CalendarEventInfo
+
+<a id="CalendarEventInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | Event ID |
+| symbol | string | false | Security symbol |
+| market | string | false | Market |
+| counter_name | string | false | Security name |
+| event_type | string | false | Event type |
+| activity_type | string | false | Activity type |
+| date | string | false | Event date |
+| datetime | string | false | Event datetime |
+| date_type | string | false | Date type |
+| content | string | false | Event content description |
+| currency | string | false | Currency |
+| star | integer | false | Importance rating (1-3) |
+| icon | string | false | Icon URL |
+| chart_uid | string | false | Chart identifier |
+| financial_market_time | string | false | Financial market time |
+| data_kv | object[] | false | Key-value data pairs |

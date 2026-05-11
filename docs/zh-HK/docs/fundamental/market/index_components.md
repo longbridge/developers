@@ -248,7 +248,6 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| total | integer | 是 | 成分股總數 |
 | rise_num | integer | 否 | 上漲數量 |
 | fall_num | integer | 否 | 下跌數量 |
 | flat_num | integer | 否 | 平盤數量 |
@@ -260,7 +259,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | 是 | 證券代碼 |
+| symbol | string | 是 | 證券代碼 |
 | name | string | 是 | 證券名稱 |
 | market | string | 否 | 市場 |
 | last_done | string | 否 | 最新價 |
@@ -271,7 +270,7 @@ func main() {
 | circulating_shares | string | 否 | 流通股數 |
 | total_shares | string | 否 | 總股數 |
 | balance | string | 否 | 市值 |
-| trade_status | string | 否 | 交易狀態 |
+| trade_status | integer | 否 | 交易狀態碼 |
 | intro | string | 否 | 簡介 |
 | delay | boolean | 否 | 是否為延遲數據 |
 | tags | string[] | 否 | 標籤 |

@@ -218,20 +218,23 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [RatingsResponse](#RatingsResponse) |
+| 200    | Success     | [StockRatingsResponse](#StockRatingsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### RatingsResponse
+### StockRatingsResponse
 
-<a id="RatingsResponse"></a>
+<a id="StockRatingsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of analyst ratings |
-| ∟ broker_name | string | true | Institution name |
-| ∟ rating | string | true | Rating: `Buy`, `Hold`, `Sell` |
-| ∟ target_price | string | false | Target price |
-| ∟ currency | string | false | Currency |
-| ∟ date | string | true | Rating date in `YYYY-MM-DD` format |
+| industry_name | string | false | Industry name |
+| industry_rank | integer | false | Rank within industry |
+| multi_letter | string | false | Rating letter grade |
+| multi_score | string | false | Composite score |
+| multi_score_change | integer | false | Score change vs previous period |
+| report_period_txt | string | false | Report period description |
+| scale_txt_name | string | false | Rating scale name |
+| style_txt_name | string | false | Rating style name |
+| ratings_json | string | false | Raw rating detail JSON |

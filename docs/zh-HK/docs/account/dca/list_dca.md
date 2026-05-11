@@ -250,7 +250,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 定投計劃列表 |
+| plans | object[] | 是 | 定投計劃列表 |
 
 ### DcaPlan
 
@@ -264,17 +264,19 @@ func main() {
 | market | string | 否 | 市場 |
 | status | string | 否 | 計劃狀態：`Active`（進行中）、`Suspended`（已暫停）、`Finished`（已結束） |
 | per_invest_amount | string | 否 | 每次投入金額 |
-| invest_frequency | string | 否 | 投資頻率：`daily`、`weekly`、`fortnightly`、`monthly` |
+| invest_frequency | string | 否 | 投資頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly` |
 | invest_day_of_week | string | 否 | 每週扣款日 |
-| invest_day_of_month | integer | 否 | 每月扣款日 |
+| invest_day_of_month | string | 否 | 每月扣款日 |
 | next_trd_date | string | 否 | 下次交易日 |
 | cum_amount | string | 否 | 累計投入金額 |
 | cum_profit | string | 否 | 累計盈虧 |
 | average_cost | string | 否 | 平均持倉成本 |
 | allow_margin_finance | boolean | 否 | 是否允許融資 |
-| alter_hours | integer | 否 | 提前提醒小時數 |
+| alter_hours | string | 否 | 提前提醒小時數 |
 | display_account | string | 否 | 賬戶顯示名稱 |
+| account_channel | string | 否 | 賬戶渠道 |
+| aaid | string | 否 | 賬戶資產 ID |
 | member_id | string | 否 | 用戶 ID |
-| issue_number | integer | 否 | 已執行次數 |
+| issue_number | string | 否 | 已執行次數 |
 | created_at | string | 否 | 創建時間 |
 | updated_at | string | 否 | 最後更新時間 |

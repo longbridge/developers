@@ -226,21 +226,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [IpoCalendarResponse](#IpoCalendarResponse) |
+| 200    | 成功     | [CalendarEventsResponse](#CalendarEventsResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### IpoCalendarResponse
+### CalendarEventsResponse
 
-<a id="IpoCalendarResponse"></a>
+<a id="CalendarEventsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | IPO 事件列表 |
-| ∟ symbol | string | 否 | 證券代碼（上市後分配） |
-| ∟ name | string | 是 | 公司名稱 |
-| ∟ listing_date | string | 是 | 預計上市日期 |
-| ∟ offer_price | string | 否 | 新股發行價 |
-| ∟ currency | string | 否 | 貨幣 |
-| ∟ market | string | 是 | 市場代碼 |
+| date | string | 否 | 響應日期 |
+| list | object[] | 是 | 日曆日期分組列表 |
+
+### CalendarDateGroup
+
+<a id="CalendarDateGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | 是 | 日期 |
+| count | integer | 否 | 該日期的事件數量 |
+| infos | object[] | 是 | 日曆事件列表 |
+
+### CalendarEventInfo
+
+<a id="CalendarEventInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | 否 | 事件 ID |
+| symbol | string | 否 | 證券代碼 |
+| market | string | 否 | 市場 |
+| counter_name | string | 否 | 證券名稱 |
+| event_type | string | 否 | 事件類型 |
+| activity_type | string | 否 | 活動類型 |
+| date | string | 否 | 事件日期 |
+| datetime | string | 否 | 事件時間 |
+| date_type | string | 否 | 日期類型 |
+| content | string | 否 | 事件內容描述 |
+| currency | string | 否 | 貨幣 |
+| star | integer | 否 | 重要性（1-3 星） |
+| icon | string | 否 | 圖標鏈接 |
+| chart_uid | string | 否 | 圖表標識符 |
+| financial_market_time | string | 否 | 金融市場時間 |
+| data_kv | object[] | 否 | 鍵值數據對 |

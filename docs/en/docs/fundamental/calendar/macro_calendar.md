@@ -227,22 +227,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [MacroCalendarResponse](#MacroCalendarResponse) |
+| 200    | Success     | [CalendarEventsResponse](#CalendarEventsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### MacroCalendarResponse
+### CalendarEventsResponse
 
-<a id="MacroCalendarResponse"></a>
+<a id="CalendarEventsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Macro event list |
-| ∟ event | string | true | Event name |
-| ∟ country | string | true | Country code |
-| ∟ release_date | string | true | Release date |
-| ∟ actual | string | false | Actual value (null if not yet released) |
-| ∟ forecast | string | false | Consensus forecast |
-| ∟ previous | string | false | Previous period value |
-| ∟ importance | string | false | Importance level: `High`, `Medium`, `Low` |
+| date | string | false | Response date |
+| list | object[] | true | List of calendar date groups |
+
+### CalendarDateGroup
+
+<a id="CalendarDateGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | true | Date |
+| count | integer | false | Number of events on this date |
+| infos | object[] | true | List of calendar events |
+
+### CalendarEventInfo
+
+<a id="CalendarEventInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | Event ID |
+| symbol | string | false | Security symbol |
+| market | string | false | Market |
+| counter_name | string | false | Security name |
+| event_type | string | false | Event type |
+| activity_type | string | false | Activity type |
+| date | string | false | Event date |
+| datetime | string | false | Event datetime |
+| date_type | string | false | Date type |
+| content | string | false | Event content description |
+| currency | string | false | Currency |
+| star | integer | false | Importance rating (1-3) |
+| icon | string | false | Icon URL |
+| chart_uid | string | false | Chart identifier |
+| financial_market_time | string | false | Financial market time |
+| data_kv | object[] | false | Key-value data pairs |

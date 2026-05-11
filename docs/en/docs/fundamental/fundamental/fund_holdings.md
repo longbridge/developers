@@ -222,19 +222,28 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [FundHoldingsResponse](#FundHoldingsResponse) |
+| 200    | Success     | [FundHoldersResponse](#FundHoldersResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### FundHoldingsResponse
+### FundHoldersResponse
 
-<a id="FundHoldingsResponse"></a>
+<a id="FundHoldersResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Fund holder list |
-| ∟ fund_name | string | true | Fund name |
-| ∟ shares | string | true | Number of shares held |
-| ∟ percentage | string | true | Ownership percentage |
-| ∟ date | string | false | Report date |
+| lists | object[] | true | List of fund holders |
+
+### FundHolder
+
+<a id="FundHolder"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Fund symbol |
+| code | string | false | Fund code |
+| name | string | false | Fund name |
+| position_ratio | string | false | Position ratio (%) |
+| report_date | string | false | Report date |
+| currency | string | false | Currency |

@@ -190,23 +190,17 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [SharelistList](#SharelistList) |
+| 200    | 成功        | [SharelistListResponse](#SharelistListResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### SharelistList
+### SharelistListResponse
 
-<a id="SharelistList"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| list | SharelistItem[] | true | 股单列表 |
-
-### SharelistItem
+<a id="SharelistListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | 股单 ID |
-| name | string | true | 股单名称 |
-| description | string | false | 描述 |
+| sharelists | object[] | false | 用户自建股单列表 |
+| subscribed_sharelists | object[] | false | 已订阅股单列表 |
+| tail_mark | string | false | 分页游标 |

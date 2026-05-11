@@ -190,23 +190,17 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [SharelistList](#SharelistList) |
+| 200    | Success     | [SharelistListResponse](#SharelistListResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### SharelistList
+### SharelistListResponse
 
-<a id="SharelistList"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| list | SharelistItem[] | true | List of sharelists |
-
-### SharelistItem
+<a id="SharelistListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | int64 | true | Sharelist ID |
-| name | string | true | Sharelist name |
-| description | string | false | Description |
+| sharelists | object[] | false | User's own share lists |
+| subscribed_sharelists | object[] | false | Subscribed share lists |
+| tail_mark | string | false | Pagination cursor |

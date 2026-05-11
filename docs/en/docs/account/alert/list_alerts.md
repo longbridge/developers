@@ -224,21 +224,46 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ListAlertsResponse](#ListAlertsResponse) |
+| 200    | Success     | [AlertListResponse](#AlertListResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### ListAlertsResponse
+### AlertListResponse
 
-<a id="ListAlertsResponse"></a>
+<a id="AlertListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Alert list |
-| ∟ id | int64 | true | Alert ID |
-| ∟ symbol | string | true | Security symbol |
-| ∟ price | string | true | Target price |
-| ∟ direction | string | true | Direction: `rise` or `fall` |
-| ∟ enabled | bool | true | Whether alert is enabled |
-| ∟ frequency | string | true | Trigger frequency: `once` or `every` |
+| lists | object[] | true | List of alert groups by symbol |
+
+### AlertSymbolGroup
+
+<a id="AlertSymbolGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Security symbol |
+| code | string | false | Security code |
+| name | string | false | Security name |
+| market | string | false | Market |
+| product | string | false | Product type |
+| price | string | false | Current price |
+| chg | string | false | Price change |
+| p_chg | string | false | Price change percentage |
+| indicators | object[] | true | List of alert indicators |
+
+### AlertItem
+
+<a id="AlertItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | true | Alert ID |
+| indicator_id | string | false | Indicator ID |
+| text | string | false | Alert description text |
+| enabled | boolean | false | Whether alert is enabled |
+| frequency | integer | false | Trigger frequency |
+| scope | integer | false | Scope |
+| value_map | object | false | Alert condition values |
+| state | integer[] | false | Alert state flags |

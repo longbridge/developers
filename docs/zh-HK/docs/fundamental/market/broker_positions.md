@@ -224,21 +224,28 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [BrokerPositionsResponse](#BrokerPositionsResponse) |
+| 200    | 成功     | [BrokerHoldingResponse](#BrokerHoldingResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### BrokerPositionsResponse
+### BrokerHoldingResponse
 
-<a id="BrokerPositionsResponse"></a>
+<a id="BrokerHoldingResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| updated_at | string | 是 | 最後更新的 Unix 時間戳 |
-| participants | object[] | 是 | 經紀商持倉列表 |
-| ∟ broker_id | int32 | 是 | 經紀商 ID |
-| ∟ broker_name | string | 是 | 經紀商名稱 |
-| ∟ buy_qty | string | 是 | 買入數量 |
-| ∟ sell_qty | string | 是 | 賣出數量 |
-| ∟ net_qty | string | 是 | 凈持倉數量（買入 - 賣出） |
+| buy | object[] | 否 | 淨買入經紀商列表 |
+| sell | object[] | 否 | 淨賣出經紀商列表 |
+| updated_at | string | 否 | 最後更新時間 |
+
+### BrokerHoldingEntry
+
+<a id="BrokerHoldingEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| parti_number | string | 是 | 經紀商參與者編號 |
+| name | string | 否 | 經紀商名稱 |
+| chg | string | 否 | 持倉變動 |
+| strong | boolean | 否 | 是否為主要持倉者 |

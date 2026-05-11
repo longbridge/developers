@@ -191,22 +191,24 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [DcaSupportList](#DcaSupportList) |
+| 200    | Success     | [DcaSupportListResponse](#DcaSupportListResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### DcaSupportList
+### DcaSupportListResponse
 
-<a id="DcaSupportList"></a>
+<a id="DcaSupportListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | DcaSupportItem[] | true | Support check results |
+| infos | object[] | true | List of DCA support results |
 
-### DcaSupportItem
+### DcaSupportInfo
+
+<a id="DcaSupportInfo"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | true | Security symbol |
-| support | boolean | true | Whether DCA is supported |
+| support_regular_saving | boolean | true | Whether DCA is supported |

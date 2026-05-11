@@ -227,22 +227,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [MacroCalendarResponse](#MacroCalendarResponse) |
+| 200    | 成功     | [CalendarEventsResponse](#CalendarEventsResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### MacroCalendarResponse
+### CalendarEventsResponse
 
-<a id="MacroCalendarResponse"></a>
+<a id="CalendarEventsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 宏觀事件列表 |
-| ∟ event | string | 是 | 事件名稱 |
-| ∟ country | string | 是 | 國家/地區代碼 |
-| ∟ release_date | string | 是 | 發布日期 |
-| ∟ actual | string | 否 | 實際值（未發布時為 null） |
-| ∟ forecast | string | 否 | 市場預期值 |
-| ∟ previous | string | 否 | 前期值 |
-| ∟ importance | string | 否 | 重要程度：`High`（高）、`Medium`（中）、`Low`（低） |
+| date | string | 否 | 響應日期 |
+| list | object[] | 是 | 日曆日期分組列表 |
+
+### CalendarDateGroup
+
+<a id="CalendarDateGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | 是 | 日期 |
+| count | integer | 否 | 該日期的事件數量 |
+| infos | object[] | 是 | 日曆事件列表 |
+
+### CalendarEventInfo
+
+<a id="CalendarEventInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | 否 | 事件 ID |
+| symbol | string | 否 | 證券代碼 |
+| market | string | 否 | 市場 |
+| counter_name | string | 否 | 證券名稱 |
+| event_type | string | 否 | 事件類型 |
+| activity_type | string | 否 | 活動類型 |
+| date | string | 否 | 事件日期 |
+| datetime | string | 否 | 事件時間 |
+| date_type | string | 否 | 日期類型 |
+| content | string | 否 | 事件內容描述 |
+| currency | string | 否 | 貨幣 |
+| star | integer | 否 | 重要性（1-3 星） |
+| icon | string | 否 | 圖標鏈接 |
+| chart_uid | string | 否 | 圖表標識符 |
+| financial_market_time | string | 否 | 金融市場時間 |
+| data_kv | object[] | 否 | 鍵值數據對 |

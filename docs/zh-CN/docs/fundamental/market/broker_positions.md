@@ -224,21 +224,28 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [BrokerPositionsResponse](#BrokerPositionsResponse) |
+| 200    | 成功     | [BrokerHoldingResponse](#BrokerHoldingResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### BrokerPositionsResponse
+### BrokerHoldingResponse
 
-<a id="BrokerPositionsResponse"></a>
+<a id="BrokerHoldingResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| updated_at | string | 是 | 最后更新的 Unix 时间戳 |
-| participants | object[] | 是 | 经纪商持仓列表 |
-| ∟ broker_id | int32 | 是 | 经纪商 ID |
-| ∟ broker_name | string | 是 | 经纪商名称 |
-| ∟ buy_qty | string | 是 | 买入数量 |
-| ∟ sell_qty | string | 是 | 卖出数量 |
-| ∟ net_qty | string | 是 | 净持仓数量（买入 - 卖出） |
+| buy | object[] | 否 | 净买入经纪商列表 |
+| sell | object[] | 否 | 净卖出经纪商列表 |
+| updated_at | string | 否 | 最后更新时间 |
+
+### BrokerHoldingEntry
+
+<a id="BrokerHoldingEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| parti_number | string | 是 | 经纪商参与者编号 |
+| name | string | 否 | 经纪商名称 |
+| chg | string | 否 | 持仓变动 |
+| strong | boolean | 否 | 是否为主要持仓者 |

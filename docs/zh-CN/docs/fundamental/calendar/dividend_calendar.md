@@ -226,21 +226,49 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [DividendCalendarResponse](#DividendCalendarResponse) |
+| 200    | 成功     | [CalendarEventsResponse](#CalendarEventsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### DividendCalendarResponse
+### CalendarEventsResponse
 
-<a id="DividendCalendarResponse"></a>
+<a id="CalendarEventsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 分红事件列表 |
-| ∟ symbol | string | 是 | 证券代码 |
-| ∟ name | string | 是 | 公司名称 |
-| ∟ ex_date | string | 是 | 除息日 |
-| ∟ pay_date | string | 否 | 派息日 |
-| ∟ amount | string | 是 | 每股分红金额 |
-| ∟ currency | string | 是 | 货币 |
+| date | string | 否 | 响应日期 |
+| list | object[] | 是 | 日历日期分组列表 |
+
+### CalendarDateGroup
+
+<a id="CalendarDateGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | 是 | 日期 |
+| count | integer | 否 | 该日期的事件数量 |
+| infos | object[] | 是 | 日历事件列表 |
+
+### CalendarEventInfo
+
+<a id="CalendarEventInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | 否 | 事件 ID |
+| symbol | string | 否 | 证券代码 |
+| market | string | 否 | 市场 |
+| counter_name | string | 否 | 证券名称 |
+| event_type | string | 否 | 事件类型 |
+| activity_type | string | 否 | 活动类型 |
+| date | string | 否 | 事件日期 |
+| datetime | string | 否 | 事件时间 |
+| date_type | string | 否 | 日期类型 |
+| content | string | 否 | 事件内容描述 |
+| currency | string | 否 | 货币 |
+| star | integer | 否 | 重要性（1-3 星） |
+| icon | string | 否 | 图标链接 |
+| chart_uid | string | 否 | 图表标识符 |
+| financial_market_time | string | 否 | 金融市场时间 |
+| data_kv | object[] | 否 | 键值数据对 |

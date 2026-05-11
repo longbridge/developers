@@ -222,19 +222,28 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [FundHoldingsResponse](#FundHoldingsResponse) |
+| 200    | 成功     | [FundHoldersResponse](#FundHoldersResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### FundHoldingsResponse
+### FundHoldersResponse
 
-<a id="FundHoldingsResponse"></a>
+<a id="FundHoldersResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 基金持有人列表 |
-| ∟ fund_name | string | 是 | 基金名稱 |
-| ∟ shares | string | 是 | 持股數量 |
-| ∟ percentage | string | 是 | 持股比例 |
-| ∟ date | string | 否 | 報告日期 |
+| lists | object[] | 是 | 基金持倉列表 |
+
+### FundHolder
+
+<a id="FundHolder"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | 是 | 基金代碼（含市場後綴） |
+| code | string | 否 | 基金簡碼 |
+| name | string | 否 | 基金名稱 |
+| position_ratio | string | 否 | 持倉佔比（%） |
+| report_date | string | 否 | 報告日期 |
+| currency | string | 否 | 貨幣 |

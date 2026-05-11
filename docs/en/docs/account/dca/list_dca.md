@@ -250,7 +250,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of DCA plans |
+| plans | object[] | true | List of DCA plans |
 
 ### DcaPlan
 
@@ -264,17 +264,19 @@ func main() {
 | market | string | false | Market |
 | status | string | false | Plan status: `Active`, `Suspended`, `Finished` |
 | per_invest_amount | string | false | Amount per investment |
-| invest_frequency | string | false | Frequency: `daily`, `weekly`, `fortnightly`, `monthly` |
-| invest_day_of_week | string | false | Day of week (for weekly plans) |
-| invest_day_of_month | integer | false | Day of month (for monthly plans) |
+| invest_frequency | string | false | Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly` |
+| invest_day_of_week | string | false | Day of week for weekly plans |
+| invest_day_of_month | string | false | Day of month for monthly plans |
 | next_trd_date | string | false | Next trade date |
 | cum_amount | string | false | Cumulative invested amount |
 | cum_profit | string | false | Cumulative profit/loss |
 | average_cost | string | false | Average cost per share |
 | allow_margin_finance | boolean | false | Whether margin financing is allowed |
-| alter_hours | integer | false | Reminder hours before trade |
+| alter_hours | string | false | Reminder hours before trade |
 | display_account | string | false | Account display name |
+| account_channel | string | false | Account channel |
+| aaid | string | false | Account asset ID |
 | member_id | string | false | Member ID |
-| issue_number | integer | false | Execution count |
+| issue_number | string | false | Execution count |
 | created_at | string | false | Creation timestamp |
 | updated_at | string | false | Last update timestamp |

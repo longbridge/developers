@@ -248,7 +248,6 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| total | integer | true | Total number of constituents |
 | rise_num | integer | false | Number of rising stocks |
 | fall_num | integer | false | Number of falling stocks |
 | flat_num | integer | false | Number of flat stocks |
@@ -260,7 +259,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | true | Security identifier |
+| symbol | string | true | Security symbol |
 | name | string | true | Security name |
 | market | string | false | Market |
 | last_done | string | false | Last trade price |
@@ -271,7 +270,7 @@ func main() {
 | circulating_shares | string | false | Circulating shares |
 | total_shares | string | false | Total shares |
 | balance | string | false | Market cap |
-| trade_status | string | false | Trading status |
+| trade_status | integer | false | Trading status code |
 | intro | string | false | Brief description |
 | delay | boolean | false | Whether data is delayed |
 | tags | string[] | false | Tags |

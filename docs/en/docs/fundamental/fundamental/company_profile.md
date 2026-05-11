@@ -236,7 +236,7 @@ func main() {
 | company_name | string | false | Full company name |
 | ticker | string | false | Ticker symbol |
 | market | string | false | Listing exchange |
-| sector | string | false | Industry sector |
+| sector | integer | false | Industry sector |
 | category | string | false | Company category |
 | founded | string | false | Founding year |
 | listing_date | string | false | IPO listing date |
@@ -255,7 +255,7 @@ func main() {
 | issue_price | string | false | IPO issue price |
 | year_end | string | false | Fiscal year-end |
 | zip_code | string | false | Postal code |
-| Phone | string | false | Phone number |
+| phone | string | false | Phone number |
 | fax | string | false | Fax number |
 | legal_repr | string | false | Legal representative |
 | legal_counsel | string | false | Legal counsel |

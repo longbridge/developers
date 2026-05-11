@@ -223,20 +223,16 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [UnusualItemsResponse](#UnusualItemsResponse) |
+| 200    | Success     | [AnomalyResponse](#AnomalyResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### UnusualItemsResponse
+### AnomalyResponse
 
-<a id="UnusualItemsResponse"></a>
+<a id="AnomalyResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Unusual item list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Security name |
-| ∟ alert | string | true | Alert description |
-| ∟ emotion | string | false | Market sentiment: `Bullish`, `Bearish` |
-| ∟ time | string | true | Alert time as Unix timestamp |
+| all_off | boolean | false | Whether all anomaly alerts are disabled |
+| changes | object[] | false | List of anomaly items |
