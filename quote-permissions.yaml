@@ -86,15 +86,15 @@ commands:
     level: lv1
     description:
       en: |-
-        US stocks: Nasdaq Basic 1-level bid/ask included by default; overnight requires LV1.
+        US stocks: Nasdaq Basic 1-level bid/ask included by default (pre-market, regular, and after-hours sessions); overnight requires LV1.
         HK stocks: LV1 1-level bid/ask included by default; 10-level order book requires "LV2 Advanced Quotes - Plus (OpenAPI)".
         US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)".
       zh-CN: |-
-        美股：默认赠送 Nasdaq Basic 一档买卖盘报价；夜盘报价需购买 LV1。
+        美股：默认赠送 Nasdaq Basic 一档买卖盘报价（含盘前、盘中、盘后时段）；夜盘报价需购买 LV1。
         港股：默认赠送 LV1 一档买卖盘报价；十档买卖盘需购买「LV2 高级行情 - Plus (OpenAPI)」行情卡。
         美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡。
       zh-HK: |-
-        美股：預設贈送 Nasdaq Basic 一檔買賣盤報價；夜盤報價需購買 LV1。
+        美股：預設贈送 Nasdaq Basic 一檔買賣盤報價（含盤前、盤中、盤後時段）；夜盤報價需購買 LV1。
         港股：預設贈送 LV1 一檔買賣盤報價；十檔買賣盤需購買「LV2 高級行情 - Plus (OpenAPI)」行情卡。
         美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡。
     store_cards:
@@ -179,17 +179,17 @@ commands:
     description:
       en: |-
         Quota-based access: 100–3,000 unique symbols per calendar month depending on account tier (resets monthly; see quota table in the docs).
-        US stocks: Nasdaq Basic included by default; overnight requires LV1.
+        US stocks: Nasdaq Basic included by default (pre-market, regular, and after-hours sessions); overnight requires LV1.
         HK stocks: LV1 included by default.
         US options: no permission by default — purchase "OPRA US Options Quotes (OpenAPI)".
       zh-CN: |-
         按账户等级配额，每自然月可查询 100–3,000 个标的（每月重置，详见文档中的配额表）。
-        美股：默认赠送 Nasdaq Basic 行情；夜盘需购买 LV1。
+        美股：默认赠送 Nasdaq Basic 行情（含盘前、盘中、盘后时段）；夜盘需购买 LV1。
         港股：默认赠送 LV1 行情。
         美股期权：默认无权限，需购买「OPRA 美股期权行情 (OpenAPI)」行情卡。
       zh-HK: |-
         按帳戶等級配額，每自然月可查詢 100–3,000 個標的（每月重置，詳見文檔中的配額表）。
-        美股：預設贈送 Nasdaq Basic 行情；夜盤需購買 LV1。
+        美股：預設贈送 Nasdaq Basic 行情（含盤前、盤中、盤後時段）；夜盤需購買 LV1。
         港股：預設贈送 LV1 行情。
         美股期權：預設無權限，需購買「OPRA 美股期權行情 (OpenAPI)」行情卡。
     store_cards:

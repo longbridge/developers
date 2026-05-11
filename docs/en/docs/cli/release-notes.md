@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.20.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.2)
+
+- **Fix: `institution-rating --history`** — restructured as a proper table with logical column ordering; timestamps formatted as `YYYY-MM-DD`; price targets rounded to 2 decimal places; `evaluate_history` capped to 20 most recent records
+- **Fix: IPO date display** — `ipo listed`, `ipo wait-listing`, `ipo calendar`, `ipo us-wait-listing` now show correct dates (e.g. `2026-05-11`) instead of a bogus 1970 date
+
 ### [v0.20.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.0)
 
 - **`ipo` command group** — comprehensive IPO tools: `subscriptions`, `wait-listing`, `listed`, `calendar`, `detail`, `orders`, `profit-loss` for HK market; `us-subscriptions`, `us-wait-listing`, `us-listed` for US market; `orders detail <id>` for full order detail

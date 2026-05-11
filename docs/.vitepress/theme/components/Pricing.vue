@@ -73,12 +73,12 @@ const t = computed(() => {
     freeItems: zh
       ? [
           { name: '交易 & 账户 API', note: '个股基本面、分析、资讯、资产、订单等基础 API 功能免费' },
-          { name: '基础行情', note: 'Nasdaq Basic、港股 LV1、沪深 LV1' },
+          { name: '基础行情', note: 'Nasdaq Basic（含盘前、盘中、盘后）、港股 LV1、沪深 LV1' },
           { name: '数据推送 & 拉取', note: 'WebSocket 实时推送、REST API 主动拉取，无限制' },
         ]
       : [
           { name: 'Trading & Account APIs', note: 'Fundamentals, analysis, news, assets, orders — core APIs free' },
-          { name: 'Basic Market Data', note: 'Nasdaq Basic, HK LV1, CN LV1' },
+          { name: 'Basic Market Data', note: 'Nasdaq Basic (pre-market, regular & after-hours), HK LV1, CN LV1' },
           { name: 'Push & Pull Data', note: 'WebSocket real-time push and REST API pull — unlimited' },
         ],
 
@@ -157,7 +157,8 @@ const t = computed(() => {
           { feature: 'WebSocket 实时行情推送', values: [true, true, true, true, true, true] },
           { feature: 'Pull 主动拉取行情', values: [true, true, true, true, true, true] },
           { feature: '美股实时行情（买卖一档）', values: [true, true, false, false, false, false] },
-          { feature: '盘前盘后（夜盘）行情', values: [false, true, false, false, false, false] },
+          { feature: '盘前、盘中、盘后行情', values: [true, true, false, false, false, false] },
+          { feature: '夜盘行情', values: [false, true, false, false, false, false] },
           { feature: '期权链 & 实时报价', values: [false, false, true, false, false, false] },
           { feature: '港股实时行情（基础）', values: [false, false, false, true, true, false] },
           { feature: '恒生指数行情', values: [false, false, false, true, true, false] },
@@ -171,7 +172,8 @@ const t = computed(() => {
           { feature: 'WebSocket Real-time Quote Push', values: [true, true, true, true, true, true] },
           { feature: 'Pull Quote (REST API)', values: [true, true, true, true, true, true] },
           { feature: 'US Quotes (Best Bid/Ask)', values: [true, true, false, false, false, false] },
-          { feature: 'Pre/post-market (overnight)', values: [false, true, false, false, false, false] },
+          { feature: 'Pre-market, regular & after-hours', values: [true, true, false, false, false, false] },
+          { feature: 'Overnight (night session)', values: [false, true, false, false, false, false] },
           { feature: 'Options Chain & Real-time Quotes', values: [false, false, true, false, false, false] },
           { feature: 'HK Real-time (basic)', values: [false, false, false, true, true, false] },
           { feature: 'Hang Seng Index', values: [false, false, false, true, true, false] },

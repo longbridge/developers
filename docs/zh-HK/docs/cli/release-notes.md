@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.20.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.2)
+
+- **修復：`institution-rating --history` 輸出格式** — 改為表格版面，欄位順序更合理；時間戳格式化為 `YYYY-MM-DD`；目標價保留 2 位小數；`evaluate_history` 僅顯示最近 20 條記錄
+- **修復：IPO 日期顯示** — `ipo listed`、`ipo wait-listing`、`ipo calendar`、`ipo us-wait-listing` 現在正確顯示日期（如 `2026-05-11`），不再出現 1970 年的錯誤日期
+
 ### [v0.20.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.0)
 
 - **`ipo` 指令組** — 完整 IPO 工具：港股支持 `subscriptions`（招股中）、`wait-listing`（暗盤）、`listed`（近期上市）、`calendar`（日曆）、`detail`（詳情）、`orders`（訂單）、`profit-loss`（盈虧）；美股支持 `us-subscriptions`、`us-wait-listing`、`us-listed`
