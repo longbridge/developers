@@ -67,7 +67,7 @@ sidebar_position: 5
         <td><a href="../quote/pull/capital_flow_intraday">獲取標的當日資金流向</a></td>
     </tr>
     <tr>
-        <td><a href="../quote/pull/capital-distribution">獲取標的當日資金分佈</a></td>
+        <td><a href="../quote/pull/capital_distribution">獲取標的當日資金分佈</a></td>
     </tr>
     <tr>
         <td><a href="../quote/pull/calc-index">獲取標的計算指標</a></td>

@@ -66,7 +66,7 @@ slug: overview
         <td><a href="./pull/capital_flow_intraday">獲取標的當日資金流向</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/capital-distribution">獲取標的當日資金分佈</a></td>
+        <td><a href="./pull/capital_distribution">獲取標的當日資金分佈</a></td>
     </tr>
     <tr>
         <td><a href="./pull/calc-index">獲取標的計算指標</a></td>

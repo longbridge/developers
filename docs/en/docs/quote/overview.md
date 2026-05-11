@@ -65,7 +65,7 @@ slug: overview
         <td><a href="./pull/capital_flow_intraday">Get Security Capital Flow Intraday</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/capital-distribution">Get Security Capital Distribution</a></td>
+        <td><a href="./pull/capital_distribution">Get Security Capital Distribution</a></td>
     </tr>
     <tr>
         <td><a href="./pull/calc-index">Get Calculate Indexes Of Securities</a></td>
