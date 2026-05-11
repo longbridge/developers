@@ -211,7 +211,7 @@ func main() {
       {
         "plan_id": "1225781523156889600",
         "counter_id": "ST/US/SPY",
-        "stock_name": "SPDR 标普500 ETF 信托",
+        "stock_name": "SPDR 标普 500 ETF 信托",
         "market": "US",
         "status": "Active",
         "per_invest_amount": "750",
