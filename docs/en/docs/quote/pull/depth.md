@@ -22,7 +22,7 @@ longbridge depth 700.HK
 
 :::info
 
-[Business Command](../../socket/biz-command): `14`
+[Business Command](../../socket/biz_command): `14`
 
 :::
 

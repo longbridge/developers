@@ -18,7 +18,7 @@ longbridge subscriptions
 
 :::info
 
-[Business Command](../../socket/biz-command): `5`
+[Business Command](../../socket/biz_command): `5`
 
 :::
 

@@ -1,7 +1,7 @@
 ---
 title: Data Commands
-id: biz-command
-slug: /socket/biz-command
+id: biz_command
+slug: /socket/biz_command
 sidebar_position: 5
 ---
 

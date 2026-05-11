@@ -17,7 +17,7 @@ longbridge participants
 <SDKLinks module="quote" klass="QuoteContext" method="participants" />
 
 :::info
-[Business Command](../../socket/biz-command): `16`
+[Business Command](../../socket/biz_command): `16`
 :::
 
 ## Request

@@ -20,7 +20,7 @@ longbridge warrant quote 24687.HK
 
 :::info
 
-[业务指令](../../socket/biz-command)：`13`
+[业务指令](../../socket/biz_command)：`13`
 
 :::
 

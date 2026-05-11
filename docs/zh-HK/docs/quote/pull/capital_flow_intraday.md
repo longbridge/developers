@@ -21,7 +21,7 @@ longbridge capital NVDA.US --flow
 <SDKLinks module="quote" klass="QuoteContext" method="capital_flow" />
 
 :::info
-[業務指令](../../socket/biz-command)：`24`
+[業務指令](../../socket/biz_command)：`24`
 :::
 
 ## Request

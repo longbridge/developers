@@ -22,7 +22,7 @@ longbridge trading days CN
 
 :::info
 
-[業務指令](../../socket/biz-command)：`9`
+[業務指令](../../socket/biz_command)：`9`
 
 :::
 

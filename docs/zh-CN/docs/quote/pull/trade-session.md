@@ -18,7 +18,7 @@ longbridge trading session
 
 :::info
 
-[业务指令](../../socket/biz-command)：`8`
+[业务指令](../../socket/biz_command)：`8`
 
 :::
 

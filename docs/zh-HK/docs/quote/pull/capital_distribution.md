@@ -21,7 +21,7 @@ longbridge capital NVDA.US
 <SDKLinks module="quote" klass="QuoteContext" method="capital_distribution" />
 
 :::info
-[業務指令](../../socket/biz-command)：`25`
+[業務指令](../../socket/biz_command)：`25`
 :::
 
 ## Request

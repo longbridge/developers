@@ -13,7 +13,7 @@ sidebar_position: 1
 
 :::info
 
-[業務指令](../../socket/biz-command)：`6`
+[業務指令](../../socket/biz_command)：`6`
 
 :::
 

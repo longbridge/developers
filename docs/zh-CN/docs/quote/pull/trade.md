@@ -22,7 +22,7 @@ longbridge trades NVDA.US
 
 :::info
 
-[业务指令](../../socket/biz-command)：`17`
+[业务指令](../../socket/biz_command)：`17`
 
 :::
 

@@ -26,7 +26,7 @@ longbridge kline NVDA.US --period day --count 20
 
 :::info
 
-[業務指令](../../socket/biz-command)：`19`
+[業務指令](../../socket/biz_command)：`19`
 
 :::
 

@@ -22,7 +22,7 @@ longbridge kline history NVDA.US --start 2025-01-01 --end 2025-12-31
 
 :::info
 
-[Business Command](../../socket/biz-command)：`27`
+[Business Command](../../socket/biz_command)：`27`
 
 :::
 

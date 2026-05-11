@@ -13,7 +13,7 @@ This API is used to subscribe quote.
 
 :::info
 
-[Business Command](../../socket/biz-command): `6`
+[Business Command](../../socket/biz_command): `6`
 
 :::
 

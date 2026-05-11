@@ -19,7 +19,7 @@ longbridge option quote TSLA260418P350000.US
 <SDKLinks module="quote" klass="QuoteContext" method="option_quote" />
 
 :::info
-[业务指令](../../socket/biz-command)：`12`
+[业务指令](../../socket/biz_command)：`12`
 :::
 
 ## Request

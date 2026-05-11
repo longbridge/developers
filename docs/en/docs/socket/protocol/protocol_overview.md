@@ -35,4 +35,4 @@ Data is in the `body` of the packet, current we only support [`Protobuf`](https:
 `Protobuf` definition can be found in:
 
 - [Control command](../control-command)
-- [Data command](../biz-command)
+- [Data command](../biz_command)

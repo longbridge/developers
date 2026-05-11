@@ -18,7 +18,7 @@ longbridge trading session
 
 :::info
 
-[Business Command](../../socket/biz-command): `8`
+[Business Command](../../socket/biz_command): `8`
 
 :::
 

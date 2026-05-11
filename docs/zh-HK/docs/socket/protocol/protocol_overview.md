@@ -37,4 +37,4 @@ sidebar_position: 0
 具體的業務數據的 `Protobuf` 定義可以在瞭解協議解析後查看：
 
 - [控制指令](../control-command)
-- [業務指令](../biz-command)
+- [業務指令](../biz_command)

@@ -20,7 +20,7 @@ longbridge option chain TSLA.US
 
 :::info
 
-[业务指令](../../socket/biz-command)：`20`
+[业务指令](../../socket/biz_command)：`20`
 
 :::
 

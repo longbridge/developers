@@ -22,7 +22,7 @@ longbridge intraday 700.HK
 
 :::info
 
-[Business Command](../../socket/biz-command): `18`
+[Business Command](../../socket/biz_command): `18`
 
 :::
 

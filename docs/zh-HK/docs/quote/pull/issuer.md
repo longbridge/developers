@@ -18,7 +18,7 @@ longbridge warrant issuers
 
 :::info
 
-[業務指令](../../socket/biz-command)：`22`
+[業務指令](../../socket/biz_command)：`22`
 
 :::
 

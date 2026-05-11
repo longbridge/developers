@@ -18,7 +18,7 @@ longbridge subscriptions
 
 :::info
 
-[业务指令](../../socket/biz-command)：`5`
+[业务指令](../../socket/biz_command)：`5`
 
 :::
 

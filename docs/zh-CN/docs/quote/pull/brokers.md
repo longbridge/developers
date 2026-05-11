@@ -19,7 +19,7 @@ longbridge brokers 9988.HK
 <SDKLinks module="quote" klass="QuoteContext" method="brokers" />
 
 :::info
-[业务指令](../../socket/biz-command)：`15`
+[业务指令](../../socket/biz_command)：`15`
 :::
 
 ## Request

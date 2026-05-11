@@ -22,7 +22,7 @@ longbridge warrant list 9618.HK
 
 :::info
 
-[業務指令](../../socket/biz-command)：`23`
+[業務指令](../../socket/biz_command)：`23`
 
 :::
 

@@ -21,7 +21,7 @@ longbridge quote TSLA.US 700.HK AAPL.US
 <SDKLinks module="quote" klass="QuoteContext" method="quote" />
 
 :::info
-[業務指令](../../socket/biz-command)：`11`
+[業務指令](../../socket/biz_command)：`11`
 :::
 
 ## Request

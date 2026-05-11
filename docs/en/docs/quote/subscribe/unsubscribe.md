@@ -13,7 +13,7 @@ This API is used to unsubscribe quote.
 
 :::info
 
-[Business Command](../../socket/biz-command): `7`
+[Business Command](../../socket/biz_command): `7`
 
 :::
 

@@ -20,7 +20,7 @@ longbridge option chain TSLA.US --date 2026-04-17
 
 :::info
 
-[Business Command](../../socket/biz-command): `21`
+[Business Command](../../socket/biz_command): `21`
 
 :::
 

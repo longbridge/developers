@@ -21,7 +21,7 @@ longbridge calc-index TSLA.US --index pe,total_market_value
 <SDKLinks module="quote" klass="QuoteContext" method="calc_indexes" go="CalcIndex" />
 
 :::info
-[业务指令](../../socket/biz-command)：`26`
+[业务指令](../../socket/biz_command)：`26`
 :::
 
 ## Request

@@ -21,7 +21,7 @@ longbridge static TSLA.US 700.HK
 <SDKLinks module="quote" klass="QuoteContext" method="static_info" />
 
 :::info
-[Business Command](../../socket/biz-command): `10`
+[Business Command](../../socket/biz_command): `10`
 :::
 
 ## Request
