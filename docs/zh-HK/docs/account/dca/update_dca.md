@@ -214,13 +214,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [update_dca_rsp](#update_dca_rsp) |
+| 200    | 成功        | [UpdateDcaResponse](#UpdateDcaResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### update_dca_rsp
+### UpdateDcaResponse
 
-<a id="update_dca_rsp"></a>
+<a id="UpdateDcaResponse"></a>
 
 無響應體字段。

@@ -226,14 +226,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dividend_calendar_rsp](#dividend_calendar_rsp) |
+| 200    | Success     | [DividendCalendarResponse](#DividendCalendarResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### dividend_calendar_rsp
+### DividendCalendarResponse
 
-<a id="dividend_calendar_rsp"></a>
+<a id="DividendCalendarResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

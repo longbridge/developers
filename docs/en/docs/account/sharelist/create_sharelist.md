@@ -216,14 +216,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_sharelist_rsp](#create_sharelist_rsp) |
+| 200    | Success     | [CreateSharelistResponse](#CreateSharelistResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### create_sharelist_rsp
+### CreateSharelistResponse
 
-<a id="create_sharelist_rsp"></a>
+<a id="CreateSharelistResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

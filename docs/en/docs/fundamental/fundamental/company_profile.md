@@ -221,21 +221,46 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [company_profile_rsp](#company_profile_rsp) |
+| 200    | Success     | [CompanyProfileResponse](#CompanyProfileResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### company_profile_rsp
+### CompanyProfileResponse
 
-<a id="company_profile_rsp"></a>
+<a id="CompanyProfileResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| name | string | true | Company name |
-| symbol | string | true | Security symbol |
+| name | string | false | Chinese name |
+| company_name | string | false | Full company name |
+| ticker | string | false | Ticker symbol |
+| market | string | false | Listing exchange |
+| sector | string | false | Industry sector |
+| category | string | false | Company category |
 | founded | string | false | Founding year |
-| ceo | string | false | Current CEO |
-| employees | int32 | false | Number of employees |
+| listing_date | string | false | IPO listing date |
+| employees | string | false | Number of employees |
+| chairman | string | false | Chairman |
+| manager | string | false | CEO / General manager |
+| secretary | string | false | Company secretary |
+| address | string | false | Registered address |
+| office_address | string | false | Office address |
+| email | string | false | Contact email |
 | website | string | false | Company website |
-| description | string | false | Business description |
+| profile | string | false | Business description |
+| icon | string | false | Stock icon URL |
+| region | string | false | Region |
+| shares_offered | string | false | Total shares offered |
+| issue_price | string | false | IPO issue price |
+| year_end | string | false | Fiscal year-end |
+| zip_code | string | false | Postal code |
+| Phone | string | false | Phone number |
+| fax | string | false | Fax number |
+| legal_repr | string | false | Legal representative |
+| legal_counsel | string | false | Legal counsel |
+| accounting_firm | string | false | Accounting firm |
+| audit_inst | string | false | Audit institution |
+| securities_rep | string | false | Securities representative |
+| bus_license | string | false | Business license number |
+| ads_ratio | string | false | ADS ratio |

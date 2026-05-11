@@ -197,14 +197,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [broker_holding_detail_rsp](#broker_holding_detail_rsp) |
+| 200    | 成功        | [BrokerHoldingDetailResponse](#BrokerHoldingDetailResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### broker_holding_detail_rsp
+### BrokerHoldingDetailResponse
 
-<a id="broker_holding_detail_rsp"></a>
+<a id="BrokerHoldingDetailResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

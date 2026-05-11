@@ -231,14 +231,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [profit_analysis_by_market_rsp](#profit_analysis_by_market_rsp) |
+| 200    | Success     | [ProfitAnalysisByMarketResponse](#ProfitAnalysisByMarketResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### profit_analysis_by_market_rsp
+### ProfitAnalysisByMarketResponse
 
-<a id="profit_analysis_by_market_rsp"></a>
+<a id="ProfitAnalysisByMarketResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

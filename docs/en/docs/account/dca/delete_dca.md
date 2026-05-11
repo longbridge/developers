@@ -212,13 +212,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [delete_dca_rsp](#delete_dca_rsp) |
+| 200    | Success     | [DeleteDcaResponse](#DeleteDcaResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### delete_dca_rsp
+### DeleteDcaResponse
 
-<a id="delete_dca_rsp"></a>
+<a id="DeleteDcaResponse"></a>
 
 No response body fields.

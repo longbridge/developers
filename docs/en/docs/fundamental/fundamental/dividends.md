@@ -225,14 +225,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [dividends_rsp](#dividends_rsp) |
+| 200    | Success     | [DividendsResponse](#DividendsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### dividends_rsp
+### DividendsResponse
 
-<a id="dividends_rsp"></a>
+<a id="DividendsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

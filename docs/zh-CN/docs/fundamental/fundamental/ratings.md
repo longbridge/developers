@@ -12,11 +12,6 @@ headingLevel: 2
 
 获取指定证券的机构分析师评级和一致预期数据。
 
-<CliCommand>
-longbridge institution-rating TSLA.US
-longbridge institution-rating AAPL.US
-</CliCommand>
-
 <SDKLinks module="fundamental" klass="FundamentalContext" method="ratings" />
 
 ## Request
@@ -223,14 +218,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [ratings_rsp](#ratings_rsp) |
+| 200    | 成功     | [RatingsResponse](#RatingsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### ratings_rsp
+### RatingsResponse
 
-<a id="ratings_rsp"></a>
+<a id="RatingsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

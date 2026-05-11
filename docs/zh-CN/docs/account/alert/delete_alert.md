@@ -213,13 +213,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [delete_alert_rsp](#delete_alert_rsp) |
+| 200    | 成功        | [DeleteAlertResponse](#DeleteAlertResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### delete_alert_rsp
+### DeleteAlertResponse
 
-<a id="delete_alert_rsp"></a>
+<a id="DeleteAlertResponse"></a>
 
 无响应体字段。

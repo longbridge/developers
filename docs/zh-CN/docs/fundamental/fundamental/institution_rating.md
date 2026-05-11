@@ -206,14 +206,48 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "buy": 18,
-    "outperform": 5,
-    "hold": 12,
-    "underperform": 3,
-    "sell": 2,
-    "total": 40,
-    "avg_target_price": 285.50
+    "analyst": {
+      "evaluate": {
+        "buy": 18,
+        "hold": 17,
+        "no_opinion": 4,
+        "over": 5,
+        "sell": 4,
+        "total": 51,
+        "under": 3,
+        "start_date": "2024-01-01",
+        "end_date": "2025-01-01"
+      },
+      "industry_id": 87676,
+      "industry_mean": 10,
+      "industry_median": 4,
+      "industry_name": "汽车制造商",
+      "industry_rank": 1,
+      "industry_total": 30,
+      "target": {
+        "end_date": "2025-01-01",
+        "highest_price": "600.000",
+        "lowest_price": "123.000",
+        "prev_close": "428.35",
+        "start_date": "2024-01-01"
+      }
+    },
+    "instratings": {
+      "ccy_symbol": "$",
+      "change": "Upgraded",
+      "evaluate": {
+        "buy": 18,
+        "hold": 17,
+        "sell": 4
+      },
+      "recommend": "Buy",
+      "target": {
+        "average_target": "380.00",
+        "highest_price": "600.000",
+        "lowest_price": "123.000"
+      },
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
   }
 }
 ```
@@ -222,22 +256,39 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [InstitutionRating](#InstitutionRating) |
+| 200    | 成功        | [InstitutionRatingResponse](#InstitutionRatingResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### InstitutionRating
+### InstitutionRatingResponse
 
-<a id="InstitutionRating"></a>
+<a id="InstitutionRatingResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 证券代码 |
-| buy | int32 | 否 | 买入评级数量 |
-| outperform | int32 | 否 | 跑赢大市评级数量 |
-| hold | int32 | 否 | 持有评级数量 |
-| underperform | int32 | 否 | 跑输大市评级数量 |
-| sell | int32 | 否 | 卖出评级数量 |
-| total | int32 | 否 | 评级总数 |
-| avg_target_price | double | 否 | 平均目标价 |
+| analyst | object | 是 | 机构评级汇总 |
+| analyst.evaluate | object | 是 | 评级分布（买入/持有/卖出数量） |
+| analyst.evaluate.buy | integer | 否 | 买入评级数量 |
+| analyst.evaluate.hold | integer | 否 | 持有评级数量 |
+| analyst.evaluate.sell | integer | 否 | 卖出评级数量 |
+| analyst.evaluate.over | integer | 否 | 跑赢市场评级数量 |
+| analyst.evaluate.under | integer | 否 | 跑输市场评级数量 |
+| analyst.evaluate.no_opinion | integer | 否 | 无评级数量 |
+| analyst.evaluate.total | integer | 否 | 机构总数 |
+| analyst.industry_id | integer | 否 | 行业 ID |
+| analyst.industry_name | string | 否 | 行业名称 |
+| analyst.industry_rank | integer | 否 | 行业内排名 |
+| analyst.industry_total | integer | 否 | 行业内标的总数 |
+| analyst.industry_mean | number | 否 | 行业均值 |
+| analyst.industry_median | number | 否 | 行业中位数 |
+| analyst.target | object | 否 | 目标价区间 |
+| analyst.target.highest_price | string | 否 | 最高目标价 |
+| analyst.target.lowest_price | string | 否 | 最低目标价 |
+| analyst.target.prev_close | string | 否 | 前收盘价 |
+| instratings | object | 否 | 评级快照 |
+| instratings.recommend | string | 否 | 综合评级 |
+| instratings.change | string | 否 | 评级变化 |
+| instratings.ccy_symbol | string | 否 | 货币符号 |
+| instratings.target | object | 否 | 一致目标价 |
+| instratings.updated_at | string | 否 | 最后更新时间 |

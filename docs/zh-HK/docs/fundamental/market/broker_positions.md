@@ -224,14 +224,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [broker_positions_rsp](#broker_positions_rsp) |
+| 200    | 成功     | [BrokerPositionsResponse](#BrokerPositionsResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### broker_positions_rsp
+### BrokerPositionsResponse
 
-<a id="broker_positions_rsp"></a>
+<a id="BrokerPositionsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

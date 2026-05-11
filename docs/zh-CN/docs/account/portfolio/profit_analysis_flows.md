@@ -228,14 +228,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [profit_analysis_flows_rsp](#profit_analysis_flows_rsp) |
+| 200    | 成功        | [ProfitAnalysisFlowsResponse](#ProfitAnalysisFlowsResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### profit_analysis_flows_rsp
+### ProfitAnalysisFlowsResponse
 
-<a id="profit_analysis_flows_rsp"></a>
+<a id="ProfitAnalysisFlowsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

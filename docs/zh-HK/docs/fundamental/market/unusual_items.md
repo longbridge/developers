@@ -223,14 +223,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [unusual_items_rsp](#unusual_items_rsp) |
+| 200    | 成功     | [UnusualItemsResponse](#UnusualItemsResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### unusual_items_rsp
+### UnusualItemsResponse
 
-<a id="unusual_items_rsp"></a>
+<a id="UnusualItemsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

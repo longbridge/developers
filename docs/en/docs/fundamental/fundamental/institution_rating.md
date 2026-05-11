@@ -206,14 +206,48 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "buy": 18,
-    "outperform": 5,
-    "hold": 12,
-    "underperform": 3,
-    "sell": 2,
-    "total": 40,
-    "avg_target_price": 285.50
+    "analyst": {
+      "evaluate": {
+        "buy": 18,
+        "hold": 17,
+        "no_opinion": 4,
+        "over": 5,
+        "sell": 4,
+        "total": 51,
+        "under": 3,
+        "start_date": "2024-01-01",
+        "end_date": "2025-01-01"
+      },
+      "industry_id": 87676,
+      "industry_mean": 10,
+      "industry_median": 4,
+      "industry_name": "Auto Manufacturers",
+      "industry_rank": 1,
+      "industry_total": 30,
+      "target": {
+        "end_date": "2025-01-01",
+        "highest_price": "600.000",
+        "lowest_price": "123.000",
+        "prev_close": "428.35",
+        "start_date": "2024-01-01"
+      }
+    },
+    "instratings": {
+      "ccy_symbol": "$",
+      "change": "Upgraded",
+      "evaluate": {
+        "buy": 18,
+        "hold": 17,
+        "sell": 4
+      },
+      "recommend": "Buy",
+      "target": {
+        "average_target": "380.00",
+        "highest_price": "600.000",
+        "lowest_price": "123.000"
+      },
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
   }
 }
 ```
@@ -222,22 +256,39 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [InstitutionRating](#InstitutionRating) |
+| 200    | Success     | [InstitutionRatingResponse](#InstitutionRatingResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### InstitutionRating
+### InstitutionRatingResponse
 
-<a id="InstitutionRating"></a>
+<a id="InstitutionRatingResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| buy | int32 | false | Number of Buy ratings |
-| outperform | int32 | false | Number of Outperform ratings |
-| hold | int32 | false | Number of Hold ratings |
-| underperform | int32 | false | Number of Underperform ratings |
-| sell | int32 | false | Number of Sell ratings |
-| total | int32 | false | Total number of ratings |
-| avg_target_price | double | false | Average target price |
+| analyst | object | true | Analyst rating summary |
+| analyst.evaluate | object | true | Rating distribution (buy/hold/sell counts) |
+| analyst.evaluate.buy | integer | false | Buy ratings count |
+| analyst.evaluate.hold | integer | false | Hold ratings count |
+| analyst.evaluate.sell | integer | false | Sell ratings count |
+| analyst.evaluate.over | integer | false | Outperform ratings count |
+| analyst.evaluate.under | integer | false | Underperform ratings count |
+| analyst.evaluate.no_opinion | integer | false | No opinion count |
+| analyst.evaluate.total | integer | false | Total analyst count |
+| analyst.industry_id | integer | false | Industry ID |
+| analyst.industry_name | string | false | Industry name |
+| analyst.industry_rank | integer | false | Rank within industry |
+| analyst.industry_total | integer | false | Total stocks in industry |
+| analyst.industry_mean | number | false | Industry mean rating |
+| analyst.industry_median | number | false | Industry median rating |
+| analyst.target | object | false | Price target range |
+| analyst.target.highest_price | string | false | Highest target price |
+| analyst.target.lowest_price | string | false | Lowest target price |
+| analyst.target.prev_close | string | false | Previous close price |
+| instratings | object | false | Consensus rating snapshot |
+| instratings.recommend | string | false | Overall recommendation |
+| instratings.change | string | false | Rating change |
+| instratings.ccy_symbol | string | false | Currency symbol |
+| instratings.target | object | false | Consensus price target |
+| instratings.updated_at | string | false | Last update timestamp |

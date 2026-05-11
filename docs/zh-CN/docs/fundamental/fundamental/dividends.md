@@ -225,14 +225,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [dividends_rsp](#dividends_rsp) |
+| 200    | 成功     | [DividendsResponse](#DividendsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### dividends_rsp
+### DividendsResponse
 
-<a id="dividends_rsp"></a>
+<a id="DividendsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

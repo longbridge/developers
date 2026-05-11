@@ -216,14 +216,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [create_sharelist_rsp](#create_sharelist_rsp) |
+| 200    | 成功        | [CreateSharelistResponse](#CreateSharelistResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### create_sharelist_rsp
+### CreateSharelistResponse
 
-<a id="create_sharelist_rsp"></a>
+<a id="CreateSharelistResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

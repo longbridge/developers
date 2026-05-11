@@ -222,14 +222,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [trading_stats_rsp](#trading_stats_rsp) |
+| 200    | Success     | [TradingStatsResponse](#TradingStatsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### trading_stats_rsp
+### TradingStatsResponse
 
-<a id="trading_stats_rsp"></a>
+<a id="TradingStatsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

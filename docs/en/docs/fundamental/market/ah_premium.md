@@ -223,14 +223,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ah_premium_rsp](#ah_premium_rsp) |
+| 200    | Success     | [AhPremiumResponse](#AhPremiumResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### ah_premium_rsp
+### AhPremiumResponse
 
-<a id="ah_premium_rsp"></a>
+<a id="AhPremiumResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

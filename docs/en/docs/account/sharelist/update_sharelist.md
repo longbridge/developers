@@ -216,13 +216,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [update_sharelist_rsp](#update_sharelist_rsp) |
+| 200    | Success     | [UpdateSharelistResponse](#UpdateSharelistResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### update_sharelist_rsp
+### UpdateSharelistResponse
 
-<a id="update_sharelist_rsp"></a>
+<a id="UpdateSharelistResponse"></a>
 
 No response body fields.

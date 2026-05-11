@@ -227,14 +227,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [macro_calendar_rsp](#macro_calendar_rsp) |
+| 200    | 成功     | [MacroCalendarResponse](#MacroCalendarResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### macro_calendar_rsp
+### MacroCalendarResponse
 
-<a id="macro_calendar_rsp"></a>
+<a id="MacroCalendarResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

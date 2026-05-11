@@ -208,13 +208,11 @@ func main() {
     "list": [
       {
         "market": "US",
-        "status": "normal_trading",
-        "trade_session": "Regular"
+        "status": "Post-Market"
       },
       {
         "market": "HK",
-        "status": "closed",
-        "trade_session": "Closed"
+        "status": "Closed"
       }
     ]
   }
@@ -225,18 +223,24 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [market_status_rsp](#market_status_rsp) |
+| 200    | 成功     | [MarketStatusResponse](#MarketStatusResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### market_status_rsp
+### MarketStatusResponse
 
-<a id="market_status_rsp"></a>
+<a id="MarketStatusResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | list | object[] | 是 | 市場狀態列表 |
-| ∟ market | string | 是 | 市場代碼 |
-| ∟ status | string | 是 | 狀態：`normal_trading`（正常交易）、`closed`（已收市）、`pre_trading`（盤前）、`after_trading`（盤後） |
-| ∟ trade_session | string | 否 | 當前交易時段 |
+
+### MarketTimeItem
+
+<a id="MarketTimeItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| market | string | 是 | 市場代碼：`US`、`HK`、`CN`、`SG` |
+| status | string | 是 | 當前狀態：`Pre-Market`、`Trading`、`Post-Market`、`Closed` |

@@ -223,14 +223,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [profit_analysis_detail_rsp](#profit_analysis_detail_rsp) |
+| 200    | 成功        | [ProfitAnalysisDetailResponse](#ProfitAnalysisDetailResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### profit_analysis_detail_rsp
+### ProfitAnalysisDetailResponse
 
-<a id="profit_analysis_detail_rsp"></a>
+<a id="ProfitAnalysisDetailResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

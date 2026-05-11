@@ -219,14 +219,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [valuations_rsp](#valuations_rsp) |
+| 200    | Success     | [ValuationsResponse](#ValuationsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### valuations_rsp
+### ValuationsResponse
 
-<a id="valuations_rsp"></a>
+<a id="ValuationsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

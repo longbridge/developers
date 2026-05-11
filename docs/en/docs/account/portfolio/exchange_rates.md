@@ -221,14 +221,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [exchange_rates_rsp](#exchange_rates_rsp) |
+| 200    | Success     | [ExchangeRatesResponse](#ExchangeRatesResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### exchange_rates_rsp
+### ExchangeRatesResponse
 
-<a id="exchange_rates_rsp"></a>
+<a id="ExchangeRatesResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

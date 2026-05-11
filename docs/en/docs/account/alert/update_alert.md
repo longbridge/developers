@@ -214,13 +214,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [update_alert_rsp](#update_alert_rsp) |
+| 200    | Success     | [UpdateAlertResponse](#UpdateAlertResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### update_alert_rsp
+### UpdateAlertResponse
 
-<a id="update_alert_rsp"></a>
+<a id="UpdateAlertResponse"></a>
 
 No response body fields.

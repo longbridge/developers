@@ -206,12 +206,23 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "professional_list": [
       {
-        "name": "Timothy D. Cook",
-        "title": "Chief Executive Officer",
-        "age": 63,
-        "since": "2011"
+        "counter_id": "ST/US/AAPL",
+        "forward_url": "https://example.com/aapl/executives",
+        "total": 10,
+        "professionals": [
+          {
+            "id": "12345",
+            "name": "Timothy D. Cook",
+            "name_en": "Timothy D. Cook",
+            "name_zhcn": "蒂姆·庫克",
+            "title": "Chief Executive Officer",
+            "biography": "Tim Cook is the CEO of Apple Inc.",
+            "photo": "https://cdn.example.com/timcook.jpg",
+            "wiki_url": "https://en.wikipedia.org/wiki/Tim_Cook"
+          }
+        ]
       }
     ]
   }
@@ -222,19 +233,41 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [executives_rsp](#executives_rsp) |
+| 200    | 成功     | [ExecutiveResponse](#ExecutiveResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### executives_rsp
+### ExecutiveResponse
 
-<a id="executives_rsp"></a>
+<a id="ExecutiveResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 高管列表 |
-| ∟ name | string | 是 | 高管姓名 |
-| ∟ title | string | 是 | 職位 |
-| ∟ age | int32 | 否 | 年齡 |
-| ∟ since | string | 否 | 任職年份 |
+| professional_list | object[] | 是 | 高管分組列表 |
+
+### ExecutiveGroup
+
+<a id="ExecutiveGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| counter_id | string | 是 | 證券代碼 |
+| forward_url | string | 否 | 公司高管頁面連結 |
+| total | integer | 否 | 高管總數 |
+| professionals | object[] | 是 | 高管列表 |
+
+### Executive
+
+<a id="Executive"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | 否 | 高管 ID |
+| name | string | 是 | 顯示名稱 |
+| name_en | string | 否 | 英文名稱 |
+| name_zhcn | string | 否 | 中文名稱 |
+| title | string | 否 | 職位 |
+| biography | string | 否 | 簡歷 |
+| photo | string | 否 | 照片連結 |
+| wiki_url | string | 否 | 維基百科連結 |

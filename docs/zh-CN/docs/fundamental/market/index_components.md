@@ -206,16 +206,27 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "total": 90,
-    "rise": 45,
-    "fall": 42,
-    "flat": 3,
-    "components": [
+    "total": 80,
+    "rise_num": 53,
+    "fall_num": 24,
+    "flat_num": 3,
+    "stocks": [
       {
-        "symbol": "HSBC.HK",
-        "name": "HSBC Holdings",
-        "price": "68.40",
-        "change_pct": "0.88"
+        "counter_id": "ST/HK/00005",
+        "name": "汇丰控股",
+        "market": "HK",
+        "last_done": "68.40",
+        "prev_close": "67.80",
+        "chg": "0.88",
+        "amount": "1234567890",
+        "inflow": "23456789",
+        "circulating_shares": "20000000000",
+        "total_shares": "21000000000",
+        "balance": "1360000000000",
+        "trade_status": "Normal",
+        "intro": "汇丰控股有限公司",
+        "delay": false,
+        "tags": ["金融", "银行"]
       }
     ]
   }
@@ -226,23 +237,41 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [index_components_rsp](#index_components_rsp) |
+| 200    | 成功     | [IndexConstituentsResponse](#IndexConstituentsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### index_components_rsp
+### IndexConstituentsResponse
 
-<a id="index_components_rsp"></a>
+<a id="IndexConstituentsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| total | int32 | 是 | 成分股总数 |
-| rise | int32 | 是 | 上涨成分股数量 |
-| fall | int32 | 是 | 下跌成分股数量 |
-| flat | int32 | 是 | 平盘成分股数量 |
-| components | object[] | 是 | 成分股列表 |
-| ∟ symbol | string | 是 | 证券代码 |
-| ∟ name | string | 是 | 证券名称 |
-| ∟ price | string | 否 | 当前价格 |
-| ∟ change_pct | string | 否 | 涨跌幅 |
+| total | integer | 是 | 成分股总数 |
+| rise_num | integer | 否 | 上涨数量 |
+| fall_num | integer | 否 | 下跌数量 |
+| flat_num | integer | 否 | 平盘数量 |
+| stocks | object[] | 是 | 成分股列表 |
+
+### ConstituentStock
+
+<a id="ConstituentStock"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| counter_id | string | 是 | 证券代码 |
+| name | string | 是 | 证券名称 |
+| market | string | 否 | 市场 |
+| last_done | string | 否 | 最新价 |
+| prev_close | string | 否 | 前收盘价 |
+| chg | string | 否 | 涨跌幅 |
+| amount | string | 否 | 成交额 |
+| inflow | string | 否 | 资金净流入 |
+| circulating_shares | string | 否 | 流通股数 |
+| total_shares | string | 否 | 总股数 |
+| balance | string | 否 | 市值 |
+| trade_status | string | 否 | 交易状态 |
+| intro | string | 否 | 简介 |
+| delay | boolean | 否 | 是否为延迟数据 |
+| tags | string[] | 否 | 标签 |

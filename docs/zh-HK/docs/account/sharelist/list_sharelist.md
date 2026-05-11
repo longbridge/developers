@@ -225,14 +225,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [list_sharelist_rsp](#list_sharelist_rsp) |
+| 200    | 成功        | [ListSharelistResponse](#ListSharelistResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### list_sharelist_rsp
+### ListSharelistResponse
 
-<a id="list_sharelist_rsp"></a>
+<a id="ListSharelistResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

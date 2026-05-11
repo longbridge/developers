@@ -225,14 +225,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [split_calendar_rsp](#split_calendar_rsp) |
+| 200    | 成功     | [SplitCalendarResponse](#SplitCalendarResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### split_calendar_rsp
+### SplitCalendarResponse
 
-<a id="split_calendar_rsp"></a>
+<a id="SplitCalendarResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

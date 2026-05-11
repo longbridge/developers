@@ -222,14 +222,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [fund_holdings_rsp](#fund_holdings_rsp) |
+| 200    | Success     | [FundHoldingsResponse](#FundHoldingsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### fund_holdings_rsp
+### FundHoldingsResponse
 
-<a id="fund_holdings_rsp"></a>
+<a id="FundHoldingsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

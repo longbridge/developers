@@ -206,12 +206,23 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "professional_list": [
       {
-        "name": "Timothy D. Cook",
-        "title": "Chief Executive Officer",
-        "age": 63,
-        "since": "2011"
+        "counter_id": "ST/US/AAPL",
+        "forward_url": "https://example.com/aapl/executives",
+        "total": 10,
+        "professionals": [
+          {
+            "id": "12345",
+            "name": "Timothy D. Cook",
+            "name_en": "Timothy D. Cook",
+            "name_zhcn": "蒂姆·库克",
+            "title": "Chief Executive Officer",
+            "biography": "Tim Cook is the CEO of Apple Inc.",
+            "photo": "https://cdn.example.com/timcook.jpg",
+            "wiki_url": "https://en.wikipedia.org/wiki/Tim_Cook"
+          }
+        ]
       }
     ]
   }
@@ -222,19 +233,41 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [executives_rsp](#executives_rsp) |
+| 200    | Success     | [ExecutiveResponse](#ExecutiveResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### executives_rsp
+### ExecutiveResponse
 
-<a id="executives_rsp"></a>
+<a id="ExecutiveResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Executive list |
-| ∟ name | string | true | Executive name |
-| ∟ title | string | true | Job title |
-| ∟ age | int32 | false | Age |
-| ∟ since | string | false | Year appointed |
+| professional_list | object[] | true | List of executive groups |
+
+### ExecutiveGroup
+
+<a id="ExecutiveGroup"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| counter_id | string | true | Security identifier |
+| forward_url | string | false | Company executives page URL |
+| total | integer | false | Total number of executives |
+| professionals | object[] | true | List of executives |
+
+### Executive
+
+<a id="Executive"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | Executive ID |
+| name | string | true | Display name |
+| name_en | string | false | English name |
+| name_zhcn | string | false | Chinese name |
+| title | string | false | Job title |
+| biography | string | false | Biography |
+| photo | string | false | Photo URL |
+| wiki_url | string | false | Wikipedia URL |

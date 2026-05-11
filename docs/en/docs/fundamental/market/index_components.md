@@ -206,16 +206,27 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "total": 90,
-    "rise": 45,
-    "fall": 42,
-    "flat": 3,
-    "components": [
+    "total": 80,
+    "rise_num": 53,
+    "fall_num": 24,
+    "flat_num": 3,
+    "stocks": [
       {
-        "symbol": "HSBC.HK",
+        "counter_id": "ST/HK/00005",
         "name": "HSBC Holdings",
-        "price": "68.40",
-        "change_pct": "0.88"
+        "market": "HK",
+        "last_done": "68.40",
+        "prev_close": "67.80",
+        "chg": "0.88",
+        "amount": "1234567890",
+        "inflow": "23456789",
+        "circulating_shares": "20000000000",
+        "total_shares": "21000000000",
+        "balance": "1360000000000",
+        "trade_status": "Normal",
+        "intro": "HSBC Holdings plc",
+        "delay": false,
+        "tags": ["Finance", "Bank"]
       }
     ]
   }
@@ -226,23 +237,41 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [index_components_rsp](#index_components_rsp) |
+| 200    | Success     | [IndexConstituentsResponse](#IndexConstituentsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### index_components_rsp
+### IndexConstituentsResponse
 
-<a id="index_components_rsp"></a>
+<a id="IndexConstituentsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| total | int32 | true | Total number of components |
-| rise | int32 | true | Number of rising components |
-| fall | int32 | true | Number of falling components |
-| flat | int32 | true | Number of flat components |
-| components | object[] | true | Component list |
-| ∟ symbol | string | true | Security symbol |
-| ∟ name | string | true | Security name |
-| ∟ price | string | false | Current price |
-| ∟ change_pct | string | false | Percentage change |
+| total | integer | true | Total number of constituents |
+| rise_num | integer | false | Number of rising stocks |
+| fall_num | integer | false | Number of falling stocks |
+| flat_num | integer | false | Number of flat stocks |
+| stocks | object[] | true | List of constituent stocks |
+
+### ConstituentStock
+
+<a id="ConstituentStock"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| counter_id | string | true | Security identifier |
+| name | string | true | Security name |
+| market | string | false | Market |
+| last_done | string | false | Last trade price |
+| prev_close | string | false | Previous close |
+| chg | string | false | Price change percentage |
+| amount | string | false | Trading volume amount |
+| inflow | string | false | Capital inflow |
+| circulating_shares | string | false | Circulating shares |
+| total_shares | string | false | Total shares |
+| balance | string | false | Market cap |
+| trade_status | string | false | Trading status |
+| intro | string | false | Brief description |
+| delay | boolean | false | Whether data is delayed |
+| tags | string[] | false | Tags |

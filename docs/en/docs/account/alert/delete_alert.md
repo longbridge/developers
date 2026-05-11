@@ -213,13 +213,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [delete_alert_rsp](#delete_alert_rsp) |
+| 200    | Success     | [DeleteAlertResponse](#DeleteAlertResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### delete_alert_rsp
+### DeleteAlertResponse
 
-<a id="delete_alert_rsp"></a>
+<a id="DeleteAlertResponse"></a>
 
 No response body fields.

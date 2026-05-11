@@ -231,14 +231,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [profit_analysis_by_market_rsp](#profit_analysis_by_market_rsp) |
+| 200    | 成功        | [ProfitAnalysisByMarketResponse](#ProfitAnalysisByMarketResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### profit_analysis_by_market_rsp
+### ProfitAnalysisByMarketResponse
 
-<a id="profit_analysis_by_market_rsp"></a>
+<a id="ProfitAnalysisByMarketResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

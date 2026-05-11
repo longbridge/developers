@@ -197,14 +197,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [broker_holding_detail_rsp](#broker_holding_detail_rsp) |
+| 200    | Success     | [BrokerHoldingDetailResponse](#BrokerHoldingDetailResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### broker_holding_detail_rsp
+### BrokerHoldingDetailResponse
 
-<a id="broker_holding_detail_rsp"></a>
+<a id="BrokerHoldingDetailResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

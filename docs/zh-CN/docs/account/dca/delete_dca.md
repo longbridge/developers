@@ -212,13 +212,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [delete_dca_rsp](#delete_dca_rsp) |
+| 200    | 成功        | [DeleteDcaResponse](#DeleteDcaResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### delete_dca_rsp
+### DeleteDcaResponse
 
-<a id="delete_dca_rsp"></a>
+<a id="DeleteDcaResponse"></a>
 
 无响应体字段。

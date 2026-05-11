@@ -226,14 +226,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [financial_report_rsp](#financial_report_rsp) |
+| 200    | Success     | [FinancialReportResponse](#FinancialReportResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### financial_report_rsp
+### FinancialReportResponse
 
-<a id="financial_report_rsp"></a>
+<a id="FinancialReportResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

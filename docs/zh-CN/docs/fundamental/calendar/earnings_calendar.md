@@ -226,14 +226,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [earnings_calendar_rsp](#earnings_calendar_rsp) |
+| 200    | 成功     | [EarningsCalendarResponse](#EarningsCalendarResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### earnings_calendar_rsp
+### EarningsCalendarResponse
 
-<a id="earnings_calendar_rsp"></a>
+<a id="EarningsCalendarResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

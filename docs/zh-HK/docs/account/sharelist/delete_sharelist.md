@@ -212,13 +212,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [delete_sharelist_rsp](#delete_sharelist_rsp) |
+| 200    | 成功        | [DeleteSharelistResponse](#DeleteSharelistResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### delete_sharelist_rsp
+### DeleteSharelistResponse
 
-<a id="delete_sharelist_rsp"></a>
+<a id="DeleteSharelistResponse"></a>
 
 無響應體字段。

@@ -218,14 +218,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_alert_rsp](#create_alert_rsp) |
+| 200    | Success     | [CreateAlertResponse](#CreateAlertResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### create_alert_rsp
+### CreateAlertResponse
 
-<a id="create_alert_rsp"></a>
+<a id="CreateAlertResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

@@ -225,14 +225,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [dca_history_rsp](#dca_history_rsp) |
+| 200    | 成功        | [DcaHistoryResponse](#DcaHistoryResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### dca_history_rsp
+### DcaHistoryResponse
 
-<a id="dca_history_rsp"></a>
+<a id="DcaHistoryResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

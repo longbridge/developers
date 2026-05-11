@@ -216,13 +216,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [update_sharelist_rsp](#update_sharelist_rsp) |
+| 200    | 成功        | [UpdateSharelistResponse](#UpdateSharelistResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### update_sharelist_rsp
+### UpdateSharelistResponse
 
-<a id="update_sharelist_rsp"></a>
+<a id="UpdateSharelistResponse"></a>
 
 無響應體字段。

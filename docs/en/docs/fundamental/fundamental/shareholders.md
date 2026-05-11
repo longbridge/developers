@@ -222,19 +222,30 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [shareholders_rsp](#shareholders_rsp) |
+| 200    | Success     | [ShareholderResponse](#ShareholderResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### shareholders_rsp
+### ShareholderResponse
 
-<a id="shareholders_rsp"></a>
+<a id="ShareholderResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Shareholder list |
-| ∟ name | string | true | Shareholder name |
-| ∟ shares | string | true | Number of shares held |
-| ∟ percentage | string | true | Ownership percentage |
-| ∟ type | string | false | `Institution` or `Individual` |
+| shareholder_list | object[] | true | List of shareholders |
+| total | integer | true | Total number of shareholders |
+
+### ShareholderItem
+
+<a id="ShareholderItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| shareholder_name | string | true | Shareholder name |
+| percent_of_shares | string | true | Percentage of shares held |
+| institution_type | string | false | Institution type |
+| report_date | string | false | Report date |
+| shareholder_id | string | false | Shareholder ID |
+| shares_changed | string | false | Change in shares held |
+| stocks | object[] | false | Associated stocks |

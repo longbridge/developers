@@ -226,14 +226,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [ipo_calendar_rsp](#ipo_calendar_rsp) |
+| 200    | 成功     | [IpoCalendarResponse](#IpoCalendarResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### ipo_calendar_rsp
+### IpoCalendarResponse
 
-<a id="ipo_calendar_rsp"></a>
+<a id="IpoCalendarResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

@@ -219,14 +219,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [create_dca_rsp](#create_dca_rsp) |
+| 200    | Success     | [CreateDcaResponse](#CreateDcaResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### create_dca_rsp
+### CreateDcaResponse
 
-<a id="create_dca_rsp"></a>
+<a id="CreateDcaResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

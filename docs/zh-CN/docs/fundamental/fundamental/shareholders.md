@@ -222,19 +222,30 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [shareholders_rsp](#shareholders_rsp) |
+| 200    | 成功     | [ShareholderResponse](#ShareholderResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### shareholders_rsp
+### ShareholderResponse
 
-<a id="shareholders_rsp"></a>
+<a id="ShareholderResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 股东列表 |
-| ∟ name | string | 是 | 股东名称 |
-| ∟ shares | string | 是 | 持股数量 |
-| ∟ percentage | string | 是 | 持股比例 |
-| ∟ type | string | 否 | `Institution`（机构）或 `Individual`（个人） |
+| shareholder_list | object[] | 是 | 股东列表 |
+| total | integer | 是 | 股东总数 |
+
+### ShareholderItem
+
+<a id="ShareholderItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| shareholder_name | string | 是 | 股东名称 |
+| percent_of_shares | string | 是 | 持股比例 |
+| institution_type | string | 否 | 机构类型 |
+| report_date | string | 否 | 报告日期 |
+| shareholder_id | string | 否 | 股东 ID |
+| shares_changed | string | 否 | 持股变动 |
+| stocks | object[] | 否 | 关联标的 |

@@ -208,13 +208,11 @@ func main() {
     "list": [
       {
         "market": "US",
-        "status": "normal_trading",
-        "trade_session": "Regular"
+        "status": "Post-Market"
       },
       {
         "market": "HK",
-        "status": "closed",
-        "trade_session": "Closed"
+        "status": "Closed"
       }
     ]
   }
@@ -225,18 +223,24 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [market_status_rsp](#market_status_rsp) |
+| 200    | Success     | [MarketStatusResponse](#MarketStatusResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### market_status_rsp
+### MarketStatusResponse
 
-<a id="market_status_rsp"></a>
+<a id="MarketStatusResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Market status list |
-| ∟ market | string | true | Market code |
-| ∟ status | string | true | Status: `normal_trading`, `closed`, `pre_trading`, `after_trading` |
-| ∟ trade_session | string | false | Current trading session |
+| list | object[] | true | List of market statuses |
+
+### MarketTimeItem
+
+<a id="MarketTimeItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| market | string | true | Market code: `US`, `HK`, `CN`, `SG` |
+| status | string | true | Current status: `Pre-Market`, `Trading`, `Post-Market`, `Closed` |

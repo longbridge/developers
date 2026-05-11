@@ -209,13 +209,26 @@ func main() {
   "data": {
     "list": [
       {
-        "id": "1225781523156889600",
-        "symbol": "SPY.US",
-        "status": "Finished",
-        "amount": "750",
-        "frequency": "Fortnightly",
-        "day_of_week": "Wed",
-        "next_trade_date": "2026-04-08T14:00:00Z"
+        "plan_id": "1225781523156889600",
+        "counter_id": "ST/US/SPY",
+        "stock_name": "SPDR 标普500 ETF 信托",
+        "market": "US",
+        "status": "Active",
+        "per_invest_amount": "750",
+        "invest_frequency": "fortnightly",
+        "invest_day_of_week": "Wed",
+        "invest_day_of_month": 0,
+        "next_trd_date": "2026-04-08",
+        "cum_amount": "9000",
+        "cum_profit": "320.50",
+        "average_cost": "442.15",
+        "allow_margin_finance": false,
+        "alter_hours": 24,
+        "display_account": "主账户",
+        "member_id": "U1234567",
+        "issue_number": 12,
+        "created_at": "2025-04-08T14:00:00Z",
+        "updated_at": "2026-04-08T14:00:00Z"
       }
     ]
   }
@@ -226,22 +239,42 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [list_dca_rsp](#list_dca_rsp) |
+| 200    | 成功        | [DcaListResponse](#DcaListResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### list_dca_rsp
+### DcaListResponse
 
-<a id="list_dca_rsp"></a>
+<a id="DcaListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 定投计划列表 |
-| ∟ id | string | true | 计划 ID |
-| ∟ symbol | string | true | 证券代码 |
-| ∟ status | string | true | 计划状态：`Active`（进行中）、`Suspended`（已暂停）、`Finished`（已结束） |
-| ∟ amount | string | true | 定投金额 |
-| ∟ frequency | string | true | 频率：`Daily`（每日）、`Weekly`（每周）、`Fortnightly`（每两周）、`Monthly`（每月） |
-| ∟ day_of_week | string | false | 每周/每两周计划的执行星期 |
-| ∟ next_trade_date | string | false | 下次计划交易日期（ISO 8601） |
+| list | object[] | 是 | 定投计划列表 |
+
+### DcaPlan
+
+<a id="DcaPlan"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| plan_id | string | 是 | 定投计划 ID |
+| counter_id | string | 是 | 证券代码 |
+| stock_name | string | 否 | 标的名称 |
+| market | string | 否 | 市场 |
+| status | string | 否 | 计划状态：`Active`（进行中）、`Suspended`（已暂停）、`Finished`（已结束） |
+| per_invest_amount | string | 否 | 每次投入金额 |
+| invest_frequency | string | 否 | 投资频率：`daily`、`weekly`、`fortnightly`、`monthly` |
+| invest_day_of_week | string | 否 | 每周扣款日 |
+| invest_day_of_month | integer | 否 | 每月扣款日 |
+| next_trd_date | string | 否 | 下次交易日 |
+| cum_amount | string | 否 | 累计投入金额 |
+| cum_profit | string | 否 | 累计盈亏 |
+| average_cost | string | 否 | 平均持仓成本 |
+| allow_margin_finance | boolean | 否 | 是否允许融资 |
+| alter_hours | integer | 否 | 提前提醒小时数 |
+| display_account | string | 否 | 账户显示名称 |
+| member_id | string | 否 | 用户 ID |
+| issue_number | integer | 否 | 已执行次数 |
+| created_at | string | 否 | 创建时间 |
+| updated_at | string | 否 | 最后更新时间 |

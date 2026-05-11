@@ -209,13 +209,26 @@ func main() {
   "data": {
     "list": [
       {
-        "id": "1225781523156889600",
-        "symbol": "SPY.US",
-        "status": "Finished",
-        "amount": "750",
-        "frequency": "Fortnightly",
-        "day_of_week": "Wed",
-        "next_trade_date": "2026-04-08T14:00:00Z"
+        "plan_id": "1225781523156889600",
+        "counter_id": "ST/US/SPY",
+        "stock_name": "SPDR S&P 500 ETF Trust",
+        "market": "US",
+        "status": "Active",
+        "per_invest_amount": "750",
+        "invest_frequency": "fortnightly",
+        "invest_day_of_week": "Wed",
+        "invest_day_of_month": 0,
+        "next_trd_date": "2026-04-08",
+        "cum_amount": "9000",
+        "cum_profit": "320.50",
+        "average_cost": "442.15",
+        "allow_margin_finance": false,
+        "alter_hours": 24,
+        "display_account": "Main Account",
+        "member_id": "U1234567",
+        "issue_number": 12,
+        "created_at": "2025-04-08T14:00:00Z",
+        "updated_at": "2026-04-08T14:00:00Z"
       }
     ]
   }
@@ -226,22 +239,42 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [list_dca_rsp](#list_dca_rsp) |
+| 200    | Success     | [DcaListResponse](#DcaListResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### list_dca_rsp
+### DcaListResponse
 
-<a id="list_dca_rsp"></a>
+<a id="DcaListResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | DCA plan list |
-| ∟ id | string | true | Plan ID |
-| ∟ symbol | string | true | Security symbol |
-| ∟ status | string | true | Plan status: `Active`, `Suspended`, `Finished` |
-| ∟ amount | string | true | Recurring investment amount |
-| ∟ frequency | string | true | Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly` |
-| ∟ day_of_week | string | false | Day of week for weekly/fortnightly plans |
-| ∟ next_trade_date | string | false | Next scheduled trade date (ISO 8601) |
+| list | object[] | true | List of DCA plans |
+
+### DcaPlan
+
+<a id="DcaPlan"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| plan_id | string | true | DCA plan ID |
+| counter_id | string | true | Security identifier |
+| stock_name | string | false | Security name |
+| market | string | false | Market |
+| status | string | false | Plan status: `Active`, `Suspended`, `Finished` |
+| per_invest_amount | string | false | Amount per investment |
+| invest_frequency | string | false | Frequency: `daily`, `weekly`, `fortnightly`, `monthly` |
+| invest_day_of_week | string | false | Day of week (for weekly plans) |
+| invest_day_of_month | integer | false | Day of month (for monthly plans) |
+| next_trd_date | string | false | Next trade date |
+| cum_amount | string | false | Cumulative invested amount |
+| cum_profit | string | false | Cumulative profit/loss |
+| average_cost | string | false | Average cost per share |
+| allow_margin_finance | boolean | false | Whether margin financing is allowed |
+| alter_hours | integer | false | Reminder hours before trade |
+| display_account | string | false | Account display name |
+| member_id | string | false | Member ID |
+| issue_number | integer | false | Execution count |
+| created_at | string | false | Creation timestamp |
+| updated_at | string | false | Last update timestamp |

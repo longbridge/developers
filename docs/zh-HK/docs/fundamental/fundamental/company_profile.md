@@ -221,21 +221,46 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [company_profile_rsp](#company_profile_rsp) |
+| 200    | 成功     | [CompanyProfileResponse](#CompanyProfileResponse) |
 | 400    | 請求錯誤 | None   |
 
 ## Schemas
 
-### company_profile_rsp
+### CompanyProfileResponse
 
-<a id="company_profile_rsp"></a>
+<a id="CompanyProfileResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| name | string | 是 | 公司名稱 |
-| symbol | string | 是 | 證券代碼 |
+| name | string | 否 | 中文名稱 |
+| company_name | string | 否 | 完整公司名稱 |
+| ticker | string | 否 | 股票代碼 |
+| market | string | 否 | 上市交易所 |
+| sector | string | 否 | 行業 |
+| category | string | 否 | 公司類別 |
 | founded | string | 否 | 成立年份 |
-| ceo | string | 否 | 現任 CEO |
-| employees | int32 | 否 | 員工人數 |
+| listing_date | string | 否 | 上市日期 |
+| employees | string | 否 | 員工人數 |
+| chairman | string | 否 | 董事長 |
+| manager | string | 否 | CEO / 總經理 |
+| secretary | string | 否 | 公司秘書 |
+| address | string | 否 | 註冊地址 |
+| office_address | string | 否 | 辦公地址 |
+| email | string | 否 | 聯繫郵箱 |
 | website | string | 否 | 公司官網 |
-| description | string | 否 | 業務描述 |
+| profile | string | 否 | 業務描述 |
+| icon | string | 否 | 股票圖標 URL |
+| region | string | 否 | 地區 |
+| shares_offered | string | 否 | 發行總股數 |
+| issue_price | string | 否 | 發行價格 |
+| year_end | string | 否 | 財年截止日 |
+| zip_code | string | 否 | 郵政編碼 |
+| Phone | string | 否 | 電話號碼 |
+| fax | string | 否 | 傳真 |
+| legal_repr | string | 否 | 法定代表人 |
+| legal_counsel | string | 否 | 法律顧問 |
+| accounting_firm | string | 否 | 會計師事務所 |
+| audit_inst | string | 否 | 審計機構 |
+| securities_rep | string | 否 | 證券代表 |
+| bus_license | string | 否 | 營業執照號 |
+| ads_ratio | string | 否 | ADS 比例 |

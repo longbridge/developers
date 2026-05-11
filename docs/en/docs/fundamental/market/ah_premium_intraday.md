@@ -195,14 +195,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ah_premium_intraday_rsp](#ah_premium_intraday_rsp) |
+| 200    | Success     | [AhPremiumIntradayResponse](#AhPremiumIntradayResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### ah_premium_intraday_rsp
+### AhPremiumIntradayResponse
 
-<a id="ah_premium_intraday_rsp"></a>
+<a id="AhPremiumIntradayResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

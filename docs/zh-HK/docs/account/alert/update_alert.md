@@ -214,13 +214,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [update_alert_rsp](#update_alert_rsp) |
+| 200    | 成功        | [UpdateAlertResponse](#UpdateAlertResponse) |
 | 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### update_alert_rsp
+### UpdateAlertResponse
 
-<a id="update_alert_rsp"></a>
+<a id="UpdateAlertResponse"></a>
 
 無響應體字段。

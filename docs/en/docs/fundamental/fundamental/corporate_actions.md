@@ -224,14 +224,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [corporate_actions_rsp](#corporate_actions_rsp) |
+| 200    | Success     | [CorporateActionsResponse](#CorporateActionsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### corporate_actions_rsp
+### CorporateActionsResponse
 
-<a id="corporate_actions_rsp"></a>
+<a id="CorporateActionsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

@@ -212,13 +212,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [delete_sharelist_rsp](#delete_sharelist_rsp) |
+| 200    | Success     | [DeleteSharelistResponse](#DeleteSharelistResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### delete_sharelist_rsp
+### DeleteSharelistResponse
 
-<a id="delete_sharelist_rsp"></a>
+<a id="DeleteSharelistResponse"></a>
 
 No response body fields.

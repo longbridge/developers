@@ -224,14 +224,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [corporate_actions_rsp](#corporate_actions_rsp) |
+| 200    | 成功     | [CorporateActionsResponse](#CorporateActionsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### corporate_actions_rsp
+### CorporateActionsResponse
 
-<a id="corporate_actions_rsp"></a>
+<a id="CorporateActionsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

@@ -214,13 +214,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [update_dca_rsp](#update_dca_rsp) |
+| 200    | Success     | [UpdateDcaResponse](#UpdateDcaResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### update_dca_rsp
+### UpdateDcaResponse
 
-<a id="update_dca_rsp"></a>
+<a id="UpdateDcaResponse"></a>
 
 No response body fields.

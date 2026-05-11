@@ -12,11 +12,6 @@ headingLevel: 2
 
 Get analyst institution ratings and consensus data for a security.
 
-<CliCommand>
-longbridge institution-rating TSLA.US
-longbridge institution-rating AAPL.US
-</CliCommand>
-
 <SDKLinks module="fundamental" klass="FundamentalContext" method="ratings" />
 
 ## Request
@@ -223,14 +218,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ratings_rsp](#ratings_rsp) |
+| 200    | Success     | [RatingsResponse](#RatingsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### ratings_rsp
+### RatingsResponse
 
-<a id="ratings_rsp"></a>
+<a id="RatingsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |

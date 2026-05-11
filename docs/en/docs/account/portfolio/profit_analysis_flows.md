@@ -228,14 +228,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [profit_analysis_flows_rsp](#profit_analysis_flows_rsp) |
+| 200    | Success     | [ProfitAnalysisFlowsResponse](#ProfitAnalysisFlowsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### profit_analysis_flows_rsp
+### ProfitAnalysisFlowsResponse
 
-<a id="profit_analysis_flows_rsp"></a>
+<a id="ProfitAnalysisFlowsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
