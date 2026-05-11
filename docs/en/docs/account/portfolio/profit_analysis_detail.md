@@ -237,8 +237,8 @@ func main() {
 | name | string | false | Security name |
 | currency | string | false | Currency |
 | profit | string | false | Total profit/loss |
-| start | string | false | Period start |
-| end | string | false | Period end |
+| start | integer | false | Period start |
+| end | integer | false | Period end |
 | start_date | string | false | Start date |
 | end_date | string | false | End date |
 | default_tag | integer | false | Default display tag |

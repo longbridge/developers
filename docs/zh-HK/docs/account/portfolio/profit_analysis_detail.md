@@ -237,8 +237,8 @@ func main() {
 | name | string | false | 證券名稱 |
 | currency | string | false | 貨幣 |
 | profit | string | false | 總盈虧 |
-| start | string | false | 統計期開始 |
-| end | string | false | 統計期結束 |
+| start | integer | false | 統計期開始 |
+| end | integer | false | 統計期結束 |
 | start_date | string | false | 開始日期 |
 | end_date | string | false | 結束日期 |
 | default_tag | integer | false | 默認顯示標簽 |
