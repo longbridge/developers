@@ -62,7 +62,7 @@ slug: overview
         <td><a href="./pull/trade-day">Get Market Trading Days</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/capital-flow-intraday">Get Security Capital Flow Intraday</a></td>
+        <td><a href="./pull/capital_flow_intraday">Get Security Capital Flow Intraday</a></td>
     </tr>
     <tr>
         <td><a href="./pull/capital-distribution">Get Security Capital Distribution</a></td>
