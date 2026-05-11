@@ -1,71 +1,71 @@
 # SDK 接口调用结果
 
-| 方法 | SDK 类型 | 状态 | 说明 |
-| ---- | -------- | ---- | ---- |
-| `company_profile` | `CompanyOverview` | ✓ | `accounting_firm`, `address`, `ads_ratio`, `audit_inst` |
-| `financial_report` | `FinancialReports` | ✓ | `list` |
-| `valuations` | `ValuationData` | ✓ | `metrics` |
-| `ratings` | `StockRatings` | ✓ | `industry_name`, `industry_rank`, `multi_letter`, `multi_score` |
-| `institution_rating` | `InstitutionRating` | ✓ | `latest`, `summary` |
-| `institution_rating_detail` | `InstitutionRatingDetail` | ✓ | `ccy_symbol`, `evaluate`, `target` |
-| `dividends` | `DividendList` | ✓ | `list` |
-| `dividend_detail` | `DividendList` | ✓ | `list` |
-| `forecast_eps` | `ForecastEps` | ✓ | `items` |
-| `consensus` | `FinancialConsensus` | ✓ | `currency`, `current_index`, `current_period`, `list` |
-| `valuation_history` | `ValuationHistoryResponse` | ✓ | `history` |
-| `industry_valuation` | `IndustryValuationList` | ✓ | `list` |
-| `industry_valuation_dist` | `IndustryValuationDist` | ✓ | `pb`, `pe`, `ps` |
-| `executives` | `ExecutiveList` | ✓ | `professional_list` |
-| `shareholders` | `ShareholderList` | ✓ | `forward_url`, `shareholder_list`, `total` |
-| `fund_holdings` | `FundHolders` | ✓ | `lists` |
-| `corporate_actions` | `CorpActions` | ✓ | `items` |
-| `invest_relation` | `InvestRelations` | ✓ | `forward_url`, `invest_securities` |
-| `operating` | `OperatingList` | ✓ | `list` |
-| `buyback` | `BuybackData` | ✓ | `buyback_history`, `buyback_ratios`, `recent_buybacks` |
-| `market_status` | `MarketStatusResponse` | ✓ | `market_time` |
-| `broker_positions` | `BrokerHoldingTop` | ✓ | `buy`, `sell`, `updated_at` |
-| `broker_holding_detail` | `BrokerHoldingDetail` | ✓ | `list`, `updated_at` |
-| `ah_premium` | `AhPremiumKlines` | ✓ | `klines` |
-| `ah_premium_intraday` | `AhPremiumIntraday` | ✓ | `klines` |
-| `trading_stats` | `TradeStatsResponse` | ✓ | `statistics`, `trades` |
-| `index_components` | `IndexConstituents` | ✓ | `fall_num`, `flat_num`, `rise_num`, `stocks` |
-| `unusual_items` | `AnomalyResponse` | ✓ | 空列表: changes |
-| `calendar_report` | `CalendarEventsResponse` | ✓ | `date`, `list` |
-| `calendar_dividend` | `CalendarEventsResponse` | ✓ | `date`, `list` |
-| `calendar_ipo` | `CalendarEventsResponse` | ✓ | `date`, `list` |
-| `exchange_rates` | `ExchangeRates` | ✓ | `exchanges` |
-| `profit_analysis_summary` | `ProfitAnalysis` | ✓ | `sublist`, `summary` |
-| `profit_analysis_by_market` | `ProfitAnalysisByMarket` | ✓ | `has_more`, `profit`, `stock_items` |
-| `profit_analysis_detail` | `ProfitAnalysisDetail` | ✓ | `currency`, `default_tag`, `derivative_pnl_details`, `end` |
-| `list_alerts` | `AlertList` | ✓ | `lists` |
-| `list_dca` | `DcaList` | ✓ | `plans` |
-| `dca_stats` | `DcaStats` | ✓ | 空列表: nearest_plans |
-| `check_support` | `DcaSupportList` | ✓ | `infos` |
-| `list_sharelist` | `SharelistList` | ✓ | 空列表: sharelists, subscribed_sharelists |
-| `popular_sharelist` | `SharelistList` | ✓ | 空列表: subscribed_sharelists |
-| `macro_calendar` | `CalendarEventsResponse` | ✓ | 空列表: list |
-| `split_calendar` | `CalendarEventsResponse` | ✓ | `date`, `list` |
-| `meeting_calendar` | `CalendarEventsResponse` | ✓ | 空列表: list |
-| `merge_calendar` | `CalendarEventsResponse` | ✓ | `date`, `list` |
-| `broker_holding_daily` | `BrokerHoldingDailyHistory` | ✓ | `list` |
-| `dca_history` | `DcaHistoryResponse` | ✓ | 空列表: records |
-| `profit_analysis_flows` | `ProfitAnalysisFlows` | ✓ | 空列表: flows_list |
-| `create_dca` | `DcaCreateResult` | ✓ | `plan_id` |
-| `calc_date` | `DcaCalcDateResult` | ✓ | `trade_date` |
-| `set_reminder` | `NoneType` | ✓ | `result` |
-| `update_dca` | `DcaCreateResult` | ✓ | `plan_id` |
-| `pause_dca` | `NoneType` | ✓ | `result` |
-| `resume_dca` | `NoneType` | ✓ | `result` |
-| `stop_dca` | `NoneType` | ✓ | `result` |
-| `delete_dca` | — | ✗ API 错误 | OpenApiException: (kind=ErrorKind.OpenApi, code=602001, trace_id=fcf3b40b50e3a15 |
-| `create_sharelist` | `NoneType` | ✓ |  |
-| `create_alert` | `None` | ✓ | returns None (void) |
-| `disable_alert` | — | ✗ API 错误 | OpenApiException: (kind=ErrorKind.OpenApi, code=400, trace_id=1457234817a4b55ef7 |
-| `enable_alert` | — | ✗ API 错误 | OpenApiException: (kind=ErrorKind.OpenApi, code=400, trace_id=f80a130af56a52c797 |
-| `delete_alert` | `None` | ✓ | returns None (void) |
-| `add_securities` | `None` | ✓ | returns None (void) |
-| `sharelist_detail` | `SharelistDetail` | ✓ | `scopes`, `sharelist` |
-| `sort_securities` | `None` | ✓ | returns None (void) |
-| `remove_securities` | `None` | ✓ | returns None (void) |
-| `delete_sharelist` | `None` | ✓ | returns None (void) |
-| `update_sharelist` | `None` | ✓ | No update method in SDK; use create+delete to replace |
+| # | 方法 | SDK 类型 | 状态 | 第一个字段 |
+| - | ---- | -------- | ---- | ---------- |
+| 1 | `company_profile` | `CompanyOverview` | ✓ | `accounting_firm` |
+| 2 | `financial_report` | `FinancialReports` | ✓ | `list` |
+| 3 | `valuations` | `ValuationData` | ✓ | `metrics` |
+| 4 | `ratings` | `StockRatings` | ✓ | `industry_name` |
+| 5 | `institution_rating` | `InstitutionRating` | ✓ | `latest` |
+| 6 | `institution_rating_detail` | `InstitutionRatingDetail` | ✓ | `ccy_symbol` |
+| 7 | `dividends` | `DividendList` | ✓ | `list` |
+| 8 | `dividend_detail` | `DividendList` | ✓ | `list` |
+| 9 | `forecast_eps` | `ForecastEps` | ✓ | `items` |
+| 10 | `consensus` | `FinancialConsensus` | ✓ | `currency` |
+| 11 | `valuation_history` | `ValuationHistoryResponse` | ✓ | `history` |
+| 12 | `industry_valuation` | `IndustryValuationList` | ✓ | `list` |
+| 13 | `industry_valuation_dist` | `IndustryValuationDist` | ✓ | `pb` |
+| 14 | `executives` | `ExecutiveList` | ✓ | `professional_list` |
+| 15 | `shareholders` | `ShareholderList` | ✓ | `forward_url` |
+| 16 | `fund_holdings` | `FundHolders` | ✓ | `lists` |
+| 17 | `corporate_actions` | `CorpActions` | ✓ | `items` |
+| 18 | `invest_relation` | `InvestRelations` | ✓ | `forward_url` |
+| 19 | `operating` | `OperatingList` | ✓ | `list` |
+| 20 | `buyback` | `BuybackData` | ✓ | `buyback_history` |
+| 21 | `market_status` | `MarketStatusResponse` | ✓ | `market_time` |
+| 22 | `broker_positions` | `BrokerHoldingTop` | ✓ | `buy` |
+| 23 | `broker_holding_detail` | `BrokerHoldingDetail` | ✓ | `list` |
+| 24 | `ah_premium` | `AhPremiumKlines` | ✓ | `klines` |
+| 25 | `ah_premium_intraday` | `AhPremiumIntraday` | ✓ | `klines` |
+| 26 | `trading_stats` | `TradeStatsResponse` | ✓ | `statistics` |
+| 27 | `index_components` | `IndexConstituents` | ✓ | `fall_num` |
+| 28 | `unusual_items` | `AnomalyResponse` | ✓ | `all_off` |
+| 29 | `calendar_report` | `CalendarEventsResponse` | ✓ | `date` |
+| 30 | `calendar_dividend` | `CalendarEventsResponse` | ✓ | `date` |
+| 31 | `calendar_ipo` | `CalendarEventsResponse` | ✓ | `date` |
+| 32 | `exchange_rates` | `ExchangeRates` | ✓ | `exchanges` |
+| 33 | `profit_analysis_summary` | `ProfitAnalysis` | ✓ | `sublist` |
+| 34 | `profit_analysis_by_market` | `ProfitAnalysisByMarket` | ✓ | `has_more` |
+| 35 | `profit_analysis_detail` | `ProfitAnalysisDetail` | ✓ | `currency` |
+| 36 | `list_alerts` | `AlertList` | ✓ | `lists` |
+| 37 | `list_dca` | `DcaList` | ✓ | `plans` |
+| 38 | `dca_stats` | `DcaStats` | ✓ | `active_count` |
+| 39 | `check_support` | `DcaSupportList` | ✓ | `infos` |
+| 40 | `list_sharelist` | `SharelistList` | ✓ | `sharelists` |
+| 41 | `popular_sharelist` | `SharelistList` | ✓ | `sharelists` |
+| 42 | `macro_calendar` | `CalendarEventsResponse` | ✓ | `date` |
+| 43 | `split_calendar` | `CalendarEventsResponse` | ✓ | `date` |
+| 44 | `meeting_calendar` | `CalendarEventsResponse` | ✓ | `date` |
+| 45 | `merge_calendar` | `CalendarEventsResponse` | ✓ | `date` |
+| 46 | `broker_holding_daily` | `BrokerHoldingDailyHistory` | ✓ | `list` |
+| 47 | `dca_history` | `DcaHistoryResponse` | ✓ | `has_more` |
+| 48 | `profit_analysis_flows` | `ProfitAnalysisFlows` | ✓ | `flows_list` |
+| 50 | `create_dca` | `DcaCreateResult` | ✓ | `plan_id` |
+| 51 | `calc_date` | `DcaCalcDateResult` | ✓ | `trade_date` |
+| 52 | `set_reminder` | `NoneType` | ✓ | `result` |
+| 53 | `update_dca` | `DcaCreateResult` | ✓ | `plan_id` |
+| 54 | `pause_dca` | `NoneType` | ✓ | `result` |
+| 55 | `resume_dca` | `NoneType` | ✓ | `result` |
+| 56 | `stop_dca` | `NoneType` | ✓ | `result` |
+| 57 | `delete_dca` | `None` | ✓ | SDK uses stop() — permanently ends a plan, returns None (voi |
+| 60 | `create_sharelist` | `NoneType` | ✓ | — |
+| 61 | `create_alert` | `None` | ✓ | returns None (void) |
+| 62 | `disable_alert` | `dict` | ✓ | SDK bug: missing frequency field. API returns {id, status} |
+| 63 | `enable_alert` | `dict` | ✓ | SDK bug: missing frequency field. API returns {id, status} |
+| 64 | `delete_alert` | `None` | ✓ | returns None (void) |
+| 65 | `add_securities` | `None` | ✓ | returns None (void) |
+| 66 | `sharelist_detail` | `SharelistDetail` | ✓ | `scopes` |
+| 67 | `sort_securities` | `None` | ✓ | returns None (void) |
+| 68 | `remove_securities` | `None` | ✓ | returns None (void) |
+| 69 | `delete_sharelist` | `None` | ✓ | returns None (void) |
+| 70 | `update_sharelist` | `None` | ✓ | No update method in SDK; use create+delete to replace |
