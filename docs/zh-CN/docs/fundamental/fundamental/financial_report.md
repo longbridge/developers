@@ -35,8 +35,8 @@ longbridge financial-report AAPL.US
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | 是 | 证券代码，例如 `AAPL.US` |
-| kind | string | 否 | 报表类型：`IS`（利润表）、`BS`（资产负债表）、`CF`（现金流量表）、`ALL`（默认） |
-| report | string | 否 | 报告期：`af`（年报）、`saf`（半年报）、`qf`（季报） |
+| kind | string | 是 | 报表类型：`IncomeStatement`（利润表）、`BalanceSheet`（资产负债表）、`CashFlow`（现金流量表）、`All`（全部） |
+| period | string | 是 | 报告期：`Annual`（年报）、`SemiAnnual`（中报）、`Q1`/`Q2`/`Q3`/`ThreeQ`（季报）、`QuarterlyFull`（累计季报） |
 
 ### Request Example
 
@@ -226,21 +226,54 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功     | [FinancialReportResponse](#FinancialReportResponse) |
+| 200    | 成功     | [FinancialReportsResponse](#FinancialReportsResponse) |
 | 400    | 请求错误 | None   |
 
 ## Schemas
 
-### FinancialReportResponse
+### FinancialReportsResponse
 
-<a id="FinancialReportResponse"></a>
+<a id="FinancialReportsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 财务报表记录列表 |
-| ∟ type | string | 是 | 报表类型：`IS`、`BS`、`CF` |
-| ∟ period | string | 是 | 报告期标签 |
-| ∟ eps | string | 否 | 每股收益 |
-| ∟ revenue | string | 否 | 总营收 |
-| ∟ net_income | string | 否 | 净利润 |
-| ∟ gross_margin | string | 否 | 毛利率 |
+| list | object | true | 按报表类型分组的数据（key 为报表类型代码，如 `IS`、`BS`、`CF`） |
+
+### FinancialReportIndicator
+
+<a id="FinancialReportIndicator"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| title | string | false | 指标标题 |
+| short_title | string | false | 短标题 |
+| currency | string | false | 货币 |
+| has_yoy | boolean | false | 是否有同比数据 |
+| entry | string | false | 条目标识符 |
+| periods | string[] | false | 可用报告期列表 |
+| accounts | object[] | false | 财务科目列表 |
+
+### FinancialAccount
+
+<a id="FinancialAccount"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| field | string | true | 字段标识符 |
+| name | string | false | 字段显示名称 |
+| percent | boolean | false | 是否为百分比值 |
+| tip | string | false | 提示说明 |
+| values | object[] | false | 按报告期的历史数值 |
+
+### FinancialValue
+
+<a id="FinancialValue"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| period | string | true | 报告期标签（如 `FY 2024`） |
+| year | integer | false | 财政年度 |
+| fp_end | string | false | 报告期结束时间戳 |
+| value | string | false | 报告值 |
+| ratio | string | false | 比率值 |
+| yoy | string | false | 同比增长率 |

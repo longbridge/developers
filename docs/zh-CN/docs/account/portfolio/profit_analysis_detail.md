@@ -34,9 +34,9 @@ longbridge profit-analysis detail AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 证券代码，例如 `TSLA.US` |
-| start_date | string | 否 | 分析开始日期，格式 `YYYY-MM-DD` |
-| end_date | string | 否 | 分析结束日期，格式 `YYYY-MM-DD` |
+| symbol | string | 是 | 证券代码，例如 `AAPL.US` |
+| start | string | 否 | 开始日期，格式 `YYYY-MM-DD` |
+| end | string | 否 | 结束日期，格式 `YYYY-MM-DD` | 分析结束日期，格式 `YYYY-MM-DD` |
 
 ### Request Example
 
@@ -234,10 +234,32 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | 证券代码 |
-| name | string | true | 证券名称 |
-| pnl | string | true | 总盈亏金额 |
-| pnl_pct | string | true | 盈亏百分比 |
-| cost | string | true | 总成本 |
-| market_value | string | false | 当前市值 |
-| currency | string | true | 货币 |
+| name | string | false | 证券名称 |
+| currency | string | false | 货币 |
+| profit | string | false | 总盈亏 |
+| start | string | false | 统计期开始 |
+| end | string | false | 统计期结束 |
+| start_date | string | false | 开始日期 |
+| end_date | string | false | 结束日期 |
+| default_tag | integer | false | 默认显示标签 |
+| underlying_details | object | false | 正股盈亏明细 |
+| derivative_pnl_details | object | false | 衍生品盈亏明细 |
+
+### ProfitDetails
+
+<a id="ProfitDetails"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| profit | string | false | 总盈亏 |
+| holding_value | string | false | 当前持仓市值 |
+| holding_value_at_beginning | string | false | 期初持仓市值 |
+| holding_value_at_ending | string | false | 期末持仓市值 |
+| long_holding_value | string | false | 多头持仓市值 |
+| short_holding_value | string | false | 空头持仓市值 |
+| cumulative_credited_amount | string | false | 累计入账金额 |
+| cumulative_debited_amount | string | false | 累计出账金额 |
+| cumulative_fee_amount | string | false | 累计费用金额 |
+| credited_details | object[] | false | 入账明细 |
+| debited_details | object[] | false | 出账明细 |
+| fee_details | object[] | false | 费用明细 |

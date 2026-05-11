@@ -34,9 +34,9 @@ longbridge profit-analysis detail AAPL.US
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | YES | Security symbol, e.g. `TSLA.US` |
-| start_date | string | NO | Analysis start date in `YYYY-MM-DD` format |
-| end_date | string | NO | Analysis end date in `YYYY-MM-DD` format |
+| symbol | string | YES | Security symbol, e.g. `AAPL.US` |
+| start | string | NO | Start date, `YYYY-MM-DD` |
+| end | string | NO | End date, `YYYY-MM-DD` | Analysis end date in `YYYY-MM-DD` format |
 
 ### Request Example
 
@@ -234,10 +234,32 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| name | string | true | Security name |
-| pnl | string | true | Total P&L |
-| pnl_pct | string | true | P&L percentage |
-| cost | string | true | Total cost basis |
-| market_value | string | false | Current market value |
-| currency | string | true | Currency |
+| name | string | false | Security name |
+| currency | string | false | Currency |
+| profit | string | false | Total profit/loss |
+| start | string | false | Period start |
+| end | string | false | Period end |
+| start_date | string | false | Start date |
+| end_date | string | false | End date |
+| default_tag | integer | false | Default display tag |
+| underlying_details | object | false | Underlying asset P&L breakdown |
+| derivative_pnl_details | object | false | Derivatives P&L breakdown |
+
+### ProfitDetails
+
+<a id="ProfitDetails"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| profit | string | false | Total profit/loss |
+| holding_value | string | false | Current holding value |
+| holding_value_at_beginning | string | false | Holding value at period start |
+| holding_value_at_ending | string | false | Holding value at period end |
+| long_holding_value | string | false | Long position value |
+| short_holding_value | string | false | Short position value |
+| cumulative_credited_amount | string | false | Cumulative credited amount |
+| cumulative_debited_amount | string | false | Cumulative debited amount |
+| cumulative_fee_amount | string | false | Cumulative fee amount |
+| credited_details | object[] | false | Credit transaction details |
+| debited_details | object[] | false | Debit transaction details |
+| fee_details | object[] | false | Fee transaction details |

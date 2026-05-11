@@ -35,8 +35,8 @@ longbridge financial-report AAPL.US
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | Security symbol, e.g. `AAPL.US` |
-| kind | string | NO | Statement type: `IS` (income), `BS` (balance sheet), `CF` (cash flow), `ALL` (default) |
-| report | string | NO | Reporting period: `af` (annual), `saf` (semi-annual), `qf` (quarterly) |
+| kind | string | YES | Report type: `IncomeStatement`, `BalanceSheet`, `CashFlow`, `All` |
+| period | string | YES | Report period: `Annual`, `SemiAnnual`, `Q1`, `Q2`, `Q3`, `ThreeQ`, `QuarterlyFull` |
 
 ### Request Example
 
@@ -226,21 +226,54 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [FinancialReportResponse](#FinancialReportResponse) |
+| 200    | Success     | [FinancialReportsResponse](#FinancialReportsResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### FinancialReportResponse
+### FinancialReportsResponse
 
-<a id="FinancialReportResponse"></a>
+<a id="FinancialReportsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of financial statement records |
-| ∟ type | string | true | Statement type: `IS`, `BS`, `CF` |
-| ∟ period | string | true | Reporting period label |
-| ∟ eps | string | false | Earnings per share |
-| ∟ revenue | string | false | Total revenue |
-| ∟ net_income | string | false | Net income |
-| ∟ gross_margin | string | false | Gross margin ratio |
+| list | object | true | Report data grouped by kind (key: report type code, e.g. `IS`, `BS`, `CF`) |
+
+### FinancialReportIndicator
+
+<a id="FinancialReportIndicator"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| title | string | false | Indicator title |
+| short_title | string | false | Short title |
+| currency | string | false | Currency |
+| has_yoy | boolean | false | Whether year-over-year data is available |
+| entry | string | false | Entry identifier |
+| periods | string[] | false | Available reporting periods |
+| accounts | object[] | false | List of financial line items |
+
+### FinancialAccount
+
+<a id="FinancialAccount"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| field | string | true | Field identifier |
+| name | string | false | Field display name |
+| percent | boolean | false | Whether the value is a percentage |
+| tip | string | false | Tooltip description |
+| values | object[] | false | Historical values by period |
+
+### FinancialValue
+
+<a id="FinancialValue"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| period | string | true | Period label (e.g. `FY 2024`) |
+| year | integer | false | Fiscal year |
+| fp_end | string | false | Period end timestamp |
+| value | string | false | Reported value |
+| ratio | string | false | Ratio value |
+| yoy | string | false | Year-over-year growth rate |
