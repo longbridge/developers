@@ -136,7 +136,7 @@ https://open.longbridge.com/skill/longbridge-all.zip
 
 ### Claude Desktop — 切换到 Code 标签页
 
-Claude Desktop 的 **Chat 模式**存在网络限制，无法安装 CLI 或连接 MCP 服务器。不要在 Chat 模式下反复尝试，这样不会成功。
+Claude Desktop 的 **Chat 和 Cowork 模式**都存在网络限制，无法安装 CLI 或连接 MCP 服务器。不要在这两种模式下反复尝试，这样不会成功。
 
 切换到 Claude Desktop 的 **Code 标签页**（即 App 内嵌的 Claude Code）。在 Code 标签页下，你拥有完整的终端访问权限，可以在同一个会话中完成 CLI 安装、MCP 连接和 Skill 安装。
 

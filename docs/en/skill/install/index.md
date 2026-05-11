@@ -138,7 +138,7 @@ Some environments have network whitelists or sandboxing that block CLI installat
 
 ### Claude Desktop — use the Code tab
 
-**Chat mode** in Claude Desktop has network restrictions that prevent CLI installation and MCP server connections. Do not try to install from Chat mode — it will not work no matter how many times you retry.
+**Chat and Cowork modes** in Claude Desktop have network restrictions that prevent CLI installation and MCP server connections. Do not try to install from either of these modes — it will not work no matter how many times you retry.
 
 Switch to the **Code** tab in Claude Desktop (this is Claude Code embedded in the app). From the Code tab, you have full terminal access — you can install the CLI, connect MCP, and install the Skill all in one session.
 
