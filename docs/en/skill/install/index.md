@@ -85,6 +85,18 @@ Add the following as a remote MCP server in your AI tool:
 https://openapi.longbridge.com/mcp
 ```
 
+For clients that use a JSON config file (Claude Desktop, Cursor, Zed, Gemini CLI, etc.), add this to your MCP config:
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://openapi.longbridge.com/mcp"
+    }
+  }
+}
+```
+
 > Users in mainland China can use the accelerated endpoint: `https://openapi.longbridge.cn/mcp`
 
 Where to find the MCP configuration in each client:

@@ -83,6 +83,18 @@ longbridge auth login
 https://openapi.longbridge.com/mcp
 ```
 
+對於使用 JSON 配置文件的客戶端（Claude Desktop、Cursor、Zed、Gemini CLI 等），將以下內容添加到 MCP 配置中：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://openapi.longbridge.com/mcp"
+    }
+  }
+}
+```
+
 > 中國大陸用戶可使用加速地址：`https://openapi.longbridge.cn/mcp`
 
 各工具配置入口：
