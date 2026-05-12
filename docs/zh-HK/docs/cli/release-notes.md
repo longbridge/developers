@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.20.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.3)
+
+- **Breaking：移除 `analyst-estimates` 指令** — 該指令已下線；EPS 及營收預測數據請改用 `consensus`
+- **修復：港股代碼前導零** — `00700.HK`、`09988.HK` 等格式現在可正確解析為 `700.HK`、`9988.HK`；`operating` 指令說明更新，明確僅支援港股
+- **修復：`ipo detail`** — 自動從代碼後綴識別市場（如 `SUJA.US` → 美股，`700.HK` → 港股），不再需要 `--market` 參數；找不到 IPO 資料時提示更友好；繳款截止日期改為 RFC 3339 格式
+
 ### [v0.20.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.2)
 
 - **修復：`institution-rating --history` 輸出格式** — 改為表格版面，欄位順序更合理；時間戳格式化為 `YYYY-MM-DD`；目標價保留 2 位小數；`evaluate_history` 僅顯示最近 20 條記錄

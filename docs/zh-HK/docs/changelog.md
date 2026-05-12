@@ -6,6 +6,18 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-08
+
+### CLI v0.20.0
+
+- **`ipo` 指令組** — 港股完整 IPO 工具（`subscriptions`、`wait-listing`、`listed`、`calendar`、`detail`、`orders`、`profit-loss`），美股支援 `us-subscriptions`、`us-wait-listing`、`us-listed`
+- **`financial-statement`** — 完整逐行財務報表（損益表 / 資產負債表 / 現金流量表），含層級結構與 YoY 對比；`financial-report --latest` 快速獲取關鍵指標摘要
+- **`valuation-rank`** — 每日 PE/PB/PS 行業百分位排名
+- **`institution-rating --history` / `--industry-rank`** — 分析師評級變化歷史與行業覆蓋排名
+- **`news search` / `topic search`** — 關鍵詞搜尋資訊和社區話題
+- **`bank-cards`**、**`withdrawals`**、**`deposits`** — 銀行卡及出入金記錄查詢
+- **`portfolio short-margin`** — 各持倉融券保證金明細
+
 ## 2026-05-05
 
 ### CLI v0.19.2

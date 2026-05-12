@@ -6,6 +6,18 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-08
+
+### CLI v0.20.0
+
+- **`ipo` command group** — comprehensive IPO tools for HK (`subscriptions`, `wait-listing`, `listed`, `calendar`, `detail`, `orders`, `profit-loss`) and US markets (`us-subscriptions`, `us-wait-listing`, `us-listed`)
+- **`financial-statement`** — detailed hierarchical financial statements (IS/BS/CF) with YoY comparison; `financial-report --latest` for key indicator summary
+- **`valuation-rank`** — daily PE/PB/PS industry percentile rank over a date range
+- **`institution-rating --history` / `--industry-rank`** — analyst rating history and industry-wide analyst coverage ranking
+- **`news search` / `topic search`** — keyword search across news and community topics
+- **`bank-cards`**, **`withdrawals`**, **`deposits`** — account management commands for linked cards and transaction history
+- **`portfolio short-margin`** — short-selling margin deposit details per position
+
 ## 2026-05-05
 
 ### CLI v0.19.2

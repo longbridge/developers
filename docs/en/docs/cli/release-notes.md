@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.20.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.3)
+
+- **Breaking: `analyst-estimates` removed** — command has been removed; the same data is available via `consensus` (EPS and revenue estimates)
+- **Fix: HK symbol leading zeros** — inputs like `00700.HK` or `09988.HK` now correctly resolve to `700.HK` / `9988.HK`; `operating` updated to reflect HK-only data coverage
+- **Fix: `ipo detail`** — auto-detects market from symbol suffix (`SUJA.US` → US, `700.HK` → HK), so `--market` is no longer required; cleaner error message when no IPO data is found; Payment Deadline formatted as RFC 3339
+
 ### [v0.20.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.2)
 
 - **Fix: `institution-rating --history`** — restructured as a proper table with logical column ordering; timestamps formatted as `YYYY-MM-DD`; price targets rounded to 2 decimal places; `evaluate_history` capped to 20 most recent records
