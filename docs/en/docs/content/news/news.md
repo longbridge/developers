@@ -1,6 +1,6 @@
 ---
 slug: news
-title: News
+title: Security News
 sidebar_position: 1
 language_tabs: false
 toc_footers: []

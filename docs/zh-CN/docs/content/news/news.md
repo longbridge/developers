@@ -1,6 +1,6 @@
 ---
 slug: news
-title: 标的资讯
+title: 个股资讯
 sidebar_position: 1
 language_tabs: false
 toc_footers: []

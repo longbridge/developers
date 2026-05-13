@@ -1,6 +1,6 @@
 ---
 slug: news
-title: 標的資訊
+title: 個股資訊
 sidebar_position: 1
 language_tabs: false
 toc_footers: []
