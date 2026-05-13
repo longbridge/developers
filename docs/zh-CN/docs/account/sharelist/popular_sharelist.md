@@ -237,3 +237,5 @@ func main() {
 | last_done | string | false | 最新价格 |
 | change | string | false | 日涨跌幅 |
 | trade_status | integer | false | 交易状态码 |
+| latency | boolean | false | 是否为延迟行情数据 |
+| unread_change_log_category | string | false | 未读变更日志分类 |

@@ -237,3 +237,5 @@ func main() {
 | last_done | string | false | Latest price |
 | change | string | false | Day change percentage |
 | trade_status | integer | false | Trade status code |
+| latency | boolean | false | Whether quote data is delayed |
+| unread_change_log_category | string | false | Unread change log category |
