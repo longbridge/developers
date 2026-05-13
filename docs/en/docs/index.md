@@ -5,12 +5,15 @@ id: overview
 sidebar_icon: book_open
 ---
 
-Longbridge Developers provides programmatic quote trading interfaces for investors with research and development capabilities and assists them to build trading or quote strategy analysis tools based on their own investment strategies. The functions fall into the following categories:
+Longbridge Developers provides programmatic interfaces for investors with research and development capabilities, enabling them to build trading or market analysis tools based on their own investment strategies. The platform covers the following categories:
 
-- **Trading** - Create, amend, cancel orders, query today's/past orders and transaction details, etc.
-- **Quotes** - Real-time quotes, acquisition of historical quotes, etc.
-- **Portfolio** - Real-time query of the account assets, positions, funds
-- **Real-time subscription** - Provides real-time quotes and push notifications for order status changes
+- **Quote** — Real-time and historical quotes, market depth, candlesticks, options/warrants data, subscriptions
+- **Fundamental** — Company profiles, financials, valuations, analyst ratings, market data, calendars
+- **News & Contents** — Market news, community topics, sharelist management
+- **Trade** — Create, amend, and cancel orders; query orders, executions, and assets
+- **Account** — Portfolio analysis, price alerts, DCA plans, watchlist
+- **CLI** — Command-line tool covering all of the above, plus quant backtesting and research
+- **MCP** — Model Context Protocol integration for AI assistant workflows
 
 ## Interface Type
 
@@ -86,7 +89,7 @@ The [OpenAPI SDK](https://open.longbridge.com/sdk) has done effective frequency 
 
 ## Pricing {#pricing}
 
-Longbridge does not charge any additional fees for activating or using interface services. You only need to open a Longbridge Integrated A/C and get OpenAPI service permissions to use it for free. For actual transaction fees, please contact the brokerage firm where you have opened your securities account.
+Longbridge does not charge any additional fees for activating or using interface services. You only need to open a Longbridge Integrated A/C and get OpenAPI service permissions to use it for free. See the [Pricing](/pricing) page for details on quote data subscription fees. For actual transaction fees, please contact the brokerage firm where you have opened your securities account.
 
 ## Other
 
