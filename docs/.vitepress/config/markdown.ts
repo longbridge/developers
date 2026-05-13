@@ -5,12 +5,20 @@ import { GenTryItPlugin } from '../md-plugins/gen-try-it.ts'
 import { NormalizeMdPlugin } from '../md-plugins/normalize-md'
 import { CliCommandPlugin } from '../md-plugins/cli-command'
 import { RegionFilterPlugin } from '../md-plugins/region-filter'
+import openPineGrammar from '../grammars/openpine.tmLanguage.json'
 
 export const markdownConfig: MarkdownOptions = {
   image: {
     lazyLoading: true,
   },
   math: true,
+  languages: [
+    {
+      ...openPineGrammar,
+      name: 'openpine',
+      aliases: ['pine'],
+    },
+  ],
   codeTransformers: [
     // We use `[!!code` in demo to prevent transformation, here we revert it back.
     {
