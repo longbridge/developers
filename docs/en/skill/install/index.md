@@ -73,6 +73,16 @@ longbridge auth login
 
 That's it. The AI can now call `longbridge` commands on your behalf.
 
+**Claude Code users:** The first time Claude runs a `longbridge` command, it will ask for permission. To allow all Longbridge commands without repeated prompts, add this to `.claude/settings.json` in your project (create the file if it doesn't exist):
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(longbridge *)"]
+  }
+}
+```
+
 > See the [CLI reference](/docs/cli) for the full command list and installation details.
 
 ### Method B — MCP

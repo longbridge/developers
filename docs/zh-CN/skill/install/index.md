@@ -71,6 +71,16 @@ longbridge auth login
 
 完成后，AI 即可代你调用 `longbridge` 命令。
 
+**Claude Code 用户：** Claude 首次运行 `longbridge` 命令时会弹出权限确认提示。若要避免每次都被询问，可在项目的 `.claude/settings.json` 中添加以下配置（文件不存在时新建）：
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(longbridge *)"]
+  }
+}
+```
+
 > 详细安装说明及完整命令列表参见 [CLI 文档](/zh-CN/docs/cli)。
 
 ### 方式 B：MCP
