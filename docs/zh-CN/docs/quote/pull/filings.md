@@ -1,6 +1,6 @@
 ---
 slug: filings
-title: 获取标的公告
+title: 标的公告
 sidebar_position: 20.5
 language_tabs: false
 toc_footers: []

@@ -1,6 +1,6 @@
 ﻿---
 slug: today_orders
-title: 獲取當日訂單
+title: 當日訂單
 language_tabs: false
 toc_footers: []
 includes: []

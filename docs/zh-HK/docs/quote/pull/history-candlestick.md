@@ -1,6 +1,6 @@
 ---
 id: quote_history_candlestick
-title: 獲取標的曆史 K 線
+title: 標的曆史 K 線
 slug: history-candlestick
 sidebar_position: 10
 ---

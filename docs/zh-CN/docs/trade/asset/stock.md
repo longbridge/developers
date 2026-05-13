@@ -1,6 +1,6 @@
 ---
 slug: stock
-title: 获取股票持仓
+title: 股票持仓
 language_tabs: false
 toc_footers: []
 includes: []

@@ -1,6 +1,6 @@
 ---
 id: quote_trade_day
-title: 获取市场交易日
+title: 市场交易日
 slug: trade-day
 sidebar_position: 16
 ---

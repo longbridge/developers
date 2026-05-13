@@ -1,6 +1,6 @@
 ---
 id: quote_quote
-title: 獲取標的實時行情
+title: 標的實時行情
 slug: quote
 sidebar_position: 2
 ---

@@ -1,6 +1,6 @@
 ﻿---
 slug: history_executions
-title: 獲取歷史成交明細
+title: 歷史成交明細
 language_tabs: false
 toc_footers: []
 includes: []

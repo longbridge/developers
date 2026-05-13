@@ -1,6 +1,6 @@
 ---
 id: quote_calc_index.md
-title: 获取标的计算指标
+title: 标的计算指标
 slug: calc-index
 sidebar_position: 19
 ---

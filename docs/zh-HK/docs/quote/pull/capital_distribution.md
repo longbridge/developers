@@ -1,6 +1,6 @@
 ---
 id: quote_capital_distribution.md
-title: 獲取標的當日資金分佈
+title: 標的當日資金分佈
 slug: capital-distribution
 sidebar_position: 18
 ---

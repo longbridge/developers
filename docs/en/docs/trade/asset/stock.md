@@ -1,6 +1,6 @@
 ---
 slug: stock
-title: Get Stock Positions
+title: Stock Positions
 language_tabs: false
 toc_footers: []
 includes: []

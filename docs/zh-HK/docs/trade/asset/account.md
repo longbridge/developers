@@ -1,6 +1,6 @@
 ---
 slug: account
-title: 獲取賬戶資金
+title: 賬戶資金
 language_tabs: false
 toc_footers: []
 includes: []

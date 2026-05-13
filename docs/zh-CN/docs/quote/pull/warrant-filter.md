@@ -1,6 +1,6 @@
 ﻿---
 id: quote_warrant_filter
-title: 获取轮证筛选列表
+title: 轮证筛选列表
 slug: warrant-filter
 sidebar_position: 14
 ---

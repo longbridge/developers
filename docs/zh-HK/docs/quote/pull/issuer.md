@@ -1,6 +1,6 @@
 ---
 id: quote_issuer
-title: 獲取輪證發行商 ID
+title: 輪證發行商 ID
 slug: issuer
 sidebar_position: 13
 ---

@@ -1,6 +1,6 @@
 ---
 id: quote_static
-title: 獲取標的基礎信息
+title: 標的基礎信息
 slug: static
 sidebar_position: 1
 ---

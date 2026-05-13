@@ -1,6 +1,6 @@
 ---
 id: quote_intraday
-title: 获取标的当日分时
+title: 标的当日分时
 slug: intraday
 sidebar_position: 9
 ---

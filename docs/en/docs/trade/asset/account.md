@@ -1,6 +1,6 @@
 ---
 slug: account
-title: Get Account Assets
+title: Account Assets
 language_tabs: false
 toc_footers: []
 includes: []

@@ -1,6 +1,6 @@
 ---
 slug: stock
-title: 獲取股票持倉
+title: 股票持倉
 language_tabs: false
 toc_footers: []
 includes: []

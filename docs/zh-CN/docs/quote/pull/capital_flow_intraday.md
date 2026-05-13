@@ -1,6 +1,6 @@
 ﻿---
 id: quote_capital_flow_intraday
-title: 获取标的当日资金流向
+title: 标的当日资金流向
 slug: capital-flow-intraday
 sidebar_position: 17
 ---

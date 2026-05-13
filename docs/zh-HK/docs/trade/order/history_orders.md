@@ -1,6 +1,6 @@
 ﻿---
 slug: history_orders
-title: 獲取歷史訂單
+title: 歷史訂單
 language_tabs: false
 toc_footers: []
 includes: []

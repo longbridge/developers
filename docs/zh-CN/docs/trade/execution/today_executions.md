@@ -1,6 +1,6 @@
 ﻿---
 slug: today_executions
-title: 获取当日成交明细
+title: 当日成交明细
 language_tabs: false
 toc_footers: []
 includes: []

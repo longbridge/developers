@@ -1,6 +1,6 @@
 ---
 id: quote_issuer
-title: 获取轮证发行商 ID
+title: 轮证发行商 ID
 slug: issuer
 sidebar_position: 13
 ---

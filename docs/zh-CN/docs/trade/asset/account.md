@@ -1,6 +1,6 @@
 ---
 slug: account
-title: 获取账户资金
+title: 账户资金
 language_tabs: false
 toc_footers: []
 includes: []

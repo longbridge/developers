@@ -1,6 +1,6 @@
 ---
 slug: cashflow
-title: 获取资金流水
+title: 资金流水
 language_tabs: false
 toc_footers: []
 includes: []

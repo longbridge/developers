@@ -1,6 +1,6 @@
 ---
 slug: fund
-title: 获取基金持仓
+title: 基金持仓
 language_tabs: false
 toc_footers: []
 includes: []

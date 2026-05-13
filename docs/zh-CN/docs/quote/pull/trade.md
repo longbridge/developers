@@ -1,6 +1,6 @@
 ---
 id: quote_trade
-title: 获取标的成交明细
+title: 标的成交明细
 slug: trade
 sidebar_position: 8
 ---

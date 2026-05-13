@@ -1,6 +1,6 @@
 ---
 slug: security_list
-title: 获取标的列表
+title: 标的列表
 language_tabs: false
 toc_footers: []
 includes: []

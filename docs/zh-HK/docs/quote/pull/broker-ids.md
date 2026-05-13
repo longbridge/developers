@@ -1,6 +1,6 @@
 ---
 id: quote_broker_ids
-title: 獲取券商席位 ID
+title: 券商席位 ID
 slug: broker-ids
 sidebar_position: 7
 ---

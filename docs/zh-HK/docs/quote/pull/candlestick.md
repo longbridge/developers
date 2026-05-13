@@ -1,6 +1,6 @@
 ---
 id: quote_candlestick
-title: 獲取標的 K 線
+title: 標的 K 線
 slug: candlestick
 sidebar_position: 20
 ---

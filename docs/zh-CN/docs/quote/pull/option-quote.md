@@ -1,6 +1,6 @@
 ---
 id: quote_option_quote
-title: 获取期权实时行情
+title: 期权实时行情
 slug: option-quote
 sidebar_position: 3
 ---

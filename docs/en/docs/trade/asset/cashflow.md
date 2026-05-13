@@ -1,6 +1,6 @@
 ---
 slug: cashflow
-title: Get Cash Flow
+title: Cash Flow
 language_tabs: false
 toc_footers: []
 includes: []

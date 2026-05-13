@@ -1,6 +1,6 @@
 ﻿---
 slug: margin_ratio
-title: 獲取保證金比例
+title: 保證金比例
 language_tabs: false
 toc_footers: []
 includes: []

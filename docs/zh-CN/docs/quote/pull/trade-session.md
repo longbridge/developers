@@ -1,6 +1,6 @@
 ---
 id: quote_trade_session
-title: 获取各市场当日交易时段
+title: 各市场当日交易时段
 slug: trade-session
 sidebar_position: 15
 ---

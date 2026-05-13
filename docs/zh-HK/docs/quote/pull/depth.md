@@ -1,6 +1,6 @@
 ---
 id: quote_depth
-title: 獲取標的盤口
+title: 標的盤口
 slug: depth
 sidebar_position: 5
 ---

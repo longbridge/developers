@@ -1,6 +1,6 @@
 ---
 id: quote_optionchain_date
-title: 獲取標的的期權鏈到期日列表
+title: 標的的期權鏈到期日列表
 slug: optionchain-date
 sidebar_position: 11
 ---

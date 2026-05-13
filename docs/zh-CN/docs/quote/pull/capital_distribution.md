@@ -1,6 +1,6 @@
 ---
 id: quote_capital_distribution.md
-title: 获取标的当日资金分布
+title: 标的当日资金分布
 slug: capital-distribution
 sidebar_position: 18
 ---

@@ -1,6 +1,6 @@
 ---
 id: quote_brokers
-title: 獲取標的經紀隊列
+title: 標的經紀隊列
 slug: brokers
 sidebar_position: 6
 ---

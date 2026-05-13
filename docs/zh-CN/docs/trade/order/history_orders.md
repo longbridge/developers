@@ -1,6 +1,6 @@
 ﻿---
 slug: history_orders
-title: 获取历史订单
+title: 历史订单
 language_tabs: false
 toc_footers: []
 includes: []

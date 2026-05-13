@@ -1,6 +1,6 @@
 ---
 id: quote_warrant_quote
-title: 获取轮证实时行情
+title: 轮证实时行情
 slug: warrant-quote
 sidebar_position: 4
 ---

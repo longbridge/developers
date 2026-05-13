@@ -1,6 +1,6 @@
 ---
 slug: fund
-title: Get Fund Positions
+title: Fund Positions
 language_tabs: false
 toc_footers: []
 includes: []

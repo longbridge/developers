@@ -1,6 +1,6 @@
 ﻿---
 slug: history_executions
-title: Get History Executions
+title: History Executions
 language_tabs: false
 toc_footers: []
 includes: []

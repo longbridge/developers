@@ -1,6 +1,6 @@
 ---
 slug: topics
-title: 獲取標的社區討論
+title: 標的社區討論
 sidebar_position: 2
 language_tabs: false
 toc_footers: []

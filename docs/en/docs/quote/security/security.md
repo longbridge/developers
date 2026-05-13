@@ -1,6 +1,6 @@
 ---
 slug: security_list
-title: Retrieve the List of Securities
+title: Security List
 language_tabs: false
 toc_footers: []
 includes: []

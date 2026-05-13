@@ -1,6 +1,6 @@
 ---
 id: quote_brokers
-title: 获取标的经纪队列
+title: 标的经纪队列
 slug: brokers
 sidebar_position: 6
 ---

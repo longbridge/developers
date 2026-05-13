@@ -1,6 +1,6 @@
 ﻿---
 id: quote_subscription
-title: 获取已订阅标的行情
+title: 已订阅标的行情
 slug: subscription
 sidebar_position: 3
 ---
