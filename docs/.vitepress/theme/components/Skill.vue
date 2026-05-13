@@ -2232,10 +2232,10 @@ const openclawCommand = '/skills add longbridge/skills'
 import { siteHostname } from '../utils/region'
 const oneLinerCommand = computed(() =>
   isEN.value
-    ? `Install Longbridge Skill following the guide: \n${siteHostname}/skill/install.md`
+    ? `Install Longbridge AI toolkit following the guide: \n${siteHostname}/skill/install.md`
     : isHK.value
-      ? `根據指引安裝 Longbridge SKILL：\n${siteHostname}/skill/install.md`
-      : `根据指引安装 Longbridge SKILL：\n${siteHostname}/skill/install.md`
+      ? `根據指引安裝 Longbridge AI toolkit：\n${siteHostname}/skill/install.md`
+      : `根据指引安装 Longbridge AI toolkit：\n${siteHostname}/skill/install.md`
 )
 
 const copiedNpx = ref(false)
