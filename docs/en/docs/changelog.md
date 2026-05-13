@@ -6,6 +6,21 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-13
+
+### SDK v4.1.0
+
+- **7 new context types** — `FundamentalContext` (financial reports, analyst ratings, dividends, EPS forecasts, consensus estimates, valuation), `MarketContext` (market status, broker holdings, A/H premium, trade stats), `CalendarContext` (earnings / dividends / splits / IPO calendar), `PortfolioContext` (exchange rates, P&L analysis), `AlertContext` (price alerts), `DCAContext` (DCA plans), `SharelistContext` (community sharelists)
+- **QuoteContext** — new `short_positions`, `option_volume`, `option_volume_daily` methods
+- **ContentContext** — new `topic_detail` and topic reply methods
+- **Rust SDK** — `Config::header()` to inject custom HTTP/WebSocket headers
+- Parameters now use typed enums instead of raw integers; monetary fields use `Decimal` type
+
+### Docs
+
+- Sidebar restructured: **News & Contents** section consolidates News, Topics, and Sharelist; Quote **Watchlist** replaces Individual; **Appendix** replaces Socket Feed (collapsed by default)
+- **Fundamental** and **News & Contents** sections added to the docs overview
+
 ## 2026-05-08
 
 ### CLI v0.20.0

@@ -6,6 +6,21 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-13
+
+### SDK v4.1.0
+
+- **7 個新 Context 類型** — `FundamentalContext`（財報、分析師評級、股息、EPS 預測、一致性預期、估值），`MarketContext`（市場狀態、券商持倉、A/H 溢價、交易統計），`CalendarContext`（財報 / 股息 / 拆股 / IPO 日曆），`PortfolioContext`（匯率、盈虧分析），`AlertContext`（價格提醒），`DCAContext`（定投計劃），`SharelistContext`（自選股列表）
+- **QuoteContext** — 新增 `short_positions`、`option_volume`、`option_volume_daily` 方法
+- **ContentContext** — 新增 `topic_detail` 及話題回覆相關方法
+- **Rust SDK** — `Config::header()` 支援注入自訂 HTTP/WebSocket 請求頭
+- 參數類型改用 typed enum 替代原始整數；貨幣欄位使用 `Decimal` 類型
+
+### 文件
+
+- 側邊欄重構：新增 **資訊與社區** 分類（含資訊、話題、自選股）；行情 **Watchlist** 替代 Individual；**附錄** 替代 Socket Feed（預設折疊）
+- 文件總覽新增 **Fundamental** 和 **資訊與社區** 章節介紹
+
 ## 2026-05-08
 
 ### CLI v0.20.0
