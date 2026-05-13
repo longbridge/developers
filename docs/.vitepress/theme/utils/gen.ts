@@ -181,7 +181,7 @@ function generateSidebarItems(
         const iconHtml =
           iconKey && SIDEBAR_ICONS[iconKey] ? `<span class="sidebar-item-icon">${SIDEBAR_ICONS[iconKey]}</span>` : ''
         const text = iconHtml ? `${iconHtml}${dirTitle}` : dirTitle
-        const collapsed = depth === 0 ? false : (subCategoryConfig?.collapsed ?? true)
+        const collapsed = subCategoryConfig?.collapsed ?? (depth === 0 ? false : true)
         const position = subCategoryConfig?.position
 
         const sidebarItem: MSidebar = {

@@ -1,7 +1,7 @@
 {
   "label": "Quote",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "link": null,
   "position": 3,
   "icon": "bar-chart-2"

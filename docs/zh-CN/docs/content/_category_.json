@@ -1,7 +1,7 @@
 {
   "label": "资讯与社区",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "link": null,
   "position": 4,
   "icon": "newspaper"

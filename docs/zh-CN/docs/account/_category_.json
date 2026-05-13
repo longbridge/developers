@@ -2,7 +2,7 @@
   "position": 6,
   "label": "账户",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "link": null,
   "icon": "briefcase"
 }

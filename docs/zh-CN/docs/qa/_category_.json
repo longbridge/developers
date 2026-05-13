@@ -1,7 +1,7 @@
 {
   "label": "Q & A",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "link": null,
   "position": 6.5,
   "icon": "badge-question-mark"
