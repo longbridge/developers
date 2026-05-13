@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <div class="border-b border-[var(--vp-c-divider)] text-center">
+  <div class="border-b border-[var(--vp-c-divider)] text-center mb-10">
     <div
       class="flex flex-col md:flex-row max-w-4xl items-center gap-6 justify-between text-center md:text-left mx-auto px-6 md:px-0 py-10">
       <div class="gap-4">

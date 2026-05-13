@@ -9,7 +9,6 @@ import ProductSkill from './ProductSkill.vue'
 import ProductMCP from './ProductMCP.vue'
 import ProductOpenAPI from './ProductOpenAPI.vue'
 import GetStarted from './GetStarted.vue'
-import Footer from './Footer.vue'
 // import MarketCoverage from './MarketCoverage.vue'
 </script>
 
@@ -26,7 +25,6 @@ import Footer from './Footer.vue'
     <ProductOpenAPI />
     <GetStarted />
     <!-- <MarketCoverage /> -->
-    <Footer />
   </div>
 </template>
 
