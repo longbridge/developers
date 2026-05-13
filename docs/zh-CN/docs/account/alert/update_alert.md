@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-启用或禁用已有的价格提醒。先通过 `list` 获取完整的 `AlertItem`，再传入 `enable` 或 `disable`。
+启用或禁用已有的价格提醒。先通过 `list` 获取完整的 `AlertItem`，修改 `item.enabled` 后调用 `update(item)`。
 
 <CliCommand>
 # 启用
@@ -52,7 +52,6 @@ config = Config.from_oauth(oauth)
 ctx = AlertContext(config)
 
 resp = ctx.update_alert("112326", enabled=True)
-print(resp)
 ```
 
   </TabItem>
@@ -68,7 +67,6 @@ async def main() -> None:
     ctx = AsyncAlertContext.create(config)
 
     resp = await ctx.update_alert("112326", enabled=True)
-    print(resp)
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -124,7 +122,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = AlertContext::new(config);
     let resp = ctx.update_alert().await?;
-    println!("{:?}", resp);
     Ok(())
 }
 ```

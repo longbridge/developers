@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Enable or disable an existing price alert. First call `list` to obtain the full `AlertItem`, then pass it to `enable` or `disable`.
+Enable or disable an existing price alert. First call `list` to obtain the full `AlertItem`, set `item.enabled` to `True` or `False`, then call `update(item)`.
 
 <CliCommand>
 # Enable an alert
@@ -37,7 +37,7 @@ longbridge alert disable 486469
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | int64 | YES | Alert ID (path parameter) |
-| enabled | bool | YES | Set to `true` to enable or `false` to disable |
+| enabled | bool | YES | New enabled state: `true` to enable, `false` to disable — set on the `AlertItem` before calling `update` |
 
 ### Request Example
 
@@ -51,14 +51,15 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = AlertContext(config)
 
-# First get the alert item from list()
+# Get the alert from list()
 alerts = ctx.list()
 item = alerts.lists[0].indicators[0]  # pick the alert you want
-# Enable
-resp = ctx.enable(item)
-# Or disable
-resp = ctx.disable(item)
-print(resp)
+# Enable: set enabled=True then call update
+item.enabled = True
+ctx.update(item)
+# Disable: set enabled=False then call update
+item.enabled = False
+ctx.update(item)
 ```
 
   </TabItem>
@@ -75,8 +76,8 @@ async def main() -> None:
 
     alerts = await ctx.list()
     item = alerts.lists[0].indicators[0]
-    resp = await ctx.enable(item)  # or ctx.disable(item)
-    print(resp)
+    item.enabled = True   # or False to disable
+    await ctx.update(item)
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -96,7 +97,8 @@ async function main() {
   const ctx = AlertContext.new(config)
   const alerts = await ctx.list()
   const item = alerts.lists[0].indicators[0]
-  await ctx.enable(item)  // or ctx.disable(item)
+  item.enabled = true   // or false to disable
+  await ctx.update(item)
   console.log(resp)
 }
 main().catch(console.error)
@@ -116,7 +118,8 @@ class Main {
              AlertContext ctx = AlertContext.create(config)) {
             var alerts = ctx.list().get();
             var item = alerts.getLists().get(0).getIndicators().get(0);
-            ctx.enable(item).get();  // or ctx.disable(item).get()
+            item.setEnabled(true);  // or false to disable
+            ctx.update(item).get();
             System.out.println(resp);
         }
     }
@@ -135,10 +138,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = AlertContext::new(config);
-    let list = ctx.list().await?;
-    let item = &list.lists[0].indicators[0];
-    ctx.enable(item).await?;  // or ctx.disable(item).await?
-    println!("{:?}", resp);
+    let mut item = ctx.list().await?.lists.remove(0).indicators.remove(0);
+    item.enabled = true;  // or false to disable
+    ctx.update(&item).await?;
     Ok(())
 }
 ```
@@ -204,7 +206,10 @@ func main() {
 	list, err := c.List(context.Background())
 	if err != nil { log.Fatal(err) }
 	item := list.Lists[0].Indicators[0]
-	err = c.Enable(context.Background(), &item) // or c.Disable(context.Background(), &item)
+	item.Enabled = true  // or false to disable
+	if err = c.Update(context.Background(), &item); err != nil {
+		log.Fatal(err)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
