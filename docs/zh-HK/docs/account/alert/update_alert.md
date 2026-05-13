@@ -13,11 +13,13 @@ headingLevel: 2
 啟用或禁用已有的價格提醒。
 
 <CliCommand>
-longbridge alert enable 112326
-longbridge alert disable 112326
+# 啟用
+longbridge alert enable 486469
+# 停用
+longbridge alert disable 486469
 </CliCommand>
 
-<SDKLinks module="alert" klass="AlertContext" method="update_alert" />
+<SDKLinks module="alert" klass="AlertContext" method="enable" />
 
 ## Request
 

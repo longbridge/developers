@@ -10,14 +10,16 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Enable or disable an existing price alert.
+Enable or disable an existing price alert. First call `list` to obtain the full `AlertItem`, then pass it to `enable` or `disable`.
 
 <CliCommand>
-longbridge alert enable 112326
-longbridge alert disable 112326
+# Enable an alert
+longbridge alert enable 486469
+# Disable an alert
+longbridge alert disable 486469
 </CliCommand>
 
-<SDKLinks module="alert" klass="AlertContext" method="update_alert" />
+<SDKLinks module="alert" klass="AlertContext" method="enable" />
 
 ## Request
 
@@ -49,7 +51,13 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = AlertContext(config)
 
-resp = ctx.update_alert("112326", enabled=True)
+# First get the alert item from list()
+alerts = ctx.list()
+item = alerts.lists[0].indicators[0]  # pick the alert you want
+# Enable
+resp = ctx.enable(item)
+# Or disable
+resp = ctx.disable(item)
 print(resp)
 ```
 
@@ -65,7 +73,9 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncAlertContext.create(config)
 
-    resp = await ctx.update_alert("112326", enabled=True)
+    alerts = await ctx.list()
+    item = alerts.lists[0].indicators[0]
+    resp = await ctx.enable(item)  # or ctx.disable(item)
     print(resp)
 
 if __name__ == "__main__":
@@ -84,7 +94,9 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = AlertContext.new(config)
-  const resp = await ctx.update_alert()
+  const alerts = await ctx.list()
+  const item = alerts.lists[0].indicators[0]
+  await ctx.enable(item)  // or ctx.disable(item)
   console.log(resp)
 }
 main().catch(console.error)
@@ -102,7 +114,9 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              AlertContext ctx = AlertContext.create(config)) {
-            var resp = ctx.getUpdateAlert().get();
+            var alerts = ctx.list().get();
+            var item = alerts.getLists().get(0).getIndicators().get(0);
+            ctx.enable(item).get();  // or ctx.disable(item).get()
             System.out.println(resp);
         }
     }
@@ -121,7 +135,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = AlertContext::new(config);
-    let resp = ctx.update_alert().await?;
+    let list = ctx.list().await?;
+    let item = &list.lists[0].indicators[0];
+    ctx.enable(item).await?;  // or ctx.disable(item).await?
     println!("{:?}", resp);
     Ok(())
 }
@@ -144,7 +160,9 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             AlertContext ctx = AlertContext::create(config);
-            ctx.update_alert([](auto resp) {
+            ctx.list([&ctx](auto list_resp) {
+              auto& item = (*list_resp).lists[0].indicators[0];
+              ctx.enable(item, [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -183,7 +201,10 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.UpdateAlert(context.Background())
+	list, err := c.List(context.Background())
+	if err != nil { log.Fatal(err) }
+	item := list.Lists[0].Indicators[0]
+	err = c.Enable(context.Background(), &item) // or c.Disable(context.Background(), &item)
 	if err != nil {
 		log.Fatal(err)
 	}

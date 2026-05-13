@@ -10,14 +10,16 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-启用或禁用已有的价格提醒。
+启用或禁用已有的价格提醒。先通过 `list` 获取完整的 `AlertItem`，再传入 `enable` 或 `disable`。
 
 <CliCommand>
-longbridge alert enable 112326
-longbridge alert disable 112326
+# 启用
+longbridge alert enable 486469
+# 禁用
+longbridge alert disable 486469
 </CliCommand>
 
-<SDKLinks module="alert" klass="AlertContext" method="update_alert" />
+<SDKLinks module="alert" klass="AlertContext" method="enable" />
 
 ## Request
 
