@@ -14,10 +14,18 @@ Pin or unpin a security within a watchlist group to control its display order.
 
 <SDKLinks module="quote" klass="QuoteContext" method="update_pinned" />
 
+## Request
 
-## Parameters
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>PUT</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/watchlist/groups</td></tr>
+</tbody>
+</table>
 
-> **SDK method parameters.**
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
 
 | Name      | Type   | Required | Description                                              |
 | --------- | ------ | -------- | -------------------------------------------------------- |
@@ -25,7 +33,7 @@ Pin or unpin a security within a watchlist group to control its display order.
 | symbol    | string | YES      | Security symbol to pin or unpin, e.g. `AAPL.US`         |
 | is_pinned | bool   | YES      | Set to `true` to pin the security, `false` to unpin it  |
 
-## Request Example
+### Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python" default>
@@ -176,6 +184,9 @@ func main() {
 
 ## Response
 
+### Response Headers
+
+- Content-Type: application/json
 
 ### Response Example
 
