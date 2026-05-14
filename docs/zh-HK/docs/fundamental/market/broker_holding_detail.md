@@ -184,10 +184,22 @@ func main() {
     "list": [
       {
         "parti_number": "B01224",
-        "name": "HSBC",
-        "chg": "5000000",
-        "holding": "120000000",
-        "ratio": "0.0625"
+        "name": "HSBC Securities",
+        "strong": false,
+        "shares": {
+          "value": "25100",
+          "chg_1": "4000.0000",
+          "chg_5": "6100.0000",
+          "chg_20": "12600.0000",
+          "chg_60": "8800.0000"
+        },
+        "ratio": {
+          "value": "0.0025",
+          "chg_1": "0.0004",
+          "chg_5": "0.0006",
+          "chg_20": "0.0012",
+          "chg_60": "0.0009"
+        }
       }
     ]
   }
@@ -209,9 +221,27 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 港股代碼 |
-| updated_at | string | 是 | 最後更新的 Unix 時間戳 |
-| brokers | object[] | 是 | 經紀商持倉列表 |
-| ∟ broker_id | string | 是 | 經紀商參與者 ID |
-| ∟ broker_name | string | 是 | 經紀商名稱 |
-| ∟ holding_qty | string | 是 | 持倉數量 |
+| updated_at | string | false | 最後更新日期 |
+| list | object[] | true | 經紀商持倉明細 |
+
+### BrokerHoldingItem
+
+<a id="BrokerHoldingItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| parti_number | string | true | 經紀商參與者編號 |
+| name | string | false | 經紀商名稱 |
+| strong | boolean | false | 是否為主要持倉者 |
+| shares | object | false | 持股數量 |
+| shares.value | string | false | 當前持股數 |
+| shares.chg_1 | string | false | 1日變動 |
+| shares.chg_5 | string | false | 5日變動 |
+| shares.chg_20 | string | false | 20日變動 |
+| shares.chg_60 | string | false | 60日變動 |
+| ratio | object | false | 持倉比率 |
+| ratio.value | string | false | 當前比率 |
+| ratio.chg_1 | string | false | 1日比率變動 |
+| ratio.chg_5 | string | false | 5日比率變動 |
+| ratio.chg_20 | string | false | 20日比率變動 |
+| ratio.chg_60 | string | false | 60日比率變動 |

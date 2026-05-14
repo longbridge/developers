@@ -184,10 +184,22 @@ func main() {
     "list": [
       {
         "parti_number": "B01224",
-        "name": "HSBC",
-        "chg": "5000000",
-        "holding": "120000000",
-        "ratio": "0.0625"
+        "name": "HSBC Securities",
+        "strong": false,
+        "shares": {
+          "value": "25100",
+          "chg_1": "4000.0000",
+          "chg_5": "6100.0000",
+          "chg_20": "12600.0000",
+          "chg_60": "8800.0000"
+        },
+        "ratio": {
+          "value": "0.0025",
+          "chg_1": "0.0004",
+          "chg_5": "0.0006",
+          "chg_20": "0.0012",
+          "chg_60": "0.0009"
+        }
       }
     ]
   }
@@ -209,17 +221,27 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Broker holding detail list |
-| updated_at | string | false | Last update date string |
+| updated_at | string | false | Last update date |
+| list | object[] | true | Broker holding detail records |
 
-### BrokerHoldingDetailItem
+### BrokerHoldingItem
 
-<a id="BrokerHoldingDetailItem"></a>
+<a id="BrokerHoldingItem"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | parti_number | string | true | Broker participant number |
 | name | string | false | Broker name |
 | strong | boolean | false | Whether marked as strong holder |
-| shares | object | false | Share quantity data with change stats |
-| ratio | object | false | Holding ratio data with change stats |
+| shares | object | false | Holding share counts |
+| shares.value | string | false | Current shares held |
+| shares.chg_1 | string | false | 1-day change |
+| shares.chg_5 | string | false | 5-day change |
+| shares.chg_20 | string | false | 20-day change |
+| shares.chg_60 | string | false | 60-day change |
+| ratio | object | false | Holding ratio |
+| ratio.value | string | false | Current ratio |
+| ratio.chg_1 | string | false | 1-day ratio change |
+| ratio.chg_5 | string | false | 5-day ratio change |
+| ratio.chg_20 | string | false | 20-day ratio change |
+| ratio.chg_60 | string | false | 60-day ratio change |

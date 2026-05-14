@@ -181,13 +181,18 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "700.HK",
-    "broker_id": "B01224",
-    "broker_name": "HSBC Securities",
-    "history": [
+    "list": [
       {
-        "date": "2024-01-15",
-        "holding_qty": "500000"
+        "date": "2026.05.13",
+        "holding": "22903430",
+        "chg": "7029132.0000",
+        "ratio": "0.0025"
+      },
+      {
+        "date": "2026.05.12",
+        "holding": "15874298",
+        "chg": "-2150000.0000",
+        "ratio": "0.0017"
       }
     ]
   }
@@ -217,7 +222,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| date | string | true | Date (e.g. `2026.05.05`) |
+| date | string | true | Date (e.g. `2026.05.13`) |
 | holding | string | false | Total shares held |
+| chg | string | false | Daily change in shares |
 | ratio | string | false | Holding ratio |
-| chg | string | false | Daily change |
