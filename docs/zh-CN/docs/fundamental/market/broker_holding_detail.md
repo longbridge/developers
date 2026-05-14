@@ -235,13 +235,13 @@ func main() {
 | strong | boolean | false | 是否为主要持仓者 |
 | shares | object | false | 持股数量 |
 | shares.value | string | false | 当前持股数 |
-| shares.chg_1 | string | false | 1日变动 |
-| shares.chg_5 | string | false | 5日变动 |
-| shares.chg_20 | string | false | 20日变动 |
-| shares.chg_60 | string | false | 60日变动 |
+| shares.chg_1 | string | false | 1 日变动 |
+| shares.chg_5 | string | false | 5 日变动 |
+| shares.chg_20 | string | false | 20 日变动 |
+| shares.chg_60 | string | false | 60 日变动 |
 | ratio | object | false | 持仓比率 |
 | ratio.value | string | false | 当前比率 |
-| ratio.chg_1 | string | false | 1日比率变动 |
-| ratio.chg_5 | string | false | 5日比率变动 |
-| ratio.chg_20 | string | false | 20日比率变动 |
-| ratio.chg_60 | string | false | 60日比率变动 |
+| ratio.chg_1 | string | false | 1 日比率变动 |
+| ratio.chg_5 | string | false | 5 日比率变动 |
+| ratio.chg_20 | string | false | 20 日比率变动 |
+| ratio.chg_60 | string | false | 60 日比率变动 |
