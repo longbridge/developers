@@ -4,7 +4,17 @@ on:
   repository_dispatch:
     types:
       - skill-updated
-  workflow_dispatch: # manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'OSS environment to upload to'
+        required: true
+        default: 'canary'
+        type: choice
+        options:
+          - canary
+          - release
+          - both
 
 concurrency:
   group: pack-skills
@@ -17,6 +27,13 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Resolve environment
+        id: setup
+        run: |
+          ENV="${{ github.event.client_payload.environment || github.event.inputs.environment || 'canary' }}"
+          echo "target=$ENV" >> $GITHUB_OUTPUT
+          echo "Upload target: $ENV"
+
       - name: Install ossutil
         run: |
           wget -q https://github.com/aliyun/ossutil/releases/download/v1.7.17/ossutil-v1.7.17-linux-amd64.zip
@@ -34,21 +51,19 @@ jobs:
         run: |
           mkdir -p dist/skill
           cd skills-repo/skills
-
-          # All skills in one zip
-          zip -r ${{ github.workspace }}/dist/skill/longbridge-all.zip .
+          zip -r ${{ github.workspace }}/dist/skill/longbridge-all.zip . -q
           echo "✓ longbridge-all.zip"
-
-          # One zip per skill directory
+          count=0
           for dir in */; do
             name="${dir%/}"
-            zip -r ${{ github.workspace }}/dist/skill/${name}.zip "$name"
-            echo "✓ ${name}.zip"
+            zip -r ${{ github.workspace }}/dist/skill/${name}.zip "$name" -q
+            count=$((count+1))
           done
-
-          echo "Total zips: $(ls ${{ github.workspace }}/dist/skill/*.zip | wc -l)"
+          echo "✓ $count individual skill zips"
+          echo "Total: $(ls ${{ github.workspace }}/dist/skill/*.zip | wc -l) zips"
 
       - name: Upload to OSS (canary)
+        if: steps.setup.outputs.target == 'canary' || steps.setup.outputs.target == 'both'
         run: |
           ${{ github.workspace }}/ossutil cp dist/skill/ \
             oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/skill/ \
@@ -61,6 +76,7 @@ jobs:
           echo "✓ Uploaded to canary OSS"
 
       - name: Upload to OSS (release)
+        if: steps.setup.outputs.target == 'release' || steps.setup.outputs.target == 'both'
         run: |
           ${{ github.workspace }}/ossutil cp dist/skill/ \
             oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/skill/ \
@@ -75,6 +91,7 @@ jobs:
       - name: Summary
         run: |
           echo "### Skill upload complete" >> $GITHUB_STEP_SUMMARY
-          echo "- Triggered by: ${{ github.event.client_payload.ref || 'manual' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Skills SHA: ${{ github.event.client_payload.sha || 'manual' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment: **${{ steps.setup.outputs.target }}**" >> $GITHUB_STEP_SUMMARY
+          echo "- Triggered by: ${{ github.event.client_payload.ref || github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Skills SHA: ${{ github.event.client_payload.sha || github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Zips uploaded: $(ls dist/skill/*.zip | wc -l)" >> $GITHUB_STEP_SUMMARY
