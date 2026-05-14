@@ -206,27 +206,28 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "total": 80,
-    "rise_num": 53,
-    "fall_num": 24,
+    "fall_num": 10,
     "flat_num": 3,
+    "rise_num": 7,
     "stocks": [
       {
-        "symbol": "00005.HK",
-        "name": "匯豐控股",
+        "symbol": "9988.HK",
+        "name": "BABA-W",
         "market": "HK",
-        "last_done": "68.40",
-        "prev_close": "67.80",
-        "chg": "0.88",
-        "amount": "1234567890",
-        "inflow": "23456789",
-        "circulating_shares": "20000000000",
-        "total_shares": "21000000000",
-        "balance": "1360000000000",
-        "trade_status": "Normal",
-        "intro": "匯豐控股有限公司",
+        "last_done": "140.90",
+        "prev_close": "132.80",
+        "chg": "0.0610",
+        "amount": "93828577",
+        "inflow": "18483450",
+        "balance": "13320299492",
+        "circulating_shares": "19192403958",
+        "total_shares": "19192403958",
+        "trade_status": 105,
+        "intro": "China's largest e-commerce platform",
         "delay": false,
-        "tags": ["金融", "銀行"]
+        "tags": [
+          "Top gainers"
+        ]
       }
     ]
   }

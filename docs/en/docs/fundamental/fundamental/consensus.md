@@ -206,14 +206,32 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
+    "currency": "USD",
+    "current_index": 3,
+    "current_period": "qf",
+    "opt_periods": [
+      "qf",
+      "af",
+      "saf"
+    ],
     "list": [
       {
-        "period": "FY2024",
-        "revenue": 105000000000,
-        "eps": 3.12,
-        "net_income": 10500000000,
-        "analyst_count": 35
+        "fiscal_year": 2026,
+        "fiscal_period": "Q2 FY2026",
+        "period_text": "Q2 FY2026",
+        "details": [
+          {
+            "key": "revenue",
+            "name": "Revenue",
+            "estimate": "95000000000",
+            "actual": "",
+            "comp": "",
+            "comp_value": null,
+            "comp_desc": "",
+            "description": "",
+            "is_released": false
+          }
+        ]
       }
     ]
   }
@@ -235,10 +253,35 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
+| currency | string | false | Reporting currency |
+| current_index | integer | false | Index of the current period in opt_periods |
+| current_period | string | false | Current period code (e.g. `qf`) |
 | list | object[] | true | List of consensus forecast periods |
-| list[].period | string | false | Fiscal period (e.g. FY2024) |
-| list[].revenue | int64 | false | Consensus revenue estimate |
-| list[].eps | double | false | Consensus EPS estimate |
-| list[].net_income | int64 | false | Consensus net income estimate |
-| list[].analyst_count | int32 | false | Number of analysts contributing |
+| opt_periods | string[] | false | Available period options |
+
+### ConsensusListItem
+
+<a id="ConsensusListItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| fiscal_period | string | false | Fiscal period number within the fiscal year |
+| fiscal_year | integer | false | Fiscal year |
+| period_text | string | false | Display period label (e.g. Q1 2027) |
+| details | object[] | false | List of financial indicator details |
+
+### ConsensusDetail
+
+<a id="ConsensusDetail"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| key | string | false | Indicator key (e.g. `eps`, `revenue`) |
+| name | string | false | Indicator display name |
+| description | string | false | Full description |
+| actual | string | false | Actual reported value |
+| estimate | string | false | Consensus estimate |
+| comp | string | false | Comparison result (e.g. `beat`, `miss`) |
+| comp_desc | string | false | Comparison description |
+| comp_value | string | false | Comparison percentage value |
+| is_released | boolean | false | Whether actual has been released |

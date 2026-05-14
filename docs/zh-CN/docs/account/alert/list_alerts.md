@@ -206,14 +206,32 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "lists": [
       {
-        "id": 112326,
         "symbol": "TSLA.US",
-        "price": "348.950",
-        "direction": "fall",
-        "enabled": true,
-        "frequency": "every"
+        "code": "TSLA",
+        "market": "US",
+        "name": "Tesla",
+        "price": "428.35",
+        "chg": "0.05",
+        "p_chg": "0.012",
+        "product": "stock",
+        "indicators": [
+          {
+            "id": "514050",
+            "indicator_id": "1",
+            "enabled": true,
+            "frequency": 2,
+            "scope": 0,
+            "text": "价格涨到 400",
+            "state": [
+              1
+            ],
+            "value_map": {
+              "price": "400"
+            }
+          }
+        ]
       }
     ]
   }

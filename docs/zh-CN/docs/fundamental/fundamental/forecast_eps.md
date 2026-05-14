@@ -206,14 +206,17 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "list": [
+    "items": [
       {
-        "period": "FY2024",
-        "consensus_eps": 3.12,
-        "high_eps": 4.50,
-        "low_eps": 2.10,
-        "analyst_count": 35
+        "forecast_end_date": "1727827200",
+        "forecast_eps_highest": "3.71",
+        "forecast_eps_lowest": "2.37",
+        "forecast_eps_mean": "2.998",
+        "forecast_eps_median": "3.02",
+        "forecast_start_date": "1727827200",
+        "institution_down": 0,
+        "institution_total": 0,
+        "institution_up": 0
       }
     ]
   }

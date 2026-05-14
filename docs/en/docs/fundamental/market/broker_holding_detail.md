@@ -180,13 +180,14 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "700.HK",
-    "updated_at": "1774310400",
-    "brokers": [
+    "updated_at": "2026.05.13",
+    "list": [
       {
-        "broker_id": "B01224",
-        "broker_name": "HSBC Securities",
-        "holding_qty": "500000"
+        "parti_number": "B01224",
+        "name": "HSBC",
+        "chg": "5000000",
+        "holding": "120000000",
+        "ratio": "0.0625"
       }
     ]
   }
@@ -208,9 +209,17 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | HK security symbol |
-| updated_at | string | true | Last updated Unix timestamp |
-| brokers | object[] | true | Broker holding list |
-| ∟ broker_id | string | true | Broker participant ID |
-| ∟ broker_name | string | true | Broker name |
-| ∟ holding_qty | string | true | Holding quantity |
+| list | object[] | true | Broker holding detail list |
+| updated_at | string | false | Last update date string |
+
+### BrokerHoldingDetailItem
+
+<a id="BrokerHoldingDetailItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| parti_number | string | true | Broker participant number |
+| name | string | false | Broker name |
+| strong | boolean | false | Whether marked as strong holder |
+| shares | object | false | Share quantity data with change stats |
+| ratio | object | false | Holding ratio data with change stats |

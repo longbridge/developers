@@ -207,15 +207,42 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "currency": "USD",
-    "total_asset": "125413.01",
-    "invest_amount": "76997.11",
-    "total_pnl": "48415.89",
-    "simple_yield": "0.6288",
-    "twr": "0.5841",
-    "stocks_traded": 12,
-    "start_date": "2023-12-04",
-    "end_date": "2026-04-17"
+    "summary": {
+      "currency": "USD",
+      "sum_profit": "-16263.15",
+      "sum_profit_rate": "-0.9008",
+      "invest_amount": "18053.32",
+      "current_total_asset": "1790.16",
+      "initial_asset_value": "0.00",
+      "ending_asset_value": "1790.16",
+      "is_traded": true,
+      "start_date": "2025-11-22",
+      "start_time": "1763769600",
+      "end_date": "2026-05-14",
+      "end_time": "1778724973",
+      "profits": {}
+    },
+    "sublist": {
+      "start": "2025-11-22",
+      "start_date": "2025-11-22",
+      "end": "2026-05-14",
+      "end_date": "2026-05-14",
+      "items": [
+        {
+          "symbol": "AAPL.US",
+          "name": "Apple",
+          "market": "US",
+          "profit": "100.00",
+          "profit_rate": "0.05",
+          "holding_period": "180",
+          "clearance_times": 0,
+          "is_holding": true,
+          "item_type": "Stock",
+          "underlying_profit": "100.00",
+          "derivatives_profit": "0.00"
+        }
+      ]
+    }
   }
 }
 ```

@@ -205,12 +205,13 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "exchanges": [
       {
-        "pair": "HKD/USD",
-        "bid_rate": "0.1284",
-        "offer_rate": "0.1285",
-        "average_rate": "0.12845"
+        "base_currency": "USD",
+        "other_currency": "HKD",
+        "bid_rate": 7.785,
+        "offer_rate": 7.795,
+        "average_rate": 7.79
       }
     ]
   }

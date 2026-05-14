@@ -201,16 +201,26 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "AAPL.US",
-    "list": [
+    "buyback_history": [
       {
-        "period": "FY2023",
-        "buyback_amount": 77550000000,
-        "buyback_shares": 430000000,
-        "buyback_ratio": 0.0278,
-        "currency": "USD"
+        "fiscal_year": "FY2024",
+        "fiscal_year_range": "2024-01-01~2024-12-31",
+        "net_buyback": "94949000000",
+        "net_buyback_yield": "0.0241",
+        "net_buyback_growth_rate": "-0.1233"
       }
-    ]
+    ],
+    "buyback_ratios": [
+      {
+        "net_buyback_payout_ratio": "0.9502",
+        "net_buyback_to_cashflow_ratio": "0.8821"
+      }
+    ],
+    "recent_buybacks": {
+      "currency": "USD",
+      "net_buyback_ttm": "94949000000",
+      "net_buyback_yield_ttm": "0.0241"
+    }
   }
 }
 ```

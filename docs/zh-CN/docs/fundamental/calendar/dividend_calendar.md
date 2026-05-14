@@ -208,14 +208,31 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "date": "2026-04-30",
     "list": [
       {
-        "symbol": "AAPL.US",
-        "name": "Apple Inc.",
-        "ex_date": "2026-05-09",
-        "pay_date": "2026-05-15",
-        "amount": "0.25",
-        "currency": "USD"
+        "date": "2026-04-30",
+        "count": 275,
+        "infos": [
+          {
+            "id": "12345",
+            "symbol": "AAPL.US",
+            "market": "US",
+            "counter_name": "Apple Inc.",
+            "event_type": "",
+            "activity_type": "",
+            "date": "2026-05-14",
+            "datetime": "",
+            "content": "",
+            "star": 0,
+            "currency": "",
+            "icon": "",
+            "chart_uid": "",
+            "date_type": "",
+            "financial_market_time": "",
+            "data_kv": []
+          }
+        ]
       }
     ]
   }

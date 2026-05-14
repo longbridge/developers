@@ -206,14 +206,17 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "list": [
+    "items": [
       {
-        "period": "FY2024",
-        "consensus_eps": 3.12,
-        "high_eps": 4.50,
-        "low_eps": 2.10,
-        "analyst_count": 35
+        "forecast_end_date": "1727827200",
+        "forecast_eps_highest": "3.71",
+        "forecast_eps_lowest": "2.37",
+        "forecast_eps_mean": "2.998",
+        "forecast_eps_median": "3.02",
+        "forecast_start_date": "1727827200",
+        "institution_down": 0,
+        "institution_total": 0,
+        "institution_up": 0
       }
     ]
   }
@@ -235,10 +238,20 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| list | object[] | true | List of EPS forecast periods |
-| list[].period | string | false | Fiscal period (e.g. FY2024, Q1 2024) |
-| list[].consensus_eps | double | false | Consensus EPS estimate |
-| list[].high_eps | double | false | Highest EPS estimate |
-| list[].low_eps | double | false | Lowest EPS estimate |
-| list[].analyst_count | int32 | false | Number of analysts contributing |
+| items | object[] | true | List of EPS forecast periods |
+
+### ForecastEpsItem
+
+<a id="ForecastEpsItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| forecast_start_date | string | false | Forecast period start date |
+| forecast_end_date | string | false | Forecast period end date |
+| forecast_eps_mean | string | false | Mean EPS estimate |
+| forecast_eps_median | string | false | Median EPS estimate |
+| forecast_eps_highest | string | false | Highest EPS estimate |
+| forecast_eps_lowest | string | false | Lowest EPS estimate |
+| institution_total | integer | false | Total contributing institutions |
+| institution_up | integer | false | Institutions revising up |
+| institution_down | integer | false | Institutions revising down |

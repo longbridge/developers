@@ -208,12 +208,20 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "items": [
       {
-        "type": "Split",
-        "date": "2020-08-31",
-        "ratio": "4:1",
-        "description": "4-for-1 stock split"
+        "id": "622620",
+        "action": "DividendExDate",
+        "act_type": "Distribution Plan",
+        "act_desc": "Cash dividend 0.27 USD",
+        "date": "20260514",
+        "date_str": "05.14",
+        "date_type": "Payment Date",
+        "date_zone": "EST",
+        "delay_content": "",
+        "is_delay": false,
+        "recent": false,
+        "live": null
       }
     ]
   }

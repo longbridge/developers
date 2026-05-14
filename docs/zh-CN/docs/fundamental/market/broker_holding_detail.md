@@ -180,13 +180,14 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "700.HK",
-    "updated_at": "1774310400",
-    "brokers": [
+    "updated_at": "2026.05.13",
+    "list": [
       {
-        "broker_id": "B01224",
-        "broker_name": "HSBC Securities",
-        "holding_qty": "500000"
+        "parti_number": "B01224",
+        "name": "HSBC",
+        "chg": "5000000",
+        "holding": "120000000",
+        "ratio": "0.0625"
       }
     ]
   }

@@ -206,13 +206,16 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "klines": [
       {
-        "date": "2026-04-08",
-        "a_price": "9.28",
-        "h_price": "6.70",
-        "premium": "1.0847",
-        "fx_rate": "0.8947"
+        "ahpremium_rate": "0.1523",
+        "apreclose": "24.80",
+        "aprice": "25.10",
+        "currency_rate": "0.8920",
+        "hpreclose": "19.20",
+        "hprice": "19.50",
+        "price_spread": "1.23",
+        "timestamp": "1778198400"
       }
     ]
   }

@@ -206,16 +206,29 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
-      {
-        "symbol": "TSLA.US",
-        "broker": "Goldman Sachs",
-        "analyst": "Mark Delaney",
-        "rating": "Buy",
-        "target_price": 320.00,
-        "date": "2024-03-15"
-      }
-    ]
+    "ccy_symbol": "$",
+    "evaluate": {
+      "list": [
+        {
+          "date": "2021/05/14",
+          "buy": 3,
+          "hold": 11,
+          "sell": 2,
+          "strong_buy": 9,
+          "under": 6
+        }
+      ]
+    },
+    "target": {
+      "list": [
+        {
+          "broker_name": "Goldman Sachs",
+          "date": "2026-04-30",
+          "rating": "Buy",
+          "target_price": "250.00"
+        }
+      ]
+    }
   }
 }
 ```

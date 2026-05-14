@@ -208,21 +208,21 @@ func main() {
   "data": {
     "professional_list": [
       {
-        "symbol": "AAPL.US",
-        "forward_url": "https://example.com/aapl/executives",
-        "total": 10,
+        "forward_url": "https://longbridge.com/wiki/stocks/ST.US.AAPL#company-manager",
         "professionals": [
           {
+            "biography": "Tim Cook is the CEO of Apple Inc.",
             "id": "12345",
             "name": "Timothy D. Cook",
             "name_en": "Timothy D. Cook",
             "name_zhcn": "蒂姆·库克",
-            "title": "Chief Executive Officer",
-            "biography": "Tim Cook is the CEO of Apple Inc.",
             "photo": "https://cdn.example.com/timcook.jpg",
+            "title": "Chief Executive Officer",
             "wiki_url": "https://en.wikipedia.org/wiki/Tim_Cook"
           }
-        ]
+        ],
+        "symbol": "AAPL.US",
+        "total": 9
       }
     ]
   }

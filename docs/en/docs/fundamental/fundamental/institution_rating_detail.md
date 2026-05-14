@@ -206,16 +206,29 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
-      {
-        "symbol": "TSLA.US",
-        "broker": "Goldman Sachs",
-        "analyst": "Mark Delaney",
-        "rating": "Buy",
-        "target_price": 320.00,
-        "date": "2024-03-15"
-      }
-    ]
+    "ccy_symbol": "$",
+    "evaluate": {
+      "list": [
+        {
+          "date": "2021/05/14",
+          "buy": 3,
+          "hold": 11,
+          "sell": 2,
+          "strong_buy": 9,
+          "under": 6
+        }
+      ]
+    },
+    "target": {
+      "list": [
+        {
+          "broker_name": "Goldman Sachs",
+          "date": "2026-04-30",
+          "rating": "Buy",
+          "target_price": "250.00"
+        }
+      ]
+    }
   }
 }
 ```
@@ -235,10 +248,39 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of rating details |
-| list[].symbol | string | true | Security symbol |
-| list[].broker | string | false | Brokerage firm name |
-| list[].analyst | string | false | Analyst name |
-| list[].rating | string | false | Rating (e.g. Buy, Hold, Sell) |
-| list[].target_price | double | false | Target price |
-| list[].date | string | false | Rating date (YYYY-MM-DD) |
+| ccy_symbol | string | false | Currency symbol |
+| evaluate | object | false | Rating distribution history |
+| evaluate.list | object[] | false | List of historical rating snapshots |
+| target | object | false | Target price history |
+| target.list | object[] | false | List of historical target price data |
+| target.data_percent | string | false | Data coverage percentage |
+| target.prediction_accuracy | string | false | Prediction accuracy percentage |
+| target.updated_at | string | false | Last update date string |
+
+### EvaluateHistoryItem
+
+<a id="EvaluateHistoryItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | false | Date |
+| buy | integer | false | Buy count |
+| strong_buy | integer | false | Strong buy count |
+| hold | integer | false | Hold count |
+| sell | integer | false | Sell count |
+| no_opinion | integer | false | No opinion count |
+| under | integer | false | Underperform count |
+
+### TargetHistoryItem
+
+<a id="TargetHistoryItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| date | string | false | Date |
+| avg_target | string | false | Average target price |
+| max_target | string | false | Highest target price |
+| min_target | string | false | Lowest target price |
+| price | string | false | Closing price on that date |
+| meet | boolean | false | Whether price met target |
+| timestamp | string | false | Unix timestamp |

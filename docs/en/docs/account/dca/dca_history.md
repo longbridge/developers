@@ -207,14 +207,19 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "has_more": false,
+    "records": [
       {
-        "trade_date": "2026-04-08T14:00:00Z",
-        "symbol": "SPY.US",
-        "amount": "750",
-        "price": "548.20",
-        "quantity": "1.37",
-        "status": "Filled"
+        "symbol": "AAPL.US",
+        "order_id": "123456",
+        "status": "Filled",
+        "action": "Buy",
+        "order_type": "Market",
+        "executed_qty": "1",
+        "executed_price": "180.50",
+        "executed_amount": "180.50",
+        "created_at": "1763769600",
+        "rejected_reason": ""
       }
     ]
   }
@@ -248,10 +253,12 @@ func main() {
 | symbol | string | true | Security symbol |
 | order_id | string | false | Associated order ID |
 | status | string | false | Execution status |
-| action | string | false | Action type |
-| order_type | string | false | Order type |
+| action | string | false | Action type (e.g. `buy`) |
+| order_type | string | false | Order type (e.g. `market`) |
 | executed_qty | string | false | Executed quantity |
 | executed_price | string | false | Executed price |
-| executed_amount | string | false | Executed amount |
+| executed_amount | string | false | Executed cost amount |
+| rejected_reason | string | false | Rejection reason if failed |
+| created_at | string | false | Creation Unix timestamp |
 | created_at | string | false | Execution time |
 | rejected_reason | string | false | Rejection reason (if any) |

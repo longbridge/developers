@@ -208,13 +208,44 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "name": "Tesla Inc.",
-    "pnl": "12450.00",
-    "pnl_pct": "0.2891",
-    "cost": "43085.00",
-    "market_value": "55535.00",
-    "currency": "USD"
+    "name": "Apple",
+    "currency": "USD",
+    "profit": "100.00",
+    "start": "1763769600",
+    "end": "1778724973",
+    "start_date": "2025-11-22",
+    "end_date": "2026-05-14",
+    "default_tag": 0,
+    "updated_at": "1778724973",
+    "updated_date": "2026-05-14",
+    "underlying_details": {
+      "profit": "100.00",
+      "holding_value": "1790.16",
+      "holding_value_at_beginning": null,
+      "holding_value_at_ending": "1790.16",
+      "long_holding_value": "1790.16",
+      "short_holding_value": "0.00",
+      "cumulative_credited_amount": "0.00",
+      "cumulative_debited_amount": "0.00",
+      "cumulative_fee_amount": "0.00",
+      "credited_details": [],
+      "debited_details": [],
+      "fee_details": []
+    },
+    "derivative_pnl_details": {
+      "profit": "0.00",
+      "holding_value": "0.00",
+      "holding_value_at_beginning": null,
+      "holding_value_at_ending": "0.00",
+      "long_holding_value": "0.00",
+      "short_holding_value": "0.00",
+      "cumulative_credited_amount": "0.00",
+      "cumulative_debited_amount": "0.00",
+      "cumulative_fee_amount": "0.00",
+      "credited_details": [],
+      "debited_details": [],
+      "fee_details": []
+    }
   }
 }
 ```

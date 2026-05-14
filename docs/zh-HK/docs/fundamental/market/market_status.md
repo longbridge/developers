@@ -205,14 +205,18 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "market_time": [
       {
         "market": "US",
-        "status": "Post-Market"
+        "delay_sub_status": 0,
+        "delay_timestamp": "0",
+        "delay_trade_status": 0
       },
       {
         "market": "HK",
-        "status": "Closed"
+        "delay_sub_status": 0,
+        "delay_timestamp": "0",
+        "delay_trade_status": 0
       }
     ]
   }

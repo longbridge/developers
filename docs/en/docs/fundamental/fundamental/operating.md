@@ -207,17 +207,29 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "AAPL.US",
     "list": [
       {
-        "period": "Q1 2024",
-        "revenue": 119575000000,
-        "gross_profit": 54856000000,
-        "operating_income": 40372000000,
-        "net_income": 33916000000,
-        "gross_margin": 0.4588,
-        "operating_margin": 0.3377,
-        "net_margin": 0.2837
+        "id": "12345",
+        "report": "af",
+        "title": "FY2025 Annual Report Summary",
+        "txt": "Management discussion...",
+        "latest": true,
+        "web_url": "https://longbridge.com/wiki/...",
+        "financial": {
+          "code": "700",
+          "currency": "HKD",
+          "name": "Tencent",
+          "region": "HK",
+          "report": "af",
+          "indicators": [
+            {
+              "field_name": "operating_revenue",
+              "indicator_name": "Revenue",
+              "indicator_value": "6786 亿",
+              "yoy": "0.0800"
+            }
+          ]
+        }
       }
     ]
   }

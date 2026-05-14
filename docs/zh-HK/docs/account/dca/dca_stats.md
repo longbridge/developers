@@ -178,9 +178,21 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "total_invested": "10000.00",
-    "total_profit_loss": "1500.00",
-    "total_profit_loss_rate": "0.15"
+    "active_count": "2",
+    "finished_count": "1",
+    "suspended_count": "0",
+    "rest_days": "3",
+    "total_amount": "5400",
+    "total_profit": "120.50",
+    "nearest_plans": [
+      {
+        "plan_id": "1234567890",
+        "symbol": "AAPL.US",
+        "stock_name": "Apple Inc.",
+        "per_invest_amount": "100",
+        "next_trd_date": "1778853600"
+      }
+    ]
   }
 }
 ```

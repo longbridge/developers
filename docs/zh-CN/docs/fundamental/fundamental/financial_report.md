@@ -208,16 +208,41 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
-      {
-        "type": "IS",
-        "period": "Q4 2025",
-        "eps": "0.24",
-        "revenue": "24900000000",
-        "net_income": "840000000",
-        "gross_margin": "0.2012"
+    "list": {
+      "IS": {
+        "indicators": [
+          {
+            "title": "Income Statement",
+            "short_title": "IS",
+            "currency": "USD",
+            "has_yoy": true,
+            "entry": "IS",
+            "periods": [
+              "FY2025",
+              "FY2024"
+            ],
+            "accounts": [
+              {
+                "field": "EPS",
+                "name": "Earnings Per Share(USD)",
+                "percent": false,
+                "tip": "",
+                "values": [
+                  {
+                    "period": "FY 2025",
+                    "year": 2025,
+                    "fp_end": "1758945600",
+                    "value": "7.46",
+                    "ratio": "",
+                    "yoy": "0.227"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
-    ]
+    }
   }
 }
 ```

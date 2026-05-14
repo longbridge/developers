@@ -206,13 +206,16 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "klines": [
       {
-        "date": "2026-04-08",
-        "a_price": "9.28",
-        "h_price": "6.70",
-        "premium": "1.0847",
-        "fx_rate": "0.8947"
+        "ahpremium_rate": "0.1523",
+        "apreclose": "24.80",
+        "aprice": "25.10",
+        "currency_rate": "0.8920",
+        "hpreclose": "19.20",
+        "hprice": "19.50",
+        "price_spread": "1.23",
+        "timestamp": "1778198400"
       }
     ]
   }
@@ -234,9 +237,19 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | A/H premium records |
-| ∟ date | string | true | Date in `YYYY-MM-DD` format |
-| ∟ a_price | string | true | A-share price in CNY |
-| ∟ h_price | string | true | H-share price in HKD |
-| ∟ premium | string | true | A/H premium ratio |
-| ∟ fx_rate | string | true | CNH/HKD exchange rate |
+| klines | object[] | true | A/H premium daily kline records |
+
+### AhPremiumKline
+
+<a id="AhPremiumKline"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| timestamp | string | false | Unix timestamp |
+| ahpremium_rate | string | false | A/H premium rate |
+| aprice | string | false | A-share price (CNY) |
+| apreclose | string | false | A-share previous close (CNY) |
+| hprice | string | false | H-share price (HKD) |
+| hpreclose | string | false | H-share previous close (HKD) |
+| currency_rate | string | false | CNH/HKD exchange rate |
+| price_spread | string | false | Price spread |

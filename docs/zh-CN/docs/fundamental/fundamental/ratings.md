@@ -201,15 +201,15 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
-      {
-        "broker_name": "Goldman Sachs",
-        "rating": "Buy",
-        "target_price": "230.00",
-        "currency": "USD",
-        "date": "2026-01-10"
-      }
-    ]
+    "industry_name": "Technology Hardware, Storage and Peripherals",
+    "industry_rank": 2,
+    "multi_letter": "B",
+    "multi_score": "0.32",
+    "multi_score_change": -1,
+    "scale_txt_name": "Large",
+    "style_txt_name": "Blend",
+    "report_period_txt": "Rating based on Fiscal Year 2026 s.a.",
+    "ratings_json": "[]"
   }
 }
 ```

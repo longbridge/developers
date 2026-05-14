@@ -201,15 +201,33 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "AAPL.US",
-    "metric": "pe",
-    "symbol_value": 28.5,
-    "buckets": [
-      { "range_start": 0, "range_end": 10, "count": 5 },
-      { "range_start": 10, "range_end": 20, "count": 18 },
-      { "range_start": 20, "range_end": 30, "count": 22 },
-      { "range_start": 30, "range_end": 50, "count": 12 }
-    ]
+    "pe": {
+      "value": "28.5",
+      "high": "120.0",
+      "low": "5.0",
+      "median": "22.0",
+      "ranking": "35",
+      "rank_index": "12",
+      "rank_total": "30"
+    },
+    "pb": {
+      "value": "45.2",
+      "high": "200.0",
+      "low": "1.0",
+      "median": "8.0",
+      "ranking": "85",
+      "rank_index": "25",
+      "rank_total": "30"
+    },
+    "ps": {
+      "value": "7.8",
+      "high": "30.0",
+      "low": "0.5",
+      "median": "4.0",
+      "ranking": "70",
+      "rank_index": "21",
+      "rank_total": "30"
+    }
   }
 }
 ```

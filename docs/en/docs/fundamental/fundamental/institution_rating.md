@@ -206,47 +206,47 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "analyst": {
+    "latest": {
       "evaluate": {
         "buy": 18,
         "hold": 17,
+        "sell": 4,
         "no_opinion": 4,
         "over": 5,
-        "sell": 4,
-        "total": 51,
         "under": 3,
-        "start_date": "2024-01-01",
-        "end_date": "2025-01-01"
+        "total": 51,
+        "start_date": "1778198400",
+        "end_date": "0"
       },
       "industry_id": 87676,
       "industry_mean": 10,
       "industry_median": 4,
-      "industry_name": "Auto Manufacturers",
+      "industry_name": "Automobiles",
       "industry_rank": 1,
       "industry_total": 30,
       "target": {
-        "end_date": "2025-01-01",
         "highest_price": "600.000",
         "lowest_price": "123.000",
         "prev_close": "428.35",
-        "start_date": "2024-01-01"
+        "start_date": "1778198400",
+        "end_date": "0"
       }
     },
-    "instratings": {
+    "summary": {
       "ccy_symbol": "$",
-      "change": "Upgraded",
+      "change": "0",
+      "recommend": "Buy",
+      "updated_at": "1778198400",
       "evaluate": {
         "buy": 18,
         "hold": 17,
         "sell": 4
       },
-      "recommend": "Buy",
       "target": {
-        "average_target": "380.00",
+        "average_target": "350.00",
         "highest_price": "600.000",
         "lowest_price": "123.000"
-      },
-      "updated_at": "2025-01-01T00:00:00Z"
+      }
     }
   }
 }
@@ -291,12 +291,14 @@ func main() {
 | latest.target.start_date | string | false | Period start date |
 | latest.target.end_date | string | false | Period end date |
 | summary | object | false | Consensus rating snapshot |
-| summary.recommend | string | false | Overall recommendation |
-| summary.change | string | false | Rating change |
+| summary.recommend | object | false | Recommendation distribution mapping |
+| summary.change | string | false | Price change value |
 | summary.ccy_symbol | string | false | Currency symbol |
-| summary.evaluate | object | false | Rating distribution (same as latest.evaluate) |
-| summary.target | object | false | Consensus price target |
-| summary.target.average_target | string | false | Average target price |
-| summary.target.highest_price | string | false | Highest target price |
-| summary.target.lowest_price | string | false | Lowest target price |
-| summary.updated_at | string | false | Last update timestamp |
+| summary.evaluate | object | false | Rating distribution counts |
+| summary.evaluate.buy | integer | false | Buy count |
+| summary.evaluate.strong_buy | integer | false | Strong buy count |
+| summary.evaluate.hold | integer | false | Hold count |
+| summary.evaluate.sell | integer | false | Sell count |
+| summary.evaluate.under | integer | false | Underperform count |
+| summary.target | string | false | Consensus average target price |
+| summary.updated_at | string | false | Last update date string |

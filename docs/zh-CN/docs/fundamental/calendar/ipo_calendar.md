@@ -208,14 +208,31 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "date": "2026-04-30",
     "list": [
       {
-        "symbol": "NEWCO.US",
-        "name": "New Company Inc.",
-        "listing_date": "2026-05-15",
-        "offer_price": "18.00",
-        "currency": "USD",
-        "market": "US"
+        "date": "2026-05-05",
+        "count": 1,
+        "infos": [
+          {
+            "id": "12345",
+            "symbol": "AAPL.US",
+            "market": "US",
+            "counter_name": "Apple Inc.",
+            "event_type": "",
+            "activity_type": "",
+            "date": "2026-05-14",
+            "datetime": "",
+            "content": "",
+            "star": 0,
+            "currency": "",
+            "icon": "",
+            "chart_uid": "",
+            "date_type": "",
+            "financial_market_time": "",
+            "data_kv": []
+          }
+        ]
       }
     ]
   }

@@ -206,16 +206,19 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "700.HK",
-    "parent": {
-      "symbol": "",
-      "name": ""
-    },
-    "subsidiaries": [
-      { "symbol": "TCEHY.US", "name": "Tencent Holdings ADR", "holding_ratio": 1.0 }
-    ],
-    "holdings": [
-      { "symbol": "SE.US", "name": "Sea Limited", "holding_ratio": 18.7 }
+    "forward_url": "https://longbridge.com/wiki/stocks/ST.HK.700#invest",
+    "invest_securities": [
+      {
+        "symbol": "HUYA.US",
+        "company_id": "12345",
+        "company_name": "虎牙直播",
+        "company_name_en": "Huya Inc.",
+        "company_name_zhcn": "虎牙直播",
+        "currency": "USD",
+        "percent_of_shares": "19.00",
+        "shares_rank": "1",
+        "shares_value": "19000000"
+      }
     ]
   }
 }

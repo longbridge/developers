@@ -208,13 +208,31 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "date": "2026-04-30",
     "list": [
       {
-        "symbol": "NVDA.US",
-        "name": "NVIDIA Corp",
-        "date": "2024-06-10",
-        "ratio": "10:1",
-        "type": "Split"
+        "date": "2026-04-30",
+        "count": 2228,
+        "infos": [
+          {
+            "id": "12345",
+            "symbol": "AAPL.US",
+            "market": "US",
+            "counter_name": "Apple Inc.",
+            "event_type": "",
+            "activity_type": "",
+            "date": "2026-05-14",
+            "datetime": "",
+            "content": "",
+            "star": 0,
+            "currency": "",
+            "icon": "",
+            "chart_uid": "",
+            "date_type": "",
+            "financial_market_time": "",
+            "data_kv": []
+          }
+        ]
       }
     ]
   }

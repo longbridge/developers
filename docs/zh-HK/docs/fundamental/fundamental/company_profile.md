@@ -206,13 +206,21 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "name": "Apple Inc.",
-    "symbol": "AAPL.US",
+    "company_name": "Apple Inc.",
+    "name": "Apple",
+    "ticker": "AAPL",
+    "market": "NasdaqGS",
     "founded": "1976",
-    "ceo": "Timothy D. Cook",
-    "employees": 166000,
+    "employees": "166000",
+    "manager": "Timothy D. Cook",
     "website": "www.apple.com",
-    "description": "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide."
+    "phone": "(408) 996-1010",
+    "address": "One Apple Park Way, Cupertino, California, United States",
+    "profile": "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, a...",
+    "region": "US",
+    "sector": 0,
+    "year_end": "September 27",
+    "icon": "https://assets.lbkrs.com/ticker/ST/US/AAPL.png"
   }
 }
 ```

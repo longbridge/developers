@@ -206,16 +206,17 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "industry": "Automobiles",
     "list": [
       {
-        "symbol": "TSLA.US",
-        "name": "Tesla Inc.",
-        "pe": 55.2,
-        "pb": 12.1,
-        "ps": 6.8,
-        "market_cap": 700000000000
+        "symbol": "AAPL.US",
+        "name": "Apple Inc.",
+        "market": "US",
+        "currency": "USD",
+        "pe": "28.50",
+        "pb": "45.2",
+        "ps": "7.8",
+        "eps": "6.08",
+        "bps": "4.50"
       }
     ]
   }

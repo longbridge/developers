@@ -208,15 +208,31 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "date": "2026-04-30",
     "list": [
       {
-        "event": "US CPI (YoY)",
-        "country": "US",
-        "release_date": "2026-05-13",
-        "actual": null,
-        "forecast": "2.4",
-        "previous": "2.4",
-        "importance": "High"
+        "date": "2026-05-02",
+        "count": 0,
+        "infos": [
+          {
+            "id": "12345",
+            "symbol": "AAPL.US",
+            "market": "US",
+            "counter_name": "Apple Inc.",
+            "event_type": "",
+            "activity_type": "",
+            "date": "2026-05-14",
+            "datetime": "",
+            "content": "",
+            "star": 0,
+            "currency": "",
+            "icon": "",
+            "chart_uid": "",
+            "date_type": "",
+            "financial_market_time": "",
+            "data_kv": []
+          }
+        ]
       }
     ]
   }

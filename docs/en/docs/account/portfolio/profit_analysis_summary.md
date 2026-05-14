@@ -207,15 +207,42 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "currency": "USD",
-    "total_asset": "125413.01",
-    "invest_amount": "76997.11",
-    "total_pnl": "48415.89",
-    "simple_yield": "0.6288",
-    "twr": "0.5841",
-    "stocks_traded": 12,
-    "start_date": "2023-12-04",
-    "end_date": "2026-04-17"
+    "summary": {
+      "currency": "USD",
+      "sum_profit": "-16263.15",
+      "sum_profit_rate": "-0.9008",
+      "invest_amount": "18053.32",
+      "current_total_asset": "1790.16",
+      "initial_asset_value": "0.00",
+      "ending_asset_value": "1790.16",
+      "is_traded": true,
+      "start_date": "2025-11-22",
+      "start_time": "1763769600",
+      "end_date": "2026-05-14",
+      "end_time": "1778724973",
+      "profits": {}
+    },
+    "sublist": {
+      "start": "2025-11-22",
+      "start_date": "2025-11-22",
+      "end": "2026-05-14",
+      "end_date": "2026-05-14",
+      "items": [
+        {
+          "symbol": "AAPL.US",
+          "name": "Apple",
+          "market": "US",
+          "profit": "100.00",
+          "profit_rate": "0.05",
+          "holding_period": "180",
+          "clearance_times": 0,
+          "is_holding": true,
+          "item_type": "Stock",
+          "underlying_profit": "100.00",
+          "derivatives_profit": "0.00"
+        }
+      ]
+    }
   }
 }
 ```
@@ -236,12 +263,39 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | summary | object | false | Overall profit summary |
-| sublist | object | false | Detailed profit analysis |
-| sublist.start | string | false | Period start |
-| sublist.end | string | false | Period end |
-| sublist.start_date | string | false | Start date |
-| sublist.end_date | string | false | End date |
-| sublist.items | object[] | false | Per-position profit items |
+| sublist | object | false | Detailed profit analysis by position |
+
+### ProfitAnalysisSummary
+
+<a id="ProfitAnalysisSummary"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| currency | string | false | Account currency |
+| current_total_asset | string | false | Current total asset value |
+| end_date | string | false | Analysis end date |
+| end_time | string | false | Analysis end Unix timestamp |
+| ending_asset_value | string | false | Ending asset value |
+| initial_asset_value | string | false | Initial asset value at start |
+| invest_amount | string | false | Total invested amount |
+| is_traded | boolean | false | Whether any trades occurred |
+| profits | object | false | Profit breakdown by asset type |
+| start_date | string | false | Analysis start date |
+| start_time | string | false | Analysis start Unix timestamp |
+| sum_profit | string | false | Total profit/loss |
+| sum_profit_rate | string | false | Total profit rate |
+
+### ProfitAnalysisSublist
+
+<a id="ProfitAnalysisSublist"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| start | string | false | Period start timestamp |
+| end | string | false | Period end timestamp |
+| start_date | string | false | Start date |
+| end_date | string | false | End date |
+| items | object[] | false | Per-position profit items |
 
 ### ProfitAnalysisItem
 
@@ -249,15 +303,18 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
+| symbol | string | false | Security symbol |
+| security_code | string | false | Security code |
 | name | string | false | Security name |
 | market | string | false | Market |
 | currency | string | false | Currency |
+| isin | string | false | ISIN code |
 | profit | string | false | Total profit/loss |
 | profit_rate | string | false | Profit/loss rate |
 | underlying_profit | string | false | Underlying asset profit |
 | derivatives_profit | string | false | Derivatives profit |
-| holding_period | string | false | Holding period |
+| order_profit | string | false | Order profit |
+| holding_period | string | false | Holding period in days |
 | clearance_times | integer | false | Number of times closed |
 | is_holding | boolean | false | Whether currently holding |
 | item_type | string | false | Asset type: `Stock`, `Fund`, `Crypto` |

@@ -206,16 +206,19 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "700.HK",
-    "parent": {
-      "symbol": "",
-      "name": ""
-    },
-    "subsidiaries": [
-      { "symbol": "TCEHY.US", "name": "Tencent Holdings ADR", "holding_ratio": 1.0 }
-    ],
-    "holdings": [
-      { "symbol": "SE.US", "name": "Sea Limited", "holding_ratio": 18.7 }
+    "forward_url": "https://longbridge.com/wiki/stocks/ST.HK.700#invest",
+    "invest_securities": [
+      {
+        "symbol": "HUYA.US",
+        "company_id": "12345",
+        "company_name": "虎牙直播",
+        "company_name_en": "Huya Inc.",
+        "company_name_zhcn": "虎牙直播",
+        "currency": "USD",
+        "percent_of_shares": "19.00",
+        "shares_rank": "1",
+        "shares_value": "19000000"
+      }
     ]
   }
 }
@@ -236,15 +239,21 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| parent | object | false | Parent company information |
-| parent.symbol | string | false | Parent security symbol |
-| parent.name | string | false | Parent company name |
-| subsidiaries | object[] | false | List of subsidiaries |
-| subsidiaries[].symbol | string | false | Subsidiary security symbol |
-| subsidiaries[].name | string | false | Subsidiary company name |
-| subsidiaries[].holding_ratio | double | false | Holding ratio (%) |
-| holdings | object[] | false | List of major holdings |
-| holdings[].symbol | string | false | Holding security symbol |
-| holdings[].name | string | false | Holding company name |
-| holdings[].holding_ratio | double | false | Holding ratio (%) |
+| forward_url | string | false | Company investment relations page URL |
+| invest_securities | object[] | false | List of investment holdings |
+
+### InvestSecurity
+
+<a id="InvestSecurity"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | false | Security symbol |
+| company_id | string | false | Company ID |
+| company_name | string | false | Display company name |
+| company_name_en | string | false | English company name |
+| company_name_zhcn | string | false | Chinese company name |
+| currency | string | false | Currency |
+| percent_of_shares | string | false | Ownership percentage |
+| shares_rank | string | false | Rank by shares held |
+| shares_value | string | false | Value of shares held |

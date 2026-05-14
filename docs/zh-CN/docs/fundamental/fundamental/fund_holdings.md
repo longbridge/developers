@@ -206,12 +206,14 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "lists": [
       {
-        "fund_name": "Vanguard Total Stock Market ETF",
-        "shares": "289000000",
-        "percentage": "1.88",
-        "date": "2026-03-31"
+        "symbol": "TSLT.US",
+        "code": "TSLT",
+        "name": "2x Long TSLA ETF",
+        "position_ratio": "101.02",
+        "report_date": "2026-05-07",
+        "currency": "USD"
       }
     ]
   }

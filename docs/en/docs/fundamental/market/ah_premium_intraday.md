@@ -180,11 +180,16 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "939.HK",
-    "timeseries": [
+    "klines": [
       {
-        "timestamp": "1774310400",
-        "premium": "2.35"
+        "ahpremium_rate": "0.1523",
+        "apreclose": "24.80",
+        "aprice": "25.10",
+        "currency_rate": "0.8920",
+        "hpreclose": "19.20",
+        "hprice": "19.50",
+        "price_spread": "1.23",
+        "timestamp": "1778198400"
       }
     ]
   }
@@ -206,7 +211,19 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | HK-side security symbol |
-| timeseries | object[] | true | Intraday A/H premium timeseries |
-| ∟ timestamp | string | true | Unix timestamp |
-| ∟ premium | string | true | A/H premium percentage |
+| klines | object[] | true | Intraday A/H premium kline data |
+
+### AhPremiumIntradayKline
+
+<a id="AhPremiumIntradayKline"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| timestamp | string | false | Unix timestamp |
+| ahpremium_rate | string | false | A/H premium rate |
+| aprice | string | false | A-share price (CNY) |
+| apreclose | string | false | A-share previous close (CNY) |
+| hprice | string | false | H-share price (HKD) |
+| hpreclose | string | false | H-share previous close (HKD) |
+| currency_rate | string | false | CNH/HKD exchange rate |
+| price_spread | string | false | Price spread |

@@ -207,20 +207,14 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "has_more": false,
+    "profit": "-16325.26",
+    "stock_items": [
       {
+        "code": "AAPL",
         "market": "US",
-        "pnl": "42000.00",
-        "pnl_pct": "0.5412",
-        "market_value": "120000.00",
-        "currency": "USD"
-      },
-      {
-        "market": "HK",
-        "pnl": "5203.00",
-        "pnl_pct": "0.1832",
-        "market_value": "28400.00",
-        "currency": "HKD"
+        "name": "Apple",
+        "profit": "100.00"
       }
     ]
   }

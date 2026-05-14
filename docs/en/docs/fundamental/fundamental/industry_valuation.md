@@ -206,16 +206,17 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
-    "industry": "Automobiles",
     "list": [
       {
-        "symbol": "TSLA.US",
-        "name": "Tesla Inc.",
-        "pe": 55.2,
-        "pb": 12.1,
-        "ps": 6.8,
-        "market_cap": 700000000000
+        "symbol": "AAPL.US",
+        "name": "Apple Inc.",
+        "market": "US",
+        "currency": "USD",
+        "pe": "28.50",
+        "pb": "45.2",
+        "ps": "7.8",
+        "eps": "6.08",
+        "bps": "4.50"
       }
     ]
   }
@@ -237,12 +238,23 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| industry | string | false | Industry classification |
 | list | object[] | true | List of peer companies |
-| list[].symbol | string | false | Peer security symbol |
-| list[].name | string | false | Company name |
-| list[].pe | double | false | Price-to-Earnings ratio |
-| list[].pb | double | false | Price-to-Book ratio |
-| list[].ps | double | false | Price-to-Sales ratio |
-| list[].market_cap | int64 | false | Market capitalization |
+
+### IndustryValuationItem
+
+<a id="IndustryValuationItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | false | Security symbol |
+| name | string | false | Company name |
+| currency | string | false | Reporting currency |
+| pe | string | false | Price-to-Earnings ratio |
+| bps | string | false | Book value per share |
+| eps | string | false | Earnings per share |
+| dps | string | false | Dividends per share |
+| div_yld | string | false | Dividend yield |
+| div_payout_ratio | string | false | Dividend payout ratio |
+| five_y_avg_dps | string | false | 5-year average DPS |
+| assets | string | false | Total assets |
+| history | object[] | false | Historical valuation data |

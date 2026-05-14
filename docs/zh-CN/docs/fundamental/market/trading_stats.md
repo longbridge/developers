@@ -206,13 +206,26 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "prev_close": "504.500",
-    "avg_price": "491.63",
-    "trades": 32782,
-    "volume": "15200000",
-    "turnover": "7382000000",
-    "distribution": [
-      { "price": "490.00", "volume": "1200000", "pct": "7.89" }
+    "statistics": {
+      "avgprice": "210.50",
+      "buy": "45000000",
+      "sell": "38000000",
+      "neutral": "12000000",
+      "total_amount": "95000000",
+      "trades_count": "125000",
+      "preclose": "208.20",
+      "timestamp": "1778198400",
+      "trade_date": [
+        "2026-05-13"
+      ]
+    },
+    "trades": [
+      {
+        "price": "210.00",
+        "buy_amount": "5000000",
+        "sell_amount": "4000000",
+        "neutral_amount": "1000000"
+      }
     ]
   }
 }

@@ -206,12 +206,17 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "forward_url": "",
+    "total": 33,
+    "shareholder_list": [
       {
-        "name": "The Vanguard Group",
-        "shares": "1236787000",
-        "percentage": "8.04",
-        "type": "Institution"
+        "shareholder_name": "Timothy D. Cook",
+        "percent_of_shares": "2.84",
+        "institution_type": "",
+        "report_date": "2026-04-21",
+        "shareholder_id": "0",
+        "shares_changed": "0",
+        "stocks": []
       }
     ]
   }

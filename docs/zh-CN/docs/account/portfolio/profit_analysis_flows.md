@@ -209,15 +209,18 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "has_more": false,
+    "flows_list": [
       {
-        "transaction_flow_name": "Cash Dividend",
-        "direction": 1,
-        "business_type": 2,
-        "balance": "25.00",
-        "currency": "USD",
-        "business_time": "1774310400",
-        "symbol": "AAPL.US"
+        "code": "AAPL",
+        "symbol": "AAPL.US",
+        "direction": "In",
+        "executed_date": "2025-11-22",
+        "executed_timestamp": "1763769600",
+        "executed_quantity": "10",
+        "executed_price": "180.50",
+        "executed_cost": "1805.00",
+        "describe": "Buy AAPL.US"
       }
     ]
   }

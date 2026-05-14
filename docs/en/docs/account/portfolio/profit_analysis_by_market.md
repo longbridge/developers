@@ -207,20 +207,14 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "has_more": false,
+    "profit": "-16325.26",
+    "stock_items": [
       {
+        "code": "AAPL",
         "market": "US",
-        "pnl": "42000.00",
-        "pnl_pct": "0.5412",
-        "market_value": "120000.00",
-        "currency": "USD"
-      },
-      {
-        "market": "HK",
-        "pnl": "5203.00",
-        "pnl_pct": "0.1832",
-        "market_value": "28400.00",
-        "currency": "HKD"
+        "name": "Apple",
+        "profit": "100.00"
       }
     ]
   }
@@ -242,9 +236,17 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | P&L by market list |
-| ∟ market | string | true | Market code |
-| ∟ pnl | string | true | P&L for this market |
-| ∟ pnl_pct | string | true | P&L percentage |
-| ∟ market_value | string | false | Market value |
-| ∟ currency | string | true | Settlement currency |
+| has_more | boolean | false | Whether there are more pages |
+| profit | string | false | Total profit/loss |
+| stock_items | object[] | false | P&L breakdown by stock |
+
+### StockProfitItem
+
+<a id="StockProfitItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| code | string | false | Stock code |
+| market | string | false | Market code |
+| name | string | false | Stock name |
+| profit | string | false | Profit/loss for this stock |

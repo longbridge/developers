@@ -206,47 +206,47 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "analyst": {
+    "latest": {
       "evaluate": {
         "buy": 18,
         "hold": 17,
+        "sell": 4,
         "no_opinion": 4,
         "over": 5,
-        "sell": 4,
-        "total": 51,
         "under": 3,
-        "start_date": "2024-01-01",
-        "end_date": "2025-01-01"
+        "total": 51,
+        "start_date": "1778198400",
+        "end_date": "0"
       },
       "industry_id": 87676,
       "industry_mean": 10,
       "industry_median": 4,
-      "industry_name": "汽車製造商",
+      "industry_name": "Automobiles",
       "industry_rank": 1,
       "industry_total": 30,
       "target": {
-        "end_date": "2025-01-01",
         "highest_price": "600.000",
         "lowest_price": "123.000",
         "prev_close": "428.35",
-        "start_date": "2024-01-01"
+        "start_date": "1778198400",
+        "end_date": "0"
       }
     },
-    "instratings": {
+    "summary": {
       "ccy_symbol": "$",
-      "change": "Upgraded",
+      "change": "0",
+      "recommend": "Buy",
+      "updated_at": "1778198400",
       "evaluate": {
         "buy": 18,
         "hold": 17,
         "sell": 4
       },
-      "recommend": "Buy",
       "target": {
-        "average_target": "380.00",
+        "average_target": "350.00",
         "highest_price": "600.000",
         "lowest_price": "123.000"
-      },
-      "updated_at": "2025-01-01T00:00:00Z"
+      }
     }
   }
 }

@@ -201,16 +201,24 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "AAPL.US",
-    "list": [
-      {
-        "date": "2024-03-31",
-        "pe": 28.5,
-        "pb": 46.2,
-        "ps": 7.8,
-        "dividend_yield": 0.55
+    "history": {
+      "metrics": {
+        "pe": {
+          "desc": "P/E Ratio",
+          "high": "35.2",
+          "low": "18.1",
+          "median": "26.5",
+          "list": [
+            {
+              "timestamp": "1622520000",
+              "value": "28.5"
+            }
+          ]
+        },
+        "pb": null,
+        "ps": null
       }
-    ]
+    }
   }
 }
 ```
@@ -230,10 +238,22 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| list | object[] | true | Historical valuation data points |
+| history | object | true | Valuation history data |
+| history.metrics | object | false | Valuation metrics |
+| history.metrics.pe | object | false | P/E ratio history |
+| history.metrics.pb | object | false | P/B ratio history |
+| history.metrics.ps | object | false | P/S ratio history |
+
+### ValuationMetric
+
+<a id="ValuationMetric"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| desc | string | false | Description of current valuation |
+| high | string | false | Historical high value |
+| low | string | false | Historical low value |
+| median | string | false | Median value |
+| list | object[] | false | Time series data points |
 | list[].date | string | false | Date (YYYY-MM-DD) |
-| list[].pe | double | false | Price-to-Earnings ratio |
-| list[].pb | double | false | Price-to-Book ratio |
-| list[].ps | double | false | Price-to-Sales ratio |
-| list[].dividend_yield | double | false | Dividend yield (%) |
+| list[].value | string | false | Valuation value |

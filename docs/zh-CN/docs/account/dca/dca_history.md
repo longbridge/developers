@@ -207,14 +207,19 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "has_more": false,
+    "records": [
       {
-        "trade_date": "2026-04-08T14:00:00Z",
-        "symbol": "SPY.US",
-        "amount": "750",
-        "price": "548.20",
-        "quantity": "1.37",
-        "status": "Filled"
+        "symbol": "AAPL.US",
+        "order_id": "123456",
+        "status": "Filled",
+        "action": "Buy",
+        "order_type": "Market",
+        "executed_qty": "1",
+        "executed_price": "180.50",
+        "executed_amount": "180.50",
+        "created_at": "1763769600",
+        "rejected_reason": ""
       }
     ]
   }

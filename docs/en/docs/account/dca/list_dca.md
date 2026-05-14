@@ -207,28 +207,30 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
+    "plans": [
       {
-        "plan_id": "1225781523156889600",
-        "symbol": "SPY.US",
-        "stock_name": "SPDR S&P 500 ETF Trust",
+        "plan_id": "1239402174908207104",
+        "symbol": "AAPL.US",
+        "stock_name": "Apple Inc.",
         "market": "US",
         "status": "Active",
-        "per_invest_amount": "750",
-        "invest_frequency": "fortnightly",
-        "invest_day_of_week": "Wed",
-        "invest_day_of_month": 0,
-        "next_trd_date": "2026-04-08",
-        "cum_amount": "9000",
-        "cum_profit": "320.50",
-        "average_cost": "442.15",
+        "per_invest_amount": "100",
+        "invest_frequency": "Monthly",
+        "invest_day_of_month": "15",
+        "invest_day_of_week": "",
+        "next_trd_date": "1778853600",
+        "cum_amount": "0",
+        "cum_profit": "0",
+        "average_cost": "0",
         "allow_margin_finance": false,
-        "alter_hours": 24,
-        "display_account": "Main Account",
-        "member_id": "U1234567",
-        "issue_number": 12,
-        "created_at": "2025-04-08T14:00:00Z",
-        "updated_at": "2026-04-08T14:00:00Z"
+        "alter_hours": "6",
+        "display_account": "LBPT10065023",
+        "member_id": "3162",
+        "aaid": "20975338",
+        "account_channel": "lb_papertrading",
+        "issue_number": 0,
+        "created_at": "1778725628",
+        "updated_at": "1778725628"
       }
     ]
   }

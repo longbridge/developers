@@ -210,11 +210,12 @@ func main() {
   "data": {
     "list": [
       {
+        "id": "12345",
+        "symbol": "AAPL.US",
         "ex_date": "2026-02-07",
-        "pay_date": "2026-02-13",
-        "amount": "0.25",
-        "currency": "USD",
-        "type": "Cash"
+        "payment_date": "2026-02-13",
+        "record_date": "2026-02-10",
+        "desc": "Cash dividend 0.25 USD"
       }
     ]
   }

@@ -206,14 +206,32 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "TSLA.US",
+    "currency": "USD",
+    "current_index": 3,
+    "current_period": "qf",
+    "opt_periods": [
+      "qf",
+      "af",
+      "saf"
+    ],
     "list": [
       {
-        "period": "FY2024",
-        "revenue": 105000000000,
-        "eps": 3.12,
-        "net_income": 10500000000,
-        "analyst_count": 35
+        "fiscal_year": 2026,
+        "fiscal_period": "Q2 FY2026",
+        "period_text": "Q2 FY2026",
+        "details": [
+          {
+            "key": "revenue",
+            "name": "Revenue",
+            "estimate": "95000000000",
+            "actual": "",
+            "comp": "",
+            "comp_value": null,
+            "comp_desc": "",
+            "description": "",
+            "is_released": false
+          }
+        ]
       }
     ]
   }

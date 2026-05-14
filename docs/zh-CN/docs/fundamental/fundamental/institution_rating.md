@@ -206,47 +206,47 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "analyst": {
+    "latest": {
       "evaluate": {
         "buy": 18,
         "hold": 17,
+        "sell": 4,
         "no_opinion": 4,
         "over": 5,
-        "sell": 4,
-        "total": 51,
         "under": 3,
-        "start_date": "2024-01-01",
-        "end_date": "2025-01-01"
+        "total": 51,
+        "start_date": "1778198400",
+        "end_date": "0"
       },
       "industry_id": 87676,
       "industry_mean": 10,
       "industry_median": 4,
-      "industry_name": "汽车制造商",
+      "industry_name": "Automobiles",
       "industry_rank": 1,
       "industry_total": 30,
       "target": {
-        "end_date": "2025-01-01",
         "highest_price": "600.000",
         "lowest_price": "123.000",
         "prev_close": "428.35",
-        "start_date": "2024-01-01"
+        "start_date": "1778198400",
+        "end_date": "0"
       }
     },
-    "instratings": {
+    "summary": {
       "ccy_symbol": "$",
-      "change": "Upgraded",
+      "change": "0",
+      "recommend": "Buy",
+      "updated_at": "1778198400",
       "evaluate": {
         "buy": 18,
         "hold": 17,
         "sell": 4
       },
-      "recommend": "Buy",
       "target": {
-        "average_target": "380.00",
+        "average_target": "350.00",
         "highest_price": "600.000",
         "lowest_price": "123.000"
-      },
-      "updated_at": "2025-01-01T00:00:00Z"
+      }
     }
   }
 }
@@ -291,12 +291,14 @@ func main() {
 | latest.target.start_date | string | 否 | 统计周期开始日期 |
 | latest.target.end_date | string | 否 | 统计周期结束日期 |
 | summary | object | 否 | 综合评级快照 |
-| summary.recommend | string | 否 | 综合评级 |
-| summary.change | string | 否 | 评级变化 |
+| summary.recommend | object | 否 | 评级分布映射 |
+| summary.change | string | 否 | 价格变动值 |
 | summary.ccy_symbol | string | 否 | 货币符号 |
-| summary.evaluate | object | 否 | 评级分布（同 latest.evaluate） |
-| summary.target | object | 否 | 一致目标价 |
-| summary.target.average_target | string | 否 | 平均目标价 |
-| summary.target.highest_price | string | 否 | 最高目标价 |
-| summary.target.lowest_price | string | 否 | 最低目标价 |
-| summary.updated_at | string | 否 | 最后更新时间 |
+| summary.evaluate | object | 否 | 评级分布数量 |
+| summary.evaluate.buy | integer | 否 | 买入数量 |
+| summary.evaluate.strong_buy | integer | 否 | 强力买入数量 |
+| summary.evaluate.hold | integer | 否 | 持有数量 |
+| summary.evaluate.sell | integer | 否 | 卖出数量 |
+| summary.evaluate.under | integer | 否 | 跑输数量 |
+| summary.target | string | 否 | 一致平均目标价 |
+| summary.updated_at | string | 否 | 最后更新日期字符串 |

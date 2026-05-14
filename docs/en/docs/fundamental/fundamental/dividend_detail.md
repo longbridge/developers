@@ -203,14 +203,12 @@ func main() {
   "data": {
     "list": [
       {
+        "id": "12345",
         "symbol": "AAPL.US",
-        "dividend_type": "cash",
-        "amount": 0.24,
-        "currency": "USD",
-        "declared_date": "2024-02-01",
-        "ex_date": "2024-02-09",
-        "record_date": "2024-02-12",
-        "payment_date": "2024-02-15"
+        "ex_date": "2026-02-07",
+        "payment_date": "2026-02-13",
+        "record_date": "2026-02-10",
+        "desc": "Cash dividend 0.25 USD"
       }
     ]
   }
@@ -233,11 +231,16 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | list | object[] | true | List of dividend records |
-| list[].symbol | string | true | Security symbol |
-| list[].dividend_type | string | false | Dividend type (e.g. cash, stock) |
-| list[].amount | double | false | Dividend amount per share |
-| list[].currency | string | false | Currency code |
-| list[].declared_date | string | false | Declaration date (YYYY-MM-DD) |
-| list[].ex_date | string | false | Ex-dividend date (YYYY-MM-DD) |
-| list[].record_date | string | false | Record date (YYYY-MM-DD) |
-| list[].payment_date | string | false | Payment date (YYYY-MM-DD) |
+
+### DividendItem
+
+<a id="DividendItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | string | false | Dividend event ID |
+| symbol | string | false | Security symbol |
+| desc | string | false | Dividend description |
+| ex_date | string | false | Ex-dividend date (YYYY-MM-DD) |
+| record_date | string | false | Record date (YYYY-MM-DD) |
+| payment_date | string | false | Payment date (YYYY-MM-DD) |

@@ -206,16 +206,23 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "updated_at": "1774310400",
-    "participants": [
+    "buy": [
       {
-        "broker_id": 1234,
-        "broker_name": "HSBC Securities",
-        "buy_qty": "100000",
-        "sell_qty": "80000",
-        "net_qty": "20000"
+        "parti_number": "B01224",
+        "name": "HSBC",
+        "chg": "5000000",
+        "strong": true
       }
-    ]
+    ],
+    "sell": [
+      {
+        "parti_number": "B01274",
+        "name": "Goldman Sachs HK",
+        "chg": "-3000000",
+        "strong": false
+      }
+    ],
+    "updated_at": "2026.05.13"
   }
 }
 ```

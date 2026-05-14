@@ -201,16 +201,24 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "symbol": "AAPL.US",
-    "list": [
-      {
-        "date": "2024-03-31",
-        "pe": 28.5,
-        "pb": 46.2,
-        "ps": 7.8,
-        "dividend_yield": 0.55
+    "history": {
+      "metrics": {
+        "pe": {
+          "desc": "P/E Ratio",
+          "high": "35.2",
+          "low": "18.1",
+          "median": "26.5",
+          "list": [
+            {
+              "timestamp": "1622520000",
+              "value": "28.5"
+            }
+          ]
+        },
+        "pb": null,
+        "ps": null
       }
-    ]
+    }
   }
 }
 ```

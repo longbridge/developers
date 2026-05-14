@@ -179,9 +179,15 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "list": [
-      { "symbol": "AAPL.US", "support": true },
-      { "symbol": "700.HK", "support": true }
+    "infos": [
+      {
+        "symbol": "AAPL.US",
+        "support_regular_saving": true
+      },
+      {
+        "symbol": "700.HK",
+        "support_regular_saving": false
+      }
     ]
   }
 }
