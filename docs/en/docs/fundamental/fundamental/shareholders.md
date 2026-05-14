@@ -239,6 +239,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | shareholder_list | object[] | true | List of shareholders |
+| forward_url | string | false | Link to full shareholder page |
 | total | integer | true | Total number of shareholders |
 
 ### ShareholderItem

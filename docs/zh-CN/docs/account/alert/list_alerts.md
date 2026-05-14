@@ -208,13 +208,13 @@ func main() {
   "data": {
     "lists": [
       {
-        "symbol": "TSLA.US",
-        "code": "TSLA",
+        "symbol": "AAPL.US",
+        "code": "AAPL",
         "market": "US",
-        "name": "Tesla",
-        "price": "428.35",
-        "chg": "0.05",
-        "p_chg": "0.012",
+        "name": "Apple",
+        "price": "298.87",
+        "chg": "4.07",
+        "p_chg": "1.38",
         "product": "stock",
         "indicators": [
           {
@@ -262,14 +262,14 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | true | 证券代码 |
-| code | string | false | 证券简码 |
-| name | string | false | 证券名称 |
+| code | string | false | 股票代码 |
 | market | string | false | 市场 |
+| name | string | false | 证券名称 |
+| price | string | false | 最新价 |
+| chg | string | false | 当日涨跌额 |
+| p_chg | string | false | 当日涨跌幅 |
 | product | string | false | 产品类型 |
-| price | string | false | 当前价格 |
-| chg | string | false | 价格变动 |
-| p_chg | string | false | 涨跌幅 |
-| indicators | object[] | true | 提醒指标列表 |
+| indicators | object[] | false | 价格提醒列表 |
 
 ### AlertItem
 
@@ -278,10 +278,10 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | string | true | 提醒 ID |
-| indicator_id | string | false | 指标 ID |
-| text | string | false | 提醒描述 |
+| indicator_id | string | false | 条件：`1`=价格上涨，`2`=价格下跌，`3`=涨幅，`4`=跌幅 |
 | enabled | boolean | false | 是否启用 |
-| frequency | integer | false | 触发频率 |
-| scope | integer | false | 作用范围 |
-| value_map | object | false | 提醒条件值 |
-| state | integer[] | false | 提醒状态标志 |
+| frequency | integer | false | 触发频率：`1`=每日，`2`=每次，`3`=一次 |
+| scope | integer | false | 范围 |
+| text | string | false | 显示文本 |
+| state | integer[] | false | 触发状态标志 |
+| value_map | object | false | 触发值（如 `{"price":"400"}` 或 `{"chg":"5"}`） |

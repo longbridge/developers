@@ -208,13 +208,13 @@ func main() {
   "data": {
     "lists": [
       {
-        "symbol": "TSLA.US",
-        "code": "TSLA",
+        "symbol": "AAPL.US",
+        "code": "AAPL",
         "market": "US",
-        "name": "Tesla",
-        "price": "428.35",
-        "chg": "0.05",
-        "p_chg": "0.012",
+        "name": "Apple",
+        "price": "298.87",
+        "chg": "4.07",
+        "p_chg": "1.38",
         "product": "stock",
         "indicators": [
           {
@@ -262,14 +262,14 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | true | 證券代碼 |
-| code | string | false | 證券簡碼 |
-| name | string | false | 證券名稱 |
+| code | string | false | 股票代碼 |
 | market | string | false | 市場 |
+| name | string | false | 證券名稱 |
+| price | string | false | 最新價 |
+| chg | string | false | 當日漲跌額 |
+| p_chg | string | false | 當日漲跌幅 |
 | product | string | false | 產品類型 |
-| price | string | false | 當前價格 |
-| chg | string | false | 價格變動 |
-| p_chg | string | false | 漲跌幅 |
-| indicators | object[] | true | 提醒指標列表 |
+| indicators | object[] | false | 價格提醒列表 |
 
 ### AlertItem
 
@@ -278,10 +278,10 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | string | true | 提醒 ID |
-| indicator_id | string | false | 指標 ID |
-| text | string | false | 提醒描述 |
+| indicator_id | string | false | 條件：`1`=價格上漲，`2`=價格下跌，`3`=漲幅，`4`=跌幅 |
 | enabled | boolean | false | 是否啟用 |
-| frequency | integer | false | 觸發頻率 |
-| scope | integer | false | 作用範圍 |
-| value_map | object | false | 提醒條件值 |
-| state | integer[] | false | 提醒狀態標誌 |
+| frequency | integer | false | 觸發頻率：`1`=每日，`2`=每次，`3`=一次 |
+| scope | integer | false | 範圍 |
+| text | string | false | 顯示文本 |
+| state | integer[] | false | 觸發狀態標誌 |
+| value_map | object | false | 觸發值（如 `{"price":"400"}` 或 `{"chg":"5"}`） |

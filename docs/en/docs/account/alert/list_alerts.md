@@ -208,13 +208,13 @@ func main() {
   "data": {
     "lists": [
       {
-        "symbol": "TSLA.US",
-        "code": "TSLA",
+        "symbol": "AAPL.US",
+        "code": "AAPL",
         "market": "US",
-        "name": "Tesla",
-        "price": "428.35",
-        "chg": "0.05",
-        "p_chg": "0.012",
+        "name": "Apple",
+        "price": "298.87",
+        "chg": "4.07",
+        "p_chg": "1.38",
         "product": "stock",
         "indicators": [
           {
@@ -253,7 +253,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | true | List of alert groups by symbol |
+| lists | object[] | true | Alert groups per security |
 
 ### AlertSymbolGroup
 
@@ -262,14 +262,14 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | true | Security symbol |
-| code | string | false | Security code |
-| name | string | false | Security name |
+| code | string | false | Ticker code |
 | market | string | false | Market |
+| name | string | false | Security name |
+| price | string | false | Latest price |
+| chg | string | false | Day change amount |
+| p_chg | string | false | Day change percentage |
 | product | string | false | Product type |
-| price | string | false | Current price |
-| chg | string | false | Price change |
-| p_chg | string | false | Price change percentage |
-| indicators | object[] | true | List of alert indicators |
+| indicators | object[] | false | Alert indicators |
 
 ### AlertItem
 
@@ -278,10 +278,10 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | string | true | Alert ID |
-| indicator_id | string | false | Indicator ID |
-| text | string | false | Alert description text |
-| enabled | boolean | false | Whether alert is enabled |
-| frequency | integer | false | Trigger frequency |
+| indicator_id | string | false | Condition: `1`=price_rise, `2`=price_fall, `3`=pct_rise, `4`=pct_fall |
+| enabled | boolean | false | Whether the alert is active |
+| frequency | integer | false | Frequency: `1`=daily, `2`=every_time, `3`=once |
 | scope | integer | false | Scope |
-| value_map | object | false | Alert condition values |
-| state | integer[] | false | Alert state flags |
+| text | string | false | Display text |
+| state | integer[] | false | Trigger state flags |
+| value_map | object | false | Trigger value (e.g. `{"price":"400"}` or `{"chg":"5"}`) |

@@ -186,11 +186,17 @@ func main() {
     "total_profit": "120.50",
     "nearest_plans": [
       {
-        "plan_id": "1234567890",
+        "plan_id": "1239402174908207104",
         "symbol": "AAPL.US",
         "stock_name": "Apple Inc.",
+        "market": "US",
+        "status": "Active",
         "per_invest_amount": "100",
-        "next_trd_date": "1778853600"
+        "invest_frequency": "Monthly",
+        "invest_day_of_month": "15",
+        "next_trd_date": "1778853600",
+        "cum_amount": "0",
+        "cum_profit": "0"
       }
     ]
   }
@@ -206,15 +212,18 @@ func main() {
 
 ## Schemas
 
-### DcaStats
+### DcaStatsResponse
 
-<a id="DcaStats"></a>
+<a id="DcaStatsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| total_invested | string | true | 總投入金額 |
-| total_profit_loss | string | true | 總盈虧金額 |
-| total_profit_loss_rate | string | true | 總盈虧比率 |
-| nearest_plans | object[] | false | 最近即將執行的定投計劃（見 DcaPlan） |
+| active_count | string | false | 活躍計劃數量 |
+| finished_count | string | false | 已完成計劃數量 |
+| suspended_count | string | false | 已暫停計劃數量 |
+| rest_days | string | false | 距下次扣款天數 |
+| total_amount | string | false | 總投入金額 |
+| total_profit | string | false | 總盈虧 |
+| nearest_plans | object[] | false | 最近即將執行的定投計劃（結構與 DcaPlan 一致） |
 
 > `nearest_plans` 的子項結構與 [查看定投計劃](./list-dca) 中的 `DcaPlan` 一致。

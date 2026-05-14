@@ -186,11 +186,17 @@ func main() {
     "total_profit": "120.50",
     "nearest_plans": [
       {
-        "plan_id": "1234567890",
+        "plan_id": "1239402174908207104",
         "symbol": "AAPL.US",
         "stock_name": "Apple Inc.",
+        "market": "US",
+        "status": "Active",
         "per_invest_amount": "100",
-        "next_trd_date": "1778853600"
+        "invest_frequency": "Monthly",
+        "invest_day_of_month": "15",
+        "next_trd_date": "1778853600",
+        "cum_amount": "0",
+        "cum_profit": "0"
       }
     ]
   }
@@ -206,18 +212,18 @@ func main() {
 
 ## Schemas
 
-### DcaStats
+### DcaStatsResponse
 
-<a id="DcaStats"></a>
+<a id="DcaStatsResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | active_count | string | false | Number of active plans |
 | finished_count | string | false | Number of finished plans |
 | suspended_count | string | false | Number of suspended plans |
+| rest_days | string | false | Days until next investment |
 | total_amount | string | false | Total invested amount |
 | total_profit | string | false | Total profit/loss |
-| rest_days | string | false | Days until next trade |
-| nearest_plans | object[] | false | Nearest upcoming DCA plans (see DcaPlan) |
+| nearest_plans | object[] | false | Nearest upcoming DCA plans (same structure as DcaPlan) |
 
 > `nearest_plans` items use the same `DcaPlan` structure as [List DCA Plans](./list-dca).

@@ -209,37 +209,51 @@ func main() {
   "data": {
     "summary": {
       "currency": "USD",
-      "sum_profit": "-16263.15",
-      "sum_profit_rate": "-0.9008",
-      "invest_amount": "18053.32",
-      "current_total_asset": "1790.16",
+      "sum_profit": "62905.97",
+      "sum_profit_rate": "0.6128",
+      "invest_amount": "102659.74",
+      "current_total_asset": "165565.71",
       "initial_asset_value": "0.00",
-      "ending_asset_value": "1790.16",
+      "ending_asset_value": "165565.71",
       "is_traded": true,
-      "start_date": "2025-11-22",
-      "start_time": "1763769600",
+      "start_date": "2025-10-17",
+      "start_time": "1760659200",
       "end_date": "2026-05-14",
-      "end_time": "1778724973",
-      "profits": {}
+      "end_time": "1778731947",
+      "profits": {
+        "stock": "66370.84",
+        "crypto": "0",
+        "fund": null,
+        "ipo": null,
+        "mmf": null,
+        "other": null,
+        "cumulative_transaction_amount": "1244920.28"
+      }
     },
     "sublist": {
-      "start": "2025-11-22",
-      "start_date": "2025-11-22",
+      "start": "2025-10-17",
+      "start_date": "2025-10-17",
       "end": "2026-05-14",
       "end_date": "2026-05-14",
+      "updated_at": "1778731947",
+      "updated_date": "2026-05-14",
       "items": [
         {
           "symbol": "AAPL.US",
           "name": "Apple",
           "market": "US",
+          "currency": "USD",
           "profit": "100.00",
           "profit_rate": "0.05",
           "holding_period": "180",
           "clearance_times": 0,
           "is_holding": true,
           "item_type": "Stock",
+          "isin": "",
+          "security_code": "AAPL",
           "underlying_profit": "100.00",
-          "derivatives_profit": "0.00"
+          "derivatives_profit": "0.00",
+          "order_profit": null
         }
       ]
     }
@@ -262,8 +276,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| summary | object | false | Overall profit summary |
-| sublist | object | false | Detailed profit analysis by position |
+| summary | object | true | Overall summary |
+| sublist | object | false | Per-position breakdown |
 
 ### ProfitAnalysisSummary
 
@@ -271,19 +285,26 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| currency | string | false | Account currency |
-| current_total_asset | string | false | Current total asset value |
-| end_date | string | false | Analysis end date |
-| end_time | string | false | Analysis end Unix timestamp |
-| ending_asset_value | string | false | Ending asset value |
-| initial_asset_value | string | false | Initial asset value at start |
-| invest_amount | string | false | Total invested amount |
-| is_traded | boolean | false | Whether any trades occurred |
-| profits | object | false | Profit breakdown by asset type |
-| start_date | string | false | Analysis start date |
-| start_time | string | false | Analysis start Unix timestamp |
+| currency | string | false | Currency |
 | sum_profit | string | false | Total profit/loss |
-| sum_profit_rate | string | false | Total profit rate |
+| sum_profit_rate | string | false | Total profit/loss rate |
+| invest_amount | string | false | Total invested amount |
+| current_total_asset | string | false | Current total asset value |
+| initial_asset_value | string | false | Initial asset value |
+| ending_asset_value | string | false | Ending asset value |
+| is_traded | boolean | false | Whether any trades exist |
+| start_date | string | false | Period start date |
+| start_time | string | false | Period start timestamp |
+| end_date | string | false | Period end date |
+| end_time | string | false | Period end timestamp |
+| profits | object | false | Profit breakdown by category |
+| profits.stock | string | false | Stock profit |
+| profits.crypto | string | false | Crypto profit |
+| profits.fund | string | false | Fund profit |
+| profits.ipo | string | false | IPO profit |
+| profits.mmf | string | false | Money market fund profit |
+| profits.other | string | false | Other profit |
+| profits.cumulative_transaction_amount | string | false | Cumulative transaction amount |
 
 ### ProfitAnalysisSublist
 
@@ -291,11 +312,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start | string | false | Period start timestamp |
-| end | string | false | Period end timestamp |
+| start | string | false | Period start |
 | start_date | string | false | Start date |
+| end | string | false | Period end |
 | end_date | string | false | End date |
-| items | object[] | false | Per-position profit items |
+| updated_at | string | false | Last update timestamp |
+| updated_date | string | false | Last update date |
+| items | object[] | false | Per-position P&L items |
 
 ### ProfitAnalysisItem
 
@@ -304,17 +327,17 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | false | Security symbol |
-| security_code | string | false | Security code |
 | name | string | false | Security name |
 | market | string | false | Market |
 | currency | string | false | Currency |
-| isin | string | false | ISIN code |
-| profit | string | false | Total profit/loss |
+| profit | string | false | Profit/loss |
 | profit_rate | string | false | Profit/loss rate |
-| underlying_profit | string | false | Underlying asset profit |
+| holding_period | string | false | Holding period (days) |
+| clearance_times | integer | false | Number of clearances |
+| is_holding | boolean | false | Whether currently holding |
+| item_type | string | false | Asset type: `Stock`, `Fund`, `Crypto`, etc. |
+| isin | string | false | ISIN code |
+| security_code | string | false | Security code |
+| underlying_profit | string | false | Underlying stock profit |
 | derivatives_profit | string | false | Derivatives profit |
 | order_profit | string | false | Order profit |
-| holding_period | string | false | Holding period in days |
-| clearance_times | integer | false | Number of times closed |
-| is_holding | boolean | false | Whether currently holding |
-| item_type | string | false | Asset type: `Stock`, `Fund`, `Crypto` |

@@ -209,37 +209,51 @@ func main() {
   "data": {
     "summary": {
       "currency": "USD",
-      "sum_profit": "-16263.15",
-      "sum_profit_rate": "-0.9008",
-      "invest_amount": "18053.32",
-      "current_total_asset": "1790.16",
+      "sum_profit": "62905.97",
+      "sum_profit_rate": "0.6128",
+      "invest_amount": "102659.74",
+      "current_total_asset": "165565.71",
       "initial_asset_value": "0.00",
-      "ending_asset_value": "1790.16",
+      "ending_asset_value": "165565.71",
       "is_traded": true,
-      "start_date": "2025-11-22",
-      "start_time": "1763769600",
+      "start_date": "2025-10-17",
+      "start_time": "1760659200",
       "end_date": "2026-05-14",
-      "end_time": "1778724973",
-      "profits": {}
+      "end_time": "1778731947",
+      "profits": {
+        "stock": "66370.84",
+        "crypto": "0",
+        "fund": null,
+        "ipo": null,
+        "mmf": null,
+        "other": null,
+        "cumulative_transaction_amount": "1244920.28"
+      }
     },
     "sublist": {
-      "start": "2025-11-22",
-      "start_date": "2025-11-22",
+      "start": "2025-10-17",
+      "start_date": "2025-10-17",
       "end": "2026-05-14",
       "end_date": "2026-05-14",
+      "updated_at": "1778731947",
+      "updated_date": "2026-05-14",
       "items": [
         {
           "symbol": "AAPL.US",
           "name": "Apple",
           "market": "US",
+          "currency": "USD",
           "profit": "100.00",
           "profit_rate": "0.05",
           "holding_period": "180",
           "clearance_times": 0,
           "is_holding": true,
           "item_type": "Stock",
+          "isin": "",
+          "security_code": "AAPL",
           "underlying_profit": "100.00",
-          "derivatives_profit": "0.00"
+          "derivatives_profit": "0.00",
+          "order_profit": null
         }
       ]
     }
@@ -262,13 +276,49 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| summary | object | false | 整体盈亏汇总 |
-| sublist | object | false | 详细盈亏分析 |
-| sublist.start | string | false | 统计期开始 |
-| sublist.end | string | false | 统计期结束 |
-| sublist.start_date | string | false | 开始日期 |
-| sublist.end_date | string | false | 结束日期 |
-| sublist.items | object[] | false | 按持仓的盈亏明细 |
+| summary | object | true | 总体汇总 |
+| sublist | object | false | 逐仓位明细 |
+
+### ProfitAnalysisSummary
+
+<a id="ProfitAnalysisSummary"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| currency | string | false | 货币 |
+| sum_profit | string | false | 总盈亏 |
+| sum_profit_rate | string | false | 总盈亏率 |
+| invest_amount | string | false | 总投入金额 |
+| current_total_asset | string | false | 当前总资产 |
+| initial_asset_value | string | false | 初始资产价值 |
+| ending_asset_value | string | false | 期末资产价值 |
+| is_traded | boolean | false | 是否有交易记录 |
+| start_date | string | false | 统计开始日期 |
+| start_time | string | false | 统计开始时间戳 |
+| end_date | string | false | 统计结束日期 |
+| end_time | string | false | 统计结束时间戳 |
+| profits | object | false | 按类型分解的盈亏 |
+| profits.stock | string | false | 股票盈亏 |
+| profits.crypto | string | false | 加密货币盈亏 |
+| profits.fund | string | false | 基金盈亏 |
+| profits.ipo | string | false | 打新盈亏 |
+| profits.mmf | string | false | 货币基金盈亏 |
+| profits.other | string | false | 其他盈亏 |
+| profits.cumulative_transaction_amount | string | false | 累计交易金额 |
+
+### ProfitAnalysisSublist
+
+<a id="ProfitAnalysisSublist"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| start | string | false | 统计期开始 |
+| start_date | string | false | 开始日期 |
+| end | string | false | 统计期结束 |
+| end_date | string | false | 结束日期 |
+| updated_at | string | false | 最后更新时间戳 |
+| updated_date | string | false | 最后更新日期 |
+| items | object[] | false | 逐仓位盈亏列表 |
 
 ### ProfitAnalysisItem
 
@@ -276,15 +326,18 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | true | 证券代码 |
+| symbol | string | false | 证券代码 |
 | name | string | false | 证券名称 |
 | market | string | false | 市场 |
 | currency | string | false | 货币 |
-| profit | string | false | 总盈亏 |
-| profit_rate | string | false | 盈亏比率 |
+| profit | string | false | 盈亏 |
+| profit_rate | string | false | 盈亏率 |
+| holding_period | string | false | 持仓天数 |
+| clearance_times | integer | false | 清仓次数 |
+| is_holding | boolean | false | 是否持有中 |
+| item_type | string | false | 资产类型：`Stock`、`Fund`、`Crypto` 等 |
+| isin | string | false | ISIN 代码 |
+| security_code | string | false | 证券代码（短） |
 | underlying_profit | string | false | 正股盈亏 |
 | derivatives_profit | string | false | 衍生品盈亏 |
-| holding_period | string | false | 持仓周期 |
-| clearance_times | integer | false | 已平仓次数 |
-| is_holding | boolean | false | 是否当前持有 |
-| item_type | string | false | 资产类型：`Stock`、`Fund`、`Crypto` |
+| order_profit | string | false | 订单盈亏 |
