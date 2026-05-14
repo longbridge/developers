@@ -242,17 +242,14 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buy | object[] | 否 | 淨買入經紀商列表，見 [BrokerHoldingEntry](#BrokerHoldingEntry) |
-| sell | object[] | 否 | 淨賣出經紀商列表，見 [BrokerHoldingEntry](#BrokerHoldingEntry) |
+| buy | object[] | 否 | 淨買入經紀商列表， |
+| ∟ parti_number | string | 是 | 經紀商參與者編號 |
+| ∟ name | string | 否 | 經紀商名稱 |
+| ∟ chg | string | 否 | 持倉變動 |
+| ∟ strong | boolean | 否 | 是否為主要持倉者 |
+| sell | object[] | 否 | 淨賣出經紀商列表， |
+| ∟ parti_number | string | 是 | 經紀商參與者編號 |
+| ∟ name | string | 否 | 經紀商名稱 |
+| ∟ chg | string | 否 | 持倉變動 |
+| ∟ strong | boolean | 否 | 是否為主要持倉者 |
 | updated_at | string | 否 | 最後更新時間 |
-
-### BrokerHoldingEntry
-
-<a id="BrokerHoldingEntry"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| parti_number | string | 是 | 經紀商參與者編號 |
-| name | string | 否 | 經紀商名稱 |
-| chg | string | 否 | 持倉變動 |
-| strong | boolean | 否 | 是否為主要持倉者 |

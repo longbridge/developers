@@ -256,15 +256,8 @@ func main() {
 | statistics.preclose | string | false | Previous close price |
 | statistics.timestamp | string | false | Statistics timestamp |
 | statistics.trade_date | string[] | false | Trading dates included |
-| trades | object[] | false | Price-level trade distribution, see [TradePriceLevel](#TradePriceLevel) |
-
-### TradePriceLevel
-
-<a id="TradePriceLevel"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| price | string | true | Price level |
-| buy_amount | string | false | Buy amount at this price |
-| sell_amount | string | false | Sell amount at this price |
-| neutral_amount | string | false | Neutral amount at this price |
+| trades | object[] | false | Price-level trade distribution |
+| ∟ price | string | true | Price level |
+| ∟ buy_amount | string | false | Buy amount at this price |
+| ∟ sell_amount | string | false | Sell amount at this price |
+| ∟ neutral_amount | string | false | Neutral amount at this price |

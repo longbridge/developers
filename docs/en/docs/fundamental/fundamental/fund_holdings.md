@@ -235,17 +235,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | true | List of fund holders, see [FundHolder](#FundHolder) |
-
-### FundHolder
-
-<a id="FundHolder"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Fund symbol |
-| code | string | false | Fund code |
-| name | string | false | Fund name |
-| position_ratio | string | false | Position ratio (%) |
-| report_date | string | false | Report date |
-| currency | string | false | Currency |
+| lists | object[] | true | List of fund holders |
+| ∟ symbol | string | true | Fund symbol |
+| ∟ code | string | false | Fund code |
+| ∟ name | string | false | Fund name |
+| ∟ position_ratio | string | false | Position ratio (%) |
+| ∟ report_date | string | false | Report date |
+| ∟ currency | string | false | Currency |

@@ -208,13 +208,6 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| infos | object[] | true | List of DCA support results, see [DcaSupportInfo](#DcaSupportInfo) |
-
-### DcaSupportInfo
-
-<a id="DcaSupportInfo"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| support_regular_saving | boolean | true | Whether DCA is supported |
+| infos | object[] | true | List of DCA support results |
+| ∟ symbol | string | true | Security symbol |
+| ∟ support_regular_saving | boolean | true | Whether DCA is supported |

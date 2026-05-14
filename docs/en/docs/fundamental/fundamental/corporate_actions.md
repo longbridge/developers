@@ -243,23 +243,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | object[] | true | Corporate action list, see [CorpActionItem](#CorpActionItem) |
-
-### CorpActionItem
-
-<a id="CorpActionItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| id | string | false | Action ID |
-| act_desc | string | false | Action description |
-| act_type | string | false | Action type category |
-| action | string | false | Action code (e.g. `DividendExDate`) |
-| date | string | false | Event date (YYYYMMDD) |
-| date_str | string | false | Short display date (MM.DD) |
-| date_type | string | false | Date type label (e.g. Payment Date) |
-| date_zone | string | false | Time zone (e.g. EST) |
-| delay_content | string | false | Delay content description |
-| is_delay | boolean | false | Whether the event is delayed |
-| live | boolean | false | Whether currently live |
-| recent | boolean | false | Whether this is a recent event |
+| items | object[] | true | Corporate action list |
+| ∟ id | string | false | Action ID |
+| ∟ act_desc | string | false | Action description |
+| ∟ act_type | string | false | Action type category |
+| ∟ action | string | false | Action code (e.g. `DividendExDate`) |
+| ∟ date | string | false | Event date (YYYYMMDD) |
+| ∟ date_str | string | false | Short display date (MM.DD) |
+| ∟ date_type | string | false | Date type label (e.g. Payment Date) |
+| ∟ date_zone | string | false | Time zone (e.g. EST) |
+| ∟ delay_content | string | false | Delay content description |
+| ∟ is_delay | boolean | false | Whether the event is delayed |
+| ∟ live | boolean | false | Whether currently live |
+| ∟ recent | boolean | false | Whether this is a recent event |

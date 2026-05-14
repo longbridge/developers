@@ -233,16 +233,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| exchanges | object[] | true | 匯率列表，見 [ExchangeRate](#ExchangeRate) |
-
-### ExchangeRate
-
-<a id="ExchangeRate"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| base_currency | string | true | 基準貨幣 |
-| other_currency | string | true | 報價貨幣 |
-| bid_rate | number | false | 買入匯率 |
-| offer_rate | number | false | 賣出匯率 |
-| average_rate | number | false | 平均匯率 |
+| exchanges | object[] | true | 匯率列表， |
+| ∟ base_currency | string | true | 基準貨幣 |
+| ∟ other_currency | string | true | 報價貨幣 |
+| ∟ bid_rate | number | false | 買入匯率 |
+| ∟ offer_rate | number | false | 賣出匯率 |
+| ∟ average_rate | number | false | 平均匯率 |

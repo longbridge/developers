@@ -238,20 +238,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| shareholder_list | object[] | true | List of shareholders, see [ShareholderItem](#ShareholderItem) |
+| shareholder_list | object[] | true | List of shareholders |
+| ∟ shareholder_name | string | true | Shareholder name |
+| ∟ percent_of_shares | string | true | Percentage of shares held |
+| ∟ institution_type | string | false | Institution type |
+| ∟ report_date | string | false | Report date |
+| ∟ shareholder_id | string | false | Shareholder ID |
+| ∟ shares_changed | string | false | Change in shares held |
+| ∟ stocks | object[] | false | Associated stocks |
 | forward_url | string | false | Link to full shareholder page |
 | total | integer | true | Total number of shareholders |
-
-### ShareholderItem
-
-<a id="ShareholderItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| shareholder_name | string | true | Shareholder name |
-| percent_of_shares | string | true | Percentage of shares held |
-| institution_type | string | false | Institution type |
-| report_date | string | false | Report date |
-| shareholder_id | string | false | Shareholder ID |
-| shares_changed | string | false | Change in shares held |
-| stocks | object[] | false | Associated stocks |

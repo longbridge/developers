@@ -250,17 +250,3 @@ func main() {
 | pe | object | false | P/E ratio distribution |
 | pb | object | false | P/B ratio distribution |
 | ps | object | false | P/S ratio distribution |
-
-### ValuationDist
-
-<a id="ValuationDist"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| value | string | false | Symbol's own metric value |
-| high | string | false | Industry high |
-| low | string | false | Industry low |
-| median | string | false | Industry median |
-| rank_index | string | false | Symbol's rank index |
-| rank_total | string | false | Total number of companies |
-| ranking | string | false | Ranking percentile (0–1) |

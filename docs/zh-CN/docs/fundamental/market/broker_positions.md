@@ -242,17 +242,14 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buy | object[] | 否 | 净买入经纪商列表，见 [BrokerHoldingEntry](#BrokerHoldingEntry) |
-| sell | object[] | 否 | 净卖出经纪商列表，见 [BrokerHoldingEntry](#BrokerHoldingEntry) |
+| buy | object[] | 否 | 净买入经纪商列表， |
+| ∟ parti_number | string | 是 | 经纪商参与者编号 |
+| ∟ name | string | 否 | 经纪商名称 |
+| ∟ chg | string | 否 | 持仓变动 |
+| ∟ strong | boolean | 否 | 是否为主要持仓者 |
+| sell | object[] | 否 | 净卖出经纪商列表， |
+| ∟ parti_number | string | 是 | 经纪商参与者编号 |
+| ∟ name | string | 否 | 经纪商名称 |
+| ∟ chg | string | 否 | 持仓变动 |
+| ∟ strong | boolean | 否 | 是否为主要持仓者 |
 | updated_at | string | 否 | 最后更新时间 |
-
-### BrokerHoldingEntry
-
-<a id="BrokerHoldingEntry"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| parti_number | string | 是 | 经纪商参与者编号 |
-| name | string | 否 | 经纪商名称 |
-| chg | string | 否 | 持仓变动 |
-| strong | boolean | 否 | 是否为主要持仓者 |

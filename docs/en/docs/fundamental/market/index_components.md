@@ -252,26 +252,19 @@ func main() {
 | rise_num | integer | false | Number of rising stocks |
 | fall_num | integer | false | Number of falling stocks |
 | flat_num | integer | false | Number of flat stocks |
-| stocks | object[] | true | List of constituent stocks, see [ConstituentStock](#ConstituentStock) |
-
-### ConstituentStock
-
-<a id="ConstituentStock"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| name | string | true | Security name |
-| market | string | false | Market |
-| last_done | string | false | Last trade price |
-| prev_close | string | false | Previous close |
-| chg | string | false | Price change percentage |
-| amount | string | false | Trading volume amount |
-| inflow | string | false | Capital inflow |
-| circulating_shares | string | false | Circulating shares |
-| total_shares | string | false | Total shares |
-| balance | string | false | Market cap |
-| trade_status | integer | false | Trading status code |
-| intro | string | false | Brief description |
-| delay | boolean | false | Whether data is delayed |
-| tags | string[] | false | Tags |
+| stocks | object[] | true | List of constituent stocks |
+| ∟ symbol | string | true | Security symbol |
+| ∟ name | string | true | Security name |
+| ∟ market | string | false | Market |
+| ∟ last_done | string | false | Last trade price |
+| ∟ prev_close | string | false | Previous close |
+| ∟ chg | string | false | Price change percentage |
+| ∟ amount | string | false | Trading volume amount |
+| ∟ inflow | string | false | Capital inflow |
+| ∟ circulating_shares | string | false | Circulating shares |
+| ∟ total_shares | string | false | Total shares |
+| ∟ balance | string | false | Market cap |
+| ∟ trade_status | integer | false | Trading status code |
+| ∟ intro | string | false | Brief description |
+| ∟ delay | boolean | false | Whether data is delayed |
+| ∟ tags | string[] | false | Tags |

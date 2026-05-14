@@ -241,22 +241,17 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| records | object[] | true | 执行记录列表，见 [DcaHistoryRecord](#DcaHistoryRecord) |
+| records | object[] | true | 执行记录列表， |
+| ∟ symbol | string | true | 证券代码 |
+| ∟ order_id | string | false | 关联订单 ID |
+| ∟ status | string | false | 执行状态 |
+| ∟ action | string | false | 操作类型 |
+| ∟ order_type | string | false | 订单类型 |
+| ∟ executed_qty | string | false | 成交数量 |
+| ∟ executed_price | string | false | 成交价格 |
+| ∟ executed_amount | string | false | 成交金额 |
+| ∟ rejected_reason | string | false | 拒绝原因（如有） |
+| ∟ created_at | string | false | 执行时间 |
+| ∟ created_at | string | false | 执行时间 |
+| ∟ rejected_reason | string | false | 拒绝原因（如有） |
 | has_more | boolean | false | 是否有更多记录 |
-
-### DcaHistoryRecord
-
-<a id="DcaHistoryRecord"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | 证券代码 |
-| order_id | string | false | 关联订单 ID |
-| status | string | false | 执行状态 |
-| action | string | false | 操作类型 |
-| order_type | string | false | 订单类型 |
-| executed_qty | string | false | 成交数量 |
-| executed_price | string | false | 成交价格 |
-| executed_amount | string | false | 成交金额 |
-| created_at | string | false | 执行时间 |
-| rejected_reason | string | false | 拒绝原因（如有） |

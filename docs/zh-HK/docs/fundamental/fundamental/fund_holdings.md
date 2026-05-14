@@ -235,17 +235,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | 是 | 基金持倉列表，見 [FundHolder](#FundHolder) |
-
-### FundHolder
-
-<a id="FundHolder"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 基金代碼（含市場後綴） |
-| code | string | 否 | 基金簡碼 |
-| name | string | 否 | 基金名稱 |
-| position_ratio | string | 否 | 持倉佔比（%） |
-| report_date | string | 否 | 報告日期 |
-| currency | string | 否 | 貨幣 |
+| lists | object[] | 是 | 基金持倉列表， |
+| ∟ symbol | string | 是 | 基金代碼（含市場後綴） |
+| ∟ code | string | 否 | 基金簡碼 |
+| ∟ name | string | 否 | 基金名稱 |
+| ∟ position_ratio | string | 否 | 持倉佔比（%） |
+| ∟ report_date | string | 否 | 報告日期 |
+| ∟ currency | string | 否 | 貨幣 |

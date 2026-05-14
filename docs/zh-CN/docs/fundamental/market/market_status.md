@@ -238,15 +238,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market_time | object[] | 是 | 市场状态列表，见 [MarketTimeItem](#MarketTimeItem) |
-
-### MarketTimeItem
-
-<a id="MarketTimeItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| market | string | 是 | 市场：`US`、`HK`、`CN`、`SG`、`Crypto` |
-| delay_sub_status | integer | 否 | 延迟订阅状态 |
-| delay_timestamp | string | 否 | 延迟时间戳 |
-| delay_trade_status | integer | 否 | 延迟交易状态 |
+| market_time | object[] | 是 | 市场状态列表， |
+| ∟ market | string | 是 | 市场：`US`、`HK`、`CN`、`SG`、`Crypto` |
+| ∟ delay_sub_status | integer | 否 | 延迟订阅状态 |
+| ∟ delay_timestamp | string | 否 | 延迟时间戳 |
+| ∟ delay_trade_status | integer | 否 | 延迟交易状态 |

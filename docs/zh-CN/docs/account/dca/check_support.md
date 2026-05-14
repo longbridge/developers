@@ -208,13 +208,6 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| infos | object[] | true | 定投支持情况列表，见 [DcaSupportInfo](#DcaSupportInfo) |
-
-### DcaSupportInfo
-
-<a id="DcaSupportInfo"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | 证券代码 |
-| support_regular_saving | boolean | true | 是否支持定投 |
+| infos | object[] | true | 定投支持情况列表， |
+| ∟ symbol | string | true | 证券代码 |
+| ∟ support_regular_saving | boolean | true | 是否支持定投 |

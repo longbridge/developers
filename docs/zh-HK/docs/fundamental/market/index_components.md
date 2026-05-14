@@ -252,26 +252,19 @@ func main() {
 | rise_num | integer | 否 | 上漲數量 |
 | fall_num | integer | 否 | 下跌數量 |
 | flat_num | integer | 否 | 平盤數量 |
-| stocks | object[] | 是 | 成分股列表，見 [ConstituentStock](#ConstituentStock) |
-
-### ConstituentStock
-
-<a id="ConstituentStock"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 證券代碼 |
-| name | string | 是 | 證券名稱 |
-| market | string | 否 | 市場 |
-| last_done | string | 否 | 最新價 |
-| prev_close | string | 否 | 前收盤價 |
-| chg | string | 否 | 漲跌幅 |
-| amount | string | 否 | 成交額 |
-| inflow | string | 否 | 資金淨流入 |
-| circulating_shares | string | 否 | 流通股數 |
-| total_shares | string | 否 | 總股數 |
-| balance | string | 否 | 市值 |
-| trade_status | integer | 否 | 交易狀態碼 |
-| intro | string | 否 | 簡介 |
-| delay | boolean | 否 | 是否為延遲數據 |
-| tags | string[] | 否 | 標籤 |
+| stocks | object[] | 是 | 成分股列表， |
+| ∟ symbol | string | 是 | 證券代碼 |
+| ∟ name | string | 是 | 證券名稱 |
+| ∟ market | string | 否 | 市場 |
+| ∟ last_done | string | 否 | 最新價 |
+| ∟ prev_close | string | 否 | 前收盤價 |
+| ∟ chg | string | 否 | 漲跌幅 |
+| ∟ amount | string | 否 | 成交額 |
+| ∟ inflow | string | 否 | 資金淨流入 |
+| ∟ circulating_shares | string | 否 | 流通股數 |
+| ∟ total_shares | string | 否 | 總股數 |
+| ∟ balance | string | 否 | 市值 |
+| ∟ trade_status | integer | 否 | 交易狀態碼 |
+| ∟ intro | string | 否 | 簡介 |
+| ∟ delay | boolean | 否 | 是否為延遲數據 |
+| ∟ tags | string[] | 否 | 標籤 |

@@ -238,15 +238,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market_time | object[] | true | List of market status items, see [MarketTimeItem](#MarketTimeItem) |
-
-### MarketTimeItem
-
-<a id="MarketTimeItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| market | string | true | Market: `US`, `HK`, `CN`, `SG`, `Crypto` |
-| delay_sub_status | integer | false | Delayed subscription status |
-| delay_timestamp | string | false | Delay timestamp |
-| delay_trade_status | integer | false | Delayed trading status |
+| market_time | object[] | true | List of market status items |
+| ∟ market | string | true | Market: `US`, `HK`, `CN`, `SG`, `Crypto` |
+| ∟ delay_sub_status | integer | false | Delayed subscription status |
+| ∟ delay_timestamp | string | false | Delay timestamp |
+| ∟ delay_trade_status | integer | false | Delayed trading status |

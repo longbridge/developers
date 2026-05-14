@@ -243,8 +243,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 公司行動列表 |
-| ∟ type | string | 是 | 行動類型：`Split`（拆股）、`Merger`（合並）、`Spinoff`（分拆）、`Rights`（配股） |
-| ∟ date | string | 是 | 生效日期 |
-| ∟ ratio | string | 否 | 拆股/合並比例 |
-| ∟ description | string | 否 | 行動描述 |
+| items | object[] | true | Corporate action list |
+| ∟ id | string | false | Action ID |
+| ∟ act_desc | string | false | Action description |
+| ∟ act_type | string | false | Action type category |
+| ∟ action | string | false | Action code (e.g. `DividendExDate`) |
+| ∟ date | string | false | 生效日期 |
+| ∟ date_str | string | false | Short display date (MM.DD) |
+| ∟ date_type | string | false | Date type label (e.g. Payment Date) |
+| ∟ date_zone | string | false | Time zone (e.g. EST) |
+| ∟ delay_content | string | false | Delay content description |
+| ∟ is_delay | boolean | false | Whether the event is delayed |
+| ∟ live | boolean | false | Whether currently live |
+| ∟ recent | boolean | false | Whether this is a recent event |

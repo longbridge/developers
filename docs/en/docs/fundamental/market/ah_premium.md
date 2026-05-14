@@ -237,19 +237,12 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| klines | object[] | true | A/H premium daily kline records, see [AhPremiumKline](#AhPremiumKline) |
-
-### AhPremiumKline
-
-<a id="AhPremiumKline"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| timestamp | string | false | Unix timestamp |
-| ahpremium_rate | string | false | A/H premium rate |
-| aprice | string | false | A-share price (CNY) |
-| apreclose | string | false | A-share previous close (CNY) |
-| hprice | string | false | H-share price (HKD) |
-| hpreclose | string | false | H-share previous close (HKD) |
-| currency_rate | string | false | CNH/HKD exchange rate |
-| price_spread | string | false | Price spread |
+| klines | object[] | true | A/H premium daily kline records |
+| ∟ timestamp | string | false | Unix timestamp |
+| ∟ ahpremium_rate | string | false | A/H premium rate |
+| ∟ aprice | string | false | A-share price (CNY) |
+| ∟ apreclose | string | false | A-share previous close (CNY) |
+| ∟ hprice | string | false | H-share price (HKD) |
+| ∟ hpreclose | string | false | H-share previous close (HKD) |
+| ∟ currency_rate | string | false | CNH/HKD exchange rate |
+| ∟ price_spread | string | false | Price spread |

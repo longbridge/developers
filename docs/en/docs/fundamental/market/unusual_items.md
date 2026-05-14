@@ -239,17 +239,10 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | all_off | boolean | false | Whether anomaly alerts are globally disabled |
-| changes | object[] | false | List of market anomaly events, see [AnomalyItem](#AnomalyItem) |
-
-### AnomalyItem
-
-<a id="AnomalyItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| name | string | false | Security name |
-| alert_name | string | false | Anomaly type name |
-| alert_time | integer | false | Anomaly time (Unix timestamp, ms) |
-| emotion | integer | false | Sentiment: `1`=positive/up, `2`=negative/down |
-| change_values | string[] | false | Change value strings |
+| changes | object[] | false | List of market anomaly events |
+| ∟ symbol | string | true | Security symbol |
+| ∟ name | string | false | Security name |
+| ∟ alert_name | string | false | Anomaly type name |
+| ∟ alert_time | integer | false | Anomaly time (Unix timestamp, ms) |
+| ∟ emotion | integer | false | Sentiment: `1`=positive/up, `2`=negative/down |
+| ∟ change_values | string[] | false | Change value strings |

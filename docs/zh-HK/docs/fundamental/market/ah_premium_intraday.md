@@ -211,7 +211,12 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 港股代碼 |
-| timeseries | object[] | 是 | 盤中 A/H 溢價時間序列 |
-| ∟ timestamp | string | 是 | Unix 時間戳 |
-| ∟ premium | string | 是 | A/H 溢價百分比 |
+| klines | object[] | true | Intraday A/H premium kline data, see [AhPremiumKline](#AhPremiumKline) |
+| ∟ timestamp | string | false | Unix 時間戳 |
+| ∟ ahpremium_rate | string | false | A/H premium rate |
+| ∟ aprice | string | false | A-share price (CNY) |
+| ∟ apreclose | string | false | A-share previous close (CNY) |
+| ∟ hprice | string | false | H-share price (HKD) |
+| ∟ hpreclose | string | false | H-share previous close (HKD) |
+| ∟ currency_rate | string | false | CNH/HKD exchange rate |
+| ∟ price_spread | string | false | Price spread |

@@ -243,26 +243,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | object[] | 是 | 公司行动列表，见 [CorpActionItem](#CorpActionItem) |
-
-### CorpActionItem
-
-<a id="CorpActionItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| id | string | 否 | 行动 ID |
-| act_desc | string | 否 | 行动描述 |
-| act_type | string | 否 | 行动类型分类 |
-| action | string | 否 | 行动代码（如 `DividendExDate`） |
-| date | string | 否 | 事件日期（YYYYMMDD） |
-| date_str | string | 否 | 简短展示日期（MM.DD） |
-| date_type | string | 否 | 日期类型标签（如 Payment Date） |
-| date_zone | string | 否 | 时区（如 EST） |
-| delay_content | string | 否 | 延迟内容描述 |
-| is_delay | boolean | 否 | 是否延迟 |
-| live | boolean | 否 | 是否实时 |
-| recent | boolean | 否 | 是否为近期事件 |
-| ∟ date | string | 是 | 生效日期 |
-| ∟ ratio | string | 否 | 拆股/合并比例 |
-| ∟ description | string | 否 | 行动描述 |
+| items | object[] | true | 公司行动列表， |
+| ∟ id | string | false | 行动 ID |
+| ∟ act_desc | string | false | 行动描述 |
+| ∟ act_type | string | false | 行动类型分类 |
+| ∟ action | string | false | 行动代码（如 `DividendExDate`） |
+| ∟ date | string | false | 生效日期 |
+| ∟ date_str | string | false | 简短展示日期（MM.DD） |
+| ∟ date_type | string | false | 日期类型标签（如 Payment Date） |
+| ∟ date_zone | string | false | 时区（如 EST） |
+| ∟ delay_content | string | false | 延迟内容描述 |
+| ∟ is_delay | boolean | false | 是否延迟 |
+| ∟ live | boolean | false | 是否实时 |
+| ∟ recent | boolean | false | 是否为近期事件 |

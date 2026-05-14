@@ -237,17 +237,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Dividend records, see [DividendItem](#DividendItem) |
-
-### DividendItem
-
-<a id="DividendItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| id | string | false | Dividend event ID |
-| symbol | string | false | Security symbol |
-| desc | string | false | Dividend description |
-| ex_date | string | false | Ex-dividend date |
-| payment_date | string | false | Payment date |
-| record_date | string | false | Record date |
+| list | object[] | true | Dividend records |
+| ∟ id | string | false | Dividend event ID |
+| ∟ symbol | string | false | Security symbol |
+| ∟ desc | string | false | Dividend description |
+| ∟ ex_date | string | false | Ex-dividend date |
+| ∟ payment_date | string | false | Payment date |
+| ∟ record_date | string | false | Record date |

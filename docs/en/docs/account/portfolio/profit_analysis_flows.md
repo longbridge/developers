@@ -242,20 +242,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| flows_list | object[] | true | Paginated list of flow items, see [FlowItem](#FlowItem) |
+| flows_list | object[] | true | Paginated list of flow items |
+| ∟ executed_date | string | true | Execution date (e.g. `2024-01-15`) |
+| ∟ executed_timestamp | string | false | Execution timestamp |
+| ∟ code | string | false | Security code |
+| ∟ direction | string | false | Direction: `In` or `Out` |
+| ∟ executed_quantity | string | false | Executed quantity |
+| ∟ executed_price | string | false | Executed price |
+| ∟ executed_cost | string | false | Executed cost |
+| ∟ describe | string | false | Human-readable description |
 | has_more | boolean | false | Whether there are more pages |
-
-### FlowItem
-
-<a id="FlowItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| executed_date | string | true | Execution date (e.g. `2024-01-15`) |
-| executed_timestamp | string | false | Execution timestamp |
-| code | string | false | Security code |
-| direction | string | false | Direction: `In` or `Out` |
-| executed_quantity | string | false | Executed quantity |
-| executed_price | string | false | Executed price |
-| executed_cost | string | false | Executed cost |
-| describe | string | false | Human-readable description |

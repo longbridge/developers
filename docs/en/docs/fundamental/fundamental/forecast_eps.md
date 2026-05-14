@@ -238,20 +238,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | object[] | true | List of EPS forecast periods, see [ForecastEpsItem](#ForecastEpsItem) |
-
-### ForecastEpsItem
-
-<a id="ForecastEpsItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| forecast_start_date | string | false | Forecast period start date |
-| forecast_end_date | string | false | Forecast period end date |
-| forecast_eps_mean | string | false | Mean EPS estimate |
-| forecast_eps_median | string | false | Median EPS estimate |
-| forecast_eps_highest | string | false | Highest EPS estimate |
-| forecast_eps_lowest | string | false | Lowest EPS estimate |
-| institution_total | integer | false | Total contributing institutions |
-| institution_up | integer | false | Institutions revising up |
-| institution_down | integer | false | Institutions revising down |
+| items | object[] | true | List of EPS forecast periods |
+| ∟ forecast_start_date | string | false | Forecast period start date |
+| ∟ forecast_end_date | string | false | Forecast period end date |
+| ∟ forecast_eps_mean | string | false | Mean EPS estimate |
+| ∟ forecast_eps_median | string | false | Median EPS estimate |
+| ∟ forecast_eps_highest | string | false | Highest EPS estimate |
+| ∟ forecast_eps_lowest | string | false | Lowest EPS estimate |
+| ∟ institution_total | integer | false | Total contributing institutions |
+| ∟ institution_up | integer | false | Institutions revising up |
+| ∟ institution_down | integer | false | Institutions revising down |

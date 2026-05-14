@@ -238,15 +238,8 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | has_more | boolean | false | Whether there are more pages |
 | profit | string | false | Total profit/loss |
-| stock_items | object[] | false | P&L breakdown by stock, see [StockProfitItem](#StockProfitItem) |
-
-### StockProfitItem
-
-<a id="StockProfitItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| code | string | false | Stock code |
-| market | string | false | Market code |
-| name | string | false | Stock name |
-| profit | string | false | Profit/loss for this stock |
+| stock_items | object[] | false | P&L breakdown by stock |
+| ∟ code | string | false | Stock code |
+| ∟ market | string | false | Market code |
+| ∟ name | string | false | Stock name |
+| ∟ profit | string | false | Profit/loss for this stock |

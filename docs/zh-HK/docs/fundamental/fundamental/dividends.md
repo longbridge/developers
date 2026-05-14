@@ -237,9 +237,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 股息記錄列表，見 [DividendItem](#DividendItem) |
-| ∟ ex_date | string | 是 | 除息日 |
-| ∟ pay_date | string | 否 | 派息日 |
-| ∟ amount | string | 是 | 每股股息金額 |
-| ∟ currency | string | 是 | 貨幣 |
-| ∟ type | string | 是 | 股息類型，例如 `Cash`（現金）、`Stock`（股票） |
+| list | object[] | true | 股息記錄列表，見 [DividendItem](#DividendItem) |
+| ∟ id | string | false | Dividend event ID |
+| ∟ symbol | string | false | Security symbol |
+| ∟ desc | string | false | Dividend description |
+| ∟ ex_date | string | false | 除息日 |
+| ∟ payment_date | string | false | Payment date |
+| ∟ record_date | string | false | Record date |

@@ -237,9 +237,12 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | A/H 溢价记录列表 |
-| ∟ date | string | 是 | 日期，格式 `YYYY-MM-DD` |
-| ∟ a_price | string | 是 | A 股价格（人民币） |
-| ∟ h_price | string | 是 | H 股价格（港币） |
-| ∟ premium | string | 是 | A/H 溢价比率 |
-| ∟ fx_rate | string | 是 | CNH/HKD 汇率 |
+| klines | object[] | true | A/H premium daily kline records |
+| ∟ timestamp | string | false | Unix timestamp |
+| ∟ ahpremium_rate | string | false | A/H premium rate |
+| ∟ aprice | string | false | A-share price (CNY) |
+| ∟ apreclose | string | false | A-share previous close (CNY) |
+| ∟ hprice | string | false | H-share price (HKD) |
+| ∟ hpreclose | string | false | H-share previous close (HKD) |
+| ∟ currency_rate | string | false | CNH/HKD exchange rate |
+| ∟ price_spread | string | false | Price spread |

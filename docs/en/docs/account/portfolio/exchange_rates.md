@@ -233,16 +233,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| exchanges | object[] | true | List of exchange rates, see [ExchangeRate](#ExchangeRate) |
-
-### ExchangeRate
-
-<a id="ExchangeRate"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| base_currency | string | true | Base currency |
-| other_currency | string | true | Quote currency |
-| bid_rate | number | false | Bid rate |
-| offer_rate | number | false | Offer rate |
-| average_rate | number | false | Average exchange rate |
+| exchanges | object[] | true | List of exchange rates |
+| ∟ base_currency | string | true | Base currency |
+| ∟ other_currency | string | true | Quote currency |
+| ∟ bid_rate | number | false | Bid rate |
+| ∟ offer_rate | number | false | Offer rate |
+| ∟ average_rate | number | false | Average exchange rate |

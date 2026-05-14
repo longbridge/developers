@@ -236,9 +236,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 按市場盈虧列表 |
-| ∟ market | string | true | 市場代碼 |
-| ∟ pnl | string | true | 該市場盈虧金額 |
-| ∟ pnl_pct | string | true | 盈虧百分比 |
-| ∟ market_value | string | false | 市值 |
-| ∟ currency | string | true | 結算貨幣 |
+| has_more | boolean | false | Whether there are more pages |
+| profit | string | false | Total profit/loss |
+| stock_items | object[] | false | P&L breakdown by stock |
+| ∟ code | string | false | Stock code |
+| ∟ market | string | false | 市場代碼 |
+| ∟ name | string | false | Stock name |
+| ∟ profit | string | false | Profit/loss for this stock |

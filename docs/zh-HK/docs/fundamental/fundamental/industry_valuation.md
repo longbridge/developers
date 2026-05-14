@@ -238,12 +238,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 證券代碼 |
-| industry | string | 否 | 行業分類 |
-| list | object[] | 是 | 同行公司列表，見 [IndustryValuationItem](#IndustryValuationItem) |
-| list[].symbol | string | 否 | 同行證券代碼 |
-| list[].name | string | 否 | 公司名稱 |
-| list[].pe | double | 否 | 市盈率 |
-| list[].pb | double | 否 | 市淨率 |
-| list[].ps | double | 否 | 市銷率 |
-| list[].market_cap | int64 | 否 | 市值 |
+| list | object[] | true | 同行公司列表，見 [IndustryValuationItem](#IndustryValuationItem) |
+| ∟ symbol | string | false | 證券代碼 |
+| ∟ name | string | false | Company name |
+| ∟ currency | string | false | Reporting currency |
+| ∟ pe | string | false | Price-to-Earnings ratio |
+| ∟ bps | string | false | Book value per share |
+| ∟ eps | string | false | Earnings per share |
+| ∟ dps | string | false | Dividends per share |
+| ∟ div_yld | string | false | Dividend yield |
+| ∟ div_payout_ratio | string | false | Dividend payout ratio |
+| ∟ five_y_avg_dps | string | false | 5-year average DPS |
+| ∟ assets | string | false | Total assets |
+| ∟ history | object[] | false | Historical valuation data |

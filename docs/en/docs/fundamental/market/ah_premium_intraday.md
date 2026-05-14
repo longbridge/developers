@@ -212,18 +212,11 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | klines | object[] | true | Intraday A/H premium kline data, see [AhPremiumKline](#AhPremiumKline) |
-
-### AhPremiumIntradayKline
-
-<a id="AhPremiumIntradayKline"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| timestamp | string | false | Unix timestamp |
-| ahpremium_rate | string | false | A/H premium rate |
-| aprice | string | false | A-share price (CNY) |
-| apreclose | string | false | A-share previous close (CNY) |
-| hprice | string | false | H-share price (HKD) |
-| hpreclose | string | false | H-share previous close (HKD) |
-| currency_rate | string | false | CNH/HKD exchange rate |
-| price_spread | string | false | Price spread |
+| ∟ timestamp | string | false | Unix timestamp |
+| ∟ ahpremium_rate | string | false | A/H premium rate |
+| ∟ aprice | string | false | A-share price (CNY) |
+| ∟ apreclose | string | false | A-share previous close (CNY) |
+| ∟ hprice | string | false | H-share price (HKD) |
+| ∟ hpreclose | string | false | H-share previous close (HKD) |
+| ∟ currency_rate | string | false | CNH/HKD exchange rate |
+| ∟ price_spread | string | false | Price spread |

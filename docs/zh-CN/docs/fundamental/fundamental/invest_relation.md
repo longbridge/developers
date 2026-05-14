@@ -239,15 +239,14 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 证券代码 |
-| parent | object | 否 | 母公司信息 |
-| parent.symbol | string | 否 | 母公司证券代码 |
-| parent.name | string | 否 | 母公司名称 |
-| subsidiaries | object[] | 否 | 子公司列表 |
-| subsidiaries[].symbol | string | 否 | 子公司证券代码 |
-| subsidiaries[].name | string | 否 | 子公司名称 |
-| subsidiaries[].holding_ratio | double | 否 | 持股比例（%） |
-| holdings | object[] | 否 | 主要持股列表 |
-| holdings[].symbol | string | 否 | 持股证券代码 |
-| holdings[].name | string | 否 | 持股公司名称 |
-| holdings[].holding_ratio | double | 否 | 持股比例（%） |
+| forward_url | string | false | Company investment relations page URL |
+| invest_securities | object[] | false | List of investment holdings |
+| ∟ symbol | string | false | 证券代码 |
+| ∟ company_id | string | false | Company ID |
+| ∟ company_name | string | false | Display company name |
+| ∟ company_name_en | string | false | English company name |
+| ∟ company_name_zhcn | string | false | Chinese company name |
+| ∟ currency | string | false | Currency |
+| ∟ percent_of_shares | string | false | Ownership percentage |
+| ∟ shares_rank | string | false | Rank by shares held |
+| ∟ shares_value | string | false | Value of shares held |

@@ -240,20 +240,13 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | forward_url | string | false | Company investment relations page URL |
-| invest_securities | object[] | false | List of investment holdings, see [InvestSecurity](#InvestSecurity) |
-
-### InvestSecurity
-
-<a id="InvestSecurity"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | false | Security symbol |
-| company_id | string | false | Company ID |
-| company_name | string | false | Display company name |
-| company_name_en | string | false | English company name |
-| company_name_zhcn | string | false | Chinese company name |
-| currency | string | false | Currency |
-| percent_of_shares | string | false | Ownership percentage |
-| shares_rank | string | false | Rank by shares held |
-| shares_value | string | false | Value of shares held |
+| invest_securities | object[] | false | List of investment holdings |
+| ∟ symbol | string | false | Security symbol |
+| ∟ company_id | string | false | Company ID |
+| ∟ company_name | string | false | Display company name |
+| ∟ company_name_en | string | false | English company name |
+| ∟ company_name_zhcn | string | false | Chinese company name |
+| ∟ currency | string | false | Currency |
+| ∟ percent_of_shares | string | false | Ownership percentage |
+| ∟ shares_rank | string | false | Rank by shares held |
+| ∟ shares_value | string | false | Value of shares held |

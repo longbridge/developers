@@ -238,20 +238,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| shareholder_list | object[] | 是 | 股东列表，见 [ShareholderItem](#ShareholderItem) |
+| shareholder_list | object[] | 是 | 股东列表， |
+| ∟ shareholder_name | string | 是 | 股东名称 |
+| ∟ percent_of_shares | string | 是 | 持股比例 |
+| ∟ institution_type | string | 否 | 机构类型 |
+| ∟ report_date | string | 否 | 报告日期 |
+| ∟ shareholder_id | string | 否 | 股东 ID |
+| ∟ shares_changed | string | 否 | 持股变动 |
+| ∟ stocks | object[] | 否 | 关联标的 |
 | forward_url | string | 否 | 完整股东页面链接 |
 | total | integer | 是 | 股东总数 |
-
-### ShareholderItem
-
-<a id="ShareholderItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| shareholder_name | string | 是 | 股东名称 |
-| percent_of_shares | string | 是 | 持股比例 |
-| institution_type | string | 否 | 机构类型 |
-| report_date | string | 否 | 报告日期 |
-| shareholder_id | string | 否 | 股东 ID |
-| shares_changed | string | 否 | 持股变动 |
-| stocks | object[] | 否 | 关联标的 |

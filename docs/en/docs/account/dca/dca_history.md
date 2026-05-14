@@ -241,24 +241,17 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| records | object[] | true | List of execution records, see [DcaHistoryRecord](#DcaHistoryRecord) |
+| records | object[] | true | List of execution records |
+| ∟ symbol | string | true | Security symbol |
+| ∟ order_id | string | false | Associated order ID |
+| ∟ status | string | false | Execution status |
+| ∟ action | string | false | Action type (e.g. `buy`) |
+| ∟ order_type | string | false | Order type (e.g. `market`) |
+| ∟ executed_qty | string | false | Executed quantity |
+| ∟ executed_price | string | false | Executed price |
+| ∟ executed_amount | string | false | Executed cost amount |
+| ∟ rejected_reason | string | false | Rejection reason if failed |
+| ∟ created_at | string | false | Creation Unix timestamp |
+| ∟ created_at | string | false | Execution time |
+| ∟ rejected_reason | string | false | Rejection reason (if any) |
 | has_more | boolean | false | Whether more records exist |
-
-### DcaHistoryRecord
-
-<a id="DcaHistoryRecord"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Security symbol |
-| order_id | string | false | Associated order ID |
-| status | string | false | Execution status |
-| action | string | false | Action type (e.g. `buy`) |
-| order_type | string | false | Order type (e.g. `market`) |
-| executed_qty | string | false | Executed quantity |
-| executed_price | string | false | Executed price |
-| executed_amount | string | false | Executed cost amount |
-| rejected_reason | string | false | Rejection reason if failed |
-| created_at | string | false | Creation Unix timestamp |
-| created_at | string | false | Execution time |
-| rejected_reason | string | false | Rejection reason (if any) |

@@ -214,15 +214,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Daily holding history records, see [BrokerHoldingDailyItem](#BrokerHoldingDailyItem) |
-
-### BrokerHoldingDailyItem
-
-<a id="BrokerHoldingDailyItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| date | string | true | Date (e.g. `2026.05.13`) |
-| holding | string | false | Total shares held |
-| chg | string | false | Daily change in shares |
-| ratio | string | false | Holding ratio |
+| list | object[] | true | Daily holding history records |
+| ∟ date | string | true | Date (e.g. `2026.05.13`) |
+| ∟ holding | string | false | Total shares held |
+| ∟ chg | string | false | Daily change in shares |
+| ∟ ratio | string | false | Holding ratio |

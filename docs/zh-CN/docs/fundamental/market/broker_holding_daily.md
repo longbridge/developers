@@ -214,15 +214,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 每日持仓历史记录，见 [BrokerHoldingDailyItem](#BrokerHoldingDailyItem) |
-
-### BrokerHoldingDailyItem
-
-<a id="BrokerHoldingDailyItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| date | string | true | 日期（如 `2026.05.13`） |
-| holding | string | false | 总持股数 |
-| chg | string | false | 日变动量 |
-| ratio | string | false | 持仓比率 |
+| list | object[] | true | 每日持仓历史记录， |
+| ∟ date | string | true | 日期（如 `2026.05.13`） |
+| ∟ holding | string | false | 总持股数 |
+| ∟ chg | string | false | 日变动量 |
+| ∟ ratio | string | false | 持仓比率 |

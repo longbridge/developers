@@ -230,12 +230,10 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 分紅記錄列表，見 [DividendItem](#DividendItem) |
-| list[].symbol | string | 是 | 證券代碼 |
-| list[].dividend_type | string | 否 | 分紅類型（如 cash 現金、stock 股票） |
-| list[].amount | double | 否 | 每股分紅金額 |
-| list[].currency | string | 否 | 貨幣代碼 |
-| list[].declared_date | string | 否 | 宣告日（YYYY-MM-DD） |
-| list[].ex_date | string | 否 | 除息日（YYYY-MM-DD） |
-| list[].record_date | string | 否 | 股權登記日（YYYY-MM-DD） |
-| list[].payment_date | string | 否 | 派發日（YYYY-MM-DD） |
+| list | object[] | true | 分紅記錄列表，見 [DividendItem](#DividendItem) |
+| ∟ id | string | false | Dividend event ID |
+| ∟ symbol | string | false | Security symbol |
+| ∟ desc | string | false | Dividend description |
+| ∟ ex_date | string | false | Ex-dividend date (YYYY-MM-DD) |
+| ∟ record_date | string | false | Record date (YYYY-MM-DD) |
+| ∟ payment_date | string | false | Payment date (YYYY-MM-DD) |

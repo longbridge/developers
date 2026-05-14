@@ -242,17 +242,14 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buy | object[] | false | Top buying brokers, see [BrokerHoldingEntry](#BrokerHoldingEntry) |
-| sell | object[] | false | Top selling brokers, see [BrokerHoldingEntry](#BrokerHoldingEntry) |
+| buy | object[] | false | Top buying brokers |
+| ∟ parti_number | string | true | Broker participant number |
+| ∟ name | string | false | Broker name |
+| ∟ chg | string | false | Position change |
+| ∟ strong | boolean | false | Whether marked as strong holder |
+| sell | object[] | false | Top selling brokers |
+| ∟ parti_number | string | true | Broker participant number |
+| ∟ name | string | false | Broker name |
+| ∟ chg | string | false | Position change |
+| ∟ strong | boolean | false | Whether marked as strong holder |
 | updated_at | string | false | Last update timestamp |
-
-### BrokerHoldingEntry
-
-<a id="BrokerHoldingEntry"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| parti_number | string | true | Broker participant number |
-| name | string | false | Broker name |
-| chg | string | false | Position change |
-| strong | boolean | false | Whether marked as strong holder |

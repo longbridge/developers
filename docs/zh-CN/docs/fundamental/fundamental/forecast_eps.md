@@ -238,10 +238,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol | string | 是 | 证券代码 |
-| list | object[] | 是 | EPS 预测期列表 |
-| list[].period | string | 否 | 财报期（如 FY2024、Q1 2024） |
-| list[].consensus_eps | double | 否 | 共识 EPS 估值 |
-| list[].high_eps | double | 否 | 最高 EPS 估值 |
-| list[].low_eps | double | 否 | 最低 EPS 估值 |
-| list[].analyst_count | int32 | 否 | 参与估值的分析师数量 |
+| items | object[] | true | List of EPS forecast periods |
+| ∟ forecast_start_date | string | false | Forecast period start date |
+| ∟ forecast_end_date | string | false | Forecast period end date |
+| ∟ forecast_eps_mean | string | false | Mean EPS estimate |
+| ∟ forecast_eps_median | string | false | Median EPS estimate |
+| ∟ forecast_eps_highest | string | false | Highest EPS estimate |
+| ∟ forecast_eps_lowest | string | false | Lowest EPS estimate |
+| ∟ institution_total | integer | false | Total contributing institutions |
+| ∟ institution_up | integer | false | Institutions revising up |
+| ∟ institution_down | integer | false | Institutions revising down |

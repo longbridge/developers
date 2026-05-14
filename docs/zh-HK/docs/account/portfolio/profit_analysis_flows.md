@@ -242,20 +242,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| flows_list | object[] | true | 資金流水列表（分頁），見 [FlowItem](#FlowItem) |
+| flows_list | object[] | true | 資金流水列表（分頁）， |
+| ∟ executed_date | string | true | 執行日期（如 `2024-01-15`） |
+| ∟ executed_timestamp | string | false | 執行時間戳 |
+| ∟ code | string | false | 證券代碼 |
+| ∟ direction | string | false | 方向：`In`（買入）或 `Out`（賣出） |
+| ∟ executed_quantity | string | false | 成交數量 |
+| ∟ executed_price | string | false | 成交價格 |
+| ∟ executed_cost | string | false | 成交成本 |
+| ∟ describe | string | false | 描述說明 |
 | has_more | boolean | false | 是否有更多頁 |
-
-### FlowItem
-
-<a id="FlowItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| executed_date | string | true | 執行日期（如 `2024-01-15`） |
-| executed_timestamp | string | false | 執行時間戳 |
-| code | string | false | 證券代碼 |
-| direction | string | false | 方向：`In`（買入）或 `Out`（賣出） |
-| executed_quantity | string | false | 成交數量 |
-| executed_price | string | false | 成交價格 |
-| executed_cost | string | false | 成交成本 |
-| describe | string | false | 描述說明 |

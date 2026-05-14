@@ -238,23 +238,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of peer companies, see [IndustryValuationItem](#IndustryValuationItem) |
-
-### IndustryValuationItem
-
-<a id="IndustryValuationItem"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | false | Security symbol |
-| name | string | false | Company name |
-| currency | string | false | Reporting currency |
-| pe | string | false | Price-to-Earnings ratio |
-| bps | string | false | Book value per share |
-| eps | string | false | Earnings per share |
-| dps | string | false | Dividends per share |
-| div_yld | string | false | Dividend yield |
-| div_payout_ratio | string | false | Dividend payout ratio |
-| five_y_avg_dps | string | false | 5-year average DPS |
-| assets | string | false | Total assets |
-| history | object[] | false | Historical valuation data |
+| list | object[] | true | List of peer companies |
+| ∟ symbol | string | false | Security symbol |
+| ∟ name | string | false | Company name |
+| ∟ currency | string | false | Reporting currency |
+| ∟ pe | string | false | Price-to-Earnings ratio |
+| ∟ bps | string | false | Book value per share |
+| ∟ eps | string | false | Earnings per share |
+| ∟ dps | string | false | Dividends per share |
+| ∟ div_yld | string | false | Dividend yield |
+| ∟ div_payout_ratio | string | false | Dividend payout ratio |
+| ∟ five_y_avg_dps | string | false | 5-year average DPS |
+| ∟ assets | string | false | Total assets |
+| ∟ history | object[] | false | Historical valuation data |

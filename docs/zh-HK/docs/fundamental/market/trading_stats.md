@@ -256,15 +256,8 @@ func main() {
 | statistics.preclose | string | 否 | 前收盤價 |
 | statistics.timestamp | string | 否 | 統計時間戳 |
 | statistics.trade_date | string[] | 否 | 涵蓋的交易日期 |
-| trades | object[] | 否 | 按價位的成交分布，見 [TradePriceLevel](#TradePriceLevel) |
-
-### TradePriceLevel
-
-<a id="TradePriceLevel"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| price | string | 是 | 價位 |
-| buy_amount | string | 否 | 該價位買入成交額 |
-| sell_amount | string | 否 | 該價位賣出成交額 |
-| neutral_amount | string | 否 | 該價位中性成交額 |
+| trades | object[] | 否 | 按價位的成交分布， |
+| ∟ price | string | 是 | 價位 |
+| ∟ buy_amount | string | 否 | 該價位買入成交額 |
+| ∟ sell_amount | string | 否 | 該價位賣出成交額 |
+| ∟ neutral_amount | string | 否 | 該價位中性成交額 |
