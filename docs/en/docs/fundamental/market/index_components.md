@@ -212,7 +212,7 @@ func main() {
     "flat_num": 3,
     "stocks": [
       {
-        "counter_id": "ST/HK/00005",
+        "symbol": "00005.HK",
         "name": "HSBC Holdings",
         "market": "HK",
         "last_done": "68.40",

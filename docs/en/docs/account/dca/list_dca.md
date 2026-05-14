@@ -210,7 +210,7 @@ func main() {
     "list": [
       {
         "plan_id": "1225781523156889600",
-        "counter_id": "ST/US/SPY",
+        "symbol": "SPY.US",
         "stock_name": "SPDR S&P 500 ETF Trust",
         "market": "US",
         "status": "Active",

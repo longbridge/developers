@@ -208,7 +208,7 @@ func main() {
   "data": {
     "professional_list": [
       {
-        "counter_id": "ST/US/AAPL",
+        "symbol": "AAPL.US",
         "forward_url": "https://example.com/aapl/executives",
         "total": 10,
         "professionals": [
