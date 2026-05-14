@@ -10,8 +10,8 @@ sidebar_icon: newspaper
 
 ### SDK v4.1.0
 
-- **7 个新 Context 类型** — `FundamentalContext`（财报、分析师评级、股息、EPS 预测、一致性预期、估值），`MarketContext`（市场状态、券商持仓、A/H 溢价、交易统计），`CalendarContext`（财报 / 股息 / 拆股 / IPO 日历），`PortfolioContext`（汇率、盈亏分析），`AlertContext`（价格提醒），`DCAContext`（定投计划），`SharelistContext`（自选股列表）
-- **QuoteContext** — 新增 `short_positions`、`option_volume`、`option_volume_daily` 方法
+- **7 个新 Context 类型，共 66 个方法** — `FundamentalContext`（20 个方法：财报、分析师评级、股息、EPS 预测、一致性预期、估值），`MarketContext`（9 个方法：市场状态、券商持仓、A/H 溢价、交易统计），`CalendarContext`（7 个方法：财报 / 股息 / 拆股 / IPO 日历），`PortfolioContext`（5 个方法：汇率、盈亏分析），`AlertContext`（4 个方法：价格提醒），`DCAContext`（12 个方法：定投计划全生命周期），`SharelistContext`（9 个方法：自选股列表）
+- **QuoteContext** — 新增 4 个方法：`short_positions`、`option_volume`、`option_volume_daily`、`update_pinned`
 - **ContentContext** — 新增 `topic_detail` 及话题回复相关方法
 - **Rust SDK** — `Config::header()` 支持注入自定义 HTTP/WebSocket 请求头
 - 参数类型改用 typed enum 替代原始整数；货币字段使用 `Decimal` 类型
