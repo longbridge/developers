@@ -76,7 +76,13 @@ export default defineConfig(
         ['meta', { property: 'og:url', content: `${siteHost}/${localePathname}` }],
         ['meta', { property: 'og:title', content: context.title }],
         ['meta', { property: 'og:description', content: context.description }],
-        ['meta', { name: 'twitter:image', content: 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png' }],
+        [
+          'meta',
+          {
+            name: 'twitter:image',
+            content: 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png',
+          },
+        ],
         ['meta', { name: 'twitter:title', content: context.title }],
         ['meta', { name: 'twitter:description', content: context.description }],
       ]
@@ -91,20 +97,15 @@ export default defineConfig(
       const tmpDir = resolve(__dirname, '../../.tmp-longbridge-skills')
       rmSync(tmpDir, { recursive: true, force: true })
       try {
-        execSync(
-          `git clone --depth 1 --branch main https://github.com/longbridge/skills.git "${tmpDir}"`,
-          { stdio: 'inherit' }
-        )
+        execSync(`git clone --depth 1 --branch main https://github.com/longbridge/skills.git "${tmpDir}"`, {
+          stdio: 'inherit',
+        })
       } catch (err) {
-        throw new Error(
-          `Failed to clone longbridge/skills@main: ${(err as Error).message}`
-        )
+        throw new Error(`Failed to clone longbridge/skills@main: ${(err as Error).message}`)
       }
       const skillsSrcDir = resolve(tmpDir, 'skills')
       if (!existsSync(skillsSrcDir)) {
-        throw new Error(
-          `longbridge/skills@main is missing the "skills/" directory; cannot build skill zips`
-        )
+        throw new Error(`longbridge/skills@main is missing the "skills/" directory; cannot build skill zips`)
       }
 
       // Pack all skills into longbridge-all.zip
@@ -166,11 +167,10 @@ export default defineConfig(
         text: 'Edit',
       },
       logo: {
-        light: 'https://assets.wbrks.com/assets/logo/light/logo.svg',
-        dark: 'https://assets.wbrks.com/assets/logo/dark/logo.svg',
-        width: 48,
-        height: 48,
+        light: 'https://assets.lbkrs.com/uploads/e76f6d93-80f8-4f9b-8b8d-2c86f0c94a78/longbridge-developers-light.png',
+        dark: 'https://assets.lbkrs.com/uploads/37a18fa4-46a4-408c-a36a-560004eb3cfb/longbridge-developers-dark.png',
       },
+      siteTitle: false,
       search: {
         provider: 'local',
       },

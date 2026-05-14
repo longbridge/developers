@@ -4175,7 +4175,7 @@ const currentExample = computed(() => {
 .skill-chat-window {
   flex: 1;
   background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--lb-card-border);
   border-radius: 10px;
   overflow-y: auto;
   display: flex;

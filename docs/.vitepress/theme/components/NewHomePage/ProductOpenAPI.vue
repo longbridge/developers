@@ -494,12 +494,11 @@ function copyInstall() {
 .sdk-cell {
   border-radius: 0.75rem;
   border: 1px solid var(--vp-c-divider);
-  background: radial-gradient(200px 120px at 100% 0%, color-mix(in srgb, var(--brand-color) 13%, transparent), transparent 70%), var(--vp-c-bg-soft);
+  background: radial-gradient(200px 120px at 100% 0%, color-mix(in srgb, var(--brand-color) 13%, transparent), transparent 70%), var(--vp-c-bg);
   padding: 1rem;
-  transition: border-color 0.2s, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .sdk-cell:not(.sdk-cell-hero):hover {
-  border-color: color-mix(in srgb, var(--brand-color) 40%, var(--vp-c-divider));
   transform: translateY(-2px);
   box-shadow: 0 8px 24px -6px rgba(10, 14, 25, 0.10);
 }

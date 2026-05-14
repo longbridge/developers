@@ -76,7 +76,7 @@ const rightLinks = [
 <style scoped>
 .nhp-footer {
   border-top: 1px solid var(--vp-c-divider);
-  padding: 1.25rem 0;
+  padding: 1.25rem 0 2.5rem;
   margin-top: 0;
 }
 

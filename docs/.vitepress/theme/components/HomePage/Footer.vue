@@ -74,7 +74,7 @@ const rightLinks = [
 
 <style scoped>
 .footer {
-  @apply text-sm py-5 mt-10 flex justify-between items-center w-full;
+  @apply text-sm pt-4 pb-8 mt-6 flex justify-between items-center w-full;
 }
 
 .beian-link,

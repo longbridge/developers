@@ -58,7 +58,7 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #page-top><slot name="page-top" /></template>
       <template #page-bottom>
         <slot name="page-bottom" />
-        <div class="max-w-[1200px] mx-auto px-8">
+        <div v-if="frontmatter.pageClass !== 'new-home-page'" class="max-w-[1200px] mx-auto">
           <Footer />
         </div>
       </template>
