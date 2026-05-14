@@ -259,7 +259,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | plan_id | string | 是 | 定投计划 ID |
-| counter_id | string | 是 | 证券代码 |
+| symbol | string | 是 | 证券代码 |
 | stock_name | string | 否 | 标的名称 |
 | market | string | 否 | 市场 |
 | status | string | 否 | 计划状态：`Active`（进行中）、`Suspended`（已暂停）、`Finished`（已结束） |

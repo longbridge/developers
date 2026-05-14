@@ -252,7 +252,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | 是 | 证券代码 |
+| symbol | string | 是 | 证券代码 |
 | forward_url | string | 否 | 公司高管页面链接 |
 | total | integer | 否 | 高管总数 |
 | professionals | object[] | 是 | 高管列表 |
