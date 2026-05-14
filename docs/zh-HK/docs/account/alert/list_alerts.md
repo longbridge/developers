@@ -253,7 +253,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | true | 按標的分組的提醒列表 |
+| lists | object[] | true | 按標的分組的提醒列表，見 [AlertSymbolGroup](#AlertSymbolGroup) |
 
 ### AlertSymbolGroup
 
@@ -269,7 +269,7 @@ func main() {
 | chg | string | false | 當日漲跌額 |
 | p_chg | string | false | 當日漲跌幅 |
 | product | string | false | 產品類型 |
-| indicators | object[] | false | 價格提醒列表 |
+| indicators | object[] | false | 價格提醒列表，見 [AlertItem](#AlertItem) |
 
 ### AlertItem
 

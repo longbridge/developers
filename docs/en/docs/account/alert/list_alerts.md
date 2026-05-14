@@ -253,7 +253,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | true | Alert groups per security |
+| lists | object[] | true | Alert groups per security, see [AlertSymbolGroup](#AlertSymbolGroup) |
 
 ### AlertSymbolGroup
 
@@ -269,7 +269,7 @@ func main() {
 | chg | string | false | Day change amount |
 | p_chg | string | false | Day change percentage |
 | product | string | false | Product type |
-| indicators | object[] | false | Alert indicators |
+| indicators | object[] | false | Alert indicators, see [AlertItem](#AlertItem) |
 
 ### AlertItem
 
