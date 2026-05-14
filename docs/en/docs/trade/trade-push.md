@@ -41,7 +41,7 @@ ctx.unsubscribe([TopicType.Private])
 
 ## Subscribe
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="subscribe" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="subscribe" />
 
 :::info
 Cmd: `16`
@@ -73,7 +73,7 @@ Current support topics:
 
 ## Cancel Subscribe
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="unsubscribe" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="unsubscribe" />
 
 :::info
 Cmd: `17`
@@ -97,7 +97,7 @@ message UnsubResponse {
 
 After we `subscribe` to the trade gateway, we can get real-time trade updates from the trade gateway. The trade gateway will push the corresponding push message to the client. The SDK's `set_on_order_changed` (In Go is: `OnTrade`) can set the callback function of the push message. When the client receives the trade push message, the callback function will be called.
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="set_on_order_changed" go="OnTrade" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="set_on_order_changed" go="OnTrade" />
 
 :::info
 Cmd: `18`

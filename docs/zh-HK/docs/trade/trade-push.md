@@ -42,7 +42,7 @@ ctx.unsubscribe([TopicType.Private])
 
 ## 訂閱
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="subscribe" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="subscribe" />
 
 :::info
 指令：`16`
@@ -78,7 +78,7 @@ message SubResponse {
 
 取消訂閱用於取消訂閱訊息，如前面 `subscribe` 訂閱成功後，可以透過 `unsubscribe` 函數來取消訂閱。
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="unsubscribe" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="unsubscribe" />
 
 :::info
 指令：`17`
@@ -102,7 +102,7 @@ message UnsubResponse {
 
 我們可以透過 `set_on_order_changed` 方法（Go 裡面為 `OnTrade`）設定推播訊息的回呼函數，當收到交易推播訊息時，會呼叫該回呼函數。
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="set_on_order_changed" go="OnTrade" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="set_on_order_changed" go="OnTrade" />
 
 :::info
 指令：`18`

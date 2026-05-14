@@ -41,7 +41,7 @@ ctx.unsubscribe([TopicType.Private])
 
 ## 订阅
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="subscribe" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="subscribe" />
 
 :::info
 指令：`16`
@@ -77,7 +77,7 @@ message SubResponse {
 
 取消订阅用于取消订阅信息，如前面 `subscribe` 订阅成功后，可以通过 `unsubscribe` 函数来取消订阅。
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="unsubscribe" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="unsubscribe" />
 
 :::info
 指令：`17`
@@ -101,7 +101,7 @@ message UnsubResponse {
 
 我们可以通过 `set_on_order_changed` 方法（Go 里面为 `OnTrade`）设置推送消息的回调函数，当收到交易推送消息时，会调用该回调函数。
 
-<SDKLinks title={false} module="trade" klass="TradeContext" method="set_on_order_changed" go="OnTrade" />
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="set_on_order_changed" go="OnTrade" />
 
 :::info
 指令：`18`
