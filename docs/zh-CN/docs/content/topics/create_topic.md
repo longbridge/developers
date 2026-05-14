@@ -38,14 +38,6 @@ longbridge topic create --body "Apple WWDC 前瞻" --tickers AAPL.US
 
 <SDKLinks module="content" klass="ContentContext" method="create_topic" />
 
-## Request
-
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics</td></tr>
-</tbody>
-</table>
 
 ### Request Body
 
@@ -57,7 +49,7 @@ longbridge topic create --body "Apple WWDC 前瞻" --tickers AAPL.US
 | tickers     | string[] | NO                    | 关联标的代码，格式 `{symbol}.{market}`，如 `["AAPL.US", "700.HK"]`，最多 10 个。**注意：** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联，`tickers` 用于补充正文中未显式提及的标的。 |
 | hashtags    | string[] | NO                    | 讨论标签名称列表，如 `["earnings", "fed"]`，最多 1 个                                                  |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -314,9 +306,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

@@ -19,24 +19,16 @@ longbridge ah-premium 0939.HK
 
 <SDKLinks module="market" klass="MarketContext" method="ah_premium" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/market/ah_premium</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | 是 | A+H 兩地上市股票的 H 股代碼，例如 `939.HK` |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -195,9 +187,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

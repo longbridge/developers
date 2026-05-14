@@ -19,18 +19,10 @@ longbridge finance-calendar split --market HK
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK method parameters.**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -38,7 +30,7 @@ longbridge finance-calendar split --market HK
 | end | string | YES | End date, YYYY-MM-DD |
 | market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -197,9 +189,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

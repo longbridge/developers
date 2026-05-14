@@ -19,24 +19,16 @@ longbridge sharelist --format json
 
 <SDKLinks module="sharelist" klass="SharelistContext" method="list_sharelist" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/community/sharelists</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | type | string | 否 | 篩選：`mine`（我創建的）或 `subscribed`（我訂閱的），不傳則返回兩者 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -195,9 +187,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

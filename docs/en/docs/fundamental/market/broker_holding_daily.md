@@ -18,25 +18,17 @@ longbridge broker-holding daily 700.HK --broker B01224
 
 <SDKLinks module="market" klass="MarketContext" method="broker_holding_daily" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/market/broker_holding_daily</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK method parameters.**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | HK security symbol, e.g. `700.HK` |
 | broker_id | string | YES | Broker participant ID, e.g. `B01224` |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -170,9 +162,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

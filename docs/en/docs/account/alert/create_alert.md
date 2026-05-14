@@ -19,18 +19,10 @@ longbridge alert add AAPL.US --price 150 --direction fall
 
 <SDKLinks module="alert" klass="AlertContext" method="create_alert" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/alerts</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK method parameters.**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -39,7 +31,7 @@ longbridge alert add AAPL.US --price 150 --direction fall
 | direction | string | YES | Alert direction: `rise` or `fall` |
 | frequency | string | NO | Trigger frequency: `once` (default) or `every` |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -198,9 +190,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

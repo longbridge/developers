@@ -19,25 +19,17 @@ longbridge profit-analysis --start 2026-01-01
 
 <SDKLinks module="portfolio" klass="PortfolioContext" method="profit_analysis_summary" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/profit_analysis</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法参数。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | start_date | string | 否 | 分析开始日期，格式 `YYYY-MM-DD` |
 | end_date | string | 否 | 分析结束日期，格式 `YYYY-MM-DD` |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -196,9 +188,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

@@ -19,18 +19,10 @@ longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
 
 <SDKLinks module="dca" klass="DCAContext" method="create_dca" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/dca</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK method parameters.**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -40,7 +32,7 @@ longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
 | day_of_week | string | NO | Day of week for weekly/fortnightly plans: `mon`–`fri` |
 | day_of_month | integer | NO | Day of month for monthly plans (1–28) |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -199,9 +191,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

@@ -19,25 +19,17 @@ longbridge option volume daily TSLA.US --count 60
 
 <SDKLinks module="quote" klass="QuoteContext" method="option_volume_daily" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/option_volume_daily</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK method parameters.**
 
 | Name   | Type    | Required | Description                                        |
 | ------ | ------- | -------- | -------------------------------------------------- |
 | symbol | string  | YES      | US stock symbol, e.g. `AAPL.US`, `TSLA.US`        |
 | count  | integer | NO       | Number of trading days to return (default: 20)     |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -204,9 +196,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

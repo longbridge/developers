@@ -19,18 +19,10 @@ longbridge profit-analysis detail AAPL.US
 
 <SDKLinks module="portfolio" klass="PortfolioContext" method="profit_analysis_detail" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/profit_analysis/detail</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -38,7 +30,7 @@ longbridge profit-analysis detail AAPL.US
 | start | string | 否 | 開始日期，格式 `YYYY-MM-DD` |
 | end | string | 否 | 結束日期，格式 `YYYY-MM-DD` | 分析結束日期，格式 `YYYY-MM-DD` |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -197,9 +189,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

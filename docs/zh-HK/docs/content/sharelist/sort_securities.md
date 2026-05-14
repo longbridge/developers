@@ -18,25 +18,17 @@ longbridge sharelist sort 123 TSLA.US AAPL.US 700.HK
 
 <SDKLinks module="sharelist" klass="SharelistContext" method="sort_securities" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>PUT</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/sharelist/{id}/securities/sort</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | integer | 是 | 股單 ID |
 | symbols | string[] | 是 | 按期望順序排列的標的代碼 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -164,9 +156,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

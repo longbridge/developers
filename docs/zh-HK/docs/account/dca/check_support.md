@@ -18,22 +18,14 @@ longbridge dca check AAPL.US 700.HK
 
 <SDKLinks module="dca" klass="DCAContext" method="check_support" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/dca/support</td></tr>
-</tbody>
-</table>
-
-### Parameters
+## Parameters
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbols | string[] | 是 | 待檢查的標的代碼列表 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -168,9 +160,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

@@ -18,18 +18,10 @@ longbridge dca history 1225781523156889600
 
 <SDKLinks module="dca" klass="DCAContext" method="dca_history" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/dca/:id/history</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK method parameters.**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -37,7 +29,7 @@ longbridge dca history 1225781523156889600
 | page | integer | NO | Page number (1-based, default: 1) |
 | size | integer | NO | Records per page (default: 20) |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -196,9 +188,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

@@ -21,14 +21,6 @@ longbridge topic replies 6993508780031016960 --page 2 --size 20
 
 <SDKLinks module="content" klass="ContentContext" method="list_topic_replies" />
 
-## Request
-
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics/:topic_id/comments</td></tr>
-</tbody>
-</table>
 
 ### Path Parameters
 
@@ -43,7 +35,7 @@ longbridge topic replies 6993508780031016960 --page 2 --size 20
 | page  | int32 | NO       | 頁碼，默認 1                              |
 | size  | int32 | NO       | 每頁數量，範圍 1~50，默認 20              |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -152,9 +144,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

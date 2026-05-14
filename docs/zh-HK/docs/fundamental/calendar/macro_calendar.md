@@ -19,18 +19,10 @@ longbridge finance-calendar macrodata --market US
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/finance_calendar</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -38,7 +30,7 @@ longbridge finance-calendar macrodata --market US
 | end | string | YES | 結束日期，格式 YYYY-MM-DD |
 | market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -197,9 +189,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

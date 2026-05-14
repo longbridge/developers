@@ -19,18 +19,10 @@ longbridge corp-action AAPL.US
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="corporate_actions" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/fundamental/corporate_actions</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法参数。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -38,7 +30,7 @@ longbridge corp-action AAPL.US
 | start_date | string | 否 | 开始日期，格式 `YYYY-MM-DD` |
 | end_date | string | 否 | 结束日期，格式 `YYYY-MM-DD` |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -197,9 +189,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

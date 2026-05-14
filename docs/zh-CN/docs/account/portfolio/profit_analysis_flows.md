@@ -19,18 +19,10 @@ longbridge cash-flow --format json
 
 <SDKLinks module="portfolio" klass="PortfolioContext" method="profit_analysis_flows" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/profit_analysis/flows</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法参数。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -39,7 +31,7 @@ longbridge cash-flow --format json
 | size | integer | NO | 每页数量（默认 20） |
 | derivative | boolean | NO | 是否包含衍生品仓位 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -198,9 +190,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

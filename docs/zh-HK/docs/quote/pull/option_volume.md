@@ -19,24 +19,16 @@ longbridge option volume TSLA.US
 
 <SDKLinks module="quote" klass="QuoteContext" method="option_volume" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/option_volume</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name   | Type   | Required | Description                                    |
 | ------ | ------ | -------- | ---------------------------------------------- |
 | symbol | string | YES      | US stock symbol, e.g. `AAPL.US`, `TSLA.US`    |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -203,9 +195,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

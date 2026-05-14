@@ -19,18 +19,10 @@ longbridge financial-report AAPL.US
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="financial_report" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/fundamental/financial_reports</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -38,7 +30,7 @@ longbridge financial-report AAPL.US
 | kind | string | 是 | 報表類型：`IncomeStatement`（利潤表）、`BalanceSheet`（資產負債表）、`CashFlow`（現金流量表）、`All`（全部） |
 | period | string | 是 | 報告期：`Annual`（年報）、`SemiAnnual`（中報）、`Q1`/`Q2`/`Q3`/`ThreeQ`（季報）、`QuarterlyFull`（累計季報） |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -197,9 +189,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

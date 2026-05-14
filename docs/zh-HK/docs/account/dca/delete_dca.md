@@ -18,24 +18,16 @@ longbridge dca stop 1225781523156889600
 
 <SDKLinks module="dca" klass="DCAContext" method="delete_dca" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>DELETE</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/dca/:id</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | string | 是 | 計劃 ID（路徑參數） |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -194,9 +186,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

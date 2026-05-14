@@ -18,22 +18,14 @@ longbridge dca stats
 
 <SDKLinks module="dca" klass="DCAContext" method="stats" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/dca/stats</td></tr>
-</tbody>
-</table>
-
-### Parameters
+## Parameters
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | 否 | 按标的过滤 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -167,9 +159,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

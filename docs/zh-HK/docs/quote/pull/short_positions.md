@@ -19,25 +19,17 @@ longbridge short-positions AAPL.US --count 50
 
 <SDKLinks module="quote" klass="QuoteContext" method="short_positions" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/short_positions</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name   | Type   | Required | Description                                         |
 | ------ | ------ | -------- | --------------------------------------------------- |
 | symbol | string | YES      | US security symbol, e.g. `TSLA.US`, `AAPL.US`      |
 | count  | integer | NO      | Number of records to return (1–100, default: 20)    |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -204,9 +196,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

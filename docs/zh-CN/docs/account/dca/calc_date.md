@@ -18,16 +18,8 @@ longbridge dca calc-date AAPL.US --frequency monthly --day-of-month 15
 
 <SDKLinks module="dca" klass="DCAContext" method="calc_date" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/dca/calc_date</td></tr>
-</tbody>
-</table>
-
-### Parameters
+## Parameters
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -36,7 +28,7 @@ longbridge dca calc-date AAPL.US --frequency monthly --day-of-month 15
 | day_of_week | string | 否 | 每周计划的执行星期：`mon`–`fri` |
 | day_of_month | integer | 否 | 每月/每两周计划的执行日期：1–28 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -177,9 +169,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

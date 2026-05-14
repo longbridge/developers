@@ -19,24 +19,16 @@ longbridge alert delete 112326
 
 <SDKLinks module="alert" klass="AlertContext" method="delete_alert" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>DELETE</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/alerts/:id</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法参数。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | int64 | 是 | 提醒 ID（路径参数） |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -195,9 +187,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

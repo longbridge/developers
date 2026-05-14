@@ -18,22 +18,14 @@ longbridge dca stop 12345
 
 <SDKLinks module="dca" klass="DCAContext" method="stop" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>PUT</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/dca/{plan_id}/stop</td></tr>
-</tbody>
-</table>
-
-### Parameters
+## Parameters
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | plan_id | string | YES | DCA plan ID |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -160,9 +152,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

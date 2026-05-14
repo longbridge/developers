@@ -38,14 +38,6 @@ longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
 
 <SDKLinks module="content" klass="ContentContext" method="create_topic" />
 
-## Request
-
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics</td></tr>
-</tbody>
-</table>
 
 ### Request Body
 
@@ -57,7 +49,7 @@ longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
 | tickers    | string[] | NO                | Related security symbols, format `{symbol}.{market}` (e.g. `["AAPL.US", "700.HK"]`). Maximum 10. **Note:** Symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body. |
 | hashtags   | string[] | NO                | Hashtag names (e.g. `["earnings", "fed"]`). Maximum 1.                                                                                                                                                                                                                                                           |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -316,9 +308,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

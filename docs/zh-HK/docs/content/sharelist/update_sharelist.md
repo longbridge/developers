@@ -19,18 +19,10 @@ longbridge sharelist remove 15921 AAPL.US
 
 <SDKLinks module="sharelist" klass="SharelistContext" method="update_sharelist" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>PUT</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/community/sharelists/:id</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
@@ -39,7 +31,7 @@ longbridge sharelist remove 15921 AAPL.US
 | mode | string | 否 | 證券操作模式：`add`（添加）、`remove`（移除）或 `replace`（替換） |
 | securities | string[] | 否 | 受操作影響的證券代碼列表 |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -198,9 +190,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 

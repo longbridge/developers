@@ -19,25 +19,17 @@ longbridge dca resume 1225781523156889600
 
 <SDKLinks module="dca" klass="DCAContext" method="update_dca" />
 
-## Request
 
-<table className="http-basic">
-<tbody>
-<tr><td className="http-basic-key">HTTP Method</td><td>PUT</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/account/dca/:id</td></tr>
-</tbody>
-</table>
+## Parameters
 
-### Parameters
-
-> Content-Type: application/json; charset=utf-8
+> **SDK 方法参数。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | id | string | 是 | 计划 ID（路径参数） |
 | action | string | 是 | 执行操作：`pause`（暂停）或 `resume`（恢复） |
 
-### Request Example
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -196,9 +188,6 @@ func main() {
 
 ## Response
 
-### Response Headers
-
-- Content-Type: application/json
 
 ### Response Example
 
