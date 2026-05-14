@@ -356,7 +356,86 @@ Longbridge's shadow system uses **layered, soft shadows** that increase in blur 
 - **Form Fields:** Input height remains `60px` but width adapts from constrained (`400px` max) on desktop to full-width minus `32px` on mobile
 - **Modal Width:** Constrained to `600px` on desktop and tablet; full-width minus `16px` margins on mobile (max `100vw - 32px`)
 
-## 9. Agent Prompt Guide
+## 9. Implemented CSS Token Layer (`--lb-*`)
+
+All design decisions are encoded as CSS custom properties in `docs/.vitepress/theme/style/css-var.scss`. These tokens take precedence and should be referenced in all component styles.
+
+### Light Mode (`:root`)
+
+```scss
+/* Buttons */
+--lb-btn-primary-bg: #000000;
+--lb-btn-primary-color: #ffffff;
+--lb-btn-primary-radius: 9999px;
+--lb-btn-primary-h: 36px;
+--lb-btn-primary-fs: 14px;
+--lb-btn-primary-fw: 500;
+--lb-btn-secondary-bg: rgba(210, 210, 210, 0.6);
+--lb-btn-secondary-color: #374151;
+--lb-btn-secondary-radius: 30px;
+
+/* Cards */
+--lb-card-border: #e5e7eb;
+--lb-card-radius: 12px;
+--lb-card-shadow-1: rgba(0, 0, 0, 0.04) 0px 2px 8px;
+--lb-card-shadow-2: rgba(0, 0, 0, 0.09) 0px 8px 24px;
+
+/* Badge */
+--lb-badge-fs: 12px;
+--lb-badge-fw: 600;
+--lb-badge-lh: 1;
+--lb-badge-py: 4px;
+--lb-badge-px: 8px;
+--lb-badge-radius: 9999px;
+```
+
+### Dark Mode (`.dark`)
+
+```scss
+--lb-btn-primary-bg: #ffffff;
+--lb-btn-primary-color: #000000;
+--lb-btn-secondary-bg: rgba(80, 80, 80, 0.5);
+--lb-btn-secondary-color: #d1d5db;
+--lb-card-border: rgba(255, 255, 255, 0.1);
+```
+
+### Component-Level Implementation Notes
+
+**Navigation Logo**
+- Light: `https://assets.wbrks.com/uploads/e76f6d93-.../longbridge-developers-light.png`
+- Dark: `https://assets.wbrks.com/uploads/37a18fa4-.../longbridge-developers-dark.png`
+- Width: `145px` via CSS (`.VPNavBarTitle .logo { width: 145px; height: auto; }` in `custom.scss`)
+- `siteTitle: false` in VitePress config to hide the text beside the logo
+
+**Hero CTA Buttons** (`NewHomePage/HeroSection.vue`)
+- Primary: black pill (`--lb-btn-primary-*`), hover opacity `0.82`
+- Secondary: gray pill (`--lb-btn-secondary-*`), hover gap widens from `0.375rem` to `0.625rem`
+
+**GetStarted Cards** (`NewHomePage/GetStarted.vue`)
+- Icon wrap: `40×40px`, `border-radius: 10px`, per-card color via inline CSS vars `--icon-color / --icon-bg / --icon-bg-dark`
+- Dark mode icon bg: `color-mix(in srgb, iconColor 15%, var(--vp-c-bg-soft))`
+- Hover: `box-shadow: var(--lb-card-shadow-2)` + `translateY(-3px)` — **no border color change**
+
+**OpenAPI SDK Bento Cards** (`NewHomePage/ProductOpenAPI.vue`)
+- Background: `var(--vp-c-bg)` — **no gray soft background**
+- Hover: lift + shadow only — **no border color change**
+
+**Skill Page Badge** (`Skill.vue`)
+- Filled pill: `background: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent)`; text `var(--vp-c-brand-1)`
+- Uses `--lb-badge-*` tokens
+
+**Skill Chat Window Border**
+- Uses `--lb-card-border` (light: `#e5e7eb`, dark: `rgba(255,255,255,0.1)`)
+
+**Footer Spacing**
+- Homepage (`NewHomePage/Footer.vue`): `padding: 1.25rem 0 2.5rem` — extra bottom breathing room
+- Doc pages (`HomePage/Footer.vue`): `pt-4 pb-8 mt-6` — tighter top margin, generous bottom padding
+- `LayoutInner.vue` page-bottom slot: Footer skipped for `new-home-page` pageClass to avoid double footer
+
+**Pricing Badge**
+- `text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap`
+
+## 10. Agent Prompt Guide
 
 ### Quick Color Reference
 - **Primary CTA:** Black (`#000000`) with white text
