@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Resolve environment
-        id: env
+        id: setup
         run: |
           # repository_dispatch passes it via client_payload; workflow_dispatch via inputs
           ENV="${{ github.event.client_payload.environment || github.event.inputs.environment || 'canary' }}"
@@ -66,7 +66,7 @@ jobs:
           echo "Total: $(ls ${{ github.workspace }}/dist/skill/*.zip | wc -l) zips, $(du -sh ${{ github.workspace }}/dist/skill/ | cut -f1)"
 
       - name: Upload to OSS (canary)
-        if: steps.env.outputs.target == 'canary' || steps.env.outputs.target == 'both'
+        if: steps.setup.outputs.target == 'canary' || steps.setup.outputs.target == 'both'
         run: |
           ${{ github.workspace }}/ossutil cp dist/skill/ \
             oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/skill/ \
@@ -79,7 +79,7 @@ jobs:
           echo "✓ Uploaded to canary OSS"
 
       - name: Upload to OSS (release)
-        if: steps.env.outputs.target == 'release' || steps.env.outputs.target == 'both'
+        if: steps.setup.outputs.target == 'release' || steps.setup.outputs.target == 'both'
         run: |
           ${{ github.workspace }}/ossutil cp dist/skill/ \
             oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/skill/ \
@@ -94,7 +94,7 @@ jobs:
       - name: Summary
         run: |
           echo "### Skill upload complete" >> $GITHUB_STEP_SUMMARY
-          echo "- Environment: **${{ steps.env.outputs.target }}**" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment: **${{ steps.setup.outputs.target }}**" >> $GITHUB_STEP_SUMMARY
           echo "- Triggered by: ${{ github.event.client_payload.ref || github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- Skills SHA: ${{ github.event.client_payload.sha || github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Zips uploaded: $(ls dist/skill/*.zip | wc -l)" >> $GITHUB_STEP_SUMMARY
