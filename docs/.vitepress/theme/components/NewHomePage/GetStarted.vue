@@ -8,16 +8,25 @@ const entries = [
     key: 'auth',
     href: '/docs/getting-started',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`,
+    iconColor: '#00b8b8',
+    iconBg: '#e0f7f5',
+    iconBgDark: 'color-mix(in srgb, #00b8b8 15%, var(--vp-c-bg-soft))',
   },
   {
     key: 'api',
     href: '/docs/api',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>`,
+    iconColor: '#0ea5e9',
+    iconBg: '#e0f0ff',
+    iconBgDark: 'color-mix(in srgb, #0ea5e9 15%, var(--vp-c-bg-soft))',
   },
   {
     key: 'cli',
     href: '/docs/cli',
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>`,
+    iconColor: '#f97316',
+    iconBg: '#fff3e0',
+    iconBgDark: 'color-mix(in srgb, #f97316 15%, var(--vp-c-bg-soft))',
   },
 ]
 </script>
@@ -32,7 +41,11 @@ const entries = [
       <div class="gs-cards">
         <a v-for="e in entries" :key="e.key" :href="e.href" class="gs-card">
           <div class="gs-card-header">
-            <span class="gs-card-icon" v-html="e.icon" />
+            <div
+              class="gs-card-icon-wrap"
+              :style="{ '--icon-color': e.iconColor, '--icon-bg': e.iconBg, '--icon-bg-dark': e.iconBgDark }">
+              <span class="gs-card-icon" v-html="e.icon" />
+            </div>
             <h3 class="gs-card-title">{{ $t(`getStarted.${e.key}.title`) }}</h3>
           </div>
           <p class="gs-card-desc">{{ $t(`getStarted.${e.key}.desc`) }}</p>
@@ -113,41 +126,50 @@ const entries = [
   flex-direction: column;
   align-items: flex-start;
   padding: 1.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--lb-card-radius);
+  border: 1px solid var(--lb-card-border);
   background: var(--vp-c-bg);
   text-decoration: none !important;
-  transition: all 0.25s;
+  transition: transform 0.25s, box-shadow 0.25s;
 }
 
 .gs-card:hover {
-  border-color: var(--brand-color);
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--brand-color) 8%, transparent);
-  transform: translateY(-2px);
+  box-shadow: var(--lb-card-shadow-2);
+  transform: translateY(-3px);
 }
 
 .gs-card-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin-bottom: 0.75rem;
+}
+
+.gs-card-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--icon-bg);
+}
+
+:root.dark .gs-card-icon-wrap {
+  background: var(--icon-bg-dark);
 }
 
 .gs-card-icon {
   display: flex;
   flex-shrink: 0;
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--vp-c-text-3);
-  transition: color 0.25s, transform 0.25s;
+  width: 20px;
+  height: 20px;
+  color: var(--icon-color);
 }
 .gs-card-icon :deep(svg) {
   width: 100%;
   height: 100%;
-}
-.gs-card:hover .gs-card-icon {
-  color: var(--brand-color);
-  transform: scale(1.15);
 }
 
 .gs-card-title {

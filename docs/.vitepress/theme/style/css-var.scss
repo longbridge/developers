@@ -129,6 +129,27 @@
   --home-bg-color: #f8f9fa;
   --home-text-color: #000000;
   --home-bg-color-1: #ffffff;
+
+  /* LB design tokens */
+  --lb-btn-primary-bg: #000000;
+  --lb-btn-primary-color: #ffffff;
+  --lb-btn-primary-radius: 9999px;
+  --lb-btn-primary-h: 36px;
+  --lb-btn-primary-fs: 14px;
+  --lb-btn-primary-fw: 500;
+  --lb-btn-secondary-bg: rgba(210, 210, 210, 0.6);
+  --lb-btn-secondary-color: #374151;
+  --lb-btn-secondary-radius: 30px;
+  --lb-card-border: #e5e7eb;
+  --lb-card-radius: 12px;
+  --lb-card-shadow-1: rgba(0, 0, 0, 0.04) 0px 2px 8px;
+  --lb-card-shadow-2: rgba(0, 0, 0, 0.09) 0px 8px 24px;
+  --lb-badge-fs: 12px;
+  --lb-badge-fw: 600;
+  --lb-badge-lh: 1;
+  --lb-badge-py: 4px;
+  --lb-badge-px: 8px;
+  --lb-badge-radius: 9999px;
 }
 
 .dark {
@@ -262,4 +283,11 @@
   --home-bg-color: #161618;
   --home-text-color: #ffffff;
   --home-bg-color-1: #1b1b1f;
+
+  /* LB design tokens (dark overrides) */
+  --lb-btn-primary-bg: #ffffff;
+  --lb-btn-primary-color: #000000;
+  --lb-btn-secondary-bg: rgba(80, 80, 80, 0.5);
+  --lb-btn-secondary-color: #d1d5db;
+  --lb-card-border: #374151;
 }

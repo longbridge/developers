@@ -3,7 +3,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FlickeringGrid from '../inspira/FlickeringGrid.vue'
 import ColourfulText from '../inspira/ColourfulText.vue'
-import ShimmerButton from '../inspira/ShimmerButton.vue'
 
 const { t } = useI18n()
 
@@ -107,16 +106,8 @@ const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
 
       <!-- CTA Buttons -->
       <div class="hero-cta">
-        <a href="https://open.longbridge.com/account" class="hero-link">
-          <ShimmerButton
-            :shimmer-color="'rgba(255,255,255,0.6)'"
-            shimmer-size="0.04em"
-            shimmer-duration="2.5s"
-            border-radius="100px"
-            :background="'var(--brand-100)'"
-            class="hero-btn-primary">
-            {{ ctaGetStarted }}
-          </ShimmerButton>
+        <a href="https://open.longbridge.com/account" class="hero-btn-primary">
+          {{ ctaGetStarted }}
         </a>
         <a href="/docs/" class="hero-cta-secondary">
           {{ ctaReadDocs }}
@@ -279,50 +270,51 @@ const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
   gap: 1.25rem;
 }
 
-.hero-link {
-  text-decoration: none !important;
-}
-
 .hero-btn-primary {
-  padding: 0.7rem 2.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff !important;
-  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--lb-btn-primary-h);
+  padding: 0 1.5rem;
+  font-size: var(--lb-btn-primary-fs);
+  font-weight: var(--lb-btn-primary-fw);
+  color: var(--lb-btn-primary-color) !important;
+  background: var(--lb-btn-primary-bg);
+  border-radius: var(--lb-btn-primary-radius);
+  text-decoration: none !important;
+  transition: opacity 0.2s;
 }
 
-:root.dark .hero-btn-primary {
-  color: #fff !important;
+.hero-btn-primary:hover {
+  opacity: 0.82;
 }
 
 .hero-cta-secondary {
   display: inline-flex;
   align-items: center;
+  height: var(--lb-btn-primary-h);
   gap: 0.375rem;
-  padding: 0.7rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--brand-100);
+  padding: 0 1.25rem;
+  font-size: var(--lb-btn-primary-fs);
+  font-weight: 400;
+  color: var(--vp-c-text-1) !important;
+  background: var(--lb-btn-secondary-bg);
+  border-radius: var(--lb-btn-secondary-radius);
   text-decoration: none !important;
-  border-radius: 100px;
-  border: 1.5px solid color-mix(in srgb, var(--brand-100) 40%, transparent);
-  transition: gap 0.2s, border-color 0.2s, background 0.2s;
-  background: transparent;
+  border: none;
+  transition: background 0.2s, gap 0.2s;
 }
 
 .hero-cta-secondary:hover {
+  background: rgba(200, 200, 200, 0.8);
   gap: 0.625rem;
-  border-color: var(--brand-100);
-  background: color-mix(in srgb, var(--brand-100) 6%, transparent);
 }
 
 :root.dark .hero-cta-secondary {
-  color: var(--brand-80, var(--brand-100));
-  border-color: color-mix(in srgb, var(--brand-80, var(--brand-100)) 35%, transparent);
+  color: var(--lb-btn-secondary-color) !important;
 }
 
 :root.dark .hero-cta-secondary:hover {
-  border-color: var(--brand-80, var(--brand-100));
-  background: color-mix(in srgb, var(--brand-80, var(--brand-100)) 8%, transparent);
+  background: rgba(100, 100, 100, 0.6);
 }
 </style>

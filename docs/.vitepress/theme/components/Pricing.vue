@@ -260,7 +260,7 @@ const t = computed(() => {
         }">
         <div class="flex items-center justify-between mb-[18px]">
           <span
-            class="text-[0.68rem] font-semibold px-2 py-[2px] rounded-full whitespace-nowrap"
+            class="text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap"
             :style="{
               background: `color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 13%, transparent)`,
               color: LEVEL_COLORS.lv1.text,
@@ -330,7 +330,7 @@ const t = computed(() => {
         }">
         <div class="flex items-center justify-between mb-[18px]">
           <span
-            class="text-[0.68rem] font-semibold px-2 py-[2px] rounded-full whitespace-nowrap"
+            class="text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap"
             :style="{
               background: `color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 13%, transparent)`,
               color: LEVEL_COLORS.lv2.text,
@@ -413,7 +413,7 @@ const t = computed(() => {
         }">
         <div class="flex items-center justify-between mb-[18px]">
           <span
-            class="text-[0.68rem] font-semibold px-2 py-[2px] rounded-full whitespace-nowrap"
+            class="text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap"
             :style="{
               background: `color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 13%, transparent)`,
               color: LEVEL_COLORS.opra.text,

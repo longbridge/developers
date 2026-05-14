@@ -2467,6 +2467,7 @@ const currentExample = computed(() => {
   <!-- ─── Hero ──────────────────────────────────────────────────────────────── -->
   <div class="skill-hero border-b border-[var(--vp-c-divider)]">
     <div class="max-w-3xl mx-auto px-6 py-16 text-center">
+      <div class="skill-badge">{{ t.badge.value }}</div>
       <h1 class="skill-title">
         {{ t.heroTitle1.value }}
       </h1>
@@ -3791,12 +3792,13 @@ const currentExample = computed(() => {
 /* ─── Hero ───────────────────────────────────────────────────────────────── */
 .skill-badge {
   display: inline-block;
-  border: 1px solid var(--vp-c-brand-1);
-  border-radius: 20px;
-  padding: 3px 14px;
-  font-size: 0.75rem;
+  background: color-mix(in srgb, var(--vp-c-brand-1) 12%, transparent);
+  border-radius: var(--lb-badge-radius, 9999px);
+  padding: var(--lb-badge-py, 4px) var(--lb-badge-px, 8px);
+  font-size: var(--lb-badge-fs, 12px);
+  font-weight: var(--lb-badge-fw, 600);
+  line-height: var(--lb-badge-lh, 1);
   color: var(--vp-c-brand-1);
-  letter-spacing: 0.04em;
   margin-bottom: 20px;
 }
 .skill-title {
