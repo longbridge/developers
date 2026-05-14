@@ -235,7 +235,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | true | List of fund holders |
+| lists | object[] | true | List of fund holders, see [FundHolder](#FundHolder) |
 
 ### FundHolder
 

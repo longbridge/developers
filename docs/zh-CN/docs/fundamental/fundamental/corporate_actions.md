@@ -243,7 +243,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | object[] | 是 | 公司行动列表 |
+| items | object[] | 是 | 公司行动列表，见 [CorpActionItem](#CorpActionItem) |
 
 ### CorpActionItem
 

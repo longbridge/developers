@@ -241,7 +241,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| records | object[] | true | List of execution records |
+| records | object[] | true | List of execution records, see [DcaHistoryRecord](#DcaHistoryRecord) |
 | has_more | boolean | false | Whether more records exist |
 
 ### DcaHistoryRecord

@@ -222,7 +222,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | updated_at | string | false | 最后更新日期 |
-| list | object[] | true | 经纪商持仓明细 |
+| list | object[] | true | 经纪商持仓明细，见 [BrokerHoldingItem](#BrokerHoldingItem) |
 
 ### BrokerHoldingItem
 

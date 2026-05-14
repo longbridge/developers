@@ -236,8 +236,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| sharelists | object[] | false | 用户自建股单列表 |
-| subscribed_sharelists | object[] | false | 已订阅股单列表 |
+| sharelists | object[] | false | 用户自建股单列表，见 [SharelistInfo](#SharelistInfo) |
+| subscribed_sharelists | object[] | false | 已订阅股单列表，见 [SharelistInfo](#SharelistInfo) |
 | tail_mark | string | false | 已订阅列表的分页游标 |
 
 ### SharelistInfo
@@ -256,7 +256,7 @@ func main() {
 | subscribed | boolean | false | 当前用户是否已订阅 |
 | sharelist_type | integer | false | 类型：`0`=普通，`3`=官方，`4`=行业 |
 | industry_code | string | false | 行业代码（行业股单适用） |
-| stocks | object[] | false | 成份股列表 |
+| stocks | object[] | false | 成份股列表，见 [SharelistStock](#SharelistStock) |
 
 ### SharelistStock
 

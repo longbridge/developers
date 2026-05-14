@@ -208,7 +208,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| infos | object[] | true | 定投支持情況列表 |
+| infos | object[] | true | 定投支持情況列表，見 [DcaSupportInfo](#DcaSupportInfo) |
 
 ### DcaSupportInfo
 

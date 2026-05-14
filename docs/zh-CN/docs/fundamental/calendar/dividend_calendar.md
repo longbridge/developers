@@ -255,7 +255,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | date | string | 否 | 响应日期 |
-| list | object[] | 是 | 日历日期分组列表 |
+| list | object[] | 是 | 日历日期分组列表，见 [CalendarDateGroup](#CalendarDateGroup) |
 
 ### CalendarDateGroup
 
@@ -265,7 +265,7 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | date | string | 是 | 日期 |
 | count | integer | 否 | 该日期的事件数量 |
-| infos | object[] | 是 | 日历事件列表 |
+| infos | object[] | 是 | 日历事件列表，见 [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo
 

@@ -256,7 +256,7 @@ func main() {
 | currency | string | false | Reporting currency |
 | current_index | integer | false | Index of the current period in opt_periods |
 | current_period | string | false | Current period code (e.g. `qf`) |
-| list | object[] | true | List of consensus forecast periods |
+| list | object[] | true | List of consensus forecast periods, see [ConsensusListItem](#ConsensusListItem) |
 | opt_periods | string[] | false | Available period options |
 
 ### ConsensusListItem
@@ -268,7 +268,7 @@ func main() {
 | fiscal_period | string | false | Fiscal period number within the fiscal year |
 | fiscal_year | integer | false | Fiscal year |
 | period_text | string | false | Display period label (e.g. Q1 2027) |
-| details | object[] | false | List of financial indicator details |
+| details | object[] | false | List of financial indicator details, see [ConsensusDetail](#ConsensusDetail) |
 
 ### ConsensusDetail
 

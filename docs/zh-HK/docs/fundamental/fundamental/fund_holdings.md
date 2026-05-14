@@ -235,7 +235,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| lists | object[] | 是 | 基金持倉列表 |
+| lists | object[] | 是 | 基金持倉列表，見 [FundHolder](#FundHolder) |
 
 ### FundHolder
 

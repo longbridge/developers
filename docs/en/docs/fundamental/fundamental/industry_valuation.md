@@ -238,7 +238,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of peer companies |
+| list | object[] | true | List of peer companies, see [IndustryValuationItem](#IndustryValuationItem) |
 
 ### IndustryValuationItem
 

@@ -252,7 +252,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| plans | object[] | 是 | 定投计划列表 |
+| plans | object[] | 是 | 定投计划列表，见 [DcaPlan](#DcaPlan) |
 
 ### DcaPlan
 

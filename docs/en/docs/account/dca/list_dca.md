@@ -252,7 +252,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| plans | object[] | true | List of DCA plans |
+| plans | object[] | true | List of DCA plans, see [DcaPlan](#DcaPlan) |
 
 ### DcaPlan
 

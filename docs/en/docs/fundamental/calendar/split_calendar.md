@@ -255,7 +255,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | date | string | false | Response date |
-| list | object[] | true | List of calendar date groups |
+| list | object[] | true | List of calendar date groups, see [CalendarDateGroup](#CalendarDateGroup) |
 
 ### CalendarDateGroup
 
@@ -265,7 +265,7 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | date | string | true | Date |
 | count | integer | false | Number of events on this date |
-| infos | object[] | true | List of calendar events |
+| infos | object[] | true | List of calendar events, see [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo
 

@@ -240,8 +240,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buyback_history | object[] | 否 | 年度回购历史 |
-| buyback_ratios | object[] | 否 | 回购比率历史 |
+| buyback_history | object[] | 否 | 年度回购历史，见 [BuybackHistoryItem](#BuybackHistoryItem) |
+| buyback_ratios | object[] | 否 | 回购比率历史，见 [BuybackRatios](#BuybackRatios) |
 | recent_buybacks | object | 否 | 近 12 个月回购汇总 |
 
 ### BuybackHistoryItem

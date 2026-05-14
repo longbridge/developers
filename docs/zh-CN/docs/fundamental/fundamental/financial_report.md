@@ -276,7 +276,7 @@ func main() {
 | has_yoy | boolean | false | 是否有同比数据 |
 | entry | string | false | 条目标识符 |
 | periods | string[] | false | 可用报告期列表 |
-| accounts | object[] | false | 财务科目列表 |
+| accounts | object[] | false | 财务科目列表，见 [FinancialAccount](#FinancialAccount) |
 
 ### FinancialAccount
 
@@ -288,7 +288,7 @@ func main() {
 | name | string | false | 字段显示名称 |
 | percent | boolean | false | 是否为百分比值 |
 | tip | string | false | 提示说明 |
-| values | object[] | false | 按报告期的历史数值 |
+| values | object[] | false | 按报告期的历史数值，见 [FinancialValue](#FinancialValue) |
 
 ### FinancialValue
 

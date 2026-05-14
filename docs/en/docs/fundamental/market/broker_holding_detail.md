@@ -222,7 +222,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | updated_at | string | false | Last update date |
-| list | object[] | true | Broker holding detail records |
+| list | object[] | true | Broker holding detail records, see [BrokerHoldingItem](#BrokerHoldingItem) |
 
 ### BrokerHoldingItem
 

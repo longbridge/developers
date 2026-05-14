@@ -241,7 +241,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| records | object[] | true | 执行记录列表 |
+| records | object[] | true | 执行记录列表，见 [DcaHistoryRecord](#DcaHistoryRecord) |
 | has_more | boolean | false | 是否有更多记录 |
 
 ### DcaHistoryRecord

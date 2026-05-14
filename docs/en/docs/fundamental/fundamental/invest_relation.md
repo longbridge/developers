@@ -240,7 +240,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | forward_url | string | false | Company investment relations page URL |
-| invest_securities | object[] | false | List of investment holdings |
+| invest_securities | object[] | false | List of investment holdings, see [InvestSecurity](#InvestSecurity) |
 
 ### InvestSecurity
 

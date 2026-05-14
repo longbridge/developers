@@ -242,7 +242,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| flows_list | object[] | true | 资金流水列表（分页） |
+| flows_list | object[] | true | 资金流水列表（分页），见 [FlowItem](#FlowItem) |
 | has_more | boolean | false | 是否有更多页 |
 
 ### FlowItem

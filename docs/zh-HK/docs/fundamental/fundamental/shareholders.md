@@ -238,7 +238,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| shareholder_list | object[] | 是 | 股東列表 |
+| shareholder_list | object[] | 是 | 股東列表，見 [ShareholderItem](#ShareholderItem) |
 | forward_url | string | 否 | 完整股東頁面連結 |
 | total | integer | 是 | 股東總數 |
 

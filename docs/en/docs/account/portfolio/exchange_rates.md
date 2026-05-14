@@ -233,7 +233,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| exchanges | object[] | true | List of exchange rates |
+| exchanges | object[] | true | List of exchange rates, see [ExchangeRate](#ExchangeRate) |
 
 ### ExchangeRate
 

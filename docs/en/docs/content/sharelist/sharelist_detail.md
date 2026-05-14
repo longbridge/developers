@@ -220,7 +220,7 @@ func main() {
 | subscribed | boolean | false | Whether subscribed |
 | sharelist_type | integer | false | Type: `0`=regular, `3`=official, `4`=industry |
 | industry_code | string | false | Industry code |
-| stocks | object[] | false | Constituent stocks |
+| stocks | object[] | false | Constituent stocks, see [SharelistStock](#SharelistStock) |
 
 ### SharelistScopes
 

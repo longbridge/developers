@@ -252,7 +252,7 @@ func main() {
 | rise_num | integer | 否 | 上涨数量 |
 | fall_num | integer | 否 | 下跌数量 |
 | flat_num | integer | 否 | 平盘数量 |
-| stocks | object[] | 是 | 成分股列表 |
+| stocks | object[] | 是 | 成分股列表，见 [ConstituentStock](#ConstituentStock) |
 
 ### ConstituentStock
 

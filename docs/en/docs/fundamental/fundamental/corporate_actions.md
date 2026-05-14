@@ -243,7 +243,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | object[] | true | Corporate action list |
+| items | object[] | true | Corporate action list, see [CorpActionItem](#CorpActionItem) |
 
 ### CorpActionItem
 

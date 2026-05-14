@@ -220,7 +220,7 @@ func main() {
 | subscribed | boolean | false | 是否已订阅 |
 | sharelist_type | integer | false | 类型：`0`=普通，`3`=官方，`4`=行业 |
 | industry_code | string | false | 行业代码 |
-| stocks | object[] | false | 成分股列表 |
+| stocks | object[] | false | 成分股列表，见 [SharelistStock](#SharelistStock) |
 
 ### SharelistScopes
 

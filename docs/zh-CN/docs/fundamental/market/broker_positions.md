@@ -242,8 +242,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buy | object[] | 否 | 净买入经纪商列表 |
-| sell | object[] | 否 | 净卖出经纪商列表 |
+| buy | object[] | 否 | 净买入经纪商列表，见 [BrokerHoldingEntry](#BrokerHoldingEntry) |
+| sell | object[] | 否 | 净卖出经纪商列表，见 [BrokerHoldingEntry](#BrokerHoldingEntry) |
 | updated_at | string | 否 | 最后更新时间 |
 
 ### BrokerHoldingEntry

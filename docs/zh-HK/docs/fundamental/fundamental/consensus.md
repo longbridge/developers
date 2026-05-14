@@ -254,7 +254,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | 是 | 證券代碼 |
-| list | object[] | 是 | 共識預測期列表 |
+| list | object[] | 是 | 共識預測期列表，見 [ConsensusListItem](#ConsensusListItem) |
 | list[].period | string | 否 | 財報期（如 FY2024） |
 | list[].revenue | int64 | 否 | 共識營收預測 |
 | list[].eps | double | 否 | 共識 EPS 預測 |

@@ -238,7 +238,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | object[] | true | List of EPS forecast periods |
+| items | object[] | true | List of EPS forecast periods, see [ForecastEpsItem](#ForecastEpsItem) |
 
 ### ForecastEpsItem
 

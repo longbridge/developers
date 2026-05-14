@@ -236,8 +236,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| sharelists | object[] | false | User's own sharelists |
-| subscribed_sharelists | object[] | false | Subscribed sharelists |
+| sharelists | object[] | false | User's own sharelists, see [SharelistInfo](#SharelistInfo) |
+| subscribed_sharelists | object[] | false | Subscribed sharelists, see [SharelistInfo](#SharelistInfo) |
 | tail_mark | string | false | Pagination cursor for subscribed list |
 
 ### SharelistInfo
@@ -256,7 +256,7 @@ func main() {
 | subscribed | boolean | false | Whether the current user is subscribed |
 | sharelist_type | integer | false | Type: `0`=regular, `3`=official, `4`=industry |
 | industry_code | string | false | Industry code (for industry sharelists) |
-| stocks | object[] | false | Constituent stocks |
+| stocks | object[] | false | Constituent stocks, see [SharelistStock](#SharelistStock) |
 
 ### SharelistStock
 

@@ -237,7 +237,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| klines | object[] | true | A/H premium daily kline records |
+| klines | object[] | true | A/H premium daily kline records, see [AhPremiumKline](#AhPremiumKline) |
 
 ### AhPremiumKline
 

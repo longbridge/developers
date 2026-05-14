@@ -254,6 +254,6 @@ func main() {
 | high | string | false | Historical high value |
 | low | string | false | Historical low value |
 | median | string | false | Median value |
-| list | object[] | false | Time series data points |
+| list | object[] | false | Time series data points, see [ValuationMetric](#ValuationMetric) |
 | list[].date | string | false | Date (YYYY-MM-DD) |
 | list[].value | string | false | Valuation value |

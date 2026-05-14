@@ -230,7 +230,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 分紅記錄列表 |
+| list | object[] | 是 | 分紅記錄列表，見 [DividendItem](#DividendItem) |
 | list[].symbol | string | 是 | 證券代碼 |
 | list[].dividend_type | string | 否 | 分紅類型（如 cash 現金、stock 股票） |
 | list[].amount | double | 否 | 每股分紅金額 |

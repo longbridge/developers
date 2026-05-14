@@ -238,7 +238,7 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | has_more | boolean | false | Whether there are more pages |
 | profit | string | false | Total profit/loss |
-| stock_items | object[] | false | P&L breakdown by stock |
+| stock_items | object[] | false | P&L breakdown by stock, see [StockProfitItem](#StockProfitItem) |
 
 ### StockProfitItem
 

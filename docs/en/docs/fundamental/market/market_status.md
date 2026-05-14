@@ -238,7 +238,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| market_time | object[] | true | List of market status items |
+| market_time | object[] | true | List of market status items, see [MarketTimeItem](#MarketTimeItem) |
 
 ### MarketTimeItem
 

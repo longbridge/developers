@@ -251,7 +251,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 经营数据报告列表 |
+| list | object[] | true | 经营数据报告列表，见 [OperatingItem](#OperatingItem) |
 
 ### OperatingItem
 
@@ -278,7 +278,7 @@ func main() {
 | currency | string | false | 报告货币 |
 | region | string | false | 市场地区 |
 | report | string | false | 报告期代码 |
-| indicators | object[] | false | 财务指标列表 |
+| indicators | object[] | false | 财务指标列表，见 [OperatingIndicator](#OperatingIndicator) |
 
 ### OperatingIndicator
 

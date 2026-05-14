@@ -251,7 +251,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 經營數據報告列表 |
+| list | object[] | true | 經營數據報告列表，見 [OperatingItem](#OperatingItem) |
 
 ### OperatingItem
 
@@ -278,7 +278,7 @@ func main() {
 | currency | string | false | 報告貨幣 |
 | region | string | false | 市場地區 |
 | report | string | false | 報告期代碼 |
-| indicators | object[] | false | 財務指標列表 |
+| indicators | object[] | false | 財務指標列表，見 [OperatingIndicator](#OperatingIndicator) |
 
 ### OperatingIndicator
 

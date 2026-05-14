@@ -214,7 +214,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | 每日持倉歷史紀錄 |
+| list | object[] | true | 每日持倉歷史紀錄，見 [BrokerHoldingDailyItem](#BrokerHoldingDailyItem) |
 
 ### BrokerHoldingDailyItem
 

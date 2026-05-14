@@ -251,7 +251,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | List of operating summary reports |
+| list | object[] | true | List of operating summary reports, see [OperatingItem](#OperatingItem) |
 
 ### OperatingItem
 
@@ -278,7 +278,7 @@ func main() {
 | currency | string | false | Reporting currency |
 | region | string | false | Market region |
 | report | string | false | Report period code |
-| indicators | object[] | false | Financial indicators |
+| indicators | object[] | false | Financial indicators, see [OperatingIndicator](#OperatingIndicator) |
 
 ### OperatingIndicator
 

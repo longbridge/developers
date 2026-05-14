@@ -318,7 +318,7 @@ func main() {
 | end_date | string | false | End date |
 | updated_at | string | false | Last update timestamp |
 | updated_date | string | false | Last update date |
-| items | object[] | false | Per-position P&L items |
+| items | object[] | false | Per-position P&L items, see [ProfitAnalysisItem](#ProfitAnalysisItem) |
 
 ### ProfitAnalysisItem
 

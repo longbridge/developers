@@ -318,7 +318,7 @@ func main() {
 | end_date | string | false | 結束日期 |
 | updated_at | string | false | 最後更新時間戳 |
 | updated_date | string | false | 最後更新日期 |
-| items | object[] | false | 逐倉位盈虧列表 |
+| items | object[] | false | 逐倉位盈虧列表，見 [ProfitAnalysisItem](#ProfitAnalysisItem) |
 
 ### ProfitAnalysisItem
 

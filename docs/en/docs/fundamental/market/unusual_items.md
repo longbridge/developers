@@ -239,7 +239,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | all_off | boolean | false | Whether anomaly alerts are globally disabled |
-| changes | object[] | false | List of market anomaly events |
+| changes | object[] | false | List of market anomaly events, see [AnomalyItem](#AnomalyItem) |
 
 ### AnomalyItem
 

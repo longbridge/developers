@@ -237,7 +237,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | 是 | 分红记录列表 |
+| list | object[] | 是 | 分红记录列表，见 [DividendItem](#DividendItem) |
 | ∟ ex_date | string | 是 | 除息日 |
 | ∟ pay_date | string | 否 | 派息日 |
 | ∟ amount | string | 是 | 每股分红金额 |

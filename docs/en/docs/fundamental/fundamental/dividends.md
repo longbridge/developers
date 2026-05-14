@@ -237,7 +237,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| list | object[] | true | Dividend records |
+| list | object[] | true | Dividend records, see [DividendItem](#DividendItem) |
 
 ### DividendItem
 

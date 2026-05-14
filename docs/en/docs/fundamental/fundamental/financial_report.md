@@ -276,7 +276,7 @@ func main() {
 | has_yoy | boolean | false | Whether year-over-year data is available |
 | entry | string | false | Entry identifier |
 | periods | string[] | false | Available reporting periods |
-| accounts | object[] | false | List of financial line items |
+| accounts | object[] | false | List of financial line items, see [FinancialAccount](#FinancialAccount) |
 
 ### FinancialAccount
 
@@ -288,7 +288,7 @@ func main() {
 | name | string | false | Field display name |
 | percent | boolean | false | Whether the value is a percentage |
 | tip | string | false | Tooltip description |
-| values | object[] | false | Historical values by period |
+| values | object[] | false | Historical values by period, see [FinancialValue](#FinancialValue) |
 
 ### FinancialValue
 

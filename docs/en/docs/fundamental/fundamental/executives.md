@@ -244,7 +244,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| professional_list | object[] | true | List of executive groups |
+| professional_list | object[] | true | List of executive groups, see [ExecutiveGroup](#ExecutiveGroup) |
 
 ### ExecutiveGroup
 
@@ -255,7 +255,7 @@ func main() {
 | symbol | string | true | Security symbol |
 | forward_url | string | false | Company executives page URL |
 | total | integer | false | Total number of executives |
-| professionals | object[] | true | List of executives |
+| professionals | object[] | true | List of executives, see [Executive](#Executive) |
 
 ### Executive
 

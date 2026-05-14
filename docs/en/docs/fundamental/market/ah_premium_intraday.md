@@ -211,7 +211,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| klines | object[] | true | Intraday A/H premium kline data |
+| klines | object[] | true | Intraday A/H premium kline data, see [AhPremiumKline](#AhPremiumKline) |
 
 ### AhPremiumIntradayKline
 

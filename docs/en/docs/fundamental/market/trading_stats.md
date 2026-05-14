@@ -256,7 +256,7 @@ func main() {
 | statistics.preclose | string | false | Previous close price |
 | statistics.timestamp | string | false | Statistics timestamp |
 | statistics.trade_date | string[] | false | Trading dates included |
-| trades | object[] | false | Price-level trade distribution |
+| trades | object[] | false | Price-level trade distribution, see [TradePriceLevel](#TradePriceLevel) |
 
 ### TradePriceLevel
 

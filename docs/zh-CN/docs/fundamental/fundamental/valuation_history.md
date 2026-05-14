@@ -239,7 +239,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | 是 | 证券代码 |
-| list | object[] | 是 | 历史估值数据点列表 |
+| list | object[] | 是 | 历史估值数据点列表，见 [ValuationMetric](#ValuationMetric) |
 | list[].date | string | 否 | 日期（YYYY-MM-DD） |
 | list[].pe | double | 否 | 市盈率（PE） |
 | list[].pb | double | 否 | 市净率（PB） |

@@ -242,8 +242,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buy | object[] | false | Top buying brokers |
-| sell | object[] | false | Top selling brokers |
+| buy | object[] | false | Top buying brokers, see [BrokerHoldingEntry](#BrokerHoldingEntry) |
+| sell | object[] | false | Top selling brokers, see [BrokerHoldingEntry](#BrokerHoldingEntry) |
 | updated_at | string | false | Last update timestamp |
 
 ### BrokerHoldingEntry

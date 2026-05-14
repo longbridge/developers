@@ -240,7 +240,7 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | symbol | string | 是 | 证券代码 |
 | industry | string | 否 | 行业分类 |
-| list | object[] | 是 | 同行公司列表 |
+| list | object[] | 是 | 同行公司列表，见 [IndustryValuationItem](#IndustryValuationItem) |
 | list[].symbol | string | 否 | 同行证券代码 |
 | list[].name | string | 否 | 公司名称 |
 | list[].pe | double | 否 | 市盈率 |

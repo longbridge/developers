@@ -244,7 +244,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| professional_list | object[] | 是 | 高管分组列表 |
+| professional_list | object[] | 是 | 高管分组列表，见 [ExecutiveGroup](#ExecutiveGroup) |
 
 ### ExecutiveGroup
 
@@ -255,7 +255,7 @@ func main() {
 | symbol | string | 是 | 证券代码 |
 | forward_url | string | 否 | 公司高管页面链接 |
 | total | integer | 否 | 高管总数 |
-| professionals | object[] | 是 | 高管列表 |
+| professionals | object[] | 是 | 高管列表，见 [Executive](#Executive) |
 
 ### Executive
 

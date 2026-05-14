@@ -242,7 +242,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| flows_list | object[] | true | Paginated list of flow items |
+| flows_list | object[] | true | Paginated list of flow items, see [FlowItem](#FlowItem) |
 | has_more | boolean | false | Whether there are more pages |
 
 ### FlowItem

@@ -208,7 +208,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| infos | object[] | true | List of DCA support results |
+| infos | object[] | true | List of DCA support results, see [DcaSupportInfo](#DcaSupportInfo) |
 
 ### DcaSupportInfo
 

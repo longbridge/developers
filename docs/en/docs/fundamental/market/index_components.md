@@ -252,7 +252,7 @@ func main() {
 | rise_num | integer | false | Number of rising stocks |
 | fall_num | integer | false | Number of falling stocks |
 | flat_num | integer | false | Number of flat stocks |
-| stocks | object[] | true | List of constituent stocks |
+| stocks | object[] | true | List of constituent stocks, see [ConstituentStock](#ConstituentStock) |
 
 ### ConstituentStock
 

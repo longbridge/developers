@@ -239,7 +239,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | all_off | boolean | false | 是否全局关闭异动提醒 |
-| changes | object[] | false | 市场异动事件列表 |
+| changes | object[] | false | 市场异动事件列表，见 [AnomalyItem](#AnomalyItem) |
 
 ### AnomalyItem
 

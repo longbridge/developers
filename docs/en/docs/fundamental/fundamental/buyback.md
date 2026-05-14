@@ -240,8 +240,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| buyback_history | object[] | false | Annual buyback history |
-| buyback_ratios | object[] | false | Buyback ratio history |
+| buyback_history | object[] | false | Annual buyback history, see [BuybackHistoryItem](#BuybackHistoryItem) |
+| buyback_ratios | object[] | false | Buyback ratio history, see [BuybackRatios](#BuybackRatios) |
 | recent_buybacks | object | false | Trailing 12-month buyback summary |
 
 ### BuybackHistoryItem
