@@ -44,6 +44,14 @@ longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
 
 <SDKLinks module="content" klass="ContentContext" method="create_topic_reply" />
 
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics/:topic_id/comments</td></tr>
+</tbody>
+</table>
 
 ### Path Parameters
 
@@ -58,7 +66,7 @@ longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
 | body        | string | YES      | Reply body. Plain text only — Markdown is not rendered. Symbols mentioned in the body are auto-linked by the platform. |
 | reply_to_id | string | NO       | ID of the reply to nest under. Omit or set to `"0"` for a top-level reply.                                             |
 
-## Request Example
+### Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -174,6 +182,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Response
 
+### Response Headers
+
+- Content-Type: application/json
 
 ### Response Example
 

@@ -18,6 +18,14 @@ longbridge topic mine
 
 <SDKLinks module="content" klass="ContentContext" method="topics_mine" />
 
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics/mine</td></tr>
+</tbody>
+</table>
 
 ### Query Parameters
 
@@ -27,7 +35,7 @@ longbridge topic mine
 | size        | int32  | NO       | 每页数量，范围 1~500，默认 50                                                  |
 | topic_type  | string | NO       | 类型过滤，可选 `article`（长文）、`post`（短帖），不传返回全部                  |
 
-## Request Example
+### Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -231,6 +239,9 @@ func main() {
 
 ## Response
 
+### Response Headers
+
+- Content-Type: application/json
 
 ### Response Example
 

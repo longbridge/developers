@@ -18,6 +18,14 @@ longbridge topic detail 6993508780031016960
 
 <SDKLinks module="content" klass="ContentContext" method="topic_detail" />
 
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics/:id</td></tr>
+</tbody>
+</table>
 
 ### Path Parameters
 
@@ -25,7 +33,7 @@ longbridge topic detail 6993508780031016960
 | ---- | ------ | -------- | --------------------------------- |
 | id   | string | YES      | 讨论 ID，如 `6993508780031016960` |
 
-## Request Example
+### Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -122,6 +130,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Response
 
+### Response Headers
+
+- Content-Type: application/json
 
 ### Response Example
 

@@ -32,6 +32,14 @@ longbridge topic create-reply 6993508780031016960 --body "分析得好！"
 
 <SDKLinks module="content" klass="ContentContext" method="create_topic_reply" />
 
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/topics/:topic_id/comments</td></tr>
+</tbody>
+</table>
 
 ### Path Parameters
 
@@ -46,7 +54,7 @@ longbridge topic create-reply 6993508780031016960 --body "分析得好！"
 | body        | string | YES      | 回覆正文，僅支持純文本。正文中提到的標的代碼會被平台自動識別並關聯。           |
 | reply_to_id | string | NO       | 被回覆的回覆 ID；不填或填 `"0"` 表示發頂層回覆，填入有效 ID 則嵌套在該回覆下。 |
 
-## Request Example
+### Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="cli" label="CLI" default>
@@ -162,6 +170,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Response
 
+### Response Headers
+
+- Content-Type: application/json
 
 ### Response Example
 

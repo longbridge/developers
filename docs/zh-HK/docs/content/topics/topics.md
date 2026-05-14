@@ -23,6 +23,14 @@ longbridge topic NVDA.US
 
 <SDKLinks module="content" klass="ContentContext" method="topics" />
 
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/content/{symbol}/topics</td></tr>
+</tbody>
+</table>
 
 ### Path Parameters
 
@@ -30,7 +38,7 @@ longbridge topic NVDA.US
 | ------ | ------ | -------- | ---------------------------------------------- |
 | symbol | string | YES      | 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US` |
 
-## Request Example
+### Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python" default>
@@ -210,6 +218,9 @@ func main() {
 
 ## Response
 
+### Response Headers
+
+- Content-Type: application/json
 
 ### Response Example
 
