@@ -259,7 +259,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | plan_id | string | true | DCA plan ID |
-| counter_id | string | true | Security identifier |
+| symbol | string | true | Security symbol |
 | stock_name | string | false | Security name |
 | market | string | false | Market |
 | status | string | false | Plan status: `Active`, `Suspended`, `Finished` |

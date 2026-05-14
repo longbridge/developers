@@ -252,7 +252,7 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | true | Security identifier |
+| symbol | string | true | Security symbol |
 | forward_url | string | false | Company executives page URL |
 | total | integer | false | Total number of executives |
 | professionals | object[] | true | List of executives |
