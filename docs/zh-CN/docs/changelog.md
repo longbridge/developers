@@ -6,6 +6,17 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-15
+
+### CLI v0.21.0
+
+- **`industry-rank`** — 按市场（US/HK/CN/SG）查看行业强弱排名；配合 `industry-peers` 展开任意板块的完整竞争格局
+- **`industry-peers`** — 行业子板块树形结构，展示各节点的股票数、当日涨跌和年初至今涨跌
+- **`business-segments`** — 按业务分部拆解营收，支持当期数据或历史趋势对比
+- **`financial-report snapshot`** — AI 生成财报摘要，含营收、EBIT、净利润相对分析师预期的差距分析
+- **`institution-rating --views`** — 逐月展示机构评级分布（买入/持有/卖出）的变化趋势
+- MCP 服务同步新增相同功能（工具总数达 133 个）
+
 ## 2026-05-13
 
 ### SDK v4.1.0

@@ -6,6 +6,17 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-15
+
+### CLI v0.21.0
+
+- **`industry-rank`** — industry ranking by market (US/HK/CN/SG); pairs with `industry-peers` to explore the full competitive tree for any sector
+- **`industry-peers`** — sub-sector tree showing stock count, daily change, and YTD change per node
+- **`business-segments`** — revenue breakdown by business segment, current period or historical trend
+- **`financial-report snapshot`** — AI-generated earnings summary with beat/miss analysis vs consensus estimates
+- **`institution-rating --views`** — month-by-month buy/hold/sell distribution to track how analyst sentiment shifts over time
+- MCP server updated with the same new capabilities (133 tools total)
+
 ## 2026-05-13
 
 ### SDK v4.1.0
