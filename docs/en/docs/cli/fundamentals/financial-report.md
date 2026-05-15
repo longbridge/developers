@@ -59,3 +59,40 @@ longbridge financial-report 700.HK --kind BS --report af
 ```
 
 Retrieves the annual balance sheet for Tencent. Use `--report` to choose the reporting period: `af` (annual), `saf` (semi-annual), `q1`, `3q`, or `qf` (quarterly).
+
+### AI earnings snapshot
+
+```bash
+longbridge financial-report snapshot AAPL.US
+```
+
+```
+Apple Inc. (AAPL)    Q1 FY2026    Jan 2026 – Mar 2026    USD
+
+Apple delivered a solid quarter with revenue and EPS beating consensus
+estimates. Services continued to outperform, offsetting softer iPhone
+sales outside of China.
+
+── Forecast vs Actual ──────────────────────────────────────────────
+| metric        | consensus | actual  | beat/miss |
+|---------------|-----------|---------|-----------|
+| Revenue       | 123.15B   | 124.30B | +0.93%    |
+| EBIT          | 34.21B    | 35.43B  | +3.57%    |
+| Net Income    | 29.48B    | 30.52B  | +3.53%    |
+
+── Upcoming peer earnings ──────────────────────────────────────────
+| company     | ticker   | date       |
+|-------------|----------|------------|
+| Microsoft   | MSFT.US  | 2026-04-29 |
+| Alphabet    | GOOG.US  | 2026-04-29 |
+| Meta        | META.US  | 2026-04-30 |
+```
+
+The `snapshot` subcommand provides an AI-generated earnings summary, beat/miss analysis against consensus estimates, and upcoming earnings dates for peer companies.
+
+```bash
+# Specify a historical quarter
+longbridge financial-report snapshot TSLA.US --report qf --year 2025 --period 4
+```
+
+Use `--report qf --year <YEAR> --period <1-4>` to retrieve a specific quarter.

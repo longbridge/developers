@@ -112,3 +112,20 @@ longbridge institution-rating TSLA.US --format json
 ```
 
 The `evaluate` object contains the per-rating counts across all 52 covering analysts. The `target` object shows the highest and lowest price targets alongside the previous close for context.
+
+### Monthly analyst sentiment trend
+
+```bash
+longbridge institution-rating TSLA.US --views
+```
+
+```
+| month   | strong_buy | buy | hold | sell | under | no_opinion | total |
+|---------|------------|-----|------|------|-------|------------|-------|
+| 2026-04 | 18         | 5   | 17   | 6    | 2     | 4          | 52    |
+| 2026-03 | 17         | 6   | 18   | 5    | 3     | 3          | 52    |
+| 2026-02 | 16         | 7   | 19   | 5    | 3     | 2          | 52    |
+| 2026-01 | 15         | 8   | 19   | 6    | 2     | 2          | 52    |
+```
+
+Shows how the buy/hold/sell distribution has shifted month by month, newest first. Use alongside `--history` (individual analyst target price changes) to get both perspectives on momentum.

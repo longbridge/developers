@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.21.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.21.0)
+
+- **新增 `business-segments`** — 按业务分部拆解营收，支持当期数据或历史趋势对比
+- **新增 `industry-rank`** — 按市场（US/HK/CN/SG）和指标对行业排名；Counter ID 可直接传给 `industry-peers`
+- **新增 `industry-peers`** — 行业子板块树形结构，展示各节点的股票数、当日涨跌和年初至今涨跌
+- **新增 `financial-report snapshot`** — AI 财报摘要，含超/低预期分析和同行即将发布财报日期
+- **新增 `institution-rating --views`** — 逐月展示机构评级分布变化趋势
+
 ### [v0.20.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.3)
 
 - **Breaking：移除 `analyst-estimates` 命令** — 该命令已下线；EPS 和营收预测数据请改用 `consensus`

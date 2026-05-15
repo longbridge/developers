@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.21.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.21.0)
+
+- **New: `business-segments`** — revenue breakdown by business segment, current period or historical trend
+- **New: `industry-rank`** — industry ranking by market (US/HK/CN/SG) and indicator; counter_id output feeds directly into `industry-peers`
+- **New: `industry-peers`** — hierarchical sub-sector tree with stock count, daily change, and YTD change per node
+- **New: `financial-report snapshot`** — AI earnings summary with beat/miss analysis vs consensus estimates and upcoming peer earnings dates
+- **New: `institution-rating --views`** — month-by-month buy/hold/sell distribution timeline
+
 ### [v0.20.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.20.3)
 
 - **Breaking: `analyst-estimates` removed** — command has been removed; the same data is available via `consensus` (EPS and revenue estimates)
