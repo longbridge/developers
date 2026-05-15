@@ -6,9 +6,9 @@ sidebar_position: 17
 
 # longbridge industry-peers
 
-Explore the hierarchical sub-sector tree for an industry group. Takes a BK counter ID from [`industry-rank`](./industry-rank) and expands it into a full competitive landscape — sub-sectors, their sub-sectors, and the stocks in each.
+展开某行业组的层级子板块树形结构。接受来自 [`industry-rank`](./industry-rank) 的 BK 计数器 ID，并将其扩展为完整的竞争全景——子板块、子板块的子板块以及各板块内的股票。
 
-## Basic Usage
+## 基本用法
 
 ```bash
 longbridge industry-peers BK/US/IN00258
@@ -27,33 +27,33 @@ Root: Semiconductors (US)
 └── Equipment & Materials  12 stocks  +1.43%  YTD +7.2%
 ```
 
-## Examples
+## 示例
 
-### Explore a sector from industry-rank
+### 从 industry-rank 下探某板块
 
 ```bash
-# Step 1: find a sector
+# 第一步：查找板块
 longbridge industry-rank --market US
 
-# Step 2: drill into it using the counter_id column
+# 第二步：使用 counter_id 列深入探索
 longbridge industry-peers BK/US/IN00258
 ```
 
-### HK sector tree
+### 港股板块树形结构
 
 ```bash
 longbridge industry-peers BK/HK/IN00012
 ```
 
-Works the same way across markets — use counter IDs from `industry-rank --market HK`, `--market CN`, or `--market SG`.
+在不同市场下使用方式相同——从 `industry-rank --market HK`、`--market CN` 或 `--market SG` 获取计数器 ID 即可。
 
-## Options
+## 选项
 
-| Flag | Description |
-|------|-------------|
-| `--format json` | Output raw JSON |
+| 参数 | 说明 |
+|------|------|
+| `--format json` | 输出原始 JSON |
 
-## Notes
+## 注意事项
 
-- Counter IDs follow the format `BK/<MARKET>/IN<NUMBER>` — copy them directly from `industry-rank` output
-- Each node shows stock count, daily change, and YTD change
+- 计数器 ID 格式为 `BK/<MARKET>/IN<NUMBER>`，直接从 `industry-rank` 输出中复制即可
+- 每个节点显示股票数量、日内涨跌幅和年初至今（YTD）涨跌幅

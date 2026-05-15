@@ -6,9 +6,9 @@ sidebar_position: 16
 
 # longbridge industry-rank
 
-Rank all industries in a market by a chosen indicator — see which sectors are leading today, which have the strongest revenue growth, or which are attracting the most capital.
+按选定指标对某市场所有行业排名——查看今日哪些板块领涨、哪些营收增速最强，或哪些正在吸引最多资金。
 
-## Basic Usage
+## 基本用法
 
 ```bash
 longbridge industry-rank --market US
@@ -24,54 +24,54 @@ longbridge industry-rank --market US
 | 5    | Asset Management                        | BK/US/IN00033   | +1.73% | ...       |
 ```
 
-The `counter_id` column (e.g. `BK/US/IN00258`) can be passed directly to [`industry-peers`](./industry-peers) to explore the competitive tree within that sector.
+`counter_id` 列（如 `BK/US/IN00258`）可直接传给 [`industry-peers`](./industry-peers)，展开该板块的完整竞争树。
 
-## Examples
+## 示例
 
-### Leading industries today
+### 今日领涨行业
 
 ```bash
 longbridge industry-rank --market US
 ```
 
-Ranks industries by daily price performance. Replace `US` with `HK`, `CN`, or `SG` to switch markets.
+按日内价格表现对行业排名。将 `US` 替换为 `HK`、`CN` 或 `SG` 可切换市场。
 
-### Top industries by market cap
+### 按市值排名的头部行业
 
 ```bash
 longbridge industry-rank --market HK --indicator market-cap
 ```
 
-### Top industries by revenue growth
+### 按营收增速排名的头部行业
 
 ```bash
 longbridge industry-rank --market CN --indicator revenue-growth
 ```
 
-### Then drill into a sector
+### 进一步下探某板块
 
 ```bash
-# Get the counter_id from industry-rank, then explore its sub-sectors
+# 从 industry-rank 获取 counter_id，再探索其子板块
 longbridge industry-peers BK/US/IN00258
 ```
 
-## Options
+## 选项
 
-| Flag | Description |
-|------|-------------|
-| `--market <MARKET>` | Market to rank: `US`, `HK`, `CN`, `SG` |
-| `--indicator <IND>` | Ranking indicator (see below) |
-| `--format json` | Output raw JSON |
+| 参数 | 说明 |
+|------|------|
+| `--market <MARKET>` | 排名市场：`US`、`HK`、`CN`、`SG` |
+| `--indicator <IND>` | 排名指标（见下方） |
+| `--format json` | 输出原始 JSON |
 
-### Indicators
+### 指标说明
 
-| Value | Description |
-|-------|-------------|
-| `leading-gainer` | Daily price performance (default) |
-| `today-trend` | Intraday trend strength |
-| `popularity` | Search and watchlist activity |
-| `market-cap` | Total market capitalisation |
-| `revenue` | Latest revenue |
-| `revenue-growth` | YoY revenue growth rate |
-| `net-profit` | Latest net profit |
-| `net-profit-growth` | YoY net profit growth rate |
+| 值 | 说明 |
+|----|------|
+| `leading-gainer` | 日内价格涨幅（默认） |
+| `today-trend` | 盘中趋势强度 |
+| `popularity` | 搜索与自选活跃度 |
+| `market-cap` | 总市值 |
+| `revenue` | 最新营收 |
+| `revenue-growth` | 同比营收增速 |
+| `net-profit` | 最新净利润 |
+| `net-profit-growth` | 同比净利润增速 |

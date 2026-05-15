@@ -97,7 +97,7 @@ longbridge institution-rating TSLA.US --format json
 
 `evaluate` 對象包含 52 位覆蓋分析師的各評級數量；`target` 對象顯示最高和最低目標價，以及上一收盤價供參考。
 
-### 月度分析师情绪趋势
+### 月度分析師情緒趨勢
 
 ```bash
 longbridge institution-rating TSLA.US --views
@@ -112,4 +112,4 @@ longbridge institution-rating TSLA.US --views
 | 2026-01 | 15         | 8   | 19   | 6    | 2     | 2          | 52    |
 ```
 
-按月展示买入/持有/卖出评级分布的变化，最新月份在前。与 `--history`（个别分析师目标价变化）配合使用，可从两个维度了解机构情绪趋势。
+按月展示買入/持有/賣出評級分佈的變化，最新月份在前。與 `--history`（個別分析師目標價變化）配合使用，可從兩個維度了解機構情緒趨勢。

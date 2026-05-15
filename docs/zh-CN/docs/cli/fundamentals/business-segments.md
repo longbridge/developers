@@ -6,9 +6,9 @@ sidebar_position: 15
 
 # longbridge business-segments
 
-Show revenue breakdown by business segment for a company — current period totals or historical trends across reporting periods.
+显示公司各业务分部的营收拆解——当期合计或跨报告期的历史趋势。
 
-## Basic Usage
+## 基本用法
 
 ```bash
 longbridge business-segments AAPL.US
@@ -26,36 +26,36 @@ Period: Q1 FY2026    Total: 124,300,000,000    Currency: USD
 | Wearables & Other | 12,790,000,000  | 10.29% |
 ```
 
-## Examples
+## 示例
 
-### Current period breakdown
+### 当期业务分部拆解
 
 ```bash
 longbridge business-segments AAPL.US
 ```
 
-Shows each business segment's revenue and its share of total revenue for the most recent reporting period.
+展示最新报告期内各业务分部的营收金额及其在总营收中的占比。
 
-### Historical segment trends
+### 历史分部趋势
 
 ```bash
 longbridge business-segments AAPL.US --history
 ```
 
-Returns segment revenue across multiple reporting periods so you can track how the revenue mix has shifted over time.
+返回多个报告期的分部营收数据，便于追踪营收结构随时间的变化。
 
-### Filter by report type
+### 按报告类型筛选
 
 ```bash
 longbridge business-segments AAPL.US --history --report af
 ```
 
-Use `--report` to scope the history to a specific period type: `af` (annual), `saf` (semi-annual), `qf` (quarterly).
+使用 `--report` 将历史数据限定为特定周期类型：`af`（年报）、`saf`（半年报）、`qf`（季报）。
 
-## Options
+## 选项
 
-| Flag | Description |
-|------|-------------|
-| `--history` | Show historical segment data across multiple periods |
-| `--report <TYPE>` | Period type filter: `af` (annual), `saf` (semi-annual), `qf` (quarterly) |
-| `--format json` | Output raw JSON |
+| 参数 | 说明 |
+|------|------|
+| `--history` | 显示多期历史分部数据 |
+| `--report <TYPE>` | 周期类型筛选：`af`（年报）、`saf`（半年报）、`qf`（季报） |
+| `--format json` | 输出原始 JSON |
