@@ -1,5 +1,6 @@
 ﻿---
 slug: today_executions
+sidebar_position: 2
 title: 當日成交明細
 language_tabs: false
 toc_footers: []

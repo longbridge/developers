@@ -1,5 +1,6 @@
 ﻿---
 slug: watchlist_groups
+sidebar_position: 1
 title: 關注分組
 language_tabs: false
 toc_footers: []

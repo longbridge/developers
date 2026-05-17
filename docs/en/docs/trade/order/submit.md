@@ -1,5 +1,6 @@
 ﻿---
 slug: submit
+sidebar_position: 1
 title: Submit Order
 language_tabs: false
 toc_footers: []

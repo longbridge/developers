@@ -1,5 +1,6 @@
 ﻿---
 slug: today_orders
+sidebar_position: 2
 title: 当日订单
 language_tabs: false
 toc_footers: []

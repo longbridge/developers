@@ -1,6 +1,7 @@
 ﻿---
 slug: withdraw
-title: Withdraw Order
+sidebar_position: 6
+title: Cancel Order
 language_tabs: false
 toc_footers: []
 includes: []

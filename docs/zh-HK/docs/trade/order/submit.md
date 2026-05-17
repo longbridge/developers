@@ -1,5 +1,6 @@
 ﻿---
 slug: submit
+sidebar_position: 1
 title: 委托下單
 language_tabs: false
 toc_footers: []

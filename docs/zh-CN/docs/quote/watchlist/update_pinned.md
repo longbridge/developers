@@ -1,6 +1,6 @@
 ---
 slug: update-pinned
-title: 更新置顶证券
+title: 更新置顶
 sidebar_position: 5
 language_tabs: false
 toc_footers: []

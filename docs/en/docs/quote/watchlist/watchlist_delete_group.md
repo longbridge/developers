@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_delete_group
-title: Delete Watchlist Group
+sidebar_position: 3
+title: Delete Group
 language_tabs: false
 toc_footers: []
 includes: []

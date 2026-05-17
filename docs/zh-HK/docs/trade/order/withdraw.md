@@ -1,5 +1,6 @@
 ﻿---
 slug: withdraw
+sidebar_position: 6
 title: 撤銷訂單
 language_tabs: false
 toc_footers: []

@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_create_group
-title: 創建自選股分組
+sidebar_position: 2
+title: 創建分組
 language_tabs: false
 toc_footers: []
 includes: []

@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_groups
-title: Watchlist Group
+sidebar_position: 1
+title: Watchlist Groups
 language_tabs: false
 toc_footers: []
 includes: []
@@ -9,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get watched groups
+Get Watchlist groups
 
 <QuotePermission level="basic" />
 

@@ -1,8 +1,8 @@
 ---
 id: quote_unsubscribe
-title: Unsubscribe Quote
+title: Unsubscribe
 slug: unsubscribe
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 This API is used to unsubscribe quote.

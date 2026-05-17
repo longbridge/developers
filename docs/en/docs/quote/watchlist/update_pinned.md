@@ -1,6 +1,6 @@
 ---
 slug: update-pinned
-title: Update Pinned Security
+title: Update Pinned
 sidebar_position: 5
 language_tabs: false
 toc_footers: []

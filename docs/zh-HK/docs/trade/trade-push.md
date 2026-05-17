@@ -2,7 +2,7 @@
 id: trade_push
 title: 交易推播
 slug: trade-push
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 客戶端可以透過交易長連接網關取得到交易和資產的變更通知。

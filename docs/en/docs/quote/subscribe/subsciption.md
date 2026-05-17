@@ -1,8 +1,8 @@
 ﻿---
 id: quote_subscription
-title: Subscription Information
+title: Get Subscriptions
 slug: subscription
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 This API is used to obtain the subscription information.

@@ -1,8 +1,8 @@
 ﻿---
 id: quote_unsubscribe
-title: 取消订阅行情数据
+title: 取消订阅
 slug: unsubscribe
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 该接口用于取消订阅标的行情数据。

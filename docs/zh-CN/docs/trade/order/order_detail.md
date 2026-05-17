@@ -1,5 +1,6 @@
 ﻿---
 slug: order_detail
+sidebar_position: 4
 title: 订单详情
 language_tabs: false
 toc_footers: []

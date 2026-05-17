@@ -1,8 +1,8 @@
 ﻿---
 id: quote_subscription
-title: 已訂閱標的行情
+title: 已訂閱的標的行情
 slug: subscription
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 該接口用於獲取當前連接已訂閱的標的行情。
@@ -74,7 +74,9 @@ if __name__ == "__main__":
 const { Config, QuoteContext, OAuth } = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
   const config = Config.fromOAuth(oauth)
   const ctx = QuoteContext.new(config)
   const resp = await ctx.subscriptions()
@@ -212,7 +214,6 @@ func main() {
 
   </TabItem>
 </Tabs>
-
 
 ## Response
 

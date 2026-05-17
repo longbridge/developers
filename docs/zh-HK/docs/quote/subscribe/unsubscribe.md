@@ -1,8 +1,8 @@
 ---
 id: quote_unsubscribe
-title: 取消訂閱行情數據
+title: 取消行情訂閱
 slug: unsubscribe
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 該接口用於取消訂閱標的行情數據。
@@ -78,11 +78,13 @@ if __name__ == "__main__":
 const { Config, QuoteContext, OAuth, SubType } = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
   const config = Config.fromOAuth(oauth)
   const ctx = QuoteContext.new(config)
-  await ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote])
-  console.log("unsubscribed")
+  await ctx.unsubscribe(['700.HK', 'AAPL.US'], [SubType.Quote])
+  console.log('unsubscribed')
 }
 main().catch(console.error)
 ```
@@ -214,7 +216,6 @@ func main() {
 
   </TabItem>
 </Tabs>
-
 
 ## Response
 

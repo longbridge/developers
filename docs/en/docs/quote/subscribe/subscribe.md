@@ -1,8 +1,8 @@
 ---
 id: quote_subscribe
-title: Subscribe Quote
+title: Subscribe
 slug: subscribe
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 This API is used to subscribe quote.

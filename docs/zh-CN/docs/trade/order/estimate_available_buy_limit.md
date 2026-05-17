@@ -1,5 +1,6 @@
 ﻿---
 slug: estimate_available_buy_limit
+sidebar_position: 7
 title: 预估最大购买数量
 language_tabs: false
 toc_footers: []

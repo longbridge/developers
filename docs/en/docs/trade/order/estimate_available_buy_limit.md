@@ -1,5 +1,6 @@
 ﻿---
 slug: estimate_available_buy_limit
+sidebar_position: 7
 title: Estimate Maximum Purchase Quantity
 language_tabs: false
 toc_footers: []

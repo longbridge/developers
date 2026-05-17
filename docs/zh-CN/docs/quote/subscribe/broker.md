@@ -1,0 +1,96 @@
+---
+id: push_broker
+title: 实时经纪队列订阅
+slug: /quote/push/broker
+sidebar_position: 7
+---
+
+已订阅标的的实时经纪队列数据推送。
+
+<QuotePermission command="brokers" />
+
+<SDKLinks module="quote" klass="QuoteContext" method="set_on_brokers" go="OnBrokers" />
+
+:::info
+
+[业务指令](../../socket/protocol/push)：`103`
+
+:::
+
+## 数据格式
+
+### Properties
+
+| Name         | Type     | Description                       |
+| ------------ | -------- | --------------------------------- |
+| symbol       | string   | 标的代码，例如：`AAPL.US`         |
+| sequence     | int64    | 序列号                            |
+| ask_brokers  | object[] | 卖盘经纪队列                      |
+| ∟ position   | int32    | 档位                              |
+| ∟ broker_ids | int32[]  | [券商席位 Id](../pull/broker-ids) |
+| bid_brokers  | object[] | 买盘经纪队列                      |
+| ∟ position   | int32    | 档位                              |
+| ∟ broker_ids | int32[]  | [券商席位 Id](../pull/broker-ids) |
+
+### Protobuf
+
+```protobuf
+message PushBrokers {
+  string symbol = 1;
+  int64 sequence = 2;
+  repeated Brokers ask_brokers = 3;
+  repeated Brokers bid_brokers = 4;
+}
+
+message Brokers {
+  int32 position = 1;
+  repeated int32 broker_ids = 2;
+}
+```
+
+### Example
+
+```python
+from time import sleep
+from longbridge.openapi import QuoteContext, Config, SubType, PushBrokers, OAuthBuilder
+
+def on_brokers(symbol: str, event: PushBrokers):
+    print(symbol, event)
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = QuoteContext(config)
+ctx.set_on_brokers(on_brokers)
+
+ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Brokers])
+sleep(30)
+```
+
+### JSON Example
+
+```json
+{
+  "symbol": "700.HK",
+  "sequence": 160808750000000,
+  "ask_brokers": [
+    {
+      "position": 1,
+      "broker_ids": [7358, 9057, 9028, 7364]
+    },
+    {
+      "position": 2,
+      "broker_ids": [6968, 3448, 3348, 1049, 4973, 6997, 3448, 5465, 6997]
+    }
+  ],
+  "bid_brokers": [
+    {
+      "position": 1,
+      "broker_ids": [6996, 5465, 8026, 8304, 4978]
+    },
+    {
+      "position": 2,
+      "broker_ids": [7358, 9057, 9028, 7364]
+    }
+  ]
+}
+```

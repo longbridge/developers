@@ -90,7 +90,7 @@ sidebar_position: 5
         <td><a href="../quote/push/quote">實時價格推送</a></td>
     </tr>
     <tr>
-        <td><a href="../quote/push/depth">實時盤口推送</a></td>
+        <td><a href="../quote/push/depth">實時盤口訂閱</a></td>
     </tr>
     <tr>
         <td><a href="../quote/push/broker">實時經紀隊列推送</a></td>

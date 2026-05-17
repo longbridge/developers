@@ -1,5 +1,6 @@
 ﻿---
 slug: order_detail
+sidebar_position: 4
 title: Order Details
 language_tabs: false
 toc_footers: []

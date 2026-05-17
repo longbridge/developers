@@ -1,8 +1,8 @@
 ---
 id: quote_subscribe
-title: 订阅行情数据
+title: 订阅
 slug: subscribe
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 该接口用于订阅标的行情数据。

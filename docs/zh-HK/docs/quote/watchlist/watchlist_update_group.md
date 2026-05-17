@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_update_group
-title: 更新自選股分組
+sidebar_position: 4
+title: 管理分組標的
 language_tabs: false
 toc_footers: []
 includes: []

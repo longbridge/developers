@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_delete_group
-title: 刪除自選股分組
+sidebar_position: 3
+title: 刪除分組
 language_tabs: false
 toc_footers: []
 includes: []

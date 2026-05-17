@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_update_group
-title: Update Watchlist Group
+sidebar_position: 4
+title: Manage Group Securities
 language_tabs: false
 toc_footers: []
 includes: []

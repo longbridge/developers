@@ -1,5 +1,6 @@
 ﻿---
 slug: history_orders
+sidebar_position: 3
 title: History Orders
 language_tabs: false
 toc_footers: []

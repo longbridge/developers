@@ -2,7 +2,7 @@
 id: trade_push
 title: Trade Push
 slug: trade-push
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 Client can get real-time trade updates from trade gateway.

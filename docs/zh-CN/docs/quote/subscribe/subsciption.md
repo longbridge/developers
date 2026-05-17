@@ -1,8 +1,8 @@
 ﻿---
 id: quote_subscription
-title: 已订阅标的行情
+title: 获取订阅信息
 slug: subscription
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 该接口用于获取当前连接已订阅的标的行情。

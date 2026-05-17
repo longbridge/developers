@@ -1,6 +1,7 @@
 ﻿---
 slug: watchlist_create_group
-title: Create Watchlist Group
+sidebar_position: 2
+title: Create Group
 language_tabs: false
 toc_footers: []
 includes: []

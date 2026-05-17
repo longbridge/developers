@@ -1,5 +1,6 @@
 ﻿---
 slug: replace
+sidebar_position: 5
 title: Replace Order
 language_tabs: false
 toc_footers: []

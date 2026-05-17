@@ -1,5 +1,6 @@
 ﻿---
 slug: history_executions
+sidebar_position: 1
 title: History Executions
 language_tabs: false
 toc_footers: []
