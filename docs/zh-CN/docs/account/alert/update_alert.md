@@ -1,6 +1,6 @@
 ---
 slug: update-alert
-title: 更新价格提醒
+title: 更新股价提醒
 sidebar_position: 3
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-启用或禁用已有的价格提醒。先通过 `list` 获取完整的 `AlertItem`，修改 `item.enabled` 后调用 `update(item)`。
+启用或禁用已有的股价提醒。先通过 `list` 获取完整的 `AlertItem`，修改 `item.enabled` 后调用 `update(item)`。
 
 <CliCommand>
 # 启用

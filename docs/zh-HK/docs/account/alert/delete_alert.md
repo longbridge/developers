@@ -1,6 +1,6 @@
 ---
 slug: delete-alert
-title: 刪除價格提醒
+title: 刪除股價提醒
 sidebar_position: 4
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-根據 ID 刪除指定的價格提醒。
+根據 ID 刪除指定的股價提醒。
 
 <CliCommand>
 longbridge alert delete 486469

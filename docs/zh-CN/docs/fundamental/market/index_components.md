@@ -1,7 +1,6 @@
 ---
 slug: index-components
 title: 指数成分股
-sidebar_position: 6
 language_tabs: false
 toc_footers: []
 includes: []

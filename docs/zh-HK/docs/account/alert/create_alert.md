@@ -1,6 +1,6 @@
 ---
 slug: create-alert
-title: 創建價格提醒
+title: 創建股價提醒
 sidebar_position: 2
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-為指定證券創建價格提醒，當價格高於或低於目標價時觸發通知。
+為指定證券創建股價提醒，當價格高於或低於目標價時觸發通知。
 
 <CliCommand>
 longbridge alert add TSLA.US --price 300 --direction rise

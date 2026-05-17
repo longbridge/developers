@@ -1,6 +1,6 @@
 ---
 slug: update-alert
-title: 更新價格提醒
+title: 更新股價提醒
 sidebar_position: 3
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-啟用或禁用已有的價格提醒。
+啟用或禁用已有的股價提醒。
 
 <CliCommand>
 # 啟用

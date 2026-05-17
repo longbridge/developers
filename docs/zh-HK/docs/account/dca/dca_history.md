@@ -1,6 +1,6 @@
 ---
 slug: dca-history
-title: 定期投資交易歷史
+title: 定投交易歷史
 sidebar_position: 5
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取指定定期投資計劃的執行歷史，包含交易日期、金額和價格。
+獲取指定定投的執行歷史，包含交易日期、金額和價格。
 
 <CliCommand>
 longbridge dca history 1225781523156889600

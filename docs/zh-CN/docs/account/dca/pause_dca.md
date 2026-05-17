@@ -1,6 +1,6 @@
 ---
 slug: pause-dca
-title: 暂停定投计划
+title: 暂停定投
 sidebar_position: 5
 language_tabs: false
 toc_footers: []
@@ -18,12 +18,11 @@ longbridge dca pause 12345
 
 <SDKLinks module="dca" klass="DCAContext" method="pause" />
 
-
 ## Parameters
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| plan_id | string | 是 | 定投计划 ID |
+| Name    | Type   | Required | Description |
+| ------- | ------ | -------- | ----------- |
+| plan_id | string | 是       | 定投计划 ID |
 
 ## Request Example
 
@@ -151,7 +150,6 @@ func main() {
 </Tabs>
 
 ## Response
-
 
 ### Response Example
 

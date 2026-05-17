@@ -7,7 +7,7 @@ slug: overview
 
 # 賬戶 API 概覽
 
-賬戶管理接口，涵盖组合分析、價格提醒、定投计划和股單管理。大多数接口需要交易级别的认证权限。
+賬戶管理接口，涵盖组合分析、股價提醒、定投计划和股單管理。大多数接口需要交易级别的认证权限。
 
 ## PortfolioContext
 
@@ -23,14 +23,14 @@ slug: overview
 
 ## AlertContext
 
-建立和管理标的價格提醒。
+建立和管理标的股價提醒。
 
 | 方法 | 说明 |
 |---|---|
-| [list_alerts](./alert/list-alerts) | 查看所有有效的價格提醒 |
-| [create_alert](./alert/create-alert) | 建立新的價格提醒 |
+| [list_alerts](./alert/list-alerts) | 查看所有有效的股價提醒 |
+| [create_alert](./alert/create-alert) | 建立新的股價提醒 |
 | [update_alert](./alert/update-alert) | 修改已有提醒 |
-| [delete_alert](./alert/delete-alert) | 刪除價格提醒 |
+| [delete_alert](./alert/delete-alert) | 刪除股價提醒 |
 
 ## DCAContext
 

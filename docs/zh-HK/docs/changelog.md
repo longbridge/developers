@@ -21,7 +21,7 @@ sidebar_icon: newspaper
 
 ### SDK v4.1.0
 
-- **7 個新 Context 類型，共 66 個方法** — `FundamentalContext`（20 個方法：財報、分析師評級、股息、EPS 預測、一致性預期、估值），`MarketContext`（9 個方法：市場狀態、券商持倉、A/H 溢價、交易統計），`CalendarContext`（7 個方法：財報 / 股息 / 拆股 / IPO 日曆），`PortfolioContext`（5 個方法：匯率、盈虧分析），`AlertContext`（4 個方法：價格提醒），`DCAContext`（12 個方法：定投計劃全生命週期），`SharelistContext`（9 個方法：自選股列表）
+- **7 個新 Context 類型，共 66 個方法** — `FundamentalContext`（20 個方法：財報、分析師評級、股息、EPS 預測、一致性預期、估值），`MarketContext`（9 個方法：市場狀態、券商持倉、A/H 溢價、交易統計），`CalendarContext`（7 個方法：財報 / 股息 / 拆股 / IPO 日曆），`PortfolioContext`（5 個方法：匯率、盈虧分析），`AlertContext`（4 個方法：股價提醒），`DCAContext`（12 個方法：定投計劃全生命週期），`SharelistContext`（9 個方法：自選股列表）
 - **QuoteContext** — 新增 4 個方法：`short_positions`、`option_volume`、`option_volume_daily`、`update_pinned`
 - **ContentContext** — 新增 `topic_detail` 及話題回覆相關方法
 - **Rust SDK** — `Config::header()` 支援注入自訂 HTTP/WebSocket 請求頭

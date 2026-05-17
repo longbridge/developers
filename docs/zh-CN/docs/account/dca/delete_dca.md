@@ -1,6 +1,6 @@
 ---
 slug: delete-dca
-title: 删除定期投资计划
+title: 删除定投
 sidebar_position: 4
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-永久停止并删除定期投资计划，此操作不可撤销。
+永久停止并删除定投，此操作不可撤销。
 
 <CliCommand>
 longbridge dca stop 1225781523156889600

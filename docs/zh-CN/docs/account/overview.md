@@ -7,7 +7,7 @@ slug: overview
 
 # 账户 API 概览
 
-账户管理接口，涵盖组合分析、价格提醒、定投计划和股单管理。大多数接口需要交易级别的认证权限。
+账户管理接口，涵盖组合分析、股价提醒、定投计划和股单管理。大多数接口需要交易级别的认证权限。
 
 ## PortfolioContext
 
@@ -23,14 +23,14 @@ slug: overview
 
 ## AlertContext
 
-创建和管理标的价格提醒。
+创建和管理标的股价提醒。
 
 | 方法 | 说明 |
 |---|---|
-| [list_alerts](./alert/list-alerts) | 查看所有有效的价格提醒 |
-| [create_alert](./alert/create-alert) | 创建新的价格提醒 |
+| [list_alerts](./alert/list-alerts) | 查看所有有效的股价提醒 |
+| [create_alert](./alert/create-alert) | 创建新的股价提醒 |
 | [update_alert](./alert/update-alert) | 修改已有提醒 |
-| [delete_alert](./alert/delete-alert) | 删除价格提醒 |
+| [delete_alert](./alert/delete-alert) | 删除股价提醒 |
 
 ## DCAContext
 

@@ -21,7 +21,7 @@ sidebar_icon: newspaper
 
 ### SDK v4.1.0
 
-- **7 个新 Context 类型，共 66 个方法** — `FundamentalContext`（20 个方法：财报、分析师评级、股息、EPS 预测、一致性预期、估值），`MarketContext`（9 个方法：市场状态、券商持仓、A/H 溢价、交易统计），`CalendarContext`（7 个方法：财报 / 股息 / 拆股 / IPO 日历），`PortfolioContext`（5 个方法：汇率、盈亏分析），`AlertContext`（4 个方法：价格提醒），`DCAContext`（12 个方法：定投计划全生命周期），`SharelistContext`（9 个方法：自选股列表）
+- **7 个新 Context 类型，共 66 个方法** — `FundamentalContext`（20 个方法：财报、分析师评级、股息、EPS 预测、一致性预期、估值），`MarketContext`（9 个方法：市场状态、券商持仓、A/H 溢价、交易统计），`CalendarContext`（7 个方法：财报 / 股息 / 拆股 / IPO 日历），`PortfolioContext`（5 个方法：汇率、盈亏分析），`AlertContext`（4 个方法：股价提醒），`DCAContext`（12 个方法：定投计划全生命周期），`SharelistContext`（9 个方法：自选股列表）
 - **QuoteContext** — 新增 4 个方法：`short_positions`、`option_volume`、`option_volume_daily`、`update_pinned`
 - **ContentContext** — 新增 `topic_detail` 及话题回复相关方法
 - **Rust SDK** — `Config::header()` 支持注入自定义 HTTP/WebSocket 请求头
@@ -105,7 +105,7 @@ sidebar_icon: newspaper
 ### CLI v0.16.3
 
 - **`auth` 子命令组** — `longbridge auth login` / `auth logout` / `auth status`；`auth status` 本地查看 Token 有效性和账户信息，无需网络
-- **`alert enable` / `alert disable`** — 切换价格提醒启用状态，无需删除重建
+- **`alert enable` / `alert disable`** — 切换股价提醒启用状态，无需删除重建
 - **修复：美股指数 symbol** — `.DJI.US`、`.VIX.US` 现已正确解析；美股指数需要前置点号
 - **"你是否想查询…" 提示** — 查询无结果时给出 symbol 格式建议
 

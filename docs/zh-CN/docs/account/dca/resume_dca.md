@@ -1,6 +1,6 @@
 ---
 slug: resume-dca
-title: 恢复定投计划
+title: 恢复定投
 sidebar_position: 6
 language_tabs: false
 toc_footers: []
@@ -18,12 +18,11 @@ longbridge dca resume 12345
 
 <SDKLinks module="dca" klass="DCAContext" method="resume" />
 
-
 ## Parameters
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| plan_id | string | 是 | 定投计划 ID |
+| Name    | Type   | Required | Description |
+| ------- | ------ | -------- | ----------- |
+| plan_id | string | 是       | 定投计划 ID |
 
 ## Request Example
 
@@ -151,7 +150,6 @@ func main() {
 </Tabs>
 
 ## Response
-
 
 ### Response Example
 

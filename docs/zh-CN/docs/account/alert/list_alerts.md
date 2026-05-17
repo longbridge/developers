@@ -1,6 +1,6 @@
 ---
 slug: list-alerts
-title: 获取价格提醒列表
+title: 获取股价提醒列表
 sidebar_position: 1
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取当前用户的所有价格提醒，支持按标的筛选。
+获取当前用户的所有股价提醒，支持按标的筛选。
 
 <CliCommand>
 longbridge alert
@@ -258,7 +258,7 @@ func main() {
 | chg | string | false | 当日涨跌额 |
 | p_chg | string | false | 当日涨跌幅 |
 | product | string | false | 产品类型 |
-| indicators | object[] | false | 价格提醒列表，见 [AlertItem](#AlertItem) |
+| indicators | object[] | false | 股价提醒列表，见 [AlertItem](#AlertItem) |
 
 ### AlertItem
 

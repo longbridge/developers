@@ -1,6 +1,6 @@
 ---
 slug: stop-dca
-title: 終止定投計劃
+title: 終止定投
 sidebar_position: 7
 language_tabs: false
 toc_footers: []
@@ -18,12 +18,11 @@ longbridge dca stop 12345
 
 <SDKLinks module="dca" klass="DCAContext" method="stop" />
 
-
 ## Parameters
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| plan_id | string | 是 | 定投計劃 ID |
+| Name    | Type   | Required | Description |
+| ------- | ------ | -------- | ----------- |
+| plan_id | string | 是       | 定投計劃 ID |
 
 ## Request Example
 
@@ -151,7 +150,6 @@ func main() {
 </Tabs>
 
 ## Response
-
 
 ### Response Example
 

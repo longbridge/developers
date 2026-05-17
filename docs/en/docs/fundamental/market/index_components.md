@@ -1,7 +1,6 @@
 ---
 slug: index-components
 title: Index Components
-sidebar_position: 6
 language_tabs: false
 toc_footers: []
 includes: []

@@ -155,6 +155,7 @@ html:root {
   margin: 16px 0 20px;
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid var(--vp-code-block-divider-color, rgba(128, 128, 128, 0.15));
 }
 
 .vp-cli-command div[class*='language-'].vp-adaptive-theme {

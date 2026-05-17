@@ -1,6 +1,6 @@
 ---
 slug: create-dca
-title: 创建定期投资计划
+title: 创建定投
 sidebar_position: 2
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-为指定证券创建新的定期投资计划。
+为指定证券创建新的定投。
 
 <CliCommand>
 longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15

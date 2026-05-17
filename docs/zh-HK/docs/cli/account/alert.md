@@ -6,7 +6,7 @@ sidebar_position: 8
 
 # longbridge alert
 
-管理到價提醒——列出、新增和刪除任意標的的價格提醒。
+管理到價提醒——列出、新增和刪除任意標的的股價提醒。
 
 ## 基本用法
 
@@ -32,7 +32,7 @@ longbridge alert
 longbridge alert --format json
 ```
 
-展示所有標的的有效價格提醒。
+展示所有標的的有效股價提醒。
 
 ### 按標的篩選
 
@@ -41,7 +41,7 @@ longbridge alert TSLA.US
 longbridge alert QQQ.US
 ```
 
-### 新增價格提醒
+### 新增股價提醒
 
 ```bash
 # 當 TSLA 升至 $300 時提醒

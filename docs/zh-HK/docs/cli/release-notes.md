@@ -130,7 +130,7 @@ sidebar_icon: newspaper
 
 **新增：帳戶**
 
-- `alert` — 價格提醒（查看/新增/刪除）
+- `alert` — 股價提醒（查看/新增/刪除）
 - `profit-analysis` — 盈虧總覽 + 逐隻股票分析；`detail` 查看單隻股票盈虧明細與交易流水；`by-market` 按市場篩選
 
 **增強**

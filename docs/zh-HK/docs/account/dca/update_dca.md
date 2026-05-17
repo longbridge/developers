@@ -1,6 +1,6 @@
 ---
 slug: update-dca
-title: 更新定期投資計劃
+title: 更新定投
 sidebar_position: 3
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-暫停或恢復已有的定期投資計劃。
+暫停或恢復已有的定投。
 
 <CliCommand>
 longbridge dca pause 1225781523156889600

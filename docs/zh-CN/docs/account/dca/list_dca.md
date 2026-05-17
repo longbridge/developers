@@ -1,6 +1,6 @@
 ---
 slug: list-dca
-title: 获取定期投资计划列表
+title: 获取定投列表
 sidebar_position: 1
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取当前用户的所有定期投资（DCA）计划。
+获取当前用户的所有定投（DCA）计划。
 
 <CliCommand>
 longbridge dca

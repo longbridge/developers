@@ -757,11 +757,11 @@ paths:
       operationId: list_market_temperature
       x-quote-command: market-temp
       summary: Get Historical Market Temperature
-      x-summary-zh: 获取历史市场情绪
+      x-summary-zh: 获取历史市场温度
       description: |
         Get the historical market temperature time series for the specified market within a date range.
         Each data point contains the daily temperature, valuation, and sentiment scores (all scored 0–100).
-      x-description-zh: 获取指定市场在日期范围内的历史市场情绪时间序列，每个数据点包含当日情绪温度、估值和情绪分项评分（均为 0–100 分制）。
+      x-description-zh: 获取指定市场在日期范围内的历史市场温度时间序列，每个数据点包含当日情绪温度、估值和情绪分项评分（均为 0–100 分制）。
       tags:
         - Market Temperature
       parameters:
@@ -1179,12 +1179,12 @@ paths:
                       type: string
                       description: File key used to request the download URL.
               example:
-                - date: "20260327"
-                  file_key: "/statement_data/data/lb/1/20260327/10000104.json"
-                - date: "20260324"
-                  file_key: "/statement_data/data/lb/1/20260324/10000104.json"
-                - date: "20260323"
-                  file_key: "/statement_data/data/lb/1/20260323/10000104.json"
+                - date: '20260327'
+                  file_key: '/statement_data/data/lb/1/20260327/10000104.json'
+                - date: '20260324'
+                  file_key: '/statement_data/data/lb/1/20260324/10000104.json'
+                - date: '20260323'
+                  file_key: '/statement_data/data/lb/1/20260323/10000104.json'
         default:
           description: Unexpected error
           content:
@@ -1228,7 +1228,7 @@ paths:
                     type: string
                     description: Presigned URL to download the statement JSON.
               example:
-                url: "https://storage.example.com/statements/abc123xyz456.json?X-Amz-Signature=..."
+                url: 'https://storage.example.com/statements/abc123xyz456.json?X-Amz-Signature=...'
         default:
           description: Unexpected error
           content:
