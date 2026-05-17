@@ -1,6 +1,6 @@
 ---
 slug: list-sharelist
-title: 自選列表
+title: 股單列表
 sidebar_position: 1
 language_tabs: false
 toc_footers: []

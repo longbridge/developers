@@ -1,6 +1,6 @@
 ---
 slug: update-sharelist
-title: 更新自選列表
+title: 更新股單
 sidebar_position: 3
 language_tabs: false
 toc_footers: []

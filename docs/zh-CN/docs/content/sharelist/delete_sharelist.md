@@ -1,6 +1,6 @@
 ---
 slug: delete-sharelist
-title: 删除自选列表
+title: 删除股单
 sidebar_position: 4
 language_tabs: false
 toc_footers: []

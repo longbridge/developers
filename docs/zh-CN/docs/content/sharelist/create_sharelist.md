@@ -1,6 +1,6 @@
 ---
 slug: create-sharelist
-title: 创建自选列表
+title: 创建股单
 sidebar_position: 2
 language_tabs: false
 toc_footers: []

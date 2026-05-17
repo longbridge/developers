@@ -29,12 +29,7 @@ function buildDocsSidebar(): DefaultTheme.SidebarItem[] {
     const link = typeof item.link === 'string' ? item.link : ''
     return !link.endsWith('/mcp') && !link.endsWith('/docs/api')
   })
-  const llmIdx = items.findIndex((item) => typeof item.link === 'string' && item.link.endsWith('/llm'))
-  if (llmIdx !== -1) {
-    items.splice(llmIdx + 1, 0, apiRefItem)
-  } else {
-    items.push(apiRefItem)
-  }
+  items.push(apiRefItem)
   return items
 }
 
