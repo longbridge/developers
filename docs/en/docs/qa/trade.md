@@ -17,7 +17,7 @@ To place orders for overnight trading, you can specify overnight trading by pass
 
 ## Q4: What are the trading rules for paper accounts?
 
-Paper accounts currently support trading in Hong Kong and U.S. stocks, ETFs, and Hong Kong warrants. Short selling is supported for U.S. stocks. However, OTC trading, pre & post market trading, and options trading are not supported in paper accounts.
+Paper accounts currently support trading in Hong Kong and U.S. stocks, ETFs, Hong Kong warrants, and U.S. options. Short selling is supported for U.S. stocks. However, OTC trading and pre & post market trading are not supported in paper accounts.
 
 Trades in the paper environment are matched based on the bid-ask spread from the real market. If the buy order price is higher than or equal to the ask price and the sell order price is lower than or equal to the bid price, a trade can be executed. Market orders are matched by default.
 
