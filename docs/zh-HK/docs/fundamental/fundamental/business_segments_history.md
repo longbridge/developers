@@ -203,12 +203,12 @@ func main() {
         "total": "124300000000",
         "currency": "USD",
         "business": [
-          {"name": "iPhone", "percent": "0.5619", "value": "69900000000"},
-          {"name": "Services", "percent": "0.2196", "value": "26300000000"}
+          {"name": "iPhone", "percent": "56.19", "value": "69900000000"},
+          {"name": "Services", "percent": "21.96", "value": "26300000000"}
         ],
         "regionals": [
-          {"name": "Americas", "percent": "0.4280", "value": "53200000000"},
-          {"name": "Europe", "percent": "0.2520", "value": "30100000000"}
+          {"name": "Americas", "percent": "42.80", "value": "53200000000"},
+          {"name": "Europe", "percent": "25.20", "value": "30100000000"}
         ]
       }
     ]

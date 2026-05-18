@@ -199,11 +199,11 @@ func main() {
     "total": "124300000000",
     "currency": "USD",
     "business": [
-      {"name": "iPhone", "percent": "0.5619"},
-      {"name": "Services", "percent": "0.2196"},
-      {"name": "Mac", "percent": "0.0804"},
-      {"name": "iPad", "percent": "0.0700"},
-      {"name": "Wearables", "percent": "0.0681"}
+      {"name": "iPhone", "percent": "56.19"},
+      {"name": "Services", "percent": "21.96"},
+      {"name": "Mac", "percent": "8.04"},
+      {"name": "iPad", "percent": "7.00"},
+      {"name": "Wearables", "percent": "6.81"}
     ]
   }
 }
