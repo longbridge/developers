@@ -132,14 +132,11 @@ longbridge order sell TSLA.US 10 --price 300.00  # regular sell (closes long pos
 
 **Market support:**
 
-US and HK markets must each be activated separately. For each market:
+**US stocks** can be shorted directly with no additional setup.
 
-1. Open the Longbridge mobile app and place your first short sell order for that market — the app will trigger a Securities Borrowing and Lending (SBL) agreement signing flow.
-2. Complete the signing, then wait for the review to be approved.
+**HK stocks** require activation: open the Longbridge mobile app, place your first HK short sell order — the app will trigger a Securities Borrowing and Lending (SBL) agreement signing flow. Complete the signing and wait for approval. Note: HK short selling is subject to a fee levied by the Hong Kong Inland Revenue Department; details are described in the in-app agreement. The API returns error `602301` before the HK SBL agreement is signed.
 
-Once approved, the CLI, API, and MCP can short stocks in that market directly. The API returns error `602301` before the agreement is signed.
-
-A-share (SH/SZ) short selling is not supported — the CLI does not support Northbound (Stock Connect) trading.
+**A-share (SH/SZ)** short selling is not supported — the CLI does not support Northbound (Stock Connect) trading.
 
 To close a short position, submit a buy order for the same symbol and quantity.
 
