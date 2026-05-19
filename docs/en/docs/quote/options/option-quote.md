@@ -1,6 +1,6 @@
 ---
 id: quote_option_quote
-title: Quotes
+title: Option Quotes
 slug: /quote/pull/option-quote
 sidebar_position: 3
 ---
