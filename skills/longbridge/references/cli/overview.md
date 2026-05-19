@@ -121,33 +121,6 @@ longbridge filing detail TSLA.US 610186794100660481 --file-index 0
 - **`quote`**: always returns `pre_market_quote` / `post_market_quote` / `overnight_quote` when available (US only). Table format appends an "Extended Hours" section; JSON includes them as nested objects.
 - **`intraday` / `kline` / `kline history`**: default to intraday session only; pass `--session all` to include pre/post-market data. `kline`/`kline history` add a **Session** column when `--session all` is used.
 
-## Notable Commands
-
-```bash
-# Market activity and sentiment
-longbridge top-movers [--market HK|US|CN|SG] [--sort hot|time|chg]  # Stocks with abnormal price moves + correlated news
-longbridge rank                                                        # List popularity ranking tab keys
-longbridge rank --key ib_hot_all-us [--count 20]                      # Stocks ranked by composite heat score
-
-# Short selling
-longbridge short-positions AAPL.US                                    # Short interest, ratio, days to cover
-longbridge short-trades AAPL.US                                       # Daily short sale volume (FINRA/HKEX)
-
-# Stock screener (two workflows)
-longbridge screener strategies                                         # Step 1: list strategies → get ID
-longbridge screener search --strategy-id <ID>                         # Step 2: run saved strategy
-longbridge screener indicators                                         # Discover indicator keys and ranges
-longbridge screener search --market HK --filter filter_marketcap:100:1000 --filter filter_divyld:3:  # Custom filter
-
-# Valuation comparison
-longbridge compare AAPL.US                                            # vs server-selected industry peers
-longbridge compare 9988.HK 700.HK 9999.HK [--currency HKD]           # Side-by-side multi-stock comparison
-
-# Institutional shareholders (extended)
-longbridge shareholder AAPL.US --top                                  # Top 20 major shareholders (multi-period)
-longbridge shareholder AAPL.US --object-id <ID>                       # Holding + trade detail for one shareholder
-```
-
 ## Rate Limits
 
 - Max **10 API calls/second**
