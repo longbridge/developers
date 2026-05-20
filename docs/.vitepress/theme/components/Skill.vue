@@ -178,6 +178,23 @@ const LOCALE = {
         taskCoins: '任务币',
         perWinner: '每位获奖者',
       },
+      items: [
+        {
+          title: '用 AI 挖掘期权机会',
+          desc: 'AI 筛选 39 个合约，捕捉最优期权机会——最高年化收益率 423%。',
+          metricLabel: '年化最高',
+        },
+        {
+          title: '初体验 Longbridge Skill——真香',
+          desc: '用自然语言控制交易终端、查行情、分析持仓——出乎意料地好用。',
+          metricLabel: '初体验',
+        },
+        {
+          title: 'QQQ 0DTE 量化系统：从零到实盘',
+          desc: '完整流程：策略设计、回测，以及部署 QQQ 0DTE 期权量化系统。',
+          metricLabel: '量化实盘',
+        },
+      ],
     },
     getstarted: {
       eyebrow: '开始使用',
@@ -389,6 +406,23 @@ const LOCALE = {
         taskCoins: '任務幣',
         perWinner: '每位獲獎者',
       },
+      items: [
+        {
+          title: '用 AI 挖掘期權機會',
+          desc: 'AI 篩選 39 個合約，捕捉最優期權機會——最高年化收益率 423%。',
+          metricLabel: '年化最高',
+        },
+        {
+          title: '初體驗 Longbridge Skill——真香',
+          desc: '用自然語言控制交易終端、查行情、分析持倉——出乎意料地好用。',
+          metricLabel: '初體驗',
+        },
+        {
+          title: 'QQQ 0DTE 量化系統：從零到實盤',
+          desc: '完整流程：策略設計、回測，以及部署 QQQ 0DTE 期權量化系統。',
+          metricLabel: '量化實盤',
+        },
+      ],
     },
     getstarted: {
       eyebrow: '開始使用',
@@ -1667,11 +1701,11 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 </svg>
               </span>
             </div>
-            <h3 class="user-case-title">{{ c.title }}</h3>
-            <p class="user-case-desc">{{ c.desc }}</p>
+            <h3 class="user-case-title">{{ (content.cases as any).items?.[i]?.title ?? c.title }}</h3>
+            <p class="user-case-desc">{{ (content.cases as any).items?.[i]?.desc ?? c.desc }}</p>
             <div class="user-case-metric">
               <span class="user-case-metric-v" :style="{ color: c.accent }">{{ c.metric }}</span>
-              <span class="user-case-metric-l">{{ c.metricLabel }}</span>
+              <span class="user-case-metric-l">{{ (content.cases as any).items?.[i]?.metricLabel ?? c.metricLabel }}</span>
             </div>
           </a>
         </div>
@@ -3677,6 +3711,12 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   }
   .sc-modal-leave-to .sc-modal {
     transform: translateY(20px);
+  }
+}
+
+@media (max-width: 640px) {
+  .skill-hero-install-cmd {
+    max-width: 100%;
   }
 }
 </style>
