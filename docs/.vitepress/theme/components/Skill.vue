@@ -1,8 +1,305 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useData } from 'vitepress'
 import AppNav from './AppNav.vue'
 import AppFooter from './AppFooter.vue'
-import { localePath } from '../utils/i18n'
+import type { SkillEntry } from './skill-catalog/types'
+import { locale as enLocale } from './skill-catalog/en'
+import { locale as zhCNLocale } from './skill-catalog/zh-CN'
+import { locale as zhHKLocale } from './skill-catalog/zh-HK'
+
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    hero: {
+      eyebrow: 'AI · Skill',
+      title1: 'Longbridge Skill',
+      title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
+      desc: 'With Longbridge Skill, your AI assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can screen stocks, decode earnings, track insider moves, and place orders, all in plain conversation.',
+      installLabel: 'Copy and send to any AI — it will walk you through install:',
+      installLink: 'View installation guide for each client',
+      agentsLabel: 'Supported AI tools',
+      agentsMore: '+ Other AI tools',
+    },
+    demo: {
+      title: 'See what Skill can do for you.',
+      desc: 'Pick a scenario to see your AI assistant in action.',
+      tryAsking: 'Try asking',
+    },
+    catalog: {
+      eyebrow: 'Skill catalog',
+      badge: 'SKILL CATALOG',
+      title: '100+ Skills, covering every move in your trading day.',
+      desc: 'Each Skill is a packaged set of tools, callable by any supported AI client. Click any card to see install instructions and details.',
+      marketplace: 'Available on Claude Code Plugin Marketplace',
+      pluginDesc: 'Copy the commands and run them in Claude Code.',
+      tools: 'tools',
+      manualLabel: 'Manual',
+      viewSkill: 'View Full Skill',
+      downloadZip: 'Download ZIP',
+      install: 'Install',
+      installHint: 'Copy the command for your AI client.',
+      upgradeVerify: (client: string) => `Upgrade / Verify (${client})`,
+      upgradeTo: 'Upgrade to latest',
+      verifyInstalled: 'Verify installed',
+      uninstall: (client: string) => `Uninstall (${client})`,
+      uninstallHint: "Removing a Skill won't affect your Longbridge account or API key.",
+      uninstallNote1: 'Client config is cleaned up automatically. For manual installs, delete',
+      uninstallNote1End: 'directory.',
+      uninstallNote2: 'Reinstalling after uninstall reuses the cached API key from your keychain.',
+    },
+    catLabels: {
+      All: 'All',
+      Market: 'Market',
+      Research: 'Research',
+      Derivatives: 'Derivatives',
+      Discovery: 'Discovery',
+      Trade: 'Trade',
+      Portfolio: 'Portfolio',
+      Platform: 'Platform',
+    } as Record<string, string>,
+    cap: {
+      eyebrow: 'Capability reference',
+      title: 'Full coverage of Longbridge CLI commands and MCP tools.',
+      desc: 'Every capability below is available to your AI in plain conversation.',
+      marketData: 'Real-time Market Data',
+      fundamentals: 'Fundamentals & Research',
+      calendar: 'Calendar & Events',
+      news: 'News, Community & Watchlist',
+      account: 'Account & Portfolio',
+      trading: 'Trading',
+    } as Record<string, string>,
+    cases: {
+      eyebrow: 'SEE IT IN ACTION',
+      title: 'Real user cases, real returns.',
+      desc: 'Hand-picked write-ups from the Longbridge community. From quick experiments to fully-deployed quant systems — see what people are shipping with Skill.',
+      read: 'Read case',
+      award: {
+        tag: 'AWARD',
+        title: 'Each winner receives 10,000 Task Coins + 1 × AirPods 4',
+        desc: "Winning cases are showcased on the Longbridge Skill website — visible to users worldwide, including the winner's ID and creative work.",
+        taskCoins: 'TASK COINS',
+        perWinner: 'PER WINNER',
+      },
+    },
+    getstarted: {
+      eyebrow: 'Get started',
+      title: 'Choose your AI tool',
+      recommended: 'Recommended',
+      card1: {
+        title: 'Copy and send to any AI',
+        desc: 'Paste this message into any AI assistant (Claude, ChatGPT, Cursor) and it will guide you through the installation.',
+      },
+      card2: {
+        title: 'Download Skill ZIP',
+        desc: 'Extract and import into Claude, ChatGPT, Cursor and other AI clients. Includes the full Skill manifest.',
+        cta: 'Download longbridge-all.zip',
+      },
+      card3: {
+        title: 'Install via Npx',
+        desc: 'For Claude Code, Codex, and similar tools — installs all skills globally.',
+      },
+      footer: {
+        also: 'Also available on',
+        and: 'and',
+        guide: 'View installation guide for each client',
+      },
+    },
+  },
+  'zh-CN': {
+    hero: {
+      eyebrow: 'AI · Skill',
+      title1: 'Longbridge Skill',
+      title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
+      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以筛选股票、解读财报、追踪机构动向，并直接下单，全程自然对话。',
+      installLabel: '复制发送给任意 AI——它将引导您完成安装：',
+      installLink: '查看各客户端安装指南',
+      agentsLabel: '支持的 AI 工具',
+      agentsMore: '+ 更多 AI 工具',
+    },
+    demo: {
+      title: '看看 Skill 能为您做什么',
+      desc: '选择一个场景，观看 AI 助手实际操作。',
+      tryAsking: '试着问',
+    },
+    catalog: {
+      eyebrow: 'Skill 目录',
+      badge: 'SKILL 目录',
+      title: '100+ 个 Skill，覆盖您交易日的每一个动作',
+      desc: '每个 Skill 都是一套打包的工具集，可被任何受支持的 AI 客户端调用。点击任意卡片查看安装说明和详情。',
+      marketplace: '已上架 Claude Code 插件市场',
+      pluginDesc: '复制命令，在 Claude Code 中运行即可。',
+      tools: '个工具',
+      manualLabel: '手动安装',
+      viewSkill: '查看完整技能',
+      downloadZip: '下载 ZIP',
+      install: '安装',
+      installHint: '选择你使用的客户端，复制命令到对应终端。',
+      upgradeVerify: (client: string) => `升级 / 验证（${client}）`,
+      upgradeTo: '升级到最新版',
+      verifyInstalled: '验证已安装',
+      uninstall: (client: string) => `卸载（${client}）`,
+      uninstallHint: '移除 Skill 不会影响你的 Longbridge 账户与 API key。',
+      uninstallNote1: '客户端配置会自动清理；如手动安装，删除',
+      uninstallNote1End: '目录即可。',
+      uninstallNote2: '卸载后再次安装会沿用上次的 API key 缓存（位于钥匙串）。',
+    },
+    catLabels: {
+      All: '全部',
+      Market: '行情',
+      Research: '研究',
+      Derivatives: '衍生品',
+      Discovery: '发现',
+      Trade: '交易',
+      Portfolio: '投资组合',
+      Platform: '平台',
+    } as Record<string, string>,
+    cap: {
+      eyebrow: '能力参考',
+      title: '完整覆盖 Longbridge CLI 命令和 MCP 工具',
+      desc: '以下所有能力均可通过自然对话调用。',
+      marketData: '实时行情数据',
+      fundamentals: '基本面与研究',
+      calendar: '日历与事件',
+      news: '资讯、社区与自选股',
+      account: '账户与投资组合',
+      trading: '交易',
+    } as Record<string, string>,
+    cases: {
+      eyebrow: '实战案例',
+      title: '真实用户案例，真实回报',
+      desc: '精选长桥社区用户分享。从快速实验到全面部署的量化系统——看看大家用 Skill 在做什么。',
+      read: '阅读案例',
+      award: {
+        tag: '奖励',
+        title: '每位获奖者将获得 10,000 任务币 + 1 × AirPods 4',
+        desc: '获奖案例将在 Longbridge Skill 官网展示，全球用户可见，包含获奖者 ID 和创作内容。',
+        taskCoins: '任务币',
+        perWinner: '每位获奖者',
+      },
+    },
+    getstarted: {
+      eyebrow: '开始使用',
+      title: '选择您的 AI 工具',
+      recommended: '推荐',
+      card1: {
+        title: '复制发送给任意 AI',
+        desc: '将此消息粘贴到任意 AI 助手（Claude、ChatGPT、Cursor），它将引导您完成安装。',
+      },
+      card2: {
+        title: '下载 Skill ZIP 包',
+        desc: '解压后导入 Claude、ChatGPT、Cursor 等 AI 客户端。包含完整的 Skill 清单。',
+        cta: '下载 longbridge-all.zip',
+      },
+      card3: {
+        title: '通过 Npx 安装',
+        desc: '适用于 Claude Code、Codex 等工具——全局安装所有 Skill。',
+      },
+      footer: {
+        also: '也可在以下平台获取',
+        and: '和',
+        guide: '查看各客户端安装指南',
+      },
+    },
+  },
+  'zh-HK': {
+    hero: {
+      eyebrow: 'AI · Skill',
+      title1: 'Longbridge Skill',
+      title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
+      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以篩選股票、解讀財報、追蹤機構動向，並直接下單，全程自然對話。',
+      installLabel: '複製發送給任意 AI——它將引導您完成安裝：',
+      installLink: '查看各客戶端安裝指南',
+      agentsLabel: '支援的 AI 工具',
+      agentsMore: '+ 更多 AI 工具',
+    },
+    demo: {
+      title: '看看 Skill 能為您做什麼',
+      desc: '選擇一個場景，觀看 AI 助手實際操作',
+      tryAsking: '試著問',
+    },
+    catalog: {
+      eyebrow: 'Skill 目錄',
+      badge: 'SKILL 目錄',
+      title: '100+ 個 Skill，覆蓋您交易日的每一個動作。',
+      desc: '每個 Skill 都是一套打包的工具集，可被任何受支援的 AI 客戶端調用。點擊任意卡片查看安裝說明和詳情。',
+      marketplace: '已上架 Claude Code 外掛市場',
+      pluginDesc: '複製命令，在 Claude Code 中運行即可。',
+      tools: '個工具',
+      manualLabel: '手動安裝',
+      viewSkill: '查看完整技能',
+      downloadZip: '下載 ZIP',
+      install: '安裝',
+      installHint: '選擇你使用的客戶端，複製命令到對應終端。',
+      upgradeVerify: (client: string) => `升級 / 驗證（${client}）`,
+      upgradeTo: '升級到最新版',
+      verifyInstalled: '驗證已安裝',
+      uninstall: (client: string) => `卸載（${client}）`,
+      uninstallHint: '移除 Skill 不會影響你的 Longbridge 賬戶與 API key。',
+      uninstallNote1: '客戶端配置會自動清理；如手動安裝，刪除',
+      uninstallNote1End: '目錄即可。',
+      uninstallNote2: '卸載後再次安裝會沿用上次的 API key 緩存（位於鑰匙串）。',
+    },
+    catLabels: {
+      All: '全部',
+      Market: '行情',
+      Research: '研究',
+      Derivatives: '衍生品',
+      Discovery: '發現',
+      Trade: '交易',
+      Portfolio: '投資組合',
+      Platform: '平台',
+    } as Record<string, string>,
+    cap: {
+      eyebrow: '能力參考',
+      title: '完整覆蓋 Longbridge CLI 命令和 MCP 工具',
+      desc: '以下所有能力均可透過自然對話調用。',
+      marketData: '即時行情數據',
+      fundamentals: '基本面與研究',
+      calendar: '日曆與事件',
+      news: '資訊、社區與自選股',
+      account: '帳戶與投資組合',
+      trading: '交易',
+    } as Record<string, string>,
+    cases: {
+      eyebrow: '實戰案例',
+      title: '真實用戶案例，真實回報。',
+      desc: '精選長橋社區用戶分享。從快速實驗到全面部署的量化系統——看看大家用 Skill 在做什麼。',
+      read: '閱讀案例',
+      award: {
+        tag: '獎勵',
+        title: '每位獲獎者將獲得 10,000 任務幣 + 1 × AirPods 4',
+        desc: '獲獎案例將在 Longbridge Skill 官網展示，全球用戶可見，包含獲獎者 ID 和創作內容。',
+        taskCoins: '任務幣',
+        perWinner: '每位獲獎者',
+      },
+    },
+    getstarted: {
+      eyebrow: '開始使用',
+      title: '選擇您的 AI 工具',
+      recommended: '推薦',
+      card1: {
+        title: '複製發送給任意 AI',
+        desc: '將此消息貼上到任意 AI 助手（Claude、ChatGPT、Cursor），它將引導您完成安裝。',
+      },
+      card2: {
+        title: '下載 Skill ZIP 包',
+        desc: '解壓後導入 Claude、ChatGPT、Cursor 等 AI 客戶端。包含完整的 Skill 清單。',
+        cta: '下載 longbridge-all.zip',
+      },
+      card3: {
+        title: '透過 Npx 安裝',
+        desc: '適用於 Claude Code、Codex 等工具——全局安裝所有 Skill。',
+      },
+      footer: {
+        also: '也可在以下平台獲取',
+        and: '及',
+        guide: '查看各客戶端安裝指南',
+      },
+    },
+  },
+}
 
 const SKILLS = [
   {
@@ -218,7 +515,7 @@ const SKILLS = [
   },
 ]
 
-const SKILL_CATS = [
+const SKILL_CATS_DEF = [
   { key: 'All', count: 30 },
   { key: 'Market', count: 6 },
   { key: 'Research', count: 9 },
@@ -390,7 +687,7 @@ const DEMO_SCENARIOS = [
 
 const CAP_REFERENCE = [
   {
-    title: 'Real-time Market Data',
+    tKey: 'marketData',
     items: [
       'Live quotes for one or more symbols',
       'Level 2 order book depth (bid/ask ladder)',
@@ -405,7 +702,7 @@ const CAP_REFERENCE = [
     ],
   },
   {
-    title: 'Fundamentals & Research',
+    tKey: 'fundamentals',
     items: [
       'Income statement, balance sheet, cash flow',
       'P/E, P/B, P/S, dividend yield + peer comparison',
@@ -420,7 +717,7 @@ const CAP_REFERENCE = [
     ],
   },
   {
-    title: 'Calendar & Events',
+    tKey: 'calendar',
     items: [
       'Upcoming earnings events by symbol',
       'High-importance macro data events',
@@ -429,7 +726,7 @@ const CAP_REFERENCE = [
     ],
   },
   {
-    title: 'News, Community & Watchlist',
+    tKey: 'news',
     items: [
       'Latest news articles for a symbol',
       'Community discussion topics',
@@ -437,7 +734,7 @@ const CAP_REFERENCE = [
     ],
   },
   {
-    title: 'Account & Portfolio',
+    tKey: 'account',
     items: [
       'Stock positions across all sub-accounts',
       'Fund positions across all sub-accounts',
@@ -448,7 +745,7 @@ const CAP_REFERENCE = [
     ],
   },
   {
-    title: 'Trading',
+    tKey: 'trading',
     items: [
       'Limit, market, or stop-limit orders',
       "List today's orders, view detail, executions",
@@ -465,6 +762,18 @@ const scenarioIdx = ref(0)
 const activeAgent = ref('OpenClaw')
 const copied = ref(false)
 const copiedGetStarted = ref(false)
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
+
+const localePfx = computed(() => {
+  if (lang.value === 'zh-CN') return '/zh-CN'
+  if (lang.value === 'zh-HK') return '/zh-HK'
+  return ''
+})
+
+const skillCats = computed(() => SKILL_CATS_DEF.map((c) => ({ ...c, label: content.value.catLabels[c.key] ?? c.key })))
+
+const capGroups = computed(() => CAP_REFERENCE.map((g) => ({ ...g, label: content.value.cap[g.tKey] ?? g.tKey })))
 
 const filteredSkills = computed(() =>
   activeCat.value === 'All' ? SKILLS : SKILLS.filter((s) => s.cat === activeCat.value)
@@ -498,6 +807,162 @@ function rowClass(flag: string | boolean) {
   if (flag === true) return 'is-cross'
   return ''
 }
+
+// ─── Skills Catalog ───────────────────────────────────────────────────────────
+
+const isEN = computed(() => lang.value === 'en-US' || lang.value === 'en')
+const isHK = computed(() => lang.value === 'zh-HK')
+
+type CatalogSkill = SkillEntry & { tag?: string }
+
+const catalogLocale = computed(() => (isEN.value ? enLocale : isHK.value ? zhHKLocale : zhCNLocale))
+
+const CATALOG_SKILLS = computed<CatalogSkill[]>(() =>
+  catalogLocale.value.skills.map((s) => ({
+    ...s,
+    tag: s.tagType ? catalogLocale.value.ui.tagLabels[s.tagType] : undefined,
+  }))
+)
+
+const CATALOG_CATS = computed(() =>
+  Object.entries(catalogLocale.value.ui.catLabels).map(([id, label]) => ({ id, label }))
+)
+
+const activeCatalogCat = ref('all')
+const catalogQuery = ref('')
+const catalogExpanded = ref(false)
+const openCatalogSkill = ref<CatalogSkill | null>(null)
+const catalogCols = ref(3)
+const installClient = ref('cli')
+const modalCopiedKey = ref<string | null>(null)
+
+const _SVG_COMMON =
+  'width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b8b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'
+const CAT_ICONS: Record<string, string> = {
+  meta: `<svg ${_SVG_COMMON}><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`,
+  quote: `<svg ${_SVG_COMMON}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  research: `<svg ${_SVG_COMMON}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+  derivative: `<svg ${_SVG_COMMON}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+  discovery: `<svg ${_SVG_COMMON}><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>`,
+  trade: `<svg ${_SVG_COMMON}><path d="m17 1 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 23-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`,
+  portfolio: `<svg ${_SVG_COMMON}><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>`,
+}
+
+function handleModalCopy(text: string, key: string) {
+  navigator.clipboard?.writeText(text)
+  modalCopiedKey.value = key
+  setTimeout(() => {
+    modalCopiedKey.value = null
+  }, 1400)
+}
+
+const INSTALL_CLIENTS = computed(() => {
+  const pkg = openCatalogSkill.value?.pkg ?? ''
+  return {
+    cli: {
+      label: 'CLI',
+      cmd: `npx skills add longbridge/skills -g --skill ${pkg}`,
+      uninstall: `npx skills remove ${pkg} -g`,
+      upgrade: `npx skills update ${pkg} -g`,
+      verify: `npx skills list | grep ${pkg}`,
+    },
+    manual: {
+      label: content.value.catalog.manualLabel,
+      cmd: `# 1. Download ZIP\ncurl -LO https://open.longbridge.com/skill/${pkg}.zip\n# 2. Extract\nunzip ${pkg}.zip -d ~/.claude/skills/\n# 3. Restart AI client`,
+      uninstall: `rm -rf ~/.claude/skills/${pkg}/`,
+      upgrade: `curl -LO https://open.longbridge.com/skill/${pkg}.zip\nunzip -o ${pkg}.zip -d ~/.claude/skills/`,
+      verify: `ls ~/.claude/skills/${pkg}/`,
+    },
+  } as Record<string, { label: string; cmd: string; uninstall: string; upgrade: string; verify: string }>
+})
+
+const tabsEl = ref<HTMLElement | null>(null)
+const indicatorStyle = ref({ left: '0px', width: '0px' })
+function updateIndicator() {
+  if (!tabsEl.value) return
+  const active = tabsEl.value.querySelector<HTMLElement>('.sc-tab--active')
+  if (!active) return
+  const base = tabsEl.value.getBoundingClientRect()
+  const rect = active.getBoundingClientRect()
+  indicatorStyle.value = { left: rect.left - base.left + 'px', width: rect.width + 'px' }
+  const wrap = tabsEl.value.parentElement
+  if (wrap) {
+    const targetScroll = active.offsetLeft - wrap.clientWidth / 2 + active.offsetWidth / 2
+    wrap.scrollTo({ left: targetScroll, behavior: 'smooth' })
+  }
+}
+watch(activeCatalogCat, () => nextTick(updateIndicator))
+
+function updateCatalogCols() {
+  if (typeof window === 'undefined') return
+  const w = window.innerWidth
+  catalogCols.value = w <= 600 ? 1 : w <= 960 ? 2 : 3
+}
+
+function onModalKey(e: KeyboardEvent) {
+  if (e.key === 'Escape') openCatalogSkill.value = null
+}
+onMounted(() => {
+  updateCatalogCols()
+  window.addEventListener('resize', updateCatalogCols)
+  window.addEventListener('keydown', onModalKey)
+  nextTick(updateIndicator)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', updateCatalogCols)
+  window.removeEventListener('keydown', onModalKey)
+})
+
+watch([activeCatalogCat, catalogQuery], () => {
+  catalogExpanded.value = false
+})
+watch(openCatalogSkill, () => {
+  installClient.value = 'cli'
+  modalCopiedKey.value = null
+})
+
+const filteredCatalogSkills = computed(() => {
+  const q = catalogQuery.value.trim().toLowerCase()
+  return CATALOG_SKILLS.value.filter((s) => {
+    if (q) return (s.pkg + ' ' + s.name + ' ' + s.desc).toLowerCase().includes(q)
+    return activeCatalogCat.value === 'all' || s.cat === activeCatalogCat.value
+  })
+})
+
+const catalogCap = computed(() => catalogCols.value * 3)
+
+const shownCatalogSkills = computed(() =>
+  catalogExpanded.value || filteredCatalogSkills.value.length <= catalogCap.value
+    ? filteredCatalogSkills.value
+    : filteredCatalogSkills.value.slice(0, catalogCap.value)
+)
+
+const catalogCounts = computed(() =>
+  Object.fromEntries(
+    CATALOG_CATS.value.map((c) => [
+      c.id,
+      c.id === 'all' ? CATALOG_SKILLS.value.length : CATALOG_SKILLS.value.filter((s) => s.cat === c.id).length,
+    ])
+  )
+)
+
+function triggerRipple(event: MouseEvent, el: HTMLElement) {
+  const ripple = el.querySelector<HTMLElement>('.sc-ripple')
+  if (!ripple) return
+  const r = el.getBoundingClientRect()
+  const x = event.clientX - r.left
+  const y = event.clientY - r.top
+  ripple.style.left = x + 'px'
+  ripple.style.top = y + 'px'
+  ripple.getAnimations().forEach((a) => a.cancel())
+  ripple.animate(
+    [
+      { width: '0px', height: '0px', opacity: 0.6 },
+      { width: '600px', height: '600px', opacity: 0 },
+    ],
+    { duration: 400, easing: 'ease-out', fill: 'forwards' }
+  )
+}
 </script>
 
 <template>
@@ -509,22 +974,20 @@ function rowClass(flag: string | boolean) {
       <div class="skill-hero-bg" />
       <div class="section-inner skill-hero-inner">
         <div style="text-align: center; max-width: 760px; margin: 0 auto">
-          <span class="eyebrow">Longbridge Developers · Skill</span>
+          <span class="eyebrow">{{ content.hero.eyebrow }}</span>
           <h1 class="h-display" style="margin-top: 20px; font-size: clamp(36px, 4.8vw, 56px)">
-            Longbridge Skill
+            {{ content.hero.title1 }}
             <br />
-            <span style="color: var(--lb-brand)">your AI's trading desk.</span>
+            <span style="color: var(--lb-brand)">{{ content.hero.title2 }}</span>
           </h1>
           <p
             class="t-body"
             style="margin-top: 24px; max-width: 640px; margin-left: auto; margin-right: auto; font-size: 16px">
-            Unlock market insights, deep research and intelligent trading for your AI. With Longbridge Skill, your AI
-            assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can screen stocks, decode earnings, track insider
-            moves, and place orders, all in plain conversation.
+            {{ content.hero.desc }}
           </p>
 
           <div class="skill-hero-install">
-            <div class="skill-hero-install-label">Copy and send to any AI — it will walk you through install:</div>
+            <div class="skill-hero-install-label">{{ content.hero.installLabel }}</div>
             <div class="skill-hero-install-cmd">
               <code>{{ installCmd }}</code>
               <button class="code-copy" @click="copyInstall" :title="copied ? 'Copied!' : 'Copy'">
@@ -555,8 +1018,8 @@ function rowClass(flag: string | boolean) {
                 </svg>
               </button>
             </div>
-            <a class="skill-hero-install-link" :href="localePath('/skill/install')">
-              View installation guide for each client
+            <a class="skill-hero-install-link" :href="localePfx + '/skill/install'">
+              {{ content.hero.installLink }}
               <svg
                 width="12"
                 height="12"
@@ -582,14 +1045,14 @@ function rowClass(flag: string | boolean) {
                 text-transform: uppercase;
                 color: var(--lb-fg-3);
               "
-              >Supported AI tools</span
+              >{{ content.hero.agentsLabel }}</span
             >
             <div class="skill-hero-agents-row">
               <div v-for="a in SKILL_AGENTS" :key="a.name" class="ai-agent-chip">
                 <span class="ai-agent-mark" :style="{ background: a.color }">{{ a.mark }}</span>
                 {{ a.name }}
               </div>
-              <div class="ai-agent-chip ai-agent-more">+ any Skill-compatible agent</div>
+              <div class="ai-agent-chip ai-agent-more">{{ content.hero.agentsMore }}</div>
             </div>
           </div>
         </div>
@@ -600,9 +1063,9 @@ function rowClass(flag: string | boolean) {
     <section class="section" style="padding-top: 60px">
       <div class="section-inner">
         <div style="text-align: center; max-width: 560px; margin: 0 auto 36px">
-          <h2 class="h-section" style="margin-top: 0">See what Skill can do for you.</h2>
+          <h2 class="h-section" style="margin-top: 0">{{ content.demo.title }}</h2>
           <p class="t-meta" style="margin-top: 12px; line-height: 1.55">
-            Pick a scenario to see your AI assistant in action.
+            {{ content.demo.desc }}
           </p>
         </div>
 
@@ -632,7 +1095,7 @@ function rowClass(flag: string | boolean) {
               <h3 class="skill-demo-title">{{ activeScenario.title }}</h3>
               <p class="skill-demo-desc">{{ activeScenario.desc }}</p>
 
-              <div class="skill-demo-prompt-label">Try asking</div>
+              <div class="skill-demo-prompt-label">{{ content.demo.tryAsking }}</div>
               <div class="skill-demo-prompt">
                 <svg
                   width="14"
@@ -703,67 +1166,163 @@ function rowClass(flag: string | boolean) {
         border-bottom: 1px solid var(--app-card-stroke);
       ">
       <div class="section-inner">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 24px;
-            margin-bottom: 24px;
-          ">
-          <div style="max-width: 540px">
-            <span class="eyebrow">Skill catalog</span>
-            <h2 class="h-section" style="margin-top: 14px">100+ Skills, covering every move in your trading day.</h2>
-            <p class="t-meta" style="margin-top: 10px; line-height: 1.55">
-              Each Skill is a packaged set of tools, callable by any supported AI client. Click any card to see install
-              instructions and details.
-            </p>
+        <!-- Header -->
+        <div class="sc-header">
+          <div class="sc-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1.5 L14 10 L22 12 L14 14 L12 22.5 L10 14 L2 12 L10 10 Z" />
+            </svg>
+            {{ content.catalog.badge }}
           </div>
-          <div class="skill-marketplace-card">
-            <div class="skill-marketplace-label">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="color: var(--lb-brand)">
-                <path d="M12 2.5 13.4 9.2 20.5 10.5 13.6 12 12 18.5 10.4 12 3.5 10.5 10.6 9.2z" />
-              </svg>
-              <span>Available on Claude Code Plugin Marketplace</span>
-              <span class="skill-marketplace-pill">PLUGIN</span>
+          <h2 class="h-section" style="margin-top: 10px">{{ content.catalog.title }}</h2>
+          <p class="t-meta" style="margin-top: 10px; line-height: 1.55">{{ content.catalog.desc }}</p>
+          <div class="sc-plugin-bar">
+            <div class="sc-plugin-left">
+              <div class="sc-plugin-icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="rgb(245, 158, 11)"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+              </div>
+              <div>
+                <div class="sc-plugin-title">
+                  {{ content.catalog.marketplace }}
+                  <span class="sc-plugin-badge">PLUGIN</span>
+                </div>
+                <div class="sc-plugin-desc">{{ content.catalog.pluginDesc }}</div>
+              </div>
             </div>
-            <code class="skill-marketplace-cmd">/plugin marketplace add longbridge/skills</code>
-            <code class="skill-marketplace-cmd">/plugin install longbridge@longbridge-skills</code>
+            <div class="sc-plugin-right">
+              <div class="sc-plugin-cmd-block">
+                <div class="sc-plugin-cmd-lines">
+                  <code><span class="sc-plugin-kw">/plugin</span> marketplace add longbridge/skills</code>
+                  <code><span class="sc-plugin-kw">/plugin</span> install longbridge@longbridge-skills</code>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="skill-cat-tabs">
-          <button
-            v-for="c in SKILL_CATS"
-            :key="c.key"
-            :class="['skill-cat-tab', c.key === activeCat ? 'is-active' : '']"
-            @click="activeCat = c.key">
-            {{ c.key }}
-            <span class="skill-cat-count">{{ c.count }}</span>
+        <!-- Tabs + Search row -->
+        <div class="sc-toolbar">
+          <div class="sc-tabs-wrap">
+            <div ref="tabsEl" class="sc-tabs" role="tablist">
+              <button
+                v-for="cat in CATALOG_CATS"
+                :key="cat.id"
+                role="tab"
+                :aria-selected="activeCatalogCat === cat.id"
+                class="sc-tab"
+                :class="{ 'sc-tab--active': activeCatalogCat === cat.id }"
+                @click="activeCatalogCat = cat.id">
+                {{ cat.label }}
+                <span class="sc-tab-count">{{ catalogCounts[cat.id] }}</span>
+              </button>
+              <span class="sc-tabs-indicator" :style="indicatorStyle"></span>
+            </div>
+          </div>
+          <div class="sc-search-wrap">
+            <svg
+              class="sc-search-icon"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.3-4.3" />
+            </svg>
+            <input v-model="catalogQuery" class="sc-search-input" :placeholder="catalogLocale.ui.searchPlaceholder" />
+            <button v-if="catalogQuery" class="sc-search-clear" @click="catalogQuery = ''">×</button>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="sc-grid" :key="activeCatalogCat + (catalogQuery ? '1' : '0')">
+          <div
+            v-for="(skill, i) in shownCatalogSkills"
+            :key="skill.id"
+            class="sc-card"
+            :style="{ '--sc-i': i }"
+            @mouseenter="triggerRipple($event, $event.currentTarget as HTMLElement)"
+            @click="openCatalogSkill = skill">
+            <div class="sc-ripple" />
+            <div class="sc-card-inner">
+              <div class="sc-card-header">
+                <div class="sc-card-title">
+                  <span class="sc-card-name">{{ skill.name }}</span>
+                  <span class="sc-card-pkg">{{ skill.pkg }}</span>
+                  <span v-if="skill.tag" class="sc-card-tag" :class="'sc-card-tag--' + (skill.tagType ?? 'default')">{{
+                    skill.tag
+                  }}</span>
+                </div>
+                <svg
+                  class="sc-card-arrow"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </div>
+              <p class="sc-card-desc">{{ skill.desc }}</p>
+              <div class="sc-card-prompt">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 1024 1024"
+                  fill="#00B8B8"
+                  style="flex: 0 0 auto; margin-top: 2px; opacity: 0.55">
+                  <path
+                    d="M470.9888 261.77536v98.54976c0 13.3632-10.83392 24.19712-24.19712 24.19712-47.68768 0-73.6256 48.90624-77.21984 145.43872h77.21984c13.3632 0 24.19712 10.84416 24.19712 24.19712v208.0768c0 13.3632-10.83392 24.19712-24.19712 24.19712H240.90624c-13.37344 0-24.19712-10.84416-24.19712-24.19712V554.15808c0-46.27456 4.6592-88.73984 13.84448-126.22848 9.4208-38.44096 23.87968-72.04864 42.96704-99.90144 19.64032-28.6208 44.20608-51.07712 73.02144-66.72384 29.00992-15.73888 62.74048-23.72608 100.25984-23.72608 13.34272 0 24.17664 10.83392 24.17664 24.19712zM783.09376 384.52224c13.3632 0 24.19712-10.84416 24.19712-24.19712V261.77536c0-13.3632-10.83392-24.19712-24.19712-24.19712-37.50912 0-71.23968 7.9872-100.2496 23.72608-28.81536 15.64672-53.39136 38.10304-73.03168 66.72384-19.08736 27.8528-33.54624 61.46048-42.96704 99.91168-9.17504 37.49888-13.83424 79.96416-13.83424 126.21824v208.0768c0 13.3632 10.83392 24.19712 24.19712 24.19712h205.8752c13.3632 0 24.19712-10.84416 24.19712-24.19712V554.15808c0-13.3632-10.83392-24.19712-24.19712-24.19712h-76.1344c3.54304-96.5325 29.10208-145.43872 76.12416-145.43872z" />
+                </svg>
+                <span class="sc-card-prompt-text">{{ skill.prompt }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div v-if="filteredCatalogSkills.length === 0" class="sc-empty">
+          {{ catalogLocale.ui.noResults(catalogQuery) }}
+          <button class="sc-empty-clear" @click="catalogQuery = ''">{{ catalogLocale.ui.clear }}</button>
+        </div>
+
+        <!-- Expand / collapse -->
+        <div v-if="filteredCatalogSkills.length > catalogCap" class="sc-expand-row">
+          <button class="sc-expand-btn" @click="catalogExpanded = !catalogExpanded">
+            {{
+              catalogExpanded
+                ? catalogLocale.ui.collapse
+                : catalogLocale.ui.showMore(filteredCatalogSkills.length - catalogCap)
+            }}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              :style="{ transform: catalogExpanded ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </button>
-        </div>
-
-        <div class="skill-grid">
-          <a v-for="s in filteredSkills" :key="s.id" href="#" class="skill-card">
-            <div class="skill-card-head">
-              <h3 class="skill-card-name">{{ s.name }}</h3>
-              <code class="skill-card-id">{{ s.id }}</code>
-              <span v-if="s.tag" class="skill-card-tag">{{ s.tag }}</span>
-            </div>
-            <p class="skill-card-desc">{{ s.desc }}</p>
-            <div class="skill-card-example">
-              <svg
-                width="11"
-                height="11"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                style="color: var(--lb-brand); flex-shrink: 0">
-                <path d="M12 2.5 13.4 9.2 20.5 10.5 13.6 12 12 18.5 10.4 12 3.5 10.5 10.6 9.2z" />
-              </svg>
-              <span>"{{ s.example }}"</span>
-            </div>
-          </a>
         </div>
       </div>
     </section>
@@ -772,15 +1331,15 @@ function rowClass(flag: string | boolean) {
     <section class="section">
       <div class="section-inner">
         <div style="max-width: 640px; margin-bottom: 40px">
-          <span class="eyebrow">Capability reference</span>
-          <h2 class="h-section" style="margin-top: 14px">Full coverage of Longbridge CLI commands and MCP tools.</h2>
+          <span class="eyebrow">{{ content.cap.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 14px">{{ content.cap.title }}</h2>
           <p class="t-meta" style="margin-top: 10px; line-height: 1.55">
-            Every capability below is available to your AI in plain conversation.
+            {{ content.cap.desc }}
           </p>
         </div>
         <div class="skill-cap-grid">
-          <div v-for="g in CAP_REFERENCE" :key="g.title" class="skill-cap-col">
-            <h3 class="h-card" style="font-size: 14px; color: var(--lb-fg-1)">{{ g.title }}</h3>
+          <div v-for="g in capGroups" :key="g.tKey" class="skill-cap-col">
+            <h3 class="h-card" style="font-size: 14px; color: var(--lb-fg-1)">{{ g.label }}</h3>
             <ul>
               <li v-for="item in g.items" :key="item">
                 <svg
@@ -807,35 +1366,31 @@ function rowClass(flag: string | boolean) {
     <section class="section" style="padding-top: 48px">
       <div class="section-inner">
         <div style="text-align: left; max-width: 640px; margin-bottom: 32px">
-          <span class="eyebrow">SEE IT IN ACTION</span>
-          <h2 class="h-section" style="margin-top: 14px">Real user cases, real returns.</h2>
+          <span class="eyebrow">{{ content.cases.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 14px">{{ content.cases.title }}</h2>
           <p class="t-meta" style="margin-top: 10px; line-height: 1.55">
-            Hand-picked write-ups from the Longbridge community. From quick experiments to fully-deployed quant systems
-            — see what people are shipping with Skill.
+            {{ content.cases.desc }}
           </p>
         </div>
 
         <div class="user-cases-grid">
           <a href="https://longbridge.com/topics/39630019" target="_blank" rel="noreferrer" class="user-case-award">
             <div class="user-case-award-tag">
-              <span>AWARD</span>
+              <span>{{ content.cases.award.tag }}</span>
               <span class="user-case-award-tag-line"></span>
             </div>
             <div>
-              <h3 class="user-case-award-h">Each winner receives 10,000 Task Coins + 1 × AirPods 4</h3>
-              <p class="user-case-award-d">
-                Winning cases are showcased on the Longbridge Skill website — visible to users worldwide, including the
-                winner's ID and creative work.
-              </p>
+              <h3 class="user-case-award-h">{{ content.cases.award.title }}</h3>
+              <p class="user-case-award-d">{{ content.cases.award.desc }}</p>
             </div>
             <div class="user-case-award-rewards">
               <div>
                 <div class="user-case-award-num">10,000</div>
-                <div class="user-case-award-l">TASK COINS</div>
+                <div class="user-case-award-l">{{ content.cases.award.taskCoins }}</div>
               </div>
               <div>
                 <div class="user-case-award-num">AirPods 4</div>
-                <div class="user-case-award-l">PER WINNER</div>
+                <div class="user-case-award-l">{{ content.cases.award.perWinner }}</div>
               </div>
             </div>
           </a>
@@ -844,7 +1399,7 @@ function rowClass(flag: string | boolean) {
             <div class="user-case-head">
               <span class="user-case-idx">{{ String(i + 1).padStart(2, '0') }}</span>
               <span class="user-case-read">
-                Read case
+                {{ content.cases.read }}
                 <svg
                   width="11"
                   height="11"
@@ -875,8 +1430,8 @@ function rowClass(flag: string | boolean) {
     <section class="section" style="border-top: 1px solid var(--app-card-stroke); background: var(--app-canvas)">
       <div class="section-inner">
         <div style="text-align: center; max-width: 560px; margin: 0 auto">
-          <span class="eyebrow">Get started</span>
-          <h2 class="h-section" style="margin-top: 14px">Choose your AI tool</h2>
+          <span class="eyebrow">{{ content.getstarted.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 14px">{{ content.getstarted.title }}</h2>
         </div>
         <div class="skill-getstarted-grid">
           <div class="skill-getstarted-card">
@@ -896,10 +1451,9 @@ function rowClass(flag: string | boolean) {
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
               </svg>
             </div>
-            <h3 class="h-card" style="margin-top: 16px">Copy and send to any AI</h3>
+            <h3 class="h-card" style="margin-top: 16px">{{ content.getstarted.card1.title }}</h3>
             <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
-              Paste this message into any AI assistant (Claude, ChatGPT, Cursor) and it will guide you through the
-              installation.
+              {{ content.getstarted.card1.desc }}
             </p>
             <div class="skill-getstarted-cmd">
               <code>{{ installCmd }}</code>
@@ -934,7 +1488,7 @@ function rowClass(flag: string | boolean) {
           </div>
 
           <div class="skill-getstarted-card recommended">
-            <span class="skill-getstarted-badge">Recommended</span>
+            <span class="skill-getstarted-badge">{{ content.getstarted.recommended }}</span>
             <div
               class="skill-getstarted-icon"
               style="background: color-mix(in srgb, var(--lb-up) 14%, transparent); color: var(--lb-up)">
@@ -952,9 +1506,9 @@ function rowClass(flag: string | boolean) {
                 <polyline points="2 12 12 17 22 12" />
               </svg>
             </div>
-            <h3 class="h-card" style="margin-top: 16px">Download Skill ZIP</h3>
+            <h3 class="h-card" style="margin-top: 16px">{{ content.getstarted.card2.title }}</h3>
             <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
-              Extract and import into Claude, ChatGPT, Cursor and other AI clients. Includes the full Skill manifest.
+              {{ content.getstarted.card2.desc }}
             </p>
             <a class="btn btn-primary" style="margin-top: 14px; align-self: flex-start" href="#">
               <svg
@@ -970,7 +1524,7 @@ function rowClass(flag: string | boolean) {
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-              Download longbridge-all.zip
+              {{ content.getstarted.card2.cta }}
             </a>
           </div>
 
@@ -994,9 +1548,9 @@ function rowClass(flag: string | boolean) {
                 <line x1="12" y1="19" x2="20" y2="19" />
               </svg>
             </div>
-            <h3 class="h-card" style="margin-top: 16px">Install via Npx</h3>
+            <h3 class="h-card" style="margin-top: 16px">{{ content.getstarted.card3.title }}</h3>
             <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
-              For Claude Code, Codex, and similar tools — installs all skills globally.
+              {{ content.getstarted.card3.desc }}
             </p>
             <div class="skill-getstarted-cmd">
               <code><span style="color: var(--lb-brand)">$</span> npx skills add longbridge/skills -g</code>
@@ -1005,10 +1559,12 @@ function rowClass(flag: string | boolean) {
         </div>
 
         <div class="skill-getstarted-foot">
-          Also available on <a href="#">skills.sh</a> and <a href="#">GitHub</a>.
+          {{ content.getstarted.footer.also }}
+          <a href="https://www.skills.sh/longbridge/skills" target="_blank">skills.sh</a>
+          {{ content.getstarted.footer.and }} <a href="https://github.com/longbridge/skills" target="_blank">GitHub</a>.
           <span style="color: var(--lb-fg-3)">·</span>
-          <a :href="localePath('/skill/install')" style="color: var(--lb-brand); font-weight: 600">
-            View installation guide for each client
+          <a :href="localePfx + '/skill/install'" style="color: var(--lb-brand); font-weight: 600">
+            {{ content.getstarted.footer.guide }}
             <svg
               width="12"
               height="12"
@@ -1029,6 +1585,251 @@ function rowClass(flag: string | boolean) {
 
     <AppFooter />
   </div>
+
+  <!-- Skill Catalog Modal -->
+  <Teleport to="body">
+    <Transition name="sc-modal">
+      <div v-if="openCatalogSkill" class="sc-modal-backdrop" @click.self="openCatalogSkill = null">
+        <div class="sc-modal">
+          <!-- Header -->
+          <div class="sc-modal-head">
+            <svg class="sc-modal-deco" width="180" height="180" viewBox="0 0 24 24">
+              <path d="M12 1.5 L14 10 L22 12 L14 14 L12 22.5 L10 14 L2 12 L10 10 Z" fill="#00b8b8" />
+            </svg>
+            <button class="sc-modal-close" @click="openCatalogSkill = null" aria-label="关闭">×</button>
+            <div class="sc-modal-hero">
+              <div class="sc-modal-icon" v-html="CAT_ICONS[openCatalogSkill.cat] ?? CAT_ICONS.meta"></div>
+              <div>
+                <h2 class="sc-modal-title">{{ openCatalogSkill.name }}</h2>
+                <div class="sc-modal-meta">
+                  <code>{{ openCatalogSkill.pkg }}</code>
+                  <span class="sc-modal-dot">·</span>
+                  <span>{{ catalogLocale.ui.catLabels[openCatalogSkill.cat] }}</span>
+                  <span class="sc-modal-dot">·</span>
+                  <span>{{ openCatalogSkill.tools }} {{ content.catalog.tools }}</span>
+                </div>
+              </div>
+            </div>
+            <p class="sc-modal-desc">{{ openCatalogSkill.desc }}</p>
+            <div class="sc-modal-actions">
+              <a
+                class="sc-modal-btn-outline"
+                :href="`https://github.com/longbridge/skills/blob/main/skills/${openCatalogSkill.pkg}/SKILL.md`"
+                target="_blank"
+                rel="noreferrer">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.18c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.69-1.27-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.16 1.18a10.94 10.94 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5Z" />
+                </svg>
+                {{ content.catalog.viewSkill }}
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round">
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </a>
+              <a class="sc-modal-btn-outline" :href="`https://open.longbridge.com/skill/${openCatalogSkill.pkg}.zip`">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                {{ content.catalog.downloadZip }}
+              </a>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="sc-modal-body">
+            <!-- Install section -->
+            <div class="sc-modal-section">
+              <div class="sc-modal-client-tabs">
+                <button
+                  v-for="(v, key) in INSTALL_CLIENTS"
+                  v-show="key === 'cli' || key === 'manual'"
+                  :key="key"
+                  class="sc-modal-client-tab"
+                  :class="{ 'sc-modal-client-tab--active': installClient === key }"
+                  @click="installClient = key">
+                  {{ v.label }}
+                </button>
+              </div>
+              <div class="sc-modal-section-hd">
+                <span class="sc-modal-section-label">{{ content.catalog.install }}</span>
+                <span class="sc-modal-section-hint">{{ content.catalog.installHint }}</span>
+              </div>
+              <div class="sc-modal-cmd-block">
+                <code
+                  class="sc-modal-cmd-text"
+                  :class="{ 'sc-modal-cmd-text--multi': INSTALL_CLIENTS[installClient].cmd.includes('\n') }"
+                  >{{ INSTALL_CLIENTS[installClient].cmd }}</code
+                >
+                <button class="sc-modal-cmd-copy" @click="handleModalCopy(INSTALL_CLIENTS[installClient].cmd, 'inst')">
+                  <svg
+                    v-if="modalCopiedKey === 'inst'"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#00b88a"
+                    stroke-width="2.6"
+                    stroke-linecap="round">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <svg
+                    v-else
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round">
+                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Upgrade / Verify section -->
+            <div class="sc-modal-section">
+              <div class="sc-modal-section-hd">
+                <span class="sc-modal-section-label">{{
+                  content.catalog.upgradeVerify(INSTALL_CLIENTS[installClient].label)
+                }}</span>
+              </div>
+              <div class="sc-modal-labeled-cmd">
+                <div class="sc-modal-cmd-label">{{ content.catalog.upgradeTo }}</div>
+                <div class="sc-modal-cmd-block">
+                  <code class="sc-modal-cmd-text">{{ INSTALL_CLIENTS[installClient].upgrade }}</code>
+                  <button
+                    class="sc-modal-cmd-copy"
+                    @click="handleModalCopy(INSTALL_CLIENTS[installClient].upgrade, 'upg')">
+                    <svg
+                      v-if="modalCopiedKey === 'upg'"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#00b88a"
+                      stroke-width="2.6"
+                      stroke-linecap="round">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <svg
+                      v-else
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round">
+                      <rect x="9" y="9" width="11" height="11" rx="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="sc-modal-labeled-cmd">
+                <div class="sc-modal-cmd-label">{{ content.catalog.verifyInstalled }}</div>
+                <div class="sc-modal-cmd-block">
+                  <code class="sc-modal-cmd-text">{{ INSTALL_CLIENTS[installClient].verify }}</code>
+                  <button
+                    class="sc-modal-cmd-copy"
+                    @click="handleModalCopy(INSTALL_CLIENTS[installClient].verify, 'ver')">
+                    <svg
+                      v-if="modalCopiedKey === 'ver'"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#00b88a"
+                      stroke-width="2.6"
+                      stroke-linecap="round">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <svg
+                      v-else
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round">
+                      <rect x="9" y="9" width="11" height="11" rx="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Uninstall section -->
+            <div class="sc-modal-section">
+              <div class="sc-modal-section-hd">
+                <span class="sc-modal-section-label">{{
+                  content.catalog.uninstall(INSTALL_CLIENTS[installClient].label)
+                }}</span>
+                <span class="sc-modal-section-hint">{{ content.catalog.uninstallHint }}</span>
+              </div>
+              <div class="sc-modal-cmd-block">
+                <code class="sc-modal-cmd-text">{{ INSTALL_CLIENTS[installClient].uninstall }}</code>
+                <button
+                  class="sc-modal-cmd-copy"
+                  @click="handleModalCopy(INSTALL_CLIENTS[installClient].uninstall, 'uni')">
+                  <svg
+                    v-if="modalCopiedKey === 'uni'"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#00b88a"
+                    stroke-width="2.6"
+                    stroke-linecap="round">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <svg
+                    v-else
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round">
+                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                </button>
+              </div>
+              <ul class="sc-modal-notes">
+                <li>
+                  {{ content.catalog.uninstallNote1 }}
+                  <code>~/.skills/{{ openCatalogSkill.pkg }}/</code>
+                  {{ content.catalog.uninstallNote1End }}
+                </li>
+                <li>{{ content.catalog.uninstallNote2 }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -1848,5 +2649,782 @@ function rowClass(flag: string | boolean) {
 .btn-primary {
   background: var(--lb-brand);
   color: #fff;
+}
+
+/* ─── Skills Catalog ──────────────────────────────────────────────────────── */
+.sc-header {
+  margin-bottom: 24px;
+}
+.sc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(0, 184, 184, 0.1);
+  color: #00b8b8;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+.dark .sc-badge {
+  background: rgba(0, 184, 184, 0.15);
+}
+
+/* Toolbar */
+.sc-toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--app-card-stroke);
+}
+@media (max-width: 600px) {
+  .sc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+.sc-tabs-wrap {
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sc-tabs-wrap::-webkit-scrollbar {
+  display: none;
+}
+.sc-tabs {
+  display: flex;
+  gap: 2px;
+  position: relative;
+}
+.sc-tab {
+  padding: 8px 9px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--lb-fg-3);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.sc-tab:hover {
+  color: var(--lb-fg-1);
+}
+.sc-tab--active {
+  color: var(--lb-fg-1);
+  font-weight: 600;
+}
+.sc-tabs-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: var(--lb-brand);
+  border-radius: 1px;
+  transition:
+    left 0.2s ease,
+    width 0.2s ease;
+  pointer-events: none;
+}
+.sc-tab-count {
+  margin-left: 5px;
+  font-size: 11px;
+  color: var(--lb-fg-3);
+  font-variant-numeric: tabular-nums;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--lb-bg-2);
+}
+.sc-tab--active .sc-tab-count {
+  background: rgba(0, 184, 184, 0.12);
+  color: #00b8b8;
+}
+.dark .sc-tab--active .sc-tab-count {
+  background: rgba(0, 184, 184, 0.18);
+}
+
+/* Search */
+.sc-search-wrap {
+  flex: 0 0 140px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: var(--lb-bg-2);
+  margin-bottom: 6px;
+}
+@media (max-width: 600px) {
+  .sc-search-wrap {
+    flex: 0 0 auto;
+    margin: 8px 0;
+  }
+}
+.sc-search-icon {
+  color: var(--lb-fg-3);
+  flex-shrink: 0;
+  transition: color 0.18s;
+}
+.sc-search-wrap:focus-within .sc-search-icon {
+  color: var(--lb-brand);
+}
+.sc-search-input {
+  flex: 1;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--lb-fg-1);
+  min-width: 0;
+}
+.sc-search-clear {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--lb-fg-3);
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+/* Grid */
+.sc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  animation: sc-grid-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (max-width: 960px) {
+  .sc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .sc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@keyframes sc-grid-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Card */
+.sc-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--lb-card);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s;
+  animation: sc-card-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--sc-i, 0) * 30ms);
+}
+@keyframes sc-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.sc-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(43, 62, 92, 0.12);
+}
+.dark .sc-card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.sc-ripple {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 184, 184, 0.4) 0%, rgba(0, 184, 184, 0.16) 45%, transparent 75%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+}
+.sc-card-inner {
+  position: relative;
+  z-index: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.sc-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.sc-card-title {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.sc-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-fg-1);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.sc-card-pkg {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  color: var(--lb-fg-3);
+  white-space: nowrap;
+}
+.sc-card-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.sc-card-tag--hot {
+  background: rgba(245, 158, 11, 0.12);
+  color: rgb(217, 119, 6);
+}
+.dark .sc-card-tag--hot {
+  background: rgba(245, 158, 11, 0.18);
+  color: rgb(245, 158, 11);
+}
+.sc-card-tag--risk {
+  background: rgba(255, 80, 0, 0.1);
+  color: #ff5000;
+}
+.sc-card-tag--default {
+  background: var(--lb-bg-2);
+  color: var(--lb-fg-2);
+}
+.sc-card-arrow {
+  color: var(--lb-fg-3);
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition:
+    transform 0.2s,
+    color 0.2s;
+}
+.sc-card:hover .sc-card-arrow {
+  color: var(--lb-brand);
+  transform: translateX(3px);
+}
+.sc-card-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--lb-fg-2);
+  flex: 1;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sc-card-prompt {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  background: var(--lb-bg-2);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.sc-card-prompt-text {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--lb-fg-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Empty */
+.sc-empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--lb-fg-3);
+  font-size: 13px;
+  border: 1px dashed var(--app-card-stroke);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.sc-empty-clear {
+  border: 0;
+  background: transparent;
+  color: var(--lb-brand);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  padding: 0;
+}
+
+/* Expand */
+.sc-expand-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+.sc-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--app-card-stroke);
+  background: var(--lb-card);
+  color: var(--lb-fg-1);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.sc-expand-btn:hover {
+  border-color: var(--lb-brand);
+}
+
+/* Plugin bar */
+.sc-plugin-bar {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.08);
+  flex-wrap: wrap;
+}
+.dark .sc-plugin-bar {
+  background: rgba(245, 158, 11, 0.12);
+}
+.sc-plugin-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.sc-plugin-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sc-plugin-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lb-fg-1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sc-plugin-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  background: rgb(245, 158, 11);
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+.sc-plugin-desc {
+  font-size: 12px;
+  color: var(--lb-fg-2);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.sc-plugin-right {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .sc-plugin-right {
+    width: 100%;
+  }
+}
+.sc-plugin-cmd-block {
+  position: relative;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.045);
+}
+.dark .sc-plugin-cmd-block {
+  background: rgba(255, 255, 255, 0.045);
+}
+.sc-plugin-cmd-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 12px;
+  font-family: var(--vp-font-family-mono);
+  color: var(--lb-fg-1);
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.sc-plugin-cmd-lines code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+.sc-plugin-kw {
+  color: #e09765;
+}
+
+/* Modal */
+.sc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 25, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+@media (max-width: 600px) {
+  .sc-modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+}
+.sc-modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--lb-card);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px -10px rgba(0, 0, 0, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.18);
+  color: var(--lb-fg-1);
+  overflow: clip;
+}
+@media (max-width: 600px) {
+  .sc-modal {
+    max-height: 85vh;
+    border-radius: 16px 16px 0 0;
+  }
+}
+.sc-modal-head {
+  padding: 24px 28px 20px;
+  position: relative;
+  overflow: visible;
+  background: linear-gradient(135deg, rgba(0, 184, 184, 0.1) 0%, transparent 70%);
+  border-bottom: 1px solid var(--app-card-stroke);
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .sc-modal-head {
+    padding: 20px 20px 16px;
+  }
+}
+.dark .sc-modal-head {
+  background: linear-gradient(135deg, rgba(0, 184, 184, 0.18) 0%, transparent 70%);
+}
+.sc-modal-deco {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  opacity: 0.07;
+  pointer-events: none;
+}
+.dark .sc-modal-deco {
+  opacity: 0.1;
+}
+.sc-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--lb-fg-2);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dark .sc-modal-close {
+  background: rgba(255, 255, 255, 0.06);
+}
+.sc-modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.dark .sc-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.sc-modal-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.sc-modal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: rgba(0, 184, 184, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dark .sc-modal-icon {
+  background: rgba(0, 184, 184, 0.18);
+}
+.sc-modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--lb-fg-1);
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+@media (max-width: 600px) {
+  .sc-modal-title {
+    font-size: 18px;
+  }
+}
+.sc-modal-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--lb-fg-3);
+}
+.sc-modal-meta code {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  color: var(--lb-fg-3);
+}
+.sc-modal-dot {
+  opacity: 0.4;
+}
+.sc-modal-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--lb-fg-2);
+  margin: 0 0 16px;
+  max-width: 580px;
+}
+.sc-modal-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sc-modal-btn-outline {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--app-card-stroke);
+  background: transparent;
+  color: var(--lb-fg-1);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+.sc-modal-btn-outline:hover {
+  background: var(--lb-bg-2);
+}
+.sc-modal-body {
+  padding: 22px 28px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+@media (max-width: 600px) {
+  .sc-modal-body {
+    padding: 16px 20px 24px;
+  }
+}
+.sc-modal-section {
+  margin-bottom: 22px;
+}
+.sc-modal-section:last-child {
+  margin-bottom: 0;
+}
+.sc-modal-section-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.sc-modal-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--lb-fg-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sc-modal-section-hint {
+  font-size: 11px;
+  color: var(--lb-fg-3);
+  text-align: right;
+}
+.sc-modal-client-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid var(--app-card-stroke);
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+.sc-modal-client-tab {
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--lb-fg-2);
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  font-size: 12.5px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: color 0.15s;
+  margin-bottom: -1px;
+}
+.sc-modal-client-tab--active {
+  color: var(--lb-fg-1);
+  font-weight: 600;
+  border-bottom-color: var(--lb-brand);
+}
+.sc-modal-cmd-block {
+  position: relative;
+  padding: 10px 42px 10px 14px;
+  border-radius: 8px;
+  background: var(--lb-bg-2);
+}
+.sc-modal-cmd-text {
+  display: block;
+  font-size: 12px;
+  font-family: var(--vp-font-family-mono);
+  color: var(--lb-fg-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-modal-cmd-text--multi {
+  white-space: pre;
+  overflow-x: auto;
+}
+.sc-modal-cmd-copy {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--lb-fg-3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.sc-modal-cmd-copy:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+.dark .sc-modal-cmd-copy:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.sc-modal-labeled-cmd {
+  margin-bottom: 10px;
+}
+.sc-modal-labeled-cmd:last-child {
+  margin-bottom: 0;
+}
+.sc-modal-cmd-label {
+  font-size: 12px;
+  color: var(--lb-fg-2);
+  margin-bottom: 6px;
+}
+.sc-modal-notes {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  color: var(--lb-fg-2);
+  line-height: 1.7;
+}
+.sc-modal-notes code {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  color: var(--lb-fg-3);
+}
+
+/* Transitions */
+.sc-modal-enter-active {
+  transition: opacity 0.18s ease-out;
+}
+.sc-modal-leave-active {
+  transition: opacity 0.15s;
+}
+.sc-modal-enter-from,
+.sc-modal-leave-to {
+  opacity: 0;
+}
+.sc-modal-enter-active .sc-modal,
+.sc-modal-leave-active .sc-modal {
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sc-modal-enter-from .sc-modal {
+  transform: translateY(12px) scale(0.98);
+}
+.sc-modal-leave-to .sc-modal {
+  transform: scale(0.97);
+}
+@media (max-width: 600px) {
+  .sc-modal-enter-from .sc-modal {
+    transform: translateY(40px);
+  }
+  .sc-modal-leave-to .sc-modal {
+    transform: translateY(20px);
+  }
 }
 </style>

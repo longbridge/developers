@@ -1,9 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, computed } from 'vue'
+import { useData } from 'vitepress'
 // Compact layout only
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'API Capabilities',
+    subtitle: 'Everything you need to build trading and market data applications',
+    caps: {
+      quote: { name: 'Market Data', desc: 'Real-time quotes, order depth, candlestick, intraday, capital flow, and push subscriptions' },
+      trade: { name: 'Trading & Orders', desc: 'Submit, replace, and withdraw orders. Track positions, balance, and execution history' },
+      derivatives: { name: 'Derivatives', desc: 'Full option chains with Greeks, warrants listing, and real-time derivative quotes' },
+      research: { name: 'Financial Research', desc: 'Financial statements, valuation metrics, dividend history, EPS forecasts, and analyst ratings' },
+      content: { name: 'Content & News', desc: 'Real-time news feeds, community discussions, topics, and engagement metrics' },
+    } as Record<string, { name: string; desc: string }>,
+  },
+  'zh-CN': {
+    title: 'API 能力',
+    subtitle: '构建交易和行情应用所需的一切',
+    caps: {
+      quote: { name: '行情数据', desc: '实时行情、盘口深度、K 线、分时、资金流向和推送订阅' },
+      trade: { name: '交易下单', desc: '提交、修改、撤销订单，跟踪持仓、余额和成交记录' },
+      derivatives: { name: '衍生品', desc: '完整期权链含 Greeks、窝轮列表和实时衍生品行情' },
+      research: { name: '基本面研究', desc: '财务报表、估值指标、分红历史、EPS 预测和分析师评级' },
+      content: { name: '资讯内容', desc: '实时新闻、社区讨论、话题帖子和互动数据' },
+    } as Record<string, { name: string; desc: string }>,
+  },
+  'zh-HK': {
+    title: 'API 能力',
+    subtitle: '構建交易和行情應用所需的一切',
+    caps: {
+      quote: { name: '行情數據', desc: '即時行情、盤口深度、K 線、分時、資金流向和推送訂閱' },
+      trade: { name: '交易下單', desc: '提交、修改、撤銷訂單，跟蹤持倉、餘額和成交記錄' },
+      derivatives: { name: '衍生品', desc: '完整期權鏈含 Greeks、窩輪列表和即時衍生品行情' },
+      research: { name: '基本面研究', desc: '財務報表、估值指標、分紅歷史、EPS 預測和分析師評級' },
+      content: { name: '資訊內容', desc: '即時新聞、社區討論、話題帖子和互動數據' },
+    } as Record<string, { name: string; desc: string }>,
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 // Single layout — Compact only
 
 const caps = [
@@ -56,8 +94,8 @@ const caps = [
   <section class="cap-section">
     <div class="cap-content">
       <div class="cap-header">
-        <h2 class="cap-title">{{ $t('cap.title') }}</h2>
-        <p class="cap-subtitle">{{ $t('cap.subtitle') }}</p>
+        <h2 class="cap-title">{{ content.title }}</h2>
+        <p class="cap-subtitle">{{ content.subtitle }}</p>
       </div>
 
       <div class="cap-compact">
@@ -65,8 +103,8 @@ const caps = [
           <div class="cc-top">
             <span class="cc-icon" v-html="cap.icon" />
             <div class="cc-info">
-              <span class="cc-name">{{ $t(`cap.${cap.key}`) }}</span>
-              <span class="cc-desc">{{ $t(`cap.${cap.key}.desc`) }}</span>
+              <span class="cc-name">{{ content.caps[cap.key]?.name }}</span>
+              <span class="cc-desc">{{ content.caps[cap.key]?.desc }}</span>
             </div>
             <span class="cc-count">{{ cap.count }}+</span>
           </div>

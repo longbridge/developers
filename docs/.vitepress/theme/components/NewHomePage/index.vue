@@ -3,6 +3,546 @@ import { ref, computed } from 'vue'
 import AppNav from '../AppNav.vue'
 import AppFooter from '../AppFooter.vue'
 import { localePath } from '../../utils/i18n'
+import { useData } from 'vitepress'
+
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    hero: {
+      eyebrow: 'LONGBRIDGE OPENAPI',
+      title1: 'Real-time markets,',
+      title2: 'built for AI.',
+      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead.',
+      cta1: 'Get Started',
+      cta2: 'Read the Docs',
+      highlights: [
+        { u: 'markets', d: 'US · HK · SG · CN' },
+        { u: 'SDKs', d: 'Python · Rust · Node · Go · Java · C · C++' },
+        { u: 'endpoints', d: 'Quote · Trade · Research · News' },
+        { u: 'p50 latency', d: 'WebSocket streaming' },
+      ],
+    },
+    features: {
+      eyebrow: 'FEATURES',
+      title: 'Everything you need for market analysis, quantitative research, and intelligent trading.',
+      cta: 'Compare all',
+    },
+    products: [
+      {
+        label: 'AI Skill',
+        title: 'Investment analysis agent for any AI',
+        desc: 'Real-time quotes, portfolio data, news sentiment, and market intelligence — works with Claude, ChatGPT, Cursor, Gemini, Codex, Zed, Cherry Studio.',
+        tags: ['100+ Skills'],
+      },
+      {
+        label: 'CLI',
+        title: 'AI-native terminal for trading',
+        desc: 'Interactive TUI dashboard, 130+ commands, and --format json output for scripting and AI agent integration. OAuth 2.0 works on SSH and headless servers.',
+        tags: ['130+ cmds', '--format json', 'TUI'],
+      },
+      {
+        label: 'MCP',
+        title: 'Hosted MCP server',
+        desc: 'OAuth 2.1 authentication — drop into Claude Code, Cursor, Codex, Zed, Cherry Studio in one line. Your AI gets real positions and live quotes.',
+        tags: ['OAuth 2.1', 'Hosted'],
+      },
+      {
+        label: 'SDK',
+        title: '7 languages, one Rust core',
+        desc: 'Get your first quote in minutes. Python, Node.js, Rust, Go, Java, C, C++ — with async support and built-in rate control.',
+        tags: ['Python', 'Rust', 'Go', '+ 4'],
+      },
+      {
+        label: 'Paper Trading',
+        title: 'Sandbox at zero cost',
+        desc: 'Test orders with real market data — simulated matching based on live bid-ask spreads. No securities account required.',
+        tags: ['Sandbox', 'Zero Cost'],
+      },
+      {
+        label: 'LLM Ready',
+        title: 'Built for retrieval & RAG',
+        desc: 'llms.txt standard compliance, every doc available as .md for RAG pipelines, and Accept: text/markdown header support on longbridge.com.',
+        tags: ['Markdown', 'llms.txt'],
+      },
+    ],
+    cli: {
+      eyebrow: 'Longbridge CLI',
+      title: 'AI-native command-line tool, covering every OpenAPI.',
+      feats: [
+        ['130+ commands', 'Market data, trading, fundamentals — all in your shell.'],
+        ['--format json output', "Pipe into jq, awk, or any AI agent's tool channel."],
+        ['Multi-period candlesticks', 'Daily, hourly, 15-min, 5-min, 1-min — all from one flag.'],
+        ['Portfolio P&L view', 'Position breakdown with allocation drill-down.'],
+        ['OAuth 2.0 on SSH', 'Works on headless servers and inside Docker.'],
+      ],
+      cta: 'CLI Documentation',
+    },
+    ai: {
+      eyebrow: 'AI Skill · 100+ packaged tools',
+      title1: 'Unlock market insights, deep research,',
+      title2: 'and intelligent trading for your AI.',
+      desc: 'With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and place orders — all in plain conversation, no app-switching required.',
+      installLabel: 'Copy and send to any AI — it walks you through install:',
+      installOr: '— or via package manager —',
+      agentMore: '+ any Skill-compatible agent',
+      cta: 'Browse Skill catalog',
+    },
+    mcp: {
+      eyebrow: 'Hosted MCP',
+      title: 'Connect any AI assistant to live market data — no API keys.',
+      desc: 'Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets real-time quotes, account info, and trading — all in one connection.',
+      cta: 'MCP Documentation',
+      note: 'OAuth 2.1 — browser opens automatically on first use. No API key needed.',
+    },
+    apiCaps: {
+      eyebrow: 'API Capabilities',
+      title: 'Real-time data and trading capabilities for every investment workflow.',
+      items: [
+        {
+          title: 'Market Data',
+          count: '30+',
+          desc: 'Real-time quotes, order depth, candlestick, intraday, capital flow, and push subscriptions',
+          items: [
+            'Real-time quotes',
+            'Order book depth',
+            'Candlestick charts',
+            'Intraday timeline',
+            'Capital flow',
+            'WebSocket push',
+          ],
+        },
+        {
+          title: 'Trading & Orders',
+          count: '14+',
+          desc: 'Submit, replace, and withdraw orders. Track positions, balance, and execution history',
+          items: ['Submit orders', 'Modify & cancel', 'Positions & balance', 'Execution history', 'Order status push'],
+        },
+        {
+          title: 'Derivatives',
+          count: '8+',
+          desc: 'Full option chains with Greeks, warrants listing, and real-time derivative quotes',
+          items: ['Option chains + Greeks', 'Warrant filtering', 'Issuer directory', 'Derivative quotes'],
+        },
+        {
+          title: 'Financial Research',
+          count: '7+',
+          desc: 'Financial statements, valuation metrics, dividend history, EPS forecasts, analyst ratings',
+          items: ['Financial statements', 'Valuation metrics', 'Dividend history', 'EPS forecasts', 'Analyst ratings'],
+        },
+        {
+          title: 'Content & News',
+          count: '8+',
+          desc: 'Real-time news feeds, community discussions, topics, and engagement metrics',
+          items: ['News feeds', 'Community topics', 'Discussions', 'Engagement data'],
+        },
+      ],
+    },
+    sdk: {
+      eyebrow: 'OpenAPI SDK',
+      title: 'Production-grade SDKs with real-time streaming.',
+      desc: '7 SDKs built on a shared Rust core — subscribe to live data, place orders, and monitor positions with async/await patterns and built-in rate limiting.',
+      feats: [
+        { h: 'Multi-Market', body: 'US · HK · SG · CN (SH/SZ) — stocks, ETFs, options, warrants.' },
+        {
+          h: 'Free & Paper Trading',
+          body: 'No additional API charges. Paper trading with real market data, no securities account required.',
+          strong: '$0 API charges',
+        },
+        {
+          h: 'Real-time Push',
+          body: 'WebSocket push for quotes, order depth, trades, and order status — <60 ms latency.',
+        },
+        {
+          h: 'OAuth 2.0 + Async',
+          body: 'Automatic token management with modern async/await patterns and built-in rate control.',
+        },
+      ],
+      cta: 'SDK Documentation',
+    },
+    stats: [
+      { v: '130+', label: 'API endpoints', sub: 'across all markets' },
+      { v: '60ms', label: 'Median quote latency', sub: 'P99 < 180 ms' },
+      { v: '99.99%', label: 'API uptime SLO', sub: 'Last 12 months' },
+      { v: '$0', label: 'OpenAPI access fee', sub: 'For integrated accounts' },
+    ],
+    getstarted: {
+      eyebrow: 'Get started',
+      title: 'Get started in minutes',
+      desc: 'Set up your environment, authenticate, and make your first API call — everything you need to go from zero to live data.',
+      items: [
+        {
+          title: 'Authentication setup',
+          desc: 'Register an OAuth 2.0 client, obtain credentials, and configure your SDK with automatic token management.',
+          cta: 'Setup guide',
+        },
+        {
+          title: 'API Reference',
+          desc: 'Browse 100+ endpoints for quotes, trading, portfolio, and content. Try requests directly in the browser.',
+          cta: 'Explore APIs',
+        },
+        {
+          title: 'Install CLI',
+          desc: 'One-line install for macOS, Linux, and Windows. 130+ commands with interactive TUI and JSON output.',
+          cta: 'Install now',
+        },
+      ],
+    },
+    cta: {
+      title: 'Build smarter financial tools with real-time data and AI.',
+      btn1: 'Get started',
+      btn2: 'See pricing',
+    },
+  },
+  'zh-CN': {
+    hero: {
+      eyebrow: 'LONGBRIDGE OPENAPI',
+      title1: '实时市场数据',
+      title2: '专为 AI 而生',
+      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。',
+      cta1: '开始使用',
+      cta2: '阅读文档',
+      highlights: [
+        { u: '个市场', d: 'US · HK · SG · CN' },
+        { u: '个 SDK', d: 'Python · Rust · Node · Go · Java · C · C++' },
+        { u: '+ 个接口', d: '行情 · 交易 · 研究 · 资讯' },
+        { u: 'p50 延迟', d: 'WebSocket 实时推送' },
+      ],
+    },
+    features: {
+      eyebrow: '功能特性',
+      title: '一切所需，涵盖行情分析、量化研究与智能交易',
+      cta: '查看全部',
+    },
+    products: [
+      {
+        label: 'AI Skill',
+        title: '为任意 AI 打造的投资分析 Agent',
+        desc: '实时行情、持仓数据、新闻情绪与市场洞察——兼容 Claude、ChatGPT、Cursor、Gemini、Codex、Zed、Cherry Studio。',
+        tags: ['100+ Skills'],
+      },
+      {
+        label: 'CLI',
+        title: '面向交易的 AI 原生终端',
+        desc: '交互式 TUI 仪表盘、130+ 条命令，以及用于脚本和 AI Agent 集成的 --format json 输出。OAuth 2.0 支持 SSH 和无头服务器。',
+        tags: ['130+ 命令', '--format json', 'TUI'],
+      },
+      {
+        label: 'MCP',
+        title: '托管 MCP 服务器',
+        desc: 'OAuth 2.1 认证——一行命令接入 Claude Code、Cursor、Codex、Zed、Cherry Studio。您的 AI 可获取真实持仓与实时行情。',
+        tags: ['OAuth 2.1', '托管'],
+      },
+      {
+        label: 'SDK',
+        title: '7 种语言，共用 Rust 内核',
+        desc: '几分钟内获取第一个报价。Python、Node.js、Rust、Go、Java、C、C++——支持异步模式与内置限速控制。',
+        tags: ['Python', 'Rust', 'Go', '+ 4'],
+      },
+      {
+        label: '模拟交易',
+        title: '零成本沙盒环境',
+        desc: '用真实市场数据测试订单——基于实时买卖价差进行模拟撮合。无需证券账户。',
+        tags: ['沙盒', '零成本'],
+      },
+      {
+        label: 'LLM 就绪',
+        title: '专为检索与 RAG 构建',
+        desc: '符合 llms.txt 标准，每篇文档均提供 .md 格式供 RAG 流水线使用，longbridge.com 支持 Accept: text/markdown 请求头。',
+        tags: ['Markdown', 'llms.txt'],
+      },
+    ],
+    cli: {
+      eyebrow: 'Longbridge CLI',
+      title: 'AI 原生命令行工具，覆盖所有 OpenAPI',
+      feats: [
+        ['130+ 条命令', '行情、交易、基本面——全在终端中触手可及。'],
+        ['--format json 输出', '可直接管道传输给 jq、awk 或任意 AI Agent 工具通道。'],
+        ['多周期 K 线', '日线、小时线、15 分钟、5 分钟、1 分钟——一个参数搞定。'],
+        ['投资组合盈亏视图', '持仓明细及配置占比下钻分析。'],
+        ['SSH 环境 OAuth 2.0', '支持无头服务器和 Docker 容器内运行。'],
+      ],
+      cta: 'CLI 文档',
+    },
+    ai: {
+      eyebrow: 'AI Skill · 100+ 预打包工具',
+      title1: '为你的 AI 解锁市场洞察、',
+      title2: '深度研究与智能交易',
+      desc: '借助 Longbridge Skill，您的 AI 助手可以筛选股票、解读财报、追踪内部人交易、下达订单——全程对话完成，无需切换 App。',
+      installLabel: '复制发给任意 AI，它会引导你完成安装：',
+      installOr: '—— 或通过包管理器 ——',
+      agentMore: '+ 任意兼容 Skill 的 Agent',
+      cta: '浏览 Skill 目录',
+    },
+    mcp: {
+      eyebrow: '托管 MCP',
+      title: '无需 API Key，让任意 AI 助手连接实时市场数据',
+      desc: '托管 HTTP MCP 服务，支持 OAuth 2.1 认证。您的 AI 编程助手可获取实时行情、账户信息与交易功能——一次连接，全部到位。',
+      cta: 'MCP 文档',
+      note: 'OAuth 2.1——首次使用时自动打开浏览器授权，无需 API Key。',
+    },
+    apiCaps: {
+      eyebrow: 'API 功能',
+      title: '覆盖每个投资工作流的实时数据与交易能力',
+      items: [
+        {
+          title: '行情数据',
+          count: '30+',
+          desc: '实时报价、买卖盘深度、K 线、分时、资金流向及推送订阅',
+          items: ['实时报价', '买卖盘深度', 'K 线图', '分时数据', '资金流向', 'WebSocket 推送'],
+        },
+        {
+          title: '交易与订单',
+          count: '14+',
+          desc: '提交、修改与撤销订单。追踪持仓、余额及成交历史',
+          items: ['提交订单', '修改与撤单', '持仓与余额', '成交历史', '订单状态推送'],
+        },
+        {
+          title: '衍生品',
+          count: '8+',
+          desc: '完整期权链含希腊字母、权证列表及实时衍生品报价',
+          items: ['期权链 + 希腊字母', '权证筛选', '发行商目录', '衍生品报价'],
+        },
+        {
+          title: '金融研究',
+          count: '7+',
+          desc: '财务报表、估值指标、分红历史、EPS 预测、分析师评级',
+          items: ['财务报表', '估值指标', '分红历史', 'EPS 预测', '分析师评级'],
+        },
+        {
+          title: '内容与资讯',
+          count: '8+',
+          desc: '实时新闻推送、社区讨论、话题及互动数据',
+          items: ['新闻推送', '社区话题', '讨论帖', '互动数据'],
+        },
+      ],
+    },
+    sdk: {
+      eyebrow: 'OpenAPI SDK',
+      title: '生产级 SDK，支持实时流式数据',
+      desc: '7 个 SDK 共享 Rust 内核——订阅实时数据、下达订单、监控持仓，支持 async/await 模式与内置限速控制。',
+      feats: [
+        { h: '多市场覆盖', body: 'US · HK · SG · CN（沪深）——股票、ETF、期权、权证。' },
+        {
+          h: '免费及模拟交易',
+          body: '无额外 API 费用。用真实市场数据进行模拟交易，无需证券账户。',
+          strong: '零 API 费用',
+        },
+        { h: '实时推送', body: 'WebSocket 推送报价、买卖盘深度、成交及订单状态，延迟 < 60 ms。' },
+        { h: 'OAuth 2.0 + 异步', body: '自动令牌管理，支持现代 async/await 模式及内置限速控制。' },
+      ],
+      cta: 'SDK 文档',
+    },
+    stats: [
+      { v: '130+', label: 'API 接口数量', sub: '覆盖所有市场' },
+      { v: '60ms', label: '行情中位延迟', sub: 'P99 < 180 ms' },
+      { v: '99.99%', label: 'API 可用性 SLO', sub: '过去 12 个月' },
+      { v: '$0', label: 'OpenAPI 接入费', sub: '适用于关联账户' },
+    ],
+    getstarted: {
+      eyebrow: '开始使用',
+      title: '几分钟内快速上手',
+      desc: '搭建环境、完成认证、发起第一个 API 调用——从零到实时数据，所有步骤一应俱全。',
+      items: [
+        { title: '认证配置', desc: '注册 OAuth 2.0 客户端，获取凭证，并配置 SDK 的自动令牌管理。', cta: '配置指南' },
+        {
+          title: 'API 参考',
+          desc: '浏览 100+ 个行情、交易、投资组合和内容接口，直接在浏览器中调试请求。',
+          cta: '探索 API',
+        },
+        {
+          title: '安装 CLI',
+          desc: '支持 macOS、Linux 和 Windows 一行安装。130+ 条命令，含交互式 TUI 与 JSON 输出。',
+          cta: '立即安装',
+        },
+      ],
+    },
+    cta: {
+      title: '用实时数据与 AI 构建更智能的金融工具',
+      btn1: '开始使用',
+      btn2: '查看定价',
+    },
+  },
+  'zh-HK': {
+    hero: {
+      eyebrow: 'LONGBRIDGE OPENAPI',
+      title1: '即時市場數據，',
+      title2: '專為 AI 而生',
+      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。',
+      cta1: '開始使用',
+      cta2: '閱讀文件',
+      highlights: [
+        { u: '個市場', d: 'US · HK · SG · CN' },
+        { u: '個 SDK', d: 'Python · Rust · Node · Go · Java · C · C++' },
+        { u: '+ 個接口', d: '行情 · 交易 · 研究 · 資訊' },
+        { u: 'p50 延遲', d: 'WebSocket 即時推送' },
+      ],
+    },
+    features: {
+      eyebrow: '功能特性',
+      title: '一切所需，涵蓋行情分析、量化研究與智能交易',
+      cta: '查看全部',
+    },
+    products: [
+      {
+        label: 'AI Skill',
+        title: '為任意 AI 打造的投資分析 Agent',
+        desc: '即時行情、持倉數據、新聞情緒與市場洞察——兼容 Claude、ChatGPT、Cursor、Gemini、Codex、Zed、Cherry Studio。',
+        tags: ['100+ Skills'],
+      },
+      {
+        label: 'CLI',
+        title: '面向交易的 AI 原生終端',
+        desc: '互動式 TUI 儀表板、130+ 條命令，以及用於腳本和 AI Agent 整合的 --format json 輸出。OAuth 2.0 支援 SSH 和無頭伺服器。',
+        tags: ['130+ 命令', '--format json', 'TUI'],
+      },
+      {
+        label: 'MCP',
+        title: '託管 MCP 伺服器',
+        desc: 'OAuth 2.1 認證——一行命令接入 Claude Code、Cursor、Codex、Zed、Cherry Studio。您的 AI 可獲取真實持倉與即時行情。',
+        tags: ['OAuth 2.1', '託管'],
+      },
+      {
+        label: 'SDK',
+        title: '7 種語言，共用 Rust 核心',
+        desc: '幾分鐘內獲取第一個報價。Python、Node.js、Rust、Go、Java、C、C++——支援非同步模式與內建限速控制。',
+        tags: ['Python', 'Rust', 'Go', '+ 4'],
+      },
+      {
+        label: '模擬交易',
+        title: '零成本沙盒環境',
+        desc: '用真實市場數據測試訂單——基於即時買賣價差進行模擬撮合。無需證券帳戶。',
+        tags: ['沙盒', '零成本'],
+      },
+      {
+        label: 'LLM 就緒',
+        title: '專為檢索與 RAG 構建',
+        desc: '符合 llms.txt 標準，每篇文件均提供 .md 格式供 RAG 流水線使用，longbridge.com 支援 Accept: text/markdown 請求頭。',
+        tags: ['Markdown', 'llms.txt'],
+      },
+    ],
+    cli: {
+      eyebrow: 'Longbridge CLI',
+      title: 'AI 原生命令列工具，覆蓋所有 OpenAPI',
+      feats: [
+        ['130+ 條命令', '行情、交易、基本面——全在終端中觸手可及。'],
+        ['--format json 輸出', '可直接管道傳輸給 jq、awk 或任意 AI Agent 工具通道。'],
+        ['多週期 K 線', '日線、小時線、15 分鐘、5 分鐘、1 分鐘——一個參數搞定。'],
+        ['投資組合盈虧視圖', '持倉明細及配置佔比下鑽分析。'],
+        ['SSH 環境 OAuth 2.0', '支援無頭伺服器和 Docker 容器內運行。'],
+      ],
+      cta: 'CLI 文件',
+    },
+    ai: {
+      eyebrow: 'AI Skill · 100+ 預打包工具',
+      title1: '為你的 AI 解鎖市場洞察、',
+      title2: '深度研究與智能交易',
+      desc: '借助 Longbridge Skill，您的 AI 助手可以篩選股票、解讀財報、追蹤內部人交易、下達訂單——全程對話完成，無需切換 App。',
+      installLabel: '複製發給任意 AI，它會引導你完成安裝：',
+      installOr: '—— 或透過套件管理器 ——',
+      agentMore: '+ 任意相容 Skill 的 Agent',
+      cta: '瀏覽 Skill 目錄',
+    },
+    mcp: {
+      eyebrow: '託管 MCP',
+      title: '無需 API Key，讓任意 AI 助手連接即時市場數據',
+      desc: '託管 HTTP MCP 服務，支援 OAuth 2.1 認證。您的 AI 程式設計助手可獲取即時行情、帳戶資訊與交易功能——一次連線，全部到位。',
+      cta: 'MCP 文件',
+      note: 'OAuth 2.1——首次使用時自動打開瀏覽器授權，無需 API Key。',
+    },
+    apiCaps: {
+      eyebrow: 'API 功能',
+      title: '覆蓋每個投資工作流的即時數據與交易能力',
+      items: [
+        {
+          title: '行情數據',
+          count: '30+',
+          desc: '即時報價、買賣盤深度、K 線、分時、資金流向及推送訂閱',
+          items: ['即時報價', '買賣盤深度', 'K 線圖', '分時數據', '資金流向', 'WebSocket 推送'],
+        },
+        {
+          title: '交易與訂單',
+          count: '14+',
+          desc: '提交、修改與撤銷訂單。追蹤持倉、餘額及成交歷史',
+          items: ['提交訂單', '修改與撤單', '持倉與餘額', '成交歷史', '訂單狀態推送'],
+        },
+        {
+          title: '衍生品',
+          count: '8+',
+          desc: '完整期權鏈含希臘字母、權證列表及即時衍生品報價',
+          items: ['期權鏈 + 希臘字母', '權證篩選', '發行商目錄', '衍生品報價'],
+        },
+        {
+          title: '金融研究',
+          count: '7+',
+          desc: '財務報表、估值指標、股息歷史、EPS 預測、分析師評級',
+          items: ['財務報表', '估值指標', '股息歷史', 'EPS 預測', '分析師評級'],
+        },
+        {
+          title: '內容與資訊',
+          count: '8+',
+          desc: '即時新聞推送、社群討論、話題及互動數據',
+          items: ['新聞推送', '社群話題', '討論帖', '互動數據'],
+        },
+      ],
+    },
+    sdk: {
+      eyebrow: 'OpenAPI SDK',
+      title: '生產級 SDK，支援即時串流數據',
+      desc: '7 個 SDK 共享 Rust 核心——訂閱即時數據、下達訂單、監控持倉，支援 async/await 模式與內建限速控制。',
+      feats: [
+        { h: '多市場覆蓋', body: 'US · HK · SG · CN（滬深）——股票、ETF、期權、權證。' },
+        {
+          h: '免費及模擬交易',
+          body: '無額外 API 費用。用真實市場數據進行模擬交易，無需證券帳戶。',
+          strong: '零 API 費用',
+        },
+        { h: '即時推送', body: 'WebSocket 推送報價、買賣盤深度、成交及訂單狀態，延遲 < 60 ms。' },
+        { h: 'OAuth 2.0 + 非同步', body: '自動令牌管理，支援現代 async/await 模式及內建限速控制。' },
+      ],
+      cta: 'SDK 文件',
+    },
+    stats: [
+      { v: '130+', label: 'API 接口數量', sub: '覆蓋所有市場' },
+      { v: '60ms', label: '行情中位延遲', sub: 'P99 < 180 ms' },
+      { v: '99.99%', label: 'API 可用性 SLO', sub: '過去 12 個月' },
+      { v: '$0', label: 'OpenAPI 接入費', sub: '適用於關聯帳戶' },
+    ],
+    getstarted: {
+      eyebrow: '開始使用',
+      title: '幾分鐘內快速上手',
+      desc: '搭建環境、完成認證、發起第一個 API 呼叫——從零到即時數據，所有步驟一應俱全。',
+      items: [
+        { title: '認證配置', desc: '註冊 OAuth 2.0 客戶端，獲取憑證，並配置 SDK 的自動令牌管理。', cta: '配置指南' },
+        {
+          title: 'API 參考',
+          desc: '瀏覽 100+ 個行情、交易、投資組合和內容接口，直接在瀏覽器中偵錯請求。',
+          cta: '探索 API',
+        },
+        {
+          title: '安裝 CLI',
+          desc: '支援 macOS、Linux 和 Windows 一行安裝。130+ 條命令，含互動式 TUI 與 JSON 輸出。',
+          cta: '立即安裝',
+        },
+      ],
+    },
+    cta: {
+      title: '用即時數據與 AI 構建更智慧的金融工具',
+      btn1: '開始使用',
+      btn2: '查看定價',
+    },
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
+
+const heroHighlights = computed(() => {
+  const vs = ['4', '7', '100+', '60ms']
+  return content.value.hero.highlights.map((h, i) => ({ ...h, v: vs[i] }))
+})
+const products = computed(() => PRODUCTS.map((p, i) => ({ ...p, ...(content.value.products[i] ?? {}) })))
+const apiCaps = computed(() => API_CAPS.map((c, i) => ({ ...c, ...(content.value.apiCaps.items[i] ?? {}) })))
+const getstarted = computed(() => GETSTARTED.map((g, i) => ({ ...g, ...(content.value.getstarted.items[i] ?? {}) })))
 
 // CLI OS tab
 const cliOs = ref('macOS')
@@ -617,8 +1157,8 @@ const PRODUCTS = [
     icon: 'terminal',
     label: 'CLI',
     title: 'AI-native terminal for trading',
-    desc: 'Interactive TUI dashboard, 120+ commands, and --format json output for scripting and AI agent integration. OAuth 2.0 works on SSH and headless servers.',
-    tags: ['120+ cmds', '--format json', 'TUI'],
+    desc: 'Interactive TUI dashboard, 130+ commands, and --format json output for scripting and AI agent integration. OAuth 2.0 works on SSH and headless servers.',
+    tags: ['130+ cmds', '--format json', 'TUI'],
     href: '/docs/cli',
     accent: 'var(--lb-status-alert)',
   },
@@ -746,12 +1286,11 @@ const GETSTARTED = [
     key: 'cli',
     icon: 'terminal',
     title: 'Install CLI',
-    desc: 'One-line install for macOS, Linux, and Windows. 120+ commands with interactive TUI and JSON output.',
+    desc: 'One-line install for macOS, Linux, and Windows. 130+ commands with interactive TUI and JSON output.',
     cta: 'Install now',
     href: '/docs/cli',
   },
 ]
-
 </script>
 
 <template>
@@ -772,19 +1311,15 @@ const GETSTARTED = [
         <div class="hero-bg-horizon" />
       </div>
       <div class="home-hero-inner-centered">
-        <span class="eyebrow">LONGBRIDGE OPENAPI</span>
+        <span class="eyebrow">{{ content.hero.eyebrow }}</span>
         <h1 class="h-display home-hero-title">
-          Real-time markets,<br />
-          <span :style="{ color: 'var(--lb-brand)' }">built for AI.</span>
+          {{ content.hero.title1 }}<br />
+          <span :style="{ color: 'var(--lb-brand)' }">{{ content.hero.title2 }}</span>
         </h1>
-        <p class="t-body home-hero-sub">
-          Real-time market data, quantitative research, and AI-powered analysis — through
-          <b :style="{ color: 'var(--lb-fg-1)' }">AI Skill, CLI, MCP, SDK and OpenAPI</b>. One credential, every market,
-          zero overhead.
-        </p>
+        <p class="t-body home-hero-sub">{{ content.hero.desc }}</p>
         <div class="home-hero-cta">
           <a class="btn btn-primary btn-lg" :href="localePath('/docs')">
-            Get Started
+            {{ content.hero.cta1 }}
             <svg
               width="15"
               height="15"
@@ -811,11 +1346,11 @@ const GETSTARTED = [
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
-            Read the Docs
+            {{ content.hero.cta2 }}
           </a>
         </div>
         <div class="home-hero-highlights">
-          <template v-for="(h, i) in HERO_HIGHLIGHTS" :key="h.u">
+          <template v-for="(h, i) in heroHighlights" :key="i">
             <div class="home-hero-stat">
               <div class="home-hero-stat-line">
                 <span class="home-hero-stat-v">{{ h.v }}</span>
@@ -823,7 +1358,7 @@ const GETSTARTED = [
               </div>
               <div class="home-hero-stat-d">{{ h.d }}</div>
             </div>
-            <span v-if="i < HERO_HIGHLIGHTS.length - 1" class="home-hero-stat-sep" />
+            <span v-if="i < heroHighlights.length - 1" class="home-hero-stat-sep" />
           </template>
         </div>
       </div>
@@ -842,13 +1377,11 @@ const GETSTARTED = [
             margin-bottom: 48px;
           ">
           <div style="max-width: 560px">
-            <span class="eyebrow">FEATURES</span>
-            <h2 class="h-section" style="margin-top: 16px">
-              Everything you need for market analysis, quantitative research, and intelligent trading.
-            </h2>
+            <span class="eyebrow">{{ content.features.eyebrow }}</span>
+            <h2 class="h-section" style="margin-top: 16px">{{ content.features.title }}</h2>
           </div>
           <a class="btn btn-ghost" :href="localePath('/docs')">
-            Compare all
+            {{ content.features.cta }}
             <svg
               width="13"
               height="13"
@@ -865,7 +1398,7 @@ const GETSTARTED = [
         </div>
         <div class="products-grid">
           <a
-            v-for="p in PRODUCTS"
+            v-for="p in products"
             :key="p.key"
             :href="localePath(p.href)"
             class="product-card"
@@ -900,18 +1433,10 @@ const GETSTARTED = [
     <section class="section cli-spotlight">
       <div class="section-inner cli-spotlight-grid">
         <div>
-          <span class="eyebrow">Longbridge CLI</span>
-          <h2 class="h-section" style="margin-top: 18px">AI-native command-line tool, covering every OpenAPI.</h2>
+          <span class="eyebrow">{{ content.cli.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 18px">{{ content.cli.title }}</h2>
           <ul class="cli-feat-list">
-            <li
-              v-for="[h, d] in [
-                ['120+ commands', 'Market data, trading, fundamentals — all in your shell.'],
-                ['--format json output', 'Pipe into jq, awk, or any AI agent\'s tool channel.'],
-                ['Multi-period candlesticks', 'Daily, hourly, 15-min, 5-min, 1-min — all from one flag.'],
-                ['Portfolio P&L view', 'Position breakdown with allocation drill-down.'],
-                ['OAuth 2.0 on SSH', 'Works on headless servers and inside Docker.'],
-              ]"
-              :key="h">
+            <li v-for="[h, d] in content.cli.feats" :key="h">
               <svg
                 width="14"
                 height="14"
@@ -931,7 +1456,7 @@ const GETSTARTED = [
             </li>
           </ul>
           <a class="btn btn-outline" :href="localePath('/docs/cli')" style="margin-top: 24px">
-            CLI Documentation
+            {{ content.cli.cta }}
             <svg
               width="13"
               height="13"
@@ -1043,9 +1568,9 @@ const GETSTARTED = [
       <div class="section-inner">
         <div class="ai-spotlight-card">
           <div class="ai-spotlight-text">
-            <span class="eyebrow" :style="{ color: 'var(--lb-ai-mention)' }">AI Skill · 100+ packaged tools</span>
+            <span class="eyebrow" :style="{ color: 'var(--lb-ai-mention)' }">{{ content.ai.eyebrow }}</span>
             <h2 class="h-section" style="margin-top: 18px; color: #fff">
-              Unlock market insights, deep research,<br />and intelligent trading for your AI.
+              {{ content.ai.title1 }}<br />{{ content.ai.title2 }}
             </h2>
             <p
               style="
@@ -1055,12 +1580,11 @@ const GETSTARTED = [
                 line-height: 1.65;
                 font-size: 15px;
               ">
-              With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and
-              place orders — all in plain conversation, no app-switching required.
+              {{ content.ai.desc }}
             </p>
 
             <div class="ai-install-block">
-              <div class="ai-install-label">Copy and send to any AI — it walks you through install:</div>
+              <div class="ai-install-label">{{ content.ai.installLabel }}</div>
               <div class="ai-install-cmd">
                 <code
                   >Install Longbridge AI toolkit following the guide:<br />https://open.longbridge.com/skill/install.md</code
@@ -1087,7 +1611,7 @@ const GETSTARTED = [
                   </svg>
                 </button>
               </div>
-              <div class="ai-install-or">— or via package manager —</div>
+              <div class="ai-install-or">{{ content.ai.installOr }}</div>
               <div class="ai-install-cmd">
                 <code
                   ><span :style="{ color: 'var(--lb-ai-mention)' }">$</span> npx skills add longbridge/skills -g</code
@@ -1114,12 +1638,12 @@ const GETSTARTED = [
                 <span class="ai-agent-mark" :style="{ background: a.color }">{{ a.initial }}</span>
                 {{ a.name }}
               </div>
-              <div class="ai-agent-chip ai-agent-more">+ any Skill-compatible agent</div>
+              <div class="ai-agent-chip ai-agent-more">{{ content.ai.agentMore }}</div>
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap">
               <a class="btn btn-lg" :href="localePath('/skill')" style="background: #fff; color: #09252a">
-                Browse Skill catalog
+                {{ content.ai.cta }}
                 <svg
                   width="15"
                   height="15"
@@ -1237,14 +1761,9 @@ const GETSTARTED = [
     <section class="section">
       <div class="section-inner mcp-grid">
         <div>
-          <span class="eyebrow">Hosted MCP</span>
-          <h2 class="h-section" style="margin-top: 18px">
-            Connect any AI assistant to live market data — no API keys.
-          </h2>
-          <p class="t-body" style="margin-top: 14px; max-width: 520px">
-            Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets real-time quotes,
-            account info, and trading — all in one connection.
-          </p>
+          <span class="eyebrow">{{ content.mcp.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 18px">{{ content.mcp.title }}</h2>
+          <p class="t-body" style="margin-top: 14px; max-width: 520px">{{ content.mcp.desc }}</p>
           <div class="mcp-clients">
             <span v-for="c in MCP_CLIENTS" :key="c" class="mcp-client-pill">
               <span class="mcp-client-dot" />
@@ -1252,7 +1771,7 @@ const GETSTARTED = [
             </span>
           </div>
           <a class="btn btn-outline" style="margin-top: 24px" :href="localePath('/docs/mcp')">
-            MCP Documentation
+            {{ content.mcp.cta }}
             <svg
               width="13"
               height="13"
@@ -1330,9 +1849,7 @@ const GETSTARTED = [
               <circle cx="7" cy="15" r="4" />
               <path d="m10 12 9-9 3 3-3 3 3 3-3 3-3-3-3 3" />
             </svg>
-            <span class="t-meta" style="font-size: 11.5px"
-              >OAuth 2.1 — browser opens automatically on first use. No API key needed.</span
-            >
+            <span class="t-meta" style="font-size: 11.5px">{{ content.mcp.note }}</span>
           </div>
         </div>
       </div>
@@ -1348,13 +1865,11 @@ const GETSTARTED = [
       ">
       <div class="section-inner">
         <div style="max-width: 560px; margin-bottom: 48px">
-          <span class="eyebrow">API Capabilities</span>
-          <h2 class="h-section" style="margin-top: 16px">
-            Real-time data and trading capabilities for every investment workflow.
-          </h2>
+          <span class="eyebrow">{{ content.apiCaps.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 16px">{{ content.apiCaps.title }}</h2>
         </div>
         <div class="api-caps-grid">
-          <a v-for="c in API_CAPS" :key="c.title" :href="localePath('/api')" class="api-cap-card">
+          <a v-for="c in apiCaps" :key="c.title" :href="localePath('/api')" class="api-cap-card">
             <div class="api-cap-head">
               <div
                 class="api-cap-icon"
@@ -1448,12 +1963,9 @@ const GETSTARTED = [
     <section class="section">
       <div class="section-inner">
         <div style="max-width: 640px; margin-bottom: 40px">
-          <span class="eyebrow">OpenAPI SDK</span>
-          <h2 class="h-section" style="margin-top: 16px">Production-grade SDKs with real-time streaming.</h2>
-          <p class="t-body" style="margin-top: 14px">
-            7 SDKs built on a shared Rust core — subscribe to live data, place orders, and monitor positions with
-            async/await patterns and built-in rate limiting.
-          </p>
+          <span class="eyebrow">{{ content.sdk.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 16px">{{ content.sdk.title }}</h2>
+          <p class="t-body" style="margin-top: 14px">{{ content.sdk.desc }}</p>
         </div>
 
         <div class="sdk-tabs">
@@ -1569,9 +2081,9 @@ const GETSTARTED = [
                 </svg>
               </div>
               <div style="flex: 1; min-width: 0">
-                <div class="sdk-feat-h">Multi-Market</div>
+                <div class="sdk-feat-h">{{ content.sdk.feats[0].h }}</div>
                 <div class="sdk-feat-body">
-                  US · HK · SG · CN (SH/SZ) — stocks, ETFs, options, warrants.
+                  {{ content.sdk.feats[0].body }}
                   <div class="sdk-feat-pills">
                     <span v-for="m in ['US', 'HK', 'SG', 'CN']" :key="m">{{ m }}</span>
                   </div>
@@ -1596,10 +2108,12 @@ const GETSTARTED = [
                 </svg>
               </div>
               <div style="flex: 1; min-width: 0">
-                <div class="sdk-feat-h">Free &amp; Paper Trading</div>
+                <div class="sdk-feat-h">{{ content.sdk.feats[1].h }}</div>
                 <div class="sdk-feat-body">
-                  No additional API charges. Paper trading with real market data, no securities account required.
-                  <div class="sdk-feat-strong">$0 API charges</div>
+                  {{ content.sdk.feats[1].body }}
+                  <div v-if="content.sdk.feats[1].strong" class="sdk-feat-strong">
+                    {{ content.sdk.feats[1].strong }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1624,10 +2138,8 @@ const GETSTARTED = [
                 </svg>
               </div>
               <div style="flex: 1; min-width: 0">
-                <div class="sdk-feat-h">Real-time Push</div>
-                <div class="sdk-feat-body">
-                  WebSocket push for quotes, order depth, trades, and order status — &lt;60 ms latency.
-                </div>
+                <div class="sdk-feat-h">{{ content.sdk.feats[2].h }}</div>
+                <div class="sdk-feat-body">{{ content.sdk.feats[2].body }}</div>
               </div>
             </div>
             <!-- OAuth 2.0 -->
@@ -1652,10 +2164,8 @@ const GETSTARTED = [
                 </svg>
               </div>
               <div style="flex: 1; min-width: 0">
-                <div class="sdk-feat-h">OAuth 2.0 + Async</div>
-                <div class="sdk-feat-body">
-                  Automatic token management with modern async/await patterns and built-in rate control.
-                </div>
+                <div class="sdk-feat-h">{{ content.sdk.feats[3].h }}</div>
+                <div class="sdk-feat-body">{{ content.sdk.feats[3].body }}</div>
               </div>
             </div>
           </div>
@@ -1663,7 +2173,7 @@ const GETSTARTED = [
 
         <div style="margin-top: 32px; display: flex; justify-content: center">
           <a class="btn btn-outline btn-lg" :href="localePath('/docs')">
-            SDK Documentation
+            {{ content.sdk.cta }}
             <svg
               width="14"
               height="14"
@@ -1689,23 +2199,23 @@ const GETSTARTED = [
             <div class="num h-display" style="font-size: 44px; font-weight: 600">
               130<span style="font-size: 20px; color: var(--lb-fg-3)">+</span>
             </div>
-            <div class="t-meta">API endpoints<br />across all markets</div>
+            <div class="t-meta">{{ content.stats[0].label }}<br />{{ content.stats[0].sub }}</div>
           </div>
           <div class="stats-band-cell">
             <div class="num h-display" style="font-size: 44px; font-weight: 600">
               60<span style="font-size: 20px; color: var(--lb-fg-3)">ms</span>
             </div>
-            <div class="t-meta">Median quote latency<br />P99 &lt; 180 ms</div>
+            <div class="t-meta">{{ content.stats[1].label }}<br />{{ content.stats[1].sub }}</div>
           </div>
           <div class="stats-band-cell">
             <div class="num h-display" style="font-size: 44px; font-weight: 600">
               99.99<span style="font-size: 20px; color: var(--lb-fg-3)">%</span>
             </div>
-            <div class="t-meta">API uptime SLO<br />Last 12 months</div>
+            <div class="t-meta">{{ content.stats[2].label }}<br />{{ content.stats[2].sub }}</div>
           </div>
           <div class="stats-band-cell">
             <div class="num h-display" style="font-size: 44px; font-weight: 600">$0</div>
-            <div class="t-meta">OpenAPI access fee<br />For integrated accounts</div>
+            <div class="t-meta">{{ content.stats[3].label }}<br />{{ content.stats[3].sub }}</div>
           </div>
         </div>
       </div>
@@ -1715,15 +2225,12 @@ const GETSTARTED = [
     <section class="section" style="border-top: 1px solid var(--app-card-stroke); background: var(--app-canvas)">
       <div class="section-inner">
         <div style="text-align: center; max-width: 640px; margin: 0 auto">
-          <span class="eyebrow">Get started</span>
-          <h2 class="h-section" style="margin-top: 18px">Get started in minutes</h2>
-          <p class="t-body" style="margin-top: 14px">
-            Set up your environment, authenticate, and make your first API call — everything you need to go from zero to
-            live data.
-          </p>
+          <span class="eyebrow">{{ content.getstarted.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 18px">{{ content.getstarted.title }}</h2>
+          <p class="t-body" style="margin-top: 14px">{{ content.getstarted.desc }}</p>
         </div>
         <div class="gs-grid">
-          <a v-for="(g, i) in GETSTARTED" :key="g.key" class="gs-card" :href="localePath(g.href)">
+          <a v-for="(g, i) in getstarted" :key="g.key" class="gs-card" :href="localePath(g.href)">
             <div class="gs-card-step">{{ String(i + 1).padStart(2, '0') }}</div>
             <div class="gs-card-icon-wrap">
               <svg
@@ -1791,10 +2298,10 @@ const GETSTARTED = [
     <!-- ===== Final CTA ===== -->
     <section class="section">
       <div class="section-inner final-cta">
-        <h2 class="h-section" style="max-width: 680px">Build smarter financial tools with real-time data and AI.</h2>
+        <h2 class="h-section" style="max-width: 680px">{{ content.cta.title }}</h2>
         <div style="display: flex; gap: 12px; flex-wrap: wrap">
           <a class="btn btn-primary btn-lg" :href="localePath('/docs')">
-            Get started
+            {{ content.cta.btn1 }}
             <svg
               width="14"
               height="14"
@@ -1808,7 +2315,7 @@ const GETSTARTED = [
               <path d="m12 5 7 7-7 7" />
             </svg>
           </a>
-          <a class="btn btn-outline btn-lg" :href="localePath('/pricing')">See pricing</a>
+          <a class="btn btn-outline btn-lg" :href="localePath('/pricing')">{{ content.cta.btn2 }}</a>
         </div>
       </div>
     </section>
@@ -1824,5 +2331,4 @@ const GETSTARTED = [
   color: var(--lb-fg-1);
   font-family: var(--lb-font-sans);
 }
-
 </style>

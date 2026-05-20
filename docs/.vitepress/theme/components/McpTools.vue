@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import toolsData from '../../data/mcp-tools.json'
 import {
   Accordion,
@@ -42,6 +43,8 @@ interface ParamRow {
   default?: unknown
   format?: string
 }
+
+const { t } = useI18n()
 
 const allTools: Tool[] = (toolsData as ToolsPayload).tools
 
@@ -126,13 +129,13 @@ function getParams(schema?: ToolSchema): ParamRow[] {
           v-model="query"
           type="text"
           class="mcp-tools-input"
-          placeholder="Search tools by name or description..."
+          :placeholder="t('mcp.searchPlaceholder')"
         />
         <button
           v-if="query"
           type="button"
           class="mcp-tools-clear"
-          aria-label="Clear search"
+          :aria-label="t('mcp.clearSearch')"
           @click="query = ''"
         >
           <svg
@@ -154,7 +157,7 @@ function getParams(schema?: ToolSchema): ParamRow[] {
     </div>
 
     <div v-if="filtered.length === 0" class="mcp-tools-empty">
-      No tools match "{{ query }}"
+      {{ t('mcp.noMatch', { query }) }}
     </div>
 
     <div v-else ref="listRef" class="mcp-tools-list">
@@ -188,11 +191,11 @@ function getParams(schema?: ToolSchema): ParamRow[] {
           <p class="mcp-tool-desc">{{ tool.description }}</p>
 
           <p v-if="getParams(tool.inputSchema).length === 0" class="mcp-tool-no-params">
-            No parameters
+            {{ t('mcp.noParams') }}
           </p>
 
           <template v-else>
-            <h4 class="mcp-params-title">Parameters</h4>
+            <h4 class="mcp-params-title">{{ t('mcp.params') }}</h4>
             <dl class="mcp-params">
               <div
                 v-for="p in getParams(tool.inputSchema)"
@@ -202,15 +205,15 @@ function getParams(schema?: ToolSchema): ParamRow[] {
                 <dt class="mcp-param-head">
                   <code class="mcp-param-name">{{ p.name }}</code>
                   <span class="mcp-param-type">{{ p.type }}</span>
-                  <span v-if="p.required" class="mcp-param-required">Required</span>
+                  <span v-if="p.required" class="mcp-param-required">{{ t('mcp.required') }}</span>
                 </dt>
                 <dd class="mcp-param-body">
                   <p v-if="p.description" class="mcp-param-desc">{{ p.description }}</p>
                   <p v-if="p.enum" class="mcp-param-meta">
-                    Enum: {{ p.enum.map((e) => `"${e}"`).join(' | ') }}
+                    {{ t('mcp.enum') }}: {{ p.enum.map((e) => `"${e}"`).join(' | ') }}
                   </p>
                   <p v-if="p.default !== undefined" class="mcp-param-meta">
-                    Default: {{ p.default }}
+                    {{ t('mcp.default') }}: {{ p.default }}
                   </p>
                 </dd>
               </div>

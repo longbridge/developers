@@ -60,8 +60,8 @@
 
   /* AI chat */
   --lb-ai-bubble:         #00A9A9;
-  --lb-ai-mention:        #00F0C4;
-  --lb-ai-accent:         #00F0C4;
+  --lb-ai-mention:        #CC8800;
+  --lb-ai-accent:         #CC8800;
   --lb-ai-brand-bg:       #09252A;
   --lb-ai-card-bg:        #203A3F;
 
@@ -218,6 +218,8 @@
   --lb-fade-0:            rgba(10,14,25,0.00);
   --lb-shadow-card:       0 4px 12px 6px rgba(0,0,0,0.40);
   --lb-shadow-menu:       0 2px 9px 0 rgba(0,0,0,0.14);
+  --lb-ai-mention:        #00F0C4;
+  --lb-ai-accent:         #00F0C4;
 
   color-scheme: dark;
 }

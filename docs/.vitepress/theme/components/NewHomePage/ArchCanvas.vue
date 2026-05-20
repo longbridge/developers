@@ -1,6 +1,70 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+import { computed } from 'vue'
+import { useData } from 'vitepress'
+
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    user: 'User',
+    yourApp: 'Your Application',
+    accessVia: 'Access via',
+    skill: { label: 'AI Skill', desc: 'Investment analysis agent for any AI platform' },
+    cli: { label: 'CLI' },
+    mcp: { label: 'MCP Client', desc: 'Claude, Cursor, Codex, Zed, Cherry Studio' },
+    sdk: { label: 'SDK', desc: 'Python, Node.js, Rust, Go, Java, C++' },
+    protoIn: 'HTTP / WebSocket',
+    platform: 'Longbridge Platform',
+    gateway: 'API Gateway',
+    protoOut: 'Request / Stream',
+    services: 'Services',
+    quote: 'Quote',
+    fundamentals: 'Fundamentals',
+    trade: 'Trade',
+    content: 'Content',
+    more: 'More',
+  },
+  'zh-CN': {
+    user: '用户',
+    yourApp: '你的应用',
+    accessVia: '接入方式',
+    skill: { label: 'AI Skill', desc: '适配任何 AI 平台的投资分析 Agent' },
+    cli: { label: 'CLI' },
+    mcp: { label: 'MCP Client', desc: 'Claude, Cursor, Codex, Zed, Cherry Studio' },
+    sdk: { label: 'SDK', desc: 'Python, Node.js, Rust, Go, Java, C++' },
+    protoIn: 'HTTP / WebSocket',
+    platform: 'Longbridge 平台',
+    gateway: 'API 网关',
+    protoOut: '请求 / 数据流',
+    services: '服务',
+    quote: '行情',
+    fundamentals: '基本面',
+    trade: '交易',
+    content: '内容',
+    more: '更多',
+  },
+  'zh-HK': {
+    user: '用戶',
+    yourApp: '你的應用',
+    accessVia: '接入方式',
+    skill: { label: 'AI Skill', desc: '適配任何 AI 平台的投資分析 Agent' },
+    cli: { label: 'CLI' },
+    mcp: { label: 'MCP Client', desc: 'Claude, Cursor, Codex, Zed, Cherry Studio' },
+    sdk: { label: 'SDK', desc: 'Python, Node.js, Rust, Go, Java, C++' },
+    protoIn: 'HTTP / WebSocket',
+    platform: 'Longbridge 平台',
+    gateway: 'API 閘道',
+    protoOut: '請求 / 數據流',
+    services: '服務',
+    quote: '行情',
+    fundamentals: '基本面',
+    trade: '交易',
+    content: '內容',
+    more: '更多',
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 </script>
 
 <template>
@@ -8,7 +72,7 @@ const { t } = useI18n()
     <div class="ab-flow">
       <!-- Col 1: User & Tools -->
       <div class="ab-group">
-        <div class="ab-group-label">{{ $t('arch.user') }}</div>
+        <div class="ab-group-label">{{ content.user }}</div>
         <div class="ab-group-box">
           <div class="ab-app">
             <svg
@@ -23,25 +87,25 @@ const { t } = useI18n()
               <rect x="2" y="3" width="20" height="14" rx="2" />
               <path d="M8 21h8m-4-4v4" />
             </svg>
-            <span>{{ $t('arch.yourApp') }}</span>
+            <span>{{ content.yourApp }}</span>
           </div>
-          <div class="ab-via">{{ $t('arch.accessVia') }}</div>
+          <div class="ab-via">{{ content.accessVia }}</div>
           <div class="ab-tools">
             <a href="/skill" class="ab-tool">
-              <span class="ab-tool-name">{{ $t('arch.skill.label') }}</span>
-              <span class="ab-tool-desc">{{ $t('arch.skill.desc') }}</span>
+              <span class="ab-tool-name">{{ content.skill.label }}</span>
+              <span class="ab-tool-desc">{{ content.skill.desc }}</span>
             </a>
             <a href="/docs/cli" class="ab-tool">
-              <span class="ab-tool-name">{{ $t('arch.cli.label') }}</span>
-              <span class="ab-tool-desc">120+ commands, TUI dashboard, JSON output</span>
+              <span class="ab-tool-name">{{ content.cli.label }}</span>
+              <span class="ab-tool-desc">130+ commands, TUI dashboard, JSON output</span>
             </a>
             <a href="/docs/mcp" class="ab-tool">
-              <span class="ab-tool-name">{{ $t('arch.mcp.label') }}</span>
-              <span class="ab-tool-desc">{{ $t('arch.mcp.desc') }}</span>
+              <span class="ab-tool-name">{{ content.mcp.label }}</span>
+              <span class="ab-tool-desc">{{ content.mcp.desc }}</span>
             </a>
             <a href="/sdk" class="ab-tool">
-              <span class="ab-tool-name">{{ $t('arch.sdk.label') }}</span>
-              <span class="ab-tool-desc">{{ $t('arch.sdk.desc') }}</span>
+              <span class="ab-tool-name">{{ content.sdk.label }}</span>
+              <span class="ab-tool-desc">{{ content.sdk.desc }}</span>
             </a>
           </div>
         </div>
@@ -49,7 +113,7 @@ const { t } = useI18n()
 
       <!-- Arrow: User → Platform -->
       <div class="ab-arrow">
-        <span class="ab-arrow-label">{{ $t('arch.proto.in') }}</span>
+        <span class="ab-arrow-label">{{ content.protoIn }}</span>
         <div class="ab-arrow-line">
           <div class="ab-arrow-shaft" />
           <div class="ab-arrow-head" />
@@ -70,17 +134,17 @@ const { t } = useI18n()
 
       <!-- Col 2: Longbridge Platform -->
       <div class="ab-group ab-group-brand">
-        <div class="ab-group-label ab-label-brand">{{ $t('arch.platform') }}</div>
+        <div class="ab-group-label ab-label-brand">{{ content.platform }}</div>
         <div class="ab-group-box ab-box-brand">
           <div class="ab-gw">
-            <span class="ab-gw-title">{{ $t('arch.gateway') }}</span>
+            <span class="ab-gw-title">{{ content.gateway }}</span>
           </div>
         </div>
       </div>
 
       <!-- Arrow: Platform → Services -->
       <div class="ab-arrow">
-        <span class="ab-arrow-label">{{ $t('arch.proto.out') }}</span>
+        <span class="ab-arrow-label">{{ content.protoOut }}</span>
         <div class="ab-arrow-line">
           <div class="ab-arrow-shaft" />
           <div class="ab-arrow-head" />
@@ -101,26 +165,26 @@ const { t } = useI18n()
 
       <!-- Col 3: Services -->
       <div class="ab-group">
-        <div class="ab-group-label">{{ $t('arch.services') }}</div>
+        <div class="ab-group-label">{{ content.services }}</div>
         <div class="ab-group-box ab-box-svc">
           <a href="/docs/quote/overview" class="ab-svc">
-            <span class="ab-svc-name">{{ $t('arch.quote') }}</span>
+            <span class="ab-svc-name">{{ content.quote }}</span>
             <span class="ab-svc-count">30+</span>
           </a>
           <a href="/docs/cli/fundamentals/company" class="ab-svc">
-            <span class="ab-svc-name">{{ $t('arch.fundamentals') }}</span>
+            <span class="ab-svc-name">{{ content.fundamentals }}</span>
             <span class="ab-svc-count">13+</span>
           </a>
           <a href="/docs/trade/overview" class="ab-svc">
-            <span class="ab-svc-name">{{ $t('arch.trade') }}</span>
+            <span class="ab-svc-name">{{ content.trade }}</span>
             <span class="ab-svc-count">14+</span>
           </a>
           <a href="/docs/content/news" class="ab-svc">
-            <span class="ab-svc-name">{{ $t('arch.content') }}</span>
+            <span class="ab-svc-name">{{ content.content }}</span>
             <span class="ab-svc-count">8+</span>
           </a>
           <div class="ab-svc ab-svc-more">
-            <span class="ab-svc-name">{{ $t('arch.more') }}</span>
+            <span class="ab-svc-name">{{ content.more }}</span>
             <span class="ab-svc-dots">···</span>
           </div>
         </div>

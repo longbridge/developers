@@ -1,10 +1,51 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, shallowRef } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useData } from 'vitepress'
 import BorderBeam from '../inspira/BorderBeam.vue'
 import NumberTicker from '../inspira/NumberTicker.vue'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'OpenAPI SDK',
+    subtitle: 'Production-grade SDKs with real-time streaming and full trading capabilities',
+    desc: '7 language SDKs built on a Rust core — subscribe to live market data, place orders, and monitor positions with async/await patterns and built-in rate limiting.',
+    tabs: { quote: 'Get Quote', trade: 'Place Order', subscribe: 'Subscribe Push', portfolio: 'Account Balance' } as Record<string, string>,
+    market: { title: 'Multi-Market', desc: 'US, HK, SG, CN (SH/SZ) — stocks, ETFs, options, warrants' },
+    free: { title: 'Free & Paper Trading', desc: 'No additional API charges. Paper trading with real market data, no securities account required.' },
+    streaming: { title: 'Real-time Push', desc: 'WebSocket push for quotes, order depth, trades, and order status updates' },
+    trading: { title: 'Complete Trading', desc: 'Submit, replace, withdraw orders. Trailing stops, conditional orders, and auction orders.' },
+    auth: { title: 'OAuth 2.0 + Async', desc: 'Automatic token management with modern async/await patterns and built-in rate control.' },
+    cta: 'SDK Documentation',
+  },
+  'zh-CN': {
+    title: 'OpenAPI SDK',
+    subtitle: '生产级 SDK，支持实时数据流和完整交易能力',
+    desc: '基于 Rust 核心构建的 7 种语言 SDK — 订阅实时行情、下单交易、监控持仓，支持 async/await 模式和内置频率控制。',
+    tabs: { quote: '获取行情', trade: '下单交易', subscribe: '订阅推送', portfolio: '账户资产' } as Record<string, string>,
+    market: { title: '多市场覆盖', desc: '美股、港股、新加坡、A 股 (沪/深) — 股票、ETF、期权、窝轮' },
+    free: { title: '免费 & 模拟交易', desc: '无额外 API 费用。使用真实行情数据模拟交易，无需证券账户。' },
+    streaming: { title: '实时推送', desc: 'WebSocket 推送行情、盘口深度、成交和订单状态更新' },
+    trading: { title: '完整交易套件', desc: '提交、修改、撤销订单。支持追踪止损、条件单和竞价订单。' },
+    auth: { title: 'OAuth 2.0 + 异步', desc: '自动令牌管理，现代 async/await 模式，内置频率控制。' },
+    cta: 'SDK 文档',
+  },
+  'zh-HK': {
+    title: 'OpenAPI SDK',
+    subtitle: '生產級 SDK，支援即時數據流和完整交易能力',
+    desc: '基於 Rust 核心構建的 7 種語言 SDK — 訂閱即時行情、下單交易、監控持倉，支援 async/await 模式和內建頻率控制。',
+    tabs: { quote: '獲取行情', trade: '下單交易', subscribe: '訂閱推送', portfolio: '賬戶資產' } as Record<string, string>,
+    market: { title: '多市場覆蓋', desc: '美股、港股、新加坡、A 股 (滬/深) — 股票、ETF、期權、窩輪' },
+    free: { title: '免費 & 模擬交易', desc: '無額外 API 費用。使用真實行情數據模擬交易，無需證券賬戶。' },
+    streaming: { title: '即時推送', desc: 'WebSocket 推送行情、盤口深度、成交和訂單狀態更新' },
+    trading: { title: '完整交易套件', desc: '提交、修改、撤銷訂單。支援追蹤止損、條件單和競價訂單。' },
+    auth: { title: 'OAuth 2.0 + 異步', desc: '自動令牌管理，現代 async/await 模式，內建頻率控制。' },
+    cta: 'SDK 文檔',
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 // SDK definitions with logos and install commands
 const sdks = [
@@ -355,9 +396,9 @@ function copyInstall() {
 <template>
   <section class="sdk-section">
     <div class="sdk-header">
-      <h2 class="sdk-title">{{ $t('product.sdk.title') }}</h2>
-      <p class="sdk-subtitle">{{ $t('product.sdk.subtitle') }}</p>
-      <p class="sdk-desc">{{ $t('product.sdk.desc') }}</p>
+      <h2 class="sdk-title">{{ content.title }}</h2>
+      <p class="sdk-subtitle">{{ content.subtitle }}</p>
+      <p class="sdk-desc">{{ content.desc }}</p>
     </div>
 
     <div class="sdk-bento">
@@ -384,7 +425,7 @@ function copyInstall() {
               class="sdk-cap-tab"
               :class="{ active: activeDomain === idx }"
               @click="switchDomain(idx)"
-            >{{ $t(`product.sdk.tab.${d.key}`) }}</button>
+            >{{ content.tabs[d.key] }}</button>
           </div>
         </div>
         <!-- Code -->
@@ -424,8 +465,8 @@ function copyInstall() {
         <div class="sdk-cell-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
         </div>
-        <h3 class="sdk-cell-title">{{ $t('product.sdk.market.title') }}</h3>
-        <p class="sdk-cell-desc">{{ $t('product.sdk.market.desc') }}</p>
+        <h3 class="sdk-cell-title">{{ content.market.title }}</h3>
+        <p class="sdk-cell-desc">{{ content.market.desc }}</p>
         <div class="sdk-tags">
           <span class="sdk-tag">US</span><span class="sdk-tag">HK</span><span class="sdk-tag">SG</span><span class="sdk-tag">CN</span>
         </div>
@@ -436,39 +477,39 @@ function copyInstall() {
         <div class="sdk-cell-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 000 4h4v-4z"/></svg>
         </div>
-        <h3 class="sdk-cell-title">{{ $t('product.sdk.free.title') }}</h3>
+        <h3 class="sdk-cell-title">{{ content.free.title }}</h3>
         <div class="sdk-free-price">
           <span class="sdk-free-dollar">$</span>
           <ClientOnly><NumberTicker :value="0" class="sdk-free-num" /></ClientOnly>
           <span class="sdk-free-label">API charges</span>
         </div>
-        <p class="sdk-cell-desc">{{ $t('product.sdk.free.desc') }}</p>
+        <p class="sdk-cell-desc">{{ content.free.desc }}</p>
       </div>
 
       <!-- Streaming Cell -->
       <div class="sdk-cell sdk-cell-sm">
         <div class="sdk-cell-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="sdk-live-dot" /></div>
-        <h3 class="sdk-cell-title">{{ $t('product.sdk.streaming.title') }}</h3>
-        <p class="sdk-cell-desc">{{ $t('product.sdk.streaming.desc') }}</p>
+        <h3 class="sdk-cell-title">{{ content.streaming.title }}</h3>
+        <p class="sdk-cell-desc">{{ content.streaming.desc }}</p>
       </div>
 
       <!-- Trading Cell -->
       <div class="sdk-cell sdk-cell-sm">
         <div class="sdk-cell-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
-        <h3 class="sdk-cell-title">{{ $t('product.sdk.trading.title') }}</h3>
-        <p class="sdk-cell-desc">{{ $t('product.sdk.trading.desc') }}</p>
+        <h3 class="sdk-cell-title">{{ content.trading.title }}</h3>
+        <p class="sdk-cell-desc">{{ content.trading.desc }}</p>
       </div>
 
       <!-- Auth Cell -->
       <div class="sdk-cell sdk-cell-sm">
         <div class="sdk-cell-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-        <h3 class="sdk-cell-title">{{ $t('product.sdk.auth.title') }}</h3>
-        <p class="sdk-cell-desc">{{ $t('product.sdk.auth.desc') }}</p>
+        <h3 class="sdk-cell-title">{{ content.auth.title }}</h3>
+        <p class="sdk-cell-desc">{{ content.auth.desc }}</p>
       </div>
     </div>
 
     <div class="sdk-cta-wrap">
-      <a href="/sdk" class="sdk-cta">{{ $t('product.sdk.cta') }} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      <a href="/sdk" class="sdk-cta">{{ content.cta }} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
     </div>
   </section>
 </template>

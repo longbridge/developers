@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useData } from 'vitepress'
 import NumberTicker from '../inspira/NumberTicker.vue'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: { ainative: 'AI Native Tools', markets: 'Global Markets', sdks: 'SDK Languages', endpoints: 'API Endpoints' },
+  'zh-CN': { ainative: 'AI 原生', markets: '全球市场', sdks: 'SDK 语言', endpoints: 'API 端点' },
+  'zh-HK': { ainative: 'AI 原生', markets: '全球市場', sdks: 'SDK 語言', endpoints: 'API 端點' },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 const lightColors = ['#00b8b8', '#d4a800', '#c34607', '#505050']
 const darkColors = ['#00dbb6', '#ffe000', '#fc5200', '#AAAAAA']
@@ -18,12 +26,12 @@ onMounted(() => {
 const stats = computed(() => [
   {
     value: 4,
-    label: t('stats.ainative'),
+    label: content.value.ainative,
     suffix: '+',
     link: '/docs/mcp',
     color: statColors.value[0],
     card: {
-      title: t('stats.ainative'),
+      title: content.value.ainative,
       items: [
         {
           name: 'AI Skill',
@@ -54,12 +62,12 @@ const stats = computed(() => [
   },
   {
     value: 6,
-    label: t('stats.markets'),
+    label: content.value.markets,
     suffix: '+',
     link: '/docs/',
     color: statColors.value[1],
     card: {
-      title: t('stats.markets'),
+      title: content.value.markets,
       items: [
         {
           name: 'United States',
@@ -86,12 +94,12 @@ const stats = computed(() => [
   },
   {
     value: 7,
-    label: t('stats.sdks'),
+    label: content.value.sdks,
     suffix: '+',
     link: '/sdk',
     color: statColors.value[2],
     card: {
-      title: t('stats.sdks'),
+      title: content.value.sdks,
       items: [
         {
           name: 'Python',
@@ -128,12 +136,12 @@ const stats = computed(() => [
   },
   {
     value: 100,
-    label: t('stats.endpoints'),
+    label: content.value.endpoints,
     suffix: '+',
     link: '/docs/api',
     color: statColors.value[3],
     card: {
-      title: t('stats.endpoints'),
+      title: content.value.endpoints,
       items: [
         {
           name: 'Quote',

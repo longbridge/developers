@@ -1,10 +1,46 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
-import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
-const { isDark } = useData()
+const { isDark, lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'Longbridge CLI',
+    subtitle: 'AI-native command-line tool covering every OpenAPI',
+    cta: 'CLI Documentation',
+    feats: {
+      feat1: '130+ commands for market data, trading, fundamentals',
+      feat3: '--format json output for scripting and AI agent integration',
+      feat5: 'Candlestick data with multi-period support — daily, hourly, 15-min',
+      feat6: 'Portfolio P&L with position breakdown and allocation view',
+    } as Record<string, string>,
+  },
+  'zh-CN': {
+    title: 'Longbridge CLI',
+    subtitle: 'AI 原生命令行工具，覆盖所有 OpenAPI 端点',
+    cta: 'CLI 文档',
+    feats: {
+      feat1: '130+ 命令覆盖行情、交易、基本面和组合管理',
+      feat3: '--format json 输出，支持脚本和 AI Agent 集成',
+      feat5: '多周期 K 线数据 — 支持日线、小时线、15 分钟线',
+      feat6: '持仓盈亏分析 — 仓位明细与资产配置概览',
+    } as Record<string, string>,
+  },
+  'zh-HK': {
+    title: 'Longbridge CLI',
+    subtitle: 'AI 原生命令列工具，覆蓋所有 OpenAPI 端點',
+    cta: 'CLI 文檔',
+    feats: {
+      feat1: '130+ 命令覆蓋行情、交易、基本面和組合管理',
+      feat3: '--format json 輸出，支援腳本和 AI Agent 集成',
+      feat5: '多週期 K 線數據 — 支援日線、小時線、15 分鐘線',
+      feat6: '持倉盈虧分析 — 倉位明細與資產配置概覽',
+    } as Record<string, string>,
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 // Feature items
 const features = [
@@ -176,8 +212,8 @@ function copyInstall() {
     <div class="cli-container">
       <!-- Left -->
       <div class="cli-text">
-        <h2 class="cli-title">{{ $t('product.cli.title') }}</h2>
-        <p class="cli-subtitle">{{ $t('product.cli.subtitle') }}</p>
+        <h2 class="cli-title">{{ content.title }}</h2>
+        <p class="cli-subtitle">{{ content.subtitle }}</p>
 
         <!-- Feature list -->
         <div class="cli-features">
@@ -189,12 +225,12 @@ function copyInstall() {
             @click="selectFeature(idx)"
             @mouseenter="selectFeature(idx)">
             <span class="cli-feat-icon" v-html="feat.icon" />
-            <span class="cli-feat-label">{{ $t(`product.cli.${feat.key}`) }}</span>
+            <span class="cli-feat-label">{{ content.feats[feat.key] }}</span>
           </button>
         </div>
 
         <a href="/docs/cli" class="cli-cta">
-          {{ $t('product.cli.cta') }}
+          {{ content.cta }}
           <svg
             width="16"
             height="16"

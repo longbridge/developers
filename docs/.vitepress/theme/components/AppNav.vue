@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import { useData, useRoute } from 'vitepress'
+import { useI18n } from 'vue-i18n'
 import { localePath, getBasenameLocale } from '../utils/i18n'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
 import { useAvatar } from './UserAvatar/uesAvatar'
@@ -13,6 +14,7 @@ const VPNavBarSearch = defineAsyncComponent(
 )
 
 const { isDark } = useData()
+const { t } = useI18n()
 const route = useRoute()
 
 const currentPath = computed(() => {
@@ -36,13 +38,17 @@ function isNavActive(href: string): boolean {
 const langOpen = ref(false)
 const mobileOpen = ref(false)
 
-const APP_NAV = [
-  { key: 'pricing', label: 'Pricing', href: '/pricing' },
-  { key: 'skill', label: 'Skill', href: '/skill' },
-  { key: 'cli', label: 'CLI', href: '/docs/cli' },
-  { key: 'mcp', label: 'MCP', href: '/docs/mcp' },
-  { key: 'docs', label: 'Docs', href: '/docs' },
+const APP_NAV_DEF = [
+  { key: 'pricing', tKey: 'nav.pricing', href: '/pricing' },
+  { key: 'skill', tKey: null, label: 'Skill', href: '/skill' },
+  { key: 'cli', tKey: null, label: 'CLI', href: '/docs/cli' },
+  { key: 'mcp', tKey: null, label: 'MCP', href: '/docs/mcp' },
+  { key: 'docs', tKey: 'nav.docs', href: '/docs' },
 ]
+
+const navLinks = computed(() =>
+  APP_NAV_DEF.map((n) => ({ ...n, label: n.tKey ? t(n.tKey) : n.label! }))
+)
 
 const currentLocale = computed(() => {
   if (typeof window === 'undefined') return 'en'
@@ -127,7 +133,7 @@ onUnmounted(() => {
       <!-- Desktop nav links -->
       <div class="app-nav-links">
         <FeaturesMenu />
-        <a v-for="n in APP_NAV" :key="n.key" :href="localePath(n.href)" :class="{ 'is-active': isNavActive(n.href) }">
+        <a v-for="n in navLinks" :key="n.key" :href="localePath(n.href)" :class="{ 'is-active': isNavActive(n.href) }">
           {{ n.label }}
         </a>
       </div>
@@ -139,7 +145,7 @@ onUnmounted(() => {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
           </svg>
-          Search docs…
+          {{ t('nav.searchDocs') }}
           <span class="app-nav-search-kbd">⌘K</span>
         </button>
 
@@ -183,7 +189,7 @@ onUnmounted(() => {
         <!-- Logged-in: Dashboard + Avatar -->
         <ClientOnly>
           <template v-if="isLogin">
-            <a class="btn btn-ghost btn-sm" :href="localePath('/account')">Dashboard</a>
+            <a class="btn btn-ghost btn-sm" :href="localePath('/account')">{{ t('nav.dashboard') }}</a>
             <div
               ref="avatarEl"
               class="app-nav-avatar"
@@ -203,7 +209,7 @@ onUnmounted(() => {
           </template>
           <!-- Not logged in: Get Started -->
           <a v-else class="btn btn-primary btn-sm" :href="localePath('/login')">
-            Get Started
+            {{ t('nav.getStarted') }}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
             </svg>
@@ -223,10 +229,10 @@ onUnmounted(() => {
     <Transition name="slide-down">
       <div v-if="mobileOpen" class="app-nav-mobile">
         <FeaturesMenu :screenMenu="true" />
-        <a v-for="n in APP_NAV" :key="n.key" :href="localePath(n.href)" @click="mobileOpen = false">
+        <a v-for="n in navLinks" :key="n.key" :href="localePath(n.href)" @click="mobileOpen = false">
           {{ n.label }}
         </a>
-        <a :href="localePath('/')" @click="mobileOpen = false">Home</a>
+        <a :href="localePath('/')" @click="mobileOpen = false">{{ t('nav.home') }}</a>
       </div>
     </Transition>
 

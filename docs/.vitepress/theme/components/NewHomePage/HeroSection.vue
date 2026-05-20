@@ -1,10 +1,49 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useData } from 'vitepress'
 import FlickeringGrid from '../inspira/FlickeringGrid.vue'
 import ColourfulText from '../inspira/ColourfulText.vue'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    titlePrefix: 'Longbridge',
+    titleAccent: 'Developers',
+    powering: 'Powering',
+    subtitle: 'Real-time market data, trading, and financial intelligence — delivered through {skill}, {cli}, {mcp}, {sdk} and {openapi} for developers worldwide.',
+    keywords: { sdk: 'SDK', cli: 'CLI', skill: 'AI Skill', mcp: 'MCP', openapi: 'OpenAPI' },
+    cta: { getStarted: 'Get Started', readDocs: 'Docs' },
+  },
+  'zh-CN': {
+    titlePrefix: 'Longbridge',
+    titleAccent: 'Developers',
+    powering: '接入',
+    subtitle: '实时行情、交易和金融数据 — 通过 {skill}、{cli}、{mcp}、{sdk} 及 {openapi} 交付给全球开发者。',
+    keywords: { sdk: 'SDK', cli: 'CLI', skill: 'AI Skill', mcp: 'MCP', openapi: 'OpenAPI' },
+    cta: { getStarted: '快速开始', readDocs: '阅读文档' },
+  },
+  'zh-HK': {
+    titlePrefix: 'Longbridge',
+    titleAccent: 'Developers',
+    powering: '接入',
+    subtitle: '即時行情、交易和金融數據 — 透過 {skill}、{cli}、{mcp}、{sdk} 及 {openapi} 交付給全球開發者。',
+    keywords: { sdk: 'SDK', cli: 'CLI', skill: 'AI Skill', mcp: 'MCP', openapi: 'OpenAPI' },
+    cta: { getStarted: '快速開始', readDocs: '閱讀文檔' },
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
+
+const subtitleHtml = computed(() => {
+  const kw = content.value.keywords
+  return content.value.subtitle
+    .replace(/\{skill\}/g, `<span class="hero-keyword">${kw.skill}</span>`)
+    .replace(/\{cli\}/g, `<span class="hero-keyword">${kw.cli}</span>`)
+    .replace(/\{mcp\}/g, `<span class="hero-keyword">${kw.mcp}</span>`)
+    .replace(/\{sdk\}/g, `<span class="hero-keyword">${kw.sdk}</span>`)
+    .replace(/\{openapi\}/g, `<span class="hero-keyword">${kw.openapi}</span>`)
+})
 
 // Brand color scheme from lbus design tokens
 const brandColors = [
@@ -40,9 +79,6 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(productInterval))
 
-// i18n computed
-const ctaGetStarted = computed(() => t('hero.cta.getStarted'))
-const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
 </script>
 
 <template>
@@ -68,12 +104,12 @@ const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
     <div class="hero-content">
       <!-- Title -->
       <h1 class="hero-title">
-        {{ $t('hero.title.prefix') }} <span class="hero-title-accent">{{ $t('hero.title.accent') }}</span>
+        {{ content.titlePrefix }} <span class="hero-title-accent">{{ content.titleAccent }}</span>
       </h1>
 
       <!-- Powering + dynamic product -->
       <div class="hero-powering">
-        <span class="hero-powering-label">{{ $t('hero.powering') }}</span>
+        <span class="hero-powering-label">{{ content.powering }}</span>
         <ClientOnly>
           <span :key="currentProduct" class="hero-product-text">
             <ColourfulText
@@ -86,31 +122,15 @@ const ctaReadDocs = computed(() => t('hero.cta.readDocs'))
       </div>
 
       <!-- Subtitle with brand-colored keywords -->
-      <i18n-t keypath="hero.subtitle" tag="p" class="hero-subtitle">
-        <template #sdk>
-          <span class="hero-keyword">{{ $t('hero.keyword.sdk') }}</span>
-        </template>
-        <template #cli>
-          <span class="hero-keyword">{{ $t('hero.keyword.cli') }}</span>
-        </template>
-        <template #skill>
-          <span class="hero-keyword">{{ $t('hero.keyword.skill') }}</span>
-        </template>
-        <template #mcp>
-          <span class="hero-keyword">{{ $t('hero.keyword.mcp') }}</span>
-        </template>
-        <template #openapi>
-          <span class="hero-keyword">{{ $t('hero.keyword.openapi') }}</span>
-        </template>
-      </i18n-t>
+      <p class="hero-subtitle" v-html="subtitleHtml" />
 
       <!-- CTA Buttons -->
       <div class="hero-cta">
         <a href="https://open.longbridge.com/account" class="hero-btn-primary">
-          {{ ctaGetStarted }}
+          {{ content.cta.getStarted }}
         </a>
         <a href="/docs/" class="hero-cta-secondary">
-          {{ ctaReadDocs }}
+          {{ content.cta.readDocs }}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
           </svg>

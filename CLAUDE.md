@@ -19,7 +19,7 @@ bun run build:llms     # 构建 llms.txt（在 build 之后执行）
 bun run preview        # 预览构建产物
 ```
 
-无测试命令。
+无测试命令。禁止在 AI 会话中执行 build（包括 `bun run build:*`），build 由用户在终端自行执行。
 
 ## 内容架构
 

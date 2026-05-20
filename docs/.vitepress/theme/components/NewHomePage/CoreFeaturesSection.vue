@@ -1,7 +1,97 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import { useData } from 'vitepress'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'Developer Tools',
+    subtitle: 'Everything you need to build, test, and ship financial applications',
+    products: {
+      cli: {
+        title: 'CLI',
+        desc: 'AI-native terminal tool with interactive TUI dashboard, 130+ commands, and --format json output for scripting and AI agent integration.',
+      },
+      skill: {
+        title: 'AI Skill',
+        desc: 'Investment analysis agent for real-time quotes, portfolio data, news sentiment, and market intelligence — works with any AI platform.',
+      },
+      mcp: {
+        title: 'MCP',
+        desc: 'Hosted MCP service with OAuth 2.1 — zero-config integration for Claude Code, Cursor, Codex, Zed, and Cherry Studio.',
+      },
+      sdk: {
+        title: 'SDK',
+        desc: 'Get your first quote in minutes. 7 languages — Python, Node.js, Rust, Go, Java, C, C++ — with async support and built-in rate control.',
+      },
+      paper: {
+        title: 'Paper Trading',
+        desc: 'Test orders with real market data at zero cost. Simulated matching based on live bid-ask spreads, no securities account required.',
+      },
+      llm: {
+        title: 'LLM Ready',
+        desc: 'llms.txt standard compliance, all docs available as .md for RAG pipelines, and Accept: text/markdown header support on longbridge.com.',
+      },
+    } as Record<string, { title: string; desc: string }>,
+  },
+  'zh-CN': {
+    title: '开发者工具',
+    subtitle: '构建、测试和发布金融应用所需的一切',
+    products: {
+      cli: {
+        title: 'CLI',
+        desc: 'AI 原生终端工具，配备交互式 TUI 面板、130+ 命令、--format json 输出，支持脚本和 AI Agent 集成。',
+      },
+      skill: {
+        title: 'AI Skill',
+        desc: '投资分析 AI Agent，提供实时行情、组合数据、新闻情绪和市场洞察 — 兼容任何 AI 平台。',
+      },
+      mcp: {
+        title: 'MCP',
+        desc: '托管 MCP 服务，OAuth 2.1 认证 — 零配置接入 Claude Code、Cursor、Codex、Zed 和 Cherry Studio。',
+      },
+      sdk: {
+        title: 'SDK',
+        desc: '分钟内获取第一个行情。7 种语言 — Python、Node.js、Rust、Go、Java、C、C++ — 内置异步和频率控制。',
+      },
+      paper: { title: '模拟交易', desc: '使用真实行情数据零成本测试下单。模拟撮合基于实时买卖盘价格，无需证券账户。' },
+      llm: {
+        title: 'LLM 就绪',
+        desc: '遵循 llms.txt 标准，所有文档支持 .md 后缀 RAG 管道接入，longbridge.com 支持 Accept: text/markdown。',
+      },
+    } as Record<string, { title: string; desc: string }>,
+  },
+  'zh-HK': {
+    title: '開發者工具',
+    subtitle: '構建、測試和發佈金融應用所需的一切',
+    products: {
+      cli: {
+        title: 'CLI',
+        desc: 'AI 原生終端工具，配備互動式 TUI 面板、130+ 命令、--format json 輸出，支援腳本和 AI Agent 集成。',
+      },
+      skill: {
+        title: 'AI Skill',
+        desc: '投資分析 AI Agent，提供即時行情、組合數據、新聞情緒和市場洞察 — 兼容任何 AI 平台。',
+      },
+      mcp: {
+        title: 'MCP',
+        desc: '託管 MCP 服務，OAuth 2.1 認證 — 零配置接入 Claude Code、Cursor、Codex、Zed 和 Cherry Studio。',
+      },
+      sdk: {
+        title: 'SDK',
+        desc: '分鐘內獲取第一個行情。7 種語言 — Python、Node.js、Rust、Go、Java、C、C++ — 內置異步和頻率控制。',
+      },
+      paper: { title: '模擬交易', desc: '使用真實行情數據零成本測試下單。模擬撮合基於即時買賣盤價格，無需證券賬戶。' },
+      llm: {
+        title: 'LLM 就緒',
+        desc: '遵循 llms.txt 標準，所有文檔支持 .md 後綴 RAG 管道接入，longbridge.com 支持 Accept: text/markdown。',
+      },
+    } as Record<string, { title: string; desc: string }>,
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 const icons = {
   cli: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>`,
@@ -45,8 +135,8 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
 <template>
   <section class="core-section">
     <div class="core-header">
-      <h2 class="core-title">{{ $t('core.title') }}</h2>
-      <p class="core-subtitle">{{ $t('core.subtitle') }}</p>
+      <h2 class="core-title">{{ content.title }}</h2>
+      <p class="core-subtitle">{{ content.subtitle }}</p>
     </div>
 
     <div class="core-grid">
@@ -62,9 +152,9 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
         <div class="core-card-inner">
           <div class="core-card-top">
             <span class="core-icon" :style="{ color: accents[key] }" v-html="icons[key as keyof typeof icons]" />
-            <span class="core-card-title">{{ $t(`core.${key}.title`) }}</span>
+            <span class="core-card-title">{{ content.products[key]?.title }}</span>
           </div>
-          <p class="core-card-desc">{{ $t(`core.${key}.desc`) }}</p>
+          <p class="core-card-desc">{{ content.products[key]?.desc }}</p>
           <div class="core-tags">
             <span
               v-for="tag in tags[key]"
@@ -73,7 +163,9 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
               :style="{
                 background: `color-mix(in srgb, ${accents[key]} 10%, transparent)`,
                 color: accents[key],
-              }">{{ tag }}</span>
+              }"
+              >{{ tag }}</span
+            >
           </div>
         </div>
       </a>
@@ -153,7 +245,10 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
   text-decoration: none !important;
   overflow: hidden;
   isolation: isolate;
-  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 220ms;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 220ms;
 }
 :root.dark .core-card {
   border-color: color-mix(in srgb, var(--vp-c-divider) 80%, transparent);
@@ -161,7 +256,9 @@ const products = ['skill', 'cli', 'mcp', 'sdk', 'paper', 'llm']
 .core-card:hover {
   border-color: color-mix(in srgb, var(--card-accent, var(--brand-color)) 50%, var(--vp-c-divider));
   transform: translateY(-3px);
-  box-shadow: 0 16px 36px -10px rgba(10, 14, 25, 0.13), 0 3px 12px -5px rgba(10, 14, 25, 0.06);
+  box-shadow:
+    0 16px 36px -10px rgba(10, 14, 25, 0.13),
+    0 3px 12px -5px rgba(10, 14, 25, 0.06);
 }
 
 .core-card-inner {

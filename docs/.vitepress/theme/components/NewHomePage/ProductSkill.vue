@@ -1,11 +1,79 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useData } from 'vitepress'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'AI Skill',
+    subtitle: 'Unlock market insights, deep research and intelligent trading for your AI',
+    desc: 'With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and place orders — all in plain conversation.',
+    cta: 'Skill Installation Guide',
+    installLabel: 'Copy and send to any AI — it walks you through install:',
+    installOr: '— or via package manager —',
+    agentMore: '+ any Skill-compatible agent',
+    mockYou: 'You',
+    mockThinking: 'Using Longbridge Skill...',
+    tipBefore: 'Tip: prefix with',
+    tipAfter: 'to force trigger',
+    caps: [
+      { title: 'Cross-Market Screener', desc: 'Screen HK, US, A-shares, and SG stocks simultaneously with fundamental and technical filters', example: 'Find US and HK tech stocks with market cap above $50B, P/E below 25, and a recent MACD golden cross' },
+      { title: 'Technical Diagnosis', desc: 'Pull daily, hourly, and 15-min candlestick data with MACD, KDJ, RSI analysis', example: "Diagnose TSLA's technicals: daily trend, support/resistance levels, and short-term signals" },
+      { title: 'Earnings Deep Dive', desc: 'Unpack earnings in 5 minutes: actuals vs estimates, revenue breakdown, valuation metrics', example: 'NVDA just reported — compare actuals vs analyst estimates and break down revenue by segment' },
+      { title: 'Smart Money Tracker', desc: 'Track insider trading and institutional ownership shifts across fund types', example: "Check AAPL's recent insider trading — are executives selling? How did hedge fund positions change?" },
+      { title: 'Advanced Orders', desc: 'Place conditional orders, trailing stops, and options in conversational syntax', example: 'Set a trailing stop on TSLA: trigger a sell if it drops more than 8%, show details before executing' },
+      { title: 'Portfolio Review', desc: 'Comprehensive P&L analysis: trend, position ranking, allocation breakdown', example: 'Review my portfolio this month: P&L trend, biggest winner, worst drag, US vs HK allocation' },
+    ],
+  },
+  'zh-CN': {
+    title: 'AI Skill',
+    subtitle: '为你的 AI 解锁市场洞察、深度研究和智能交易',
+    desc: '通过 Longbridge Skill，你的 AI 助手可以选股、解读财报、追踪内部人交易、下单 — 全部通过自然对话完成。',
+    cta: 'Skill 安装指南',
+    installLabel: '复制发给任意 AI，它会引导你完成安装：',
+    installOr: '—— 或通过包管理器 ——',
+    agentMore: '+ 任意兼容 Skill 的 Agent',
+    mockYou: '你',
+    mockThinking: '正在调用 Longbridge Skill...',
+    tipBefore: '提示：加前缀',
+    tipAfter: '可强制触发',
+    caps: [
+      { title: '跨市场选股', desc: '同时筛选港股、美股、A 股和新加坡市场，支持基本面和技术面过滤器', example: '找出市值超过 500 亿美元、PE 低于 25 且近期 MACD 金叉的美股和港股科技股' },
+      { title: '技术诊断', desc: '拉取日线、小时线、15 分钟 K 线数据，结合 MACD、KDJ、RSI 分析', example: '诊断 TSLA 的技术面：日线趋势、支撑/阻力位和短期信号' },
+      { title: '财报深度分析', desc: '5 分钟解读财报：实际值 vs 预期、收入分拆、估值指标', example: 'NVDA 刚发布财报 — 对比实际业绩和分析师预期，按业务线拆解收入变化' },
+      { title: '聪明钱追踪', desc: '追踪内部人交易和机构持仓变动，覆盖各类基金', example: '查看 AAPL 近期内部人交易 — 高管是否在大量减持？对冲基金仓位变化如何？' },
+      { title: '智能下单', desc: '对话式下单：条件单、追踪止损、期权，AI 确认后执行', example: '设置 TSLA 追踪止损：跌幅超过 8% 触发卖出，执行前显示订单详情' },
+      { title: '组合回顾', desc: '全面盈亏分析：趋势、持仓排名、配置分布', example: '回顾本月组合表现：盈亏趋势、最大赢家、最大拖累、美股 vs 港股配比' },
+    ],
+  },
+  'zh-HK': {
+    title: 'AI Skill',
+    subtitle: '為你的 AI 解鎖市場洞察、深度研究和智能交易',
+    desc: '透過 Longbridge Skill，你的 AI 助手可以選股、解讀財報、追蹤內部人交易、下單 — 全部透過自然對話完成。',
+    cta: 'Skill 安裝指南',
+    installLabel: '複製發給任意 AI，它會引導你完成安裝：',
+    installOr: '—— 或透過套件管理器 ——',
+    agentMore: '+ 任意相容 Skill 的 Agent',
+    mockYou: '你',
+    mockThinking: '正在調用 Longbridge Skill...',
+    tipBefore: '提示：加前綴',
+    tipAfter: '可強制觸發',
+    caps: [
+      { title: '跨市場選股', desc: '同時篩選港股、美股、A 股和新加坡市場，支持基本面和技術面過濾器', example: '找出市值超過 500 億美元、PE 低於 25 且近期 MACD 金叉的美股和港股科技股' },
+      { title: '技術診斷', desc: '拉取日線、小時線、15 分鐘 K 線數據，結合 MACD、KDJ、RSI 分析', example: '診斷 TSLA 的技術面：日線趨勢、支撐/阻力位和短期信號' },
+      { title: '財報深度分析', desc: '5 分鐘解讀財報：實際值 vs 預期、收入分拆、估值指標', example: 'NVDA 剛發佈財報 — 對比實際業績和分析師預期，按業務線拆解收入變化' },
+      { title: '聰明錢追蹤', desc: '追蹤內部人交易和機構持倉變動，覆蓋各類基金', example: '查看 AAPL 近期內部人交易 — 高管是否在大量減持？對沖基金倉位變化如何？' },
+      { title: '智能下單', desc: '對話式下單：條件單、追蹤止損、期權，AI 確認後執行', example: '設置 TSLA 追蹤止損：跌幅超過 8% 觸發賣出，執行前顯示訂單詳情' },
+      { title: '組合回顧', desc: '全面盈虧分析：趨勢、持倉排名、配置分佈', example: '回顧本月組合表現：盈虧趨勢、最大贏家、最大拖累、美股 vs 港股配比' },
+    ],
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
+
 const activeCapIdx = ref(0)
 
-const caps = ['cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6']
 
 const agents = [
   {
@@ -89,7 +157,7 @@ function startDemo() {
   if (typeTimer) clearInterval(typeTimer)
   if (streamTimer) clearInterval(streamTimer)
 
-  const fullPrompt = t(`product.skill.${caps[activeCapIdx.value]}.example`)
+  const fullPrompt = content.value.caps[activeCapIdx.value]?.example ?? ''
   let charIdx = 0
 
   typeTimer = setInterval(() => {
@@ -99,7 +167,8 @@ function startDemo() {
       clearInterval(typeTimer)
       setTimeout(() => {
         streaming.value = true
-        const steps = aiSteps[caps[activeCapIdx.value]]
+        const capKey = `cap${activeCapIdx.value + 1}`
+        const steps = aiSteps[capKey]
         let stepIdx = 0
         streamTimer = setInterval(() => {
           if (stepIdx < steps.length) {
@@ -119,7 +188,7 @@ onMounted(() => startDemo())
 
 const copiedPrompt = ref(false)
 function copyPrompt() {
-  navigator.clipboard.writeText(t(`product.skill.${caps[activeCapIdx.value]}.example`))
+  navigator.clipboard.writeText(content.value.caps[activeCapIdx.value]?.example ?? '')
   copiedPrompt.value = true
   setTimeout(() => {
     copiedPrompt.value = false
@@ -149,14 +218,14 @@ function copyCli() {
   <section class="skill-section">
     <!-- Header -->
     <div class="skill-header">
-      <h2 class="skill-title">{{ $t('product.skill.title') }}</h2>
-      <p class="skill-subtitle">{{ $t('product.skill.subtitle') }}</p>
-      <p class="skill-desc">{{ $t('product.skill.desc') }}</p>
+      <h2 class="skill-title">{{ content.title }}</h2>
+      <p class="skill-subtitle">{{ content.subtitle }}</p>
+      <p class="skill-desc">{{ content.desc }}</p>
     </div>
 
     <!-- Install — semantic AI prompt first, CLI second -->
     <div class="skill-install-wrap">
-      <p class="skill-install-label">Copy and send to any AI — it will walk you through the installation:</p>
+      <p class="skill-install-label">{{ content.installLabel }}</p>
       <div class="skill-install-ai-block">
         <div class="skill-install-ai-text">
           <span>Install Longbridge AI toolkit following the guide:</span>
@@ -193,7 +262,7 @@ function copyCli() {
 
       <!-- CLI alternative -->
       <div class="skill-install-cli">
-        <span class="skill-install-divider">Or install via Npx</span>
+        <span class="skill-install-divider">{{ content.installOr }}</span>
         <div class="skill-install-cmd-wrap">
           <div class="skill-install-tabs">
             <button
@@ -245,7 +314,7 @@ function copyCli() {
         <img class="skill-agent-logo" :src="agent.logo" :alt="agent.name" />
         <span class="skill-agent-name">{{ agent.name }}</span>
       </div>
-      <span class="skill-agent-more">+ any Skill-compatible agent</span>
+      <span class="skill-agent-more">{{ content.agentMore }}</span>
     </div>
 
     <!-- Agent simulator -->
@@ -259,19 +328,19 @@ function copyCli() {
         <!-- Capability tabs -->
         <div class="skill-mock-caps">
           <button
-            v-for="(cap, idx) in caps"
-            :key="cap"
+            v-for="(cap, idx) in content.caps"
+            :key="idx"
             class="skill-mock-cap"
             :class="{ active: activeCapIdx === idx }"
             @click="activeCapIdx = idx">
-            {{ $t(`product.skill.${cap}.title`) }}
+            {{ cap.title }}
           </button>
         </div>
 
         <div class="skill-mock-body">
           <!-- User typing -->
           <div class="skill-mock-msg">
-            <span class="skill-mock-role">You</span>
+            <span class="skill-mock-role">{{ content.mockYou }}</span>
             <div class="skill-mock-bubble">
               <p>{{ typedPrompt }}<span v-if="!streaming" class="skill-mock-caret">|</span></p>
               <button class="skill-mock-copy" @click="copyPrompt">
@@ -308,22 +377,22 @@ function copyCli() {
           <div v-if="streaming" class="skill-mock-msg">
             <span class="skill-mock-role skill-mock-role-ai">Claude Code</span>
             <div class="skill-mock-stream">
-              <span class="skill-mock-thinking">Using Longbridge Skill...</span>
+              <span class="skill-mock-thinking">{{ content.mockThinking }}</span>
               <TransitionGroup name="skill-stream-line" tag="div" class="skill-mock-cmds">
                 <code v-for="(line, i) in streamLines" :key="i">{{ line }}</code>
               </TransitionGroup>
-              <span v-if="streamLines.length < aiSteps[caps[activeCapIdx]].length" class="skill-mock-streaming">▊</span>
+              <span v-if="streamLines.length < aiSteps[`cap${activeCapIdx + 1}`]?.length" class="skill-mock-streaming">▊</span>
             </div>
           </div>
         </div>
 
-        <div class="skill-mock-tip">Tip: prefix with <code>/longbridge</code> to force trigger</div>
+        <div class="skill-mock-tip">{{ content.tipBefore }} <code>/longbridge</code> {{ content.tipAfter }}</div>
       </div>
     </ClientOnly>
 
     <div class="skill-cta-wrap">
       <a href="skill/install" class="skill-cta">
-        {{ $t('product.skill.cta') }}
+        {{ content.cta }}
         <svg
           width="16"
           height="16"

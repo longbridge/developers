@@ -1,9 +1,27 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import { useData } from 'vitepress'
 import SdkMarquee from './SdkMarquee.vue'
 import ArchCanvas from './ArchCanvas.vue'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'Platform Architecture',
+    subtitle: 'One gateway, every access method — from SDK to real-time WebSocket streams',
+  },
+  'zh-CN': {
+    title: '平台架构',
+    subtitle: '统一网关，多种接入方式 — 从 SDK 到实时 WebSocket 数据流',
+  },
+  'zh-HK': {
+    title: '平台架構',
+    subtitle: '統一閘道，多種接入方式 — 從 SDK 到即時 WebSocket 數據流',
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 // SDK data — code from docs/en/docs/quote/pull/quote.md, installs from getting-started.md
 const sdks = [
@@ -127,8 +145,8 @@ OAuthBuilder("your-client-id").build(
 <template>
   <section class="arch-section">
     <div class="arch-header">
-      <h2 class="arch-title">{{ $t('arch.title') }}</h2>
-      <p class="arch-subtitle">{{ $t('arch.subtitle') }}</p>
+      <h2 class="arch-title">{{ content.title }}</h2>
+      <p class="arch-subtitle">{{ content.subtitle }}</p>
     </div>
 
     <!-- Vue Flow Architecture Diagram -->

@@ -1,8 +1,47 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useData } from 'vitepress'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'MCP',
+    subtitle: 'Connect your AI assistant to live market data — no API keys required',
+    desc: 'Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets real-time quotes, account info, and trading capabilities in one connection.',
+    tools: [
+      { title: 'Market Data', desc: 'Real-time quotes, candlesticks, historical data' },
+      { title: 'Account Info', desc: 'Account overview, assets, positions' },
+      { title: 'Trading', desc: 'Place, modify, cancel orders' },
+    ],
+    cta: 'MCP Documentation',
+  },
+  'zh-CN': {
+    title: 'MCP',
+    subtitle: '让你的 AI 助手连接实时行情 — 无需 API Key',
+    desc: '托管 HTTP MCP 服务，OAuth 2.1 认证。AI 编码助手一次连接即可获得实时行情、账户信息和交易能力。',
+    tools: [
+      { title: '行情数据', desc: '实时行情、K 线、历史数据' },
+      { title: '账户信息', desc: '账户总览、资产、持仓' },
+      { title: '交易', desc: '下单、改单、撤单' },
+    ],
+    cta: 'MCP 文档',
+  },
+  'zh-HK': {
+    title: 'MCP',
+    subtitle: '讓你的 AI 助手連接即時行情 — 無需 API Key',
+    desc: '託管 HTTP MCP 服務，OAuth 2.1 認證。AI 編碼助手一次連接即可獲得即時行情、賬戶信息和交易能力。',
+    tools: [
+      { title: '行情數據', desc: '即時行情、K 線、歷史數據' },
+      { title: '賬戶信息', desc: '賬戶總覽、資產、持倉' },
+      { title: '交易', desc: '下單、改單、撤單' },
+    ],
+    cta: 'MCP 文檔',
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
+
 const activeClient = ref(0)
 
 const clients = [
@@ -109,9 +148,9 @@ function copyCmd() {
 <template>
   <section class="mcp-section">
     <div class="mcp-header">
-      <h2 class="mcp-title">{{ $t('product.mcp.title') }}</h2>
-      <p class="mcp-subtitle">{{ $t('product.mcp.subtitle') }}</p>
-      <p class="mcp-desc">{{ $t('product.mcp.desc') }}</p>
+      <h2 class="mcp-title">{{ content.title }}</h2>
+      <p class="mcp-subtitle">{{ content.subtitle }}</p>
+      <p class="mcp-desc">{{ content.desc }}</p>
     </div>
 
     <!-- Bus-topology SVG diagram (replaces VueFlow) -->
@@ -201,8 +240,8 @@ function copyCmd() {
             :width="pos.w"
             :height="TOOL_H">
             <div class="mcp-n mcp-n-tool">
-              <span class="mcp-n-tool-title">{{ $t(`product.mcp.tool${i + 1}`) }}</span>
-              <span class="mcp-n-tool-desc">{{ $t(`product.mcp.tool${i + 1}.desc`) }}</span>
+              <span class="mcp-n-tool-title">{{ content.tools[i]?.title }}</span>
+              <span class="mcp-n-tool-desc">{{ content.tools[i]?.desc }}</span>
             </div>
           </foreignObject>
         </svg>
@@ -324,7 +363,7 @@ function copyCmd() {
 
     <div class="mcp-cta-wrap">
       <a href="/docs/mcp" class="mcp-cta">
-        {{ $t('product.mcp.cta') }}
+        {{ content.cta }}
         <svg
           width="16"
           height="16"

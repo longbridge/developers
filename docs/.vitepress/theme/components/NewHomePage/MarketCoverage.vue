@@ -1,7 +1,28 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import { useData } from 'vitepress'
 
-const { t } = useI18n()
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    title: 'Global Market Coverage',
+    subtitle: 'Real-time data and trading across major financial markets',
+    markets: { hk: 'Hong Kong', us: 'United States', cn: 'China A-Shares', sg: 'Singapore' } as Record<string, string>,
+  },
+  'zh-CN': {
+    title: '全球市场覆盖',
+    subtitle: '跨主要金融市场的实时数据和交易',
+    markets: { hk: '香港市场', us: '美国市场', cn: 'A 股市场', sg: '新加坡市场' } as Record<string, string>,
+  },
+  'zh-HK': {
+    title: '全球市場覆蓋',
+    subtitle: '跨主要金融市場的即時數據和交易',
+    markets: { hk: '香港市場', us: '美國市場', cn: 'A 股市場', sg: '新加坡市場' } as Record<string, string>,
+  },
+}
+
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 const markets = [
   {
@@ -44,14 +65,14 @@ const markets = [
     <div class="mc-grid">
       <!-- Title as inline label in grid -->
       <div class="mc-label-cell">
-        <span class="mc-label-tag">{{ $t('market.title') }}</span>
-        <p class="mc-label-desc">{{ $t('market.subtitle') }}</p>
+        <span class="mc-label-tag">{{ content.title }}</span>
+        <p class="mc-label-desc">{{ content.subtitle }}</p>
       </div>
       <div v-for="m in markets" :key="m.key" class="mc-card">
         <div class="mc-card-top">
           <span class="mc-flag" v-html="m.flag" />
           <div>
-            <h3 class="mc-market-name">{{ $t(`market.${m.key}.name`) }}</h3>
+            <h3 class="mc-market-name">{{ content.markets[m.key] }}</h3>
             <code class="mc-example">{{ m.example }}</code>
           </div>
         </div>

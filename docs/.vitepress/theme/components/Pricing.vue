@@ -1,161 +1,449 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useData } from 'vitepress'
 import AppNav from './AppNav.vue'
 import AppFooter from './AppFooter.vue'
-import { localePath } from '../utils/i18n'
 
-const FREE_BASELINE = [
-  {
-    icon: 'shield',
-    color: 'var(--lb-up)',
-    title: 'Trading & Account APIs',
-    price: 'Free',
-    desc: 'Fundamentals, analysis, news, assets, orders — every core API is free.',
+const { lang } = useData()
+
+const LOCALE = {
+  en: {
+    hero: {
+      eyebrow: 'PRICING',
+      title1: 'Build for free.',
+      title2: 'Pay only for real-time market data.',
+      desc: 'Core API features — trading, accounts, fundamentals, news — are completely free. Subscribe to real-time market data only when you need it.',
+    },
+    free: {
+      price: 'Free',
+      items: [
+        {
+          title: 'Trading & Account APIs',
+          desc: 'Fundamentals, analysis, news, assets, orders — every core API is free.',
+        },
+        { title: 'Basic Market Data', desc: 'Nasdaq Basic, HK Level 1, CN Level 1 — bundled with your account.' },
+        { title: 'Push & Pull Data', desc: 'WebSocket real-time push and REST API pull — unlimited.' },
+      ],
+    },
+    realtime: {
+      eyebrow: 'REAL-TIME MARKET DATA',
+      title: 'Subscribe only to what you need.',
+      desc: 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate via Longbridge App → Me → Quote Store.',
+    },
+    billing: { label: 'Billing' },
+    cycle: {
+      auto: 'Auto-renew',
+      monthly: 'Monthly',
+      quarterly: 'Quarterly',
+      annual: 'Annual',
+      badge: 'Best',
+    },
+    suffix: { mo: '/mo', quarter: '/quarter', year: '/year' },
+    plan: {
+      subscribe: 'Subscribe',
+      was: 'Was',
+      items: [
+        {
+          market: 'US Market',
+          name: 'US LV1 Real-time',
+          badge: '',
+          tagline: 'Nasdaq LV1 real-time quotes with best bid/ask, including pre / post-market.',
+          coverage: 'US market only',
+          feats: ['Nasdaq LV1 real-time quotes', 'Pre / post-market (overnight)', 'WebSocket real-time push'],
+        },
+        {
+          market: 'HK Market',
+          name: 'HK LV2 Advanced',
+          badge: 'Global (incl. HK)',
+          tagline: 'HKEX real-time quotes with 10-level order book and broker queue.',
+          coverage: 'HK market only (excludes US)',
+          feats: ['10-level bid/ask depth', 'Real-time depth push', 'Broker queue (HK)'],
+        },
+        {
+          market: 'US Options',
+          name: 'OPRA US Options',
+          badge: '',
+          tagline: 'US options real-time quotes with best bid/ask — sold separately, any tier.',
+          coverage: 'Adds onto any tier',
+          feats: ['Option chain lookup', 'Real-time option quotes', 'Option quote push'],
+        },
+      ],
+    },
+    comparison: {
+      eyebrow: 'FEATURE COMPARISON',
+      title: "What's included in each plan.",
+      plans: [
+        { label: 'Nasdaq Basic', tag: 'Free', color: 'var(--lb-up)' },
+        { label: 'US LV1', tag: 'Paid', color: 'var(--lb-market-us)' },
+        { label: 'OPRA', tag: 'Paid', color: 'var(--lb-ai-mention)' },
+        { label: 'HK LV1', tag: 'Free (promo)', color: 'var(--lb-up)' },
+        { label: 'HK LV2', tag: 'Paid', color: 'var(--lb-market-hk)' },
+        { label: 'CN LV1', tag: 'Free (promo)', color: 'var(--lb-up)' },
+      ],
+      matrix: [
+        { f: 'Basic APIs', g: 'Core' },
+        { f: 'WebSocket real-time push', g: 'Core' },
+        { f: 'Pull quote (REST)', g: 'Core' },
+        { f: 'US best bid/ask', g: 'US' },
+        { f: 'Pre / post-market', g: 'US' },
+        { f: 'Overnight (night session)', g: 'US' },
+        { f: 'Option chain & real-time quotes', g: 'Options' },
+        { f: 'HK real-time (basic)', g: 'HK' },
+        { f: 'Hang Seng Index', g: 'HK' },
+        { f: 'HK 10-level order book', g: 'HK' },
+        { f: 'Real-time depth push', g: 'HK' },
+        { f: 'Broker queue (HK)', g: 'HK' },
+        { f: 'CN A-shares real-time', g: 'CN' },
+      ],
+    },
+    faq: {
+      eyebrow: 'FAQ',
+      title: 'Frequently asked questions',
+      items: [
+        {
+          q: 'Are OpenAPI quote subscriptions separate from the App?',
+          a: 'Yes. OpenAPI quote permissions are independent from App / PC / Web. Activate via Longbridge App → Me → Quote Store.',
+        },
+        {
+          q: 'Do I need a subscription to test the API?',
+          a: 'No. Trading, account, and fundamentals APIs are free. You can also use Basic Market Data tiers (Nasdaq Basic, HK LV1, CN LV1) for free.',
+        },
+        {
+          q: 'Can I cancel anytime?',
+          a: 'Yes. Cancel any time before the next billing cycle. Quote permissions stay active until the end of the paid period.',
+        },
+        {
+          q: 'What about paper trading?',
+          a: 'Paper trading runs against the canary environment with simulated matching on live bid-ask spreads. Free for all integrated accounts — no quote subscription required.',
+        },
+        {
+          q: 'Are there usage limits on REST or WebSocket?',
+          a: 'No hard usage caps. Rate limits scale with your account tier. See the Rate Limits doc for details.',
+        },
+        {
+          q: 'What payment methods are accepted?',
+          a: 'All payments are processed through your Longbridge account. Settled in HKD; cross-currency settled at exchange-rate.',
+        },
+      ],
+    },
   },
-  {
-    icon: 'chart',
-    color: 'var(--lb-status-neutral)',
-    title: 'Basic Market Data',
-    price: 'Free',
-    desc: 'Nasdaq Basic, HK Level 1, CN Level 1 — bundled with your account.',
+  'zh-CN': {
+    hero: {
+      eyebrow: '定价',
+      title1: '免费开始构建',
+      title2: '仅为实时行情数据付费',
+      desc: '交易、账户、基本面、资讯等核心 API 功能完全免费。仅在需要时订阅实时行情数据。',
+    },
+    free: {
+      price: '免费',
+      items: [
+        { title: '交易与账户 API', desc: '基本面、分析、资讯、资产、订单——所有核心 API 均免费。' },
+        { title: '基础行情数据', desc: '纳斯达克基础行情、港股一档、A 股一档——随账户附赠。' },
+        { title: '推送与拉取数据', desc: 'WebSocket 实时推送与 REST API 拉取——无限制。' },
+      ],
+    },
+    realtime: {
+      eyebrow: '实时行情数据',
+      title: '只订阅您需要的数据',
+      desc: 'OpenAPI 行情权限与 App / PC / Web 独立，需单独购买。通过长桥 App → 我的 → 行情商店开通。',
+    },
+    billing: { label: '计费周期' },
+    cycle: {
+      auto: '自动续订',
+      monthly: '月付',
+      quarterly: '季付',
+      annual: '年付',
+      badge: '最优',
+    },
+    suffix: { mo: '/月', quarter: '/季', year: '/年' },
+    plan: {
+      subscribe: '立即订阅',
+      was: '原价',
+      items: [
+        {
+          market: '美股市场',
+          name: 'US LV1 实时行情',
+          badge: '',
+          tagline: '纳斯达克 LV1 实时行情，含最优买卖价及盘前/盘后数据。',
+          coverage: '仅限美股市场',
+          feats: ['纳斯达克 LV1 实时行情', '盘前/盘后（隔夜）', 'WebSocket 实时推送'],
+        },
+        {
+          market: '港股市场',
+          name: 'HK LV2 高级行情',
+          badge: '全球（含港股）',
+          tagline: '港交所实时行情，含 10 档买卖盘及券商队列。',
+          coverage: '仅限港股市场（不含美股）',
+          feats: ['10 档买卖盘深度', '实时深度推送', '券商队列（港股）'],
+        },
+        {
+          market: '美股期权',
+          name: 'OPRA 美股期权',
+          badge: '',
+          tagline: '美股期权实时行情含最优买卖价——独立出售，适用任何套餐。',
+          coverage: '可叠加任意套餐',
+          feats: ['期权链查询', '实时期权行情', '期权行情推送'],
+        },
+      ],
+    },
+    comparison: {
+      eyebrow: '功能对比',
+      title: '各方案功能一览',
+      plans: [
+        { label: 'Nasdaq Basic', tag: '免费', color: 'var(--lb-up)' },
+        { label: '美股 LV1', tag: '付费', color: 'var(--lb-market-us)' },
+        { label: 'OPRA', tag: '付费', color: 'var(--lb-ai-mention)' },
+        { label: '港股 LV1', tag: '推广免费', color: 'var(--lb-up)' },
+        { label: '港股 LV2', tag: '付费', color: 'var(--lb-market-hk)' },
+        { label: 'A 股 LV1', tag: '推广免费', color: 'var(--lb-up)' },
+      ],
+      matrix: [
+        { f: '基础 API', g: '核心' },
+        { f: 'WebSocket 实时推送', g: '核心' },
+        { f: '拉取行情（REST）', g: '核心' },
+        { f: '美股最优买卖价', g: '美股' },
+        { f: '盘前、盘中、盘后行情', g: '美股' },
+        { f: '夜盘行情', g: '美股' },
+        { f: '期权链与实时期权行情', g: '期权' },
+        { f: '港股实时（基础）', g: '港股' },
+        { f: '恒生指数', g: '港股' },
+        { f: '港股 10 档买卖盘', g: '港股' },
+        { f: '实时深度推送', g: '港股' },
+        { f: '券商队列（港股）', g: '港股' },
+        { f: 'A 股实时行情', g: 'A 股' },
+      ],
+    },
+    faq: {
+      eyebrow: '常见问题',
+      title: '常见问题解答',
+      items: [
+        {
+          q: 'OpenAPI 行情订阅与 App 是否独立？',
+          a: '是的。OpenAPI 行情权限与 App / PC / Web 完全独立。通过长桥 App → 我的 → 行情商店开通。',
+        },
+        {
+          q: '测试 API 需要订阅吗？',
+          a: '不需要。交易、账户和基本面 API 均免费。您也可以免费使用基础行情（纳斯达克基础、港股 LV1、A 股 LV1）。',
+        },
+        { q: '可以随时取消吗？', a: '可以。在下一个计费周期前随时取消。行情权限在已付费周期结束前持续有效。' },
+        {
+          q: '模拟交易如何使用？',
+          a: '模拟交易基于 canary 环境运行，以实时买卖价差进行模拟撮合。所有关联账户均免费，无需行情订阅。',
+        },
+        {
+          q: 'REST 或 WebSocket 有使用限制吗？',
+          a: '没有硬性使用上限。频率限制随账户等级调整。详情请参阅频率限制文档。',
+        },
+        { q: '支持哪些付款方式？', a: '所有付款均通过长桥账户处理，以港元结算；跨币种按汇率换算。' },
+      ],
+    },
   },
-  {
-    icon: 'bolt',
-    color: 'var(--lb-brand)',
-    title: 'Push & Pull Data',
-    price: 'Free',
-    desc: 'WebSocket real-time push and REST API pull — unlimited.',
+  'zh-HK': {
+    hero: {
+      eyebrow: '定價',
+      title1: '免費開始構建。',
+      title2: '僅為即時行情數據付費。',
+      desc: '交易、帳戶、基本面、資訊等核心 API 功能完全免費。僅在需要時訂閱即時行情數據。',
+    },
+    free: {
+      price: '免費',
+      items: [
+        { title: '交易與帳戶 API', desc: '基本面、分析、資訊、資產、訂單——所有核心 API 均免費。' },
+        { title: '基礎行情數據', desc: '納斯達克基礎行情、港股一檔、A 股一檔——隨帳戶附贈。' },
+        { title: '推送與拉取數據', desc: 'WebSocket 即時推送與 REST API 拉取——無限制。' },
+      ],
+    },
+    realtime: {
+      eyebrow: '即時行情數據',
+      title: '只訂閱您需要的數據。',
+      desc: 'OpenAPI 行情權限與 App / PC / Web 獨立，需單獨購買。透過長橋 App → 我的 → 行情商店開通。',
+    },
+    billing: { label: '計費週期' },
+    cycle: {
+      auto: '自動續訂',
+      monthly: '月付',
+      quarterly: '季付',
+      annual: '年付',
+      badge: '最優',
+    },
+    suffix: { mo: '/月', quarter: '/季', year: '/年' },
+    plan: {
+      subscribe: '立即訂閱',
+      was: '原價',
+      items: [
+        {
+          market: '美股市場',
+          name: 'US LV1 即時行情',
+          badge: '',
+          tagline: '納斯達克 LV1 即時行情，含最優買賣價及盤前/盤後數據。',
+          coverage: '僅限美股市場',
+          feats: ['納斯達克 LV1 即時行情', '盤前/盤後（隔夜）', 'WebSocket 即時推送'],
+        },
+        {
+          market: '港股市場',
+          name: 'HK LV2 高級行情',
+          badge: '全球（含港股）',
+          tagline: '港交所即時行情，含 10 檔買賣盤及券商隊列。',
+          coverage: '僅限港股市場（不含美股）',
+          feats: ['10 檔買賣盤深度', '即時深度推送', '券商隊列（港股）'],
+        },
+        {
+          market: '美股期權',
+          name: 'OPRA 美股期權',
+          badge: '',
+          tagline: '美股期權即時行情含最優買賣價——獨立出售，適用任何套餐。',
+          coverage: '可疊加任意套餐',
+          feats: ['期權鏈查詢', '即時期權行情', '期權行情推送'],
+        },
+      ],
+    },
+    comparison: {
+      eyebrow: '功能對比',
+      title: '各方案功能一覽。',
+      plans: [
+        { label: 'Nasdaq Basic', tag: '免費', color: 'var(--lb-up)' },
+        { label: '美股 LV1', tag: '付費', color: 'var(--lb-market-us)' },
+        { label: 'OPRA', tag: '付費', color: 'var(--lb-ai-mention)' },
+        { label: '港股 LV1', tag: '推廣免費', color: 'var(--lb-up)' },
+        { label: '港股 LV2', tag: '付費', color: 'var(--lb-market-hk)' },
+        { label: 'A 股 LV1', tag: '推廣免費', color: 'var(--lb-up)' },
+      ],
+      matrix: [
+        { f: '基礎 API', g: '核心' },
+        { f: 'WebSocket 即時推送', g: '核心' },
+        { f: '拉取行情（REST）', g: '核心' },
+        { f: '美股最優買賣價', g: '美股' },
+        { f: '盤前、盤中、盤後行情', g: '美股' },
+        { f: '夜盤行情', g: '美股' },
+        { f: '期權鏈與即時期權行情', g: '期權' },
+        { f: '港股即時（基礎）', g: '港股' },
+        { f: '恒生指數', g: '港股' },
+        { f: '港股 10 檔買賣盤', g: '港股' },
+        { f: '即時深度推送', g: '港股' },
+        { f: '券商隊列（港股）', g: '港股' },
+        { f: 'A 股即時行情', g: 'A 股' },
+      ],
+    },
+    faq: {
+      eyebrow: '常見問題',
+      title: '常見問題解答',
+      items: [
+        {
+          q: 'OpenAPI 行情訂閱與 App 是否獨立？',
+          a: '是的。OpenAPI 行情權限與 App / PC / Web 完全獨立。透過長橋 App → 我的 → 行情商店開通。',
+        },
+        {
+          q: '測試 API 需要訂閱嗎？',
+          a: '不需要。交易、帳戶和基本面 API 均免費。您也可以免費使用基礎行情（納斯達克基礎、港股 LV1、A 股 LV1）。',
+        },
+        { q: '可以隨時取消嗎？', a: '可以。在下一個計費週期前隨時取消。行情權限在已付費週期結束前持續有效。' },
+        {
+          q: '模擬交易如何使用？',
+          a: '模擬交易基於 canary 環境運行，以即時買賣價差進行模擬撮合。所有關聯帳戶均免費，無需行情訂閱。',
+        },
+        {
+          q: 'REST 或 WebSocket 有使用限制嗎？',
+          a: '沒有硬性使用上限。頻率限制隨帳戶等級調整。詳情請參閱頻率限制文件。',
+        },
+        { q: '支援哪些付款方式？', a: '所有付款均透過長橋帳戶處理，以港元結算；跨幣種按匯率換算。' },
+      ],
+    },
   },
-]
+}
 
 interface PlanCycle {
   price: number
-  suffix: string
   discount?: number
   approxMo?: number
 }
 
-const BILLING_CYCLES = [
-  { key: 'auto', label: 'Auto-renew' },
-  { key: 'monthly', label: 'Monthly' },
-  { key: 'quarterly', label: 'Quarterly' },
-  { key: 'annual', label: 'Annual', badge: 'Best' },
-]
-
 const PAID_PLANS = [
   {
     id: 'us-lv1',
-    market: 'US Market',
-    name: 'US LV1 Real-time',
     currency: 'HK$',
-    tagline: 'Nasdaq LV1 real-time quotes with best bid/ask, including pre / post-market.',
-    coverage: 'US market only',
     color: 'var(--lb-market-us)',
-    feats: ['Nasdaq LV1 real-time quotes', 'Pre / post-market (overnight)', 'WebSocket real-time push'],
+    hasBadge: false,
     cycles: {
-      auto: { price: 558, suffix: '/mo', discount: 22 },
-      monthly: { price: 718, suffix: '/mo' },
-      quarterly: { price: 1748, suffix: '/quarter', discount: 19, approxMo: 583 },
-      annual: { price: 5788, suffix: '/year', discount: 33, approxMo: 482 },
+      auto: { price: 558, discount: 22 },
+      monthly: { price: 718 },
+      quarterly: { price: 1748, discount: 19, approxMo: 583 },
+      annual: { price: 5788, discount: 33, approxMo: 482 },
     } as Record<string, PlanCycle>,
   },
   {
     id: 'hk-lv2',
-    market: 'HK Market',
-    name: 'HK LV2 Advanced',
     currency: 'HK$',
-    badge: 'Global (incl. HK)',
-    tagline: 'HKEX real-time quotes with 10-level order book and broker queue.',
-    coverage: 'HK market only (excludes US)',
     color: 'var(--lb-market-hk)',
-    feats: ['10-level bid/ask depth', 'Real-time depth push', 'Broker queue (HK)'],
+    hasBadge: true,
     cycles: {
-      auto: { price: 558, suffix: '/mo', discount: 22 },
-      monthly: { price: 718, suffix: '/mo' },
-      quarterly: { price: 1428, suffix: '/quarter', discount: 34, approxMo: 476 },
-      annual: { price: 5288, suffix: '/year', discount: 39, approxMo: 441 },
+      auto: { price: 558, discount: 22 },
+      monthly: { price: 718 },
+      quarterly: { price: 1428, discount: 34, approxMo: 476 },
+      annual: { price: 5288, discount: 39, approxMo: 441 },
     } as Record<string, PlanCycle>,
   },
   {
     id: 'opra',
-    market: 'US Options',
-    name: 'OPRA US Options',
     currency: 'HK$',
-    tagline: 'US options real-time quotes with best bid/ask — sold separately, any tier.',
-    coverage: 'Adds onto any tier',
     color: 'var(--lb-ai-mention)',
-    feats: ['Option chain lookup', 'Real-time option quotes', 'Option quote push'],
+    hasBadge: false,
     cycles: {
-      auto: { price: 22, suffix: '/mo', discount: 45 },
-      monthly: { price: 40, suffix: '/mo' },
-      quarterly: { price: 83, suffix: '/quarter', discount: 31, approxMo: 28 },
-      annual: { price: 269, suffix: '/year', discount: 44, approxMo: 22 },
+      auto: { price: 22, discount: 45 },
+      monthly: { price: 40 },
+      quarterly: { price: 83, discount: 31, approxMo: 28 },
+      annual: { price: 269, discount: 44, approxMo: 22 },
     } as Record<string, PlanCycle>,
   },
 ]
 
-const FEATURE_MATRIX_PLANS = [
-  { key: 'nasdaq-basic', label: 'Nasdaq Basic', tag: 'Free', color: 'var(--lb-up)' },
-  { key: 'us-lv1', label: 'US LV1', tag: 'Paid', color: 'var(--lb-market-us)' },
-  { key: 'opra', label: 'OPRA', tag: 'Paid', color: 'var(--lb-ai-mention)' },
-  { key: 'hk-lv1', label: 'HK LV1', tag: 'Free (promo)', color: 'var(--lb-up)' },
-  { key: 'hk-lv2', label: 'HK LV2', tag: 'Paid', color: 'var(--lb-market-hk)' },
-  { key: 'cn-lv1', label: 'CN LV1', tag: 'Free (promo)', color: 'var(--lb-up)' },
+const FREE_ICONS = [
+  { icon: 'shield', color: 'var(--lb-up)' },
+  { icon: 'chart', color: 'var(--lb-status-neutral)' },
+  { icon: 'bolt', color: 'var(--lb-brand)' },
 ]
 
-const FEATURE_MATRIX = [
-  { f: 'Basic APIs', g: 'Core', row: [1, 1, 1, 1, 1, 1] },
-  { f: 'WebSocket real-time push', g: 'Core', row: [1, 1, 1, 1, 1, 1] },
-  { f: 'Pull quote (REST)', g: 'Core', row: [1, 1, 1, 1, 1, 1] },
-  { f: 'US best bid/ask', g: 'US', row: [1, 1, 0, 0, 0, 0] },
-  { f: 'Pre / post-market (overnight)', g: 'US', row: [0, 1, 0, 0, 0, 0] },
-  { f: 'Option chain & real-time quotes', g: 'Options', row: [0, 0, 1, 0, 0, 0] },
-  { f: 'HK real-time (basic)', g: 'HK', row: [0, 0, 0, 1, 1, 0] },
-  { f: 'Hang Seng Index', g: 'HK', row: [0, 0, 0, 1, 1, 0] },
-  { f: 'HK 10-level order book', g: 'HK', row: [0, 0, 0, 0, 1, 0] },
-  { f: 'Real-time depth push', g: 'HK', row: [0, 0, 0, 0, 1, 0] },
-  { f: 'Broker queue (HK)', g: 'HK', row: [0, 0, 0, 0, 1, 0] },
-  { f: 'CN A-shares real-time', g: 'CN', row: [0, 0, 0, 0, 0, 1] },
-]
+const BILLING_CYCLES = [{ key: 'auto' }, { key: 'monthly' }, { key: 'quarterly' }, { key: 'annual', badge: true }]
 
-const FAQ = [
-  [
-    'Are OpenAPI quote subscriptions separate from the App?',
-    'Yes. OpenAPI quote permissions are independent from App / PC / Web. Activate via Longbridge App → Me → Quote Store.',
-  ],
-  [
-    'Do I need a subscription to test the API?',
-    'No. Trading, account, and fundamentals APIs are free. You can also use Basic Market Data tiers (Nasdaq Basic, HK LV1, CN LV1) for free.',
-  ],
-  [
-    'Can I cancel anytime?',
-    'Yes. Cancel any time before the next billing cycle. Quote permissions stay active until the end of the paid period.',
-  ],
-  [
-    'What about paper trading?',
-    'Paper trading runs against the canary environment with simulated matching on live bid-ask spreads. Free for all integrated accounts — no quote subscription required.',
-  ],
-  [
-    'Are there usage limits on REST or WebSocket?',
-    'No hard usage caps. Rate limits scale with your account tier. See the Rate Limits doc for details.',
-  ],
-  [
-    'What payment methods are accepted?',
-    'All payments are processed through your Longbridge account. Settled in HKD; cross-currency settled at exchange-rate.',
-  ],
+const MATRIX_ROW_DATA = [
+  [1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1],
+  [1, 1, 0, 0, 0, 0],
+  [1, 1, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0],
+  [0, 0, 0, 1, 1, 0],
+  [0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 0, 1],
 ]
 
 const cycle = ref('auto')
-const currentCycle = computed(() => BILLING_CYCLES.find((c) => c.key === cycle.value)!)
+const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
-function planCycle(plan: (typeof PAID_PLANS)[number]): PlanCycle {
+const cycleSuffix = computed(() => {
+  if (cycle.value === 'quarterly') return content.value.suffix.quarter
+  if (cycle.value === 'annual') return content.value.suffix.year
+  return content.value.suffix.mo
+})
+
+const cycleLabels = computed<Record<string, string>>(() => ({
+  auto: content.value.cycle.auto,
+  monthly: content.value.cycle.monthly,
+  quarterly: content.value.cycle.quarterly,
+  annual: content.value.cycle.annual,
+}))
+
+const freeItems = computed(() => content.value.free.items.map((item, i) => ({ ...item, ...FREE_ICONS[i] })))
+
+const plans = computed(() => PAID_PLANS.map((p, i) => ({ ...p, ...content.value.plan.items[i] })))
+
+function planCycle(plan: { cycles: Record<string, PlanCycle> }): PlanCycle {
   return plan.cycles[cycle.value] ?? plan.cycles.monthly
 }
-function planMonthlyPrice(plan: (typeof PAID_PLANS)[number]): number {
-  return plan.cycles.monthly.price
-}
 
-// Group rows — build a flat list with group separators
 interface MatrixRow {
   type: 'group' | 'row'
   label?: string
@@ -165,12 +453,13 @@ interface MatrixRow {
 const matrixRows = computed<MatrixRow[]>(() => {
   const result: MatrixRow[] = []
   let lastGroup = ''
-  for (const m of FEATURE_MATRIX) {
+  for (let i = 0; i < content.value.comparison.matrix.length; i++) {
+    const m = content.value.comparison.matrix[i]
     if (m.g !== lastGroup) {
       result.push({ type: 'group', label: m.g })
       lastGroup = m.g
     }
-    result.push({ type: 'row', f: m.f, row: m.row })
+    result.push({ type: 'row', f: m.f, row: MATRIX_ROW_DATA[i] })
   }
   return result
 })
@@ -185,15 +474,14 @@ const matrixRows = computed<MatrixRow[]>(() => {
       <div class="pricing-hero-bg" />
       <div class="section-inner pricing-hero-inner">
         <div style="text-align: center; max-width: 760px; margin: 0 auto">
-          <span class="eyebrow">PRICING</span>
+          <span class="eyebrow">{{ content.hero.eyebrow }}</span>
           <h1 class="h-display" style="margin-top: 20px; font-size: clamp(40px, 5vw, 60px)">
-            Build for free.
+            {{ content.hero.title1 }}
             <br />
-            <span style="color: var(--lb-brand)">Pay only for real-time market data.</span>
+            <span style="color: var(--lb-brand)">{{ content.hero.title2 }}</span>
           </h1>
           <p class="t-body" style="margin-top: 20px; max-width: 580px; margin-left: auto; margin-right: auto">
-            Core API features — trading, accounts, fundamentals, news — are completely free. Subscribe to real-time
-            market data only when you need it.
+            {{ content.hero.desc }}
           </p>
         </div>
       </div>
@@ -203,14 +491,14 @@ const matrixRows = computed<MatrixRow[]>(() => {
     <section class="section" style="padding-top: 32px">
       <div class="section-inner">
         <div class="pricing-free-grid">
-          <div v-for="b in FREE_BASELINE" :key="b.title" class="pricing-free-card">
+          <div v-for="item in freeItems" :key="item.title" class="pricing-free-card">
             <div class="pricing-free-head">
               <div
                 class="pricing-free-icon"
-                :style="{ background: `color-mix(in srgb, ${b.color} 14%, transparent)`, color: b.color }">
+                :style="{ background: `color-mix(in srgb, ${item.color} 14%, transparent)`, color: item.color }">
                 <!-- shield -->
                 <svg
-                  v-if="b.icon === 'shield'"
+                  v-if="item.icon === 'shield'"
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
@@ -223,7 +511,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
                 </svg>
                 <!-- chart -->
                 <svg
-                  v-else-if="b.icon === 'chart'"
+                  v-else-if="item.icon === 'chart'"
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
@@ -238,7 +526,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
                 </svg>
                 <!-- bolt -->
                 <svg
-                  v-else-if="b.icon === 'bolt'"
+                  v-else-if="item.icon === 'bolt'"
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
@@ -250,10 +538,10 @@ const matrixRows = computed<MatrixRow[]>(() => {
                   <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" />
                 </svg>
               </div>
-              <span class="pricing-free-price">{{ b.price }}</span>
+              <span class="pricing-free-price">{{ content.free.price }}</span>
             </div>
-            <h3 class="h-card" style="margin-top: 16px">{{ b.title }}</h3>
-            <p class="t-meta" style="margin-top: 8px; line-height: 1.55">{{ b.desc }}</p>
+            <h3 class="h-card" style="margin-top: 16px">{{ item.title }}</h3>
+            <p class="t-meta" style="margin-top: 8px; line-height: 1.55">{{ item.desc }}</p>
           </div>
         </div>
       </div>
@@ -272,31 +560,30 @@ const matrixRows = computed<MatrixRow[]>(() => {
             margin-bottom: 32px;
           ">
           <div style="max-width: 520px">
-            <span class="eyebrow">REAL-TIME MARKET DATA</span>
-            <h2 class="h-section" style="margin-top: 14px">Subscribe only to what you need.</h2>
+            <span class="eyebrow">{{ content.realtime.eyebrow }}</span>
+            <h2 class="h-section" style="margin-top: 14px">{{ content.realtime.title }}</h2>
             <p class="t-meta" style="margin-top: 10px; line-height: 1.55">
-              OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate
-              via Longbridge App → Me → Quote Store.
+              {{ content.realtime.desc }}
             </p>
           </div>
 
           <div class="pricing-cycle">
-            <span class="pricing-cycle-label">Billing</span>
+            <span class="pricing-cycle-label">{{ content.billing.label }}</span>
             <div class="pricing-cycle-tabs">
               <button
                 v-for="c in BILLING_CYCLES"
                 :key="c.key"
                 :class="['pricing-cycle-tab', c.key === cycle ? 'is-active' : '']"
                 @click="cycle = c.key">
-                {{ c.label }}
-                <span v-if="c.badge" class="pricing-cycle-badge">{{ c.badge }}</span>
+                {{ cycleLabels[c.key] }}
+                <span v-if="c.badge" class="pricing-cycle-badge">{{ content.cycle.badge }}</span>
               </button>
             </div>
           </div>
         </div>
 
         <div class="pricing-plans-grid">
-          <div v-for="p in PAID_PLANS" :key="p.id" class="pricing-plan-card">
+          <div v-for="p in plans" :key="p.id" class="pricing-plan-card">
             <div class="pricing-plan-head">
               <span
                 class="pricing-plan-market"
@@ -309,14 +596,14 @@ const matrixRows = computed<MatrixRow[]>(() => {
             <div class="pricing-plan-price">
               <span class="pricing-plan-cur">{{ p.currency }}</span>
               <span class="pricing-plan-num">{{ planCycle(p).price }}</span>
-              <span class="pricing-plan-suf">{{ planCycle(p).suffix }}</span>
+              <span class="pricing-plan-suf">{{ cycleSuffix }}</span>
               <span v-if="planCycle(p).discount" class="pricing-plan-discount">-{{ planCycle(p).discount }}%</span>
             </div>
             <div v-if="planCycle(p).approxMo" class="pricing-plan-approx">
-              ≈{{ p.currency }}{{ planCycle(p).approxMo }}/mo
+              ≈{{ p.currency }}{{ planCycle(p).approxMo }}{{ content.suffix.mo }}
             </div>
             <div v-else-if="planCycle(p).discount" class="pricing-plan-was">
-              Was <s>{{ p.currency }}{{ planMonthlyPrice(p) }}/mo</s>
+              {{ content.plan.was }} <s>{{ p.currency }}{{ p.cycles.monthly.price }}{{ content.suffix.mo }}</s>
             </div>
             <p class="pricing-plan-tag">{{ p.tagline }}</p>
             <div class="pricing-plan-cov">
@@ -336,7 +623,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
               {{ p.coverage }}
             </div>
             <ul class="pricing-plan-feats">
-              <li v-for="f in p.feats" :key="f">
+              <li v-for="feat in p.feats" :key="feat">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M5 12l4.5 4.5 9.5-9.5"
@@ -345,7 +632,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
                     stroke-linecap="round"
                     stroke-linejoin="round" />
                 </svg>
-                <span>{{ f }}</span>
+                <span>{{ feat }}</span>
               </li>
             </ul>
             <a
@@ -353,7 +640,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
               href="https://longbridge.com/download"
               target="_blank"
               rel="noreferrer">
-              Subscribe
+              {{ content.plan.subscribe }}
               <svg
                 width="13"
                 height="13"
@@ -376,15 +663,15 @@ const matrixRows = computed<MatrixRow[]>(() => {
     <section class="section" style="padding-top: 48px; padding-bottom: 80px">
       <div class="section-inner">
         <div style="max-width: 540px; margin-bottom: 24px">
-          <span class="eyebrow">FEATURE COMPARISON</span>
-          <h2 class="h-section" style="margin-top: 14px">What's included in each plan.</h2>
+          <span class="eyebrow">{{ content.comparison.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 14px">{{ content.comparison.title }}</h2>
         </div>
         <div class="pricing-matrix-wrap">
           <table class="pricing-matrix">
             <thead>
               <tr>
                 <th class="pricing-matrix-feat-h"></th>
-                <th v-for="p in FEATURE_MATRIX_PLANS" :key="p.key">
+                <th v-for="p in content.comparison.plans" :key="p.label">
                   <div class="pricing-matrix-col">
                     <span class="pricing-matrix-plan" :style="{ color: p.color }">{{ p.label }}</span>
                     <span class="pricing-matrix-tag">{{ p.tag }}</span>
@@ -395,7 +682,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
             <tbody>
               <template v-for="r in matrixRows" :key="r.label || r.f">
                 <tr v-if="r.type === 'group'" class="pricing-matrix-group">
-                  <td :colspan="FEATURE_MATRIX_PLANS.length + 1">{{ r.label }}</td>
+                  <td :colspan="content.comparison.plans.length + 1">{{ r.label }}</td>
                 </tr>
                 <tr v-else>
                   <td class="pricing-matrix-feat">{{ r.f }}</td>
@@ -423,13 +710,13 @@ const matrixRows = computed<MatrixRow[]>(() => {
     <section class="section" style="border-top: 1px solid var(--app-card-stroke); background: var(--app-canvas)">
       <div class="section-inner">
         <div style="max-width: 560px; margin-bottom: 32px">
-          <span class="eyebrow">FAQ</span>
-          <h2 class="h-section" style="margin-top: 14px">Frequently asked questions</h2>
+          <span class="eyebrow">{{ content.faq.eyebrow }}</span>
+          <h2 class="h-section" style="margin-top: 14px">{{ content.faq.title }}</h2>
         </div>
         <div class="pricing-faq-grid">
-          <div v-for="[q, a] in FAQ" :key="q" class="pricing-faq-card">
-            <h4 class="pricing-faq-q">{{ q }}</h4>
-            <p class="pricing-faq-a">{{ a }}</p>
+          <div v-for="item in content.faq.items" :key="item.q" class="pricing-faq-card">
+            <h4 class="pricing-faq-q">{{ item.q }}</h4>
+            <p class="pricing-faq-a">{{ item.a }}</p>
           </div>
         </div>
       </div>
