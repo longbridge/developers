@@ -657,7 +657,6 @@ const matrixRows = computed<MatrixRow[]>(() => {
 }
 .pricing-matrix thead th {
   padding: 12px 16px;
-  background: var(--lb-bg-2);
   border-bottom: 1px solid var(--app-card-stroke);
   text-align: center;
   vertical-align: bottom;
@@ -706,6 +705,11 @@ const matrixRows = computed<MatrixRow[]>(() => {
   text-align: center;
   border-bottom: 1px solid var(--app-card-stroke);
   vertical-align: middle;
+}
+.pricing-matrix-cell svg,
+.pricing-matrix-cell span {
+  display: block;
+  margin: 0 auto;
 }
 .pricing-matrix tbody tr:hover .pricing-matrix-feat,
 .pricing-matrix tbody tr:hover .pricing-matrix-cell {
