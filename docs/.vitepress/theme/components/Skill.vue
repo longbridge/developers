@@ -817,7 +817,10 @@ function rowClass(flag: string | boolean) {
 
         <div class="user-cases-grid">
           <a href="https://longbridge.com/topics/39630019" target="_blank" rel="noreferrer" class="user-case-award">
-            <div class="user-case-award-tag">AWARD</div>
+            <div class="user-case-award-tag">
+              <span>AWARD</span>
+              <span class="user-case-award-tag-line"></span>
+            </div>
             <div>
               <h3 class="user-case-award-h">Each winner receives 10,000 Task Coins + 1 × AirPods 4</h3>
               <p class="user-case-award-d">
@@ -1582,14 +1585,18 @@ function rowClass(flag: string | boolean) {
   box-shadow: 0 4px 24px color-mix(in srgb, var(--lb-brand) 20%, transparent);
 }
 .user-case-award-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.1em;
   color: var(--lb-brand);
-  background: color-mix(in srgb, var(--lb-brand) 15%, transparent);
-  padding: 3px 8px;
-  border-radius: 4px;
-  width: fit-content;
+}
+.user-case-award-tag-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--lb-brand) 30%, transparent);
 }
 .user-case-award-h {
   font-size: 15px;

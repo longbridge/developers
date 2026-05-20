@@ -246,7 +246,7 @@
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -1714,15 +1714,12 @@
 
 .user-cases-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 @media (max-width: 1024px) {
   .user-cases-grid {
     grid-template-columns: 1fr 1fr;
-  }
-  .user-case-award {
-    grid-column: 1 / -1;
   }
 }
 @media (max-width: 640px) {
@@ -1746,14 +1743,18 @@
   box-shadow: var(--app-shadow-2);
 }
 .user-case-award-tag {
-  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--lb-brand) 18%, transparent);
   color: var(--lb-brand);
+}
+.user-case-award-tag-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--lb-brand) 30%, transparent);
 }
 .user-case-award-h {
   font-size: 17px;
