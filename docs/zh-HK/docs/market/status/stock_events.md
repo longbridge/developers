@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取價格波動超過近20個交易日標準差的異動股票，系統自動關聯相關新聞解讀異動原因。
+獲取價格波動超過近 20 個交易日標準差的異動股票，系統自動關聯相關新聞解讀異動原因。
 
 <CliCommand>
 longbridge top-movers
@@ -212,7 +212,7 @@ func main() {
         "alert_type": "earnings_beat",
         "post": {
           "id": "post_abc123",
-          "title": "阿里巴巴Q4財報解讀：雲業務強勁增長",
+          "title": "阿里巴巴 Q4 財報解讀：雲業務強勁增長",
           "url": "https://longbridge.com/news/post_abc123"
         }
       },
