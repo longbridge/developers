@@ -48,7 +48,16 @@ const APP_NAV_DEF = [
   { key: 'docs', tKey: 'nav.docs', href: '/docs' },
 ]
 
-const navLinks = computed(() => APP_NAV_DEF.map((n) => ({ ...n, label: n.tKey ? t(n.tKey) : n.label! })))
+const isCnDomain = import.meta.env.VITE_REGION === 'cn'
+
+const CN_HIDDEN_KEYS = new Set(['pricing', 'docs', 'features'])
+
+const navLinks = computed(() =>
+  APP_NAV_DEF.filter((n) => !isCnDomain || !CN_HIDDEN_KEYS.has(n.key)).map((n) => ({
+    ...n,
+    label: n.tKey ? t(n.tKey) : n.label!,
+  }))
+)
 
 const currentLocale = computed(() => {
   if (typeof window === 'undefined') return 'en'
@@ -117,18 +126,20 @@ onMounted(() => {
   initLoginState()
   document.addEventListener('click', onAvatarClickOutside)
 
-  const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
-  window.SupportWidgetConfig = {
-    isLoggedIn: function () {
-      return isLogin.value
-    },
-    loginUrl: createLoginRedirectPath({ sw_open: '1' }),
-    proxy: isProd ? 'prod' : 'staging',
+  if (!isCnDomain) {
+    const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
+    window.SupportWidgetConfig = {
+      isLoggedIn: function () {
+        return isLogin.value
+      },
+      loginUrl: createLoginRedirectPath({ sw_open: '1' }),
+      proxy: isProd ? 'prod' : 'staging',
+    }
+    const script = document.createElement('script')
+    script.src = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
+    script.async = true
+    document.head.appendChild(script)
   }
-  const script = document.createElement('script')
-  script.src = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
-  script.async = true
-  document.head.appendChild(script)
 })
 onUnmounted(() => {
   document.removeEventListener('click', onAvatarClickOutside)
@@ -155,7 +166,7 @@ onUnmounted(() => {
 
       <!-- Desktop nav links -->
       <div class="app-nav-links">
-        <FeaturesMenu />
+        <FeaturesMenu v-if="!isCnDomain" />
         <a v-for="n in navLinks" :key="n.key" :href="localePath(n.href)" :class="{ 'is-active': isNavActive(n.href) }">
           {{ n.label }}
         </a>
@@ -328,7 +339,7 @@ onUnmounted(() => {
     <!-- Mobile menu -->
     <Transition name="slide-down">
       <div v-if="mobileOpen" class="app-nav-mobile">
-        <FeaturesMenu :screenMenu="true" />
+        <FeaturesMenu v-if="!isCnDomain" :screenMenu="true" />
         <a v-for="n in navLinks" :key="n.key" :href="localePath(n.href)" @click="mobileOpen = false">
           {{ n.label }}
         </a>

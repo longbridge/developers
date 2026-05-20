@@ -88,6 +88,5 @@
   "footer.download": "Download",
   "footer.statusPage": "Status",
   "footer.about": "About",
-  "footer.rights": "© {year} Longbridge Technology Limited. All rights reserved.",
-  "footer.offices": "Hong Kong · Singapore · New York"
+  "footer.rights": "© {year} Longbridge. All rights reserved."
 }
