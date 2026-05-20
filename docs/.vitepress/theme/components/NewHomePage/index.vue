@@ -25,55 +25,239 @@ const SDK_LANGUAGES = [
   { name: 'C++', installer: 'cmake', cmd: 'git clone github.com/longbridge/openapi-cpp', color: '#00599C' },
 ]
 
-type CodeLine = [string, string]
-const SDK_SAMPLES: Record<string, CodeLine[]> = {
-  'Get Quote': [
-    ['c', '# Real-time quote for 4 symbols'],
-    ['', 'from longbridge.openapi import QuoteContext, Config'],
-    ['', ''],
-    ['', 'config = Config.from_env()'],
-    ['', 'ctx = QuoteContext(config)'],
-    ['', ''],
-    ['', 'resp = ctx.quote(["AAPL.US", "TSLA.US", "NVDA.US", "GOOG.US"])'],
-    ['', 'print(resp)'],
-  ],
-  'Place Order': [
-    ['c', '# Submit a buy order with limit price'],
-    ['', 'from longbridge.openapi import TradeContext, OrderType, OrderSide'],
-    ['', ''],
-    ['', 'ctx = TradeContext(Config.from_env())'],
-    ['', 'order = ctx.submit_order('],
-    ['', '    symbol="TSLA.US",'],
-    ['', '    order_type=OrderType.LO,'],
-    ['', '    side=OrderSide.Buy,'],
-    ['', '    submitted_quantity=Decimal("10"),'],
-    ['', '    submitted_price=Decimal("420.00"),'],
-    ['', ')'],
-  ],
-  'Subscribe Push': [
-    ['c', '# WebSocket streaming — quote + depth'],
-    ['', 'from longbridge.openapi import SubType'],
-    ['', ''],
-    ['', 'ctx.subscribe(["TSLA.US","700.HK"], [SubType.Quote, SubType.Depth], True)'],
-    ['', ''],
-    ['', 'def on_quote(sym, ev):'],
-    ['', '    print(f"{sym} {ev.last_done} {ev.change_rate}")'],
-    ['', ''],
-    ['', 'ctx.set_on_quote(on_quote)'],
-  ],
-  'Account Balance': [
-    ['c', '# Balance + buying power across sub-accounts'],
-    ['', 'balance = ctx.account_balance()'],
-    ['', 'for b in balance:'],
-    ['', '    print(b.currency, b.net_assets, b.buy_power)'],
-    ['', ''],
-    ['o', 'USD  128,365.42  42,118.20'],
-    ['o', 'HKD   84,920.11  12,008.30'],
-  ],
+const SDK_SAMPLES: Record<string, Record<string, string>> = {
+  'Get Quote': {
+    Python: `from longbridge.openapi import QuoteContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(
+    lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = QuoteContext(config)
+
+resp = ctx.quote(["AAPL.US", "TSLA.US", "NVDA.US", "GOOG.US"])
+print(resp)`,
+    'Node.js': `const { Config, QuoteContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id',
+    (_, url) => console.log('Open:', url))
+  const config = Config.fromOAuth(oauth)
+  const ctx = QuoteContext.new(config)
+  const resp = await ctx.quote(['AAPL.US', 'TSLA.US', 'NVDA.US'])
+  for (const obj of resp) console.log(obj.toString())
+}
+main().catch(console.error)`,
+    Rust: `use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, quote::QuoteContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id")
+        .build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, _) = QuoteContext::new(config);
+    let resp = ctx.quote(["AAPL.US", "TSLA.US"]).await?;
+    println!("{:?}", resp);
+    Ok(())
+}`,
+    Go: `conf, _ := config.New(config.WithOAuthClient(o))
+qctx, _ := quote.NewFromCfg(conf)
+defer qctx.Close()
+quotes, _ := qctx.Quote(context.Background(),
+  []string{"AAPL.US", "TSLA.US", "NVDA.US"})
+fmt.Printf("%+v\\n", quotes[0])`,
+    Java: `try (Config config = Config.fromOAuth(oauth);
+     QuoteContext ctx = QuoteContext.create(config)) {
+    SecurityQuote[] resp = ctx.getQuote(
+        new String[]{"AAPL.US", "TSLA.US"}).get();
+    for (SecurityQuote q : resp) System.out.println(q);
+}`,
+    'C++': `Config config = Config::from_oauth(oauth);
+QuoteContext ctx = QuoteContext::create(config);
+ctx.quote({"AAPL.US", "TSLA.US"}, [](auto res) {
+    for (const auto& q : *res)
+        std::cout << q.symbol << " "
+                  << (double)q.last_done << std::endl;
+});`,
+  },
+  'Place Order': {
+    Python: `from decimal import Decimal
+from longbridge.openapi import (
+    TradeContext, Config, OrderType,
+    OrderSide, TimeInForceType, OAuthBuilder)
+
+oauth = OAuthBuilder("your-client-id").build(
+    lambda url: print("Visit:", url))
+ctx = TradeContext(Config.from_oauth(oauth))
+
+resp = ctx.submit_order(
+    "AAPL.US", OrderType.LO, OrderSide.Buy,
+    Decimal(100), TimeInForceType.Day,
+    submitted_price=Decimal(250))
+print(resp)`,
+    'Node.js': `const { Config, TradeContext, OAuth,
+  OrderType, OrderSide, TimeInForceType } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id',
+    (_, url) => console.log('Open:', url))
+  const ctx = TradeContext.new(Config.fromOAuth(oauth))
+  const resp = await ctx.submitOrder({
+    symbol: 'AAPL.US', orderType: OrderType.LO,
+    side: OrderSide.Buy, submittedQuantity: 100,
+    submittedPrice: 250, timeInForce: TimeInForceType.Day })
+  console.log(resp)
+}
+main().catch(console.error)`,
+    Rust: `use longbridge::{trade::{TradeContext, SubmitOrderOptions,
+    OrderType, OrderSide, TimeInForceType}, Config};
+use rust_decimal::Decimal;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, _) = TradeContext::new(config);
+    let resp = ctx.submit_order(
+        SubmitOrderOptions::new("AAPL.US", OrderType::LO,
+            OrderSide::Buy, Decimal::from(100),
+            TimeInForceType::Day)
+            .submitted_price(Decimal::from(250))
+    ).await?;
+    println!("{:?}", resp);
+    Ok(())
+}`,
+    Go: `tctx, _ := trade.NewFromCfg(conf)
+orderID, _ := tctx.SubmitOrder(ctx, &trade.SubmitOrder{
+    Symbol: "AAPL.US", OrderType: trade.OrderTypeLO,
+    Side: trade.OrderSideBuy, SubmittedQuantity: 100,
+    SubmittedPrice: decimal.NewFromFloat(250),
+    TimeInForce: trade.TimeTypeDay })
+fmt.Println("order_id:", orderID)`,
+    Java: `SubmitOrderResponse resp = ctx.submitOrder(
+    new SubmitOrderOptions("AAPL.US", OrderType.LO,
+        OrderSide.Buy, new BigDecimal("100"),
+        TimeInForceType.Day)
+        .setSubmittedPrice(new BigDecimal("250"))).get();
+System.out.println(resp.orderId);`,
+    'C++': `Config config = Config::from_oauth(oauth);
+TradeContext ctx = TradeContext::create(config);
+SubmitOrderOptions opts{"AAPL.US", OrderType::LO,
+    OrderSide::Buy, 100, TimeInForceType::Day,
+    Decimal(250.0)};
+ctx.submit_order(opts, [](auto res) {
+    std::cout << "order_id: " << res->order_id << std::endl;
+});`,
+  },
+  'Subscribe Push': {
+    Python: `from longbridge.openapi import QuoteContext, Config, SubType, PushQuote
+
+def on_quote(symbol: str, event: PushQuote):
+    print(symbol, event)
+
+oauth = OAuthBuilder("your-client-id").build(
+    lambda url: print("Visit:", url))
+ctx = QuoteContext(Config.from_oauth(oauth))
+ctx.set_on_quote(on_quote)
+ctx.subscribe(["AAPL.US", "TSLA.US"], [SubType.Quote])`,
+    'Node.js': `const { Config, QuoteContext, OAuth, SubType } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build("your-client-id",
+    (_, url) => console.log("Open:", url))
+  const ctx = QuoteContext.new(Config.fromOAuth(oauth))
+  ctx.setOnQuote((event) => console.log(event))
+  await ctx.subscribe(["AAPL.US", "TSLA.US"], [SubType.Quote], true)
+  await new Promise(r => setTimeout(r, 30000))
+}
+main().catch(console.error)`,
+    Rust: `use longbridge::{quote::{QuoteContext, SubFlags}, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, mut rx) = QuoteContext::new(config);
+    ctx.subscribe(
+        vec!["AAPL.US".into(), "TSLA.US".into()],
+        SubFlags::QUOTE, true,
+    ).await?;
+    while let Some(event) = rx.recv().await {
+        println!("{:?}", event);
+    }
+    Ok(())
+}`,
+    Go: `qctx, _ := quote.NewFromCfg(conf)
+qctx.OnQuote(func(e *quote.PushQuote) {
+    fmt.Println(e.Symbol) })
+qctx.Subscribe(ctx, []string{"AAPL.US", "TSLA.US"},
+    []quote.SubType{quote.SubTypeQuote}, true)
+select {}`,
+    Java: `ctx.setOnQuote(event -> System.out.println(event));
+ctx.subscribe(new String[]{"AAPL.US", "TSLA.US"},
+    new SubType[]{SubType.Quote}, true).get();
+Thread.sleep(30000);`,
+    'C++': `ctx.set_on_quote([](auto e) {
+    std::cout << e->symbol << std::endl; });
+ctx.subscribe({"AAPL.US", "TSLA.US"},
+    SubFlags::QUOTE(), true, [](auto) {});`,
+  },
+  'Account Balance': {
+    Python: `from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(
+    lambda url: print("Visit:", url))
+ctx = TradeContext(Config.from_oauth(oauth))
+resp = ctx.account_balance()
+for b in resp:
+    print(b.currency, b.net_assets, b.buy_power)`,
+    'Node.js': `const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id',
+    (_, url) => console.log('Open:', url))
+  const ctx = TradeContext.new(Config.fromOAuth(oauth))
+  const resp = await ctx.accountBalance()
+  for (const obj of resp) console.log(obj.toString())
+}
+main().catch(console.error)`,
+    Rust: `use longbridge::{trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, _) = TradeContext::new(config);
+    let resp = ctx.account_balance(None).await?;
+    println!("{:?}", resp);
+    Ok(())
+}`,
+    Go: `tctx, _ := trade.NewFromCfg(conf)
+resp, _ := tctx.AccountBalance(ctx,
+    &trade.GetAccountBalance{})
+for _, b := range resp {
+    fmt.Printf("%s: %s\\n", b.Currency, b.NetAssets)
+}`,
+    Java: `AccountBalance[] resp = ctx.getAccountBalance().get();
+for (AccountBalance obj : resp)
+    System.out.println(obj);`,
+    'C++': `ctx.account_balance([](auto res) {
+    for (const auto& b : *res)
+        std::cout << b.currency << " "
+                  << b.net_assets << std::endl;
+});`,
+  },
 }
 
-const currentSdkSample = computed(() => SDK_SAMPLES[sdkTab.value] || [])
+const currentSdkSample = computed(() =>
+  SDK_SAMPLES[sdkTab.value]?.[sdkLang.value] ?? ''
+)
 const currentSdkLang = computed(() => SDK_LANGUAGES.find(l => l.name === sdkLang.value))
+
+const fileExt: Record<string, string> = {
+  Python: 'py', 'Node.js': 'js', Rust: 'rs', Go: 'go', Java: 'java', 'C++': 'cpp',
+}
+
+function escHtml(s: string) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+}
 
 const PY_KEYWORDS = new Set([
   'from','import','def','class','for','while','if','elif','else','in','not',
@@ -81,16 +265,10 @@ const PY_KEYWORDS = new Set([
   'try','except','raise','pass','break','continue','lambda','yield','print','len',
 ])
 
-function escHtml(s: string) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-}
-
 function highlightPython(code: string): string {
-  let out = ''
-  let i = 0
+  let out = '', i = 0
   while (i < code.length) {
     const ch = code[i]
-    // f/b/r-prefixed string
     if (/^[fFbBrR]$/.test(ch) && (code[i+1] === '"' || code[i+1] === "'")) {
       const prefix = ch; i++
       const q = code[i]; let s = prefix + q; i++
@@ -98,24 +276,18 @@ function highlightPython(code: string): string {
       s += code[i]||''; i++
       out += `<span class="ln-str">${escHtml(s)}</span>`; continue
     }
-    // string
     if (ch === '"' || ch === "'") {
       const q = ch; let s = q; i++
       while (i < code.length && code[i] !== q) { if (code[i]==='\\') { s+=code[i++] }; s+=code[i]||''; i++ }
       s += code[i]||''; i++
       out += `<span class="ln-str">${escHtml(s)}</span>`; continue
     }
-    // comment
-    if (ch === '#') {
-      out += `<span class="ln-comment">${escHtml(code.slice(i))}</span>`; break
-    }
-    // number
+    if (ch === '#') { out += `<span class="ln-comment">${escHtml(code.slice(i))}</span>`; break }
     if (/\d/.test(ch)) {
       let n = ''
       while (i < code.length && /[\d._]/.test(code[i])) n += code[i++]
       out += `<span class="ln-num">${escHtml(n)}</span>`; continue
     }
-    // identifier / keyword / function call
     if (/[a-zA-Z_]/.test(ch)) {
       let w = ''
       while (i < code.length && /[a-zA-Z0-9_]/.test(code[i])) w += code[i++]
@@ -129,13 +301,60 @@ function highlightPython(code: string): string {
   return out
 }
 
-function formatCodeLine([type, text]: CodeLine): string {
-  const t = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  if (type === 'c') return `<span class="ln-comment">${t}</span>`
-  if (type === 'o') return `<span style="color:var(--lb-fg-2)">${t}</span>`
-  if (!text) return '&nbsp;'
-  return highlightPython(text)
+const LANG_KEYWORDS: Record<string, Set<string>> = {
+  Rust: new Set(['use','let','mut','fn','async','await','pub','struct','impl','for','while','if','else','match','return','Ok','Err','Some','None','true','false','Arc','Box','Vec','String','println','tokio','main','mod','type','where','in','move','ref','self','super','crate']),
+  'Node.js': new Set(['const','let','var','function','async','await','for','while','if','else','return','new','class','import','from','require','export','default','true','false','null','undefined','console','Promise','of','in']),
+  Go: new Set(['func','var','const','type','struct','interface','for','range','if','else','return','defer','go','chan','select','case','default','break','continue','package','import','map','make','append','len','fmt','nil','true','false','error']),
+  Java: new Set(['public','private','protected','static','final','class','interface','extends','implements','new','return','void','for','while','if','else','try','catch','throws','import','package','this','super','true','false','null','String','int','long','double','boolean','System']),
+  'C++': new Set(['auto','const','void','for','while','if','else','return','new','delete','class','struct','namespace','using','include','template','typename','public','private','protected','std','cout','endl','true','false','nullptr','int','double','float','bool','char','long','unsigned']),
 }
+
+function highlightGeneric(code: string, lang: string): string {
+  const keywords = LANG_KEYWORDS[lang] || new Set()
+  let out = '', i = 0
+  while (i < code.length) {
+    const ch = code[i]
+    // line comment
+    if ((ch === '/' && code[i+1] === '/') || (ch === '#')) {
+      out += `<span class="ln-comment">${escHtml(code.slice(i))}</span>`; break
+    }
+    // string
+    if (ch === '"' || ch === "'") {
+      const q = ch; let s = q; i++
+      while (i < code.length && code[i] !== q) { if (code[i]==='\\') { s+=code[i++] }; s+=code[i]||''; i++ }
+      s += code[i]||''; i++
+      out += `<span class="ln-str">${escHtml(s)}</span>`; continue
+    }
+    // number
+    if (/\d/.test(ch) && (i === 0 || !/[a-zA-Z_]/.test(code[i-1]))) {
+      let n = ''
+      while (i < code.length && /[\d._]/.test(code[i])) n += code[i++]
+      out += `<span class="ln-num">${escHtml(n)}</span>`; continue
+    }
+    // identifier / keyword
+    if (/[a-zA-Z_]/.test(ch)) {
+      let w = ''
+      while (i < code.length && /[a-zA-Z0-9_]/.test(code[i])) w += code[i++]
+      if (keywords.has(w)) out += `<span class="ln-key">${w}</span>`
+      else if (code[i] === '(') out += `<span class="ln-fn">${escHtml(w)}</span>`
+      else out += escHtml(w)
+      continue
+    }
+    out += escHtml(ch); i++
+  }
+  return out
+}
+
+function formatLine(text: string): string {
+  if (!text.trim()) return '&nbsp;'
+  return sdkLang.value === 'Python'
+    ? highlightPython(text)
+    : highlightGeneric(text, sdkLang.value)
+}
+
+const currentSdkLines = computed(() =>
+  currentSdkSample.value.split('\n')
+)
 
 async function copyToClipboard(text: string) {
   try { await navigator.clipboard.writeText(text) } catch {}
@@ -238,12 +457,12 @@ const GETSTARTED = [
         <span class="eyebrow">LONGBRIDGE OPENAPI</span>
         <h1 class="h-display home-hero-title">
           Real-time markets,<br />
-          <span :style="{ color: 'var(--lb-brand)' }">delivered to your code.</span>
+          <span :style="{ color: 'var(--lb-brand)' }">built for AI.</span>
         </h1>
         <p class="t-body home-hero-sub">
-          Real-time market data, trading, and financial intelligence — delivered through
-          <b :style="{ color: 'var(--lb-fg-1)' }">AI Skill, CLI, MCP, SDK and OpenAPI</b>
-          for developers worldwide. One credential, seven SDKs, zero ceremony.
+          Real-time market data, quantitative research, and AI-powered analysis — through
+          <b :style="{ color: 'var(--lb-fg-1)' }">AI Skill, CLI, MCP, SDK and OpenAPI</b>.
+          One credential, every market, zero overhead.
         </p>
         <div class="home-hero-cta">
           <a class="btn btn-primary btn-lg" :href="localePath('/docs')">
@@ -276,7 +495,7 @@ const GETSTARTED = [
         <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:48px">
           <div style="max-width:560px">
             <span class="eyebrow">FEATURES</span>
-            <h2 class="h-section" style="margin-top:16px">Everything you need to build, test, and ship financial apps.</h2>
+            <h2 class="h-section" style="margin-top:16px">Everything you need for market analysis, quantitative research, and intelligent trading.</h2>
           </div>
           <a class="btn btn-ghost" :href="localePath('/docs')">
             Compare all
@@ -501,7 +720,7 @@ const GETSTARTED = [
       <div class="section-inner">
         <div style="max-width:560px;margin-bottom:48px">
           <span class="eyebrow">API Capabilities</span>
-          <h2 class="h-section" style="margin-top:16px">Everything you need to build trading and market data apps.</h2>
+          <h2 class="h-section" style="margin-top:16px">Real-time data and trading capabilities for every investment workflow.</h2>
         </div>
         <div class="api-caps-grid">
           <a v-for="c in API_CAPS" :key="c.title" :href="localePath('/api')" class="api-cap-card">
@@ -560,13 +779,13 @@ const GETSTARTED = [
             <div class="code" style="margin-top:12px;flex:1;display:flex;flex-direction:column">
               <div class="code-head">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" :style="{ color: 'var(--lb-fg-3)' }"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                <span style="font-size:11.5px;color:var(--lb-fg-3)">{{ sdkLang.toLowerCase() }} · {{ sdkTab.toLowerCase().replace(' ', '_') }}.py</span>
-                <button class="code-copy" @click="copyToClipboard(currentSdkSample.map(l => l[1]).join('\n'))">
+                <span style="font-size:11.5px;color:var(--lb-fg-3)">{{ sdkTab.toLowerCase().replace(/ /g, '_') }}.{{ fileExt[sdkLang] ?? 'py' }}</span>
+                <button class="code-copy" @click="copyToClipboard(currentSdkSample)">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
                 </button>
               </div>
               <div class="code-body" style="flex:1">
-                <div v-for="(line, idx) in currentSdkSample" :key="idx" v-html="formatCodeLine(line)" />
+                <div v-for="(line, idx) in currentSdkLines" :key="idx" v-html="formatLine(line)" />
               </div>
             </div>
             <div class="sdk-install">
@@ -668,7 +887,7 @@ const GETSTARTED = [
       <div class="section-inner">
         <div style="text-align:center;max-width:640px;margin:0 auto">
           <span class="eyebrow">Get started</span>
-          <h2 class="h-section" style="margin-top:18px">Start building in minutes</h2>
+          <h2 class="h-section" style="margin-top:18px">Get started in minutes</h2>
           <p class="t-body" style="margin-top:14px">
             Set up your environment, authenticate, and make your first API call — everything you need to go from zero to live data.
           </p>
@@ -695,10 +914,10 @@ const GETSTARTED = [
     <!-- ===== Final CTA ===== -->
     <section class="section">
       <div class="section-inner final-cta">
-        <h2 class="h-section" style="max-width:680px">Ship your trading product faster than the markets move.</h2>
+        <h2 class="h-section" style="max-width:680px">Your investment edge, powered by real-time data and AI.</h2>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <a class="btn btn-primary btn-lg" :href="localePath('/docs')">
-            Start building
+            Get started
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a class="btn btn-outline btn-lg" :href="localePath('/pricing')">See pricing</a>

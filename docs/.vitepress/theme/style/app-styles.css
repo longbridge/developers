@@ -19,7 +19,7 @@
 }
 
 .lb-dark {
-  --app-canvas: #06080f;
+  --app-canvas: #0a0e19;
   --app-card-stroke: #1f232e;
   --app-card-stroke-strong: #2c3039;
   --app-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
@@ -1175,7 +1175,7 @@
   width: 18px;
   height: 18px;
   line-height: 18px;
-  border-radius: 999px;
+  border-radius: 100%;
   display: grid;
   place-items: center;
   font-size: 10px;
@@ -1937,7 +1937,6 @@
   text-align: left;
   font: 500 13.5px/1.4 var(--lb-font-sans);
   color: var(--lb-fg-2);
-  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
   transition: all var(--lb-transition-fast);
@@ -1947,7 +1946,7 @@
   color: var(--lb-fg-1);
 }
 .skill-demo-nav-item.is-active {
-  background: color-mix(in srgb, var(--lb-brand) 10%, transparent);
+  background: color-mix(in srgb, var(--lb-brand) 40%, transparent);
   color: var(--lb-brand);
   font-weight: 600;
 }
@@ -2014,7 +2013,6 @@
   max-width: 70%;
   padding: 10px 14px;
   background: color-mix(in srgb, var(--lb-brand) 18%, var(--lb-bg-2));
-  border: 1px solid color-mix(in srgb, var(--lb-brand) 28%, var(--app-card-stroke));
   color: var(--lb-fg-1);
   border-radius: 14px 14px 4px 14px;
   font-size: 13px;

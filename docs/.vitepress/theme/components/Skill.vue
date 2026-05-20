@@ -1131,19 +1131,6 @@ function rowClass(flag: string | boolean) {
   border: 1px dashed var(--app-card-stroke) !important;
   color: var(--lb-fg-3) !important;
 }
-.ai-agent-mark {
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  line-height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-}
 
 /* ---- Copy button ---- */
 .code-copy {
@@ -1376,27 +1363,29 @@ function rowClass(flag: string | boolean) {
 
 /* ---- Skill Catalog ---- */
 .skill-marketplace-card {
-  background: var(--lb-bg-2);
-  border: 1px solid var(--app-card-stroke);
+  background: #13182a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 14px 16px;
-  min-width: 300px;
-  max-width: 340px;
+  min-width: 360px;
+  max-width: 400px;
 }
 .skill-marketplace-label {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: var(--lb-fg-2);
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.75);
   font-weight: 500;
   margin-bottom: 10px;
+  white-space: nowrap;
 }
 .skill-marketplace-pill {
   font-size: 10px;
   font-weight: 700;
-  background: color-mix(in srgb, var(--lb-brand) 15%, transparent);
-  color: var(--lb-brand);
+  background: color-mix(in srgb, var(--vp-c-brand-1) 20%, transparent);
+  color: var(--vp-c-brand-1);
   padding: 2px 6px;
   border-radius: 4px;
   letter-spacing: 0.05em;
@@ -1405,14 +1394,15 @@ function rowClass(flag: string | boolean) {
 .skill-marketplace-cmd {
   display: block;
   font-size: 11.5px;
+  line-height: 1.4;
   font-family: var(--vp-font-family-mono);
-  color: var(--lb-fg-1);
-  background: var(--lb-bg-1);
-  border: 1px solid var(--app-card-stroke);
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 7px 12px;
   margin-bottom: 6px;
-  word-break: break-all;
+  white-space: nowrap;
 }
 .skill-marketplace-cmd:last-child {
   margin-bottom: 0;
@@ -1426,10 +1416,11 @@ function rowClass(flag: string | boolean) {
 .skill-cat-tab {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
+  gap: 5px;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 13px;
+  line-height: 1.4;
   font-weight: 500;
   color: var(--lb-fg-2);
   background: var(--lb-bg-2);
@@ -1442,20 +1433,21 @@ function rowClass(flag: string | boolean) {
   border-color: var(--lb-fg-3);
 }
 .skill-cat-tab.is-active {
-  background: var(--lb-brand);
-  color: #fff;
-  border-color: var(--lb-brand);
+  background: var(--lb-fg-1);
+  color: var(--lb-bg-1);
+  border-color: var(--lb-fg-1);
 }
 .skill-cat-tab.is-active .skill-cat-count {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--lb-bg-1);
 }
 .skill-cat-count {
   font-size: 11px;
+  line-height: 1.4;
   background: var(--lb-bg-1);
   color: var(--lb-fg-3);
   border-radius: 999px;
-  padding: 1px 7px;
+  padding: 1px 6px;
   font-weight: 600;
 }
 .skill-grid {
@@ -1534,8 +1526,13 @@ function rowClass(flag: string | boolean) {
 /* ---- Capability Reference ---- */
 .skill-cap-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px 32px;
+}
+@media (max-width: 768px) {
+  .skill-cap-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .skill-cap-col ul {
   list-style: none;
