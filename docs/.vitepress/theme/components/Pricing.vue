@@ -222,9 +222,8 @@ const matrixRows = computed<MatrixRow[]>(() => {
             </div>
             <ul class="pricing-plan-feats">
               <li v-for="f in p.feats" :key="f">
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="10" :fill="p.color" fill-opacity="0.15"/>
-                  <path d="M6 10.5l2.5 2.5 5.5-5.5" :stroke="p.color" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12l4.5 4.5 9.5-9.5" :stroke="p.color" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <span>{{ f }}</span>
               </li>
@@ -399,12 +398,12 @@ const matrixRows = computed<MatrixRow[]>(() => {
 }
 .pricing-cycle-tab:hover { color: var(--lb-fg-1); }
 .pricing-cycle-tab.is-active {
-  background: var(--lb-brand);
-  color: #fff;
+  background: var(--lb-fg-1);
+  color: var(--lb-fg-invert);
 }
 .pricing-cycle-tab.is-active .pricing-cycle-badge {
-  background: rgba(255,255,255,0.25);
-  color: #fff;
+  background: color-mix(in srgb, var(--lb-up) 20%, transparent);
+  color: var(--lb-up);
 }
 .pricing-cycle-badge {
   font-size: 10px;
@@ -698,7 +697,7 @@ const matrixRows = computed<MatrixRow[]>(() => {
 }
 .btn:hover { opacity: 0.85; }
 .btn-primary {
-  background: var(--lb-brand);
-  color: #fff;
+  background: var(--lb-fg-1);
+  color: var(--lb-fg-invert);
 }
 </style>
