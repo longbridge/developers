@@ -196,36 +196,26 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "name": "The Vanguard Group, Inc.",
+    "title": "",
+    "avatar": "",
     "owner_source": "Institution",
-    "holding_summary": [
-      {
-        "period": "2025-12-31",
-        "accum_buy": "8500000",
-        "accum_sell": "2687264",
-        "stock_price": "243.08"
-      },
-      {
-        "period": "2025-09-30",
-        "accum_buy": "3200000",
-        "accum_sell": "1500000",
-        "stock_price": "226.51"
-      }
-    ],
+    "holding_periods": [],
+    "holding_details": [],
+    "holding_summary": [],
+    "trading_periods": ["Past 1 Month", "Past 3 Months", "Past 1 Year", "Past 3 Years"],
     "tradings": [
       {
-        "period": "2025-12-31",
+        "period": "Past 1 Month",
+        "accum_buy": "8500000.00",
+        "accum_sell": "2687264.00",
+        "net_buy": "5812736.00",
         "trading_details": [
           {
             "trading_date": "2025-12-18",
             "trading_shares": "5200000",
             "trading_price": "248.12",
             "trading_type": "Buy"
-          },
-          {
-            "trading_date": "2025-11-05",
-            "trading_shares": "2687264",
-            "trading_price": "222.91",
-            "trading_type": "Sell"
           }
         ]
       }
@@ -249,16 +239,21 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
+| name | string | false | 股东名称 |
+| title | string | false | 股东头衔 / 类型 |
+| avatar | string | false | 头像 URL |
 | owner_source | string | false | 股东类型：`Company`、`Institution`、`Person`、`Insider` |
-| holding_summary | object[] | false | 各报告期持仓汇总 |
-| ∟ period | string | false | 报告期，格式 `YYYY-MM-DD` |
-| ∟ accum_buy | string | false | 该期累计买入股数 |
-| ∟ accum_sell | string | false | 该期累计卖出股数 |
-| ∟ stock_price | string | false | 报告期末股价 |
-| tradings | object[] | false | 各报告期交易明细 |
-| ∟ period | string | false | 报告期，格式 `YYYY-MM-DD` |
-| ∟ trading_details | object[] | false | 该报告期内的交易记录 |
-| ∟ ∟ trading_date | string | false | 交易日期，格式 `YYYY-MM-DD` |
+| holding_periods | string[] | false | 可用的持仓报告期列表 |
+| holding_details | object[] | false | 持仓明细记录 |
+| holding_summary | object[] | false | 持仓汇总记录 |
+| trading_periods | string[] | false | 可用的交易统计区间（如 `Past 1 Month`、`Past 3 Months`） |
+| tradings | object[] | false | 各区间交易汇总 |
+| ∟ period | string | false | 区间标签（如 `Past 1 Month`） |
+| ∟ accum_buy | string | false | 该区间累计买入股数 |
+| ∟ accum_sell | string | false | 该区间累计卖出股数 |
+| ∟ net_buy | string | false | 该区间净买入股数（买入减卖出） |
+| ∟ trading_details | object[] | false | 该区间内的具体交易记录 |
+| ∟ ∟ trading_date | string | false | 交易日期 |
 | ∟ ∟ trading_shares | string | false | 交易股数 |
 | ∟ ∟ trading_price | string | false | 交易价格 |
 | ∟ ∟ trading_type | string | false | 交易方向：`Buy` 或 `Sell` |

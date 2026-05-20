@@ -194,21 +194,21 @@ func main() {
   "data": {
     "screeners": [
       {
-        "id": 1,
-        "name": "High Profit Low Valuation",
-        "average_day_chg": "+0.82%",
-        "stocks": ["AAPL.US", "MSFT.US", "GOOGL.US"],
+        "id": "1",
+        "name": "High Dividend Blue Chips",
         "groups": [
           {
-            "group_name": "Valuation",
+            "group_name": "Range",
+            "group_type": "range",
             "indicators": [
-              { "id": 10, "key": "filter_pe", "name": "P/E Ratio", "unit": "x", "min": 0, "max": 30 }
+              { "id": -1, "key": "filter_market", "name": "HK", "unit": "", "min": "", "max": "", "value": "HK", "tech_data": [] }
             ]
           },
           {
-            "group_name": "Profitability",
+            "group_name": "Dividend Indicators",
+            "group_type": "DividendIndex",
             "indicators": [
-              { "id": 25, "key": "filter_roe", "name": "Return on Equity", "unit": "%", "min": 15, "max": null }
+              { "id": 29, "key": "filter_divyld", "name": "Dividend Yield (TTM)", "unit": "%", "min": "4", "max": "", "value": "", "tech_data": [] }
             ]
           }
         ]
@@ -234,16 +234,17 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | screeners | object[] | false | Strategy list |
-| ∟ id | integer | false | Strategy ID |
+| ∟ id | string | false | Strategy ID |
 | ∟ name | string | false | Strategy name |
-| ∟ average_day_chg | string | false | Recent average daily change of strategy constituents |
-| ∟ stocks | string[] | false | Current list of stock symbols from this strategy |
 | ∟ groups | object[] | false | Filter condition groups |
 | ∟ ∟ group_name | string | false | Group name |
+| ∟ ∟ group_type | string | false | Group type (e.g. `range`, `Quotes`, `DividendIndex`) |
 | ∟ ∟ indicators | object[] | false | Indicator conditions in this group |
 | ∟ ∟ ∟ id | integer | false | Indicator ID |
 | ∟ ∟ ∟ key | string | false | Indicator key; usable in `screener_search` |
 | ∟ ∟ ∟ name | string | false | Indicator name |
 | ∟ ∟ ∟ unit | string | false | Indicator unit |
-| ∟ ∟ ∟ min | number | false | Minimum value set by the strategy |
-| ∟ ∟ ∟ max | number | false | Maximum value set by the strategy; `null` means no upper bound |
+| ∟ ∟ ∟ min | string | false | Minimum value set by the strategy; empty string means no lower bound |
+| ∟ ∟ ∟ max | string | false | Maximum value set by the strategy; empty string means no upper bound |
+| ∟ ∟ ∟ value | string | false | Fixed value (used for non-range indicators such as market selector) |
+| ∟ ∟ ∟ tech_data | array | false | Technical indicator data array |

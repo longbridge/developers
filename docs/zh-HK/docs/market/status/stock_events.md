@@ -202,34 +202,25 @@ func main() {
     "events": [
       {
         "stock": {
-          "symbol": "9988.HK",
-          "name": "阿里巴巴",
-          "change": "+4.82%",
-          "labels": ["港股", "科技"]
+          "code": "TSLA",
+          "counter_id": "ST/US/TSLA",
+          "name": "特斯拉",
+          "change": "-0.0388",
+          "last_done": "404.110",
+          "market": "US",
+          "labels": ["汽車製造商"],
+          "logo": "https://assets.lbkrs.com/ticker/ST/US/TSLA.png",
+          "trade_status": 0
         },
-        "timestamp": 1747728600000,
-        "alert_reason": "財報超預期，營收增長 8%",
-        "alert_type": "earnings_beat",
-        "post": {
-          "id": "post_abc123",
-          "title": "阿里巴巴 Q4 財報解讀：雲業務強勁增長",
-          "url": "https://longbridge.com/news/post_abc123"
-        }
-      },
-      {
-        "stock": {
-          "symbol": "NVDA.US",
-          "name": "英偉達",
-          "change": "+3.21%",
-          "labels": ["美股", "半導體"]
-        },
-        "timestamp": 1747725000000,
-        "alert_reason": "大宗買入，成交量放大 3 倍",
-        "alert_type": "volume_spike",
+        "timestamp": "1779202097",
+        "alert_reason": "波動超 20 日均值",
+        "alert_type": 11,
         "post": null
       }
     ],
-    "next_params": "eyJvZmZzZXQiOjIwfQ=="
+    "next_params": {
+      "visited": ["11098290", "11098478", "11099705"]
+    }
   }
 }
 ```
@@ -251,15 +242,17 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | events | object[] | false | 異動股票列表 |
 | ∟ stock | object | false | 股票基本信息 |
-| ∟ ∟ symbol | string | false | 證券代碼 |
+| ∟ ∟ code | string | false | 股票代碼（如 `TSLA`） |
+| ∟ ∟ counter_id | string | false | Counter ID（如 `ST/US/TSLA`） |
 | ∟ ∟ name | string | false | 證券名稱 |
-| ∟ ∟ change | string | false | 漲跌幅（含符號，如 `+4.82%`） |
-| ∟ ∟ labels | string[] | false | 標籤列表（市場、行業等） |
-| ∟ timestamp | integer | false | 異動時間（Unix 毫秒時間戳） |
+| ∟ ∟ change | string | false | 漲跌幅（如 `-0.0388`） |
+| ∟ ∟ last_done | string | false | 最新成交價 |
+| ∟ ∟ market | string | false | 市場：`US`、`HK`、`CN`、`SG` |
+| ∟ ∟ labels | string[] | false | 行業 / 主題標籤 |
+| ∟ ∟ logo | string | false | Logo 圖片 URL |
+| ∟ ∟ trade_status | integer | false | 交易狀態碼 |
+| ∟ timestamp | string | false | 異動時間（Unix 秒，字符串格式） |
 | ∟ alert_reason | string | false | 異動原因描述 |
-| ∟ alert_type | string | false | 異動類型標識符 |
+| ∟ alert_type | integer | false | 異動類型代碼 |
 | ∟ post | object | false | 關聯新聞/文章；無關聯時為 `null` |
-| ∟ ∟ id | string | false | 文章 ID |
-| ∟ ∟ title | string | false | 文章標題 |
-| ∟ ∟ url | string | false | 文章鏈接 |
-| next_params | string | false | 翻頁參數（Base64 編碼），傳入下次請求以獲取下一頁 |
+| next_params | object | false | 翻頁參數對象，傳入下次請求以獲取下一頁 |

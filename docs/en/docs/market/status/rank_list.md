@@ -196,26 +196,20 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "bmp": false,
     "lists": [
       {
-        "symbol": "NVDA.US",
-        "name": "NVIDIA",
-        "last_done": "135.62",
-        "chg": "+2.84%",
-        "inflow": "1250000000",
-        "market_cap": "3312000000000",
-        "pre_post_price": "136.10",
-        "pre_post_chg": "+0.35%"
-      },
-      {
-        "symbol": "TSLA.US",
-        "name": "Tesla",
-        "last_done": "342.15",
-        "chg": "-1.23%",
-        "inflow": "875000000",
-        "market_cap": "1098000000000",
-        "pre_post_price": "341.00",
-        "pre_post_chg": "-0.34%"
+        "code": "MU",
+        "counter_id": "ST/US/MU",
+        "name": "Micron Technology",
+        "market": "US",
+        "last_done": "698.740",
+        "chg": "0.0252",
+        "inflow": "-347041642",
+        "market_cap": "787992890796",
+        "industry": "Semiconductor Manufacturers",
+        "pre_post_price": "700.10",
+        "pre_post_chg": "0.0020"
       }
     ]
   }
@@ -237,12 +231,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
+| bmp | boolean | false | Whether the response is a market preview (before open) |
 | lists | object[] | false | Leaderboard stock list |
-| ∟ symbol | string | false | Security symbol |
+| ∟ code | string | false | Ticker code (e.g. `MU`) |
+| ∟ counter_id | string | false | Counter ID (e.g. `ST/US/MU`) |
 | ∟ name | string | false | Security name |
+| ∟ market | string | false | Market: `US`, `HK`, `CN`, `SG` |
 | ∟ last_done | string | false | Latest trade price |
-| ∟ chg | string | false | Price change with sign, e.g. `+2.84%` |
+| ∟ chg | string | false | Price change ratio (e.g. `0.0252`) |
 | ∟ inflow | string | false | Net capital inflow (in the market's currency) |
 | ∟ market_cap | string | false | Market capitalisation |
+| ∟ industry | string | false | Industry classification |
 | ∟ pre_post_price | string | false | Pre/post-market price |
-| ∟ pre_post_chg | string | false | Pre/post-market price change |
+| ∟ pre_post_chg | string | false | Pre/post-market price change ratio |

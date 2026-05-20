@@ -196,18 +196,20 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "name": "The Vanguard Group, Inc.",
+    "title": "",
+    "avatar": "",
     "owner_source": "Institution",
-    "holding_summary": [
-      {
-        "period": "2025-12-31",
-        "accum_buy": "8500000",
-        "accum_sell": "2687264",
-        "stock_price": "243.08"
-      }
-    ],
+    "holding_periods": [],
+    "holding_details": [],
+    "holding_summary": [],
+    "trading_periods": ["Past 1 Month", "Past 3 Months", "Past 1 Year", "Past 3 Years"],
     "tradings": [
       {
-        "period": "2025-12-31",
+        "period": "Past 1 Month",
+        "accum_buy": "8500000.00",
+        "accum_sell": "2687264.00",
+        "net_buy": "5812736.00",
         "trading_details": [
           {
             "trading_date": "2025-12-18",
@@ -237,16 +239,21 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
+| name | string | false | Shareholder name |
+| title | string | false | Shareholder title / type |
+| avatar | string | false | Avatar URL |
 | owner_source | string | false | Shareholder type: `Company`, `Institution`, `Person`, `Insider` |
-| holding_summary | object[] | false | Holding summary per reporting period |
-| ∟ period | string | false | Reporting period in `YYYY-MM-DD` format |
-| ∟ accum_buy | string | false | Cumulative shares bought this period |
-| ∟ accum_sell | string | false | Cumulative shares sold this period |
-| ∟ stock_price | string | false | Closing price at end of period |
-| tradings | object[] | false | Trade details per reporting period |
-| ∟ period | string | false | Reporting period in `YYYY-MM-DD` format |
+| holding_periods | string[] | false | Available holding periods |
+| holding_details | object[] | false | Holding detail records |
+| holding_summary | object[] | false | Holding summary records |
+| trading_periods | string[] | false | Available trading periods (e.g. `Past 1 Month`, `Past 3 Months`) |
+| tradings | object[] | false | Trade aggregates per period |
+| ∟ period | string | false | Period label (e.g. `Past 1 Month`) |
+| ∟ accum_buy | string | false | Cumulative shares bought in this period |
+| ∟ accum_sell | string | false | Cumulative shares sold in this period |
+| ∟ net_buy | string | false | Net shares bought (buy minus sell) in this period |
 | ∟ trading_details | object[] | false | Individual transactions within the period |
-| ∟ ∟ trading_date | string | false | Trade date in `YYYY-MM-DD` format |
+| ∟ ∟ trading_date | string | false | Trade date |
 | ∟ ∟ trading_shares | string | false | Number of shares traded |
 | ∟ ∟ trading_price | string | false | Trade price |
 | ∟ ∟ trading_type | string | false | Trade direction: `Buy` or `Sell` |

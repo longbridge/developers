@@ -194,21 +194,21 @@ func main() {
   "data": {
     "screeners": [
       {
-        "id": 1,
-        "name": "高盈利低估值",
-        "average_day_chg": "+0.82%",
-        "stocks": ["AAPL.US", "MSFT.US", "GOOGL.US"],
+        "id": "1",
+        "name": "高股息蓝筹股",
         "groups": [
           {
-            "group_name": "估值",
+            "group_name": "范围",
+            "group_type": "range",
             "indicators": [
-              { "id": 10, "key": "filter_pe", "name": "市盈率", "unit": "x", "min": 0, "max": 30 }
+              { "id": -1, "key": "filter_market", "name": "港股", "unit": "", "min": "", "max": "", "value": "HK", "tech_data": [] }
             ]
           },
           {
-            "group_name": "盈利能力",
+            "group_name": "分红指标",
+            "group_type": "DividendIndex",
             "indicators": [
-              { "id": 25, "key": "filter_roe", "name": "净资产收益率", "unit": "%", "min": 15, "max": null }
+              { "id": 29, "key": "filter_divyld", "name": "股息率 (TTM)", "unit": "%", "min": "4", "max": "", "value": "", "tech_data": [] }
             ]
           }
         ]
@@ -234,16 +234,17 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | screeners | object[] | false | 策略列表 |
-| ∟ id | integer | false | 策略 ID |
+| ∟ id | string | false | 策略 ID |
 | ∟ name | string | false | 策略名称 |
-| ∟ average_day_chg | string | false | 策略标的近期平均日涨跌幅 |
-| ∟ stocks | string[] | false | 策略当前筛选出的股票代码列表 |
 | ∟ groups | object[] | false | 策略过滤条件分组 |
 | ∟ ∟ group_name | string | false | 分组名称 |
+| ∟ ∟ group_type | string | false | 分组类型（如 `range`、`Quotes`、`DividendIndex`） |
 | ∟ ∟ indicators | object[] | false | 该分组下的指标条件 |
 | ∟ ∟ ∟ id | integer | false | 指标 ID |
 | ∟ ∟ ∟ key | string | false | 指标键值，可用于 `screener_search` |
 | ∟ ∟ ∟ name | string | false | 指标名称 |
 | ∟ ∟ ∟ unit | string | false | 指标单位 |
-| ∟ ∟ ∟ min | number | false | 策略设定的最小值 |
-| ∟ ∟ ∟ max | number | false | 策略设定的最大值；`null` 表示无上限 |
+| ∟ ∟ ∟ min | string | false | 策略设定的最小值；空字符串表示无下限 |
+| ∟ ∟ ∟ max | string | false | 策略设定的最大值；空字符串表示无上限 |
+| ∟ ∟ ∟ value | string | false | 固定值（用于非范围型指标，如市场选择器） |
+| ∟ ∟ ∟ tech_data | array | false | 技术指标数据数组 |

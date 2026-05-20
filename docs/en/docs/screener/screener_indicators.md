@@ -192,51 +192,46 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "indicators": [
+    "groups": [
       {
-        "id": 10,
-        "key": "filter_pe",
-        "name": "P/E Ratio",
-        "unit": "x",
-        "value_min": 0,
-        "value_max": 1000,
-        "step": 1
+        "group_name": "Market",
+        "group_type": "range",
+        "indicators": [
+          {
+            "id": -1,
+            "key": "filter_market",
+            "name": "Market",
+            "unit": "",
+            "category": 0,
+            "description": "",
+            "default_range": [],
+            "default_selected": false,
+            "places": 0,
+            "sub_indicators": [],
+            "tech_indicators": [],
+            "value_ranges": []
+          }
+        ]
       },
       {
-        "id": 11,
-        "key": "filter_pb",
-        "name": "P/B Ratio",
-        "unit": "x",
-        "value_min": 0,
-        "value_max": 100,
-        "step": 0.1
-      },
-      {
-        "id": 20,
-        "key": "filter_marketcap",
-        "name": "Market Cap",
-        "unit": "bn",
-        "value_min": 0,
-        "value_max": 100000,
-        "step": 10
-      },
-      {
-        "id": 25,
-        "key": "filter_roe",
-        "name": "Return on Equity",
-        "unit": "%",
-        "value_min": -100,
-        "value_max": 200,
-        "step": 1
-      },
-      {
-        "id": 30,
-        "key": "filter_revenue_growth",
-        "name": "Revenue Growth",
-        "unit": "%",
-        "value_min": -100,
-        "value_max": 500,
-        "step": 1
+        "group_name": "Quote Indicators",
+        "group_type": "Quotes",
+        "indicators": [
+          {
+            "id": 1,
+            "key": "filter_marketcap",
+            "name": "Market Cap",
+            "unit": "bn",
+            "category": 0,
+            "description": "",
+            "default_range": [],
+            "default_selected": false,
+            "places": 0,
+            "sub_indicators": [],
+            "tech_indicators": [],
+            "value_ranges": []
+          }
+        ]
       }
     ]
   }
@@ -258,11 +253,19 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| indicators | object[] | false | List of available indicators |
-| ∟ id | integer | false | Indicator ID |
-| ∟ key | string | false | Indicator key for building filter conditions (format: `filter_<key>:<min>:<max>`) |
-| ∟ name | string | false | Indicator display name |
-| ∟ unit | string | false | Unit (e.g. `x`, `%`, `bn`) |
-| ∟ value_min | number | false | Minimum allowed value for this indicator |
-| ∟ value_max | number | false | Maximum allowed value for this indicator |
-| ∟ step | number | false | Suggested step size |
+| groups | object[] | false | Indicator groups |
+| ∟ group_name | string | false | Group name |
+| ∟ group_type | string | false | Group type (e.g. `range`, `Quotes`, `DividendIndex`) |
+| ∟ indicators | object[] | false | List of indicators in this group |
+| ∟ ∟ id | integer | false | Indicator ID |
+| ∟ ∟ key | string | false | Indicator key for building filter conditions |
+| ∟ ∟ name | string | false | Indicator display name |
+| ∟ ∟ unit | string | false | Unit (e.g. `%`, `bn`) |
+| ∟ ∟ category | integer | false | Indicator category code |
+| ∟ ∟ description | string | false | Indicator description |
+| ∟ ∟ default_range | array | false | Default filter range |
+| ∟ ∟ default_selected | boolean | false | Whether this indicator is selected by default |
+| ∟ ∟ places | integer | false | Decimal places for display |
+| ∟ ∟ sub_indicators | array | false | Sub-indicator definitions |
+| ∟ ∟ tech_indicators | array | false | Technical indicator definitions |
+| ∟ ∟ value_ranges | array | false | Available value ranges for this indicator |

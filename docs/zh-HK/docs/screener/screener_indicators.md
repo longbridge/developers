@@ -192,51 +192,46 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "indicators": [
+    "groups": [
       {
-        "id": 10,
-        "key": "filter_pe",
-        "name": "市盈率",
-        "unit": "x",
-        "value_min": 0,
-        "value_max": 1000,
-        "step": 1
+        "group_name": "市場",
+        "group_type": "range",
+        "indicators": [
+          {
+            "id": -1,
+            "key": "filter_market",
+            "name": "市場",
+            "unit": "",
+            "category": 0,
+            "description": "",
+            "default_range": [],
+            "default_selected": false,
+            "places": 0,
+            "sub_indicators": [],
+            "tech_indicators": [],
+            "value_ranges": []
+          }
+        ]
       },
       {
-        "id": 11,
-        "key": "filter_pb",
-        "name": "市淨率",
-        "unit": "x",
-        "value_min": 0,
-        "value_max": 100,
-        "step": 0.1
-      },
-      {
-        "id": 20,
-        "key": "filter_marketcap",
-        "name": "市值",
-        "unit": "億",
-        "value_min": 0,
-        "value_max": 100000,
-        "step": 10
-      },
-      {
-        "id": 25,
-        "key": "filter_roe",
-        "name": "淨資產收益率",
-        "unit": "%",
-        "value_min": -100,
-        "value_max": 200,
-        "step": 1
-      },
-      {
-        "id": 30,
-        "key": "filter_revenue_growth",
-        "name": "營收增速",
-        "unit": "%",
-        "value_min": -100,
-        "value_max": 500,
-        "step": 1
+        "group_name": "行情類指標",
+        "group_type": "Quotes",
+        "indicators": [
+          {
+            "id": 1,
+            "key": "filter_marketcap",
+            "name": "市值",
+            "unit": "億",
+            "category": 0,
+            "description": "",
+            "default_range": [],
+            "default_selected": false,
+            "places": 0,
+            "sub_indicators": [],
+            "tech_indicators": [],
+            "value_ranges": []
+          }
+        ]
       }
     ]
   }
@@ -258,11 +253,19 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| indicators | object[] | false | 可用指標列表 |
-| ∟ id | integer | false | 指標 ID |
-| ∟ key | string | false | 指標鍵值，用於構建篩選條件（格式：`filter_<key>:<min>:<max>`） |
-| ∟ name | string | false | 指標顯示名稱 |
-| ∟ unit | string | false | 單位（如 `x`、`%`、`億`） |
-| ∟ value_min | number | false | 指標允許的最小值 |
-| ∟ value_max | number | false | 指標允許的最大值 |
-| ∟ step | number | false | 建議步長 |
+| groups | object[] | false | 指標分組 |
+| ∟ group_name | string | false | 分組名稱 |
+| ∟ group_type | string | false | 分組類型（如 `range`、`Quotes`、`DividendIndex`） |
+| ∟ indicators | object[] | false | 該分組下的指標列表 |
+| ∟ ∟ id | integer | false | 指標 ID |
+| ∟ ∟ key | string | false | 指標鍵值，用於構建篩選條件 |
+| ∟ ∟ name | string | false | 指標顯示名稱 |
+| ∟ ∟ unit | string | false | 單位（如 `%`、`億`） |
+| ∟ ∟ category | integer | false | 指標分類代碼 |
+| ∟ ∟ description | string | false | 指標描述 |
+| ∟ ∟ default_range | array | false | 默認篩選範圍 |
+| ∟ ∟ default_selected | boolean | false | 是否默認選中 |
+| ∟ ∟ places | integer | false | 顯示小數位數 |
+| ∟ ∟ sub_indicators | array | false | 子指標定義 |
+| ∟ ∟ tech_indicators | array | false | 技術指標定義 |
+| ∟ ∟ value_ranges | array | false | 指標可選值範圍 |

@@ -203,29 +203,42 @@ func main() {
   "data": {
     "list": [
       {
-        "symbol": "AAPL.US",
+        "counter_id": "ST/US/AAPL",
         "name": "蘋果公司",
+        "currency": "USD",
         "market_value": "3241500000000",
         "price_close": "213.49",
         "pe": "32.15",
         "pb": "50.21",
         "ps": "8.04",
+        "roe": "136.45",
+        "eps": "6.43",
+        "bps": "4.38",
+        "dps": "0.99",
+        "div_yld": "0.46",
+        "assets": "371082000000",
         "history": [
-          { "date": "2026-05-01", "pe": "32.15", "pb": "50.21", "ps": "8.04" },
-          { "date": "2026-04-01", "pe": "28.73", "pb": "46.88", "ps": "7.52" }
+          { "date": "1622520000", "pe": "37.56", "pb": "30.16", "ps": "6.41" },
+          { "date": "1625112000", "pe": "41.49", "pb": "35.64", "ps": "6.60" }
         ]
       },
       {
-        "symbol": "MSFT.US",
+        "counter_id": "ST/US/MSFT",
         "name": "微軟",
+        "currency": "USD",
         "market_value": "3085000000000",
         "price_close": "415.32",
         "pe": "35.42",
         "pb": "12.87",
         "ps": "12.61",
+        "roe": "38.21",
+        "eps": "11.72",
+        "bps": "32.28",
+        "dps": "3.32",
+        "div_yld": "0.80",
+        "assets": "512163000000",
         "history": [
-          { "date": "2026-05-01", "pe": "35.42", "pb": "12.87", "ps": "12.61" },
-          { "date": "2026-04-01", "pe": "33.10", "pb": "12.01", "ps": "11.94" }
+          { "date": "1622520000", "pe": "33.12", "pb": "11.94", "ps": "11.84" }
         ]
       }
     ]
@@ -249,15 +262,22 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | list | object[] | false | 股票估值對比列表 |
-| ∟ symbol | string | false | 證券代碼 |
+| ∟ counter_id | string | false | Counter ID（如 `ST/US/AAPL`） |
 | ∟ name | string | false | 證券名稱 |
-| ∟ market_value | string | false | 市值（結果貨幣） |
+| ∟ currency | string | false | 數值所用貨幣 |
+| ∟ market_value | string | false | 市值 |
 | ∟ price_close | string | false | 最新收盤價 |
 | ∟ pe | string | false | 市盈率（TTM） |
 | ∟ pb | string | false | 市淨率 |
 | ∟ ps | string | false | 市銷率（TTM） |
+| ∟ roe | string | false | 淨資產收益率（%） |
+| ∟ eps | string | false | 每股收益（TTM） |
+| ∟ bps | string | false | 每股淨資產 |
+| ∟ dps | string | false | 每股派息（TTM） |
+| ∟ div_yld | string | false | 股息率（%） |
+| ∟ assets | string | false | 總資產 |
 | ∟ history | object[] | false | 歷史估值時間序列 |
-| ∟ ∟ date | string | false | 日期，格式 `YYYY-MM-DD` |
+| ∟ ∟ date | string | false | 日期（Unix 時間戳，秒） |
 | ∟ ∟ pe | string | false | 歷史 PE |
 | ∟ ∟ pb | string | false | 歷史 PB |
 | ∟ ∟ ps | string | false | 歷史 PS |

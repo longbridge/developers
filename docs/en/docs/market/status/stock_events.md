@@ -202,34 +202,25 @@ func main() {
     "events": [
       {
         "stock": {
-          "symbol": "9988.HK",
-          "name": "Alibaba",
-          "change": "+4.82%",
-          "labels": ["HK", "Technology"]
+          "code": "TSLA",
+          "counter_id": "ST/US/TSLA",
+          "name": "特斯拉",
+          "change": "-0.0388",
+          "last_done": "404.110",
+          "market": "US",
+          "labels": ["汽车制造商"],
+          "logo": "https://assets.lbkrs.com/ticker/ST/US/TSLA.png",
+          "trade_status": 0
         },
-        "timestamp": 1747728600000,
-        "alert_reason": "Earnings beat: revenue up 8%",
-        "alert_type": "earnings_beat",
-        "post": {
-          "id": "post_abc123",
-          "title": "Alibaba Q4 Earnings: Cloud Business Surges",
-          "url": "https://longbridge.com/news/post_abc123"
-        }
-      },
-      {
-        "stock": {
-          "symbol": "NVDA.US",
-          "name": "NVIDIA",
-          "change": "+3.21%",
-          "labels": ["US", "Semiconductor"]
-        },
-        "timestamp": 1747725000000,
-        "alert_reason": "Block buy: volume up 3x",
-        "alert_type": "volume_spike",
+        "timestamp": "1779202097",
+        "alert_reason": "波动超 20 日均值",
+        "alert_type": 11,
         "post": null
       }
     ],
-    "next_params": "eyJvZmZzZXQiOjIwfQ=="
+    "next_params": {
+      "visited": ["11098290", "11098478", "11099705"]
+    }
   }
 }
 ```
@@ -251,15 +242,17 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | events | object[] | false | List of moving stocks |
 | ∟ stock | object | false | Basic stock information |
-| ∟ ∟ symbol | string | false | Security symbol |
+| ∟ ∟ code | string | false | Ticker code (e.g. `TSLA`) |
+| ∟ ∟ counter_id | string | false | Counter ID (e.g. `ST/US/TSLA`) |
 | ∟ ∟ name | string | false | Security name |
-| ∟ ∟ change | string | false | Price change with sign, e.g. `+4.82%` |
-| ∟ ∟ labels | string[] | false | Tags (market, industry, etc.) |
-| ∟ timestamp | integer | false | Event time (Unix milliseconds) |
+| ∟ ∟ change | string | false | Price change ratio (e.g. `-0.0388`) |
+| ∟ ∟ last_done | string | false | Latest trade price |
+| ∟ ∟ market | string | false | Market: `US`, `HK`, `CN`, `SG` |
+| ∟ ∟ labels | string[] | false | Industry / theme tags |
+| ∟ ∟ logo | string | false | Logo image URL |
+| ∟ ∟ trade_status | integer | false | Trading status code |
+| ∟ timestamp | string | false | Event time (Unix seconds as string) |
 | ∟ alert_reason | string | false | Description of the move reason |
-| ∟ alert_type | string | false | Move type identifier |
+| ∟ alert_type | integer | false | Move type code |
 | ∟ post | object | false | Associated news/article; `null` if none |
-| ∟ ∟ id | string | false | Article ID |
-| ∟ ∟ title | string | false | Article title |
-| ∟ ∟ url | string | false | Article URL |
-| next_params | string | false | Pagination cursor (Base64 encoded); pass to the next request to get the next page |
+| next_params | object | false | Pagination cursor object; pass to the next request to get the next page |

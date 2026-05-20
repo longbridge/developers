@@ -196,26 +196,20 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
+    "bmp": false,
     "lists": [
       {
-        "symbol": "NVDA.US",
-        "name": "英伟达",
-        "last_done": "135.62",
-        "chg": "+2.84%",
-        "inflow": "1250000000",
-        "market_cap": "3312000000000",
-        "pre_post_price": "136.10",
-        "pre_post_chg": "+0.35%"
-      },
-      {
-        "symbol": "TSLA.US",
-        "name": "特斯拉",
-        "last_done": "342.15",
-        "chg": "-1.23%",
-        "inflow": "875000000",
-        "market_cap": "1098000000000",
-        "pre_post_price": "341.00",
-        "pre_post_chg": "-0.34%"
+        "code": "MU",
+        "counter_id": "ST/US/MU",
+        "name": "美光科技",
+        "market": "US",
+        "last_done": "698.740",
+        "chg": "0.0252",
+        "inflow": "-347041642",
+        "market_cap": "787992890796",
+        "industry": "半导体厂商",
+        "pre_post_price": "700.10",
+        "pre_post_chg": "0.0020"
       }
     ]
   }
@@ -237,12 +231,16 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
+| bmp | boolean | false | 是否为盘前预览数据 |
 | lists | object[] | false | 排行榜股票列表 |
-| ∟ symbol | string | false | 证券代码 |
+| ∟ code | string | false | 股票代码（如 `MU`） |
+| ∟ counter_id | string | false | Counter ID（如 `ST/US/MU`） |
 | ∟ name | string | false | 证券名称 |
+| ∟ market | string | false | 市场：`US`、`HK`、`CN`、`SG` |
 | ∟ last_done | string | false | 最新成交价 |
-| ∟ chg | string | false | 涨跌幅（含符号，如 `+2.84%`） |
+| ∟ chg | string | false | 涨跌幅（如 `0.0252`） |
 | ∟ inflow | string | false | 净流入资金（单位：所属市场货币） |
 | ∟ market_cap | string | false | 市值 |
+| ∟ industry | string | false | 行业分类 |
 | ∟ pre_post_price | string | false | 盘前/盘后价格 |
 | ∟ pre_post_chg | string | false | 盘前/盘后涨跌幅 |

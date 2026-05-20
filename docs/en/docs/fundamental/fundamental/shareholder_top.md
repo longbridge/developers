@@ -195,28 +195,31 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "periods": ["2025-12-31", "2025-09-30"],
     "info": [
       {
-        "period": "2025-12-31",
+        "period": "Latest",
         "share_holders": [
           {
-            "object_id": 19463,
+            "object_id": "148057",
             "name": "The Vanguard Group, Inc.",
-            "title": "Institution",
-            "shares_held": "1285506048",
-            "percent_shares_held": "8.46",
-            "shares_changed": "5812736",
-            "filing_date": "2026-02-14"
+            "title": "",
+            "shares_held": "1426283914.00",
+            "percent_shares_held": "9.71%",
+            "percent_shares_changed": "0.01%",
+            "shares_changed": "0.00",
+            "period": "Latest",
+            "filing_date": "2025/12/31"
           },
           {
-            "object_id": 20181,
+            "object_id": "452583",
             "name": "BlackRock, Inc.",
-            "title": "Institution",
-            "shares_held": "1071234816",
-            "percent_shares_held": "7.05",
-            "shares_changed": "-3104128",
-            "filing_date": "2026-02-05"
+            "title": "",
+            "shares_held": "1138572603.00",
+            "percent_shares_held": "7.75%",
+            "percent_shares_changed": "-0.06%",
+            "shares_changed": "-10565359.00",
+            "period": "Latest",
+            "filing_date": "2026/03/31"
           }
         ]
       }
@@ -240,14 +243,15 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| periods | string[] | false | Available reporting periods in `YYYY-MM-DD` format |
 | info | object[] | false | Shareholder data per reporting period |
-| ∟ period | string | false | Reporting period in `YYYY-MM-DD` format |
+| ∟ period | string | false | Reporting period label (e.g. `Latest`) |
 | ∟ share_holders | object[] | false | List of shareholders (up to 20) |
-| ∟ ∟ object_id | integer | false | Unique shareholder ID; pass to `shareholder_detail` |
+| ∟ ∟ object_id | string | false | Unique shareholder ID; pass to `shareholder_detail` |
 | ∟ ∟ name | string | false | Shareholder name |
 | ∟ ∟ title | string | false | Shareholder type (Institution / Individual / Insider) |
 | ∟ ∟ shares_held | string | false | Number of shares held |
-| ∟ ∟ percent_shares_held | string | false | Ownership percentage |
+| ∟ ∟ percent_shares_held | string | false | Ownership percentage, including `%` sign (e.g. `9.71%`) |
+| ∟ ∟ percent_shares_changed | string | false | Change in ownership percentage, including `%` sign |
 | ∟ ∟ shares_changed | string | false | Net share count change (positive = bought, negative = sold) |
-| ∟ ∟ filing_date | string | false | Filing date in `YYYY-MM-DD` format |
+| ∟ ∟ period | string | false | Period label for this entry |
+| ∟ ∟ filing_date | string | false | Filing date |

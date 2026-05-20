@@ -194,40 +194,36 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "id": 42,
-    "name": "我的成長股策略",
     "groups": [
       {
-        "group_name": "估值",
+        "group_name": "範圍",
+        "group_type": "range",
         "indicators": [
           {
-            "id": 10,
-            "key": "filter_pe",
-            "name": "市盈率",
-            "unit": "x",
-            "min": 5,
-            "max": 30
-          },
-          {
-            "id": 11,
-            "key": "filter_pb",
-            "name": "市淨率",
-            "unit": "x",
-            "min": 1,
-            "max": 10
+            "id": -1,
+            "key": "filter_market",
+            "name": "港股",
+            "unit": "",
+            "min": "",
+            "max": "",
+            "value": "HK",
+            "tech_data": []
           }
         ]
       },
       {
-        "group_name": "成長性",
+        "group_name": "行情類指標",
+        "group_type": "Quotes",
         "indicators": [
           {
-            "id": 30,
-            "key": "filter_revenue_growth",
-            "name": "營收增速",
-            "unit": "%",
-            "min": 20,
-            "max": null
+            "id": 1,
+            "key": "filter_marketcap",
+            "name": "市值",
+            "unit": "億",
+            "min": "100",
+            "max": "",
+            "value": "",
+            "tech_data": []
           }
         ]
       }
@@ -251,14 +247,15 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | integer | false | 策略 ID |
-| name | string | false | 策略名稱 |
 | groups | object[] | false | 指標分組列表 |
 | ∟ group_name | string | false | 分組名稱 |
+| ∟ group_type | string | false | 分組類型（如 `range`、`Quotes`、`DividendIndex`） |
 | ∟ indicators | object[] | false | 該分組下的指標條件 |
 | ∟ ∟ id | integer | false | 指標 ID |
 | ∟ ∟ key | string | false | 指標鍵值 |
 | ∟ ∟ name | string | false | 指標顯示名稱 |
-| ∟ ∟ unit | string | false | 指標單位（如 `x`、`%`、`億` 等） |
-| ∟ ∟ min | number | false | 最小值；`null` 表示無下限 |
-| ∟ ∟ max | number | false | 最大值；`null` 表示無上限 |
+| ∟ ∟ unit | string | false | 指標單位（如 `%`、`億` 等） |
+| ∟ ∟ min | string | false | 最小值；空字符串表示無下限 |
+| ∟ ∟ max | string | false | 最大值；空字符串表示無上限 |
+| ∟ ∟ value | string | false | 固定值（用於非範圍型指標，如市場選擇器） |
+| ∟ ∟ tech_data | array | false | 技術指標數據數組 |

@@ -203,28 +203,42 @@ func main() {
   "data": {
     "list": [
       {
-        "symbol": "AAPL.US",
+        "counter_id": "ST/US/AAPL",
         "name": "Apple Inc.",
+        "currency": "USD",
         "market_value": "3241500000000",
         "price_close": "213.49",
         "pe": "32.15",
         "pb": "50.21",
         "ps": "8.04",
+        "roe": "136.45",
+        "eps": "6.43",
+        "bps": "4.38",
+        "dps": "0.99",
+        "div_yld": "0.46",
+        "assets": "371082000000",
         "history": [
-          { "date": "2026-05-01", "pe": "32.15", "pb": "50.21", "ps": "8.04" },
-          { "date": "2026-04-01", "pe": "28.73", "pb": "46.88", "ps": "7.52" }
+          { "date": "1622520000", "pe": "37.56", "pb": "30.16", "ps": "6.41" },
+          { "date": "1625112000", "pe": "41.49", "pb": "35.64", "ps": "6.60" }
         ]
       },
       {
-        "symbol": "MSFT.US",
+        "counter_id": "ST/US/MSFT",
         "name": "Microsoft",
+        "currency": "USD",
         "market_value": "3085000000000",
         "price_close": "415.32",
         "pe": "35.42",
         "pb": "12.87",
         "ps": "12.61",
+        "roe": "38.21",
+        "eps": "11.72",
+        "bps": "32.28",
+        "dps": "3.32",
+        "div_yld": "0.80",
+        "assets": "512163000000",
         "history": [
-          { "date": "2026-05-01", "pe": "35.42", "pb": "12.87", "ps": "12.61" }
+          { "date": "1622520000", "pe": "33.12", "pb": "11.94", "ps": "11.84" }
         ]
       }
     ]
@@ -248,15 +262,22 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | list | object[] | false | Valuation comparison list |
-| ∟ symbol | string | false | Security symbol |
+| ∟ counter_id | string | false | Counter ID (e.g. `ST/US/AAPL`) |
 | ∟ name | string | false | Security name |
-| ∟ market_value | string | false | Market cap in result currency |
+| ∟ currency | string | false | Currency of the values |
+| ∟ market_value | string | false | Market capitalisation |
 | ∟ price_close | string | false | Latest closing price |
 | ∟ pe | string | false | P/E ratio (TTM) |
 | ∟ pb | string | false | P/B ratio |
 | ∟ ps | string | false | P/S ratio (TTM) |
+| ∟ roe | string | false | Return on equity (%) |
+| ∟ eps | string | false | Earnings per share (TTM) |
+| ∟ bps | string | false | Book value per share |
+| ∟ dps | string | false | Dividends per share (TTM) |
+| ∟ div_yld | string | false | Dividend yield (%) |
+| ∟ assets | string | false | Total assets |
 | ∟ history | object[] | false | Historical valuation time series |
-| ∟ ∟ date | string | false | Date in `YYYY-MM-DD` format |
+| ∟ ∟ date | string | false | Date as Unix timestamp (seconds) |
 | ∟ ∟ pe | string | false | Historical PE |
 | ∟ ∟ pb | string | false | Historical PB |
 | ∟ ∟ ps | string | false | Historical PS |

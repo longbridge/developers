@@ -194,40 +194,36 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "id": 42,
-    "name": "My Growth Strategy",
     "groups": [
       {
-        "group_name": "Valuation",
+        "group_name": "Range",
+        "group_type": "range",
         "indicators": [
           {
-            "id": 10,
-            "key": "filter_pe",
-            "name": "P/E Ratio",
-            "unit": "x",
-            "min": 5,
-            "max": 30
-          },
-          {
-            "id": 11,
-            "key": "filter_pb",
-            "name": "P/B Ratio",
-            "unit": "x",
-            "min": 1,
-            "max": 10
+            "id": -1,
+            "key": "filter_market",
+            "name": "HK",
+            "unit": "",
+            "min": "",
+            "max": "",
+            "value": "HK",
+            "tech_data": []
           }
         ]
       },
       {
-        "group_name": "Growth",
+        "group_name": "Quote Indicators",
+        "group_type": "Quotes",
         "indicators": [
           {
-            "id": 30,
-            "key": "filter_revenue_growth",
-            "name": "Revenue Growth",
-            "unit": "%",
-            "min": 20,
-            "max": null
+            "id": 1,
+            "key": "filter_marketcap",
+            "name": "Market Cap",
+            "unit": "bn",
+            "min": "100",
+            "max": "",
+            "value": "",
+            "tech_data": []
           }
         ]
       }
@@ -251,14 +247,15 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | integer | false | Strategy ID |
-| name | string | false | Strategy name |
 | groups | object[] | false | Indicator group list |
 | ∟ group_name | string | false | Group name |
+| ∟ group_type | string | false | Group type (e.g. `range`, `Quotes`, `DividendIndex`) |
 | ∟ indicators | object[] | false | Indicator conditions in this group |
 | ∟ ∟ id | integer | false | Indicator ID |
 | ∟ ∟ key | string | false | Indicator key |
 | ∟ ∟ name | string | false | Indicator display name |
-| ∟ ∟ unit | string | false | Indicator unit (e.g. `x`, `%`, `bn`) |
-| ∟ ∟ min | number | false | Minimum value; `null` means no lower bound |
-| ∟ ∟ max | number | false | Maximum value; `null` means no upper bound |
+| ∟ ∟ unit | string | false | Indicator unit (e.g. `%`, `bn`) |
+| ∟ ∟ min | string | false | Minimum value; empty string means no lower bound |
+| ∟ ∟ max | string | false | Maximum value; empty string means no upper bound |
+| ∟ ∟ value | string | false | Fixed value (used for non-range indicators such as market selector) |
+| ∟ ∟ tech_data | array | false | Technical indicator data array |

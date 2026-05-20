@@ -195,28 +195,31 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "periods": ["2025-12-31", "2025-09-30"],
     "info": [
       {
-        "period": "2025-12-31",
+        "period": "Latest",
         "share_holders": [
           {
-            "object_id": 19463,
+            "object_id": "148057",
             "name": "The Vanguard Group, Inc.",
-            "title": "机构",
-            "shares_held": "1285506048",
-            "percent_shares_held": "8.46",
-            "shares_changed": "5812736",
-            "filing_date": "2026-02-14"
+            "title": "",
+            "shares_held": "1426283914.00",
+            "percent_shares_held": "9.71%",
+            "percent_shares_changed": "0.01%",
+            "shares_changed": "0.00",
+            "period": "Latest",
+            "filing_date": "2025/12/31"
           },
           {
-            "object_id": 20181,
+            "object_id": "452583",
             "name": "BlackRock, Inc.",
-            "title": "机构",
-            "shares_held": "1071234816",
-            "percent_shares_held": "7.05",
-            "shares_changed": "-3104128",
-            "filing_date": "2026-02-05"
+            "title": "",
+            "shares_held": "1138572603.00",
+            "percent_shares_held": "7.75%",
+            "percent_shares_changed": "-0.06%",
+            "shares_changed": "-10565359.00",
+            "period": "Latest",
+            "filing_date": "2026/03/31"
           }
         ]
       }
@@ -240,14 +243,15 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| periods | string[] | false | 可用的报告期列表，格式 `YYYY-MM-DD` |
 | info | object[] | false | 各报告期的股东数据 |
-| ∟ period | string | false | 报告期，格式 `YYYY-MM-DD` |
+| ∟ period | string | false | 报告期标签（如 `Latest`） |
 | ∟ share_holders | object[] | false | 股东列表（最多 20 条） |
-| ∟ ∟ object_id | integer | false | 股东唯一 ID，可传入 `shareholder_detail` |
+| ∟ ∟ object_id | string | false | 股东唯一 ID，可传入 `shareholder_detail` |
 | ∟ ∟ name | string | false | 股东名称 |
 | ∟ ∟ title | string | false | 股东类型（机构 / 个人 / 内部人） |
 | ∟ ∟ shares_held | string | false | 持股数量 |
-| ∟ ∟ percent_shares_held | string | false | 持股比例（百分比） |
+| ∟ ∟ percent_shares_held | string | false | 持股比例，含 `%` 符号（如 `9.71%`） |
+| ∟ ∟ percent_shares_changed | string | false | 持股比例变动，含 `%` 符号 |
 | ∟ ∟ shares_changed | string | false | 持股变动数量（正增负减） |
-| ∟ ∟ filing_date | string | false | 申报日期，格式 `YYYY-MM-DD` |
+| ∟ ∟ period | string | false | 该条目的报告期标签 |
+| ∟ ∟ filing_date | string | false | 申报日期 |

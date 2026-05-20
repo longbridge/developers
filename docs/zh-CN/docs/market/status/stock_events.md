@@ -202,34 +202,25 @@ func main() {
     "events": [
       {
         "stock": {
-          "symbol": "9988.HK",
-          "name": "阿里巴巴",
-          "change": "+4.82%",
-          "labels": ["港股", "科技"]
+          "code": "TSLA",
+          "counter_id": "ST/US/TSLA",
+          "name": "特斯拉",
+          "change": "-0.0388",
+          "last_done": "404.110",
+          "market": "US",
+          "labels": ["汽车制造商"],
+          "logo": "https://assets.lbkrs.com/ticker/ST/US/TSLA.png",
+          "trade_status": 0
         },
-        "timestamp": 1747728600000,
-        "alert_reason": "财报超预期，营收增长 8%",
-        "alert_type": "earnings_beat",
-        "post": {
-          "id": "post_abc123",
-          "title": "阿里巴巴 Q4 财报解读：云业务强劲增长",
-          "url": "https://longbridge.com/news/post_abc123"
-        }
-      },
-      {
-        "stock": {
-          "symbol": "NVDA.US",
-          "name": "英伟达",
-          "change": "+3.21%",
-          "labels": ["美股", "半导体"]
-        },
-        "timestamp": 1747725000000,
-        "alert_reason": "大宗买入，成交量放大 3 倍",
-        "alert_type": "volume_spike",
+        "timestamp": "1779202097",
+        "alert_reason": "波动超 20 日均值",
+        "alert_type": 11,
         "post": null
       }
     ],
-    "next_params": "eyJvZmZzZXQiOjIwfQ=="
+    "next_params": {
+      "visited": ["11098290", "11098478", "11099705"]
+    }
   }
 }
 ```
@@ -251,15 +242,17 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | events | object[] | false | 异动股票列表 |
 | ∟ stock | object | false | 股票基本信息 |
-| ∟ ∟ symbol | string | false | 证券代码 |
+| ∟ ∟ code | string | false | 股票代码（如 `TSLA`） |
+| ∟ ∟ counter_id | string | false | Counter ID（如 `ST/US/TSLA`） |
 | ∟ ∟ name | string | false | 证券名称 |
-| ∟ ∟ change | string | false | 涨跌幅（含符号，如 `+4.82%`） |
-| ∟ ∟ labels | string[] | false | 标签列表（市场、行业等） |
-| ∟ timestamp | integer | false | 异动时间（Unix 毫秒时间戳） |
+| ∟ ∟ change | string | false | 涨跌幅（如 `-0.0388`） |
+| ∟ ∟ last_done | string | false | 最新成交价 |
+| ∟ ∟ market | string | false | 市场：`US`、`HK`、`CN`、`SG` |
+| ∟ ∟ labels | string[] | false | 行业 / 主题标签 |
+| ∟ ∟ logo | string | false | Logo 图片 URL |
+| ∟ ∟ trade_status | integer | false | 交易状态码 |
+| ∟ timestamp | string | false | 异动时间（Unix 秒，字符串格式） |
 | ∟ alert_reason | string | false | 异动原因描述 |
-| ∟ alert_type | string | false | 异动类型标识符 |
+| ∟ alert_type | integer | false | 异动类型代码 |
 | ∟ post | object | false | 关联新闻/文章；无关联时为 `null` |
-| ∟ ∟ id | string | false | 文章 ID |
-| ∟ ∟ title | string | false | 文章标题 |
-| ∟ ∟ url | string | false | 文章链接 |
-| next_params | string | false | 翻页参数（Base64 编码），传入下次请求以获取下一页 |
+| next_params | object | false | 翻页参数对象，传入下次请求以获取下一页 |
