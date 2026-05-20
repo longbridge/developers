@@ -34,8 +34,10 @@ body {
 
 /* ---- Nav ---- */
 .app-nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1020;
   height: var(--nav-h);
   font-family: var(--lb-font-sans);
@@ -43,6 +45,10 @@ body {
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--app-card-stroke);
+}
+
+.page-root {
+  padding-top: var(--nav-h);
 }
 .app-nav-inner {
   height: 100%;

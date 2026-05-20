@@ -97,7 +97,7 @@ const agents = [
   },
 ]
 
-const SEMANTIC_TEXT = `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md`
+const semanticText = computed(() => content.value.installCmd)
 
 const cliTabs = [
   { label: 'bun', cmd: 'bunx skills add longbridge/skills -g' },
@@ -200,7 +200,7 @@ function copyPrompt() {
 
 const copiedSemantic = ref(false)
 function copySemantic() {
-  navigator.clipboard.writeText(SEMANTIC_TEXT)
+  navigator.clipboard.writeText(semanticText.value)
   copiedSemantic.value = true
   setTimeout(() => {
     copiedSemantic.value = false
@@ -231,7 +231,7 @@ function copyCli() {
       <p class="skill-install-label">{{ content.installLabel }}</p>
       <div class="skill-install-ai-block">
         <div class="skill-install-ai-text">
-          <span>Install Longbridge AI toolkit following the guide:</span>
+          <span>{{ semanticText.split('\n')[0] }}</span>
           <span class="skill-install-ai-url">https://open.longbridge.com/skill/install.md</span>
         </div>
         <button class="skill-copy-btn" @click="copySemantic">
