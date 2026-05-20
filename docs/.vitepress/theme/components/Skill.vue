@@ -100,7 +100,7 @@ const LOCALE = {
         title: 'Install via Npx',
         desc: 'For Claude Code, Codex, and similar tools — installs all skills globally.',
       },
-      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md`,
+      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\nAfter installation, complete login and test with a market data query.`,
       footer: {
         also: 'Also available on',
         and: 'and',
@@ -214,7 +214,7 @@ const LOCALE = {
         title: '通过 Npx 安装',
         desc: '适用于 Claude Code、Codex 等工具——全局安装所有 Skill。',
       },
-      installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md`,
+      installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
       footer: {
         also: '也可在以下平台获取',
         and: '和',
@@ -443,7 +443,7 @@ const LOCALE = {
         title: '透過 Npx 安裝',
         desc: '適用於 Claude Code、Codex 等工具——全局安裝所有 Skill。',
       },
-      installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md`,
+      installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安裝完成後，完成登錄授權，查詢一支股票行情確認可用。`,
       footer: {
         also: '也可在以下平台獲取',
         and: '及',
