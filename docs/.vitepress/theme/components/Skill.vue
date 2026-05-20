@@ -555,7 +555,7 @@ function rowClass(flag: string | boolean) {
                 </svg>
               </button>
             </div>
-            <a class="skill-hero-install-link" :href="localePath('/docs/mcp')">
+            <a class="skill-hero-install-link" :href="localePath('/skill/install')">
               View installation guide for each client
               <svg
                 width="12"
@@ -994,7 +994,7 @@ function rowClass(flag: string | boolean) {
                 <line x1="12" y1="19" x2="20" y2="19" />
               </svg>
             </div>
-            <h3 class="h-card" style="margin-top: 16px">Install via CLI</h3>
+            <h3 class="h-card" style="margin-top: 16px">Install via Npx</h3>
             <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
               For Claude Code, Codex, and similar tools — installs all skills globally.
             </p>
@@ -1007,7 +1007,7 @@ function rowClass(flag: string | boolean) {
         <div class="skill-getstarted-foot">
           Also available on <a href="#">skills.sh</a> and <a href="#">GitHub</a>.
           <span style="color: var(--lb-fg-3)">·</span>
-          <a :href="localePath('/docs/mcp')" style="color: var(--lb-brand); font-weight: 600">
+          <a :href="localePath('/skill/install')" style="color: var(--lb-brand); font-weight: 600">
             View installation guide for each client
             <svg
               width="12"
