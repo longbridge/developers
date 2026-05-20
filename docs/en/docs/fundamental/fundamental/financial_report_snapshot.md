@@ -232,30 +232,44 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | name | string | false | Company name |
-| ticker | string | false | Security ticker |
-| fp_start | string | false | Fiscal period start date |
-| fp_end | string | false | Fiscal period end date |
+| ticker | string | false | Ticker symbol without market suffix, e.g. `AAPL` |
+| fp_start | string | false | Fiscal period start date in `YYYY.MM.DD` format |
+| fp_end | string | false | Fiscal period end date in `YYYY.MM.DD` format |
 | currency | string | false | Currency code |
-| report_desc | string | false | AI-generated earnings summary text |
-| fo_revenue | object | false | Revenue forecast comparison |
-| fo_revenue.value | string | false | Actual revenue |
-| fo_revenue.yoy | string | false | Year-over-year growth rate (decimal) |
-| fo_revenue.cmp_desc | string | false | Beat/miss description |
-| fo_revenue.est_value | string | false | Consensus estimate value |
-| fo_ebit | object | false | EBIT forecast comparison (same fields as fo_revenue) |
-| fo_eps | object | false | EPS forecast comparison (same fields as fo_revenue) |
-| fr_revenue | object | false | Revenue financial data |
-| fr_revenue.value | string | false | Revenue value |
-| fr_revenue.yoy | string | false | Year-over-year growth rate |
-| fr_profit | object | false | Net profit financial data (same fields as fr_revenue) |
-| fr_operate_cash | object | false | Operating cash flow (same fields as fr_revenue) |
-| fr_invest_cash | object | false | Investing cash flow (same fields as fr_revenue) |
-| fr_finance_cash | object | false | Financing cash flow (same fields as fr_revenue) |
-| fr_total_assets | object | false | Total assets (same fields as fr_revenue) |
-| fr_total_liability | object | false | Total liabilities (same fields as fr_revenue) |
-| fr_roe_ttm | string | false | Return on equity TTM (decimal) |
-| fr_profit_margin | string | false | Net profit margin (decimal) |
-| fr_profit_margin_ttm | string | false | Net profit margin TTM (decimal) |
-| fr_asset_turn_ttm | string | false | Asset turnover rate TTM (decimal) |
-| fr_leverage_ttm | string | false | Leverage ratio TTM (decimal) |
-| fr_debt_assets_ratio | string | false | Debt-to-assets ratio (decimal) |
+| report_desc | string | false | AI-generated earnings summary |
+| fo_revenue | object | false | Revenue forecast vs actual, see [ForecastMetric](#ForecastMetric) |
+| fo_ebit | object | false | EBIT forecast vs actual, see [ForecastMetric](#ForecastMetric) |
+| fo_eps | object | false | EPS forecast vs actual, see [ForecastMetric](#ForecastMetric) |
+| fr_revenue | object | false | Reported revenue, see [ReportedMetric](#ReportedMetric) |
+| fr_profit | object | false | Reported net profit, see [ReportedMetric](#ReportedMetric) |
+| fr_operate_cash | object | false | Operating cash flow, see [ReportedMetric](#ReportedMetric) |
+| fr_invest_cash | object | false | Investing cash flow, see [ReportedMetric](#ReportedMetric) |
+| fr_finance_cash | object | false | Financing cash flow, see [ReportedMetric](#ReportedMetric) |
+| fr_total_assets | object | false | Total assets, see [ReportedMetric](#ReportedMetric) |
+| fr_total_liability | object | false | Total liabilities, see [ReportedMetric](#ReportedMetric) |
+| fr_roe_ttm | string | false | ROE TTM as percentage, e.g. `141.47` |
+| fr_profit_margin | string | false | Net profit margin as percentage |
+| fr_profit_margin_ttm | string | false | Net profit margin TTM as percentage |
+| fr_asset_turn_ttm | string | false | Asset turnover TTM as percentage |
+| fr_leverage_ttm | string | false | Leverage TTM as percentage |
+| fr_debt_assets_ratio | string | false | Debt-to-assets ratio as percentage |
+
+### ForecastMetric
+
+<a id="ForecastMetric"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| value | string | false | Actual value |
+| yoy | string | false | Year-over-year growth as percentage, e.g. `16.6` |
+| cmp_desc | string | false | Beat/miss description (may be empty) |
+| est_value | string | false | Consensus estimate (may be empty) |
+
+### ReportedMetric
+
+<a id="ReportedMetric"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| value | string | false | Value |
+| yoy | string | false | Year-over-year growth as percentage |

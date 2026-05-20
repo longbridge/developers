@@ -233,13 +233,27 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| top | object | 否 | 顶层行业信息 |
-| top.name | string | 否 | 顶层行业名称 |
-| top.market | string | 否 | 市场代码 |
-| chain | object | 否 | 行业层级树根节点 |
-| chain.name | string | 否 | 板块名称 |
-| chain.counter_id | string | 否 | 板块唯一标识 |
-| chain.stock_num | integer | 否 | 板块内股票数量 |
-| chain.chg | string | 否 | 当日涨跌幅（小数） |
-| chain.ytd_chg | string | 否 | 年初至今涨跌幅（小数） |
-| chain.next | array | 否 | 子板块列表（结构与 chain 相同，递归） |
+| top | object | 否 | 顶层行业信息，见 [IndustryPeersTop](#IndustryPeersTop) |
+| chain | object | 否 | 行业层级树根节点，见 [IndustryPeerNode](#IndustryPeerNode) |
+
+### IndustryPeersTop
+
+<a id="IndustryPeersTop"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| name | string | 否 | 顶层行业名称 |
+| market | string | 否 | 市场代码 |
+
+### IndustryPeerNode
+
+<a id="IndustryPeerNode"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| name | string | 否 | 板块名称 |
+| counter_id | string | 否 | 板块唯一标识（根节点有值，子节点为空字符串） |
+| stock_num | integer | 否 | 板块内股票数量 |
+| chg | string | 否 | 当日涨跌幅（小数，可能为空字符串） |
+| ytd_chg | string | 否 | 年初至今涨跌幅（小数，可能为空字符串） |
+| next | object[] | 否 | 子板块列表，结构与当前节点相同（递归） |

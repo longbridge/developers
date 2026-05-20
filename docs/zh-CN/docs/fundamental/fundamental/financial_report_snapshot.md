@@ -232,30 +232,44 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | name | string | 否 | 公司名称 |
-| ticker | string | 否 | 证券代码 |
-| fp_start | string | 否 | 财政期开始日期 |
-| fp_end | string | 否 | 财政期结束日期 |
+| ticker | string | 否 | 证券代码（不含市场后缀，例如 `AAPL`） |
+| fp_start | string | 否 | 财政期开始日期，格式 `YYYY.MM.DD` |
+| fp_end | string | 否 | 财政期结束日期，格式 `YYYY.MM.DD` |
 | currency | string | 否 | 货币代码 |
-| report_desc | string | 否 | AI 生成的财报摘要文字 |
-| fo_revenue | object | 否 | 营收预测对比 |
-| fo_revenue.value | string | 否 | 实际营收 |
-| fo_revenue.yoy | string | 否 | 同比增速（小数） |
-| fo_revenue.cmp_desc | string | 否 | 超预期/低于预期描述 |
-| fo_revenue.est_value | string | 否 | 一致预期值 |
-| fo_ebit | object | 否 | EBIT 预测对比（字段同 fo_revenue） |
-| fo_eps | object | 否 | EPS 预测对比（字段同 fo_revenue） |
-| fr_revenue | object | 否 | 营收财务数据 |
-| fr_revenue.value | string | 否 | 营收数值 |
-| fr_revenue.yoy | string | 否 | 同比增速 |
-| fr_profit | object | 否 | 净利润财务数据（字段同 fr_revenue） |
-| fr_operate_cash | object | 否 | 经营现金流（字段同 fr_revenue） |
-| fr_invest_cash | object | 否 | 投资现金流（字段同 fr_revenue） |
-| fr_finance_cash | object | 否 | 融资现金流（字段同 fr_revenue） |
-| fr_total_assets | object | 否 | 总资产（字段同 fr_revenue） |
-| fr_total_liability | object | 否 | 总负债（字段同 fr_revenue） |
-| fr_roe_ttm | string | 否 | 净资产收益率 TTM（小数） |
-| fr_profit_margin | string | 否 | 净利率（小数） |
-| fr_profit_margin_ttm | string | 否 | 净利率 TTM（小数） |
-| fr_asset_turn_ttm | string | 否 | 资产周转率 TTM（小数） |
-| fr_leverage_ttm | string | 否 | 杠杆率 TTM（小数） |
-| fr_debt_assets_ratio | string | 否 | 资产负债率（小数） |
+| report_desc | string | 否 | AI 生成的财报摘要 |
+| fo_revenue | object | 否 | 营收预测对比，见 [ForecastMetric](#ForecastMetric) |
+| fo_ebit | object | 否 | EBIT 预测对比，见 [ForecastMetric](#ForecastMetric) |
+| fo_eps | object | 否 | EPS 预测对比，见 [ForecastMetric](#ForecastMetric) |
+| fr_revenue | object | 否 | 营收财务数据，见 [ReportedMetric](#ReportedMetric) |
+| fr_profit | object | 否 | 净利润财务数据，见 [ReportedMetric](#ReportedMetric) |
+| fr_operate_cash | object | 否 | 经营现金流，见 [ReportedMetric](#ReportedMetric) |
+| fr_invest_cash | object | 否 | 投资现金流，见 [ReportedMetric](#ReportedMetric) |
+| fr_finance_cash | object | 否 | 融资现金流，见 [ReportedMetric](#ReportedMetric) |
+| fr_total_assets | object | 否 | 总资产，见 [ReportedMetric](#ReportedMetric) |
+| fr_total_liability | object | 否 | 总负债，见 [ReportedMetric](#ReportedMetric) |
+| fr_roe_ttm | string | 否 | 净资产收益率 TTM（百分比，例如 `141.47`） |
+| fr_profit_margin | string | 否 | 净利率（百分比） |
+| fr_profit_margin_ttm | string | 否 | 净利率 TTM（百分比） |
+| fr_asset_turn_ttm | string | 否 | 资产周转率 TTM（百分比） |
+| fr_leverage_ttm | string | 否 | 杠杆率 TTM（百分比） |
+| fr_debt_assets_ratio | string | 否 | 资产负债率（百分比） |
+
+### ForecastMetric
+
+<a id="ForecastMetric"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| value | string | 否 | 实际值 |
+| yoy | string | 否 | 同比增速（百分比，例如 `16.6`） |
+| cmp_desc | string | 否 | 超预期/低于预期描述（可能为空） |
+| est_value | string | 否 | 一致预期值（可能为空） |
+
+### ReportedMetric
+
+<a id="ReportedMetric"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| value | string | 否 | 数值 |
+| yoy | string | 否 | 同比增速（百分比） |

@@ -234,11 +234,11 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| elist | array | false | Monthly rating distribution list, newest first |
-| elist[].date | int64 | false | Unix timestamp (seconds) |
-| elist[].buy | string | false | Buy rating count |
-| elist[].over | string | false | Outperform rating count |
-| elist[].hold | string | false | Hold rating count |
-| elist[].under | string | false | Underperform rating count |
-| elist[].sell | string | false | Sell rating count |
-| elist[].total | string | false | Total analyst count |
+| elist | object[] | false | Monthly rating distribution list, newest first |
+| ∟ date | integer | false | Unix timestamp (seconds) |
+| ∟ buy | string | false | Number of Buy ratings |
+| ∟ over | string | false | Number of Outperform ratings |
+| ∟ hold | string | false | Number of Hold ratings |
+| ∟ under | string | false | Number of Underperform ratings |
+| ∟ sell | string | false | Number of Sell ratings |
+| ∟ total | string | false | Total analyst count |

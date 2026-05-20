@@ -229,15 +229,15 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| historical | array | 否 | 历史报告期列表 |
-| historical[].date | string | 否 | 报告期标签，例如 `2024Q4` |
-| historical[].total | string | 否 | 当期总收入（字符串数值） |
-| historical[].currency | string | 否 | 货币代码 |
-| historical[].business | array | 否 | 业务分部列表 |
-| historical[].business[].name | string | 否 | 业务分部名称 |
-| historical[].business[].percent | string | 否 | 收入占比（0–1 小数） |
-| historical[].business[].value | string | 否 | 绝对收入数值 |
-| historical[].regionals | array | 否 | 地区分部列表 |
-| historical[].regionals[].name | string | 否 | 地区名称 |
-| historical[].regionals[].percent | string | 否 | 收入占比（0–1 小数） |
-| historical[].regionals[].value | string | 否 | 绝对收入数值 |
+| historical | object[] | 否 | 历史报告期列表 |
+| ∟ date | string | 否 | 报告期，格式 YYYYMMDD，例如 `20260331` |
+| ∟ total | string | 否 | 当期总收入 |
+| ∟ currency | string | 否 | 货币代码 |
+| ∟ business | object[] | 否 | 业务分部列表 |
+| ∟ ∟ name | string | 否 | 业务分部名称 |
+| ∟ ∟ percent | string | 否 | 收入占比（百分比，例如 `40.80`） |
+| ∟ ∟ value | string | 否 | 绝对收入数值 |
+| ∟ regionals | object[] | 否 | 地区分部列表（当前通常为空数组） |
+| ∟ ∟ name | string | 否 | 地区名称 |
+| ∟ ∟ percent | string | 否 | 收入占比（百分比） |
+| ∟ ∟ value | string | 否 | 绝对收入数值 |

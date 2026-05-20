@@ -233,13 +233,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | array | 否 | 排行分組列表 |
-| items[].lists | array | 否 | 行業條目列表 |
-| items[].lists[].name | string | 否 | 行業名稱 |
-| items[].lists[].counter_id | string | 否 | 行業唯一標識（BK/市場/ID 格式），可傳入 `industry_peers` |
-| items[].lists[].chg | string | 否 | 當日漲跌幅（小數） |
-| items[].lists[].leading_name | string | 否 | 漲幅領先個股名稱 |
-| items[].lists[].leading_ticker | string | 否 | 漲幅領先個股代碼 |
-| items[].lists[].leading_chg | string | 否 | 漲幅領先個股漲跌幅 |
-| items[].lists[].value_name | string | 否 | 指標名稱（按指標類型填充） |
-| items[].lists[].value_data | string | 否 | 指標數值 |
+| items | object[] | 否 | 排行分組列表 |
+| ∟ lists | object[] | 否 | 行業條目列表 |
+| ∟ ∟ name | string | 否 | 行業名稱 |
+| ∟ ∟ counter_id | string | 否 | 行業唯一標識（`BK/市場/ID` 格式），可直接傳入 `industry_peers` |
+| ∟ ∟ chg | string | 否 | 當日漲跌幅（小數） |
+| ∟ ∟ leading_name | string | 否 | 漲幅領先個股名稱 |
+| ∟ ∟ leading_ticker | string | 否 | 漲幅領先個股代碼 |
+| ∟ ∟ leading_chg | string | 否 | 漲幅領先個股漲跌幅（小數） |
+| ∟ ∟ value_name | string | 否 | 指標名稱（按指標類型填充，可能為空） |
+| ∟ ∟ value_data | string | 否 | 指標數值（可能為空） |

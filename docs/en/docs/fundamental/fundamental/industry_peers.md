@@ -233,13 +233,27 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| top | object | false | Top-level industry info |
-| top.name | string | false | Top-level industry name |
-| top.market | string | false | Market code |
-| chain | object | false | Industry hierarchy tree root node |
-| chain.name | string | false | Sector name |
-| chain.counter_id | string | false | Sector unique identifier |
-| chain.stock_num | integer | false | Number of stocks in the sector |
-| chain.chg | string | false | Daily change (decimal) |
-| chain.ytd_chg | string | false | Year-to-date change (decimal) |
-| chain.next | array | false | Sub-sector list (same structure as chain, recursive) |
+| top | object | false | Top-level industry info, see [IndustryPeersTop](#IndustryPeersTop) |
+| chain | object | false | Industry hierarchy root node, see [IndustryPeerNode](#IndustryPeerNode) |
+
+### IndustryPeersTop
+
+<a id="IndustryPeersTop"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| name | string | false | Top-level industry name |
+| market | string | false | Market code |
+
+### IndustryPeerNode
+
+<a id="IndustryPeerNode"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| name | string | false | Sector name |
+| counter_id | string | false | Sector counter ID (present on root node; empty string on child nodes) |
+| stock_num | integer | false | Number of stocks in this sector |
+| chg | string | false | Daily change (decimal; may be empty string) |
+| ytd_chg | string | false | Year-to-date change (decimal; may be empty string) |
+| next | object[] | false | Child sector list with the same structure (recursive) |

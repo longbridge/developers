@@ -234,11 +234,11 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| elist | array | 否 | 月度评级分布列表，最新月份在前 |
-| elist[].date | int64 | 否 | Unix 时间戳（秒） |
-| elist[].buy | string | 否 | 买入评级数量 |
-| elist[].over | string | 否 | 跑赢市场评级数量 |
-| elist[].hold | string | 否 | 持有评级数量 |
-| elist[].under | string | 否 | 跑输市场评级数量 |
-| elist[].sell | string | 否 | 卖出评级数量 |
-| elist[].total | string | 否 | 机构总数 |
+| elist | object[] | 否 | 月度评级分布列表，最新月份在前 |
+| ∟ date | integer | 否 | Unix 时间戳（秒） |
+| ∟ buy | string | 否 | 买入评级数量 |
+| ∟ over | string | 否 | 跑赢市场评级数量 |
+| ∟ hold | string | 否 | 持有评级数量 |
+| ∟ under | string | 否 | 跑输市场评级数量 |
+| ∟ sell | string | 否 | 卖出评级数量 |
+| ∟ total | string | 否 | 机构总数 |

@@ -233,13 +233,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | array | false | Ranking group list |
-| items[].lists | array | false | Industry entry list |
-| items[].lists[].name | string | false | Industry name |
-| items[].lists[].counter_id | string | false | Industry unique identifier (BK/MARKET/ID format), usable in `industry_peers` |
-| items[].lists[].chg | string | false | Daily change (decimal) |
-| items[].lists[].leading_name | string | false | Top-gaining stock name |
-| items[].lists[].leading_ticker | string | false | Top-gaining stock ticker |
-| items[].lists[].leading_chg | string | false | Top-gaining stock change |
-| items[].lists[].value_name | string | false | Indicator name (populated by indicator type) |
-| items[].lists[].value_data | string | false | Indicator value |
+| items | object[] | false | Ranked group list |
+| ∟ lists | object[] | false | Industry item list |
+| ∟ ∟ name | string | false | Industry name |
+| ∟ ∟ counter_id | string | false | Industry counter ID (`BK/MARKET/ID` format), usable in `industry_peers` |
+| ∟ ∟ chg | string | false | Daily change (decimal) |
+| ∟ ∟ leading_name | string | false | Leading stock name |
+| ∟ ∟ leading_ticker | string | false | Leading stock ticker |
+| ∟ ∟ leading_chg | string | false | Leading stock daily change (decimal) |
+| ∟ ∟ value_name | string | false | Indicator label (may be empty depending on indicator type) |
+| ∟ ∟ value_data | string | false | Indicator value (may be empty) |

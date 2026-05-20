@@ -224,9 +224,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| date | string | 否 | 报告期标签，例如 `2024Q4` |
-| total | string | 否 | 当期总收入（字符串数值） |
+| date | string | 否 | 报告期，格式 YYYYMMDD，例如 `20260331` |
+| total | string | 否 | 当期总收入 |
 | currency | string | 否 | 货币代码，例如 `USD` |
-| business | array | 否 | 业务分部列表 |
-| business[].name | string | 否 | 业务分部名称 |
-| business[].percent | string | 否 | 收入占比（0–1 小数） |
+| business | object[] | 否 | 业务分部列表 |
+| ∟ name | string | 否 | 业务分部名称 |
+| ∟ percent | string | 否 | 收入占比（百分比，例如 `40.56`） |

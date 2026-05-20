@@ -233,13 +233,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| items | array | 否 | 排行分组列表 |
-| items[].lists | array | 否 | 行业条目列表 |
-| items[].lists[].name | string | 否 | 行业名称 |
-| items[].lists[].counter_id | string | 否 | 行业唯一标识（BK/市场/ID 格式），可传入 `industry_peers` |
-| items[].lists[].chg | string | 否 | 当日涨跌幅（小数） |
-| items[].lists[].leading_name | string | 否 | 涨幅领先个股名称 |
-| items[].lists[].leading_ticker | string | 否 | 涨幅领先个股代码 |
-| items[].lists[].leading_chg | string | 否 | 涨幅领先个股涨跌幅 |
-| items[].lists[].value_name | string | 否 | 指标名称（按指标类型填充） |
-| items[].lists[].value_data | string | 否 | 指标数值 |
+| items | object[] | 否 | 排行分组列表 |
+| ∟ lists | object[] | 否 | 行业条目列表 |
+| ∟ ∟ name | string | 否 | 行业名称 |
+| ∟ ∟ counter_id | string | 否 | 行业唯一标识（`BK/市场/ID` 格式），可直接传入 `industry_peers` |
+| ∟ ∟ chg | string | 否 | 当日涨跌幅（小数） |
+| ∟ ∟ leading_name | string | 否 | 涨幅领先个股名称 |
+| ∟ ∟ leading_ticker | string | 否 | 涨幅领先个股代码 |
+| ∟ ∟ leading_chg | string | 否 | 涨幅领先个股涨跌幅（小数） |
+| ∟ ∟ value_name | string | 否 | 指标名称（按指标类型填充，可能为空） |
+| ∟ ∟ value_data | string | 否 | 指标数值（可能为空） |

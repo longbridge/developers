@@ -229,15 +229,15 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| historical | array | false | List of historical reporting periods |
-| historical[].date | string | false | Reporting period label, e.g. `2024Q4` |
-| historical[].total | string | false | Total revenue for the period (string value) |
-| historical[].currency | string | false | Currency code |
-| historical[].business | array | false | Business segment list |
-| historical[].business[].name | string | false | Segment name |
-| historical[].business[].percent | string | false | Revenue share (0–1 decimal) |
-| historical[].business[].value | string | false | Absolute revenue value |
-| historical[].regionals | array | false | Regional segment list |
-| historical[].regionals[].name | string | false | Region name |
-| historical[].regionals[].percent | string | false | Revenue share (0–1 decimal) |
-| historical[].regionals[].value | string | false | Absolute revenue value |
+| historical | object[] | false | Historical period snapshots |
+| ∟ date | string | false | Report period in YYYYMMDD format, e.g. `20260331` |
+| ∟ total | string | false | Total revenue for the period |
+| ∟ currency | string | false | Currency code |
+| ∟ business | object[] | false | Business segment list |
+| ∟ ∟ name | string | false | Segment name |
+| ∟ ∟ percent | string | false | Revenue share percentage, e.g. `40.80` |
+| ∟ ∟ value | string | false | Absolute revenue value |
+| ∟ regionals | object[] | false | Regional segment list (typically empty) |
+| ∟ ∟ name | string | false | Region name |
+| ∟ ∟ percent | string | false | Revenue share percentage |
+| ∟ ∟ value | string | false | Absolute revenue value |

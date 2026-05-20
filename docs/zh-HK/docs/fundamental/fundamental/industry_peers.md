@@ -233,13 +233,27 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| top | object | 否 | 頂層行業資訊 |
-| top.name | string | 否 | 頂層行業名稱 |
-| top.market | string | 否 | 市場代碼 |
-| chain | object | 否 | 行業層級樹根節點 |
-| chain.name | string | 否 | 板塊名稱 |
-| chain.counter_id | string | 否 | 板塊唯一標識 |
-| chain.stock_num | integer | 否 | 板塊內股票數量 |
-| chain.chg | string | 否 | 當日漲跌幅（小數） |
-| chain.ytd_chg | string | 否 | 年初至今漲跌幅（小數） |
-| chain.next | array | 否 | 子板塊列表（結構與 chain 相同，遞迴） |
+| top | object | 否 | 頂層行業資訊，見 [IndustryPeersTop](#IndustryPeersTop) |
+| chain | object | 否 | 行業層級樹根節點，見 [IndustryPeerNode](#IndustryPeerNode) |
+
+### IndustryPeersTop
+
+<a id="IndustryPeersTop"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| name | string | 否 | 頂層行業名稱 |
+| market | string | 否 | 市場代碼 |
+
+### IndustryPeerNode
+
+<a id="IndustryPeerNode"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| name | string | 否 | 板塊名稱 |
+| counter_id | string | 否 | 板塊唯一標識（根節點有值，子節點為空字串） |
+| stock_num | integer | 否 | 板塊內股票數量 |
+| chg | string | 否 | 當日漲跌幅（小數，可能為空字串） |
+| ytd_chg | string | 否 | 年初至今漲跌幅（小數，可能為空字串） |
+| next | object[] | 否 | 子板塊列表，結構與當前節點相同（遞迴） |

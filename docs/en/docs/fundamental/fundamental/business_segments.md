@@ -224,9 +224,9 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| date | string | false | Reporting period label, e.g. `2024Q4` |
-| total | string | false | Total revenue for the period (string value) |
+| date | string | false | Report period in YYYYMMDD format, e.g. `20260331` |
+| total | string | false | Total revenue for the period |
 | currency | string | false | Currency code, e.g. `USD` |
-| business | array | false | Business segment list |
-| business[].name | string | false | Segment name |
-| business[].percent | string | false | Revenue share (0–1 decimal) |
+| business | object[] | false | Business segment list |
+| ∟ name | string | false | Segment name |
+| ∟ percent | string | false | Revenue share percentage, e.g. `40.56` |
