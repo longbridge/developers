@@ -57,6 +57,7 @@
   letter-spacing: -0.01em;
   color: var(--lb-fg-1);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .brand-logo {
   display: block;
@@ -125,8 +126,18 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: 12px;
+  margin-left: auto;
   padding-left: 0;
+}
+@media (max-width: 768px) {
+  .app-nav-inner {
+    padding: 0 16px;
+    gap: 0;
+  }
+  .app-nav-tail {
+    gap: 4px;
+    margin-left: auto;
+  }
 }
 .app-nav-icon-btn {
   width: 32px;
@@ -238,6 +249,11 @@
 /* ---- Generic chrome ---- */
 .section {
   padding: 80px 24px;
+}
+@media (max-width: 640px) {
+  .section {
+    padding: 48px 16px;
+  }
 }
 .section-inner {
   max-width: var(--app-max);
@@ -352,6 +368,18 @@
   display: flex;
   gap: 24px;
   align-items: center;
+}
+@media (max-width: 640px) {
+  .app-footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  .app-footer-bottom-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
 }
 
 /* ---- Nav dropdowns ---- */
@@ -470,6 +498,12 @@
   .app-footer-inner-v2 {
     grid-template-columns: 1fr 1fr;
     gap: 32px;
+  }
+}
+@media (max-width: 480px) {
+  .app-footer-inner-v2 {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
 .footer-status {
@@ -1604,6 +1638,12 @@
   border-radius: 24px;
   border: 1px solid var(--app-card-stroke);
   background: var(--lb-card);
+}
+@media (max-width: 640px) {
+  .final-cta {
+    padding: 32px 20px;
+    border-radius: 16px;
+  }
 }
 
 .lb-dark .product-card-icon,

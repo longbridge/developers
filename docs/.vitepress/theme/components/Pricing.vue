@@ -1142,4 +1142,16 @@ const matrixRows = computed<MatrixRow[]>(() => {
   background: var(--lb-fg-1);
   color: var(--lb-fg-invert);
 }
+
+@media (max-width: 640px) {
+  .pricing-hero {
+    padding: 60px 0 40px;
+  }
+  .section {
+    padding: 48px 0;
+  }
+  .section-inner {
+    padding: 0 16px;
+  }
+}
 </style>

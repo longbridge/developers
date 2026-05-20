@@ -28,9 +28,9 @@ const currentPath = computed(() => {
 function isNavActive(href: string): boolean {
   const path = currentPath.value
   if (href === '/docs') {
-    return (path === '/docs' || path.startsWith('/docs/'))
-      && !path.startsWith('/docs/cli')
-      && !path.startsWith('/docs/mcp')
+    return (
+      (path === '/docs' || path.startsWith('/docs/')) && !path.startsWith('/docs/cli') && !path.startsWith('/docs/mcp')
+    )
   }
   return path === href || path.startsWith(href + '/')
 }
@@ -46,9 +46,7 @@ const APP_NAV_DEF = [
   { key: 'docs', tKey: 'nav.docs', href: '/docs' },
 ]
 
-const navLinks = computed(() =>
-  APP_NAV_DEF.map((n) => ({ ...n, label: n.tKey ? t(n.tKey) : n.label! }))
-)
+const navLinks = computed(() => APP_NAV_DEF.map((n) => ({ ...n, label: n.tKey ? t(n.tKey) : n.label! })))
 
 const currentLocale = computed(() => {
   if (typeof window === 'undefined') return 'en'
@@ -90,11 +88,16 @@ const avatarMenuItems = computed(() => [
 ])
 
 function onAvatarMouseEnter() {
-  if (avatarCloseTimer.value) { clearTimeout(avatarCloseTimer.value); avatarCloseTimer.value = null }
+  if (avatarCloseTimer.value) {
+    clearTimeout(avatarCloseTimer.value)
+    avatarCloseTimer.value = null
+  }
   avatarOpen.value = true
 }
 function onAvatarMouseLeave() {
-  avatarCloseTimer.value = setTimeout(() => { avatarOpen.value = false }, 150)
+  avatarCloseTimer.value = setTimeout(() => {
+    avatarOpen.value = false
+  }, 150)
 }
 function onAvatarClickOutside(e: Event) {
   if (avatarEl.value && !avatarEl.value.contains(e.target as Node)) avatarOpen.value = false
@@ -122,12 +125,16 @@ onUnmounted(() => {
     <div class="app-nav-inner">
       <!-- Brand -->
       <a :href="localePath('/')" class="app-brand" aria-label="Longbridge Developers">
-        <img class="brand-logo brand-logo-light"
+        <img
+          class="brand-logo brand-logo-light"
           src="https://assets.lbkrs.com/uploads/e76f6d93-80f8-4f9b-8b8d-2c86f0c94a78/longbridge-developers-light.png"
-          alt="Longbridge Developers" style="height:30px" />
-        <img class="brand-logo brand-logo-dark"
+          alt="Longbridge Developers"
+          style="height: 30px" />
+        <img
+          class="brand-logo brand-logo-dark"
           src="https://assets.lbkrs.com/uploads/37a18fa4-46a4-408c-a36a-560004eb3cfb/longbridge-developers-dark.png"
-          alt="Longbridge Developers" style="height:30px" />
+          alt="Longbridge Developers"
+          style="height: 30px" />
       </a>
 
       <!-- Desktop nav links -->
@@ -142,47 +149,103 @@ onUnmounted(() => {
       <div class="app-nav-tail">
         <!-- Search -->
         <button type="button" class="app-nav-search" @click="openSearch" aria-label="Search docs">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
           </svg>
           {{ t('nav.searchDocs') }}
           <span class="app-nav-search-kbd">⌘K</span>
         </button>
 
         <!-- Language dropdown -->
-        <div class="nav-lang-wrap"
-          @mouseenter="langOpen = true"
-          @mouseleave="langOpen = false">
+        <div class="nav-lang-wrap app-nav-hide-mobile" @mouseenter="langOpen = true" @mouseleave="langOpen = false">
           <button class="app-nav-icon-btn" aria-label="Language">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z" />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z" />
             </svg>
           </button>
           <Transition name="dropdown">
             <div v-if="langOpen" class="nav-lang-menu">
-              <a :class="{ 'is-active': currentLocale === 'en' }" @click.prevent="switchLocale('en')" href="#">English</a>
-              <a :class="{ 'is-active': currentLocale === 'zh-CN' }" @click.prevent="switchLocale('zh-CN')" href="#">简体中文</a>
-              <a :class="{ 'is-active': currentLocale === 'zh-HK' }" @click.prevent="switchLocale('zh-HK')" href="#">繁體中文</a>
+              <a :class="{ 'is-active': currentLocale === 'en' }" @click.prevent="switchLocale('en')" href="#"
+                >English</a
+              >
+              <a :class="{ 'is-active': currentLocale === 'zh-CN' }" @click.prevent="switchLocale('zh-CN')" href="#"
+                >简体中文</a
+              >
+              <a :class="{ 'is-active': currentLocale === 'zh-HK' }" @click.prevent="switchLocale('zh-HK')" href="#"
+                >繁體中文</a
+              >
             </div>
           </Transition>
         </div>
 
         <!-- Theme toggle -->
-        <button class="app-nav-icon-btn" @click="toggleTheme" aria-label="Toggle theme">
+        <button class="app-nav-icon-btn hidden md:block" @click="toggleTheme" aria-label="Toggle theme">
           <!-- sun (dark mode active → show sun to switch to light) -->
-          <svg v-if="isDark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          <svg
+            v-if="isDark"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
           <!-- moon (light mode → show moon) -->
-          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            v-else
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         </button>
 
         <!-- GitHub -->
-        <a class="app-nav-icon-btn" href="https://github.com/longbridge/developers" target="_blank" rel="noreferrer" aria-label="GitHub">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+        <a
+          class="app-nav-icon-btn hidden md:block"
+          href="https://github.com/longbridge/developers"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="GitHub">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
           </svg>
         </a>
 
@@ -210,16 +273,35 @@ onUnmounted(() => {
           <!-- Not logged in: Get Started -->
           <a v-else class="btn btn-primary btn-sm" :href="localePath('/login')">
             {{ t('nav.getStarted') }}
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
             </svg>
           </a>
         </ClientOnly>
 
         <!-- Mobile menu toggle -->
         <button class="app-nav-icon-btn app-nav-mobile-menu" @click="mobileOpen = !mobileOpen" aria-label="Menu">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
       </div>
@@ -238,7 +320,9 @@ onUnmounted(() => {
 
     <!-- Hidden VPNavBarSearch: provides ⌘K search modal without VPNav -->
     <ClientOnly>
-      <div style="position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none" aria-hidden="true">
+      <div
+        style="position: absolute; width: 0; height: 0; overflow: hidden; visibility: hidden; pointer-events: none"
+        aria-hidden="true">
         <VPNavBarSearch />
       </div>
     </ClientOnly>
@@ -248,7 +332,9 @@ onUnmounted(() => {
 <style scoped>
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: opacity 0.15s, transform 0.15s;
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
 }
 .dropdown-enter-from,
 .dropdown-leave-to {
@@ -258,7 +344,9 @@ onUnmounted(() => {
 
 .slide-down-enter-active,
 .slide-down-leave-active {
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
 }
 .slide-down-enter-from,
 .slide-down-leave-to {
@@ -285,6 +373,7 @@ onUnmounted(() => {
 }
 
 .app-nav-mobile-menu {
+  justify-content: center;
   display: none;
 }
 
@@ -294,6 +383,12 @@ onUnmounted(() => {
   }
   .app-nav-mobile-menu {
     display: inline-flex;
+  }
+  .app-nav-links {
+    display: none;
+  }
+  .app-nav-search {
+    display: none;
   }
 }
 
@@ -320,7 +415,9 @@ onUnmounted(() => {
   right: 0;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s, visibility 0.15s;
+  transition:
+    opacity 0.15s,
+    visibility 0.15s;
   z-index: 100;
 }
 .app-nav-avatar-menu.is-open {
