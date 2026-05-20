@@ -199,7 +199,7 @@ func main() {
         "second_tags": [
           { "key": "ib_hot_all-us", "name": "美股总热度", "market": "US" },
           { "key": "ib_hot_all-hk", "name": "港股总热度", "market": "HK" },
-          { "key": "ib_hot_all-cn", "name": "A股总热度", "market": "CN" }
+          { "key": "ib_hot_all-cn", "name": "A 股总热度", "market": "CN" }
         ]
       },
       {

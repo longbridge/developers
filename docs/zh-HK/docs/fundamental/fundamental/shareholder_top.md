@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取上市公司前20大股東（機構、個人、內部人）的持股數據，支持多報告期對比。`object_id` 可傳入 `shareholder_detail` 查看詳情。
+獲取上市公司前 20 大股東（機構、個人、內部人）的持股數據，支持多報告期對比。`object_id` 可傳入 `shareholder_detail` 查看詳情。
 
 <CliCommand>
 longbridge shareholder AAPL.US --top

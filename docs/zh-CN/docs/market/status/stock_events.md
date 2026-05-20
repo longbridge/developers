@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取价格波动超过近20个交易日标准差的异动股票，系统自动关联相关新闻解读异动原因。
+获取价格波动超过近 20 个交易日标准差的异动股票，系统自动关联相关新闻解读异动原因。
 
 <CliCommand>
 longbridge top-movers
@@ -212,7 +212,7 @@ func main() {
         "alert_type": "earnings_beat",
         "post": {
           "id": "post_abc123",
-          "title": "阿里巴巴Q4财报解读：云业务强劲增长",
+          "title": "阿里巴巴 Q4 财报解读：云业务强劲增长",
           "url": "https://longbridge.com/news/post_abc123"
         }
       },
