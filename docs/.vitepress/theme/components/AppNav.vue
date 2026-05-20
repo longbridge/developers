@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
+import endsWith from 'lodash/endsWith'
 import { localePath, getBasenameLocale } from '../utils/i18n'
 import { createLoginRedirectPath } from '../utils/navigate'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
@@ -85,8 +86,8 @@ const avatarEl = ref<HTMLElement>()
 const avatarCloseTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 const avatarMenuItems = computed(() => [
-  { title: 'Dashboard', href: localePath('/dashboard') },
-  { title: 'Log out', href: localePath('/log-out') },
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Log out', href: '/log-out' },
 ])
 
 function onAvatarMouseEnter() {
@@ -115,6 +116,19 @@ function openSearch() {
 onMounted(() => {
   initLoginState()
   document.addEventListener('click', onAvatarClickOutside)
+
+  const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
+  window.SupportWidgetConfig = {
+    isLoggedIn: function () {
+      return isLogin.value
+    },
+    loginUrl: createLoginRedirectPath({ sw_open: '1' }),
+    proxy: isProd ? 'prod' : 'staging',
+  }
+  const script = document.createElement('script')
+  script.src = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
+  script.async = true
+  document.head.appendChild(script)
 })
 onUnmounted(() => {
   document.removeEventListener('click', onAvatarClickOutside)
@@ -254,7 +268,7 @@ onUnmounted(() => {
         <!-- Logged-in: Dashboard + Avatar -->
         <ClientOnly>
           <template v-if="isLogin">
-            <a class="btn btn-ghost btn-sm hidden md:inline-flex" :href="localePath('/dashboard')">{{
+            <a class="btn btn-ghost btn-sm hidden md:inline-flex" target="_self" href="/dashboard">{{
               t('nav.dashboard')
             }}</a>
             <div

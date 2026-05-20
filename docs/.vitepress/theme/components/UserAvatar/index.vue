@@ -43,11 +43,11 @@ const { avatar } = useAvatar()
 const list = computed<{ title: string; href: string }[]>(() => [
   {
     title: t('HD2WD-CgkkcJJW12yOmDM'),
-    href: localePath('/dashboard'),
+    href: '/dashboard',
   },
   {
     title: t('JJTHzcLZRxvS2W-2IwWMn'),
-    href: localePath('/log-out'),
+    href: '/log-out',
   },
 ])
 

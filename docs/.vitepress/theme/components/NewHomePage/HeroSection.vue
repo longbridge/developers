@@ -127,7 +127,7 @@ onUnmounted(() => clearInterval(productInterval))
 
       <!-- CTA Buttons -->
       <div class="hero-cta">
-        <a :href="localePath('/dashboard')" class="hero-btn-primary">
+        <a href="/dashboard" class="hero-btn-primary">
           {{ content.cta.getStarted }}
         </a>
         <a href="/docs/" class="hero-cta-secondary">
