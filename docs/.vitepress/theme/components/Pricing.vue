@@ -28,10 +28,18 @@ const FREE_BASELINE = [
   },
 ]
 
+interface PlanCycle {
+  price: number
+  suffix: string
+  discount?: number
+  approxMo?: number
+}
+
 const BILLING_CYCLES = [
-  { key: 'monthly', label: 'Monthly', mult: 1.0 },
-  { key: 'quarterly', label: 'Quarterly', mult: 0.92 },
-  { key: 'annual', label: 'Annual', mult: 0.78, badge: 'Best' },
+  { key: 'auto', label: 'Auto-renew' },
+  { key: 'monthly', label: 'Monthly' },
+  { key: 'quarterly', label: 'Quarterly' },
+  { key: 'annual', label: 'Annual', badge: 'Best' },
 ]
 
 const PAID_PLANS = [
@@ -39,38 +47,50 @@ const PAID_PLANS = [
     id: 'us-lv1',
     market: 'US Market',
     name: 'US LV1 Real-time',
-    base: 558,
     currency: 'HK$',
-    suffix: '/mo',
     tagline: 'Nasdaq LV1 real-time quotes with best bid/ask, including pre / post-market.',
     coverage: 'US market only',
     color: 'var(--lb-market-us)',
     feats: ['Nasdaq LV1 real-time quotes', 'Pre / post-market (overnight)', 'WebSocket real-time push'],
+    cycles: {
+      auto: { price: 558, suffix: '/mo', discount: 22 },
+      monthly: { price: 718, suffix: '/mo' },
+      quarterly: { price: 1748, suffix: '/quarter', discount: 19, approxMo: 583 },
+      annual: { price: 5788, suffix: '/year', discount: 33, approxMo: 482 },
+    } as Record<string, PlanCycle>,
   },
   {
     id: 'hk-lv2',
     market: 'HK Market',
     name: 'HK LV2 Advanced',
-    base: 558,
     currency: 'HK$',
-    suffix: '/mo',
     badge: 'Global (incl. HK)',
     tagline: 'HKEX real-time quotes with 10-level order book and broker queue.',
     coverage: 'HK market only (excludes US)',
     color: 'var(--lb-market-hk)',
     feats: ['10-level bid/ask depth', 'Real-time depth push', 'Broker queue (HK)'],
+    cycles: {
+      auto: { price: 558, suffix: '/mo', discount: 22 },
+      monthly: { price: 718, suffix: '/mo' },
+      quarterly: { price: 1428, suffix: '/quarter', discount: 34, approxMo: 476 },
+      annual: { price: 5288, suffix: '/year', discount: 39, approxMo: 441 },
+    } as Record<string, PlanCycle>,
   },
   {
     id: 'opra',
     market: 'US Options',
     name: 'OPRA US Options',
-    base: 22,
     currency: 'HK$',
-    suffix: '/mo',
     tagline: 'US options real-time quotes with best bid/ask — sold separately, any tier.',
     coverage: 'Adds onto any tier',
     color: 'var(--lb-ai-mention)',
     feats: ['Option chain lookup', 'Real-time option quotes', 'Option quote push'],
+    cycles: {
+      auto: { price: 22, suffix: '/mo', discount: 45 },
+      monthly: { price: 40, suffix: '/mo' },
+      quarterly: { price: 83, suffix: '/quarter', discount: 31, approxMo: 28 },
+      annual: { price: 269, suffix: '/year', discount: 44, approxMo: 22 },
+    } as Record<string, PlanCycle>,
   },
 ]
 
@@ -125,15 +145,14 @@ const FAQ = [
   ],
 ]
 
-const cycle = ref('annual')
+const cycle = ref('auto')
 const currentCycle = computed(() => BILLING_CYCLES.find((c) => c.key === cycle.value)!)
 
-function cyclePrice(base: number) {
-  return Math.round(base * currentCycle.value.mult)
+function planCycle(plan: (typeof PAID_PLANS)[number]): PlanCycle {
+  return plan.cycles[cycle.value] ?? plan.cycles.monthly
 }
-function cycleDiscount(base: number) {
-  const off = Math.round((1 - currentCycle.value.mult) * 100)
-  return off > 0 ? off : 0
+function planMonthlyPrice(plan: (typeof PAID_PLANS)[number]): number {
+  return plan.cycles.monthly.price
 }
 
 // Group rows — build a flat list with group separators
@@ -289,12 +308,15 @@ const matrixRows = computed<MatrixRow[]>(() => {
             <h3 class="pricing-plan-name">{{ p.name }}</h3>
             <div class="pricing-plan-price">
               <span class="pricing-plan-cur">{{ p.currency }}</span>
-              <span class="pricing-plan-num">{{ cyclePrice(p.base) }}</span>
-              <span class="pricing-plan-suf">{{ p.suffix }}</span>
-              <span v-if="cycleDiscount(p.base) > 0" class="pricing-plan-discount">-{{ cycleDiscount(p.base) }}%</span>
+              <span class="pricing-plan-num">{{ planCycle(p).price }}</span>
+              <span class="pricing-plan-suf">{{ planCycle(p).suffix }}</span>
+              <span v-if="planCycle(p).discount" class="pricing-plan-discount">-{{ planCycle(p).discount }}%</span>
             </div>
-            <div v-if="cycleDiscount(p.base) > 0" class="pricing-plan-was">
-              Was <s>{{ p.currency }}{{ p.base }}{{ p.suffix }}</s> · billed {{ currentCycle.label.toLowerCase() }}
+            <div v-if="planCycle(p).approxMo" class="pricing-plan-approx">
+              ≈{{ p.currency }}{{ planCycle(p).approxMo }}/mo
+            </div>
+            <div v-else-if="planCycle(p).discount" class="pricing-plan-was">
+              Was <s>{{ p.currency }}{{ planMonthlyPrice(p) }}/mo</s>
             </div>
             <p class="pricing-plan-tag">{{ p.tagline }}</p>
             <div class="pricing-plan-cov">
@@ -488,8 +510,17 @@ const matrixRows = computed<MatrixRow[]>(() => {
   color: var(--lb-fg-3);
   font-weight: 500;
 }
+.pricing-cycle-tabs {
+  display: flex;
+  align-items: center;
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
 .pricing-cycle-tab {
-  padding: 7px 14px;
+  padding: 2px 14px;
   font-size: 13px;
   font-weight: 500;
   color: var(--lb-fg-2);
@@ -508,8 +539,12 @@ const matrixRows = computed<MatrixRow[]>(() => {
 .pricing-cycle-tab.is-active {
   background: var(--lb-fg-1);
   color: var(--lb-fg-invert);
+  border-radius: 7px;
 }
-.pricing-cycle-tab.is-active .pricing-cycle-badge {
+.pricing-cycle-tab .pricing-cycle-badge {
+  padding: 0 6px;
+  line-height: 12px;
+  font-size: 10px;
   background: color-mix(in srgb, var(--lb-up) 20%, transparent);
   color: var(--lb-up);
 }
@@ -599,6 +634,11 @@ const matrixRows = computed<MatrixRow[]>(() => {
   padding: 2px 7px;
   border-radius: 999px;
   margin-left: 6px;
+}
+.pricing-plan-approx {
+  font-size: 12px;
+  color: var(--lb-fg-3);
+  margin-bottom: 0;
 }
 .pricing-plan-was {
   font-size: 12px;
