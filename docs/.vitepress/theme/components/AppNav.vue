@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import { localePath, getBasenameLocale } from '../utils/i18n'
+import { createLoginRedirectPath } from '../utils/navigate'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
 import { useAvatar } from './UserAvatar/uesAvatar'
 import UserAvatarIcon from './UserAvatar/UserAvatarIcon.vue'
@@ -77,6 +78,7 @@ function toggleTheme(_e: MouseEvent) {
 
 // Login / avatar
 const isLogin = isLoginState
+const loginUrl = computed(() => createLoginRedirectPath())
 const { avatar } = useAvatar()
 const avatarOpen = ref(false)
 const avatarEl = ref<HTMLElement>()
@@ -273,7 +275,7 @@ onUnmounted(() => {
             </div>
           </template>
           <!-- Not logged in: Get Started -->
-          <a v-else class="btn btn-primary btn-sm" :href="localePath('/login')">
+          <a v-else class="btn btn-primary btn-sm" target="_self" :href="loginUrl">
             {{ t('nav.getStarted') }}
             <svg
               width="13"

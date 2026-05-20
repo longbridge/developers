@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { localePath, getBasenameLocale } from '../utils/i18n'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const sgBaseUrl = computed(() =>
+  locale.value === 'en' ? 'https://longbridge.com/sg' : 'https://longbridge.com/sg/zh-CN',
+)
 
 function switchLocale(locale: string) {
   if (typeof window === 'undefined') return
@@ -81,9 +86,9 @@ const year = new Date().getFullYear()
       <div>
         <h5>{{ t('footer.legal') }}</h5>
         <ul>
-          <li><a href="#">{{ t('footer.terms') }}</a></li>
-          <li><a href="#">{{ t('footer.privacy') }}</a></li>
-          <li><a href="#">{{ t('footer.risk') }}</a></li>
+          <li><a :href="`${sgBaseUrl}/support/topics/us-trade/user-agreement`" target="_blank" rel="noreferrer">{{ t('footer.terms') }}</a></li>
+          <li><a :href="`${sgBaseUrl}/support/topics/Other/privacy-policy`" target="_blank" rel="noreferrer">{{ t('footer.privacy') }}</a></li>
+          <li><a :href="`${sgBaseUrl}/support/topics/Other/risk-disclosure`" target="_blank" rel="noreferrer">{{ t('footer.risk') }}</a></li>
         </ul>
       </div>
     </div>
