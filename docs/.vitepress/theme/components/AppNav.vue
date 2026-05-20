@@ -197,7 +197,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Theme toggle -->
-        <button class="app-nav-icon-btn hidden md:block" @click="toggleTheme" aria-label="Toggle theme">
+        <button class="app-nav-icon-btn hidden md:grid" @click="toggleTheme" aria-label="Toggle theme">
           <!-- sun (dark mode active → show sun to switch to light) -->
           <svg
             v-if="isDark"
@@ -230,7 +230,7 @@ onUnmounted(() => {
 
         <!-- GitHub -->
         <a
-          class="app-nav-icon-btn hidden md:block"
+          class="app-nav-icon-btn hidden md:grid"
           href="https://github.com/longbridge/developers"
           target="_blank"
           rel="noreferrer"

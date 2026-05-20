@@ -1489,33 +1489,6 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* Stats band */
-.stats-band {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 32px 0;
-}
-.stats-band-cell {
-  padding: 8px 32px;
-  border-right: 1px solid var(--app-card-stroke);
-}
-.stats-band-cell:last-child {
-  border-right: none;
-}
-@media (max-width: 720px) {
-  .stats-band {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .stats-band-cell:nth-child(2) {
-    border-right: none;
-  }
-  .stats-band-cell:nth-child(1),
-  .stats-band-cell:nth-child(2) {
-    border-bottom: 1px solid var(--app-card-stroke);
-    padding-bottom: 24px;
-    margin-bottom: 8px;
-  }
-}
 
 /* AI spotlight */
 .ai-spotlight {

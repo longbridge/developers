@@ -20,7 +20,7 @@ const LOCALE = {
         { u: 'markets', d: 'US · HK · SG · CN' },
         { u: 'SDKs', d: 'Python · Rust · Node · Go · Java · C · C++' },
         { u: 'endpoints', d: 'Quote · Trade · Research · News' },
-        { u: 'p50 latency', d: 'WebSocket streaming' },
+        { u: 'OpenAPI access', d: 'No monthly fees' },
       ],
     },
     features: {
@@ -160,12 +160,6 @@ const LOCALE = {
       ],
       cta: 'SDK Documentation',
     },
-    stats: [
-      { v: '130+', label: 'API endpoints', sub: 'across all markets' },
-      { v: '60ms', label: 'Median quote latency', sub: 'P99 < 180 ms' },
-      { v: '99.99%', label: 'API uptime SLO', sub: 'Last 12 months' },
-      { v: '$0', label: 'OpenAPI access fee', sub: 'For integrated accounts' },
-    ],
     getstarted: {
       eyebrow: 'Get started',
       title: 'Get started in minutes',
@@ -206,7 +200,7 @@ const LOCALE = {
         { u: '个市场', d: 'US · HK · SG · CN' },
         { u: '个 SDK', d: 'Python · Rust · Node · Go · Java · C · C++' },
         { u: '+ 个接口', d: '行情 · 交易 · 研究 · 资讯' },
-        { u: 'p50 延迟', d: 'WebSocket 实时推送' },
+        { u: 'OpenAPI 接入费', d: '集成账户免费' },
       ],
     },
     features: {
@@ -333,12 +327,6 @@ const LOCALE = {
       ],
       cta: 'SDK 文档',
     },
-    stats: [
-      { v: '130+', label: 'API 接口数量', sub: '覆盖所有市场' },
-      { v: '60ms', label: '行情中位延迟', sub: 'P99 < 180 ms' },
-      { v: '99.99%', label: 'API 可用性 SLO', sub: '过去 12 个月' },
-      { v: '$0', label: 'OpenAPI 接入费', sub: '适用于关联账户' },
-    ],
     getstarted: {
       eyebrow: '开始使用',
       title: '几分钟内快速上手',
@@ -375,7 +363,7 @@ const LOCALE = {
         { u: '個市場', d: 'US · HK · SG · CN' },
         { u: '個 SDK', d: 'Python · Rust · Node · Go · Java · C · C++' },
         { u: '+ 個接口', d: '行情 · 交易 · 研究 · 資訊' },
-        { u: 'p50 延遲', d: 'WebSocket 即時推送' },
+        { u: 'OpenAPI 接入費', d: '整合帳戶免費' },
       ],
     },
     features: {
@@ -502,12 +490,6 @@ const LOCALE = {
       ],
       cta: 'SDK 文件',
     },
-    stats: [
-      { v: '130+', label: 'API 接口數量', sub: '覆蓋所有市場' },
-      { v: '60ms', label: '行情中位延遲', sub: 'P99 < 180 ms' },
-      { v: '99.99%', label: 'API 可用性 SLO', sub: '過去 12 個月' },
-      { v: '$0', label: 'OpenAPI 接入費', sub: '適用於關聯帳戶' },
-    ],
     getstarted: {
       eyebrow: '開始使用',
       title: '幾分鐘內快速上手',
@@ -537,7 +519,7 @@ const LOCALE = {
 const content = computed(() => LOCALE[lang.value as keyof typeof LOCALE] ?? LOCALE.en)
 
 const heroHighlights = computed(() => {
-  const vs = ['4', '7', '100+', '60ms']
+  const vs = ['4', '7', '100+', '$0']
   return content.value.hero.highlights.map((h, i) => ({ ...h, v: vs[i] }))
 })
 const products = computed(() => PRODUCTS.map((p, i) => ({ ...p, ...(content.value.products[i] ?? {}) })))
@@ -2187,36 +2169,6 @@ const GETSTARTED = [
               <path d="m12 5 7 7-7 7" />
             </svg>
           </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Stats band ===== -->
-    <section class="section" style="padding-top: 0">
-      <div class="section-inner">
-        <div class="stats-band card">
-          <div class="stats-band-cell">
-            <div class="num h-display" style="font-size: 44px; font-weight: 600">
-              130<span style="font-size: 20px; color: var(--lb-fg-3)">+</span>
-            </div>
-            <div class="t-meta">{{ content.stats[0].label }}<br />{{ content.stats[0].sub }}</div>
-          </div>
-          <div class="stats-band-cell">
-            <div class="num h-display" style="font-size: 44px; font-weight: 600">
-              60<span style="font-size: 20px; color: var(--lb-fg-3)">ms</span>
-            </div>
-            <div class="t-meta">{{ content.stats[1].label }}<br />{{ content.stats[1].sub }}</div>
-          </div>
-          <div class="stats-band-cell">
-            <div class="num h-display" style="font-size: 44px; font-weight: 600">
-              99.99<span style="font-size: 20px; color: var(--lb-fg-3)">%</span>
-            </div>
-            <div class="t-meta">{{ content.stats[2].label }}<br />{{ content.stats[2].sub }}</div>
-          </div>
-          <div class="stats-band-cell">
-            <div class="num h-display" style="font-size: 44px; font-weight: 600">$0</div>
-            <div class="t-meta">{{ content.stats[3].label }}<br />{{ content.stats[3].sub }}</div>
-          </div>
         </div>
       </div>
     </section>

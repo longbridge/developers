@@ -3721,5 +3721,17 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   .skill-hero-install-cmd {
     max-width: 100%;
   }
+  .skill-demo-chat-body {
+    overflow-x: auto;
+  }
+  .skill-demo-chat-head {
+    overflow: hidden;
+  }
+  .skill-demo-chat-head span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
 }
 </style>
