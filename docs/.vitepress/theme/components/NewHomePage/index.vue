@@ -84,6 +84,7 @@ const LOCALE = {
       title2: 'and intelligent trading for your AI.',
       desc: 'With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and place orders — all in plain conversation, no app-switching required.',
       installLabel: 'Copy and send to any AI — it walks you through install:',
+      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\nAnd complete login and test with a market data query.`,
       installOr: '— or via package manager —',
       agentMore: '+ any Skill-compatible agent',
       cta: 'Browse Skill catalog',
@@ -264,6 +265,7 @@ const LOCALE = {
       title2: '深度研究与智能交易',
       desc: '借助 Longbridge Skill，您的 AI 助手可以筛选股票、解读财报、追踪内部人交易、下达订单——全程对话完成，无需切换 App。',
       installLabel: '复制发给任意 AI，它会引导你完成安装：',
+      installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
       installOr: '—— 或通过包管理器 ——',
       agentMore: '+ 任意兼容 Skill 的 Agent',
       cta: '浏览 Skill 目录',
@@ -1568,17 +1570,9 @@ const GETSTARTED = [
             <div class="ai-install-block">
               <div class="ai-install-label">{{ content.ai.installLabel }}</div>
               <div class="ai-install-cmd">
-                <code
-                  >Install Longbridge AI toolkit following the guide:<br />https://open.longbridge.com/skill/install.md</code
-                >
-                <button
-                  class="code-copy"
-                  title="Copy"
-                  @click="
-                    copyToClipboard(
-                      'Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md'
-                    )
-                  ">
+                <pre>
+<code>{{ content.ai.installCmd }}</code></pre>
+                <button class="code-copy" title="Copy" @click="copyToClipboard(content.ai.installCmd)">
                   <svg
                     width="13"
                     height="13"

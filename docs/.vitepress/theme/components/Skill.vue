@@ -100,7 +100,7 @@ const LOCALE = {
         title: 'Install via Npx',
         desc: 'For Claude Code, Codex, and similar tools — installs all skills globally.',
       },
-      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\nAfter installation, complete login and test with a market data query.`,
+      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\And complete login and test with a market data query.`,
       footer: {
         also: 'Also available on',
         and: 'and',
@@ -246,17 +246,8 @@ const LOCALE = {
         '历史分红记录及分配详情',
         'SEC / 监管文件（完整 Markdown 内容）',
       ],
-      calendar: [
-        '按标的查看即将发布的财报',
-        '重要宏观数据事件',
-        '按市场查看即将派息事件',
-        '交易时段安排与节假日历',
-      ],
-      news: [
-        '按标的获取最新资讯',
-        '社区讨论话题',
-        '自选股分组：查看、新建、编辑、删除',
-      ],
+      calendar: ['按标的查看即将发布的财报', '重要宏观数据事件', '按市场查看即将派息事件', '交易时段安排与节假日历'],
+      news: ['按标的获取最新资讯', '社区讨论话题', '自选股分组：查看、新建、编辑、删除'],
       account: [
         '全子账户股票持仓',
         '全子账户基金持仓',
@@ -280,7 +271,8 @@ const LOCALE = {
         title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖',
         desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。',
         prompt: '从美股和港股中，筛选市值超 500 亿、PE 低于 25 的科技股，且近期出现 MACD 金叉——按市值排序。',
-        summary: '美股 + 港股科技板块筛选完成——共 8 只股票满足市值 ≥ 500 亿、PE < 25 条件。其中 3 只确认出现近期 MACD 金叉（DIF 上穿 DEA）。',
+        summary:
+          '美股 + 港股科技板块筛选完成——共 8 只股票满足市值 ≥ 500 亿、PE < 25 条件。其中 3 只确认出现近期 MACD 金叉（DIF 上穿 DEA）。',
         tableHead: ['代码', '名称', '市值', 'PE', 'MACD', '信号'],
         callout:
           'MACD 金叉最强标的：9618.HK（京东）——DIF 从 −0.08 上穿零轴至 +0.22，是本次最接近零轴且趋势最干净的金叉。IBM.US 和 9999.HK 同样确认。腾讯 / 阿里 / 小米 DIF 仍低于 DEA，尚未满足信号条件。',
@@ -290,7 +282,8 @@ const LOCALE = {
         title: '任意标的一键技术诊断——MACD、KDJ、RSI、布林带，一条指令搞定',
         desc: '不用截图，直接问。输入任意标的，Skill 拉取日线 / 小时线，运行指标，告诉你该关注什么——金叉、背离、超卖区域。',
         prompt: '诊断 NVDA.US——日线上的 MACD、KDJ、RSI，并告诉我哪些信号值得信任。',
-        summary: 'NVDA.US 日线，近 90 个交易日：趋势强劲但 MACD 柱状缩短——动量趋于冷却。KDJ 超买（J=92.4），RSI 71.8——短期回调风险偏高。',
+        summary:
+          'NVDA.US 日线，近 90 个交易日：趋势强劲但 MACD 柱状缩短——动量趋于冷却。KDJ 超买（J=92.4），RSI 71.8——短期回调风险偏高。',
         tableHead: ['指标', '数值', '信号解读', '可信度'],
         callout:
           '偏空短期、多头中期维持。KDJ + RSI 双双超买，MACD 柱状缩短——短期调整第一浪大概率来临。关注 $135 位置（20D MA + 布林下轨共振区）作为再次入场参考。',
@@ -475,17 +468,8 @@ const LOCALE = {
         '歷史分紅記錄及分配詳情',
         'SEC / 監管文件（完整 Markdown 內容）',
       ],
-      calendar: [
-        '按標的查看即將發佈的業績',
-        '重要宏觀數據事件',
-        '按市場查看即將派息事件',
-        '交易時段安排與節假日曆',
-      ],
-      news: [
-        '按標的獲取最新資訊',
-        '社區討論話題',
-        '自選股分組：查看、新建、編輯、刪除',
-      ],
+      calendar: ['按標的查看即將發佈的業績', '重要宏觀數據事件', '按市場查看即將派息事件', '交易時段安排與節假日曆'],
+      news: ['按標的獲取最新資訊', '社區討論話題', '自選股分組：查看、新建、編輯、刪除'],
       account: [
         '全子賬戶股票持倉',
         '全子賬戶基金持倉',
@@ -509,7 +493,8 @@ const LOCALE = {
         title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋',
         desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。',
         prompt: '從美股和港股中，篩選市值超 500 億、PE 低於 25 的科技股，且近期出現 MACD 金叉——按市值排序。',
-        summary: '美股 + 港股科技板塊篩選完成——共 8 只股票滿足市值 ≥ 500 億、PE < 25 條件。其中 3 只確認出現近期 MACD 金叉（DIF 上穿 DEA）。',
+        summary:
+          '美股 + 港股科技板塊篩選完成——共 8 只股票滿足市值 ≥ 500 億、PE < 25 條件。其中 3 只確認出現近期 MACD 金叉（DIF 上穿 DEA）。',
         tableHead: ['代碼', '名稱', '市值', 'PE', 'MACD', '信號'],
         callout:
           'MACD 金叉最強標的：9618.HK（京東）——DIF 從 −0.08 上穿零軸至 +0.22，是本次最接近零軸且趨勢最乾淨的金叉。IBM.US 和 9999.HK 同樣確認。騰訊 / 阿里 / 小米 DIF 仍低於 DEA，尚未滿足信號條件。',
@@ -519,7 +504,8 @@ const LOCALE = {
         title: '任意標的一鍵技術診斷——MACD、KDJ、RSI、布林帶，一條指令搞定',
         desc: '不用截圖，直接問。輸入任意標的，Skill 拉取日線 / 小時線，運行指標，告訴你該關注什麼——金叉、背離、超賣區域。',
         prompt: '診斷 NVDA.US——日線上的 MACD、KDJ、RSI，並告訴我哪些信號值得信任。',
-        summary: 'NVDA.US 日線，近 90 個交易日：趨勢強勁但 MACD 柱狀縮短——動量趨於冷卻。KDJ 超買（J=92.4），RSI 71.8——短期回調風險偏高。',
+        summary:
+          'NVDA.US 日線，近 90 個交易日：趨勢強勁但 MACD 柱狀縮短——動量趨於冷卻。KDJ 超買（J=92.4），RSI 71.8——短期回調風險偏高。',
         tableHead: ['指標', '數值', '信號解讀', '可信度'],
         callout:
           '偏空短期、多頭中期維持。KDJ + RSI 雙雙超買，MACD 柱狀縮短——短期調整第一浪大概率來臨。關注 $135 位置（20D MA + 布林下軌共振區）作為再次入場參考。',
@@ -1708,7 +1694,9 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
             <p class="user-case-desc">{{ (content.cases as any).items?.[i]?.desc ?? c.desc }}</p>
             <div class="user-case-metric">
               <span class="user-case-metric-v" :style="{ color: c.accent }">{{ c.metric }}</span>
-              <span class="user-case-metric-l">{{ (content.cases as any).items?.[i]?.metricLabel ?? c.metricLabel }}</span>
+              <span class="user-case-metric-l">{{
+                (content.cases as any).items?.[i]?.metricLabel ?? c.metricLabel
+              }}</span>
             </div>
           </a>
         </div>
