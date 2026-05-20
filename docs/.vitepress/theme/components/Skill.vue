@@ -100,6 +100,7 @@ const LOCALE = {
         title: 'Install via Npx',
         desc: 'For Claude Code, Codex, and similar tools — installs all skills globally.',
       },
+      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md`,
       footer: {
         also: 'Also available on',
         and: 'and',
@@ -213,6 +214,7 @@ const LOCALE = {
         title: '通过 Npx 安装',
         desc: '适用于 Claude Code、Codex 等工具——全局安装所有 Skill。',
       },
+      installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md`,
       footer: {
         also: '也可在以下平台获取',
         and: '和',
@@ -441,6 +443,7 @@ const LOCALE = {
         title: '透過 Npx 安裝',
         desc: '適用於 Claude Code、Codex 等工具——全局安裝所有 Skill。',
       },
+      installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md`,
       footer: {
         also: '也可在以下平台獲取',
         and: '及',
@@ -1066,11 +1069,11 @@ const filteredSkills = computed(() =>
 )
 const activeScenario = computed(() => scenarios.value[scenarioIdx.value])
 
-const installCmd = `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md`
+const installCmd = computed(() => content.value.getstarted.installCmd)
 
 function copyInstall() {
   if (typeof navigator === 'undefined') return
-  navigator.clipboard.writeText(installCmd).then(() => {
+  navigator.clipboard.writeText(installCmd.value).then(() => {
     copied.value = true
     setTimeout(() => {
       copied.value = false
@@ -1080,7 +1083,7 @@ function copyInstall() {
 
 function copyGetStarted() {
   if (typeof navigator === 'undefined') return
-  navigator.clipboard.writeText(installCmd).then(() => {
+  navigator.clipboard.writeText(installCmd.value).then(() => {
     copiedGetStarted.value = true
     setTimeout(() => {
       copiedGetStarted.value = false
