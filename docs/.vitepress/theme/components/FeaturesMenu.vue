@@ -190,7 +190,7 @@ function close() {
   </div>
 
   <!-- Desktop hover dropdown layout -->
-  <div v-else class="relative flex items-center px-3" @mouseenter="open" @mouseleave="close">
+  <div v-else class="relative flex h-full items-center px-3" @mouseenter="open" @mouseleave="close">
     <button
       class="flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 font-[inherit] text-sm font-medium whitespace-nowrap transition-colors duration-250"
       :class="isOpen ? 'text-[var(--vp-c-brand-1)]' : 'text-[var(--vp-c-text-1)] hover:text-[var(--vp-c-brand-1)]'">
@@ -214,7 +214,7 @@ function close() {
     <Transition name="dropdown">
       <div
         v-if="isOpen"
-        class="dropdown-panel absolute top-[calc(100%-8px)] left-1/2 z-100 w-160 overflow-hidden rounded-xl border border-[var(--vp-c-divider)] bg-[var(--vp-c-bg)] p-2 shadow-lg dark:shadow-2xl">
+        class="dropdown-panel absolute top-full left-0 z-100 mt-3 w-160 overflow-hidden rounded-xl border border-[var(--vp-c-divider)] bg-[var(--vp-c-bg)] p-2 shadow-lg dark:shadow-2xl">
         <div class="grid grid-cols-3 gap-1">
           <a
             v-for="item in features"
@@ -308,7 +308,7 @@ function close() {
 }
 
 .dropdown-panel {
-  transform: translateX(-50%) translateZ(0);
+  transform: translateZ(0);
 }
 
 .dropdown-enter-active,
@@ -321,12 +321,12 @@ function close() {
 .dropdown-enter-from,
 .dropdown-leave-to {
   opacity: 0;
-  transform: translateX(-50%) translateZ(0) translateY(-4px);
+  transform: translateZ(0) translateY(-4px);
 }
 
 .dropdown-enter-to,
 .dropdown-leave-from {
   opacity: 1;
-  transform: translateX(-50%) translateZ(0) translateY(0);
+  transform: translateZ(0) translateY(0);
 }
 </style>

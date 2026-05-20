@@ -1,7 +1,7 @@
 ---
 title: '定价'
 id: pricing
-layout: page
+layout: false
 sidebar: false
 ---
 

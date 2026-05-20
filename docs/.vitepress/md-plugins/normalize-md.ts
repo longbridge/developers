@@ -111,7 +111,8 @@ export const NormalizeMdPlugin = (md: MarkdownIt) => {
     const layout = state.env.frontmatter?.layout
 
     // 只对 layout 没有定义，或者 layout 为 'doc' 的文档生效
-    if (layout && layout !== 'doc') {
+    // 注意：layout: false 是 falsy，需要单独判断
+    if (layout === false || (layout && layout !== 'doc')) {
       return
     }
 

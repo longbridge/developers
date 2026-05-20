@@ -1,3 +1,5 @@
+export { default as AppNav } from './AppNav.vue'
+export { default as AppFooter } from './AppFooter.vue'
 export { default as CliCommand } from './CliCommand.vue'
 export { default as FeaturesMenu } from './FeaturesMenu.vue'
 export { default as Tabs } from './Tabs.vue'

@@ -1,569 +1,704 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useData } from 'vitepress'
-import { LEVEL_COLORS } from './QuotePermissionData'
+import { ref, computed } from 'vue'
+import AppNav from './AppNav.vue'
+import AppFooter from './AppFooter.vue'
+import { localePath } from '../utils/i18n'
 
-const { lang } = useData()
+const FREE_BASELINE = [
+  { icon: "shield",  color: "var(--lb-up)",
+    title: "Trading & Account APIs", price: "Free",
+    desc: "Fundamentals, analysis, news, assets, orders — every core API is free." },
+  { icon: "chart",   color: "var(--lb-status-neutral)",
+    title: "Basic Market Data", price: "Free",
+    desc: "Nasdaq Basic, HK Level 1, CN Level 1 — bundled with your account." },
+  { icon: "bolt",    color: "var(--lb-brand)",
+    title: "Push & Pull Data", price: "Free",
+    desc: "WebSocket real-time push and REST API pull — unlimited." }
+]
 
-const showDialog = ref(false)
+const BILLING_CYCLES = [
+  { key: "monthly",   label: "Monthly",   mult: 1.00 },
+  { key: "quarterly", label: "Quarterly", mult: 0.92 },
+  { key: "annual",    label: "Annual",    mult: 0.78, badge: "Best" }
+]
 
-function openDialog() {
-  showDialog.value = true
-}
-
-function closeDialog() {
-  showDialog.value = false
-}
-
-type BillingPeriod = 'continuous' | 'monthly' | 'quarterly' | 'yearly'
-const billing = ref<BillingPeriod>('continuous')
-
-const PRICES = {
-  us_lv1: { continuous: 558, monthly: 718, quarterly: 1748, yearly: 5788 },
-  opra: { continuous: 22, monthly: 40, quarterly: 83, yearly: 269 },
-  hk_lv2_global: { continuous: 558, monthly: 718, quarterly: 1428, yearly: 5288 },
-  hk_lv2_mainland: { continuous: 269, monthly: 313, quarterly: 618, yearly: 1999 },
-} as const
-
-function priceOf(key: keyof typeof PRICES): number {
-  return PRICES[key][billing.value]
-}
-
-function perMonthOf(key: keyof typeof PRICES): string | null {
-  const unit = lang.value.startsWith('zh') ? '/月' : '/mo'
-  if (billing.value === 'quarterly') return `≈ HK$${Math.round(PRICES[key].quarterly / 3)}${unit}`
-  if (billing.value === 'yearly') return `≈ HK$${Math.round(PRICES[key].yearly / 12)}${unit}`
-  return null
-}
-
-function savingsOf(key: keyof typeof PRICES): string | null {
-  const monthly = PRICES[key].monthly
-  if (billing.value === 'monthly') return null
-  if (billing.value === 'continuous') {
-    const pct = Math.round((1 - PRICES[key].continuous / monthly) * 100)
-    return pct > 0 ? `-${pct}%` : null
+const PAID_PLANS = [
+  { id: "us-lv1", market: "US Market", name: "US LV1 Real-time",
+    base: 558, currency: "HK$", suffix: "/mo",
+    tagline: "Nasdaq LV1 real-time quotes with best bid/ask, including pre / post-market.",
+    coverage: "US market only",
+    color: "var(--lb-market-us)",
+    feats: ["Nasdaq LV1 real-time quotes", "Pre / post-market (overnight)", "WebSocket real-time push"]
+  },
+  { id: "hk-lv2", market: "HK Market", name: "HK LV2 Advanced",
+    base: 558, currency: "HK$", suffix: "/mo", badge: "Global (incl. HK)",
+    tagline: "HKEX real-time quotes with 10-level order book and broker queue.",
+    coverage: "HK market only (excludes US)",
+    color: "var(--lb-market-hk)",
+    feats: ["10-level bid/ask depth", "Real-time depth push", "Broker queue (HK)"]
+  },
+  { id: "opra", market: "US Options", name: "OPRA US Options",
+    base: 22, currency: "HK$", suffix: "/mo",
+    tagline: "US options real-time quotes with best bid/ask — sold separately, any tier.",
+    coverage: "Adds onto any tier",
+    color: "var(--lb-ai-mention)",
+    feats: ["Option chain lookup", "Real-time option quotes", "Option quote push"]
   }
-  if (billing.value === 'quarterly') {
-    const pct = Math.round((1 - PRICES[key].quarterly / (monthly * 3)) * 100)
-    return pct > 0 ? `-${pct}%` : null
-  }
-  if (billing.value === 'yearly') {
-    const pct = Math.round((1 - PRICES[key].yearly / (monthly * 12)) * 100)
-    return pct > 0 ? `-${pct}%` : null
-  }
-  return null
+]
+
+const FEATURE_MATRIX_PLANS = [
+  { key: "nasdaq-basic", label: "Nasdaq Basic", tag: "Free",         color: "var(--lb-up)" },
+  { key: "us-lv1",       label: "US LV1",       tag: "Paid",         color: "var(--lb-market-us)" },
+  { key: "opra",         label: "OPRA",         tag: "Paid",         color: "var(--lb-ai-mention)" },
+  { key: "hk-lv1",       label: "HK LV1",       tag: "Free (promo)", color: "var(--lb-up)" },
+  { key: "hk-lv2",       label: "HK LV2",       tag: "Paid",         color: "var(--lb-market-hk)" },
+  { key: "cn-lv1",       label: "CN LV1",       tag: "Free (promo)", color: "var(--lb-up)" }
+]
+
+const FEATURE_MATRIX = [
+  { f: "Basic APIs",                      g: "Core",    row: [1,1,1,1,1,1] },
+  { f: "WebSocket real-time push",        g: "Core",    row: [1,1,1,1,1,1] },
+  { f: "Pull quote (REST)",               g: "Core",    row: [1,1,1,1,1,1] },
+  { f: "US best bid/ask",                 g: "US",      row: [1,1,0,0,0,0] },
+  { f: "Pre / post-market (overnight)",   g: "US",      row: [0,1,0,0,0,0] },
+  { f: "Option chain & real-time quotes", g: "Options", row: [0,0,1,0,0,0] },
+  { f: "HK real-time (basic)",            g: "HK",      row: [0,0,0,1,1,0] },
+  { f: "Hang Seng Index",                 g: "HK",      row: [0,0,0,1,1,0] },
+  { f: "HK 10-level order book",          g: "HK",      row: [0,0,0,0,1,0] },
+  { f: "Real-time depth push",            g: "HK",      row: [0,0,0,0,1,0] },
+  { f: "Broker queue (HK)",               g: "HK",      row: [0,0,0,0,1,0] },
+  { f: "CN A-shares real-time",           g: "CN",      row: [0,0,0,0,0,1] }
+]
+
+const FAQ = [
+  ["Are OpenAPI quote subscriptions separate from the App?",
+   "Yes. OpenAPI quote permissions are independent from App / PC / Web. Activate via Longbridge App → Me → Quote Store."],
+  ["Do I need a subscription to test the API?",
+   "No. Trading, account, and fundamentals APIs are free. You can also use Basic Market Data tiers (Nasdaq Basic, HK LV1, CN LV1) for free."],
+  ["Can I cancel anytime?",
+   "Yes. Cancel any time before the next billing cycle. Quote permissions stay active until the end of the paid period."],
+  ["What about paper trading?",
+   "Paper trading runs against the canary environment with simulated matching on live bid-ask spreads. Free for all integrated accounts — no quote subscription required."],
+  ["Are there usage limits on REST or WebSocket?",
+   "No hard usage caps. Rate limits scale with your account tier. See the Rate Limits doc for details."],
+  ["What payment methods are accepted?",
+   "All payments are processed through your Longbridge account. Settled in HKD; cross-currency settled at exchange-rate."]
+]
+
+const cycle = ref("annual")
+const currentCycle = computed(() => BILLING_CYCLES.find(c => c.key === cycle.value)!)
+
+function cyclePrice(base: number) {
+  return Math.round(base * currentCycle.value.mult)
+}
+function cycleDiscount(base: number) {
+  const off = Math.round((1 - currentCycle.value.mult) * 100)
+  return off > 0 ? off : 0
 }
 
-const billingUnit = computed(() => {
-  const zh = lang.value.startsWith('zh')
-  if (billing.value === 'quarterly') return zh ? '/季度' : '/quarter'
-  if (billing.value === 'yearly') return zh ? '/年' : '/year'
-  return zh ? '/月' : '/mo'
-})
-
-const t = computed(() => {
-  const zh = lang.value.startsWith('zh')
-  return {
-    heroTitle: zh ? '开发者平台定价' : 'Developer Platform Pricing',
-    heroSubtitle: zh
-      ? '核心 API 功能完全免费，只有实时行情数据需要按需订阅'
-      : 'Core API features are completely free — subscribe to real-time market data only when you need it',
-
-    freeSectionTitle: zh ? '免费' : 'FREE',
-    freeItems: zh
-      ? [
-          { name: '交易 & 账户 API', note: '个股基本面、分析、资讯、资产、订单等基础 API 功能免费' },
-          { name: '基础行情', note: 'Nasdaq Basic（含盘前、盘中、盘后）、港股 LV1、沪深 LV1' },
-          { name: '数据推送 & 拉取', note: 'WebSocket 实时推送、REST API 主动拉取，无限制' },
-        ]
-      : [
-          { name: 'Trading & Account APIs', note: 'Fundamentals, analysis, news, assets, orders — core APIs free' },
-          { name: 'Basic Market Data', note: 'Nasdaq Basic (pre-market, regular & after-hours), HK LV1, CN LV1' },
-          { name: 'Push & Pull Data', note: 'WebSocket real-time push and REST API pull — unlimited' },
-        ],
-
-    billingPeriods: [
-      { id: 'continuous' as BillingPeriod, label: zh ? '连续包月' : 'Auto-renew' },
-      { id: 'monthly' as BillingPeriod, label: zh ? '月付' : 'Monthly' },
-      { id: 'quarterly' as BillingPeriod, label: zh ? '季付' : 'Quarterly' },
-      { id: 'yearly' as BillingPeriod, label: zh ? '年付' : 'Annual', badge: zh ? '最省' : 'Best', badgeGreen: true },
-    ],
-
-    usLv1Title: zh ? '美股 LV1 实时行情' : 'US LV1 Real-time',
-    usLv1Market: zh ? '美股市场' : 'US Market',
-    usLv1Desc: zh
-      ? '纳斯达克实时成交行情及最优买卖一档报价（含盘前盘后夜盘），专属美股市场'
-      : 'Nasdaq LV1 real-time quotes with best bid/ask incl. pre/post-market — US market only',
-    usLv1Features: zh
-      ? ['Nasdaq LV1 实时报价', '盘前盘后（夜盘）行情', 'WebSocket 实时推送']
-      : ['Nasdaq LV1 real-time quotes', 'Pre/post-market (overnight)', 'WebSocket real-time push'],
-
-    hkLv2Title: zh ? '港股 LV2 高级行情' : 'HK LV2 Advanced',
-    hkLv2Market: zh ? '港股市场' : 'HK Market',
-    hkLv2Desc: zh
-      ? '港交所股票实时成交行情及十档买卖盘报价，专属港股市场（不含美股）'
-      : 'HKEX real-time quotes with 10-level order book — HK market only (excludes US)',
-    hkLv2Features: zh
-      ? ['十档买卖盘口深度', '深度行情实时推送', '券商持仓队列（港股）']
-      : ['10-level bid/ask depth', 'Real-time depth push', 'Broker queue (HK)'],
-    hkLv2GlobalLabel: zh ? '全球版（含香港）' : 'Global (incl. HK)',
-    hkLv2MainlandLabel: zh ? '中国大陆用户优惠价' : 'Mainland China price',
-    hkLv2MainlandNote: zh
-      ? '港交所对中国大陆用户的特批优惠，以实际购买页面为准'
-      : 'Special HKEx rate for mainland China users — subject to verification',
-
-    opraTitle: zh ? 'OPRA 美股期权行情' : 'OPRA US Options',
-    opraMarket: zh ? '美股期权' : 'US Options',
-    opraBadge: zh ? '加购项' : 'Add-on',
-    opraDesc: zh
-      ? '美股期权实时成交行情及最优买卖报价，独立于基础行情，可单独加购'
-      : 'US options real-time quotes with best bid/ask — sold separately, any tier',
-    opraFeatures: zh
-      ? ['期权链查询', '期权实时报价', '期权行情推送']
-      : ['Option chain lookup', 'Real-time option quotes', 'Option quote push'],
-
-    cta: zh ? '前往购买' : 'Purchase',
-    noteText: zh
-      ? 'OpenAPI 行情权限独立于 App / PC / Web，需单独购买。在 Longbridge App「我的」→「行情商店」购买后自动激活。'
-      : 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate via Longbridge App "Me" → "Quote Store".',
-    qrTitle: zh ? '购买行情权限' : 'Purchase Quote Packages',
-    qrDesc: zh
-      ? '在 Longbridge App「我的」中使用扫码功能，或前往「我的」→「行情商店」。'
-      : 'In the Longbridge App, use the QR scanner in the "Me" tab, or go to "Me" → "Quote Store".',
-
-    compareTitle: zh ? '权益对比' : 'Feature Comparison',
-    // column order: nasdaq_basic | us_lv1 | opra | hk_lv1 | hk_lv2 | cn_lv1
-    compareColumns: [
-      { id: 'nasdaq_basic', label: 'Nasdaq Basic', badge: zh ? '免费' : 'Free', color: LEVEL_COLORS.basic },
-      { id: 'us_lv1', label: zh ? '美股 LV1' : 'US LV1', badge: zh ? '付费' : 'Paid', color: LEVEL_COLORS.lv1 },
-      { id: 'opra', label: 'OPRA', badge: zh ? '付费' : 'Paid', color: null },
-      {
-        id: 'hk_lv1',
-        label: zh ? '港股 LV1' : 'HK LV1',
-        badge: zh ? '推广免费' : 'Free (promo)',
-        color: LEVEL_COLORS.basic,
-      },
-      { id: 'hk_lv2', label: zh ? '港股 LV2' : 'HK LV2', badge: zh ? '付费' : 'Paid', color: LEVEL_COLORS.lv2 },
-      {
-        id: 'cn_lv1',
-        label: zh ? '沪深 LV1' : 'CN LV1',
-        badge: zh ? '推广免费' : 'Free (promo)',
-        color: LEVEL_COLORS.basic,
-      },
-    ] as Array<{ id: string; label: string; badge: string; color: typeof LEVEL_COLORS.basic | null }>,
-    compareRows: (zh
-      ? [
-          { feature: '基础 API', values: [true, true, true, true, true, true] },
-          { feature: 'WebSocket 实时行情推送', values: [true, true, true, true, true, true] },
-          { feature: 'Pull 主动拉取行情', values: [true, true, true, true, true, true] },
-          { feature: '美股实时行情（买卖一档）', values: [true, true, false, false, false, false] },
-          { feature: '盘前、盘中、盘后行情', values: [true, true, false, false, false, false] },
-          { feature: '夜盘行情', values: [false, true, false, false, false, false] },
-          { feature: '期权链 & 实时报价', values: [false, false, true, false, false, false] },
-          { feature: '港股实时行情（基础）', values: [false, false, false, true, true, false] },
-          { feature: '恒生指数行情', values: [false, false, false, true, true, false] },
-          { feature: '十档买卖盘口深度', values: [false, false, false, false, true, false] },
-          { feature: '深度实时行情', values: [false, false, false, false, true, false] },
-          { feature: '券商持仓队列（港股）', values: [false, false, false, false, true, false] },
-          { feature: '沪深 A 股实时行情', values: [false, false, false, false, false, true] },
-        ]
-      : [
-          { feature: 'Basic APIs', values: [true, true, true, true, true, true] },
-          { feature: 'WebSocket Real-time Quote Push', values: [true, true, true, true, true, true] },
-          { feature: 'Pull Quote (REST API)', values: [true, true, true, true, true, true] },
-          { feature: 'US Quotes (Best Bid/Ask)', values: [true, true, false, false, false, false] },
-          { feature: 'Pre-market, regular & after-hours', values: [true, true, false, false, false, false] },
-          { feature: 'Overnight (night session)', values: [false, true, false, false, false, false] },
-          { feature: 'Options Chain & Real-time Quotes', values: [false, false, true, false, false, false] },
-          { feature: 'HK Real-time (basic)', values: [false, false, false, true, true, false] },
-          { feature: 'Hang Seng Index', values: [false, false, false, true, true, false] },
-          { feature: 'HK 10-level Order Book', values: [false, false, false, false, true, false] },
-          { feature: 'Real-time Depth Push', values: [false, false, false, false, true, false] },
-          { feature: 'Broker Queue (HK)', values: [false, false, false, false, true, false] },
-          { feature: 'CN A-shares Real-time', values: [false, false, false, false, false, true] },
-        ]) as Array<{ feature: string; values: boolean[] }>,
+// Group rows — build a flat list with group separators
+interface MatrixRow {
+  type: 'group' | 'row'
+  label?: string
+  f?: string
+  row?: number[]
+}
+const matrixRows = computed<MatrixRow[]>(() => {
+  const result: MatrixRow[] = []
+  let lastGroup = ''
+  for (const m of FEATURE_MATRIX) {
+    if (m.g !== lastGroup) {
+      result.push({ type: 'group', label: m.g })
+      lastGroup = m.g
+    }
+    result.push({ type: 'row', f: m.f, row: m.row })
   }
+  return result
 })
 </script>
 
 <template>
-  <div class="max-w-300 mx-auto px-4 sm:px-8 pt-8 pb-16">
+  <div class="page-root pricing-page-root">
+    <AppNav />
+
     <!-- Hero -->
-    <div class="text-center mb-12 pt-6">
-      <h1 class="text-[1.8rem]! sm:text-[2.8rem]! font-bold! leading-tight! mb-4! border-none! p-0! mt-0!">
-        {{ t.heroTitle }}
-      </h1>
-      <p class="text-[1.05rem] text-[var(--vp-c-text-2)] m-0 mx-auto leading-relaxed">
-        {{ t.heroSubtitle }}
-      </p>
-    </div>
-
-    <!-- Free included -->
-    <div class="grid grid-cols-1 md:grid-cols-3 bg-[var(--vp-c-default-soft)] rounded-[14px] overflow-hidden mb-8">
-      <div
-        v-for="(item, i) in t.freeItems"
-        :key="item.name"
-        class="p-[18px_20px]"
-        :class="{ 'border-t-2 md:border-t-0 md:border-l-2 border-dashed border-[var(--vp-c-divider)]': i > 0 }">
-        <div class="flex items-center gap-1.5 mb-1.5">
-          <svg class="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.18" />
-            <path
-              d="M6 10.5l2.5 2.5 5.5-5.5"
-              stroke="#198f28"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-          <span class="text-[0.875rem] font-semibold text-[var(--vp-c-text-1)]">{{ item.name }}</span>
-          <span
-            class="text-[0.65rem] ml-2 tracking-[0.03em text-[#198f28] leading-4 px-2 py-0 rounded-[3px] bg-[#22c53844] shrink-0"
-            >Free</span
-          >
+    <section class="pricing-hero">
+      <div class="pricing-hero-bg" />
+      <div class="section-inner pricing-hero-inner">
+        <div style="text-align:center;max-width:760px;margin:0 auto">
+          <span class="eyebrow">PRICING</span>
+          <h1 class="h-display" style="margin-top:20px;font-size:clamp(40px,5vw,60px)">
+            Build for free.
+            <br />
+            <span style="color:var(--lb-brand)">Pay only for real-time market data.</span>
+          </h1>
+          <p class="t-body" style="margin-top:20px;max-width:580px;margin-left:auto;margin-right:auto">
+            Core API features — trading, accounts, fundamentals, news — are completely free.
+            Subscribe to real-time market data only when you need it.
+          </p>
         </div>
-        <div class="text-[0.75rem] text-[var(--vp-c-text-3)] leading-[1.55] pl-[22px]">{{ item.note }}</div>
       </div>
-    </div>
+    </section>
 
-    <!-- Billing period selector -->
-    <div class="flex justify-center items-center gap-3 mb-6">
-      <div class="flex gap-0.5 p-1 rounded-lg bg-[var(--vp-c-default-soft)]">
-        <button
-          v-for="p in t.billingPeriods"
-          :key="p.id"
-          class="relative px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm sm:min-w-28 rounded-md font-medium transition-all duration-150 cursor-pointer whitespace-nowrap"
-          :class="
-            billing === p.id
-              ? 'bg-[var(--vp-c-bg)] shadow-sm text-[var(--vp-c-text-1)]'
-              : 'text-[var(--vp-c-text-3)] hover:text-[var(--vp-c-text-2)]'
-          "
-          @click="billing = p.id">
-          {{ p.label
-          }}<span
-            v-if="p.badge"
-            class="ml-1 text-[0.6rem] font-bold"
-            :style="{ color: p.badgeGreen ? '#22c55e' : '#f97316' }"
-            >{{ p.badge }}</span
-          >
-        </button>
-      </div>
-    </div>
-
-    <!-- Product cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-      <!-- US LV1 -->
-      <div
-        class="relative flex flex-col p-6 border border-[var(--vp-c-divider)] rounded-[18px] overflow-hidden isolate transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_36px_-10px_rgba(10,14,25,0.13),0_3px_12px_-5px_rgba(10,14,25,0.06)]"
-        :style="{
-          '--card-accent': LEVEL_COLORS.lv1.hex,
-          background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
-        }">
-        <div class="flex items-center justify-between mb-[18px]">
-          <span
-            class="text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap"
-            :style="{
-              background: `color-mix(in srgb, ${LEVEL_COLORS.lv1.hex} 13%, transparent)`,
-              color: LEVEL_COLORS.lv1.text,
-            }"
-            >{{ t.usLv1Market }}</span
-          >
-          <button
-            class="inline-flex items-center gap-[5px] text-[0.78rem] font-medium bg-transparent border-none cursor-pointer p-0 transition-[gap] duration-[180ms] hover:gap-2"
-            :style="{ color: LEVEL_COLORS.lv1.text }"
-            @click="openDialog">
-            {{ t.cta }}
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M13 6l6 6-6 6"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div class="text-[1.0625rem] font-semibold text-[var(--vp-c-text-1)] mb-3 tracking-[-0.005em]">
-          {{ t.usLv1Title }}
-        </div>
-        <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
-          <span
-            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em]"
-            style="font-feature-settings: 'tnum'"
-            :style="{ color: LEVEL_COLORS.lv1.hex }"
-            >HK${{ priceOf('us_lv1') }}</span
-          >
-          <span class="text-[0.82rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
-          <span v-if="savingsOf('us_lv1')" class="text-[0.7rem] font-bold text-orange-500">{{
-            savingsOf('us_lv1')
-          }}</span>
-        </div>
-        <div v-if="perMonthOf('us_lv1')" class="text-[0.73rem] text-[var(--vp-c-text-3)] mb-1">
-          {{ perMonthOf('us_lv1') }}
-        </div>
-        <div class="border-t border-dashed border-[var(--vp-c-divider)] my-[14px]"></div>
-        <p class="text-[0.82rem] text-[var(--vp-c-text-2)] leading-[1.6] m-0 mb-[14px]">{{ t.usLv1Desc }}</p>
-        <ul class="m-0 p-0 list-none flex flex-col gap-[7px]">
-          <li
-            v-for="f in t.usLv1Features"
-            :key="f"
-            class="flex items-center gap-[7px] text-[0.82rem] text-[var(--vp-c-text-2)]">
-            <svg class="w-[14px] h-[14px] shrink-0" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
-              <path
-                d="M6 10.5l2.5 2.5 5.5-5.5"
-                stroke="#198f28"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            {{ f }}
-          </li>
-        </ul>
-      </div>
-
-      <!-- HK LV2 -->
-      <div
-        class="relative flex flex-col p-6 border border-[var(--vp-c-divider)] rounded-[18px] overflow-hidden isolate transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_36px_-10px_rgba(10,14,25,0.13),0_3px_12px_-5px_rgba(10,14,25,0.06)]"
-        :style="{
-          '--card-accent': LEVEL_COLORS.lv2.hex,
-          background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
-        }">
-        <div class="flex items-center justify-between mb-[18px]">
-          <span
-            class="text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap"
-            :style="{
-              background: `color-mix(in srgb, ${LEVEL_COLORS.lv2.hex} 13%, transparent)`,
-              color: LEVEL_COLORS.lv2.text,
-            }"
-            >{{ t.hkLv2Market }}</span
-          >
-          <button
-            class="inline-flex items-center gap-[5px] text-[0.78rem] font-medium bg-transparent border-none cursor-pointer p-0 transition-[gap] duration-[180ms] hover:gap-2"
-            :style="{ color: LEVEL_COLORS.lv2.text }"
-            @click="openDialog">
-            {{ t.cta }}
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M13 6l6 6-6 6"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div class="text-[1.0625rem] font-semibold text-[var(--vp-c-text-1)] mb-3 tracking-[-0.005em]">
-          {{ t.hkLv2Title }}
-        </div>
-        <!-- Global price -->
-        <div class="text-[0.68rem] text-[var(--vp-c-text-3)] mb-0.5">{{ t.hkLv2GlobalLabel }}</div>
-        <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
-          <span
-            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em]"
-            style="font-feature-settings: 'tnum'"
-            :style="{ color: LEVEL_COLORS.lv2.hex }"
-            >HK${{ priceOf('hk_lv2_global') }}</span
-          >
-          <span class="text-[0.82rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
-          <span v-if="savingsOf('hk_lv2_global')" class="text-[0.7rem] font-bold text-orange-500">{{
-            savingsOf('hk_lv2_global')
-          }}</span>
-        </div>
-        <div v-if="perMonthOf('hk_lv2_global')" class="text-[0.73rem] text-[var(--vp-c-text-3)] mb-1">
-          {{ perMonthOf('hk_lv2_global') }}
-        </div>
-        <!-- Mainland price, zh only -->
-        <div v-if="lang.startsWith('zh')" class="mt-[10px] px-3 py-[10px] rounded-[10px] bg-[var(--vp-c-default-soft)]">
-          <div class="flex items-baseline gap-1">
-            <span class="text-[1rem] font-bold leading-none text-[var(--vp-c-text-2)]"
-              >HK${{ priceOf('hk_lv2_mainland') }}</span
-            >
-            <span class="text-[0.72rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
-            <span class="ml-3 text-[0.72rem] text-[var(--vp-c-text-3)]">{{ t.hkLv2MainlandLabel }}</span>
-          </div>
-          <div class="text-[0.63rem] text-[var(--vp-c-text-3)] mt-1 leading-snug">{{ t.hkLv2MainlandNote }}</div>
-        </div>
-        <div class="border-t border-dashed border-[var(--vp-c-divider)] my-[14px]"></div>
-        <p class="text-[0.82rem] text-[var(--vp-c-text-2)] leading-[1.6] m-0 mb-[14px]">{{ t.hkLv2Desc }}</p>
-        <ul class="m-0 p-0 list-none flex flex-col gap-[7px]">
-          <li
-            v-for="f in t.hkLv2Features"
-            :key="f"
-            class="flex items-center gap-[7px] text-[0.82rem] text-[var(--vp-c-text-2)]">
-            <svg class="w-[14px] h-[14px] shrink-0" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
-              <path
-                d="M6 10.5l2.5 2.5 5.5-5.5"
-                stroke="#198f28"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            {{ f }}
-          </li>
-        </ul>
-      </div>
-
-      <!-- OPRA -->
-      <div
-        class="relative flex flex-col p-6 border border-[var(--vp-c-divider)] rounded-[18px] overflow-hidden isolate transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_36px_-10px_rgba(10,14,25,0.13),0_3px_12px_-5px_rgba(10,14,25,0.06)]"
-        :style="{
-          '--card-accent': LEVEL_COLORS.opra.hex,
-          background: `radial-gradient(300px 150px at 100% 0%, color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 9%, transparent), transparent 70%), var(--vp-c-bg)`,
-        }">
-        <div class="flex items-center justify-between mb-[18px]">
-          <span
-            class="text-[12px] font-semibold px-2 py-1 rounded-full leading-none whitespace-nowrap"
-            :style="{
-              background: `color-mix(in srgb, ${LEVEL_COLORS.opra.hex} 13%, transparent)`,
-              color: LEVEL_COLORS.opra.text,
-            }"
-            >{{ t.opraMarket }}</span
-          >
-          <button
-            class="inline-flex items-center gap-[5px] text-[0.78rem] font-medium bg-transparent border-none cursor-pointer p-0 transition-[gap] duration-[180ms] hover:gap-2"
-            :style="{ color: LEVEL_COLORS.opra.text }"
-            @click="openDialog">
-            {{ t.cta }}
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M13 6l6 6-6 6"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div class="text-[1.0625rem] font-semibold text-[var(--vp-c-text-1)] mb-3 tracking-[-0.005em]">
-          {{ t.opraTitle }}
-        </div>
-        <div class="flex items-baseline gap-[5px] flex-wrap mb-1">
-          <span
-            class="text-[1.9rem] font-bold leading-none tracking-[-0.02em]"
-            style="font-feature-settings: 'tnum'"
-            :style="{ color: LEVEL_COLORS.opra.hex }"
-            >HK${{ priceOf('opra') }}</span
-          >
-          <span class="text-[0.82rem] text-[var(--vp-c-text-3)]">{{ billingUnit }}</span>
-          <span v-if="savingsOf('opra')" class="text-[0.7rem] font-bold text-orange-500">{{ savingsOf('opra') }}</span>
-        </div>
-        <div v-if="perMonthOf('opra')" class="text-[0.73rem] text-[var(--vp-c-text-3)] mb-1">
-          {{ perMonthOf('opra') }}
-        </div>
-        <div class="border-t border-dashed border-[var(--vp-c-divider)] my-[14px]"></div>
-        <p class="text-[0.82rem] text-[var(--vp-c-text-2)] leading-[1.6] m-0 mb-[14px]">{{ t.opraDesc }}</p>
-        <ul class="m-0 p-0 list-none flex flex-col gap-[7px]">
-          <li
-            v-for="f in t.opraFeatures"
-            :key="f"
-            class="flex items-center gap-[7px] text-[0.82rem] text-[var(--vp-c-text-2)]">
-            <svg class="w-[14px] h-[14px] shrink-0" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
-              <path
-                d="M6 10.5l2.5 2.5 5.5-5.5"
-                stroke="#198f28"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            {{ f }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Feature comparison table -->
-    <div class="mb-10 overflow-x-auto rounded-xl border border-[var(--vp-c-divider)]">
-      <table class="w-full text-sm border-collapse" style="min-width: 580px">
-        <thead>
-          <tr>
-            <th
-              class="text-left py-2.5 px-3 text-[0.8rem] font-medium text-[var(--vp-c-text-3)] border-b border-[var(--vp-c-divider)] w-[30%]"></th>
-            <th
-              v-for="col in t.compareColumns"
-              :key="col.id"
-              class="py-2.5 pt-10 px-2 text-center border-b border-[var(--vp-c-divider)]">
-              <div class="flex flex-col items-center gap-1">
-                <span
-                  class="text-[0.7rem] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
-                  :style="
-                    col.color
-                      ? { background: `color-mix(in srgb, ${col.color.hex} 15%, transparent)`, color: col.color.text }
-                      : { background: 'var(--vp-c-default-soft)', color: 'var(--vp-c-text-2)' }
-                  ">
-                  {{ col.label }}
-                </span>
-                <span class="text-[0.65rem] text-[var(--vp-c-text-3)] whitespace-nowrap">{{ col.badge }}</span>
+    <!-- Free Baseline -->
+    <section class="section" style="padding-top:32px">
+      <div class="section-inner">
+        <div class="pricing-free-grid">
+          <div v-for="b in FREE_BASELINE" :key="b.title" class="pricing-free-card">
+            <div class="pricing-free-head">
+              <div class="pricing-free-icon" :style="{ background: `color-mix(in srgb, ${b.color} 14%, transparent)`, color: b.color }">
+                <!-- shield -->
+                <svg v-if="b.icon === 'shield'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <!-- chart -->
+                <svg v-else-if="b.icon === 'chart'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                <!-- bolt -->
+                <svg v-else-if="b.icon === 'bolt'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>
+                </svg>
               </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="row in t.compareRows"
-            :key="row.feature"
-            class="border-b border-[var(--vp-c-divider)] last:border-0 odd:bg-[var(--vp-c-default-soft)]">
-            <td class="py-2.5 px-3 text-[0.82rem] text-[var(--vp-c-text-2)]">{{ row.feature }}</td>
-            <td v-for="(val, i) in row.values" :key="i" class="py-2.5 px-2 text-center">
-              <svg v-if="val" class="w-4 h-4 mx-auto" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="10" fill="#22c538" fill-opacity="0.15" />
-                <path
-                  d="M6 10.5l2.5 2.5 5.5-5.5"
-                  stroke="#198f28"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-              <span v-else class="text-[var(--vp-c-text-3)] text-base leading-none">—</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Note -->
-    <div class="flex items-start gap-2 text-xs text-[var(--vp-c-text-3)] leading-relaxed">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="shrink-0 mt-[1px] w-3.5 h-3.5"
-        viewBox="0 0 20 20"
-        fill="currentColor">
-        <path
-          fill-rule="evenodd"
-          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-          clip-rule="evenodd" />
-      </svg>
-      <span>{{ t.noteText }}</span>
-    </div>
-  </div>
-
-  <!-- Purchase Dialog -->
-  <Teleport to="body">
-    <div v-if="showDialog" class="fixed inset-0 z-[200] flex items-center justify-center" @click.self="closeDialog">
-      <div class="absolute inset-0 bg-black/50" @click="closeDialog"></div>
-      <div
-        class="relative bg-[var(--vp-c-bg)] rounded-2xl shadow-2xl w-full max-w-xs mx-4 p-6 flex flex-col items-center gap-4">
-        <button
-          class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full text-[var(--vp-c-text-3)] hover:bg-[var(--vp-c-default-soft)] transition-colors cursor-pointer"
-          style="background: transparent; border: none"
-          aria-label="Close"
-          @click="closeDialog">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        <div class="text-base font-semibold text-[var(--vp-c-text-1)] text-center">{{ t.qrTitle }}</div>
-        <div class="rounded-xl overflow-hidden bg-white p-2 flex items-center justify-center">
-          <img
-            class="w-56 h-56"
-            src="https://assets.lbctrl.com/uploads/01c3494f-7a78-4e69-a50f-c9ce5cd5a859/my-quotes.svg" />
+              <span class="pricing-free-price">{{ b.price }}</span>
+            </div>
+            <h3 class="h-card" style="margin-top:16px">{{ b.title }}</h3>
+            <p class="t-meta" style="margin-top:8px;line-height:1.55">{{ b.desc }}</p>
+          </div>
         </div>
-        <p class="text-sm text-[var(--vp-c-text-2)] text-center leading-relaxed m-0">{{ t.qrDesc }}</p>
       </div>
-    </div>
-  </Teleport>
+    </section>
+
+    <!-- Paid Plans -->
+    <section class="section" style="padding-top:32px">
+      <div class="section-inner">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:32px">
+          <div style="max-width:520px">
+            <span class="eyebrow">REAL-TIME MARKET DATA</span>
+            <h2 class="h-section" style="margin-top:14px">Subscribe only to what you need.</h2>
+            <p class="t-meta" style="margin-top:10px;line-height:1.55">
+              OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately.
+              Activate via Longbridge App → Me → Quote Store.
+            </p>
+          </div>
+
+          <div class="pricing-cycle">
+            <span class="pricing-cycle-label">Billing</span>
+            <div class="pricing-cycle-tabs">
+              <button v-for="c in BILLING_CYCLES" :key="c.key"
+                :class="['pricing-cycle-tab', c.key === cycle ? 'is-active' : '']"
+                @click="cycle = c.key">
+                {{ c.label }}
+                <span v-if="c.badge" class="pricing-cycle-badge">{{ c.badge }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pricing-plans-grid">
+          <div v-for="p in PAID_PLANS" :key="p.id" class="pricing-plan-card">
+            <div class="pricing-plan-head">
+              <span class="pricing-plan-market" :style="{ color: p.color, background: `color-mix(in srgb, ${p.color} 12%, transparent)` }">
+                {{ p.market }}
+              </span>
+              <span v-if="p.badge" class="pricing-plan-badge">{{ p.badge }}</span>
+            </div>
+            <h3 class="pricing-plan-name">{{ p.name }}</h3>
+            <div class="pricing-plan-price">
+              <span class="pricing-plan-cur">{{ p.currency }}</span>
+              <span class="pricing-plan-num">{{ cyclePrice(p.base) }}</span>
+              <span class="pricing-plan-suf">{{ p.suffix }}</span>
+              <span v-if="cycleDiscount(p.base) > 0" class="pricing-plan-discount">-{{ cycleDiscount(p.base) }}%</span>
+            </div>
+            <div v-if="cycleDiscount(p.base) > 0" class="pricing-plan-was">
+              Was <s>{{ p.currency }}{{ p.base }}{{ p.suffix }}</s> · billed {{ currentCycle.label.toLowerCase() }}
+            </div>
+            <p class="pricing-plan-tag">{{ p.tagline }}</p>
+            <div class="pricing-plan-cov">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lb-fg-3);flex-shrink:0">
+                <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/>
+              </svg>
+              {{ p.coverage }}
+            </div>
+            <ul class="pricing-plan-feats">
+              <li v-for="f in p.feats" :key="f">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="10" :fill="p.color" fill-opacity="0.15"/>
+                  <path d="M6 10.5l2.5 2.5 5.5-5.5" :stroke="p.color" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{{ f }}</span>
+              </li>
+            </ul>
+            <a class="btn btn-primary pricing-plan-cta" href="https://longbridge.com/download" target="_blank" rel="noreferrer">
+              Subscribe
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Matrix -->
+    <section class="section" style="padding-top:48px;padding-bottom:80px">
+      <div class="section-inner">
+        <div style="max-width:540px;margin-bottom:24px">
+          <span class="eyebrow">FEATURE COMPARISON</span>
+          <h2 class="h-section" style="margin-top:14px">What's included in each plan.</h2>
+        </div>
+        <div class="pricing-matrix-wrap">
+          <table class="pricing-matrix">
+            <thead>
+              <tr>
+                <th class="pricing-matrix-feat-h"></th>
+                <th v-for="p in FEATURE_MATRIX_PLANS" :key="p.key">
+                  <div class="pricing-matrix-col">
+                    <span class="pricing-matrix-plan" :style="{ color: p.color }">{{ p.label }}</span>
+                    <span class="pricing-matrix-tag">{{ p.tag }}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="r in matrixRows" :key="r.label || r.f">
+                <tr v-if="r.type === 'group'" class="pricing-matrix-group">
+                  <td :colspan="FEATURE_MATRIX_PLANS.length + 1">{{ r.label }}</td>
+                </tr>
+                <tr v-else>
+                  <td class="pricing-matrix-feat">{{ r.f }}</td>
+                  <td v-for="(v, j) in r.row" :key="j" class="pricing-matrix-cell">
+                    <svg v-if="v" width="16" height="16" viewBox="0 0 20 20" fill="none">
+                      <circle cx="10" cy="10" r="10" fill="var(--lb-up)" fill-opacity="0.15"/>
+                      <path d="M6 10.5l2.5 2.5 5.5-5.5" stroke="var(--lb-up)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span v-else style="color:var(--lb-fg-3)">—</span>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" style="border-top:1px solid var(--app-card-stroke);background:var(--app-canvas)">
+      <div class="section-inner">
+        <div style="max-width:560px;margin-bottom:32px">
+          <span class="eyebrow">FAQ</span>
+          <h2 class="h-section" style="margin-top:14px">Frequently asked questions</h2>
+        </div>
+        <div class="pricing-faq-grid">
+          <div v-for="([q, a]) in FAQ" :key="q" class="pricing-faq-card">
+            <h4 class="pricing-faq-q">{{ q }}</h4>
+            <p class="pricing-faq-a">{{ a }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <AppFooter />
+  </div>
 </template>
+
+<style scoped>
+.pricing-page-root {
+  min-height: 100vh;
+  background: var(--lb-bg-1);
+  color: var(--lb-fg-1);
+}
+
+/* ---- Hero ---- */
+.pricing-hero {
+  position: relative;
+  padding: 100px 0 80px;
+  overflow: hidden;
+}
+.pricing-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, color-mix(in srgb, var(--lb-brand) 14%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.pricing-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Free Baseline ---- */
+.pricing-free-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .pricing-free-grid { grid-template-columns: 1fr; }
+}
+.pricing-free-card {
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 14px;
+  padding: 24px;
+}
+.pricing-free-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pricing-free-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pricing-free-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--lb-up);
+  background: color-mix(in srgb, var(--lb-up) 12%, transparent);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ---- Billing Cycle ---- */
+.pricing-cycle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pricing-cycle-label {
+  font-size: 13px;
+  color: var(--lb-fg-3);
+  font-weight: 500;
+}
+.pricing-cycle-tabs {
+  display: flex;
+  gap: 0;
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pricing-cycle-tab {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--lb-fg-2);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.pricing-cycle-tab:hover { color: var(--lb-fg-1); }
+.pricing-cycle-tab.is-active {
+  background: var(--lb-brand);
+  color: #fff;
+}
+.pricing-cycle-tab.is-active .pricing-cycle-badge {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+.pricing-cycle-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--lb-up) 15%, transparent);
+  color: var(--lb-up);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+/* ---- Paid Plans ---- */
+.pricing-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .pricing-plans-grid { grid-template-columns: 1fr; }
+}
+.pricing-plan-card {
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.pricing-plan-card:hover {
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--lb-fg-1) 8%, transparent);
+}
+.pricing-plan-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.pricing-plan-market {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+.pricing-plan-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--lb-fg-3);
+  background: var(--lb-bg-1);
+  border: 1px solid var(--app-card-stroke);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: auto;
+}
+.pricing-plan-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--lb-fg-1);
+  margin: 0 0 12px;
+}
+.pricing-plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+.pricing-plan-cur {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-fg-2);
+}
+.pricing-plan-num {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--lb-fg-1);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.pricing-plan-suf {
+  font-size: 14px;
+  color: var(--lb-fg-3);
+}
+.pricing-plan-discount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--lb-up);
+  background: color-mix(in srgb, var(--lb-up) 12%, transparent);
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-left: 6px;
+}
+.pricing-plan-was {
+  font-size: 12px;
+  color: var(--lb-fg-3);
+  margin-bottom: 12px;
+}
+.pricing-plan-was s { text-decoration: line-through; }
+.pricing-plan-tag {
+  font-size: 13px;
+  color: var(--lb-fg-2);
+  line-height: 1.55;
+  margin: 12px 0 10px;
+}
+.pricing-plan-cov {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--lb-fg-3);
+  margin-bottom: 16px;
+}
+.pricing-plan-feats {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.pricing-plan-feats li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--lb-fg-2);
+}
+.pricing-plan-cta {
+  margin-top: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+/* ---- Feature Matrix ---- */
+.pricing-matrix-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 12px;
+}
+.pricing-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+.pricing-matrix thead th {
+  padding: 12px 16px;
+  background: var(--lb-bg-2);
+  border-bottom: 1px solid var(--app-card-stroke);
+  text-align: center;
+  vertical-align: bottom;
+}
+.pricing-matrix-feat-h {
+  text-align: left !important;
+  min-width: 220px;
+}
+.pricing-matrix-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.pricing-matrix-plan {
+  font-size: 13px;
+  font-weight: 700;
+}
+.pricing-matrix-tag {
+  font-size: 10px;
+  color: var(--lb-fg-3);
+  font-weight: 500;
+}
+.pricing-matrix-group td {
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--lb-fg-3);
+  background: var(--lb-bg-2);
+  border-bottom: 1px solid var(--app-card-stroke);
+}
+.pricing-matrix-feat {
+  padding: 11px 16px;
+  font-size: 13px;
+  color: var(--lb-fg-2);
+  border-bottom: 1px solid var(--app-card-stroke);
+  vertical-align: middle;
+}
+.pricing-matrix tbody tr:last-child td { border-bottom: none; }
+.pricing-matrix-cell {
+  padding: 11px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--app-card-stroke);
+  vertical-align: middle;
+}
+.pricing-matrix tbody tr:hover .pricing-matrix-feat,
+.pricing-matrix tbody tr:hover .pricing-matrix-cell {
+  background: var(--lb-hover);
+}
+
+/* ---- FAQ ---- */
+.pricing-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .pricing-faq-grid { grid-template-columns: 1fr; }
+}
+.pricing-faq-card {
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 12px;
+  padding: 20px;
+}
+.pricing-faq-q {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--lb-fg-1);
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+.pricing-faq-a {
+  font-size: 13px;
+  color: var(--lb-fg-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- Shared ---- */
+.section {
+  padding: 80px 0;
+}
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--lb-brand);
+}
+.h-display {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--lb-fg-1);
+}
+.h-section {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--lb-fg-1);
+  margin: 0;
+}
+.h-card {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--lb-fg-1);
+  margin: 0;
+}
+.t-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--lb-fg-2);
+}
+.t-meta {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--lb-fg-2);
+  margin: 0;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+.btn-primary {
+  background: var(--lb-brand);
+  color: #fff;
+}
+</style>

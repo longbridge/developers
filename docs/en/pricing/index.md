@@ -1,7 +1,7 @@
 ---
 title: 'Pricing'
 id: pricing
-layout: page
+layout: false
 sidebar: false
 ---
 

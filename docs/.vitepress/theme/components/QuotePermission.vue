@@ -242,7 +242,7 @@ const marketLabel = computed(() =>
 .qp-badge {
   display: inline-block;
   font-size: 0.8125rem;
-  font-weight: 700;
+  line-height: 1;
   padding: 0.2rem 0.5rem;
   border-radius: 0.25rem;
   white-space: nowrap;
@@ -296,5 +296,4 @@ const marketLabel = computed(() =>
   font-size: 0.7rem;
   opacity: 0.8;
 }
-
 </style>

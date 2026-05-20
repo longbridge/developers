@@ -28,10 +28,6 @@ const { isHome, hasSidebar } = useLayout()
 }
 
 @media (min-width: 960px) {
-  .VPContent {
-    padding-top: var(--vp-nav-height);
-  }
-
   .VPContent.has-sidebar {
     margin: var(--vp-layout-top-height, 0px) 0 0;
     padding-left: var(--vp-sidebar-width);

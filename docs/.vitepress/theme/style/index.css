@@ -1,3 +1,5 @@
+@import './lbus-tokens.css';
+@import './app-styles.css';
 @import './marker.css';
 @import './button.css';
 @import './custom-block.css';
@@ -55,6 +57,16 @@ html:root {
   --vp-c-brand-2: var(--brand-90);
   --vp-c-brand-3: var(--brand-80);
   --vp-code-color: var(--vp-c-text-1);
+  /* Override VitePress defaults — html:root wins over :root regardless of load order */
+  --vp-nav-height: 60px;
+  --vp-layout-max-width: 1240px;
+}
+
+/* AppNav is sticky (in document flow), so VitePress's fixed-nav compensation is not needed */
+@media (min-width: 960px) {
+  .VPContent {
+    padding-top: 0 !important;
+  }
 }
 
 /* Inline code — ensure text color, not brand color */

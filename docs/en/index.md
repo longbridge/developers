@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: false
 titleTemplate: APIs, LLM, MCP, CLI & More
-pageClass: new-home-page
 ---
 
 <NewHomePage/>

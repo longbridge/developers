@@ -6,15 +6,15 @@ import VPContent from 'vitepress/dist/client/theme-default/components/VPContent.
 import VPFooter from 'vitepress/dist/client/theme-default/components/VPFooter.vue'
 import Footer from '../components/HomePage/Footer.vue'
 import VPLocalNav from 'vitepress/dist/client/theme-default/components/VPLocalNav.vue'
-import VPNav from 'vitepress/dist/client/theme-default/components/VPNav.vue'
 import VPSidebar from 'vitepress/dist/client/theme-default/components/VPSidebar.vue'
 import VPSkipLink from 'vitepress/dist/client/theme-default/components/VPSkipLink.vue'
+import AppNav from '../components/AppNav.vue'
 import { useData } from 'vitepress'
 import { registerWatchers } from 'vitepress/dist/client/theme-default/composables/layout.js'
 import { useSidebarControl } from 'vitepress/dist/client/theme-default/composables/sidebar.js'
 import { useTryItMode } from '../composables'
 import TryItContent from '../components/TryIt/Content.vue'
-import Content from './Content.vue'
+import ContentWrapper from './Content.vue'
 import 'vitepress/theme'
 import ApiReference from '../components/ApiReference.vue'
 
@@ -39,14 +39,7 @@ provide('hero-image-slot-exists', heroImageSlotExists)
     <slot name="layout-top" />
     <VPSkipLink />
     <VPBackdrop class="backdrop" :show="isSidebarOpen" @click="closeSidebar" />
-    <VPNav>
-      <template #nav-bar-title-before><slot name="nav-bar-title-before" /></template>
-      <template #nav-bar-title-after><slot name="nav-bar-title-after" /></template>
-      <template #nav-bar-content-before><slot name="nav-bar-content-before" /></template>
-      <template #nav-bar-content-after><slot name="nav-bar-content-after" /></template>
-      <template #nav-screen-content-before><slot name="nav-screen-content-before" /></template>
-      <template #nav-screen-content-after><slot name="nav-screen-content-after" /></template>
-    </VPNav>
+    <AppNav />
     <VPLocalNav v-if="!isApiReference" :open="isSidebarOpen" @open-menu="openSidebar" />
 
     <VPSidebar v-if="!isApiReference" :open="isSidebarOpen">
@@ -91,9 +84,9 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #aside-ads-after><slot name="aside-ads-after" /></template>
     </VPContent>
     <ClientOnly v-else-if="showTryIt">
-      <Content>
+      <ContentWrapper>
         <TryItContent />
-      </Content>
+      </ContentWrapper>
     </ClientOnly>
     <ClientOnly v-else-if="isApiReference">
       <ApiReference />
