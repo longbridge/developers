@@ -166,7 +166,7 @@ onUnmounted(() => {
         </button>
 
         <!-- Language dropdown -->
-        <div class="nav-lang-wrap app-nav-hide-mobile" @mouseenter="langOpen = true" @mouseleave="langOpen = false">
+        <div class="nav-lang-wrap" @mouseenter="langOpen = true" @mouseleave="langOpen = false">
           <button class="app-nav-icon-btn" aria-label="Language">
             <svg
               width="16"
@@ -252,7 +252,7 @@ onUnmounted(() => {
         <!-- Logged-in: Dashboard + Avatar -->
         <ClientOnly>
           <template v-if="isLogin">
-            <a class="btn btn-ghost btn-sm" :href="localePath('/account')">{{ t('nav.dashboard') }}</a>
+            <a class="btn btn-ghost btn-sm hidden md:inline-flex" :href="localePath('/account')">{{ t('nav.dashboard') }}</a>
             <div
               ref="avatarEl"
               class="app-nav-avatar"
@@ -389,6 +389,10 @@ onUnmounted(() => {
   }
   .app-nav-search {
     display: none;
+  }
+  /* Shrink logo on mobile to reclaim space */
+  :deep(.brand-logo) {
+    height: 22px !important;
   }
 }
 

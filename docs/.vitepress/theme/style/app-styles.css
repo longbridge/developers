@@ -5,6 +5,11 @@
    conflicting with VitePress doc page styles.
    ============================================================ */
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 /* App-specific extra tokens */
 :root {
   --app-max: 1240px;
@@ -780,10 +785,10 @@
   position: absolute;
   inset: 0;
   filter: blur(80px);
-  opacity: 0.32;
+  opacity: 0.55;
 }
 .lb-dark .hero-bg-blobs {
-  opacity: 0.18;
+  opacity: 0.28;
 }
 .hero-blob {
   position: absolute;
@@ -794,7 +799,7 @@
   left: 18%;
   width: 480px;
   height: 480px;
-  background: color-mix(in srgb, var(--lb-brand) 14%, transparent);
+  background: color-mix(in srgb, var(--lb-brand) 38%, transparent);
   animation: heroBlob1 22s ease-in-out infinite;
 }
 .hero-blob-2 {
@@ -802,7 +807,7 @@
   right: 12%;
   width: 380px;
   height: 380px;
-  background: color-mix(in srgb, var(--lb-status-neutral) 7%, transparent);
+  background: color-mix(in srgb, var(--lb-status-neutral) 20%, transparent);
   animation: heroBlob2 26s ease-in-out infinite;
 }
 .hero-blob-3 {
@@ -810,17 +815,17 @@
   left: 36%;
   width: 520px;
   height: 520px;
-  background: color-mix(in srgb, var(--lb-ai-mention) 7%, transparent);
+  background: color-mix(in srgb, var(--lb-ai-mention) 18%, transparent);
   animation: heroBlob3 28s ease-in-out infinite;
 }
 .lb-dark .hero-blob-1 {
-  background: color-mix(in srgb, var(--lb-brand) 34%, transparent);
+  background: color-mix(in srgb, var(--lb-brand) 40%, transparent);
 }
 .lb-dark .hero-blob-2 {
-  background: color-mix(in srgb, var(--lb-status-neutral) 22%, transparent);
+  background: color-mix(in srgb, var(--lb-status-neutral) 26%, transparent);
 }
 .lb-dark .hero-blob-3 {
-  background: color-mix(in srgb, var(--lb-ai-mention) 20%, transparent);
+  background: color-mix(in srgb, var(--lb-ai-mention) 24%, transparent);
 }
 .hero-blob-4 {
   display: none;
@@ -1386,6 +1391,8 @@
   display: flex;
   flex-direction: column;
   min-height: 380px;
+  min-width: 0;
+  overflow: hidden;
 }
 .sdk-action-tabs {
   display: flex;
@@ -1420,6 +1427,12 @@
   background: var(--lb-card);
   border: 1px solid var(--app-card-stroke);
   border-radius: 8px;
+  overflow: hidden;
+}
+.sdk-install code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .sdk-frame-r {
   display: grid;
