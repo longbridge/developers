@@ -198,20 +198,20 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "name": "Apple Inc.",
-    "ticker": "AAPL.US",
-    "fp_start": "2024-10-01",
-    "fp_end": "2024-12-31",
+    "name": "苹果",
+    "ticker": "AAPL",
+    "fp_start": "2025.12.28",
+    "fp_end": "2026.03.28",
     "currency": "USD",
-    "report_desc": "Apple delivered record revenue of $124.3B in Q1 FY2025...",
-    "fo_revenue": {"value": "124300000000", "yoy": "0.0407", "cmp_desc": "beat by 1.2%", "est_value": "123800000000"},
-    "fo_ebit": {"value": "42800000000", "yoy": "0.0520", "cmp_desc": "beat by 0.8%", "est_value": "42500000000"},
-    "fo_eps": {"value": "2.40", "yoy": "0.0870", "cmp_desc": "beat by 2.1%", "est_value": "2.35"},
-    "fr_revenue": {"value": "124300000000", "yoy": "0.0407"},
-    "fr_profit": {"value": "36330000000", "yoy": "0.0710"},
-    "fr_roe_ttm": "0.1570",
-    "fr_profit_margin": "0.2923",
-    "fr_debt_assets_ratio": "0.8120"
+    "report_desc": "概要：苹果（AAPL）的营业收入是 1112 亿（+16.6%）；每股收益是 2.01（+21.82%）。",
+    "fo_revenue": {"value": "111184000000.0000", "yoy": "16.6", "cmp_desc": "", "est_value": ""},
+    "fo_ebit": {"value": "35885000000.0000", "yoy": "21.28", "cmp_desc": "", "est_value": ""},
+    "fo_eps": {"value": "2.0100", "yoy": "21.82", "cmp_desc": "", "est_value": ""},
+    "fr_revenue": {"value": "111184000000.0000", "yoy": "16.6"},
+    "fr_profit": {"value": "29578000000.0000", "yoy": "19.36"},
+    "fr_roe_ttm": "141.4705",
+    "fr_profit_margin": "26.6027",
+    "fr_debt_assets_ratio": "71.3025"
   }
 }
 ```

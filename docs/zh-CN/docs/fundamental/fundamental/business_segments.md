@@ -195,7 +195,7 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "date": "2024Q4",
+    "date": "20260331",
     "total": "124300000000",
     "currency": "USD",
     "business": [

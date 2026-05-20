@@ -198,21 +198,21 @@ func main() {
     "elist": [
       {
         "date": 1746057600,
-        "buy": 18,
-        "over": 5,
-        "hold": 17,
-        "under": 3,
-        "sell": 4,
-        "total": 51
+        "buy": "18",
+        "over": "5",
+        "hold": "17",
+        "under": "3",
+        "sell": "4",
+        "total": "51"
       },
       {
         "date": 1743379200,
-        "buy": 17,
-        "over": 6,
-        "hold": 18,
-        "under": 3,
-        "sell": 5,
-        "total": 53
+        "buy": "17",
+        "over": "6",
+        "hold": "18",
+        "under": "3",
+        "sell": "5",
+        "total": "53"
       }
     ]
   }
@@ -236,9 +236,9 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | elist | array | 否 | 月度評級分佈列表，最新月份在前 |
 | elist[].date | int64 | 否 | Unix 時間戳（秒） |
-| elist[].buy | integer | 否 | 買入評級數量 |
-| elist[].over | integer | 否 | 跑贏市場評級數量 |
-| elist[].hold | integer | 否 | 持有評級數量 |
-| elist[].under | integer | 否 | 跑輸市場評級數量 |
-| elist[].sell | integer | 否 | 賣出評級數量 |
-| elist[].total | integer | 否 | 機構總數 |
+| elist[].buy | string | 否 | 買入評級數量 |
+| elist[].over | string | 否 | 跑贏市場評級數量 |
+| elist[].hold | string | 否 | 持有評級數量 |
+| elist[].under | string | 否 | 跑輸市場評級數量 |
+| elist[].sell | string | 否 | 賣出評級數量 |
+| elist[].total | string | 否 | 機構總數 |

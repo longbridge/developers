@@ -198,21 +198,21 @@ func main() {
     "elist": [
       {
         "date": 1746057600,
-        "buy": 18,
-        "over": 5,
-        "hold": 17,
-        "under": 3,
-        "sell": 4,
-        "total": 51
+        "buy": "18",
+        "over": "5",
+        "hold": "17",
+        "under": "3",
+        "sell": "4",
+        "total": "51"
       },
       {
         "date": 1743379200,
-        "buy": 17,
-        "over": 6,
-        "hold": 18,
-        "under": 3,
-        "sell": 5,
-        "total": 53
+        "buy": "17",
+        "over": "6",
+        "hold": "18",
+        "under": "3",
+        "sell": "5",
+        "total": "53"
       }
     ]
   }
@@ -236,9 +236,9 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | elist | array | false | Monthly rating distribution list, newest first |
 | elist[].date | int64 | false | Unix timestamp (seconds) |
-| elist[].buy | integer | false | Buy rating count |
-| elist[].over | integer | false | Outperform rating count |
-| elist[].hold | integer | false | Hold rating count |
-| elist[].under | integer | false | Underperform rating count |
-| elist[].sell | integer | false | Sell rating count |
-| elist[].total | integer | false | Total analyst count |
+| elist[].buy | string | false | Buy rating count |
+| elist[].over | string | false | Outperform rating count |
+| elist[].hold | string | false | Hold rating count |
+| elist[].under | string | false | Underperform rating count |
+| elist[].sell | string | false | Sell rating count |
+| elist[].total | string | false | Total analyst count |

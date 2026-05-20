@@ -199,17 +199,15 @@ func main() {
   "data": {
     "historical": [
       {
-        "date": "2024Q4",
+        "date": "20260331",
         "total": "124300000000",
         "currency": "USD",
         "business": [
-          {"name": "iPhone", "percent": "56.19", "value": "69900000000"},
-          {"name": "Services", "percent": "21.96", "value": "26300000000"}
+          {"name": "美洲", "percent": "40.80", "value": "31968000000"},
+          {"name": "欧洲", "percent": "23.64", "value": "18521000000"},
+          {"name": "大中华区", "percent": "20.72", "value": "16233000000"}
         ],
-        "regionals": [
-          {"name": "Americas", "percent": "42.80", "value": "53200000000"},
-          {"name": "Europe", "percent": "25.20", "value": "30100000000"}
-        ]
+        "regionals": []
       }
     ]
   }
