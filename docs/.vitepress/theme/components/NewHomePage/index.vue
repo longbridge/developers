@@ -1791,7 +1791,7 @@ const GETSTARTED = [
     <!-- ===== Final CTA ===== -->
     <section class="section">
       <div class="section-inner final-cta">
-        <h2 class="h-section" style="max-width: 680px">Your investment edge, powered by real-time data and AI.</h2>
+        <h2 class="h-section" style="max-width: 680px">Build smarter financial tools with real-time data and AI.</h2>
         <div style="display: flex; gap: 12px; flex-wrap: wrap">
           <a class="btn btn-primary btn-lg" :href="localePath('/docs')">
             Get started
