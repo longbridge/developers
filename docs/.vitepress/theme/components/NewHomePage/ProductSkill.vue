@@ -193,7 +193,7 @@ function copyCli() {
 
       <!-- CLI alternative -->
       <div class="skill-install-cli">
-        <span class="skill-install-divider">Or install via CLI</span>
+        <span class="skill-install-divider">Or install via Npx</span>
         <div class="skill-install-cmd-wrap">
           <div class="skill-install-tabs">
             <button
