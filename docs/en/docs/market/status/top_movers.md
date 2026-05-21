@@ -1,5 +1,5 @@
 ---
-slug: /market/stock-events
+slug: /market/top-movers
 title: Top Movers
 sidebar_position: 7
 language_tabs: false
@@ -17,7 +17,7 @@ longbridge top-movers
 longbridge top-movers --market HK --sort time
 </CliCommand>
 
-<SDKLinks module="market" klass="MarketContext" method="stock_events" />
+<SDKLinks module="market" klass="MarketContext" method="top_movers" />
 
 
 ## Parameters
@@ -43,7 +43,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = MarketContext(config)
 
-resp = ctx.stock_events(markets=["HK", "US"], sort=2, limit=20)
+resp = ctx.top_movers(markets=["HK", "US"], sort=2, limit=20)
 print(resp)
 ```
 
@@ -59,7 +59,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncMarketContext.create(config)
 
-    resp = await ctx.stock_events(markets=["HK", "US"], sort=2, limit=20)
+    resp = await ctx.top_movers(markets=["HK", "US"], sort=2, limit=20)
     print(resp)
 
 if __name__ == "__main__":
@@ -78,7 +78,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = MarketContext.new(config)
-  const resp = await ctx.stockEvents({ markets: ['HK', 'US'], sort: 2, limit: 20 })
+  const resp = await ctx.topMovers({ markets: ['HK', 'US'], sort: 2, limit: 20 })
   console.log(resp)
 }
 main().catch(console.error)
@@ -97,7 +97,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              MarketContext ctx = MarketContext.create(config)) {
-            var resp = ctx.getStockEvents(Arrays.asList("HK", "US"), 2, null, 20).get();
+            var resp = ctx.getTopMovers(new TopMoversOptions() {{ markets = new String[]{"HK", "US"}; sort = 2; limit = 20; }}).get();
             System.out.println(resp);
         }
     }
@@ -116,7 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = MarketContext::new(config);
-    let resp = ctx.stock_events(Some(vec!["HK", "US"]), Some(2), None, Some(20)).await?;
+    let resp = ctx.top_movers(Some(vec!["HK", "US"]), Some(2), None, Some(20)).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -139,7 +139,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             MarketContext ctx = MarketContext::create(config);
-            ctx.stock_events({"HK", "US"}, 2, "", 20, [](auto resp) {
+            ctx.top_movers({"HK", "US"}, 2, "", 20, [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -178,7 +178,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.StockEvents(context.Background(), []string{"HK", "US"}, 2, "", 20)
+	resp, err := c.TopMovers(context.Background(), []string{"HK", "US"}, 2, "", 20)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -229,14 +229,14 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [StockEventsResponse](#StockEventsResponse) |
+| 200    | Success     | [TopMoversResponse](#TopMoversResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### StockEventsResponse
+### TopMoversResponse
 
-<a id="StockEventsResponse"></a>
+<a id="TopMoversResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
