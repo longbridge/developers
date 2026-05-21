@@ -13,6 +13,7 @@ import { getCurrentLanguage } from './utils/i18n'
 import Layout from './layouts/Layout.vue'
 /** auto import components */
 import * as components from './components'
+import { startProgress, finishProgress } from './composables/useProgressBar'
 
 const i18n = createI18n<[typeof en, typeof zhCN, typeof zhHK], 'en' | 'zh-CN' | 'zh-HK'>({
   locale: getCurrentLanguage(),
@@ -42,7 +43,11 @@ export default {
       await import('floating-vue/dist/style.css')
       app.use(FloatingVue.default)
       saveInviteCodeFromUrl()
-      router.onAfterRouteChange = saveInviteCodeFromUrl
+      router.onBeforeRouteChange = () => startProgress()
+      router.onAfterRouteChange = () => {
+        finishProgress()
+        saveInviteCodeFromUrl()
+      }
     }
     for (const component of Object.keys(components)) {
       app.component(component, components[component])
