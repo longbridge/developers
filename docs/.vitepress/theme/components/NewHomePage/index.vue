@@ -193,7 +193,7 @@ const LOCALE = {
     hero: {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '实时市场数据',
-      title2: '专为 AI 而生',
+      title2: 'AI 直连真实市场',
       desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。',
       cta1: '开始使用',
       cta2: '阅读文档',
@@ -357,7 +357,7 @@ const LOCALE = {
     hero: {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '即時市場數據，',
-      title2: '專為 AI 而生',
+      title2: 'AI 直連真實市場',
       desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。',
       cta1: '開始使用',
       cta2: '閱讀文件',
