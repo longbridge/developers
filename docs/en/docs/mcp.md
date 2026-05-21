@@ -129,6 +129,21 @@ If another client fails to connect, check its version and MCP support documentat
 2. **Gradually enable trading**: Enable order placement only after verifying scope configuration and your own risk controls
 3. **Add guardrails in prompts**: For example, "keep each trade under X", "always confirm with me before placing an order"
 
+## MCP Inspector
+
+[MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) is the official developer tool for interactively browsing and testing MCP servers in a browser UI.
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+After launching, open `http://localhost:6274` in your browser, then:
+
+1. Set **Transport Type** to `Streamable HTTP`
+2. Set **URL** to `https://openapi.longbridge.com/mcp` (or `https://openapi.longbridge.cn/mcp` for mainland China)
+3. Click **Connect** — a browser tab will open for OAuth authorization
+4. After authorizing, browse and invoke all 100+ tools interactively in the Inspector UI
+
 ## Troubleshooting
 
 ### OAuth sign-in failed

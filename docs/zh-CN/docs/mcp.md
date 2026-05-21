@@ -129,6 +129,21 @@ Longbridge MCP 依赖 **MCP OAuth 2.1** 标准。若客户端未完整实现该�
 2. **逐步开放交易能力**：确认权限范围和风控逻辑后，再使用下单相关工具
 3. **在提示词中加入约束**：例如"每笔交易金额不超过 X"、"执行前向我确认"等明确限制
 
+## MCP Inspector
+
+[MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) 是官方提供的开发者工具，可在浏览器 UI 中交互式浏览和测试 MCP 服务器。
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+启动后在浏览器中打开 `http://localhost:6274`，然后：
+
+1. 将 **Transport Type** 设置为 `Streamable HTTP`
+2. 将 **URL** 填入 `https://openapi.longbridge.com/mcp`（中国大陆用户可改用 `https://openapi.longbridge.cn/mcp`）
+3. 点击 **Connect** — 浏览器将弹出 OAuth 授权页面
+4. 授权完成后，即可在 Inspector 界面中交互式浏览并调用所有 MCP 工具
+
 ## 常见问题
 
 ### OAuth 登录失败

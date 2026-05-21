@@ -69,7 +69,7 @@ Settings → MCP Servers → 添加 Remote MCP Server，填入上方地址即可
 
 ### Zed
 
-在 `settings.json` 的 `context_servers` 欄位（key 名稱可自訂）中加入：
+在 `settings.json` 的 `context_servers` 欄位（key 名稱可自訂）中添加：
 
 ```json
 {
@@ -128,6 +128,21 @@ Longbridge MCP 依賴 **MCP OAuth 2.1** 標準。若客戶端未完整實作該�
 1. **從唯讀能力開始**：優先使用行情查詢、持倉查看等低風險功能，熟悉工具行為
 2. **逐步開放交易能力**：確認權限範圍和風控邏輯後，再使用下單相關工具
 3. **在提示詞中加入限制**：例如「每筆交易金額不超過 X」、「執行前向我確認」等明確限制
+
+## MCP Inspector
+
+[MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) 是官方提供的開發者工具，可在瀏覽器 UI 中互動式瀏覽和測試 MCP 伺服器。
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+啟動後在瀏覽器中開啟 `http://localhost:6274`，然後：
+
+1. 將 **Transport Type** 設定為 `Streamable HTTP`
+2. 將 **URL** 填入 `https://openapi.longbridge.com/mcp`（中國大陸用戶可改用 `https://openapi.longbridge.cn/mcp`）
+3. 點擊 **Connect** — 瀏覽器將彈出 OAuth 授權頁面
+4. 授權完成後，即可在 Inspector 介面中互動式瀏覽並調用所有 MCP 工具
 
 ## 常見問題
 
