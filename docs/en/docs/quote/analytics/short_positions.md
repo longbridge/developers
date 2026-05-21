@@ -220,7 +220,7 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": "1647316800",
+      "timestamp": "2022-03-15T04:00:00Z",
       "current_shares_short": "111286790",
       "avg_daily_share_volume": "95077016",
       "days_to_cover": "1.17",
@@ -240,7 +240,7 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": "1718294400",
+      "timestamp": "2024-06-13T16:00:00Z",
       "amount": "53677721",
       "balance": "20386798436",
       "cost": "379.800",
@@ -267,7 +267,7 @@ func main() {
 | Name                     | Type     | Required | Description                                    |
 | ------------------------ | -------- | -------- | ---------------------------------------------- |
 | data                     | object[] | false    | Short position records                         |
-| ∟ timestamp              | string   | false    | Settlement date (Unix timestamp, seconds)      |
+| ∟ timestamp              | string   | false    | Settlement date (RFC 3339, e.g. `2022-03-15T04:00:00Z`) |
 | ∟ current_shares_short   | string   | false    | Number of shares sold short                    |
 | ∟ avg_daily_share_volume | string   | false    | Average daily share volume                     |
 | ∟ days_to_cover          | string   | false    | Days to cover (short shares ÷ avg daily vol)   |
@@ -279,7 +279,7 @@ func main() {
 | Name        | Type     | Required | Description                               |
 | ----------- | -------- | -------- | ----------------------------------------- |
 | data        | object[] | false    | Short position records                    |
-| ∟ timestamp | string   | false    | Trade date (Unix timestamp, seconds)      |
+| ∟ timestamp | string   | false    | Trade date (RFC 3339, e.g. `2022-03-15T04:00:00Z`) |
 | ∟ amount    | string   | false    | Short selling amount (HKD)                |
 | ∟ balance   | string   | false    | Short position balance                    |
 | ∟ cost      | string   | false    | Closing price for the day                 |

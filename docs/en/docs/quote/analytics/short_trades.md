@@ -199,12 +199,12 @@ US stocks (`.US` suffix):
   "message": "success",
   "data": [
     {
-      "timestamp": "1778558400",
-      "nus_amount": "2921788",
+      "timestamp": "2026-05-15T04:00:00Z",
+      "nus_amount": "5748485",
       "ny_amount": "0",
-      "total_amount": "11176595",
-      "rate": "0.2614",
-      "close": "294.800"
+      "total_amount": "15778974",
+      "rate": "0.3643",
+      "close": "300.230"
     }
   ]
 }
@@ -218,12 +218,12 @@ HK stocks (`.HK` suffix):
   "message": "success",
   "data": [
     {
-      "timestamp": "1778688000",
-      "amount": "6880800",
-      "balance": "3204234220.00",
-      "total_amount": "39339032",
-      "rate": "0.1749",
-      "close": "454.9"
+      "timestamp": "2026-05-17T16:00:00Z",
+      "amount": "2926000",
+      "balance": "1318056100.00",
+      "total_amount": "29497076",
+      "rate": "0.0992",
+      "close": "449.2"
     }
   ]
 }
@@ -245,7 +245,7 @@ HK stocks (`.HK` suffix):
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | data | object[] | false | Daily short trade volume records |
-| ∟ timestamp | string | false | Trading date (Unix timestamp in seconds) |
+| ∟ timestamp | string | false | Trading date (RFC 3339, e.g. `2026-05-15T04:00:00Z`) |
 | ∟ nus_amount | string | false | NASDAQ short sale volume (shares) |
 | ∟ ny_amount | string | false | NYSE short sale volume (shares) |
 | ∟ total_amount | string | false | Total trading volume for the day |
@@ -257,7 +257,7 @@ HK stocks (`.HK` suffix):
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | data | object[] | false | Daily short trade volume records |
-| ∟ timestamp | string | false | Trading date (Unix timestamp in seconds) |
+| ∟ timestamp | string | false | Trading date (RFC 3339, e.g. `2026-05-15T04:00:00Z`) |
 | ∟ amount | string | false | Short sale turnover amount (HKD) |
 | ∟ balance | string | false | Short position balance |
 | ∟ total_amount | string | false | Total trading turnover for the day |

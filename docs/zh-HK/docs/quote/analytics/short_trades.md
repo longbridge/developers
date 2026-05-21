@@ -199,12 +199,12 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": "1778558400",
-      "nus_amount": "2921788",
+      "timestamp": "2026-05-15T04:00:00Z",
+      "nus_amount": "5748485",
       "ny_amount": "0",
-      "total_amount": "11176595",
-      "rate": "0.2614",
-      "close": "294.800"
+      "total_amount": "15778974",
+      "rate": "0.3643",
+      "close": "300.230"
     }
   ]
 }
@@ -218,12 +218,12 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": "1778688000",
-      "amount": "6880800",
-      "balance": "3204234220.00",
-      "total_amount": "39339032",
-      "rate": "0.1749",
-      "close": "454.9"
+      "timestamp": "2026-05-17T16:00:00Z",
+      "amount": "2926000",
+      "balance": "1318056100.00",
+      "total_amount": "29497076",
+      "rate": "0.0992",
+      "close": "449.2"
     }
   ]
 }
@@ -245,7 +245,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | data | object[] | 否 | 每日沽空成交量列表 |
-| ∟ timestamp | string | 否 | 交易日期（Unix 時間戳，秒） |
+| ∟ timestamp | string | 否 | 交易日期（RFC 3339 格式，例如 `2026-05-15T04:00:00Z`） |
 | ∟ nus_amount | string | 否 | 納斯達克沽空成交量（股） |
 | ∟ ny_amount | string | 否 | 紐交所沽空成交量（股） |
 | ∟ total_amount | string | 否 | 當日總成交量 |
@@ -257,7 +257,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | data | object[] | 否 | 每日沽空成交量列表 |
-| ∟ timestamp | string | 否 | 交易日期（Unix 時間戳，秒） |
+| ∟ timestamp | string | 否 | 交易日期（RFC 3339 格式，例如 `2026-05-15T04:00:00Z`） |
 | ∟ amount | string | 否 | 當日沽空成交金額（港元） |
 | ∟ balance | string | 否 | 沽空持倉餘額 |
 | ∟ total_amount | string | 否 | 當日總成交金額 |

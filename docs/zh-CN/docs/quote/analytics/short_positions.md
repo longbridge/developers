@@ -219,7 +219,7 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": "1647316800",
+      "timestamp": "2022-03-15T04:00:00Z",
       "current_shares_short": "111286790",
       "avg_daily_share_volume": "95077016",
       "days_to_cover": "1.17",
@@ -239,7 +239,7 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": "1718294400",
+      "timestamp": "2024-06-13T16:00:00Z",
       "amount": "53677721",
       "balance": "20386798436",
       "cost": "379.800",
@@ -266,7 +266,7 @@ func main() {
 | Name                     | Type     | Required | Description                               |
 | ------------------------ | -------- | -------- | ----------------------------------------- |
 | data                     | object[] | false    | 沽空持仓记录                              |
-| ∟ timestamp              | string   | false    | 结算日期（Unix 时间戳，秒）               |
+| ∟ timestamp              | string   | false    | 结算日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`） |
 | ∟ current_shares_short   | string   | false    | 沽空持仓股数                              |
 | ∟ avg_daily_share_volume | string   | false    | 日均成交量                                |
 | ∟ days_to_cover          | string   | false    | 沽空回补天数                              |
@@ -278,7 +278,7 @@ func main() {
 | Name        | Type     | Required | Description                    |
 | ----------- | -------- | -------- | ------------------------------ |
 | data        | object[] | false    | 沽空持仓记录                   |
-| ∟ timestamp | string   | false    | 交易日期（Unix 时间戳，秒）    |
+| ∟ timestamp | string   | false    | 交易日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`） |
 | ∟ amount    | string   | false    | 沽空金额（港元）               |
 | ∟ balance   | string   | false    | 沽空持仓余额                   |
 | ∟ cost      | string   | false    | 当日收盘价                     |
