@@ -4,9 +4,13 @@ import { useData } from 'vitepress'
 import AppNav from './AppNav.vue'
 import AppFooter from './AppFooter.vue'
 import type { SkillEntry } from './skill-catalog/types'
-import { locale as enLocale } from './skill-catalog/en'
-import { locale as zhCNLocale } from './skill-catalog/zh-CN'
-import { locale as zhHKLocale } from './skill-catalog/zh-HK'
+import { augmentLocale } from './skill-catalog/augment'
+import { locale as _enLocale } from './skill-catalog/en'
+import { locale as _zhCNLocale } from './skill-catalog/zh-CN'
+import { locale as _zhHKLocale } from './skill-catalog/zh-HK'
+const enLocale = augmentLocale(_enLocale)
+const zhCNLocale = augmentLocale(_zhCNLocale)
+const zhHKLocale = augmentLocale(_zhHKLocale)
 
 const { lang } = useData()
 
