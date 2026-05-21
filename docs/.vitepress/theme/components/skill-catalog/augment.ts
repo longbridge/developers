@@ -1,5 +1,5 @@
 import type { CatalogLocale, SkillEntry, SkillCat } from './types'
-import skillsData from './skills.json'
+import skillsData from '../../../../../skills.json'
 
 type SkillJsonEntry = (typeof skillsData)['skills'][0]
 
