@@ -33,6 +33,10 @@ import { visible, width } from '../composables/useProgressBar'
   .progress-bar {
     transition: none;
   }
+
+  .progress-fade-leave-active {
+    transition: none;
+  }
 }
 
 .progress-fade-leave-active {
