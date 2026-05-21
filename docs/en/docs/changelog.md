@@ -6,6 +6,26 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-21
+
+### CLI v0.22.0
+
+- **`shareholder --top`** — Top-20 major shareholders (institutions, individuals, insiders) with multi-period comparison; `--object-id <id>` for single shareholder holding history and trade details
+- **`short-positions`** — Extended to HK market (`.HK` auto-routes to HKEX short-position data), unified with US FINRA interface
+- **`short-trades`** — Daily short sale volume (US: FINRA/NASDAQ; HK: HKEX disclosure data)
+- **`compare`** — Multi-stock valuation comparison (PE/PB/PS/market-cap/close); server auto-selects peers when no comparison symbols given
+- **`top-movers`** — Stocks whose price exceeds the 20-day standard deviation, with correlated news; supports `--market`, `--sort time|change|hot`
+- **`screener` command group** — Stock screener: `strategies` (recommended/saved), `search --strategy-id <id>` or `--filter key:min:max`, `indicators` to list available filters
+- **`rank`** — Popularity leaderboard; list all categories without `--key`, or pass `--key <key>` (e.g. `ib_hot_all-us`)
+
+### SDK
+
+- **FundamentalContext** — `shareholder_top`, `shareholder_detail`, `valuation_comparison`
+- **QuoteContext** — `short_positions` unified for US and HK; new `short_trades`
+- **MarketContext** — `top_movers`, `rank_categories`, `rank_list`
+- **New ScreenerContext** — `screener_recommend_strategies`, `screener_user_strategies`, `screener_strategy`, `screener_search`, `screener_indicators`
+- Languages: Rust / Python / Node.js / Java / C / C++ / Go
+
 ## 2026-05-15
 
 ### CLI v0.21.0
