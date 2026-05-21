@@ -191,28 +191,41 @@ func main() {
 
 ### Response Example
 
+美股（`.US` 后缀）：
+
 ```json
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "list": [
-      {
-        "date": "2026-05-15",
-        "short_vol": "8452310",
-        "total_vol": "62345200",
-        "short_ratio": "0.1356",
-        "close": "342.15"
-      },
-      {
-        "date": "2026-05-14",
-        "short_vol": "7831040",
-        "total_vol": "58921000",
-        "short_ratio": "0.1329",
-        "close": "338.72"
-      }
-    ]
-  }
+  "data": [
+    {
+      "timestamp": "1778558400",
+      "nus_amount": "2921788",
+      "ny_amount": "0",
+      "total_amount": "11176595",
+      "rate": "0.2614",
+      "close": "294.800"
+    }
+  ]
+}
+```
+
+港股（`.HK` 后缀）：
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": [
+    {
+      "timestamp": "1778688000",
+      "amount": "6880800",
+      "balance": "3204234220.00",
+      "total_amount": "39339032",
+      "rate": "0.1749",
+      "close": "454.9"
+    }
+  ]
 }
 ```
 
@@ -220,20 +233,33 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [short_trades_rsp](#short_trades_rsp) |
+| 200    | 成功        | [ShortTradesResponse](#ShortTradesResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### short_trades_rsp
+### US Response（`.US` 代码）
 
-<a id="short_trades_rsp"></a>
+<a id="ShortTradesResponse"></a>
 
-| Name         | Type     | Required | Description                                   |
-| ------------ | -------- | -------- | --------------------------------------------- |
-| list         | object[] | true     | 每日沽空成交量记录                            |
-| ∟ date       | string   | true     | 交易日期，格式 `YYYY-MM-DD`                   |
-| ∟ short_vol  | string   | true     | 当日沽空成交量（股数）                        |
-| ∟ total_vol  | string   | true     | 当日总成交量（股数）                          |
-| ∟ short_ratio | string  | true     | 沽空比率（沽空量 ÷ 总成交量）                 |
-| ∟ close      | string   | true     | 当日收盘价                                    |
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| data | object[] | 否 | 每日沽空成交量列表 |
+| ∟ timestamp | string | 否 | 交易日期（Unix 时间戳，秒） |
+| ∟ nus_amount | string | 否 | 纳斯达克沽空成交量（股） |
+| ∟ ny_amount | string | 否 | 纽交所沽空成交量（股） |
+| ∟ total_amount | string | 否 | 当日总成交量 |
+| ∟ rate | string | 否 | 沽空比率（沽空量 ÷ 总成交量） |
+| ∟ close | string | 否 | 当日收盘价 |
+
+### HK Response（`.HK` 代码）
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| data | object[] | 否 | 每日沽空成交量列表 |
+| ∟ timestamp | string | 否 | 交易日期（Unix 时间戳，秒） |
+| ∟ amount | string | 否 | 当日沽空成交金额（港元） |
+| ∟ balance | string | 否 | 沽空持仓余额 |
+| ∟ total_amount | string | 否 | 当日总成交金额 |
+| ∟ rate | string | 否 | 沽空比率（沽空金额 ÷ 总成交金额） |
+| ∟ close | string | 否 | 当日收盘价 |

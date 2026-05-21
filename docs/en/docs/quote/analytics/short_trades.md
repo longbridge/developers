@@ -191,28 +191,41 @@ func main() {
 
 ### Response Example
 
+US stocks (`.US` suffix):
+
 ```json
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "list": [
-      {
-        "date": "2026-05-15",
-        "short_vol": "8452310",
-        "total_vol": "62345200",
-        "short_ratio": "0.1356",
-        "close": "342.15"
-      },
-      {
-        "date": "2026-05-14",
-        "short_vol": "7831040",
-        "total_vol": "58921000",
-        "short_ratio": "0.1329",
-        "close": "338.72"
-      }
-    ]
-  }
+  "data": [
+    {
+      "timestamp": "1778558400",
+      "nus_amount": "2921788",
+      "ny_amount": "0",
+      "total_amount": "11176595",
+      "rate": "0.2614",
+      "close": "294.800"
+    }
+  ]
+}
+```
+
+HK stocks (`.HK` suffix):
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": [
+    {
+      "timestamp": "1778688000",
+      "amount": "6880800",
+      "balance": "3204234220.00",
+      "total_amount": "39339032",
+      "rate": "0.1749",
+      "close": "454.9"
+    }
+  ]
 }
 ```
 
@@ -220,20 +233,33 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [short_trades_rsp](#short_trades_rsp) |
+| 200    | Success     | [ShortTradesResponse](#ShortTradesResponse) |
 | 400    | Bad request | None   |
 
 ## Schemas
 
-### short_trades_rsp
+### US Response (`.US` symbols)
 
-<a id="short_trades_rsp"></a>
+<a id="ShortTradesResponse"></a>
 
-| Name         | Type     | Required | Description                                   |
-| ------------ | -------- | -------- | --------------------------------------------- |
-| list         | object[] | true     | Daily short sale volume records               |
-| ∟ date       | string   | true     | Trading date in `YYYY-MM-DD` format           |
-| ∟ short_vol  | string   | true     | Short sale volume for the day (shares)        |
-| ∟ total_vol  | string   | true     | Total volume for the day (shares)             |
-| ∟ short_ratio | string  | true     | Short ratio (short volume ÷ total volume)     |
-| ∟ close      | string   | true     | Closing price on that day                     |
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| data | object[] | false | Daily short trade volume records |
+| ∟ timestamp | string | false | Trading date (Unix timestamp in seconds) |
+| ∟ nus_amount | string | false | NASDAQ short sale volume (shares) |
+| ∟ ny_amount | string | false | NYSE short sale volume (shares) |
+| ∟ total_amount | string | false | Total trading volume for the day |
+| ∟ rate | string | false | Short ratio (short volume ÷ total volume) |
+| ∟ close | string | false | Closing price |
+
+### HK Response (`.HK` symbols)
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| data | object[] | false | Daily short trade volume records |
+| ∟ timestamp | string | false | Trading date (Unix timestamp in seconds) |
+| ∟ amount | string | false | Short sale turnover amount (HKD) |
+| ∟ balance | string | false | Short position balance |
+| ∟ total_amount | string | false | Total trading turnover for the day |
+| ∟ rate | string | false | Short ratio (short turnover ÷ total turnover) |
+| ∟ close | string | false | Closing price |
