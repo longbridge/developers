@@ -1256,7 +1256,7 @@ const GETSTARTED = [
     title: 'Authentication setup',
     desc: 'Register an OAuth 2.0 client, obtain credentials, and configure your SDK with automatic token management.',
     cta: 'Setup guide',
-    href: '/docs',
+    href: '/docs/getting-started',
   },
   {
     key: 'api',
@@ -1264,7 +1264,7 @@ const GETSTARTED = [
     title: 'API Reference',
     desc: 'Browse 100+ endpoints for quotes, trading, portfolio, and content. Try requests directly in the browser.',
     cta: 'Explore APIs',
-    href: '/api',
+    href: '/docs',
   },
   {
     key: 'cli',
