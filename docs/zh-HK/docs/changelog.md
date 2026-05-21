@@ -6,6 +6,12 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-21
+
+### Docs
+
+- **MCP Inspector** — MCP 文件新增 MCP Inspector 使用指引，介紹如何透過 `npx @modelcontextprotocol/inspector` 在瀏覽器中互動式瀏覽和測試所有 Longbridge MCP 工具
+
 ## 2026-05-15
 
 ### CLI v0.21.0

@@ -6,6 +6,12 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-05-21
+
+### Docs
+
+- **MCP Inspector** — Added documentation for using `npx @modelcontextprotocol/inspector` to interactively browse and test all Longbridge MCP tools in a browser UI
+
 ## 2026-05-15
 
 ### CLI v0.21.0
