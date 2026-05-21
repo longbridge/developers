@@ -125,6 +125,12 @@ const year = new Date().getFullYear()
               t('footer.risk')
             }}</a>
           </li>
+          <li>
+            <a :href="localePath('/docs/legal/user-data-authorization-hk')">{{ t('footer.dataAuthorisationHK') }}</a>
+          </li>
+          <li>
+            <a :href="localePath('/docs/legal/user-data-authorization-sg')">{{ t('footer.dataAuthorisationSG') }}</a>
+          </li>
         </ul>
       </div>
     </div>
