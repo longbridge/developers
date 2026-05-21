@@ -26,7 +26,6 @@ import { visible, width } from '../composables/useProgressBar'
   background: var(--vp-c-brand-1);
   transition: width 0.12s linear;
   border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 8px var(--vp-c-brand-2);
 }
 
 @media (prefers-reduced-motion: reduce) {
