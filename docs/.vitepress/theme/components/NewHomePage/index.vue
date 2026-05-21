@@ -542,9 +542,9 @@ const sdkTab = ref('Get Quote')
 
 const SDK_LANGUAGES = [
   { name: 'Python', installer: 'pip', cmd: 'pip3 install longbridge', color: '#3776AB' },
-  { name: 'Rust', installer: 'cargo', cmd: 'cargo add longport', color: '#CE422B' },
-  { name: 'Node.js', installer: 'npm', cmd: 'npm install longport', color: '#339933' },
-  { name: 'Go', installer: 'go', cmd: 'go get github.com/longbridgeapp/openapi-go', color: '#00ADD8' },
+  { name: 'Rust', installer: 'cargo', cmd: 'cargo add longbridge', color: '#CE422B' },
+  { name: 'Node.js', installer: 'npm', cmd: 'npm install longbridge', color: '#339933' },
+  { name: 'Go', installer: 'go', cmd: 'go get github.com/longbridge/openapi-go', color: '#00ADD8' },
   { name: 'Java', installer: 'maven', cmd: 'mvn install io.github.longbridge:openapi', color: '#E76F00' },
   { name: 'C++', installer: 'cmake', cmd: 'git clone github.com/longbridge/openapi-cpp', color: '#00599C' },
 ]

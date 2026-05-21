@@ -32,16 +32,16 @@ longbridge topic replies 6993508780031016960 --page 2 --size 20
 
 ### Path Parameters
 
-| Name      | Type   | Required | Description                                              |
-| --------- | ------ | -------- | -------------------------------------------------------- |
-| topic_id  | string | YES      | 討論 ID，如 `6993508780031016960`                        |
+| Name     | Type   | Required | Description                       |
+| -------- | ------ | -------- | --------------------------------- |
+| topic_id | string | YES      | 討論 ID，如 `6993508780031016960` |
 
 ### Query Parameters
 
-| Name  | Type  | Required | Description                               |
-| ----- | ----- | -------- | ----------------------------------------- |
-| page  | int32 | NO       | 頁碼，默認 1                              |
-| size  | int32 | NO       | 每頁數量，範圍 1~50，默認 20              |
+| Name | Type  | Required | Description                  |
+| ---- | ----- | -------- | ---------------------------- |
+| page | int32 | NO       | 頁碼，默認 1                 |
+| size | int32 | NO       | 每頁數量，範圍 1~50，默認 20 |
 
 ### Request Example
 
@@ -99,8 +99,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/longportapp/openapi-go/config"
-	"github.com/longportapp/openapi-go/content"
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/content"
 )
 
 func main() {
@@ -186,10 +186,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### Response Status
 
-| Status | Description | Schema                                                          |
-| ------ | ----------- | --------------------------------------------------------------- |
-| 200    | 返回成功    | [topic_replies_response](#schematopic_replies_response)         |
-| 500    | 內部錯誤    | None                                                            |
+| Status | Description | Schema                                                  |
+| ------ | ----------- | ------------------------------------------------------- |
+| 200    | 返回成功    | [topic_replies_response](#schematopic_replies_response) |
+| 500    | 內部錯誤    | None                                                    |
 
 ## Schemas
 
@@ -197,21 +197,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 <a id="schematopic_replies_response"></a>
 
-| Name                | Type     | Required | Description                                                               |
-| ------------------- | -------- | -------- | ------------------------------------------------------------------------- |
-| items               | object[] | true     | 回覆列表                                                                  |
-| ∟ id                | string   | true     | 回覆 ID                                                                   |
-| ∟ topic_id          | string   | true     | 所屬討論 ID                                                               |
-| ∟ body              | string   | false    | 回覆正文（純文本）                                                        |
-| ∟ reply_to_id       | string   | false    | 父回覆 ID，`"0"` 表示頂層回覆                                             |
-| ∟ author            | object   | false    | 作者信息                                                                  |
-| ∟∟ member_id        | string   | false    | 作者 member ID                                                            |
-| ∟∟ name             | string   | false    | 作者暱稱                                                                  |
-| ∟∟ avatar           | string   | false    | 作者頭像 URL                                                              |
-| ∟ images            | object[] | false    | 附圖列表                                                                  |
-| ∟∟ url              | string   | false    | 原始圖片 URL                                                              |
-| ∟∟ sm               | string   | false    | 小縮略圖 URL                                                              |
-| ∟∟ lg               | string   | false    | 大縮略圖 URL                                                              |
-| ∟ likes_count       | int32    | false    | 點讚數                                                                    |
-| ∟ comments_count    | int32    | false    | 嵌套回覆數                                                                |
-| ∟ created_at        | string   | true     | 創建時間，Unix 時間戳（秒）                                               |
+| Name             | Type     | Required | Description                   |
+| ---------------- | -------- | -------- | ----------------------------- |
+| items            | object[] | true     | 回覆列表                      |
+| ∟ id             | string   | true     | 回覆 ID                       |
+| ∟ topic_id       | string   | true     | 所屬討論 ID                   |
+| ∟ body           | string   | false    | 回覆正文（純文本）            |
+| ∟ reply_to_id    | string   | false    | 父回覆 ID，`"0"` 表示頂層回覆 |
+| ∟ author         | object   | false    | 作者信息                      |
+| ∟∟ member_id     | string   | false    | 作者 member ID                |
+| ∟∟ name          | string   | false    | 作者暱稱                      |
+| ∟∟ avatar        | string   | false    | 作者頭像 URL                  |
+| ∟ images         | object[] | false    | 附圖列表                      |
+| ∟∟ url           | string   | false    | 原始圖片 URL                  |
+| ∟∟ sm            | string   | false    | 小縮略圖 URL                  |
+| ∟∟ lg            | string   | false    | 大縮略圖 URL                  |
+| ∟ likes_count    | int32    | false    | 點讚數                        |
+| ∟ comments_count | int32    | false    | 嵌套回覆數                    |
+| ∟ created_at     | string   | true     | 創建時間，Unix 時間戳（秒）   |

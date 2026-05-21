@@ -99,8 +99,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/longportapp/openapi-go/config"
-	"github.com/longportapp/openapi-go/content"
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/content"
 )
 
 func main() {

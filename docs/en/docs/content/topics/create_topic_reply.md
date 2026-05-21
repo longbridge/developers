@@ -76,6 +76,7 @@ longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
 longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
 
 # Nested reply
+
 longbridge topic create-reply 6993508780031016960 --body "I agree." --reply-to 7001234567890123456
 </CliCommand>
 
@@ -132,8 +133,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/longportapp/openapi-go/config"
-	"github.com/longportapp/openapi-go/content"
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/content"
 )
 
 func main() {
