@@ -218,18 +218,16 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "list": [
-      {
-        "timestamp": 1743379200,
-        "current_shares_short": "65598603",
-        "rate": "0.0175",
-        "avg_daily_share_volume": "62121644",
-        "days_to_cover": "1.06",
-        "close": "371.750"
-      }
-    ]
-  }
+  "data": [
+    {
+      "timestamp": "1647316800",
+      "current_shares_short": "111286790",
+      "avg_daily_share_volume": "95077016",
+      "days_to_cover": "1.17",
+      "rate": "0.0068",
+      "close": ""
+    }
+  ]
 }
 ```
 
@@ -242,12 +240,11 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": 1747353600,
-      "amount": "2148600000",
-      "balance": "6200000",
-      "close": "418.20",
-      "rate": "0.0182",
-      "total_amount": "118120000000"
+      "timestamp": "1718294400",
+      "amount": "53677721",
+      "balance": "20386798436",
+      "cost": "379.800",
+      "rate": "0.0057"
     }
   ]
 }
@@ -267,24 +264,23 @@ func main() {
 
 ### US Response (`.US` symbols)
 
-| Name                    | Type     | Required | Description                                        |
-| ----------------------- | -------- | -------- | -------------------------------------------------- |
-| list                    | object[] | false    | Short position records                             |
-| ∟ timestamp             | integer  | false    | Settlement date (Unix timestamp)                   |
-| ∟ current_shares_short  | string   | false    | Number of short shares                             |
-| ∟ rate                  | string   | false    | Short ratio                                        |
-| ∟ avg_daily_share_volume | string  | false    | Average daily volume                               |
-| ∟ days_to_cover         | string   | false    | Days-to-cover ratio                                |
-| ∟ close                 | string   | false    | Closing price                                      |
+| Name                     | Type     | Required | Description                                    |
+| ------------------------ | -------- | -------- | ---------------------------------------------- |
+| data                     | object[] | false    | Short position records                         |
+| ∟ timestamp              | string   | false    | Settlement date (Unix timestamp, seconds)      |
+| ∟ current_shares_short   | string   | false    | Number of shares sold short                    |
+| ∟ avg_daily_share_volume | string   | false    | Average daily share volume                     |
+| ∟ days_to_cover          | string   | false    | Days to cover (short shares ÷ avg daily vol)   |
+| ∟ rate                   | string   | false    | Short ratio                                    |
+| ∟ close                  | string   | false    | Closing price for the day                      |
 
 ### HK Response (`.HK` symbols)
 
-| Name          | Type     | Required | Description                                      |
-| ------------- | -------- | -------- | ------------------------------------------------ |
-| data          | object[] | false    | Short position records                           |
-| ∟ timestamp   | integer  | false    | Date (Unix timestamp)                            |
-| ∟ amount      | string   | false    | Short selling amount (HKD)                       |
-| ∟ balance     | string   | false    | Net short position balance                       |
-| ∟ close       | string   | false    | Closing price                                    |
-| ∟ rate        | string   | false    | Short ratio (short amount ÷ total turnover)      |
-| ∟ total_amount | string  | false    | Total turnover                                   |
+| Name        | Type     | Required | Description                               |
+| ----------- | -------- | -------- | ----------------------------------------- |
+| data        | object[] | false    | Short position records                    |
+| ∟ timestamp | string   | false    | Trade date (Unix timestamp, seconds)      |
+| ∟ amount    | string   | false    | Short selling amount (HKD)                |
+| ∟ balance   | string   | false    | Short position balance                    |
+| ∟ cost      | string   | false    | Closing price for the day                 |
+| ∟ rate      | string   | false    | Short ratio                               |

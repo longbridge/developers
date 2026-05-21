@@ -204,12 +204,12 @@ func main() {
             "unit": "",
             "category": 0,
             "description": "",
-            "default_range": [],
             "default_selected": false,
+            "default_range": [],
+            "value_ranges": [],
             "places": 0,
             "sub_indicators": [],
-            "tech_indicators": [],
-            "value_ranges": []
+            "tech_indicators": []
           }
         ]
       },
@@ -222,14 +222,14 @@ func main() {
             "key": "filter_marketcap",
             "name": "市值",
             "unit": "億",
-            "category": 0,
+            "category": 1,
             "description": "",
-            "default_range": [],
-            "default_selected": false,
-            "places": 0,
+            "default_selected": true,
+            "default_range": [{"min": "10", "max": "1000"}],
+            "value_ranges": [{"min": "", "max": "10"}, {"min": "10", "max": "100"}],
+            "places": 2,
             "sub_indicators": [],
-            "tech_indicators": [],
-            "value_ranges": []
+            "tech_indicators": []
           }
         ]
       }
@@ -263,9 +263,18 @@ func main() {
 | ∟ ∟ unit | string | false | 單位（如 `%`、`億`） |
 | ∟ ∟ category | integer | false | 指標分類代碼 |
 | ∟ ∟ description | string | false | 指標描述 |
-| ∟ ∟ default_range | array | false | 默認篩選範圍 |
 | ∟ ∟ default_selected | boolean | false | 是否默認選中 |
+| ∟ ∟ default_range | [RangeItem](#RangeItem)[] | false | 默認篩選範圍 |
+| ∟ ∟ value_ranges | [RangeItem](#RangeItem)[] | false | 指標可選值範圍 |
 | ∟ ∟ places | integer | false | 顯示小數位數 |
-| ∟ ∟ sub_indicators | array | false | 子指標定義 |
-| ∟ ∟ tech_indicators | array | false | 技術指標定義 |
-| ∟ ∟ value_ranges | array | false | 指標可選值範圍 |
+| ∟ ∟ sub_indicators | object[] | false | 子指標定義 |
+| ∟ ∟ tech_indicators | object[] | false | 技術指標定義 |
+
+### RangeItem
+
+<a id="RangeItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| min | string | false | 範圍下限（空字符串表示無下限） |
+| max | string | false | 範圍上限（空字符串表示無上限） |

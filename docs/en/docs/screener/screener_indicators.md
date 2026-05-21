@@ -204,12 +204,12 @@ func main() {
             "unit": "",
             "category": 0,
             "description": "",
-            "default_range": [],
             "default_selected": false,
+            "default_range": [],
+            "value_ranges": [],
             "places": 0,
             "sub_indicators": [],
-            "tech_indicators": [],
-            "value_ranges": []
+            "tech_indicators": []
           }
         ]
       },
@@ -222,14 +222,14 @@ func main() {
             "key": "filter_marketcap",
             "name": "Market Cap",
             "unit": "bn",
-            "category": 0,
+            "category": 1,
             "description": "",
-            "default_range": [],
-            "default_selected": false,
-            "places": 0,
+            "default_selected": true,
+            "default_range": [{"min": "10", "max": "1000"}],
+            "value_ranges": [{"min": "", "max": "10"}, {"min": "10", "max": "100"}],
+            "places": 2,
             "sub_indicators": [],
-            "tech_indicators": [],
-            "value_ranges": []
+            "tech_indicators": []
           }
         ]
       }
@@ -263,9 +263,18 @@ func main() {
 | ∟ ∟ unit | string | false | Unit (e.g. `%`, `bn`) |
 | ∟ ∟ category | integer | false | Indicator category code |
 | ∟ ∟ description | string | false | Indicator description |
-| ∟ ∟ default_range | array | false | Default filter range |
 | ∟ ∟ default_selected | boolean | false | Whether this indicator is selected by default |
+| ∟ ∟ default_range | [RangeItem](#RangeItem)[] | false | Default filter range |
+| ∟ ∟ value_ranges | [RangeItem](#RangeItem)[] | false | Available value ranges for this indicator |
 | ∟ ∟ places | integer | false | Decimal places for display |
-| ∟ ∟ sub_indicators | array | false | Sub-indicator definitions |
-| ∟ ∟ tech_indicators | array | false | Technical indicator definitions |
-| ∟ ∟ value_ranges | array | false | Available value ranges for this indicator |
+| ∟ ∟ sub_indicators | object[] | false | Sub-indicator definitions |
+| ∟ ∟ tech_indicators | object[] | false | Technical indicator definitions |
+
+### RangeItem
+
+<a id="RangeItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| min | string | false | Lower bound (empty string means no lower bound) |
+| max | string | false | Upper bound (empty string means no upper bound) |

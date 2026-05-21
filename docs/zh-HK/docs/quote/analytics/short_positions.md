@@ -217,18 +217,16 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "list": [
-      {
-        "timestamp": 1743379200,
-        "current_shares_short": "65598603",
-        "rate": "0.0175",
-        "avg_daily_share_volume": "62121644",
-        "days_to_cover": "1.06",
-        "close": "371.750"
-      }
-    ]
-  }
+  "data": [
+    {
+      "timestamp": "1647316800",
+      "current_shares_short": "111286790",
+      "avg_daily_share_volume": "95077016",
+      "days_to_cover": "1.17",
+      "rate": "0.0068",
+      "close": ""
+    }
+  ]
 }
 ```
 
@@ -241,12 +239,11 @@ func main() {
   "message": "success",
   "data": [
     {
-      "timestamp": 1747353600,
-      "amount": "2148600000",
-      "balance": "6200000",
-      "close": "418.20",
-      "rate": "0.0182",
-      "total_amount": "118120000000"
+      "timestamp": "1718294400",
+      "amount": "53677721",
+      "balance": "20386798436",
+      "cost": "379.800",
+      "rate": "0.0057"
     }
   ]
 }
@@ -266,24 +263,23 @@ func main() {
 
 ### 美股響應（`.US` 代碼）
 
-| Name                    | Type     | Required | Description                        |
-| ----------------------- | -------- | -------- | ---------------------------------- |
-| list                    | object[] | false    | 沽空持倉記錄                       |
-| ∟ timestamp             | integer  | false    | 結算日期（Unix 時間戳）            |
-| ∟ current_shares_short  | string   | false    | 沽空股數                           |
-| ∟ rate                  | string   | false    | 沽空比率                           |
-| ∟ avg_daily_share_volume | string  | false    | 日均成交量                         |
-| ∟ days_to_cover         | string   | false    | 回補天數（沽空股數 ÷ 日均成交量）  |
-| ∟ close                 | string   | false    | 收盤價                             |
+| Name                     | Type     | Required | Description                               |
+| ------------------------ | -------- | -------- | ----------------------------------------- |
+| data                     | object[] | false    | 沽空持倉記錄                              |
+| ∟ timestamp              | string   | false    | 結算日期（Unix 時間戳，秒）               |
+| ∟ current_shares_short   | string   | false    | 沽空持倉股數                              |
+| ∟ avg_daily_share_volume | string   | false    | 日均成交量                                |
+| ∟ days_to_cover          | string   | false    | 沽空回補天數                              |
+| ∟ rate                   | string   | false    | 沽空比率                                  |
+| ∟ close                  | string   | false    | 當日收盤價                                |
 
 ### 港股響應（`.HK` 代碼）
 
-| Name          | Type     | Required | Description                              |
-| ------------- | -------- | -------- | ---------------------------------------- |
-| data          | object[] | false    | 沽空持倉記錄                             |
-| ∟ timestamp   | integer  | false    | 日期（Unix 時間戳）                      |
-| ∟ amount      | string   | false    | 沽空金額（港元）                         |
-| ∟ balance     | string   | false    | 淨沽空持倉餘額                           |
-| ∟ close       | string   | false    | 收盤價                                   |
-| ∟ rate        | string   | false    | 沽空比率（沽空金額 ÷ 總成交金額）        |
-| ∟ total_amount | string  | false    | 總成交金額                               |
+| Name        | Type     | Required | Description                    |
+| ----------- | -------- | -------- | ------------------------------ |
+| data        | object[] | false    | 沽空持倉記錄                   |
+| ∟ timestamp | string   | false    | 交易日期（Unix 時間戳，秒）    |
+| ∟ amount    | string   | false    | 沽空金額（港元）               |
+| ∟ balance   | string   | false    | 沽空持倉餘額                   |
+| ∟ cost      | string   | false    | 當日收盤價                     |
+| ∟ rate      | string   | false    | 沽空比率                       |

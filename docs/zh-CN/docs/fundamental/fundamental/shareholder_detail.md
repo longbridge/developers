@@ -257,3 +257,5 @@ func main() {
 | ∟ ∟ trading_shares | string | false | 交易股数 |
 | ∟ ∟ trading_price | string | false | 交易价格 |
 | ∟ ∟ trading_type | string | false | 交易方向：`Buy` 或 `Sell` |
+
+> 说明：部分字段在数据不可用时返回空字符串或空数组。

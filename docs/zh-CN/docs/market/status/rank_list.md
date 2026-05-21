@@ -202,19 +202,26 @@ func main() {
         "code": "MU",
         "counter_id": "ST/US/MU",
         "name": "美光科技",
-        "market": "US",
         "last_done": "698.740",
         "chg": "0.0252",
+        "change": "17.200",
         "inflow": "-347041642",
         "market_cap": "787992890796",
         "industry": "半导体厂商",
-        "pre_post_price": "700.10",
-        "pre_post_chg": "0.0020"
+        "pre_post_price": "726.600",
+        "pre_post_chg": "0.0399",
+        "amplitude": "0.1082",
+        "five_day_chg": "-0.0885",
+        "turnover_rate": "0.0550",
+        "volume_rate": "1.11",
+        "pb_ttm": "32.68"
       }
     ]
   }
 }
 ```
+
+> 说明：响应中包含更多附加字段，上述为主要字段。
 
 ### Response Status
 
@@ -236,11 +243,18 @@ func main() {
 | ∟ code | string | false | 股票代码（如 `MU`） |
 | ∟ counter_id | string | false | Counter ID（如 `ST/US/MU`） |
 | ∟ name | string | false | 证券名称 |
-| ∟ market | string | false | 市场：`US`、`HK`、`CN`、`SG` |
 | ∟ last_done | string | false | 最新成交价 |
-| ∟ chg | string | false | 涨跌幅（如 `0.0252`） |
+| ∟ chg | string | false | 涨跌幅（小数比率，如 `0.0252` 表示 2.52%） |
+| ∟ change | string | false | 价格涨跌额（如 `17.200`） |
 | ∟ inflow | string | false | 净流入资金（单位：所属市场货币） |
 | ∟ market_cap | string | false | 市值 |
 | ∟ industry | string | false | 行业分类 |
 | ∟ pre_post_price | string | false | 盘前/盘后价格 |
-| ∟ pre_post_chg | string | false | 盘前/盘后涨跌幅 |
+| ∟ pre_post_chg | string | false | 盘前/盘后涨跌幅（小数比率） |
+| ∟ amplitude | string | false | 振幅（小数比率） |
+| ∟ five_day_chg | string | false | 5 日涨跌幅（小数比率） |
+| ∟ turnover_rate | string | false | 换手率（小数比率） |
+| ∟ volume_rate | string | false | 量比 |
+| ∟ pb_ttm | string | false | 市净率（TTM） |
+
+> 说明：响应中包含更多附加字段，上述为主要字段。

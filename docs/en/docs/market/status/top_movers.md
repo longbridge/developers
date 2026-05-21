@@ -254,5 +254,5 @@ func main() {
 | ∟ timestamp | string | false | Event time (Unix seconds as string) |
 | ∟ alert_reason | string | false | Description of the move reason |
 | ∟ alert_type | integer | false | Move type code |
-| ∟ post | object | false | Associated news/article; `null` if none |
+| ∟ post | object | false | Associated news article (complex object with `title`, `description_html`, `published_at` and other fields; `null` when no article is linked) |
 | next_params | object | false | Pagination cursor object; pass to the next request to get the next page |

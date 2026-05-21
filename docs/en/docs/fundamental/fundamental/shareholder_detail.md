@@ -257,3 +257,5 @@ func main() {
 | ∟ ∟ trading_shares | string | false | Number of shares traded |
 | ∟ ∟ trading_price | string | false | Trade price |
 | ∟ ∟ trading_type | string | false | Trade direction: `Buy` or `Sell` |
+
+> Note: Some fields return an empty string or empty array when data is unavailable.

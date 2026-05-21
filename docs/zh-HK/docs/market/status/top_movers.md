@@ -254,5 +254,5 @@ func main() {
 | ∟ timestamp | string | false | 異動時間（Unix 秒，字符串格式） |
 | ∟ alert_reason | string | false | 異動原因描述 |
 | ∟ alert_type | integer | false | 異動類型代碼 |
-| ∟ post | object | false | 關聯新聞/文章；無關聯時為 `null` |
+| ∟ post | object | false | 關聯新聞文章（複雜對象，包含 `title`、`description_html`、`published_at` 等字段；無關聯新聞時為 `null`） |
 | next_params | object | false | 翻頁參數對象，傳入下次請求以獲取下一頁 |

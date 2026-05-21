@@ -202,19 +202,26 @@ func main() {
         "code": "MU",
         "counter_id": "ST/US/MU",
         "name": "Micron Technology",
-        "market": "US",
         "last_done": "698.740",
         "chg": "0.0252",
+        "change": "17.200",
         "inflow": "-347041642",
         "market_cap": "787992890796",
         "industry": "Semiconductor Manufacturers",
-        "pre_post_price": "700.10",
-        "pre_post_chg": "0.0020"
+        "pre_post_price": "726.600",
+        "pre_post_chg": "0.0399",
+        "amplitude": "0.1082",
+        "five_day_chg": "-0.0885",
+        "turnover_rate": "0.0550",
+        "volume_rate": "1.11",
+        "pb_ttm": "32.68"
       }
     ]
   }
 }
 ```
+
+> Note: The response contains many additional fields; the above are the main ones.
 
 ### Response Status
 
@@ -236,11 +243,18 @@ func main() {
 | ∟ code | string | false | Ticker code (e.g. `MU`) |
 | ∟ counter_id | string | false | Counter ID (e.g. `ST/US/MU`) |
 | ∟ name | string | false | Security name |
-| ∟ market | string | false | Market: `US`, `HK`, `CN`, `SG` |
 | ∟ last_done | string | false | Latest trade price |
-| ∟ chg | string | false | Price change ratio (e.g. `0.0252`) |
+| ∟ chg | string | false | Price change ratio as decimal (e.g. `0.0252` = 2.52%) |
+| ∟ change | string | false | Absolute price change (e.g. `17.200`) |
 | ∟ inflow | string | false | Net capital inflow (in the market's currency) |
 | ∟ market_cap | string | false | Market capitalisation |
 | ∟ industry | string | false | Industry classification |
 | ∟ pre_post_price | string | false | Pre/post-market price |
-| ∟ pre_post_chg | string | false | Pre/post-market price change ratio |
+| ∟ pre_post_chg | string | false | Pre/post-market price change ratio (decimal) |
+| ∟ amplitude | string | false | Amplitude / intraday range ratio (decimal) |
+| ∟ five_day_chg | string | false | 5-day price change ratio (decimal) |
+| ∟ turnover_rate | string | false | Turnover rate (decimal) |
+| ∟ volume_rate | string | false | Volume ratio (vs average) |
+| ∟ pb_ttm | string | false | Price-to-book ratio (TTM) |
+
+> Note: The response contains many additional fields; the above are the main ones.
