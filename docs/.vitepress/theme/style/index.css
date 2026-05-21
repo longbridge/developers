@@ -74,9 +74,9 @@ html.dark .vp-doc th {
   background-color: #0E1120;
 }
 
-/* AppNav is sticky (in document flow), so VitePress's fixed-nav compensation is not needed */
+/* AppNav is position:fixed; suppress VitePress padding-top only for sidebar pages (which manage their own layout) */
 @media (min-width: 960px) {
-  .VPContent {
+  .VPContent.has-sidebar {
     padding-top: 0 !important;
   }
 }
