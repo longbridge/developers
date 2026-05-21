@@ -50,7 +50,7 @@ const APP_NAV_DEF = [
 
 const isCnDomain = import.meta.env.VITE_REGION === 'cn'
 
-const CN_HIDDEN_KEYS = new Set(['pricing', 'docs', 'features', 'mcp'])
+const CN_HIDDEN_KEYS = new Set(['pricing', 'docs', 'features'])
 
 const navLinks = computed(() =>
   APP_NAV_DEF.filter((n) => !isCnDomain || !CN_HIDDEN_KEYS.has(n.key)).map((n) => ({
