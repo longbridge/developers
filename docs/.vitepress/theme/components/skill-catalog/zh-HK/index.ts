@@ -7,6 +7,7 @@ export const locale: CatalogLocale = {
       pkg: 'longbridge',
       cat: 'meta',
       tools: 8,
+      tagType: 'hot',
       name: '長橋總覽',
       desc: 'Longbridge 平台入口，覆蓋 CLI / Python / Rust SDK / MCP / LLMs.txt 整合。',
       prompt: '幫我看下 NVDA 現價、新聞和我的持倉影響。',

@@ -563,6 +563,7 @@ const SKILLS = [
     id: 'longbridge',
     name: 'Longbridge Overview',
     cat: 'Platform',
+    tag: 'Popular',
     desc: 'Full-stack financial data and trading platform — CLI, Python/Rust SDK, MCP, and LLM integration.',
     example: "What is NVDA's current price, recent news, and how does it affect my positions?",
   },
@@ -1542,7 +1543,6 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
               <div class="sc-card-header">
                 <div class="sc-card-title">
                   <span class="sc-card-name">{{ skill.name }}</span>
-                  <span class="sc-card-pkg">{{ skill.pkg }}</span>
                   <span v-if="skill.tag" class="sc-card-tag" :class="'sc-card-tag--' + (skill.tagType ?? 'default')">{{
                     skill.tag
                   }}</span>
@@ -1559,6 +1559,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </div>
+              <span class="sc-card-pkg">{{ skill.pkg }}</span>
               <p class="sc-card-desc">{{ skill.desc }}</p>
               <div class="sc-card-prompt">
                 <svg
@@ -3107,6 +3108,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 
 /* Card */
 .sc-card {
+  line-height: 16px;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -3321,8 +3323,8 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   min-width: 0;
 }
 .sc-plugin-icon {
-  width: 34px;
-  height: 34px;
+  width: 45px;
+  height: 45px;
   border-radius: 8px;
   background: rgba(245, 158, 11, 0.15);
   display: flex;
@@ -3341,6 +3343,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 }
 .sc-plugin-badge {
   font-size: 9px;
+  line-height: 14px;
   padding: 1px 5px;
   background: rgb(245, 158, 11);
   color: #fff;
