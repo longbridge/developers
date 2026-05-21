@@ -63,7 +63,6 @@ const year = new Date().getFullYear()
           <li><a :href="localePath('/skill')">AI Skill</a></li>
           <li><a :href="localePath('/docs/cli')">CLI</a></li>
           <li><a :href="localePath('/docs/mcp')">MCP</a></li>
-          <li><a :href="localePath('/docs')">Docs</a></li>
           <li><a :href="localePath('/docs/llm')">LLMs</a></li>
         </ul>
       </div>
