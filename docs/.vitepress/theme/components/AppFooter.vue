@@ -73,9 +73,9 @@ const year = new Date().getFullYear()
         <h5>{{ t('footer.resources') }}</h5>
         <ul>
           <li>
-            <a :href="localePath('/docs')">{{ t('footer.gettingStarted') }}</a>
+            <a :href="localePath('/docs/getting-started')">{{ t('footer.gettingStarted') }}</a>
           </li>
-          <li><a :href="localePath('/api')">API Reference</a></li>
+          <li><a :href="localePath('/docs')">Documentation</a></li>
           <li><a :href="localePath('/docs/quote/pull/quote')">Quote API</a></li>
           <li><a :href="localePath('/docs/trade/order/submit')">Trade API</a></li>
           <li>
