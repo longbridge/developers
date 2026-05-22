@@ -16,6 +16,7 @@ sidebar_icon: newspaper
 - **New `top-movers`** — Stocks whose price movement exceeds the 20-day standard deviation, with correlated news; supports `--market`, `--sort time|change|hot`
 - **New `screener` command group** — Stock screener: `strategies` (recommended/saved), `search --strategy-id <id>` or `--filter key:min:max`, `indicators` to list available filters
 - **New `rank`** — Popularity leaderboard; list all categories without `--key`, or pass `--key <key>` for a specific ranking (e.g. `ib_hot_all-us`)
+- MCP server updated with the same new tools
 
 ### [v0.21.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.21.0)
 

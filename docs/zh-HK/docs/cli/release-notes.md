@@ -16,6 +16,7 @@ sidebar_icon: newspaper
 - **新增 `top-movers`** — 價格波動超近 20 日標準差的異動股票，附關聯新聞解讀；支持 `--market`、`--sort time|change|hot` 篩選
 - **新增 `screener` 命令組** — 股票篩選工具：`strategies`（推薦/我的策略）、`search --strategy-id <id>` 或 `--filter key:min:max` 執行篩選、`indicators` 查看可用指標
 - **新增 `rank`** — 人氣排行榜；不帶 `--key` 列出所有分類，`--key <key>` 獲取對應排行（如 `ib_hot_all-us`）
+- MCP 服務同步新增相同工具
 
 ### [v0.21.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.21.0)
 

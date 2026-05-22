@@ -6,7 +6,7 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
-## 2026-05-21
+## 2026-05-22
 
 ### CLI v0.22.0
 
@@ -17,14 +17,16 @@ sidebar_icon: newspaper
 - **`top-movers`** — Stocks whose price exceeds the 20-day standard deviation, with correlated news; supports `--market`, `--sort time|change|hot`
 - **`screener` command group** — Stock screener: `strategies` (recommended/saved), `search --strategy-id <id>` or `--filter key:min:max`, `indicators` to list available filters
 - **`rank`** — Popularity leaderboard; list all categories without `--key`, or pass `--key <key>` (e.g. `ib_hot_all-us`)
+- MCP server updated with the same new tools
 
-### SDK
+### SDK v4.2.0
 
 - **FundamentalContext** — `shareholder_top`, `shareholder_detail`, `valuation_comparison`
 - **QuoteContext** — `short_positions` unified for US and HK; new `short_trades`
 - **MarketContext** — `top_movers`, `rank_categories`, `rank_list`
 - **New ScreenerContext** — `screener_recommend_strategies`, `screener_user_strategies`, `screener_strategy`, `screener_search`, `screener_indicators`
 - Languages: Rust / Python / Node.js / Java / C / C++ / Go
+- MCP server updated with the same new capabilities
 
 ## 2026-05-15
 

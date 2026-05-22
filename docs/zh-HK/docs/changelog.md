@@ -6,7 +6,7 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
-## 2026-05-21
+## 2026-05-22
 
 ### CLI v0.22.0
 
@@ -17,14 +17,16 @@ sidebar_icon: newspaper
 - **`top-movers`** — 價格波動超近 20 日標準差的異動股票，系統自動關聯相關新聞解讀；支持 `--market`、`--sort time|change|hot` 篩選
 - **`screener` 命令組** — 股票篩選工具：`strategies`（推薦/我的策略）、`search --strategy-id <id>` 或 `--filter key:min:max` 執行篩選、`indicators` 查看可用指標
 - **`rank`** — 人氣排行榜；不帶 `--key` 列出所有分類，`--key <key>` 獲取對應排行（如 `ib_hot_all-us`）
+- MCP 服務同步新增相同工具
 
-### SDK
+### SDK v4.2.0
 
 - **FundamentalContext** — 新增 `shareholder_top`、`shareholder_detail`、`valuation_comparison`
 - **QuoteContext** — `short_positions` 統一支持美股和港股；新增 `short_trades`
 - **MarketContext** — 新增 `top_movers`、`rank_categories`、`rank_list`
 - **新增 ScreenerContext** — `screener_recommend_strategies`、`screener_user_strategies`、`screener_strategy`、`screener_search`、`screener_indicators`
 - 覆蓋語言：Rust / Python / Node.js / Java / C / C++ / Go
+- MCP 服務同步新增相同功能
 
 ## 2026-05-15
 
