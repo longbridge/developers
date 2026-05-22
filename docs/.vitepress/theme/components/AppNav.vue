@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
 import endsWith from 'lodash/endsWith'
-import { localePath, getBasenameLocale } from '../utils/i18n'
+import { useLocalePath, getBasenameLocale } from '../utils/i18n'
 import { createLoginRedirectPath } from '../utils/navigate'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
 import { useAvatar } from './UserAvatar/uesAvatar'
@@ -18,6 +18,7 @@ const VPNavBarSearch = defineAsyncComponent(
 const { isDark } = useData()
 const { t } = useI18n()
 const route = useRoute()
+const localePath = useLocalePath()
 
 const currentPath = computed(() => {
   route.path // reactive dependency
