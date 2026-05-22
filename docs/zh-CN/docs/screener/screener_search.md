@@ -12,6 +12,10 @@ headingLevel: 2
 
 按策略 ID 或自定义指标条件筛选股票，支持分页。
 
+接口：`POST /v1/quote/ai/screener/search`
+
+> **JSON 输出格式说明：** 响应使用扁平的 `items[]` 数组（非 `stocks[]`），所有数值字段为 JSON 数字类型（非字符串），指标键名不含 `filter_` 前缀。
+
 <CliCommand>
 longbridge screener search --strategy-id 42
 longbridge screener search --market HK --filter filter_marketcap:100:1000
@@ -200,30 +204,25 @@ func main() {
   "message": "success",
   "data": {
     "total": 87,
-    "page": 1,
-    "size": 20,
-    "stocks": [
+    "page": 0,
+    "items": [
       {
         "symbol": "AAPL.US",
         "name": "苹果公司",
-        "last_done": "213.49",
-        "chg": "+0.62%",
-        "market_cap": "3241500000000",
-        "pe": "32.15",
-        "pb": "50.21",
-        "ps": "8.04",
-        "roe": "147.25"
+        "prevchg": 0.62,
+        "marketcap": 3241500000000,
+        "pettm": 32.15,
+        "pbmrq": 50.21,
+        "salesgrowthyoy": 8.04
       },
       {
         "symbol": "MSFT.US",
         "name": "微软",
-        "last_done": "415.32",
-        "chg": "+1.05%",
-        "market_cap": "3085000000000",
-        "pe": "35.42",
-        "pb": "12.87",
-        "ps": "12.61",
-        "roe": "36.52"
+        "prevchg": 1.05,
+        "marketcap": 3085000000000,
+        "pettm": 35.42,
+        "pbmrq": 12.87,
+        "salesgrowthyoy": 12.61
       }
     ]
   }
@@ -246,15 +245,15 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | total | integer | false | 满足条件的股票总数 |
-| page | integer | false | 当前页码 |
-| size | integer | false | 当前页条数 |
-| stocks | object[] | false | 筛选结果股票列表 |
+| page | integer | false | 当前页码（从零开始） |
+| items | object[] | false | 筛选结果股票列表 |
 | ∟ symbol | string | false | 证券代码 |
 | ∟ name | string | false | 证券名称 |
-| ∟ last_done | string | false | 最新成交价 |
-| ∟ chg | string | false | 涨跌幅 |
-| ∟ market_cap | string | false | 市值 |
-| ∟ pe | string | false | 市盈率 |
-| ∟ pb | string | false | 市净率 |
-| ∟ ps | string | false | 市销率 |
-| ∟ roe | string | false | 净资产收益率（%） |
+| ∟ prevchg | number | false | 昨日涨跌幅（如 `1.24` 表示 1.24%） |
+| ∟ marketcap | number | false | 市值（数字类型） |
+| ∟ pettm | number | false | 市盈率 TTM（数字类型） |
+| ∟ pbmrq | number | false | 市净率 MRQ（数字类型） |
+| ∟ salesgrowthyoy | number | false | 营收同比增速（%） |
+| ∟ industry | string | false | 行业分类 |
+
+> 所有数值指标字段均为 JSON 数字类型。具体返回字段取决于所用策略或筛选条件。指标键名不含 `filter_` 前缀。

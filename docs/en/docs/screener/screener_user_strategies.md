@@ -12,8 +12,11 @@ headingLevel: 2
 
 Get the list of custom stock screener strategies created by the currently logged-in user.
 
+Endpoint: `GET /v1/quote/ai/screener/strategies/mine`
+
 <CliCommand>
 longbridge screener strategies --mine
+longbridge screener strategies --mine --market HK
 </CliCommand>
 
 <SDKLinks module="screener" klass="ScreenerContext" method="screener_user_strategies" />
@@ -23,7 +26,11 @@ longbridge screener strategies --mine
 
 > **SDK method parameters.**
 
-This method takes no parameters (login required).
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| market | string | NO | Market filter: `US`, `HK`, `CN`, `SG`. Default: `US` |
+
+Login required.
 
 ## Request Example
 

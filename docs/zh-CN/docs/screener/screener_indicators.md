@@ -12,6 +12,10 @@ headingLevel: 2
 
 获取选股器支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
 
+接口：`GET /v1/quote/ai/screener/indicators`
+
+> **JSON 输出格式说明：** 响应为扁平数组（无嵌套分组），所有 `key` 值已去除 `filter_` 前缀，技术指标参数保存在 `tech_values` 字段中。
+
 <CliCommand>
 longbridge screener indicators
 </CliCommand>
@@ -191,50 +195,35 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "groups": [
-      {
-        "group_name": "市场",
-        "group_type": "range",
-        "indicators": [
-          {
-            "id": -1,
-            "key": "filter_market",
-            "name": "市场",
-            "unit": "",
-            "category": 0,
-            "description": "",
-            "default_selected": false,
-            "default_range": [],
-            "value_ranges": [],
-            "places": 0,
-            "sub_indicators": [],
-            "tech_indicators": []
-          }
-        ]
-      },
-      {
-        "group_name": "行情类指标",
-        "group_type": "Quotes",
-        "indicators": [
-          {
-            "id": 1,
-            "key": "filter_marketcap",
-            "name": "市值",
-            "unit": "亿",
-            "category": 1,
-            "description": "",
-            "default_selected": true,
-            "default_range": [{"min": "10", "max": "1000"}],
-            "value_ranges": [{"min": "", "max": "10"}, {"min": "10", "max": "100"}],
-            "places": 2,
-            "sub_indicators": [],
-            "tech_indicators": []
-          }
-        ]
-      }
-    ]
-  }
+  "data": [
+    {
+      "id": -1,
+      "key": "market",
+      "name": "市场",
+      "unit": "",
+      "min": "0",
+      "max": "",
+      "tech_values": {}
+    },
+    {
+      "id": 1,
+      "key": "marketcap",
+      "name": "市值",
+      "unit": "亿",
+      "min": "0",
+      "max": "",
+      "tech_values": {}
+    },
+    {
+      "id": 29,
+      "key": "divyld",
+      "name": "股息率 (TTM)",
+      "unit": "%",
+      "min": "0",
+      "max": "100",
+      "tech_values": {}
+    }
+  ]
 }
 ```
 
@@ -251,30 +240,14 @@ func main() {
 
 <a id="ScreenerIndicatorsResponse"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| groups | object[] | false | 指标分组 |
-| ∟ group_name | string | false | 分组名称 |
-| ∟ group_type | string | false | 分组类型（如 `range`、`Quotes`、`DividendIndex`） |
-| ∟ indicators | object[] | false | 该分组下的指标列表 |
-| ∟ ∟ id | integer | false | 指标 ID |
-| ∟ ∟ key | string | false | 指标键值，用于构建筛选条件 |
-| ∟ ∟ name | string | false | 指标显示名称 |
-| ∟ ∟ unit | string | false | 单位（如 `%`、`亿`） |
-| ∟ ∟ category | integer | false | 指标分类代码 |
-| ∟ ∟ description | string | false | 指标描述 |
-| ∟ ∟ default_selected | boolean | false | 是否默认选中 |
-| ∟ ∟ default_range | [RangeItem](#RangeItem)[] | false | 默认筛选范围 |
-| ∟ ∟ value_ranges | [RangeItem](#RangeItem)[] | false | 指标可选值范围 |
-| ∟ ∟ places | integer | false | 显示小数位数 |
-| ∟ ∟ sub_indicators | object[] | false | 子指标定义 |
-| ∟ ∟ tech_indicators | object[] | false | 技术指标定义 |
-
-### RangeItem
-
-<a id="RangeItem"></a>
+响应 `data` 为扁平指标对象数组，所有 `key` 值已去除 `filter_` 前缀。
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| min | string | false | 范围下限（空字符串表示无下限） |
-| max | string | false | 范围上限（空字符串表示无上限） |
+| id | integer | false | 指标 ID |
+| key | string | false | 指标键值，用于构建筛选条件（不含 `filter_` 前缀） |
+| name | string | false | 指标显示名称 |
+| unit | string | false | 单位（如 `%`、`亿`） |
+| min | string | false | 指标全局下限；空字符串表示无下限 |
+| max | string | false | 指标全局上限；空字符串表示无上限 |
+| tech_values | object | false | 技术指标参数（仅技术指标有值） |

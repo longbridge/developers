@@ -12,6 +12,10 @@ headingLevel: 2
 
 Get all indicator definitions supported by the stock screener, including keys, names, units, and available ranges. Use these to build custom filter conditions.
 
+Endpoint: `GET /v1/quote/ai/screener/indicators`
+
+> **Note on JSON output format:** The response is a flat array (no nested groups). The `filter_` prefix is stripped from all `key` values. Technical indicator parameters are available in the `tech_values` field.
+
 <CliCommand>
 longbridge screener indicators
 </CliCommand>
@@ -191,50 +195,35 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "groups": [
-      {
-        "group_name": "Market",
-        "group_type": "range",
-        "indicators": [
-          {
-            "id": -1,
-            "key": "filter_market",
-            "name": "Market",
-            "unit": "",
-            "category": 0,
-            "description": "",
-            "default_selected": false,
-            "default_range": [],
-            "value_ranges": [],
-            "places": 0,
-            "sub_indicators": [],
-            "tech_indicators": []
-          }
-        ]
-      },
-      {
-        "group_name": "Quote Indicators",
-        "group_type": "Quotes",
-        "indicators": [
-          {
-            "id": 1,
-            "key": "filter_marketcap",
-            "name": "Market Cap",
-            "unit": "bn",
-            "category": 1,
-            "description": "",
-            "default_selected": true,
-            "default_range": [{"min": "10", "max": "1000"}],
-            "value_ranges": [{"min": "", "max": "10"}, {"min": "10", "max": "100"}],
-            "places": 2,
-            "sub_indicators": [],
-            "tech_indicators": []
-          }
-        ]
-      }
-    ]
-  }
+  "data": [
+    {
+      "id": -1,
+      "key": "market",
+      "name": "Market",
+      "unit": "",
+      "min": "0",
+      "max": "",
+      "tech_values": {}
+    },
+    {
+      "id": 1,
+      "key": "marketcap",
+      "name": "Market Cap",
+      "unit": "bn",
+      "min": "0",
+      "max": "",
+      "tech_values": {}
+    },
+    {
+      "id": 29,
+      "key": "divyld",
+      "name": "Dividend Yield (TTM)",
+      "unit": "%",
+      "min": "0",
+      "max": "100",
+      "tech_values": {}
+    }
+  ]
 }
 ```
 
@@ -251,30 +240,14 @@ func main() {
 
 <a id="ScreenerIndicatorsResponse"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| groups | object[] | false | Indicator groups |
-| ∟ group_name | string | false | Group name |
-| ∟ group_type | string | false | Group type (e.g. `range`, `Quotes`, `DividendIndex`) |
-| ∟ indicators | object[] | false | List of indicators in this group |
-| ∟ ∟ id | integer | false | Indicator ID |
-| ∟ ∟ key | string | false | Indicator key for building filter conditions |
-| ∟ ∟ name | string | false | Indicator display name |
-| ∟ ∟ unit | string | false | Unit (e.g. `%`, `bn`) |
-| ∟ ∟ category | integer | false | Indicator category code |
-| ∟ ∟ description | string | false | Indicator description |
-| ∟ ∟ default_selected | boolean | false | Whether this indicator is selected by default |
-| ∟ ∟ default_range | [RangeItem](#RangeItem)[] | false | Default filter range |
-| ∟ ∟ value_ranges | [RangeItem](#RangeItem)[] | false | Available value ranges for this indicator |
-| ∟ ∟ places | integer | false | Decimal places for display |
-| ∟ ∟ sub_indicators | object[] | false | Sub-indicator definitions |
-| ∟ ∟ tech_indicators | object[] | false | Technical indicator definitions |
-
-### RangeItem
-
-<a id="RangeItem"></a>
+The response `data` is a flat array of indicator objects. The `filter_` prefix is stripped from all `key` values.
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| min | string | false | Lower bound (empty string means no lower bound) |
-| max | string | false | Upper bound (empty string means no upper bound) |
+| id | integer | false | Indicator ID |
+| key | string | false | Indicator key for building filter conditions (no `filter_` prefix) |
+| name | string | false | Indicator display name |
+| unit | string | false | Unit (e.g. `%`, `bn`) |
+| min | string | false | Global lower bound for this indicator; empty string means no lower bound |
+| max | string | false | Global upper bound for this indicator; empty string means no upper bound |
+| tech_values | object | false | Technical indicator parameters (for technical indicators only) |

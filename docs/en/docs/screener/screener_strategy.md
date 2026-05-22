@@ -12,6 +12,8 @@ headingLevel: 2
 
 Get the full configuration of a single stock screener strategy by strategy ID, including all indicator groups and the filter range for each indicator.
 
+Endpoint: `GET /v1/quote/ai/screener/strategy/{id}` (strategy ID as path parameter)
+
 <CliCommand>
 longbridge screener strategies --id 42
 </CliCommand>

@@ -12,8 +12,11 @@ headingLevel: 2
 
 獲取平台推薦的選股策略列表，含近期平均日漲跌幅和策略內股票。
 
+接口：`GET /v1/quote/ai/screener/strategies/recommend`
+
 <CliCommand>
 longbridge screener strategies
+longbridge screener strategies --market HK
 </CliCommand>
 
 <SDKLinks module="screener" klass="ScreenerContext" method="screener_recommend_strategies" />
@@ -23,7 +26,9 @@ longbridge screener strategies
 
 > **SDK 方法參數。**
 
-此方法無參數。
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| market | string | 否 | 市場篩選：`US`、`HK`、`CN`、`SG`，默認 `US` |
 
 ## Request Example
 
@@ -39,6 +44,10 @@ ctx = ScreenerContext(config)
 
 resp = ctx.screener_recommend_strategies()
 print(resp)
+
+# 港股市場
+resp = ctx.screener_recommend_strategies(market="HK")
+print(resp)
 ```
 
   </TabItem>
@@ -53,7 +62,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncScreenerContext.create(config)
 
-    resp = await ctx.screener_recommend_strategies()
+    resp = await ctx.screener_recommend_strategies(market="HK")
     print(resp)
 
 if __name__ == "__main__":

@@ -12,8 +12,11 @@ headingLevel: 2
 
 Get the list of platform-recommended stock screener strategies, including recent average daily change and constituent stocks.
 
+Endpoint: `GET /v1/quote/ai/screener/strategies/recommend`
+
 <CliCommand>
 longbridge screener strategies
+longbridge screener strategies --market HK
 </CliCommand>
 
 <SDKLinks module="screener" klass="ScreenerContext" method="screener_recommend_strategies" />
@@ -23,7 +26,9 @@ longbridge screener strategies
 
 > **SDK method parameters.**
 
-This method takes no parameters.
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| market | string | NO | Market filter: `US`, `HK`, `CN`, `SG`. Default: `US` |
 
 ## Request Example
 
@@ -37,7 +42,12 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = ScreenerContext(config)
 
+# Default market (US)
 resp = ctx.screener_recommend_strategies()
+print(resp)
+
+# Hong Kong market
+resp = ctx.screener_recommend_strategies(market="HK")
 print(resp)
 ```
 
@@ -53,7 +63,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncScreenerContext.create(config)
 
-    resp = await ctx.screener_recommend_strategies()
+    resp = await ctx.screener_recommend_strategies(market="HK")
     print(resp)
 
 if __name__ == "__main__":

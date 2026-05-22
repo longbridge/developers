@@ -12,6 +12,10 @@ headingLevel: 2
 
 Filter stocks by strategy ID or custom indicator conditions, with pagination support.
 
+Endpoint: `POST /v1/quote/ai/screener/search`
+
+> **Note on JSON output format:** The response uses a flat `items[]` array (not `stocks[]`), all numeric fields are JSON numbers (not strings), and indicator keys do not carry the `filter_` prefix.
+
 <CliCommand>
 longbridge screener search --strategy-id 42
 longbridge screener search --market HK --filter filter_marketcap:100:1000
@@ -200,30 +204,25 @@ func main() {
   "message": "success",
   "data": {
     "total": 87,
-    "page": 1,
-    "size": 20,
-    "stocks": [
+    "page": 0,
+    "items": [
       {
         "symbol": "AAPL.US",
         "name": "Apple Inc.",
-        "last_done": "213.49",
-        "chg": "+0.62%",
-        "market_cap": "3241500000000",
-        "pe": "32.15",
-        "pb": "50.21",
-        "ps": "8.04",
-        "roe": "147.25"
+        "prevchg": 0.62,
+        "marketcap": 3241500000000,
+        "pettm": 32.15,
+        "pbmrq": 50.21,
+        "salesgrowthyoy": 8.04
       },
       {
         "symbol": "MSFT.US",
         "name": "Microsoft",
-        "last_done": "415.32",
-        "chg": "+1.05%",
-        "market_cap": "3085000000000",
-        "pe": "35.42",
-        "pb": "12.87",
-        "ps": "12.61",
-        "roe": "36.52"
+        "prevchg": 1.05,
+        "marketcap": 3085000000000,
+        "pettm": 35.42,
+        "pbmrq": 12.87,
+        "salesgrowthyoy": 12.61
       }
     ]
   }
@@ -246,15 +245,15 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | total | integer | false | Total number of matching stocks |
-| page | integer | false | Current page number |
-| size | integer | false | Number of results on the current page |
-| stocks | object[] | false | Filtered stock list |
+| page | integer | false | Current page number (zero-based) |
+| items | object[] | false | Filtered stock list |
 | ∟ symbol | string | false | Security symbol |
 | ∟ name | string | false | Security name |
-| ∟ last_done | string | false | Latest trade price |
-| ∟ chg | string | false | Price change |
-| ∟ market_cap | string | false | Market capitalisation |
-| ∟ pe | string | false | P/E ratio |
-| ∟ pb | string | false | P/B ratio |
-| ∟ ps | string | false | P/S ratio |
-| ∟ roe | string | false | Return on equity (%) |
+| ∟ prevchg | number | false | Previous day price change ratio (e.g. `1.24` = 1.24%) |
+| ∟ marketcap | number | false | Market capitalisation (numeric) |
+| ∟ pettm | number | false | P/E ratio (TTM, numeric) |
+| ∟ pbmrq | number | false | P/B ratio (MRQ, numeric) |
+| ∟ salesgrowthyoy | number | false | Revenue growth YoY (%) |
+| ∟ industry | string | false | Industry classification |
+
+> All numeric indicator fields are JSON numbers. Additional indicator fields depend on the strategy or filter used. Indicator keys do not carry the `filter_` prefix.

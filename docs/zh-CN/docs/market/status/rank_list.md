@@ -12,8 +12,11 @@ headingLevel: 2
 
 根据排行榜标签 key 获取股票排行。key 来自 `rank_categories` 的 `second_tags[].key`，例如 `ib_hot_all-us`（美股总热度）。
 
+`--key` 参数中的 `ib_` 前缀为可选项：`--key hot_all-us` 与 `--key ib_hot_all-us` 效果相同。列表输出中的 key 也已去除 `ib_` 前缀（例如显示 `hot_all` 而非 `ib_hot_all`）。
+
 <CliCommand>
 longbridge rank --key ib_hot_all-us
+longbridge rank --key hot_all-us
 longbridge rank --key ib_hot_all-hk
 </CliCommand>
 
@@ -26,7 +29,7 @@ longbridge rank --key ib_hot_all-hk
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| key | string | 是 | 排行榜标签键值，来自 `rank_categories` 的 `second_tags[].key` |
+| key | string | 是 | 排行榜标签键值，来自 `rank_categories` 的 `second_tags[].key`。`ib_` 前缀为可选项（如 `hot_all-us` 与 `ib_hot_all-us` 等效） |
 | need_article | boolean | 否 | 是否返回关联文章，默认 `false` |
 
 ## Request Example

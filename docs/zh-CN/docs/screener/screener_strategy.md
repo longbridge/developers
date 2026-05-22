@@ -12,6 +12,8 @@ headingLevel: 2
 
 根据策略 ID 获取单个选股策略的完整配置，包含所有指标分组和各指标的筛选范围。
 
+接口：`GET /v1/quote/ai/screener/strategy/{id}`（策略 ID 为路径参数）
+
 <CliCommand>
 longbridge screener strategies --id 42
 </CliCommand>

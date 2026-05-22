@@ -12,8 +12,11 @@ headingLevel: 2
 
 Get the stock ranking for a given leaderboard tag key. The key comes from `rank_categories` `second_tags[].key`, e.g. `ib_hot_all-us` (US total hotness).
 
+The `ib_` prefix is optional when passing the key via `--key`: `--key hot_all-us` and `--key ib_hot_all-us` are equivalent. The listing output also shows keys without the `ib_` prefix (e.g. `hot_all` instead of `ib_hot_all`).
+
 <CliCommand>
 longbridge rank --key ib_hot_all-us
+longbridge rank --key hot_all-us
 longbridge rank --key ib_hot_all-hk
 </CliCommand>
 
@@ -26,7 +29,7 @@ longbridge rank --key ib_hot_all-hk
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| key | string | YES | Leaderboard tag key from `rank_categories` `second_tags[].key` |
+| key | string | YES | Leaderboard tag key from `rank_categories` `second_tags[].key`. The `ib_` prefix is optional (e.g. `hot_all-us` works the same as `ib_hot_all-us`) |
 | need_article | boolean | NO | Whether to return associated articles, default `false` |
 
 ## Request Example

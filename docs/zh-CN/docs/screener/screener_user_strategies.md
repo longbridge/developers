@@ -12,8 +12,11 @@ headingLevel: 2
 
 获取当前登录用户创建的自定义选股策略列表。
 
+接口：`GET /v1/quote/ai/screener/strategies/mine`
+
 <CliCommand>
 longbridge screener strategies --mine
+longbridge screener strategies --mine --market HK
 </CliCommand>
 
 <SDKLinks module="screener" klass="ScreenerContext" method="screener_user_strategies" />
@@ -23,7 +26,11 @@ longbridge screener strategies --mine
 
 > **SDK 方法参数。**
 
-此方法无参数（需登录）。
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| market | string | 否 | 市场筛选：`US`、`HK`、`CN`、`SG`，默认 `US` |
+
+需要登录。
 
 ## Request Example
 
