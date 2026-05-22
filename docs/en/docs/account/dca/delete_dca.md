@@ -16,7 +16,7 @@ Permanently stop and delete a recurring investment plan. This action cannot be u
 longbridge dca stop 1225781523156889600
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="delete_dca" />
+<SDKLinks module="dca" klass="DCAContext" method="stop" />
 
 
 ## Parameters

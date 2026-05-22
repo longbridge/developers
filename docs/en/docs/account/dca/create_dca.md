@@ -17,7 +17,7 @@ longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
 longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="create_dca" />
+<SDKLinks module="dca" klass="DCAContext" method="create" />
 
 
 ## Parameters

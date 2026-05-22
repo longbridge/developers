@@ -16,7 +16,7 @@ Get the execution history for a specific DCA plan including trade dates, amounts
 longbridge dca history 1225781523156889600
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="dca_history" />
+<SDKLinks module="dca" klass="DCAContext" method="history" />
 
 
 ## Parameters

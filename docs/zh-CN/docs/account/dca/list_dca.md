@@ -17,7 +17,7 @@ longbridge dca
 longbridge dca --status Active
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="list_dca" />
+<SDKLinks module="dca" klass="DCAContext" method="list" />
 
 
 ## Parameters
