@@ -26,7 +26,6 @@ sidebar_icon: newspaper
 - **MarketContext** — 新增 `top_movers`、`rank_categories`、`rank_list`
 - **新增 ScreenerContext** — `screener_recommend_strategies`、`screener_user_strategies`、`screener_strategy`、`screener_search`、`screener_indicators`
 - 覆盖语言：Rust / Python / Node.js / Java / C / C++ / Go
-- MCP 服务同步新增相同功能
 
 ## 2026-05-15
 

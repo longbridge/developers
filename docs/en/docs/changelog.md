@@ -26,7 +26,6 @@ sidebar_icon: newspaper
 - **MarketContext** — `top_movers`, `rank_categories`, `rank_list`
 - **New ScreenerContext** — `screener_recommend_strategies`, `screener_user_strategies`, `screener_strategy`, `screener_search`, `screener_indicators`
 - Languages: Rust / Python / Node.js / Java / C / C++ / Go
-- MCP server updated with the same new capabilities
 
 ## 2026-05-15
 
