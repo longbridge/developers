@@ -6,7 +6,12 @@ sidebar_position: 3
 
 # longbridge short-positions
 
-US stock short selling data — short interest, short ratio, days to cover, and average daily volume. Only supports US-listed stocks and ETFs. Records are updated bi-monthly by FINRA.
+Short selling position data — short ratio, short share count, and related metrics. Supports both HK and US stocks; the market is auto-detected from the symbol suffix.
+
+- **HK**: HKEX daily data
+- **US**: FINRA bi-monthly data
+
+Add `--trades` to switch to daily short sale volume (distinct from outstanding positions).
 
 <QuotePermission command="short-positions" />
 
@@ -28,14 +33,58 @@ Short Selling Data — TSLA.US
 
 ## Examples
 
-### View short interest history
+### View US short interest history
 
 ```bash
 longbridge short-positions TSLA.US
 longbridge short-positions AAPL.US --count 50
 ```
 
-Returns up to 100 records newest first. Each row shows the settlement date, short ratio (short shares ÷ float), number of short shares, average daily volume, days-to-cover ratio, and closing price on that date.
+Returns up to 100 records newest first. Each row shows the settlement date, short ratio (short shares ÷ float), number of short shares, average daily volume, days-to-cover ratio, and closing price.
+
+### View HK short positions
+
+```bash
+longbridge short-positions 700.HK
+longbridge short-positions 700.HK --count 30
+```
+
+```
+Short Positions — 700.HK
+
+| date       | rate% | amount       | balance          | close  |
+|------------|-------|--------------|------------------|--------|
+| 2026-05-19 | 1.45% | 2,748,900    | 1,256,859,880.00 | 455.20 |
+```
+
+HK fields: settlement date, short ratio, daily short sale amount, outstanding balance, and closing price.
+
+### View daily short sale volume (--trades)
+
+```bash
+longbridge short-positions AAPL.US --trades
+longbridge short-positions 700.HK --trades
+```
+
+US (--trades):
+
+```
+Short Trades — AAPL.US
+
+| date       | rate%  | nus_amount | ny_amount | total_amount |
+|------------|--------|------------|-----------|--------------|
+| 2026-05-18 | 25.61% | 2,179,682  | 0         | 8,510,570    |
+```
+
+HK (--trades):
+
+```
+Short Trades — 700.HK
+
+| date       | rate%  | amount    | balance          | total_amount |
+|------------|--------|-----------|------------------|--------------|
+| 2026-05-18 | 10.65% | 3,592,700 | 1,657,732,820.00 | 33,736,701   |
+```
 
 ### Machine-readable output
 
@@ -60,9 +109,11 @@ longbridge short-positions NVDA.US --format json
 
 | Flag | Description |
 |------|-------------|
+| `--trades` | Show daily short sale volume instead of position balance |
 | `--count` | Number of records (1–100, default: 20) |
 | `--format` | Output format: `table` (default) or `json` |
 
 ## Requirements
 
-US market data subscription required. Only works for US-listed stocks and ETFs.
+- US: US market data subscription required. Only works for US-listed stocks and ETFs.
+- HK: HK market data subscription required.

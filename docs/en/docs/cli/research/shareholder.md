@@ -34,3 +34,50 @@ longbridge shareholder TSLA.US --format json
 ```
 
 Lists the largest shareholders by ownership percentage, including both institutional investors and individual insiders.
+
+### View top 20 shareholders (--top)
+
+```bash
+longbridge shareholder AAPL.US --top
+```
+
+```
+Top 20 Shareholders — AAPL.US
+
+Period: Latest
+
+| shareholder                    | type        | % shares | chg shares | filing_date |
+|--------------------------------|-------------|----------|------------|-------------|
+| The Vanguard Group, Inc.       | Institution | 9.71%    | +0.01%     | 2025/12/31  |
+| BlackRock, Inc.                | Institution | 7.75%    | -0.06%     | 2026/03/31  |
+| ...
+
+Use --object-id <id> to view holding detail for a specific shareholder.
+```
+
+`--top` mode spans multiple reporting periods, includes institutions, individuals, and insiders, and displays the shareholder type (Institution / Individual / Insider).
+
+### View shareholder holding detail (--object-id)
+
+```bash
+longbridge shareholder AAPL.US --object-id 148057
+```
+
+```
+Shareholder Detail: The Vanguard Group, Inc.
+
+Trading History:
+
+Period: Past 1 Year
+  accum_buy: 0.00  accum_sell: 0.00
+```
+
+`--object-id` accepts a shareholder ID from `--top` output and returns that shareholder's historical position changes and trading activity.
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `--top` | Show top 20 shareholders across multiple reporting periods, including institutions and individuals |
+| `--object-id` | View holding detail for a specific shareholder (ID from `--top` output) |
+| `--format` | Output format: `table` (default) or `json` |
