@@ -1,6 +1,6 @@
 ---
 slug: screener-recommend-strategies
-title: 推荐选股策略
+title: 预设选股策略
 sidebar_position: 1
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取平台推荐的选股策略列表，含近期平均日涨跌幅和策略内股票。
+获取平台预设的选股策略列表，含近期平均日涨跌幅和策略内股票。
 
 接口：`GET /v1/quote/ai/screener/strategies/recommend`
 

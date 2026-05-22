@@ -15,7 +15,7 @@ longbridge screener strategies
 ```
 
 ```
-Recommended Strategies
+Preset Strategies
 
 | id | name              | market | description                   |
 |----|-------------------|--------|-------------------------------|
@@ -99,7 +99,7 @@ longbridge screener strategies --mine
 
 | 子命令 | 说明 |
 |--------|------|
-| `strategies` | 列出推荐策略（加 `--mine` 显示自定义策略） |
+| `strategies` | 列出预设策略（加 `--mine` 显示自定义策略） |
 | `strategies --id <id>` | 查看特定策略的筛选条件 |
 | `search` | 执行筛选（`--strategy-id` 或 `--filter`） |
 | `indicators` | 列出所有可用筛选指标 |

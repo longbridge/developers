@@ -1,6 +1,6 @@
 ---
 slug: screener-recommend-strategies
-title: Recommended Screener Strategies
+title: Preset Screener Strategies
 sidebar_position: 1
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the list of platform-recommended stock screener strategies, including recent average daily change and constituent stocks.
+Get the list of platform-preset stock screener strategies, including recent average daily change and constituent stocks.
 
 Endpoint: `GET /v1/quote/ai/screener/strategies/recommend`
 

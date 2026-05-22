@@ -15,7 +15,7 @@ longbridge screener strategies
 ```
 
 ```
-Recommended Strategies
+Preset Strategies
 
 | id | name                    | market | description                              |
 |----|-------------------------|--------|------------------------------------------|
@@ -99,7 +99,7 @@ Lists your saved custom strategies.
 
 | Subcommand | Description |
 |------------|-------------|
-| `strategies` | List recommended strategies (add `--mine` for custom strategies) |
+| `strategies` | List preset strategies (add `--mine` for custom strategies) |
 | `strategies --id <id>` | Show filter conditions for a specific strategy |
 | `search` | Run a screen (`--strategy-id` or `--filter`) |
 | `indicators` | List all available filter indicators |
