@@ -14,7 +14,7 @@ Get all indicator definitions supported by the stock screener, including keys, n
 
 Endpoint: `GET /v1/quote/ai/screener/indicators`
 
-> **Note on JSON output format:** The response is a flat array (no nested groups). The `filter_` prefix is stripped from all `key` values. Technical indicator parameters are available in the `tech_values` field.
+> **SDK response:** The `data` field contains a grouped structure `{"groups": [{...}]}`. The CLI `screener indicators --format json` flattens this to a flat array for convenience.
 
 <CliCommand>
 longbridge screener indicators
@@ -195,37 +195,20 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": [
-    {
-      "id": -1,
-      "key": "market",
-      "name": "Market",
-      "unit": "",
-      "min": "0",
-      "max": "",
-      "tech_values": {}
-    },
-    {
-      "id": 1,
-      "key": "marketcap",
-      "name": "Market Cap",
-      "unit": "bn",
-      "min": "0",
-      "max": "",
-      "tech_values": {}
-    },
-    {
-      "id": 29,
-      "key": "divyld",
-      "name": "Dividend Yield (TTM)",
-      "unit": "%",
-      "min": "0",
-      "max": "100",
-      "tech_values": {}
-    }
-  ]
+  "data": {
+    "groups": [
+      {
+        "group_name": "公司规模与财务",
+        "indicators": [
+          { "id": "1", "key": "marketcap", "name": "市值", "unit": "亿", "min": null, "max": null }
+        ]
+      }
+    ]
+  }
 }
 ```
+
+> The `filter_` prefix is stripped from all `key` values. The `id` field is a string.
 
 ### Response Status
 
@@ -240,14 +223,16 @@ func main() {
 
 <a id="ScreenerIndicatorsResponse"></a>
 
-The response `data` is a flat array of indicator objects. The `filter_` prefix is stripped from all `key` values.
+The SDK response `data` is a grouped structure. The CLI `--format json` output flattens it to a flat array. The `filter_` prefix is stripped from all `key` values.
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | integer | false | Indicator ID |
-| key | string | false | Indicator key for building filter conditions (no `filter_` prefix) |
-| name | string | false | Indicator display name |
-| unit | string | false | Unit (e.g. `%`, `bn`) |
-| min | string | false | Global lower bound for this indicator; empty string means no lower bound |
-| max | string | false | Global upper bound for this indicator; empty string means no upper bound |
-| tech_values | object | false | Technical indicator parameters (for technical indicators only) |
+| groups | object[] | false | Indicator groups |
+| ∟ group_name | string | false | Group name |
+| ∟ indicators | object[] | false | Indicators in this group |
+| ∟ ∟ id | string | false | Indicator ID (string) |
+| ∟ ∟ key | string | false | Indicator key for building filter conditions (no `filter_` prefix) |
+| ∟ ∟ name | string | false | Indicator display name |
+| ∟ ∟ unit | string | false | Unit (e.g. `%`, `亿`) |
+| ∟ ∟ min | string | false | Global lower bound; null means no lower bound |
+| ∟ ∟ max | string | false | Global upper bound; null means no upper bound |

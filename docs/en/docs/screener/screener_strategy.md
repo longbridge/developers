@@ -15,7 +15,7 @@ Get the full configuration of a single stock screener strategy by strategy ID, i
 Endpoint: `GET /v1/quote/ai/screener/strategy/{id}` (strategy ID as path parameter)
 
 <CliCommand>
-longbridge screener strategies --id 42
+longbridge screener run 42
 </CliCommand>
 
 <SDKLinks module="screener" klass="ScreenerContext" method="screener_strategy" />
@@ -196,40 +196,15 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "groups": [
-      {
-        "group_name": "Range",
-        "group_type": "range",
-        "indicators": [
-          {
-            "id": -1,
-            "key": "filter_market",
-            "name": "HK",
-            "unit": "",
-            "min": "",
-            "max": "",
-            "value": "HK",
-            "tech_data": []
-          }
-        ]
-      },
-      {
-        "group_name": "Quote Indicators",
-        "group_type": "Quotes",
-        "indicators": [
-          {
-            "id": 1,
-            "key": "filter_marketcap",
-            "name": "Market Cap",
-            "unit": "bn",
-            "min": "100",
-            "max": "",
-            "value": "",
-            "tech_data": []
-          }
-        ]
-      }
-    ]
+    "id": 19,
+    "name": "今日大涨股票",
+    "market": "US",
+    "type": "platform",
+    "filter": {
+      "filters": [
+        { "key": "prevchg", "min": "2", "max": "", "tech_values": {} }
+      ]
+    }
   }
 }
 ```
@@ -249,15 +224,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| groups | object[] | false | Indicator group list |
-| ∟ group_name | string | false | Group name |
-| ∟ group_type | string | false | Group type (e.g. `range`, `Quotes`, `DividendIndex`) |
-| ∟ indicators | object[] | false | Indicator conditions in this group |
-| ∟ ∟ id | integer | false | Indicator ID |
-| ∟ ∟ key | string | false | Indicator key |
-| ∟ ∟ name | string | false | Indicator display name |
-| ∟ ∟ unit | string | false | Indicator unit (e.g. `%`, `bn`) |
-| ∟ ∟ min | string | false | Minimum value; empty string means no lower bound |
-| ∟ ∟ max | string | false | Maximum value; empty string means no upper bound |
-| ∟ ∟ value | string | false | Fixed value (used for non-range indicators such as market selector) |
-| ∟ ∟ tech_data | array | false | Technical indicator data array |
+| id | integer | false | Strategy ID |
+| name | string | false | Strategy name |
+| market | string | false | Target market |
+| type | string | false | Strategy type |
+| filter | object | false | Filter configuration |
+| ∟ filters | object[] | false | Filter conditions |
+| ∟ ∟ key | string | false | Indicator key (no `filter_` prefix) |
+| ∟ ∟ min | string | false | Lower bound |
+| ∟ ∟ max | string | false | Upper bound |
+| ∟ ∟ tech_values | object | false | Technical indicator params |

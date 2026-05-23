@@ -31,8 +31,10 @@ longbridge screener search --market HK --filter filter_marketcap:100:1000
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | market | string | YES | Market: `US`, `HK`, `CN`, `SG` |
-| strategy_id | integer | NO | Strategy ID; use alone or combined with custom filters |
-| page | integer | NO | Page number starting from 1, default 1 |
+| strategy_id | integer | NO | Strategy ID; use alone or combined with custom conditions |
+| conditions | ScreenerCondition[] | NO | Custom filter conditions (Mode B, when strategy_id is omitted) |
+| show | string[] | NO | Extra indicator keys to include in the response beyond the 7 default columns |
+| page | integer | NO | 0-based page number, default 0 |
 | size | integer | NO | Page size, default 20 |
 
 ## Request Example
@@ -101,7 +103,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              ScreenerContext ctx = ScreenerContext.create(config)) {
-            var resp = ctx.screenerSearch("US", 42L, 1, 20).get();
+            var resp = ctx.screenerSearch("US", 19L, null, List.of(), 0, 20).get();
             System.out.println(resp);
         }
     }
@@ -120,7 +122,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = ScreenerContext::new(config);
-    let resp = ctx.screener_search("US", Some(42), 1, 20).await?;
+    // Mode A: run a strategy
+    let resp = ctx.screener_search("", Some(19), vec![], vec![], 0, 20).await?;
+    println!("{:?}", resp);
+    // Mode B: custom conditions
+    use longbridge::screener::ScreenerCondition;
+    let conditions = vec![ScreenerCondition { key: "pettm".into(), min: "10".into(), max: "50".into(), tech_values: serde_json::json!({}) }];
+    let resp = ctx.screener_search("HK", None, conditions, vec![], 0, 20).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -182,11 +190,24 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.ScreenerSearch(context.Background(), "US", 42, 1, 20)
+	// Mode A: run a strategy
+	stratID := int64(19)
+	resp, err := c.ScreenerSearch(context.Background(), "", &stratID, nil, nil, 0, 20)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v\n", resp)
+
+	// Mode B: custom conditions
+	conditions := []screener.ScreenerCondition{
+		{Key: "pettm", Min: "10", Max: "50"},
+		{Key: "roe", Min: "5"},
+	}
+	resp2, err := c.ScreenerSearch(context.Background(), "HK", nil, conditions, []string{"roe"}, 0, 20)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp2)
 }
 ```
 
@@ -203,8 +224,9 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "total": 87,
+    "total": 88,
     "page": 0,
+    "market": "US",
     "items": [
       {
         "symbol": "AAPL.US",
@@ -246,6 +268,7 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | total | integer | false | Total number of matching stocks |
 | page | integer | false | Current page number (zero-based) |
+| market | string | false | Market of the result set |
 | items | object[] | false | Filtered stock list |
 | ∟ symbol | string | false | Security symbol |
 | ∟ name | string | false | Security name |

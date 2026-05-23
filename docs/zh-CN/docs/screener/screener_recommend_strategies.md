@@ -180,7 +180,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.ScreenerRecommendStrategies(context.Background())
+	resp, err := c.ScreenerRecommendStrategies(context.Background(), "US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -201,27 +201,9 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "screeners": [
-      {
-        "id": "1",
-        "name": "高股息蓝筹股",
-        "groups": [
-          {
-            "group_name": "范围",
-            "group_type": "range",
-            "indicators": [
-              { "id": -1, "key": "filter_market", "name": "港股", "unit": "", "min": "", "max": "", "value": "HK", "tech_data": [] }
-            ]
-          },
-          {
-            "group_name": "分红指标",
-            "group_type": "DividendIndex",
-            "indicators": [
-              { "id": 29, "key": "filter_divyld", "name": "股息率 (TTM)", "unit": "%", "min": "4", "max": "", "value": "", "tech_data": [] }
-            ]
-          }
-        ]
-      }
+    "strategys": [
+      { "id": 19, "name": "今日大涨股票", "type": "platform", "market": "US" },
+      { "id": 20, "name": "今年增长冠军", "type": "platform", "market": "US" }
     ]
   }
 }
@@ -242,18 +224,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| screeners | object[] | false | 策略列表 |
-| ∟ id | string | false | 策略 ID |
+| strategys | object[] | false | 策略列表 |
+| ∟ id | integer | false | 策略 ID（传入 `screener_strategy` 或 `screener_search`） |
 | ∟ name | string | false | 策略名称 |
-| ∟ groups | object[] | false | 策略过滤条件分组 |
-| ∟ ∟ group_name | string | false | 分组名称 |
-| ∟ ∟ group_type | string | false | 分组类型（如 `range`、`Quotes`、`DividendIndex`） |
-| ∟ ∟ indicators | object[] | false | 该分组下的指标条件 |
-| ∟ ∟ ∟ id | integer | false | 指标 ID |
-| ∟ ∟ ∟ key | string | false | 指标键值，可用于 `screener_search` |
-| ∟ ∟ ∟ name | string | false | 指标名称 |
-| ∟ ∟ ∟ unit | string | false | 指标单位 |
-| ∟ ∟ ∟ min | string | false | 策略设定的最小值；空字符串表示无下限 |
-| ∟ ∟ ∟ max | string | false | 策略设定的最大值；空字符串表示无上限 |
-| ∟ ∟ ∟ value | string | false | 固定值（用于非范围型指标，如市场选择器） |
-| ∟ ∟ ∟ tech_data | array | false | 技术指标数据数组 |
+| ∟ type | string | false | `"platform"` 表示平台预设策略 |
+| ∟ market | string | false | 目标市场（如 `"US"`、`"HK"`） |

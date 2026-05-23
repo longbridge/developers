@@ -178,7 +178,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.ScreenerUserStrategies(context.Background())
+	resp, err := c.ScreenerUserStrategies(context.Background(), "US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -199,21 +199,8 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "screeners": [
-      {
-        "id": 42,
-        "name": "My Growth Strategy",
-        "average_day_chg": "+1.24%",
-        "stocks": ["NVDA.US", "AMD.US"],
-        "groups": [
-          {
-            "group_name": "Growth",
-            "indicators": [
-              { "id": 30, "key": "filter_revenue_growth", "name": "Revenue Growth", "unit": "%", "min": 20, "max": null }
-            ]
-          }
-        ]
-      }
+    "strategys": [
+      { "id": 42, "name": "My Growth Strategy", "type": "user", "market": "US" }
     ]
   }
 }

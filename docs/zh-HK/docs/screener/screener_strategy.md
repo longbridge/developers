@@ -15,7 +15,7 @@ headingLevel: 2
 接口：`GET /v1/quote/ai/screener/strategy/{id}`（策略 ID 為路徑參數）
 
 <CliCommand>
-longbridge screener strategies --id 42
+longbridge screener run 42
 </CliCommand>
 
 <SDKLinks module="screener" klass="ScreenerContext" method="screener_strategy" />
@@ -196,40 +196,15 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "groups": [
-      {
-        "group_name": "範圍",
-        "group_type": "range",
-        "indicators": [
-          {
-            "id": -1,
-            "key": "filter_market",
-            "name": "港股",
-            "unit": "",
-            "min": "",
-            "max": "",
-            "value": "HK",
-            "tech_data": []
-          }
-        ]
-      },
-      {
-        "group_name": "行情類指標",
-        "group_type": "Quotes",
-        "indicators": [
-          {
-            "id": 1,
-            "key": "filter_marketcap",
-            "name": "市值",
-            "unit": "億",
-            "min": "100",
-            "max": "",
-            "value": "",
-            "tech_data": []
-          }
-        ]
-      }
-    ]
+    "id": 19,
+    "name": "今日大涨股票",
+    "market": "US",
+    "type": "platform",
+    "filter": {
+      "filters": [
+        { "key": "prevchg", "min": "2", "max": "", "tech_values": {} }
+      ]
+    }
   }
 }
 ```
@@ -249,15 +224,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| groups | object[] | false | 指標分組列表 |
-| ∟ group_name | string | false | 分組名稱 |
-| ∟ group_type | string | false | 分組類型（如 `range`、`Quotes`、`DividendIndex`） |
-| ∟ indicators | object[] | false | 該分組下的指標條件 |
-| ∟ ∟ id | integer | false | 指標 ID |
-| ∟ ∟ key | string | false | 指標鍵值 |
-| ∟ ∟ name | string | false | 指標顯示名稱 |
-| ∟ ∟ unit | string | false | 指標單位（如 `%`、`億` 等） |
-| ∟ ∟ min | string | false | 最小值；空字符串表示無下限 |
-| ∟ ∟ max | string | false | 最大值；空字符串表示無上限 |
-| ∟ ∟ value | string | false | 固定值（用於非範圍型指標，如市場選擇器） |
-| ∟ ∟ tech_data | array | false | 技術指標數據數組 |
+| id | integer | false | 策略 ID |
+| name | string | false | 策略名稱 |
+| market | string | false | 目標市場 |
+| type | string | false | 策略類型 |
+| filter | object | false | 篩選配置 |
+| ∟ filters | object[] | false | 篩選條件列表 |
+| ∟ ∟ key | string | false | 指標鍵值（不含 `filter_` 前綴） |
+| ∟ ∟ min | string | false | 下限 |
+| ∟ ∟ max | string | false | 上限 |
+| ∟ ∟ tech_values | object | false | 技術指標參數 |

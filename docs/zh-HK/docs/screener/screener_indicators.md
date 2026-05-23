@@ -14,7 +14,7 @@ headingLevel: 2
 
 接口：`GET /v1/quote/ai/screener/indicators`
 
-> **JSON 輸出格式說明：** 響應為扁平數組（無嵌套分組），所有 `key` 值已去除 `filter_` 前綴，技術指標參數保存在 `tech_values` 字段中。
+> **SDK 響應：** `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
 
 <CliCommand>
 longbridge screener indicators
@@ -195,37 +195,20 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": [
-    {
-      "id": -1,
-      "key": "market",
-      "name": "市場",
-      "unit": "",
-      "min": "0",
-      "max": "",
-      "tech_values": {}
-    },
-    {
-      "id": 1,
-      "key": "marketcap",
-      "name": "市值",
-      "unit": "億",
-      "min": "0",
-      "max": "",
-      "tech_values": {}
-    },
-    {
-      "id": 29,
-      "key": "divyld",
-      "name": "股息率 (TTM)",
-      "unit": "%",
-      "min": "0",
-      "max": "100",
-      "tech_values": {}
-    }
-  ]
+  "data": {
+    "groups": [
+      {
+        "group_name": "公司規模與財務",
+        "indicators": [
+          { "id": "1", "key": "marketcap", "name": "市值", "unit": "億", "min": null, "max": null }
+        ]
+      }
+    ]
+  }
 }
 ```
+
+> 所有 `key` 值已去除 `filter_` 前綴，`id` 字段為字符串類型。
 
 ### Response Status
 
@@ -240,14 +223,16 @@ func main() {
 
 <a id="ScreenerIndicatorsResponse"></a>
 
-響應 `data` 為扁平指標對象數組，所有 `key` 值已去除 `filter_` 前綴。
+SDK 響應 `data` 為分組結構，CLI `--format json` 輸出會將其展平為扁平數組。所有 `key` 值已去除 `filter_` 前綴。
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | integer | false | 指標 ID |
-| key | string | false | 指標鍵值，用於構建篩選條件（不含 `filter_` 前綴） |
-| name | string | false | 指標顯示名稱 |
-| unit | string | false | 單位（如 `%`、`億`） |
-| min | string | false | 指標全局下限；空字符串表示無下限 |
-| max | string | false | 指標全局上限；空字符串表示無上限 |
-| tech_values | object | false | 技術指標參數（僅技術指標有值） |
+| groups | object[] | false | 指標分組 |
+| ∟ group_name | string | false | 分組名稱 |
+| ∟ indicators | object[] | false | 該分組下的指標 |
+| ∟ ∟ id | string | false | 指標 ID（字符串類型） |
+| ∟ ∟ key | string | false | 指標鍵值，用於構建篩選條件（不含 `filter_` 前綴） |
+| ∟ ∟ name | string | false | 指標顯示名稱 |
+| ∟ ∟ unit | string | false | 單位（如 `%`、`億`） |
+| ∟ ∟ min | string | false | 指標全局下限；null 表示無下限 |
+| ∟ ∟ max | string | false | 指標全局上限；null 表示無上限 |

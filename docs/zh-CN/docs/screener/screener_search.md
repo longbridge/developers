@@ -31,8 +31,10 @@ longbridge screener search --market HK --filter filter_marketcap:100:1000
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | market | string | 是 | 市场：`US`、`HK`、`CN`、`SG` |
-| strategy_id | integer | 否 | 策略 ID；与自定义 filter 二选一，或同时使用 |
-| page | integer | 否 | 页码，从 1 开始，默认 1 |
+| strategy_id | integer | 否 | 策略 ID；与自定义条件二选一，或同时使用 |
+| conditions | ScreenerCondition[] | 否 | 自定义筛选条件（模式 B，不传 strategy_id 时使用） |
+| show | string[] | 否 | 额外需要返回的指标键名，在默认 7 列之外追加 |
+| page | integer | 否 | 页码，从 0 开始，默认 0 |
 | size | integer | 否 | 每页条数，默认 20 |
 
 ## Request Example
@@ -101,7 +103,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              ScreenerContext ctx = ScreenerContext.create(config)) {
-            var resp = ctx.screenerSearch("US", 42L, 1, 20).get();
+            var resp = ctx.screenerSearch("US", 19L, null, List.of(), 0, 20).get();
             System.out.println(resp);
         }
     }
@@ -120,7 +122,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = ScreenerContext::new(config);
-    let resp = ctx.screener_search("US", Some(42), 1, 20).await?;
+    // 模式 A：运行策略
+    let resp = ctx.screener_search("", Some(19), vec![], vec![], 0, 20).await?;
+    println!("{:?}", resp);
+    // 模式 B：自定义条件
+    use longbridge::screener::ScreenerCondition;
+    let conditions = vec![ScreenerCondition { key: "pettm".into(), min: "10".into(), max: "50".into(), tech_values: serde_json::json!({}) }];
+    let resp = ctx.screener_search("HK", None, conditions, vec![], 0, 20).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -182,11 +190,24 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.ScreenerSearch(context.Background(), "US", 42, 1, 20)
+	// 模式 A：运行策略
+	stratID := int64(19)
+	resp, err := c.ScreenerSearch(context.Background(), "", &stratID, nil, nil, 0, 20)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v\n", resp)
+
+	// 模式 B：自定义条件
+	conditions := []screener.ScreenerCondition{
+		{Key: "pettm", Min: "10", Max: "50"},
+		{Key: "roe", Min: "5"},
+	}
+	resp2, err := c.ScreenerSearch(context.Background(), "HK", nil, conditions, []string{"roe"}, 0, 20)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp2)
 }
 ```
 
@@ -203,8 +224,9 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "total": 87,
+    "total": 88,
     "page": 0,
+    "market": "US",
     "items": [
       {
         "symbol": "AAPL.US",
@@ -246,6 +268,7 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | total | integer | false | 满足条件的股票总数 |
 | page | integer | false | 当前页码（从零开始） |
+| market | string | false | 结果集的市场 |
 | items | object[] | false | 筛选结果股票列表 |
 | ∟ symbol | string | false | 证券代码 |
 | ∟ name | string | false | 证券名称 |

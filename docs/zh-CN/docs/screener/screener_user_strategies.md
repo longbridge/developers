@@ -178,7 +178,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.ScreenerUserStrategies(context.Background())
+	resp, err := c.ScreenerUserStrategies(context.Background(), "US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -199,21 +199,8 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "screeners": [
-      {
-        "id": 42,
-        "name": "我的成长股策略",
-        "average_day_chg": "+1.24%",
-        "stocks": ["NVDA.US", "AMD.US"],
-        "groups": [
-          {
-            "group_name": "成长性",
-            "indicators": [
-              { "id": 30, "key": "filter_revenue_growth", "name": "营收增速", "unit": "%", "min": 20, "max": null }
-            ]
-          }
-        ]
-      }
+    "strategys": [
+      { "id": 42, "name": "我的成长股策略", "type": "user", "market": "US" }
     ]
   }
 }

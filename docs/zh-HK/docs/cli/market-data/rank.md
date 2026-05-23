@@ -17,22 +17,24 @@ longbridge rank
 ```
 
 ```
-Rank Categories
+Ranking Categories (use second-level key with --key)
 
-Total Heat:
-  ib_hot_all-us   美股
-  ib_hot_all-hk   港股
-  ib_hot_all-cn   A 股
-
-Heat Rising:
-  ib_hot_up-us    美股
-  ib_hot_up-hk    港股
-  ib_hot_up-cn    A 股
-
-Heat Falling:
-  ib_hot_down-us  美股
-  ib_hot_down-hk  港股
-  ib_hot_down-cn  A 股
+| key            | name   | sub-key           | market |
+|----------------|--------|-------------------|--------|
+| hot_all        | 总热度 | hot_all-us        | US     |
+| hot_all        | 总热度 | hot_all-hk        | HK     |
+| hot_up         | 热度上升 | hot_up-us       | US     |
+| hot_up         | 热度上升 | hot_up-hk       | HK     |
+| trade_heat     | 热门交易 | trade_heat-us   | US     |
+| trade_heat     | 热门交易 | trade_heat-hk   | HK     |
+| discuss_heat   | 热议   | discuss_heat-us   | US     |
+| discuss_heat   | 热议   | discuss_heat-hk   | HK     |
+| discuss_heat   | 热议   | discuss_heat-cn   | CN     |
+| discuss_heat   | 热议   | discuss_heat-sg   | SG     |
+| watchlist_heat | 关注度 | watchlist_heat-us | US     |
+| watchlist_heat | 关注度 | watchlist_heat-hk | HK     |
+| watchlist_heat | 关注度 | watchlist_heat-cn | CN     |
+| watchlist_heat | 关注度 | watchlist_heat-sg | SG     |
 ```
 
 ## 示例
@@ -40,29 +42,30 @@ Heat Falling:
 ### 查看美股總熱度排行
 
 ```bash
-longbridge rank --key ib_hot_all-us
+longbridge rank --key hot_all-us
 ```
 
-```
-Rank — ib_hot_all-us
+`--key` 值為上表中的 sub-key（如 `hot_all-us`）。CLI 同時接受帶 `ib_` 前綴的完整形式（如 `ib_hot_all-us`），兩者均可。
 
-| # | symbol  | name    | last_done | chg     | inflow          |
-|---|---------|---------|-----------|---------|-----------------|
-| 1 | MU.US   | 美光科技 | 698.74    | +4.76%  | -347,041,642    |
-| 2 | NVDA.US | 英偉達   | 131.80    | +3.21%  | +1,234,567,890  |
-| 3 | AAPL.US | 蘋果     | 205.10    | -0.42%  | +567,890,123    |
+```
+Rank — hot_all-us
+
+| rank | symbol  | name  | price   | chg%    | pre/post | pre/post chg% |
+|------|---------|-------|---------|---------|----------|---------------|
+| 1    | NVDA.US | 英偉達 | 215.330 | -0.0190 | 214.297  | -0.0048       |
+| 2    | AAPL.US | 蘋果  | 205.100 | -0.42%  | 204.800  | -0.0015       |
 ```
 
 ### 查看港股總熱度排行
 
 ```bash
-longbridge rank --key ib_hot_all-hk
+longbridge rank --key hot_all-hk
 ```
 
 ### 查看熱度上升榜（前 20）
 
 ```bash
-longbridge rank --key ib_hot_up-us --count 20
+longbridge rank --key hot_up-us --count 20
 ```
 
 ### 查看所有分類
@@ -71,18 +74,74 @@ longbridge rank --key ib_hot_up-us --count 20
 longbridge rank
 ```
 
-不傳 `--key` 時列出所有可用的排行榜 key，可直接複製用於 `--key` 參數。
+不傳 `--key` 時以表格形式顯示所有可用的排行榜分類和對應 sub-key。
+
+### JSON 輸出——傳入 `--key`
+
+```bash
+longbridge rank --key hot_all-us --format json
+```
+
+```json
+{
+  "bmp": false,
+  "lists": [
+    {
+      "counter_id": "ST/US/NVDA",
+      "name": "英偉達",
+      "last_done": "215.330",
+      "chg": "-0.0190",
+      "pre_post_price": "214.297",
+      "pre_post_chg": "-0.0048",
+      "inflow": "-750205778"
+    }
+  ]
+}
+```
+
+JSON 欄位說明：
+
+| 欄位 | 說明 |
+|------|------|
+| `bmp` | 是否為盤前/盤後行情 |
+| `lists[].counter_id` | 合約標識符（`ST/<市場>/<代碼>`） |
+| `lists[].name` | 股票名稱 |
+| `lists[].last_done` | 最新價 |
+| `lists[].chg` | 漲跌幅（小數形式） |
+| `lists[].pre_post_price` | 盤前/盤後價格 |
+| `lists[].pre_post_chg` | 盤前/盤後漲跌幅（小數形式） |
+| `lists[].inflow` | 資金淨流入（負數為淨流出，單位：分） |
+
+### JSON 輸出——不傳 `--key`
+
+```bash
+longbridge rank --format json
+```
+
+```json
+{
+  "first_tags": [
+    {
+      "key": "ib_hot_all",
+      "name": "总热度",
+      "second_tags": [
+        { "key": "ib_hot_all-us", "market": "US", "name": "美股" },
+        { "key": "ib_hot_all-hk", "market": "HK", "name": "港股" }
+      ]
+    }
+  ]
+}
+```
 
 ## 參數
 
 | 參數 | 說明 |
 |------|------|
-| `--key` | 排行榜 key（從無參數調用的輸出中獲取） |
-| `--market` | 市場篩選，用於無參數時的分類清單（預設：`US`） |
+| `--key` | 排行榜 sub-key（來自無參數時的表格）。`hot_all-us` 和 `ib_hot_all-us` 兩種格式均可接受。 |
 | `--count` | 返回筆數（預設：20） |
 | `--format` | 輸出格式：`table`（預設）或 `json` |
 
 ## 注意事項
 
 - 人氣排行綜合考量交易熱度、社群討論量、關注數等多維指標，與純價格漲跌排行不同
-- `inflow` 為當日資金淨流入（正值流入，負值流出）
+- 表格展示的 sub-key 不含 `ib_` 前綴；原始 JSON（無 `--key`）的鍵名保留 `ib_` 前綴

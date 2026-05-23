@@ -18,12 +18,11 @@ longbridge short-trades AAPL.US
 
 ```
 Short Trades — AAPL.US
-Updated: 2026-05-18T04:00:00Z
 
-| date                     | rate%  | nus_amount | ny_amount | total_amount | close   |
-|--------------------------|--------|------------|-----------|--------------|---------|
-| 2026-05-18T04:00:00Z    | 25.61% | 2,179,682  | 0         | 8,510,570    | 297.840 |
-| 2026-05-17T04:00:00Z    | 36.43% | 5,748,485  | 0         | 15,778,974   | 300.230 |
+| date       | nas_short | ny_short | total_vol  | rate%  | close   |
+|------------|-----------|----------|------------|--------|---------|
+| 2026-05-22 | 3,809,598 | 0        | 10,564,290 | 36.06% | 308.820 |
+| 2026-05-21 | 3,485,781 | 0        | 9,375,861  | 37.18% | 304.990 |
 ```
 
 ## 示例
@@ -39,12 +38,47 @@ longbridge short-trades AAPL.US --count 30
 
 | 字段 | 说明 |
 |------|------|
-| `date` | 交易日（含时区） |
+| `date` | 交易日（`YYYY-MM-DD`） |
+| `nas_short` | 纳斯达克/全国交易系统沽空股数 |
+| `ny_short` | 纽交所（NYSE）沽空股数 |
+| `total_vol` | 当日总沽空股数 |
 | `rate%` | 沽空量占当日总成交量的比例 |
-| `nus_amount` | 全国交易系统（NUS）沽空股数 |
-| `ny_amount` | 纽交所（NYSE）沽空股数 |
-| `total_amount` | 当日总沽空股数 |
 | `close` | 当日收盘价 |
+
+### 美股 JSON 输出
+
+```bash
+longbridge short-trades AAPL.US --format json
+```
+
+```json
+{
+  "counter_id": "ST/US/AAPL",
+  "data": [
+    {
+      "close": "308.820",
+      "nus_amount": "3809598",
+      "ny_amount": "0",
+      "rate": "0.3606",
+      "timestamp": "1779422400",
+      "total_amount": "10405642"
+    }
+  ],
+  "sources": 1
+}
+```
+
+美股 JSON 字段说明：
+
+| 字段 | 说明 |
+|------|------|
+| `counter_id` | 合约标识符（`ST/US/<代码>`） |
+| `data[].timestamp` | Unix 时间戳（秒） |
+| `data[].nus_amount` | 纳斯达克/全国交易系统沽空股数 |
+| `data[].ny_amount` | 纽交所（NYSE）沽空股数 |
+| `data[].total_amount` | 当日总沽空股数 |
+| `data[].rate` | 沽空量占当日总成交量的比例 |
+| `data[].close` | 当日收盘价 |
 
 ### 查看港股每日沽空成交量
 
@@ -55,23 +89,56 @@ longbridge short-trades 700.HK --count 30
 
 ```
 Short Trades — 700.HK
-Updated: 2026-05-18T16:00:00Z
 
-| date                     | rate%  | amount    | balance          | total_amount | close |
-|--------------------------|--------|-----------|------------------|--------------|-------|
-| 2026-05-18T16:00:00Z    | 10.65% | 3,592,700 | 1,657,732,820.00 | 33,736,701   | 460.0 |
+| date       | rate%  | short_shares | balance          | total_vol  | close |
+|------------|--------|--------------|------------------|------------|-------|
+| 2026-05-21 | 8.16%  | 1,957,600    | 865,793,700.00   | 23,998,219 | 441.4 |
 ```
 
 港股字段说明：
 
 | 字段 | 说明 |
 |------|------|
-| `date` | 交易日（含时区） |
-| `rate%` | 沽空量占当日总成交量的比例 |
-| `amount` | 当日沽空股数 |
+| `date` | 交易日（`YYYY-MM-DD`） |
+| `short_shares` | 当日沽空股数 |
 | `balance` | 未平仓沽空余额（港元） |
-| `total_amount` | 市场当日总成交股数 |
+| `total_vol` | 市场当日总成交股数 |
+| `rate%` | 沽空量占当日总成交量的比例 |
 | `close` | 当日收盘价 |
+
+### 港股 JSON 输出
+
+```bash
+longbridge short-trades 700.HK --format json
+```
+
+```json
+{
+  "counter_id": "ST/HK/700",
+  "data": [
+    {
+      "amount": "1957600",
+      "balance": "865793700.00",
+      "close": "441.4",
+      "rate": "0.0816",
+      "timestamp": "1779379200",
+      "total_amount": "23998219"
+    }
+  ]
+}
+```
+
+港股 JSON 字段说明：
+
+| 字段 | 说明 |
+|------|------|
+| `counter_id` | 合约标识符（`ST/HK/<代码>`） |
+| `data[].timestamp` | Unix 时间戳（秒） |
+| `data[].amount` | 当日沽空股数 |
+| `data[].balance` | 未平仓沽空余额（港元） |
+| `data[].total_amount` | 市场当日总成交股数 |
+| `data[].rate` | 沽空量占当日总成交量的比例 |
+| `data[].close` | 当日收盘价 |
 
 ### 与 short-positions 的区别
 

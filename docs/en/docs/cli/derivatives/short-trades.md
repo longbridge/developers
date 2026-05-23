@@ -18,12 +18,11 @@ longbridge short-trades AAPL.US
 
 ```
 Short Trades — AAPL.US
-Updated: 2026-05-18T04:00:00Z
 
-| date                     | rate%  | nus_amount | ny_amount | total_amount | close   |
-|--------------------------|--------|------------|-----------|--------------|---------|
-| 2026-05-18T04:00:00Z    | 25.61% | 2,179,682  | 0         | 8,510,570    | 297.840 |
-| 2026-05-17T04:00:00Z    | 36.43% | 5,748,485  | 0         | 15,778,974   | 300.230 |
+| date       | nas_short | ny_short | total_vol  | rate%  | close   |
+|------------|-----------|----------|------------|--------|---------|
+| 2026-05-22 | 3,809,598 | 0        | 10,564,290 | 36.06% | 308.820 |
+| 2026-05-21 | 3,485,781 | 0        | 9,375,861  | 37.18% | 304.990 |
 ```
 
 ## Examples
@@ -39,12 +38,47 @@ US field reference:
 
 | Field | Description |
 |-------|-------------|
-| `date` | Trading date (with timezone) |
+| `date` | Trading date (`YYYY-MM-DD`) |
+| `nas_short` | Short volume on Nasdaq/national trading systems |
+| `ny_short` | Short volume on NYSE |
+| `total_vol` | Total short volume for the day |
 | `rate%` | Short volume as a percentage of total daily volume |
-| `nus_amount` | Short volume on national trading systems (NUS) |
-| `ny_amount` | Short volume on NYSE |
-| `total_amount` | Total short volume for the day |
 | `close` | Closing price for the day |
+
+### US JSON output
+
+```bash
+longbridge short-trades AAPL.US --format json
+```
+
+```json
+{
+  "counter_id": "ST/US/AAPL",
+  "data": [
+    {
+      "close": "308.820",
+      "nus_amount": "3809598",
+      "ny_amount": "0",
+      "rate": "0.3606",
+      "timestamp": "1779422400",
+      "total_amount": "10564290"
+    }
+  ],
+  "sources": 1
+}
+```
+
+JSON field reference (US):
+
+| Field | Description |
+|-------|-------------|
+| `counter_id` | Internal counter ID for the symbol |
+| `data[].timestamp` | Trading date as Unix timestamp (seconds) |
+| `data[].nus_amount` | Short volume on national trading systems (NUS/Nasdaq) |
+| `data[].ny_amount` | Short volume on NYSE |
+| `data[].total_amount` | Total short volume for the day |
+| `data[].rate` | Short volume as a ratio (e.g. `"0.3606"` = 36.06%) |
+| `data[].close` | Closing price for the day |
 
 ### View HK daily short sale volume
 
@@ -55,23 +89,56 @@ longbridge short-trades 700.HK --count 30
 
 ```
 Short Trades — 700.HK
-Updated: 2026-05-18T16:00:00Z
 
-| date                     | rate%  | amount    | balance          | total_amount | close |
-|--------------------------|--------|-----------|------------------|--------------|-------|
-| 2026-05-18T16:00:00Z    | 10.65% | 3,592,700 | 1,657,732,820.00 | 33,736,701   | 460.0 |
+| date       | rate%  | short_shares | balance          | total_vol  | close |
+|------------|--------|--------------|------------------|------------|-------|
+| 2026-05-21 | 8.16%  | 1,957,600    | 865,793,700.00   | 23,998,219 | 441.4 |
 ```
 
 HK field reference:
 
 | Field | Description |
 |-------|-------------|
-| `date` | Trading date (with timezone) |
-| `rate%` | Short volume as a percentage of total daily volume |
-| `amount` | Short shares sold for the day |
+| `date` | Trading date (`YYYY-MM-DD`) |
+| `short_shares` | Short shares sold for the day |
 | `balance` | Outstanding short selling balance (HKD) |
-| `total_amount` | Total market shares traded for the day |
+| `total_vol` | Total market shares traded for the day |
+| `rate%` | Short volume as a percentage of total daily volume |
 | `close` | Closing price for the day |
+
+### HK JSON output
+
+```bash
+longbridge short-trades 700.HK --format json
+```
+
+```json
+{
+  "counter_id": "ST/HK/700",
+  "data": [
+    {
+      "amount": "1957600",
+      "balance": "865793700.00",
+      "close": "441.4",
+      "rate": "0.0816",
+      "timestamp": "1779379200",
+      "total_amount": "23998219"
+    }
+  ]
+}
+```
+
+JSON field reference (HK):
+
+| Field | Description |
+|-------|-------------|
+| `counter_id` | Internal counter ID for the symbol |
+| `data[].timestamp` | Trading date as Unix timestamp (seconds) |
+| `data[].amount` | Short shares sold for the day |
+| `data[].balance` | Outstanding short selling balance (HKD) |
+| `data[].total_amount` | Total market shares traded for the day |
+| `data[].rate` | Short volume ratio (e.g. `"0.0816"` = 8.16%) |
+| `data[].close` | Closing price for the day |
 
 ### Difference from short-positions
 
