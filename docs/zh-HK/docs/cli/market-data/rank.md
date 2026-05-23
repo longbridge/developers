@@ -87,7 +87,7 @@ longbridge rank --key hot_all-us --format json
   "bmp": false,
   "lists": [
     {
-      "counter_id": "ST/US/NVDA",
+      "symbol": "NVDA.US",
       "name": "英偉達",
       "last_done": "215.330",
       "chg": "-0.0190",
@@ -104,7 +104,7 @@ JSON 欄位說明：
 | 欄位 | 說明 |
 |------|------|
 | `bmp` | 是否為盤前/盤後行情 |
-| `lists[].counter_id` | 合約標識符（`ST/<市場>/<代碼>`） |
+| `lists[].symbol` | `CODE.MARKET` 格式的標的代碼 |
 | `lists[].name` | 股票名稱 |
 | `lists[].last_done` | 最新價 |
 | `lists[].chg` | 漲跌幅（小數形式） |

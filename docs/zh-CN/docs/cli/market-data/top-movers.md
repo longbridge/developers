@@ -71,6 +71,7 @@ longbridge top-movers --market US --format json
       "alert_type": 11,
       "timestamp": "1779471885",
       "stock": {
+        "symbol": "TSLA.US",
         "code": "TSLA",
         "market": "US",
         "name": "特斯拉",
@@ -91,6 +92,7 @@ JSON 字段说明：
 | `events[].alert_reason` | 异动原因描述 |
 | `events[].alert_type` | 异动类型编码 |
 | `events[].timestamp` | 异动时间（Unix 时间戳，秒） |
+| `events[].stock.symbol` | `CODE.MARKET` 格式的标的代码（如 `TSLA.US`） |
 | `events[].stock.code` | 股票代码（不含市场后缀） |
 | `events[].stock.market` | 市场（`US`、`HK`、`CN`、`SG`） |
 | `events[].stock.name` | 股票名称 |

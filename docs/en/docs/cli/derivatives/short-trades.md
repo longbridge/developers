@@ -53,7 +53,7 @@ longbridge short-trades AAPL.US --format json
 
 ```json
 {
-  "counter_id": "ST/US/AAPL",
+  "symbol": "AAPL.US",
   "data": [
     {
       "close": "308.820",
@@ -72,7 +72,7 @@ JSON field reference (US):
 
 | Field | Description |
 |-------|-------------|
-| `counter_id` | Internal counter ID for the symbol |
+| `symbol` | Symbol in `CODE.MARKET` format |
 | `data[].timestamp` | Trading date as Unix timestamp (seconds) |
 | `data[].nus_amount` | Short volume on national trading systems (NUS/Nasdaq) |
 | `data[].ny_amount` | Short volume on NYSE |
@@ -114,7 +114,7 @@ longbridge short-trades 700.HK --format json
 
 ```json
 {
-  "counter_id": "ST/HK/700",
+  "symbol": "700.HK",
   "data": [
     {
       "amount": "1957600",
@@ -132,7 +132,7 @@ JSON field reference (HK):
 
 | Field | Description |
 |-------|-------------|
-| `counter_id` | Internal counter ID for the symbol |
+| `symbol` | Symbol in `CODE.MARKET` format |
 | `data[].timestamp` | Trading date as Unix timestamp (seconds) |
 | `data[].amount` | Short shares sold for the day |
 | `data[].balance` | Outstanding short selling balance (HKD) |

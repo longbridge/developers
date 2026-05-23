@@ -53,7 +53,7 @@ longbridge short-trades AAPL.US --format json
 
 ```json
 {
-  "counter_id": "ST/US/AAPL",
+  "symbol": "AAPL.US",
   "data": [
     {
       "close": "308.820",
@@ -72,7 +72,7 @@ longbridge short-trades AAPL.US --format json
 
 | 欄位 | 說明 |
 |------|------|
-| `counter_id` | 合約標識符（`ST/US/<代碼>`） |
+| `symbol` | `CODE.MARKET` 格式的標的代碼 |
 | `data[].timestamp` | Unix 時間戳（秒） |
 | `data[].nus_amount` | 納斯達克/全國交易系統沽空股數 |
 | `data[].ny_amount` | 紐交所（NYSE）沽空股數 |
@@ -114,7 +114,7 @@ longbridge short-trades 700.HK --format json
 
 ```json
 {
-  "counter_id": "ST/HK/700",
+  "symbol": "700.HK",
   "data": [
     {
       "amount": "1957600",
@@ -132,7 +132,7 @@ longbridge short-trades 700.HK --format json
 
 | 欄位 | 說明 |
 |------|------|
-| `counter_id` | 合約標識符（`ST/HK/<代碼>`） |
+| `symbol` | `CODE.MARKET` 格式的標的代碼 |
 | `data[].timestamp` | Unix 時間戳（秒） |
 | `data[].amount` | 當日沽空股數 |
 | `data[].balance` | 未平倉沽空餘額（港元） |

@@ -87,7 +87,7 @@ longbridge rank --key hot_all-us --format json
   "bmp": false,
   "lists": [
     {
-      "counter_id": "ST/US/NVDA",
+      "symbol": "NVDA.US",
       "name": "英伟达",
       "last_done": "215.330",
       "chg": "-0.0190",
@@ -103,7 +103,7 @@ Key JSON fields:
 
 | Field | Description |
 |-------|-------------|
-| `lists[].counter_id` | Internal counter ID (e.g. `ST/US/NVDA`) |
+| `lists[].symbol` | Symbol in `CODE.MARKET` format |
 | `lists[].name` | Stock name |
 | `lists[].last_done` | Last traded price |
 | `lists[].chg` | Price change ratio (e.g. `-0.0190` = −1.90%) |
