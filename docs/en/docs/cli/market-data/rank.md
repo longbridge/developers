@@ -45,7 +45,6 @@ Ranking Categories (use second-level key with --key)
 longbridge rank --key hot_all-us
 ```
 
-The `--key` value is the sub-key shown in the table above (e.g. `hot_all-us`). The CLI also accepts the full `ib_` prefixed form (e.g. `ib_hot_all-us`) — both work.
 
 ```
 Rank — hot_all-us
@@ -121,11 +120,11 @@ longbridge rank --format json
 {
   "first_tags": [
     {
-      "key": "ib_hot_all",
+      "key": "hot_all",
       "name": "总热度",
       "second_tags": [
-        { "key": "ib_hot_all-us", "market": "US", "name": "美股" },
-        { "key": "ib_hot_all-hk", "market": "HK", "name": "港股" }
+        { "key": "hot_all-us", "market": "US", "name": "美股" },
+        { "key": "hot_all-hk", "market": "HK", "name": "港股" }
       ]
     }
   ]
@@ -136,11 +135,10 @@ longbridge rank --format json
 
 | Flag | Description |
 |------|-------------|
-| `--key` | Rank category sub-key (from the no-args table). Both `hot_all-us` and `ib_hot_all-us` are accepted. |
+| `--key` | Rank category sub-key (from the no-args table, e.g. `hot_all-us`) |
 | `--count` | Number of results (default: 20) |
 | `--format` | Output format: `table` (default) or `json` |
 
 ## Notes
 
 - Rankings are a composite of trading volume, community discussion, watchlist additions, and more — not simply price performance
-- The pretty table shows sub-keys without the `ib_` prefix; the raw JSON (no `--key`) retains the `ib_` prefix in keys

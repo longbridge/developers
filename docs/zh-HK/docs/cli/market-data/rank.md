@@ -45,7 +45,7 @@ Ranking Categories (use second-level key with --key)
 longbridge rank --key hot_all-us
 ```
 
-`--key` 值為上表中的 sub-key（如 `hot_all-us`）。CLI 同時接受帶 `ib_` 前綴的完整形式（如 `ib_hot_all-us`），兩者均可。
+`--key` 值為上表中的 sub-key（如 `hot_all-us`）。
 
 ```
 Rank — hot_all-us
@@ -122,11 +122,11 @@ longbridge rank --format json
 {
   "first_tags": [
     {
-      "key": "ib_hot_all",
+      "key": "hot_all",
       "name": "总热度",
       "second_tags": [
-        { "key": "ib_hot_all-us", "market": "US", "name": "美股" },
-        { "key": "ib_hot_all-hk", "market": "HK", "name": "港股" }
+        { "key": "hot_all-us", "market": "US", "name": "美股" },
+        { "key": "hot_all-hk", "market": "HK", "name": "港股" }
       ]
     }
   ]
@@ -137,11 +137,10 @@ longbridge rank --format json
 
 | 參數 | 說明 |
 |------|------|
-| `--key` | 排行榜 sub-key（來自無參數時的表格）。`hot_all-us` 和 `ib_hot_all-us` 兩種格式均可接受。 |
+| `--key` | 排行榜 sub-key（來自無參數時的表格，如 `hot_all-us`） |
 | `--count` | 返回筆數（預設：20） |
 | `--format` | 輸出格式：`table`（預設）或 `json` |
 
 ## 注意事項
 
 - 人氣排行綜合考量交易熱度、社群討論量、關注數等多維指標，與純價格漲跌排行不同
-- 表格展示的 sub-key 不含 `ib_` 前綴；原始 JSON（無 `--key`）的鍵名保留 `ib_` 前綴

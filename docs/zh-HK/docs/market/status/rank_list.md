@@ -10,14 +10,12 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-根據排行榜標籤 key 獲取股票排行。key 來自 `rank_categories` 的 `second_tags[].key`，例如 `ib_hot_all-us`（美股總熱度）。
+根據排行榜標籤 key 獲取股票排行。key 來自 `rank_categories` 的 `second_tags[].key`，例如 `hot_all-us`（美股總熱度）。
 
-`--key` 參數中的 `ib_` 前綴為可選項：`--key hot_all-us` 與 `--key ib_hot_all-us` 效果相同。列表輸出中的 key 也已去除 `ib_` 前綴（例如顯示 `hot_all` 而非 `ib_hot_all`）。
 
 <CliCommand>
-longbridge rank --key ib_hot_all-us
 longbridge rank --key hot_all-us
-longbridge rank --key ib_hot_all-hk
+longbridge rank --key hot_all-hk
 </CliCommand>
 
 <SDKLinks module="market" klass="MarketContext" method="rank_list" />
@@ -29,7 +27,7 @@ longbridge rank --key ib_hot_all-hk
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| key | string | 是 | 排行榜標籤鍵值，來自 `rank_categories` 的 `second_tags[].key`。`ib_` 前綴為可選項（如 `hot_all-us` 與 `ib_hot_all-us` 等效） |
+| key | string | 是 | 排行榜標籤鍵值，來自 `rank_categories` 的 `second_tags[].key` |
 | need_article | boolean | 否 | 是否返回關聯文章，默認 `false` |
 
 ## Request Example
@@ -44,7 +42,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = MarketContext(config)
 
-resp = ctx.rank_list("ib_hot_all-us")
+resp = ctx.rank_list("hot_all-us")
 print(resp)
 ```
 
@@ -60,7 +58,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncMarketContext.create(config)
 
-    resp = await ctx.rank_list("ib_hot_all-us", need_article=False)
+    resp = await ctx.rank_list("hot_all-us", need_article=False)
     print(resp)
 
 if __name__ == "__main__":
@@ -79,7 +77,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = MarketContext.new(config)
-  const resp = await ctx.rankList('ib_hot_all-us', false)
+  const resp = await ctx.rankList('hot_all-us', false)
   console.log(resp)
 }
 main().catch(console.error)
@@ -97,7 +95,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              MarketContext ctx = MarketContext.create(config)) {
-            var resp = ctx.getRankList("ib_hot_all-us", false).get();
+            var resp = ctx.getRankList("hot_all-us", false).get();
             System.out.println(resp);
         }
     }
@@ -116,7 +114,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = MarketContext::new(config);
-    let resp = ctx.rank_list("ib_hot_all-us", false).await?;
+    let resp = ctx.rank_list("hot_all-us", false).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -139,7 +137,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             MarketContext ctx = MarketContext::create(config);
-            ctx.rank_list("ib_hot_all-us", false, [](auto resp) {
+            ctx.rank_list("hot_all-us", false, [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -178,7 +176,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.RankList(context.Background(), "ib_hot_all-us", false)
+	resp, err := c.RankList(context.Background(), "hot_all-us", false)
 	if err != nil {
 		log.Fatal(err)
 	}
