@@ -11,7 +11,6 @@ Short selling position data — short ratio, short share count, and related metr
 - **HK**: HKEX daily data
 - **US**: FINRA bi-monthly data
 
-Add `--trades` to switch to daily short sale volume (distinct from outstanding positions).
 
 <QuotePermission command="short-positions" />
 
@@ -59,33 +58,6 @@ Short Positions — 700.HK
 
 HK fields: settlement date, short ratio, daily short sale amount, outstanding balance, and closing price.
 
-### View daily short sale volume (--trades)
-
-```bash
-longbridge short-positions AAPL.US --trades
-longbridge short-positions 700.HK --trades
-```
-
-US (--trades):
-
-```
-Short Trades — AAPL.US
-
-| date       | rate%  | nus_amount | ny_amount | total_amount |
-|------------|--------|------------|-----------|--------------|
-| 2026-05-18 | 25.61% | 2,179,682  | 0         | 8,510,570    |
-```
-
-HK (--trades):
-
-```
-Short Trades — 700.HK
-
-| date       | rate%  | amount    | balance          | total_amount |
-|------------|--------|-----------|------------------|--------------|
-| 2026-05-18 | 10.65% | 3,592,700 | 1,657,732,820.00 | 33,736,701   |
-```
-
 ### Machine-readable output
 
 ```bash
@@ -109,7 +81,6 @@ longbridge short-positions NVDA.US --format json
 
 | Flag | Description |
 |------|-------------|
-| `--trades` | Show daily short sale volume instead of position balance |
 | `--count` | Number of records (1–100, default: 20) |
 | `--format` | Output format: `table` (default) or `json` |
 

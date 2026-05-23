@@ -11,7 +11,6 @@ sidebar_position: 3
 - **港股**：港交所每日数据
 - **美股**：FINRA 每两周更新一次
 
-加 `--trades` 可切换为每日沽空成交量（区别于持仓余额）。
 
 <QuotePermission command="short-positions" />
 
@@ -59,33 +58,6 @@ Short Positions — 700.HK
 
 港股返回字段：结算日、空头比例、当日沽空金额、未平仓余额及收盘价。
 
-### 查看每日沽空成交量（--trades）
-
-```bash
-longbridge short-positions AAPL.US --trades
-longbridge short-positions 700.HK --trades
-```
-
-美股（--trades）：
-
-```
-Short Trades — AAPL.US
-
-| date       | rate%  | nus_amount | ny_amount | total_amount |
-|------------|--------|------------|-----------|--------------|
-| 2026-05-18 | 25.61% | 2,179,682  | 0         | 8,510,570    |
-```
-
-港股（--trades）：
-
-```
-Short Trades — 700.HK
-
-| date       | rate%  | amount    | balance          | total_amount |
-|------------|--------|-----------|------------------|--------------|
-| 2026-05-18 | 10.65% | 3,592,700 | 1,657,732,820.00 | 33,736,701   |
-```
-
 ### 机器可读格式
 
 ```bash
@@ -109,7 +81,6 @@ longbridge short-positions NVDA.US --format json
 
 | 参数 | 说明 |
 |------|------|
-| `--trades` | 显示每日沽空成交量而非持仓余额 |
 | `--count` | 返回条数（1–100，默认：20） |
 | `--format` | 输出格式：`table`（默认）或 `json` |
 
