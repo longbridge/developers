@@ -201,7 +201,7 @@ func main() {
     "lists": [
       {
         "code": "MU",
-        "counter_id": "ST/US/MU",
+        "symbol": "MU.US",
         "name": "美光科技",
         "last_done": "698.740",
         "chg": "0.0252",
@@ -242,7 +242,7 @@ func main() {
 | bmp | boolean | false | 是否為盤前預覽數據 |
 | lists | object[] | false | 排行榜股票列表 |
 | ∟ code | string | false | 股票代碼（如 `MU`） |
-| ∟ counter_id | string | false | Counter ID（如 `ST/US/MU`） |
+| ∟ symbol | string | false | 標的代碼，格式為 `代碼.市場`（如 `MU.US`） |
 | ∟ name | string | false | 證券名稱 |
 | ∟ last_done | string | false | 最新成交價 |
 | ∟ chg | string | false | 漲跌幅（小數比率，如 `0.0252` 表示 2.52%） |

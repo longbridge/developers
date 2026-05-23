@@ -200,7 +200,7 @@ func main() {
     "lists": [
       {
         "code": "MU",
-        "counter_id": "ST/US/MU",
+        "symbol": "MU.US",
         "name": "Micron Technology",
         "last_done": "698.740",
         "chg": "0.0252",
@@ -241,7 +241,7 @@ func main() {
 | bmp | boolean | false | Whether the response is a market preview (before open) |
 | lists | object[] | false | Leaderboard stock list |
 | ∟ code | string | false | Ticker code (e.g. `MU`) |
-| ∟ counter_id | string | false | Counter ID (e.g. `ST/US/MU`) |
+| ∟ symbol | string | false | Symbol in `CODE.MARKET` format (e.g. `MU.US`) |
 | ∟ name | string | false | Security name |
 | ∟ last_done | string | false | Latest trade price |
 | ∟ chg | string | false | Price change ratio as decimal (e.g. `0.0252` = 2.52%) |
