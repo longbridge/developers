@@ -22,21 +22,21 @@ Longbridge AI Technologies Limited 及其相關關聯公司（統稱"**Longbridg
 
 本授權書所涵蓋的數據類別如下文及/或 OAuth 授權頁面 "Quotes Permission" 部分所示，以您的選擇為準。除非另有説明，與證券交易相關的數據一般由 Long Bridge HK Limited（"**Longbridge Securities**"）共享，其他數據則由 Longbridge Platform（定義見 Longbridge Platform 的條款與條件）共享。您所授權的數據類別將由 Longbridge 僅出於實現本授權書所述 Longbridge Developers 功能之目的與 Third-Party AI Terminals 共享。
 
-可能可用的數據類別包括以下各項，訪問權限按功能逐項授予，取決於您在相關頁面所選功能：
+可能可用的數據類別按以下能力分組對外提供，訪問權限按功能逐項授予，取決於您在相關頁面所選功能。具體可用的工具集及其讀取 / 創建 / 更新 / 刪除權限隨 Longbridge Developers 產品迭代不時新增、調整或下線，最新清單以 [https://open.longbridge.com/docs/mcp](https://open.longbridge.com/docs/mcp) 及 OAuth 授權頁面所示為準：
 
-1. Watchlist —— 管理用户自選股清單（列表 / 創建 / 更新 / 刪除），以及檢索特定自選股清單中所包含的證券，用於展示和維護。
+1. **Real-time Market Data（實時行情數據）** —— 跨市場的實時行情與盤面數據。
 
-2. Trade Execution —— 買入、賣出或任何其他與交易執行相關的操作。
+2. **Fundamentals & Research（基本面與研究）** —— 公司基本面與研究類數據。
 
-3. Trade Order Lookup —— 涵蓋下單後的訂單生命週期與執行能力，包括訂單詳情、當日 / 歷史訂單查詢、當日 / 歷史成交記錄查詢，並在下單前提供最大可購買數量的估算。
+3. **Derivatives（衍生品）** —— 期權、權證等衍生品相關數據。
 
-4. News & Filings —— 獲取股票新聞。
+4. **Account & Portfolio（賬戶與投資組合）** —— 賬戶、資金、持倉等組合數據的訪問，以及自選股等組合配置的維護。
 
-5. Account & Positions —— 提供賬户資產與現金信息的只讀訪問，包括基金持倉、股票持倉、賬户現金餘額以及現金流歷史，用於投資組合概覽、持倉展示與對賬分析。
+5. **Trading（交易）** —— 證券交易執行及訂單生命週期管理。
 
-6. Market Sentiment —— 查詢跨股票市場的 "Market Temperature"（類似恐懼指數的情緒温度計），包括當前及歷史讀數，用於情緒測量、趨勢可視化和對比分析。
+6. **Automation（自動化）** —— 基於您預設條件觸發的自動化任務的管理。
 
-不時可能提供的任何其他數據類別。
+上述類別下的具體功能、覆蓋範圍及讀 / 寫權限可能不時調整或擴展。任何新增的數據能力類別在向 Third-Party AI Terminals 共享前，將在 OAuth 授權頁面以單獨的可勾選項呈現，您僅在主動勾選並完成授權後，相應數據方會被共享。
 
 **2.2 與 Third-Party AI Terminals 的進一步共享**
 
@@ -80,7 +80,7 @@ Third-Party AI Terminal 在理解或傳輸指令時可能出錯。您應在授�
 
 Third-Party AI Terminal 作為提供 AI 終端服務的實體，在收集和處理您的數據方面有義務遵守 PDPO 及所有其他適用的香港法律。您確認 Longbridge 不控制 Third-Party AI Terminal 的數據實踐，您應在使用前查閲任何第三方 AI 終端的隱私政策。
 
-**5. 風險提示 —— 連接您的證券賬户**
+**5.** **風險提示 —— 連接您的證券賬户**
 
 將您的經紀或證券賬户連接至 Third-Party Terminal 會授予 AI 訪問賬户數據的能力，並視權限設置可代表您進行下單、修改或撤銷訂單。**這可能導致您的資產部分或全部損失。** 通過啓用此連接，您確認並接受以下風險：
 

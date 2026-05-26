@@ -22,21 +22,21 @@ This Authorisation governs: (a) the sharing of your selected account data among 
 
 The categories of data covered by this Authorisation are displayed below and/or under "Quotes Permission" section on the OAuth authorisation page, and are subject to your selection. Unless otherwise specified, data related to securities trading will generally be shared by Long Bridge Securities Pte. Ltd. ("**Longbridge Securities**"), while other data will be shared by Longbridge Platform (as defined in the Longbridge Platform Terms and Conditions), to Longbridge.
 
-The data categories that may be available include the following, with access granted on a feature-by-feature basis depending on the functionality selected on the relevant page:
+The data categories that may be available are organized into the following capability groups, with access granted on a feature-by-feature basis depending on the functionality selected on the relevant page. The specific set of available tools and their read / create / update / delete permissions may be added, adjusted or retired from time to time as Longbridge Developers evolves; the latest inventory is as published at [https://open.longbridge.com/docs/mcp](https://open.longbridge.com/docs/mcp) and on the OAuth authorization page:
 
-Watchlist --- Manage user watchlists (list / create / update / delete) and retrieve the securities contained in a specific watchlist for display and maintenance.
+1. **Real-time Market Data** --- Real-time market quotes and order-book data across markets.
 
-Trade Execution --- Buy, sell or any other operations about trade execution.
+2. **Fundamentals & Research** --- Company fundamentals and research data.
 
-Trade Order Lookup --- Cover the post-order-placement order lifecycle and execution capabilities, including order details and same-day / historical order queries, as well as same-day / historical trade report queries, and provide an estimate of the maximum purchasable quantity before placing an order.
+3. **Derivatives** --- Data relating to options, warrants and other derivatives.
 
-News & Filings --- Get the stock news.
+4. **Account & Portfolio** --- Access to account, cash and position data, and the maintenance of portfolio constructs such as watchlists.
 
-Account & Positions --- Provides read access to account asset and cash information, including fund holdings, stock holdings, account cash balance, and cash flow history for portfolio overview, position display, and reconciliation analysis.
+5. **Trading** --- Securities trade execution and the management of the order lifecycle.
 
-Market Sentiment --- Query "Market Temperature" (a fear-gauge-like sentiment thermometer) across equity markets, including current and historical readings for sentiment measurement, trend visualization, and comparative analysis.
+6. **Automation** --- Management of automated tasks triggered by conditions you have pre-set.
 
-Any other data categories that may be made available from time to time.
+The specific functionality, coverage and read / write permissions within the categories above may be adjusted or expanded from time to time. Any newly added data capability category will be presented as a separately selectable item on the OAuth authorization page before being shared with any Third-Party AI Terminal, and the corresponding data will only be shared after you have actively selected it and completed the authorization.
 
 **2.2 Further Sharing with Third-Party AI Terminals**
 

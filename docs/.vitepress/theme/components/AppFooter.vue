@@ -121,11 +121,6 @@ const year = new Date().getFullYear()
             }}</a>
           </li>
           <li>
-            <a :href="`${sgBaseUrl}/support/topics/Other/risk-disclosure`" target="_blank" rel="noreferrer">{{
-              t('footer.risk')
-            }}</a>
-          </li>
-          <li>
             <a :href="localePath('/docs/legal/user-data-authorization-hk')">{{ t('footer.dataAuthorisationHK') }}</a>
           </li>
           <li>
