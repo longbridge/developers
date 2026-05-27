@@ -752,6 +752,20 @@
       }
     },
     {
+      "slug": "longbridge-hkipo-analysis",
+      "name": "longbridge-hkipo-analysis",
+      "description": "HK IPO 打新分析 — 港股新股是否值得申购的\"四维评估\"诊断（定价合理性 / 发行质量 / 市场时机 / 基本面展望）。输出推荐 / 中性 / 回避三档评级 + 招股书精华 + 风险提示 + 申购参考，散户友好、结论前置。覆盖三类场景：单只新股深度评估、近期打新日历浏览、未中签后的次新股追涨判断。数据优先用 Longbridge CLI（ipo detail / ipo subscriptions / ipo wait-listing / ipo listed / peer-comparison / news / quote / kline / index-quote 等），CLI 缺失项用 MCP fallback；仍然不可得的（招股书 TAM、基石公告原文、回拨倍数、暗盘价、承销商行业排名）用 WebSearch 兜底。**报告结尾固定输出「数据来源明细」附录**，每个数字可溯源到行号 + 抓取时间 + 期间。仅覆盖港股主板与 GEM，不涉及美股 / A 股 IPO；涉及孖展（融资打新）时必须主动提示杠杆风险。Triggers: \"打新\", \"港股打新\", \"新股申购\", \"新股申購\", \"新股\", \"打新分析\", \"新股分析\", \"招股\", \"招股书\", \"招股書\", \"基石投资者\", \"基石投資者\", \"国际配售\", \"國際配售\", \"公开发售\", \"公開發售\", \"暗盘\", \"暗盤\", \"回拨机制\", \"回撥機制\", \"孖展\", \"新股盈亏\", \"新股盈虧\", \"次新股\", \"破发\", \"破發\", \"中签率\", \"中籤率\", \"新股几手\", \"新股幾手\", \"新股值不值得打\", \"新股能不能打\", \"港股 IPO 推荐\", \"港股 IPO 推薦\", \"近期港股新股\", \"HK IPO analysis\", \"hong kong IPO worth it\", \"HK new listing\", \"cornerstone investor\", \"prospectus highlights\", \"grey market premium\", \"subscription ratio\", \"claw-back\", \"margin financing IPO\", \"0700.HK\", \"09988.HK\", \"01024.HK\".",
+      "metadata": {
+        "author": "longbridge",
+        "version": "1.0.0",
+        "risk_level": "read_only",
+        "requires_login": false,
+        "default_install": true,
+        "requires_mcp": false,
+        "tier": "analysis"
+      }
+    },
+    {
       "slug": "longbridge-ichimoku",
       "name": "longbridge-ichimoku",
       "description": "Ichimoku Cloud (一目均衡表) five-line system signal engine for stocks listed in HK / US / A-share / Singapore via Longbridge Securities. Computes Tenkan-sen, Kijun-sen, Senkou Span A/B, and Chikou Span from OHLCV data; generates price-vs-cloud position, line-cross signals, and full trend-confirmation scores. Triggers: \"一目均衡表\", \"一目云\", \"云图\", \"转折线\", \"基准线\", \"先行带\", \"迟行线\", \"云上\", \"云下\", \"一目均衡表\", \"一目雲\", \"雲圖\", \"轉折線\", \"基準線\", \"先行帶\", \"遲行線\", \"ichimoku\", \"ichimoku cloud\", \"tenkan sen\", \"kijun sen\", \"senkou span\", \"chikou span\", \"cloud breakout\".",
