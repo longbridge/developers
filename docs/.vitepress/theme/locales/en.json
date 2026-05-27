@@ -88,5 +88,19 @@
   "footer.download": "Download",
   "footer.statusPage": "Status",
   "footer.about": "About",
-  "footer.rights": "© {year} Longbridge. All rights reserved."
+  "footer.rights": "© {year} Longbridge. All rights reserved.",
+  "mcpInspector.tokenLabel": "Bearer Token",
+  "mcpInspector.tokenPlaceholder": "Paste OAuth Bearer token…",
+  "mcpInspector.tokenHelp": "Get token: run `longbridge auth login`, token stored at ~/.longbridge/openapi/tokens/",
+  "mcpInspector.endpoint": "Endpoint",
+  "mcpInspector.endpointGlobal": "Global",
+  "mcpInspector.endpointCN": "Mainland China",
+  "mcpInspector.selectTool": "Select a tool from the list on the left",
+  "mcpInspector.invoke": "Invoke",
+  "mcpInspector.invoking": "Invoking…",
+  "mcpInspector.result": "Result",
+  "mcpInspector.copy": "Copy",
+  "mcpInspector.copied": "Copied!",
+  "mcpInspector.noTokenWarning": "Enter a Bearer token above to invoke tools",
+  "mcpInspector.optional": "optional"
 }

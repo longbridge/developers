@@ -88,5 +88,19 @@
   "footer.download": "下载应用",
   "footer.statusPage": "服务状态",
   "footer.about": "关于我们",
-  "footer.rights": "© {year} Longbridge. 版权所有。"
+  "footer.rights": "© {year} Longbridge. 版权所有。",
+  "mcpInspector.tokenLabel": "Bearer Token",
+  "mcpInspector.tokenPlaceholder": "粘贴 OAuth Bearer token…",
+  "mcpInspector.tokenHelp": "获取 token：运行 `longbridge auth login`，token 存储在 ~/.longbridge/openapi/tokens/",
+  "mcpInspector.endpoint": "端点",
+  "mcpInspector.endpointGlobal": "全球",
+  "mcpInspector.endpointCN": "中国大陆",
+  "mcpInspector.selectTool": "从左侧列表选择一个工具",
+  "mcpInspector.invoke": "调用",
+  "mcpInspector.invoking": "调用中…",
+  "mcpInspector.result": "结果",
+  "mcpInspector.copy": "复制",
+  "mcpInspector.copied": "已复制！",
+  "mcpInspector.noTokenWarning": "请在上方输入 Bearer token 以调用工具",
+  "mcpInspector.optional": "可选"
 }
