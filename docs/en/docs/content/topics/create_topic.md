@@ -65,16 +65,12 @@ longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
 <CliCommand>
 # Short post — plain text (default). Markdown is NOT rendered.
 longbridge topic create --body "Bullish on 700.HK today"
-
 # Short post with related tickers
 longbridge topic create --body "NVDA GTC highlights" --tickers NVDA.US,700.HK
-
 # Article — Markdown body, title is required
 longbridge topic create --title "My Analysis" --body "**Bullish** on 700.HK because..." --type article
-
 # Article from a Markdown file
 longbridge topic create --title "Q4 Earnings Preview" --body "$(cat analysis.md)" --type article
-
 # JSON output
 longbridge topic create --body "Test post" --format json
 </CliCommand>

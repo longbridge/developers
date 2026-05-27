@@ -74,9 +74,7 @@ longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
 <CliCommand>
 # Top-level reply
 longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
-
 # Nested reply
-
 longbridge topic create-reply 6993508780031016960 --body "I agree." --reply-to 7001234567890123456
 </CliCommand>
 
