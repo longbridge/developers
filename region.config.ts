@@ -39,6 +39,9 @@ export const regionConfig: Record<string, RegionConfig> = {
       '**/docs/cli/install.md',
       '**/docs/cli/release-notes.md',
 
+      // MCP
+      '**/docs/mcp.md',
+
       // AI Skills
       '**/skill/**',
     ],

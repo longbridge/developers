@@ -1,92 +1,144 @@
 ---
-title: 'Stock Screening'
+title: 'Stock Screener'
 sidebar_label: 'screener'
 sidebar_position: 4
 slug: '/cli/quant/screener'
 ---
 
-# Stock Screening
+# Stock Screener
 
-Stock screening finds symbols that satisfy a set of technical conditions on the most recent bar. The workflow is:
+The `screener` command lets you list saved strategies, run a strategy to get matching stocks, apply ad-hoc filters, and browse all available indicator definitions.
 
-1. Write an `indicator()` script that plots `1.0` when your condition is met and `0.0` otherwise
-2. Run it against each symbol with `--format json`
-3. Collect symbols where the last signal value is `1`
+## screener strategies
+
+List platform-recommended or your own saved screener strategies.
 
 ```bash
-last=$(longbridge quant run "$sym" --start ... --end ... \
-  --format json --script "$script" 2>/dev/null | \
-  jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
-[ "$last" = "1" ] && echo "$sym"
+# Recommended strategies for the US market (default)
+longbridge screener strategies
+
+# Recommended strategies for Hong Kong
+longbridge screener strategies --market HK
+
+# Your own saved strategies
+longbridge screener strategies --mine
 ```
 
-The screening runs only against the symbols you explicitly list. Define your watchlist in the `symbols` array and adjust it to suit your needs.
+| Flag | Default | Description |
+| ---- | ------- | ----------- |
+| `--market US\|HK\|CN\|SG` | `US` | Market to list strategies for |
+| `--mine` | — | Show your own strategies instead of recommended ones |
+| `--format json` | — | Output raw JSON |
 
-## RSI Oversold
+## screener run \<ID\>
 
-Screen for stocks where RSI(14) closed below 35 on the latest bar.
+Run a saved strategy and list the stocks that match.
 
 ```bash
-symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
-script='
-indicator()
-r = ta.rsi(close, 14)
-plot(r < 35 ? 1.0 : 0.0, "Signal")
-'
+# Run strategy 42 with defaults
+longbridge screener run 42
 
-for sym in "${symbols[@]}"; do
-  last=$(longbridge quant run "$sym" \
-    --start 2026-01-01 --end 2026-04-28 \
-    --format json --script "$script" 2>/dev/null | \
-    jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
-  [ "$last" = "1" ] && echo "$sym"
-done
+# Paginate: second page, 50 records per page
+longbridge screener run 42 --page 1 --count 50
+
+# Show specific columns
+longbridge screener run 42 --show pettm --show pbmrq
 ```
 
-## EMA Bullish Alignment
+| Flag | Default | Description |
+| ---- | ------- | ----------- |
+| `--page N` | `0` | Zero-based page number |
+| `--count N` | `20` | Records per page |
+| `--sort KEY` | `prevchg` | Column to sort by |
+| `--order asc\|desc` | `desc` | Sort direction |
+| `--show KEY` | — | Extra column to display (repeatable) |
+| `--format json` | — | Output raw JSON |
 
-Screen for stocks with all three EMAs stacked bullishly: EMA8 > EMA21 > EMA55.
+Default output columns: `prevclose`, `prevchg`, `marketcap`, `salesgrowthyoy`, `pettm`, `pbmrq`, `industry`.
 
-```bash
-symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
-script='
-indicator()
-e8  = ta.ema(close, 8)
-e21 = ta.ema(close, 21)
-e55 = ta.ema(close, 55)
-plot(e8 > e21 and e21 > e55 ? 1.0 : 0.0, "Signal")
-'
+Default sort is `prevchg` descending (top movers first).
 
-for sym in "${symbols[@]}"; do
-  last=$(longbridge quant run "$sym" \
-    --start 2026-01-01 --end 2026-04-28 \
-    --format json --script "$script" 2>/dev/null | \
-    jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
-  [ "$last" = "1" ] && echo "$sym"
-done
+**JSON output format** (numeric values, no `filter_` prefix on keys):
+
+```json
+{
+  "total": 87,
+  "page": 0,
+  "items": [
+    {
+      "symbol": "AAPL.US",
+      "name": "Apple Inc.",
+      "prevchg": 1.24,
+      "pettm": 28.5,
+      "pbmrq": 45.2,
+      "marketcap": 3241500000000
+    }
+  ]
+}
 ```
 
-## Bollinger Band Squeeze
+## screener filter
 
-Screen for stocks where the band width (Upper − Lower) hit its 20-bar minimum — a classic volatility contraction signal.
+Run an ad-hoc screen without a saved strategy. Specify one or more filter conditions directly on the command line.
 
 ```bash
-symbols=(AAPL.US NVDA.US TSLA.US MSFT.US META.US AMZN.US GOOGL.US)
-script='
-indicator()
-length = input.int(20)
-mult   = input.float(2.0)
-basis  = ta.sma(close, length)
-dev    = mult * ta.stdev(close, length)
-bw     = (basis + dev) - (basis - dev)
-plot(bw <= ta.lowest(bw, 20) ? 1.0 : 0.0, "Signal")
-'
+# Stocks with P/E between 10 and 50 and ROE above 5% in HK
+longbridge screener filter pettm:10:50 roe:5: --market HK
 
-for sym in "${symbols[@]}"; do
-  last=$(longbridge quant run "$sym" \
-    --start 2026-01-01 --end 2026-04-28 \
-    --format json --script "$script" 2>/dev/null | \
-    jq -r '.data.series[] | select(.name == "Signal") | .values[-1]')
-  [ "$last" = "1" ] && echo "$sym"
-done
+# US stocks with market cap above $100 bn, second page
+longbridge screener filter marketcap:100: --market US --page 1 --count 50
+
+# MACD golden-cross stocks in HK (technical indicator with extra parameters)
+longbridge screener filter 'macd_day:::category=goldenfork,period=day' --market HK
+```
+
+**Condition format:** `KEY:MIN:MAX` or `KEY:MIN:MAX:k=v,k=v` for technical indicators.
+
+- `KEY` — indicator key from `screener indicators` (without `filter_` prefix)
+- `MIN` — lower bound (leave empty for no lower bound)
+- `MAX` — upper bound (leave empty for no upper bound)
+- `k=v,...` — extra key-value parameters for technical indicators
+
+| Flag | Default | Description |
+| ---- | ------- | ----------- |
+| `--market US\|HK\|CN` | `US` | Market to screen |
+| `--sort KEY` | `prevchg` | Column to sort by |
+| `--order asc\|desc` | `desc` | Sort direction |
+| `--show KEY` | — | Extra column to display (repeatable) |
+| `--page N` | `0` | Zero-based page number |
+| `--count N` | `20` | Records per page |
+| `--format json` | — | Output raw JSON |
+
+## screener indicators
+
+List all indicator definitions supported by the screener.
+
+```bash
+longbridge screener indicators
+longbridge screener indicators --format json
+```
+
+**JSON output** is a flat array (no nested groups) with `filter_` prefix stripped from keys:
+
+```json
+[
+  {
+    "id": 1,
+    "key": "marketcap",
+    "name": "Market Cap",
+    "unit": "bn",
+    "min": "0",
+    "max": "",
+    "tech_values": {}
+  },
+  {
+    "id": 29,
+    "key": "divyld",
+    "name": "Dividend Yield (TTM)",
+    "unit": "%",
+    "min": "0",
+    "max": "100",
+    "tech_values": {}
+  }
+]
 ```

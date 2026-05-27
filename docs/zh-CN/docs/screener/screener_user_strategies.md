@@ -1,7 +1,7 @@
 ---
-slug: delete-dca
-title: 删除定投
-sidebar_position: 4
+slug: screener-user-strategies
+title: 我的选股策略
+sidebar_position: 2
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,13 +10,16 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-永久停止并删除定投，此操作不可撤销。
+获取当前登录用户创建的自定义选股策略列表。
+
+接口：`GET /v1/quote/ai/screener/strategies/mine`
 
 <CliCommand>
-longbridge dca stop 1225781523156889600
+longbridge screener strategies --mine
+longbridge screener strategies --mine --market HK
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="delete_dca" />
+<SDKLinks module="screener" klass="ScreenerContext" method="screener_user_strategies" />
 
 
 ## Parameters
@@ -25,7 +28,9 @@ longbridge dca stop 1225781523156889600
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | 是 | 计划 ID（路径参数） |
+| market | string | 否 | 市场筛选：`US`、`HK`、`CN`、`SG`，默认 `US` |
+
+需要登录。
 
 ## Request Example
 
@@ -33,13 +38,13 @@ longbridge dca stop 1225781523156889600
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import DCAContext, Config, OAuthBuilder
+from longbridge.openapi import ScreenerContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
-ctx = DCAContext(config)
+ctx = ScreenerContext(config)
 
-resp = ctx.delete_dca("1225781523156889600")
+resp = ctx.screener_user_strategies()
 print(resp)
 ```
 
@@ -48,14 +53,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncScreenerContext, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
-    ctx = AsyncDCAContext.create(config)
+    ctx = AsyncScreenerContext.create(config)
 
-    resp = await ctx.delete_dca("1225781523156889600")
+    resp = await ctx.screener_user_strategies()
     print(resp)
 
 if __name__ == "__main__":
@@ -66,15 +71,15 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, DCAContext, OAuth } = require('longbridge')
+const { Config, ScreenerContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
     console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = DCAContext.new(config)
-  const resp = await ctx.delete_dca()
+  const ctx = ScreenerContext.new(config)
+  const resp = await ctx.screenerUserStrategies()
   console.log(resp)
 }
 main().catch(console.error)
@@ -85,14 +90,14 @@ main().catch(console.error)
 
 ```java
 import com.longbridge.*;
-import com.longbridge.dca.*;
+import com.longbridge.screener.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             DCAContext ctx = DCAContext.create(config)) {
-            var resp = ctx.getDeleteDca().get();
+             ScreenerContext ctx = ScreenerContext.create(config)) {
+            var resp = ctx.getScreenerUserStrategies().get();
             System.out.println(resp);
         }
     }
@@ -104,14 +109,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+use longbridge::{oauth::OAuthBuilder, screener::ScreenerContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let ctx = DCAContext::new(config);
-    let resp = ctx.delete_dca().await?;
+    let ctx = ScreenerContext::new(config);
+    let resp = ctx.screener_user_strategies().await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -125,7 +130,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #include <longbridge.hpp>
 
 using namespace longbridge;
-using namespace longbridge::dca;
+using namespace longbridge::screener;
 
 int main() {
     OAuthBuilder("your-client-id").build(
@@ -133,8 +138,8 @@ int main() {
         [](auto res) {
             if (!res) return;
             Config config = Config::from_oauth(*res);
-            DCAContext ctx = DCAContext::create(config);
-            ctx.delete_dca([](auto resp) {
+            ScreenerContext ctx = ScreenerContext::create(config);
+            ctx.screener_user_strategies([](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -155,7 +160,7 @@ import (
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/dca"
+	"github.com/longbridge/openapi-go/screener"
 )
 
 func main() {
@@ -168,12 +173,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := dca.NewFromCfg(conf)
+	c, err := screener.NewFromCfg(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.DeleteDca(context.Background())
+	resp, err := c.ScreenerUserStrategies(context.Background(), "US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -193,7 +198,11 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {}
+  "data": {
+    "strategys": [
+      { "id": 42, "name": "我的成长股策略", "type": "user", "market": "US" }
+    ]
+  }
 }
 ```
 
@@ -201,13 +210,13 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [DeleteDcaResponse](#DeleteDcaResponse) |
+| 200    | 成功        | [ScreenerStrategiesResponse](#ScreenerStrategiesResponse) |
 | 400    | 请求错误    | None   |
 
 ## Schemas
 
-### DeleteDcaResponse
+### ScreenerStrategiesResponse
 
-<a id="DeleteDcaResponse"></a>
+<a id="ScreenerStrategiesResponse"></a>
 
-无响应体字段。
+响应结构与 [screener_recommend_strategies](./screener_recommend_strategies) 相同，请参阅该文档中的 Schema 定义。

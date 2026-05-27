@@ -6,7 +6,11 @@ sidebar_position: 3
 
 # longbridge short-positions
 
-美股放空資料——空頭比例、空頭股數、平倉天數（days-to-cover）及日均成交量。僅支援美股及 ETF，資料由 FINRA 每兩週更新一次。
+放空持倉資料——空頭比例、空頭股數及相關指標。支援港股和美股，市場根據代碼後綴自動識別。
+
+- **港股**：港交所每日資料
+- **美股**：FINRA 每兩週更新一次
+
 
 <QuotePermission command="short-positions" />
 
@@ -28,7 +32,7 @@ Short Selling Data — TSLA.US
 
 ## 示例
 
-### 查看放空歷史資料
+### 查看美股放空歷史資料
 
 ```bash
 longbridge short-positions TSLA.US
@@ -36,6 +40,23 @@ longbridge short-positions AAPL.US --count 50
 ```
 
 最多返回 100 筆記錄，按日期倒序排列。每行包含結算日、空頭比例（空頭股數 ÷ 流通股數）、空頭股數、日均成交量、平倉天數及當日收盤價。
+
+### 查看港股放空持倉
+
+```bash
+longbridge short-positions 700.HK
+longbridge short-positions 700.HK --count 30
+```
+
+```
+Short Positions — 700.HK
+
+| date       | rate% | amount       | balance          | close  |
+|------------|-------|--------------|------------------|--------|
+| 2026-05-19 | 1.45% | 2,748,900    | 1,256,859,880.00 | 455.20 |
+```
+
+港股返回欄位：結算日、空頭比例、當日沽空金額、未平倉餘額及收盤價。
 
 ### 機器可讀格式
 
@@ -65,4 +86,5 @@ longbridge short-positions NVDA.US --format json
 
 ## 權限要求
 
-需要美股行情權限，僅支援美股及 ETF。
+- 美股：需要美股行情權限，僅支援美股及 ETF
+- 港股：需要港股行情權限

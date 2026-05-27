@@ -7,6 +7,17 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.22.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.0)
+
+- **新增 `shareholder --top`** — 前 20 大股东（机构、个人、内部人）多报告期持股对比；`--object-id <id>` 查看单一股东持仓历史及交易明细
+- **扩展 `short-positions`** — 新增港股支持（`.HK` 自动路由至港交所沽空持仓数据）
+- **新增 `short-trades`** — 每日沽空成交量（美股：FINRA/纳斯达克；港股：港交所披露数据）
+- **新增 `compare`** — 多股估值对比（PE/PB/PS/市值/收盘价），不传对比股票时服务端自动选取同行业标的
+- **新增 `top-movers`** — 价格波动超近 20 日标准差的异动股票，附关联新闻解读；支持 `--market`、`--sort time|change|hot` 筛选
+- **新增 `screener` 命令组** — 股票筛选工具：`strategies`（推荐/我的策略）、`search --strategy-id <id>` 或 `--filter key:min:max` 执行筛选、`indicators` 查看可用指标
+- **新增 `rank`** — 人气排行榜；不带 `--key` 列出所有分类，`--key <key>` 获取对应排行（如 `ib_hot_all-us`）
+- MCP 服务同步新增相同工具
+
 ### [v0.21.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.21.0)
 
 - **新增 `business-segments`** — 按业务分部拆解营收，支持当期数据或历史趋势对比

@@ -3,6 +3,8 @@ title: MCP
 id: mcp
 slug: /mcp
 sidebar: false
+prev: false
+next: false
 ---
 
 # Longbridge MCP Service

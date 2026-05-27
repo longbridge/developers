@@ -7,6 +7,7 @@ export const locale: CatalogLocale = {
       pkg: 'longbridge',
       cat: 'meta',
       tools: 8,
+      tagType: 'hot',
       name: 'Longbridge Overview',
       desc: 'Full-stack financial data and trading platform — CLI, Python/Rust SDK, MCP, and LLM integration.',
       prompt: 'What is NVDA\'s current price, recent news, and how does it affect my positions?',

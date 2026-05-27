@@ -6,7 +6,11 @@ sidebar_position: 3
 
 # longbridge short-positions
 
-US stock short selling data — short interest, short ratio, days to cover, and average daily volume. Only supports US-listed stocks and ETFs. Records are updated bi-monthly by FINRA.
+Short selling position data — short ratio, short share count, and related metrics. Supports both HK and US stocks; the market is auto-detected from the symbol suffix.
+
+- **HK**: HKEX daily data
+- **US**: FINRA bi-monthly data
+
 
 <QuotePermission command="short-positions" />
 
@@ -28,14 +32,31 @@ Short Selling Data — TSLA.US
 
 ## Examples
 
-### View short interest history
+### View US short interest history
 
 ```bash
 longbridge short-positions TSLA.US
 longbridge short-positions AAPL.US --count 50
 ```
 
-Returns up to 100 records newest first. Each row shows the settlement date, short ratio (short shares ÷ float), number of short shares, average daily volume, days-to-cover ratio, and closing price on that date.
+Returns up to 100 records newest first. Each row shows the settlement date, short ratio (short shares ÷ float), number of short shares, average daily volume, days-to-cover ratio, and closing price.
+
+### View HK short positions
+
+```bash
+longbridge short-positions 700.HK
+longbridge short-positions 700.HK --count 30
+```
+
+```
+Short Positions — 700.HK
+
+| date       | rate% | amount       | balance          | close  |
+|------------|-------|--------------|------------------|--------|
+| 2026-05-19 | 1.45% | 2,748,900    | 1,256,859,880.00 | 455.20 |
+```
+
+HK fields: settlement date, short ratio, daily short sale amount, outstanding balance, and closing price.
 
 ### Machine-readable output
 
@@ -65,4 +86,5 @@ longbridge short-positions NVDA.US --format json
 
 ## Requirements
 
-US market data subscription required. Only works for US-listed stocks and ETFs.
+- US: US market data subscription required. Only works for US-listed stocks and ETFs.
+- HK: HK market data subscription required.

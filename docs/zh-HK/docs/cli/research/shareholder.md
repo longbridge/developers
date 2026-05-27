@@ -34,3 +34,50 @@ longbridge shareholder TSLA.US --format json
 ```
 
 按持股比例列出最大股東，包括機構投資者和個人內部人士。
+
+### 查看前 20 大股東（--top）
+
+```bash
+longbridge shareholder AAPL.US --top
+```
+
+```
+Top 20 Shareholders — AAPL.US
+
+Period: Latest
+
+| shareholder                    | type        | % shares | chg shares | filing_date |
+|--------------------------------|-------------|----------|------------|-------------|
+| The Vanguard Group, Inc.       | Institution | 9.71%    | +0.01%     | 2025/12/31  |
+| BlackRock, Inc.                | Institution | 7.75%    | -0.06%     | 2026/03/31  |
+| ...
+
+Use --object-id <id> to view holding detail for a specific shareholder.
+```
+
+`--top` 模式覆蓋多個報告期，包含機構、個人及內部人士，並顯示股東類型（Institution / Individual / Insider）。
+
+### 查看特定股東持股詳情（--object-id）
+
+```bash
+longbridge shareholder AAPL.US --object-id 148057
+```
+
+```
+Shareholder Detail: The Vanguard Group, Inc.
+
+Trading History:
+
+Period: Past 1 Year
+  accum_buy: 0.00  accum_sell: 0.00
+```
+
+`--object-id` 接受 `--top` 輸出中的股東 ID，返回該股東歷史持倉變化和買賣記錄。
+
+## 參數
+
+| 參數 | 說明 |
+|------|------|
+| `--top` | 顯示前 20 大股東，含機構和個人，跨多個報告期 |
+| `--object-id` | 查看特定股東持倉詳情（ID 從 `--top` 輸出獲取） |
+| `--format` | 輸出格式：`table`（預設）或 `json` |

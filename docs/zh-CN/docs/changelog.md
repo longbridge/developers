@@ -6,11 +6,26 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
-## 2026-05-21
+## 2026-05-22
 
-### Docs
+### CLI v0.22.0
 
-- **MCP Inspector** — MCP 文档新增 MCP Inspector 使用指南，介绍如何通过 `npx @modelcontextprotocol/inspector` 在浏览器中交互式浏览和测试所有 Longbridge MCP 工具
+- **`shareholder --top`** — 前 20 大股东（机构、个人、内部人）多报告期持股对比；`--object-id <id>` 查看单一股东持仓历史及交易明细
+- **`short-positions`** — 新增港股支持（`.HK` 自动路由至港交所沽空持仓数据），与美股 FINRA 数据统一接口
+- **`short-trades`** — 每日沽空成交量（美股：FINRA/纳斯达克；港股：港交所披露数据）
+- **`compare`** — 多股估值对比（PE/PB/PS/市值/收盘价），不传对比股票时服务端自动选取同行业标的
+- **`top-movers`** — 价格波动超近 20 日标准差的异动股票，系统自动关联相关新闻解读；支持 `--market`、`--sort time|change|hot` 筛选
+- **`screener` 命令组** — 股票筛选工具：`strategies`（推荐/我的策略）、`search --strategy-id <id>` 或 `--filter key:min:max` 执行筛选、`indicators` 查看可用指标
+- **`rank`** — 人气排行榜；不带 `--key` 列出所有分类，`--key <key>` 获取对应排行（如 `ib_hot_all-us`）
+- MCP 服务同步新增相同工具
+
+### SDK v4.2.0
+
+- **FundamentalContext** — 新增 `shareholder_top`、`shareholder_detail`、`valuation_comparison`
+- **QuoteContext** — `short_positions` 统一支持美股和港股；新增 `short_trades`
+- **MarketContext** — 新增 `top_movers`、`rank_categories`、`rank_list`
+- **新增 ScreenerContext** — `screener_recommend_strategies`、`screener_user_strategies`、`screener_strategy`、`screener_search`、`screener_indicators`
+- 覆盖语言：Rust / Python / Node.js / Java / C / C++ / Go
 
 ## 2026-05-15
 

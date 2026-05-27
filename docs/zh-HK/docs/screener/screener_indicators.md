@@ -1,7 +1,7 @@
 ---
-slug: delete-dca
-title: Delete DCA Plan
-sidebar_position: 4
+slug: screener-indicators
+title: 選股指標
+sidebar_position: 5
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,22 +10,24 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Permanently stop and delete a recurring investment plan. This action cannot be undone.
+獲取選股器支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
+
+接口：`GET /v1/quote/ai/screener/indicators`
+
+> **SDK 響應：** `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
 
 <CliCommand>
-longbridge dca stop 1225781523156889600
+longbridge screener indicators
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="delete_dca" />
+<SDKLinks module="screener" klass="ScreenerContext" method="screener_indicators" />
 
 
 ## Parameters
 
-> **SDK method parameters.**
+> **SDK 方法參數。**
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| id | string | YES | Plan ID (path parameter) |
+此方法無參數。
 
 ## Request Example
 
@@ -33,13 +35,13 @@ longbridge dca stop 1225781523156889600
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import DCAContext, Config, OAuthBuilder
+from longbridge.openapi import ScreenerContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
-ctx = DCAContext(config)
+ctx = ScreenerContext(config)
 
-resp = ctx.delete_dca("1225781523156889600")
+resp = ctx.screener_indicators()
 print(resp)
 ```
 
@@ -48,14 +50,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncScreenerContext, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
-    ctx = AsyncDCAContext.create(config)
+    ctx = AsyncScreenerContext.create(config)
 
-    resp = await ctx.delete_dca("1225781523156889600")
+    resp = await ctx.screener_indicators()
     print(resp)
 
 if __name__ == "__main__":
@@ -66,15 +68,15 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, DCAContext, OAuth } = require('longbridge')
+const { Config, ScreenerContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
     console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = DCAContext.new(config)
-  const resp = await ctx.delete_dca()
+  const ctx = ScreenerContext.new(config)
+  const resp = await ctx.screenerIndicators()
   console.log(resp)
 }
 main().catch(console.error)
@@ -85,14 +87,14 @@ main().catch(console.error)
 
 ```java
 import com.longbridge.*;
-import com.longbridge.dca.*;
+import com.longbridge.screener.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             DCAContext ctx = DCAContext.create(config)) {
-            var resp = ctx.getDeleteDca().get();
+             ScreenerContext ctx = ScreenerContext.create(config)) {
+            var resp = ctx.getScreenerIndicators().get();
             System.out.println(resp);
         }
     }
@@ -104,14 +106,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+use longbridge::{oauth::OAuthBuilder, screener::ScreenerContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let ctx = DCAContext::new(config);
-    let resp = ctx.delete_dca().await?;
+    let ctx = ScreenerContext::new(config);
+    let resp = ctx.screener_indicators().await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -125,7 +127,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #include <longbridge.hpp>
 
 using namespace longbridge;
-using namespace longbridge::dca;
+using namespace longbridge::screener;
 
 int main() {
     OAuthBuilder("your-client-id").build(
@@ -133,8 +135,8 @@ int main() {
         [](auto res) {
             if (!res) return;
             Config config = Config::from_oauth(*res);
-            DCAContext ctx = DCAContext::create(config);
-            ctx.delete_dca([](auto resp) {
+            ScreenerContext ctx = ScreenerContext::create(config);
+            ctx.screener_indicators([](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -155,7 +157,7 @@ import (
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/dca"
+	"github.com/longbridge/openapi-go/screener"
 )
 
 func main() {
@@ -168,12 +170,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := dca.NewFromCfg(conf)
+	c, err := screener.NewFromCfg(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.DeleteDca(context.Background())
+	resp, err := c.ScreenerIndicators(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -193,21 +195,44 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {}
+  "data": {
+    "groups": [
+      {
+        "group_name": "公司規模與財務",
+        "indicators": [
+          { "id": "1", "key": "marketcap", "name": "市值", "unit": "億", "min": null, "max": null }
+        ]
+      }
+    ]
+  }
 }
 ```
+
+> 所有 `key` 值已去除 `filter_` 前綴，`id` 字段為字符串類型。
 
 ### Response Status
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [DeleteDcaResponse](#DeleteDcaResponse) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [ScreenerIndicatorsResponse](#ScreenerIndicatorsResponse) |
+| 400    | 請求錯誤    | None   |
 
 ## Schemas
 
-### DeleteDcaResponse
+### ScreenerIndicatorsResponse
 
-<a id="DeleteDcaResponse"></a>
+<a id="ScreenerIndicatorsResponse"></a>
 
-No response body fields.
+SDK 響應 `data` 為分組結構，CLI `--format json` 輸出會將其展平為扁平數組。所有 `key` 值已去除 `filter_` 前綴。
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| groups | object[] | false | 指標分組 |
+| ∟ group_name | string | false | 分組名稱 |
+| ∟ indicators | object[] | false | 該分組下的指標 |
+| ∟ ∟ id | string | false | 指標 ID（字符串類型） |
+| ∟ ∟ key | string | false | 指標鍵值，用於構建篩選條件（不含 `filter_` 前綴） |
+| ∟ ∟ name | string | false | 指標顯示名稱 |
+| ∟ ∟ unit | string | false | 單位（如 `%`、`億`） |
+| ∟ ∟ min | string | false | 指標全局下限；null 表示無下限 |
+| ∟ ∟ max | string | false | 指標全局上限；null 表示無上限 |

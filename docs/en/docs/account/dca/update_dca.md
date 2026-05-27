@@ -17,7 +17,7 @@ longbridge dca pause 1225781523156889600
 longbridge dca resume 1225781523156889600
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="update_dca" />
+<SDKLinks module="dca" klass="DCAContext" method="update" />
 
 
 ## Parameters

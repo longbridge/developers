@@ -1,6 +1,6 @@
 ---
 slug: /quote/pull/short-positions
-title: 沽空数据
+title: 沽空数据（美股 / 港股）
 sidebar_position: 25
 language_tabs: false
 toc_footers: []
@@ -10,10 +10,11 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get US stock short selling data — short interest, short ratio, days to cover, and average daily volume. Records are updated bi-monthly by FINRA. Only US-listed stocks and ETFs are supported.
+获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
 
 <CliCommand>
 longbridge short-positions TSLA.US
+longbridge short-positions 700.HK
 longbridge short-positions AAPL.US --count 50
 </CliCommand>
 
@@ -24,10 +25,10 @@ longbridge short-positions AAPL.US --count 50
 
 > **SDK 方法参数。**
 
-| Name   | Type   | Required | Description                                         |
-| ------ | ------ | -------- | --------------------------------------------------- |
-| symbol | string | YES      | US security symbol, e.g. `TSLA.US`, `AAPL.US`      |
-| count  | integer | NO      | Number of records to return (1–100, default: 20)    |
+| Name   | Type    | Required | Description                                                      |
+| ------ | ------- | -------- | ---------------------------------------------------------------- |
+| symbol | string  | YES      | 证券代码，例如 `TSLA.US` 或 `700.HK`                            |
+| count  | integer | NO       | 返回记录数（1–100，默认 20）                                     |
 
 ## Request Example
 
@@ -36,6 +37,7 @@ longbridge short-positions AAPL.US --count 50
 
 <CliCommand>
 longbridge short-positions TSLA.US
+longbridge short-positions 700.HK
 longbridge short-positions AAPL.US --count 50
 </CliCommand>
 
@@ -49,7 +51,12 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = QuoteContext(config)
 
-resp = ctx.short_positions("TSLA.US")
+# 美股示例
+resp = ctx.short_positions("TSLA.US", 20)
+print(resp)
+
+# 港股示例
+resp = ctx.short_positions("700.HK", 20)
 print(resp)
 ```
 
@@ -65,7 +72,12 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncQuoteContext.create(config)
 
-    resp = await ctx.short_positions("TSLA.US")
+    # 美股示例
+    resp = await ctx.short_positions("TSLA.US", 20)
+    print(resp)
+
+    # 港股示例
+    resp = await ctx.short_positions("700.HK", 20)
     print(resp)
 
 if __name__ == "__main__":
@@ -84,7 +96,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = QuoteContext.new(config)
-  const resp = await ctx.shortPositions('TSLA.US')
+  const resp = await ctx.shortPositions('TSLA.US', 20)
   console.log(resp)
 }
 main().catch(console.error)
@@ -102,7 +114,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              QuoteContext ctx = QuoteContext.create(config)) {
-            var resp = ctx.getShortPositions("TSLA.US").get();
+            var resp = ctx.getShortPositions("TSLA.US", 20).get();
             System.out.println(resp);
         }
     }
@@ -121,7 +133,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let (ctx, _) = QuoteContext::new(config);
-    let resp = ctx.short_positions("TSLA.US").await?;
+    let resp = ctx.short_positions("TSLA.US", 20).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -144,7 +156,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             QuoteContext ctx = QuoteContext::create(config);
-            ctx.short_positions("TSLA.US", [](auto resp) {
+            ctx.short_positions("TSLA.US", 20, [](auto resp) {
                 if (resp) std::cout << resp->size() << std::endl;
             });
         });
@@ -183,7 +195,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer qctx.Close()
-	resp, err := qctx.ShortPositions(context.Background(), "TSLA.US")
+	resp, err := qctx.ShortPositions(context.Background(), "TSLA.US", 20)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -196,47 +208,78 @@ func main() {
 
 ## Response
 
-
 ### Response Example
+
+<Tabs groupId="response-example">
+  <TabItem value="us" label="美股（.US 代码）" default>
 
 ```json
 {
   "code": 0,
   "message": "success",
-  "data": {
-    "list": [
-      {
-        "date": "2026-03-31",
-        "rate": "0.0175",
-        "short_shares": "65598603",
-        "avg_daily_vol": "62121644",
-        "days_cover": "1.06",
-        "close": "371.750"
-      }
-    ]
-  }
+  "data": [
+    {
+      "timestamp": "2022-03-15T04:00:00Z",
+      "current_shares_short": "111286790",
+      "avg_daily_share_volume": "95077016",
+      "days_to_cover": "1.17",
+      "rate": "0.0068",
+      "close": ""
+    }
+  ]
 }
 ```
+
+  </TabItem>
+  <TabItem value="hk" label="港股（.HK 代码）">
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": [
+    {
+      "timestamp": "2024-06-13T16:00:00Z",
+      "amount": "53677721",
+      "balance": "20386798436",
+      "cost": "379.800",
+      "rate": "0.0057"
+    }
+  ]
+}
+```
+
+  </TabItem>
+</Tabs>
 
 ### Response Status
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [short_positions_rsp](#short_positions_rsp) |
-| 400    | Bad request | None   |
+| 200    | 成功        | 见下方 Schema |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
-### short_positions_rsp
+### 美股响应（`.US` 代码）
 
-<a id="short_positions_rsp"></a>
+| Name                     | Type     | Required | Description                               |
+| ------------------------ | -------- | -------- | ----------------------------------------- |
+| data                     | object[] | false    | 沽空持仓记录                              |
+| ∟ timestamp              | string   | false    | 结算日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`） |
+| ∟ current_shares_short   | string   | false    | 沽空持仓股数                              |
+| ∟ avg_daily_share_volume | string   | false    | 日均成交量                                |
+| ∟ days_to_cover          | string   | false    | 沽空回补天数                              |
+| ∟ rate                   | string   | false    | 沽空比率                                  |
+| ∟ close                  | string   | false    | 当日收盘价                                |
 
-| Name          | Type     | Required | Description                                      |
-| ------------- | -------- | -------- | ------------------------------------------------ |
-| list          | object[] | true     | Short position records                           |
-| ∟ date        | string   | true     | Settlement date in `YYYY-MM-DD` format           |
-| ∟ rate        | string   | true     | Short ratio (short shares ÷ float)               |
-| ∟ short_shares | string  | true     | Number of short shares                           |
-| ∟ avg_daily_vol | string | true     | Average daily volume                             |
-| ∟ days_cover  | string   | true     | Days-to-cover ratio (short shares ÷ avg daily vol) |
-| ∟ close       | string   | true     | Closing price on that date                       |
+### 港股响应（`.HK` 代码）
+
+| Name        | Type     | Required | Description                    |
+| ----------- | -------- | -------- | ------------------------------ |
+| data        | object[] | false    | 沽空持仓记录                   |
+| ∟ timestamp | string   | false    | 交易日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`） |
+| ∟ amount    | string   | false    | 沽空金额（港元）               |
+| ∟ balance   | string   | false    | 沽空持仓余额                   |
+| ∟ cost      | string   | false    | 当日收盘价                     |
+| ∟ rate      | string   | false    | 沽空比率                       |

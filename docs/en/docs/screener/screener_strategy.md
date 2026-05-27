@@ -1,7 +1,7 @@
 ---
-slug: delete-dca
-title: 刪除定投
-sidebar_position: 4
+slug: screener-strategy
+title: Screener Strategy Detail
+sidebar_position: 3
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,22 +10,24 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-永久停止並刪除定投，此操作不可撤銷。
+Get the full configuration of a single stock screener strategy by strategy ID, including all indicator groups and the filter range for each indicator.
+
+Endpoint: `GET /v1/quote/ai/screener/strategy/{id}` (strategy ID as path parameter)
 
 <CliCommand>
-longbridge dca stop 1225781523156889600
+longbridge screener run 42
 </CliCommand>
 
-<SDKLinks module="dca" klass="DCAContext" method="delete_dca" />
+<SDKLinks module="screener" klass="ScreenerContext" method="screener_strategy" />
 
 
 ## Parameters
 
-> **SDK 方法參數。**
+> **SDK method parameters.**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | string | 是 | 計劃 ID（路徑參數） |
+| id | integer | YES | Strategy ID from `screener_recommend_strategies` or `screener_user_strategies` |
 
 ## Request Example
 
@@ -33,13 +35,13 @@ longbridge dca stop 1225781523156889600
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import DCAContext, Config, OAuthBuilder
+from longbridge.openapi import ScreenerContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
-ctx = DCAContext(config)
+ctx = ScreenerContext(config)
 
-resp = ctx.delete_dca("1225781523156889600")
+resp = ctx.screener_strategy(42)
 print(resp)
 ```
 
@@ -48,14 +50,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncScreenerContext, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
-    ctx = AsyncDCAContext.create(config)
+    ctx = AsyncScreenerContext.create(config)
 
-    resp = await ctx.delete_dca("1225781523156889600")
+    resp = await ctx.screener_strategy(42)
     print(resp)
 
 if __name__ == "__main__":
@@ -66,15 +68,15 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, DCAContext, OAuth } = require('longbridge')
+const { Config, ScreenerContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
     console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
-  const ctx = DCAContext.new(config)
-  const resp = await ctx.delete_dca()
+  const ctx = ScreenerContext.new(config)
+  const resp = await ctx.screenerStrategy(42)
   console.log(resp)
 }
 main().catch(console.error)
@@ -85,14 +87,14 @@ main().catch(console.error)
 
 ```java
 import com.longbridge.*;
-import com.longbridge.dca.*;
+import com.longbridge.screener.*;
 
 class Main {
     public static void main(String[] args) throws Exception {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
-             DCAContext ctx = DCAContext.create(config)) {
-            var resp = ctx.getDeleteDca().get();
+             ScreenerContext ctx = ScreenerContext.create(config)) {
+            var resp = ctx.getScreenerStrategy(42L).get();
             System.out.println(resp);
         }
     }
@@ -104,14 +106,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+use longbridge::{oauth::OAuthBuilder, screener::ScreenerContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
-    let ctx = DCAContext::new(config);
-    let resp = ctx.delete_dca().await?;
+    let ctx = ScreenerContext::new(config);
+    let resp = ctx.screener_strategy(42).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -125,7 +127,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 #include <longbridge.hpp>
 
 using namespace longbridge;
-using namespace longbridge::dca;
+using namespace longbridge::screener;
 
 int main() {
     OAuthBuilder("your-client-id").build(
@@ -133,8 +135,8 @@ int main() {
         [](auto res) {
             if (!res) return;
             Config config = Config::from_oauth(*res);
-            DCAContext ctx = DCAContext::create(config);
-            ctx.delete_dca([](auto resp) {
+            ScreenerContext ctx = ScreenerContext::create(config);
+            ctx.screener_strategy(42, [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -155,7 +157,7 @@ import (
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/dca"
+	"github.com/longbridge/openapi-go/screener"
 )
 
 func main() {
@@ -168,12 +170,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := dca.NewFromCfg(conf)
+	c, err := screener.NewFromCfg(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.DeleteDca(context.Background())
+	resp, err := c.ScreenerStrategy(context.Background(), 42)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -193,7 +195,17 @@ func main() {
 {
   "code": 0,
   "message": "success",
-  "data": {}
+  "data": {
+    "id": 19,
+    "name": "今日大涨股票",
+    "market": "US",
+    "type": "platform",
+    "filter": {
+      "filters": [
+        { "key": "prevchg", "min": "2", "max": "", "tech_values": {} }
+      ]
+    }
+  }
 }
 ```
 
@@ -201,13 +213,24 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | 成功        | [DeleteDcaResponse](#DeleteDcaResponse) |
-| 400    | 請求錯誤    | None   |
+| 200    | Success     | [ScreenerStrategyDetail](#ScreenerStrategyDetail) |
+| 400    | Bad request | None   |
 
 ## Schemas
 
-### DeleteDcaResponse
+### ScreenerStrategyDetail
 
-<a id="DeleteDcaResponse"></a>
+<a id="ScreenerStrategyDetail"></a>
 
-無響應體字段。
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| id | integer | false | Strategy ID |
+| name | string | false | Strategy name |
+| market | string | false | Target market |
+| type | string | false | Strategy type |
+| filter | object | false | Filter configuration |
+| ∟ filters | object[] | false | Filter conditions |
+| ∟ ∟ key | string | false | Indicator key (no `filter_` prefix) |
+| ∟ ∟ min | string | false | Lower bound |
+| ∟ ∟ max | string | false | Upper bound |
+| ∟ ∟ tech_values | object | false | Technical indicator params |

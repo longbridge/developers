@@ -1,7 +1,7 @@
 {
   "label": "市场",
   "collapsible": true,
-  "collapsed": true,
+  "collapsed": false,
   "link": null,
   "position": 3.7
 }

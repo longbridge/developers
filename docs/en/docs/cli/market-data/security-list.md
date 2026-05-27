@@ -6,14 +6,14 @@ sidebar_position: 12
 
 # longbridge security-list
 
-List US securities that are eligible for overnight trading on Longbridge.
+List securities available for a given market on Longbridge. Supports US, HK, CN, and SG markets.
 
 <QuotePermission command="security-list" />
 
 ## Basic Usage
 
 ```bash
-longbridge security-list
+longbridge security-list [MARKET] [--page N] [--count N]
 ```
 
 ```
@@ -29,19 +29,34 @@ longbridge security-list
 
 ## Examples
 
-### View overnight-eligible US securities
+### List securities by market
 
 ```bash
 # Default (US market)
 longbridge security-list
-# Explicit market
-longbridge security-list US
-# JSON output for validating eligibility before placing trades
-longbridge security-list US --format json
+# Hong Kong market
+longbridge security-list HK
+# China A-shares
+longbridge security-list CN
+# Singapore market
+longbridge security-list SG
+# JSON output for scripting
+longbridge security-list HK --format json
 ```
 
-Returns the full list of US symbols currently eligible for overnight trading sessions on Longbridge. Use `--format json` to get a machine-readable list for automating eligibility checks.
+### Pagination
+
+```bash
+# First page (default: 50 records per page)
+longbridge security-list HK
+# Second page
+longbridge security-list HK --page 2
+# Custom page size
+longbridge security-list HK --page 1 --count 100
+```
+
+Use `--format json` to get a machine-readable list for automating eligibility checks or further processing.
 
 ## Notes
 
-Only the US market is supported (Longbridge API limitation). This list changes as eligibility is updated — check it before submitting overnight orders rather than relying on a cached copy.
+This list changes as eligibility is updated — query it fresh rather than relying on a cached copy.

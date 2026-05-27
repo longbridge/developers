@@ -6,14 +6,14 @@ sidebar_position: 12
 
 # longbridge security-list
 
-列出 Longbridge 支持夜盘交易的美股标的。
+列出 Longbridge 指定市场的证券标的，支持美股、港股、A 股和新加坡市场。
 
 <QuotePermission command="security-list" />
 
 ## 基本用法
 
 ```bash
-longbridge security-list
+longbridge security-list [MARKET] [--page N] [--count N]
 ```
 
 ```
@@ -29,19 +29,34 @@ longbridge security-list
 
 ## 示例
 
-### 查看可夜盘交易的美股标的
+### 按市场查询证券列表
 
 ```bash
 # 默认（美股市场）
 longbridge security-list
-# 明确指定市场
-longbridge security-list US
-# JSON 输出，可在下单前校验标的资格
-longbridge security-list US --format json
+# 港股市场
+longbridge security-list HK
+# A 股市场
+longbridge security-list CN
+# 新加坡市场
+longbridge security-list SG
+# JSON 输出，便于脚本处理
+longbridge security-list HK --format json
 ```
 
-返回当前在 Longbridge 支持夜盘交易的美股标的完整列表。使用 `--format json` 获取机器可读列表，便于自动化资格校验。
+### 分页查询
+
+```bash
+# 第一页（默认每页 50 条）
+longbridge security-list HK
+# 第二页
+longbridge security-list HK --page 2
+# 自定义每页数量
+longbridge security-list HK --page 1 --count 100
+```
+
+使用 `--format json` 获取机器可读列表，便于自动化处理或资格校验。
 
 ## 说明
 
-仅支持美股市场（Longbridge API 限制）。此列表会随资格更新而变化——请在提交夜盘委托前实时查询，勿依赖缓存数据。
+此列表会随标的资格变化而更新——请实时查询，勿依赖缓存数据。

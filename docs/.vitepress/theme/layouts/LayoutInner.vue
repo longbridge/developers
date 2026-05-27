@@ -17,6 +17,7 @@ import TryItContent from '../components/TryIt/Content.vue'
 import ContentWrapper from './Content.vue'
 import 'vitepress/theme'
 import ApiReference from '../components/ApiReference.vue'
+import ProgressBar from '../components/ProgressBar.vue'
 
 const { isOpen: isSidebarOpen, open: openSidebar, close: closeSidebar } = useSidebarControl()
 
@@ -37,6 +38,7 @@ provide('hero-image-slot-exists', heroImageSlotExists)
   <!-- @vue-ignore -->
   <div v-if="frontmatter.layout !== false" class="Layout" :class="frontmatter.pageClass">
     <slot name="layout-top" />
+    <ProgressBar />
     <VPSkipLink />
     <VPBackdrop class="backdrop" :show="isSidebarOpen" @click="closeSidebar" />
     <AppNav />
