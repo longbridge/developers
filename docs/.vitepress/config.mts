@@ -20,6 +20,10 @@ const MCP_TOOLS_DATA_PATH = resolve(__dirname, 'data/mcp-tools.json')
 const regionCfg = getRegionConfig()
 const regionSrcExclude = computeSrcExclude(docsRoot)
 
+// Google One Tap：proxy 由环境变量 PROXY 控制（CI 与本地 dev:canary/build:canary 脚本显式注入），
+// 默认 production。放在 head 配置里，dev 与 build 都生效。
+const oneTapProxy = process.env.PROXY === 'canary' ? 'canary' : 'production'
+
 const insertScript = (html: string) => {
   const $ = cheerio.load(html)
   $('head').prepend(
@@ -159,6 +163,7 @@ export default defineConfig(
     gtag('config', 'G-P81Y8BDYYS');`],
     ['script', { defer: '', src: 'https://assets.lbkrs.com/pkg/sensorsdata/1.21.13.min.js' }],
     ['script', { async: '', src: 'https://at.alicdn.com/t/c/font_2621450_y740y72ffjq.js' }],
+    ['script', { src: 'https://assets.wbrks.com/plugin/session/google-one-tap.es.js', 'data-proxy': oneTapProxy }],
   ],
     themeConfig: {
       editLink: {
