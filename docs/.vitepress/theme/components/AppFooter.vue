@@ -126,6 +126,22 @@ const year = new Date().getFullYear()
           <li>
             <a :href="localePath('/docs/legal/user-data-authorization-sg')">{{ t('footer.dataAuthorisationSG') }}</a>
           </li>
+          <li>
+            <a
+              href="https://support.longbridgehk.com/topics/2i408e7/api_disclaimer"
+              target="_blank"
+              rel="noreferrer"
+              >{{ t('footer.disclaimer') }}</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://support.longbridgehk.com/topics/2i408e7/api_authentication"
+              target="_blank"
+              rel="noreferrer"
+              >{{ t('footer.apiLicense') }}</a
+            >
+          </li>
         </ul>
       </div>
     </div>

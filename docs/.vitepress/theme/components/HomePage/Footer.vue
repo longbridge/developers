@@ -61,6 +61,14 @@ const leftLinks = computed(() => [
     href: `${sgBaseUrl.value}/support/topics/Other/privacy-policy`,
     label: t('side-footer.section-terms.privacy-policy'),
   },
+  {
+    href: 'https://support.longbridgehk.com/topics/2i408e7/api_disclaimer',
+    label: t('footer.disclaimer'),
+  },
+  {
+    href: 'https://support.longbridgehk.com/topics/2i408e7/api_authentication',
+    label: t('footer.apiLicense'),
+  },
 ])
 
 const rightLinks = [

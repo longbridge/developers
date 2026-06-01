@@ -182,6 +182,8 @@ const LOCALE = {
           cta: 'Install now',
         },
       ],
+      disclaimer:
+        'Longbridge Developers does not authorize or permit third parties to provide regulated financial advisory services without obtaining all licenses, registrations, approvals, or exemptions required under applicable laws and regulations.',
     },
     cta: {
       title: 'Build smarter financial tools with real-time data and AI.',
@@ -346,6 +348,8 @@ const LOCALE = {
           cta: '立即安装',
         },
       ],
+      disclaimer:
+        'Longbridge Developers 不授权或允许任何第三方在未依据适用法律法规取得所有必要牌照、注册、批准或豁免的情况下，提供受监管的金融顾问服务。',
     },
     cta: {
       title: '用实时数据与 AI 构建更智能的金融工具',
@@ -509,6 +513,8 @@ const LOCALE = {
           cta: '立即安裝',
         },
       ],
+      disclaimer:
+        'Longbridge Developers 不授權或允許任何第三方在未依據適用法律法規取得所有必要牌照、註冊、批准或豁免的情況下，提供受監管的金融顧問服務。',
     },
     cta: {
       title: '用即時數據與 AI 構建更智慧的金融工具',
@@ -2238,6 +2244,16 @@ const GETSTARTED = [
             </span>
           </a>
         </div>
+        <p
+          style="
+            margin: 40px 20px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--vp-c-text-3);
+            text-align: center;
+          ">
+          {{ content.getstarted.disclaimer }}
+        </p>
       </div>
     </section>
 
