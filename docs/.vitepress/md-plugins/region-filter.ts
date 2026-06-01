@@ -11,14 +11,23 @@ export function RegionFilterPlugin(md: MarkdownItAsync) {
   const config = getRegionConfig()
   if (!config) return
 
-  // URL rewriting: replace global hostname with region hostname in all inline tokens
+  // URL rewriting: replace global hostnames (site + API) with region hostnames in all inline tokens
+  const urlReplacements: [string, string][] = []
   if (config.siteHostname && config.siteHostname !== 'https://open.longbridge.com') {
+    urlReplacements.push(['https://open.longbridge.com', config.siteHostname])
+  }
+  if (config.apiBaseUrl && config.apiBaseUrl !== 'https://openapi.longbridge.com') {
+    urlReplacements.push(['https://openapi.longbridge.com', config.apiBaseUrl])
+  }
+  if (urlReplacements.length > 0) {
     md.core.ruler.push('region_url_rewrite', (state) => {
       for (const token of state.tokens) {
-        rewriteTokenUrls(token, 'https://open.longbridge.com', config.siteHostname)
-        if (token.children) {
-          for (const child of token.children) {
-            rewriteTokenUrls(child, 'https://open.longbridge.com', config.siteHostname)
+        for (const [from, to] of urlReplacements) {
+          rewriteTokenUrls(token, from, to)
+          if (token.children) {
+            for (const child of token.children) {
+              rewriteTokenUrls(child, from, to)
+            }
           }
         }
       }

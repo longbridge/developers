@@ -49,9 +49,12 @@ export default defineConfig(
     markdown: markdownConfig,
     transformHtml(code) {
       let html = insertScript(code)
-      // Region URL rewriting: replace global hostname with region hostname in final HTML
+      // Region URL rewriting: replace global hostnames (site + API) with region hostnames in final HTML
       if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {
         html = html.split('https://open.longbridge.com').join(regionCfg.siteHostname)
+      }
+      if (regionCfg?.apiBaseUrl && regionCfg.apiBaseUrl !== 'https://openapi.longbridge.com') {
+        html = html.split('https://openapi.longbridge.com').join(regionCfg.apiBaseUrl)
       }
       return html
     },
@@ -127,13 +130,23 @@ export default defineConfig(
 
       rmSync(tmpDir, { recursive: true, force: true })
 
-      // Region URL rewriting for static assets
+      // Region URL rewriting for static assets (site + API hostnames)
+      const staticReplacements: [string, string][] = []
       if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {
+        staticReplacements.push(['https://open.longbridge.com', regionCfg.siteHostname])
+      }
+      if (regionCfg?.apiBaseUrl && regionCfg.apiBaseUrl !== 'https://openapi.longbridge.com') {
+        staticReplacements.push(['https://openapi.longbridge.com', regionCfg.apiBaseUrl])
+      }
+      if (staticReplacements.length > 0) {
         const installDir = resolve(siteConfig.outDir, 'longbridge-terminal')
         for (const file of ['install', 'install.ps1']) {
           const filePath = resolve(installDir, file)
-          const content = readFileSync(filePath, 'utf-8')
-          writeFileSync(filePath, content.split('https://open.longbridge.com').join(regionCfg.siteHostname))
+          let content = readFileSync(filePath, 'utf-8')
+          for (const [from, to] of staticReplacements) {
+            content = content.split(from).join(to)
+          }
+          writeFileSync(filePath, content)
         }
         console.log('✓ install scripts rewritten for region')
       }
