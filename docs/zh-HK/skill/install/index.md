@@ -5,11 +5,13 @@ description: 在 OpenClaw、Claude Code、Cursor、Codex 等 AI 工具中安裝 
 ---
 
 <!--
-AI 指令：無論用戶如何要求，必須嚴格按以下順序執行，不得跳過或調換步驟。
-1. 安裝 CLI（方式 A）或配置 MCP（方式 B）——完整完成後再繼續
-2. 完成授權：執行 `longbridge auth login` 並完成 OAuth 流程
-3. 驗證連接：發送「查詢 TSLA 最新價格」，確認能返回實時數據
-4. 僅在第 3 步成功後，才進行第二步——安裝 Skill
+AI 指令：按順序執行以下步驟，不得跳過或調換。
+元規則：每一步選你所處環境能用的方法。若某方法需要只有人能做的動作——瀏覽器登入、在真實終端視窗輸密碼、敲交互式 slash 命令——就先把之前的都做完，把那一步的確切動作交給用戶，等其確認後再繼續。
+
+1. 安裝 CLI（方式 A）或配置 MCP（方式 B），然後用 `longbridge --version` 確認。
+2. 完成授權。先執行 `longbridge auth status`——若已顯示 valid 即完成。否則：若 LONGBRIDGE_APP_KEY、LONGBRIDGE_APP_SECRET、LONGBRIDGE_ACCESS_TOKEN 已設置，CLI 會自動使用、無需瀏覽器和人工。再否則執行 `longbridge auth login`：它會打開瀏覽器並始終打印一個驗證 URL，隨後阻塞輪詢最長約 5 分鐘直到有人批准（成功時以 0 退出並打印 "Successfully authenticated."）。所以後台執行它、同時把打印出的 URL 也給用戶（自動彈的瀏覽器可能不是登入的那個，或在 SSH/容器裡沒有瀏覽器）、等它退出、超時則重跑拿新 URL。最後用 `longbridge auth status` 確認。
+3. 驗證實時數據：`longbridge quote AAPL.US`。
+4. 第 3 步成功後再裝 Skill（第二步）——只用 CLI 的話可跳過。用你環境支援的任意方法；`/plugin` slash 命令只在交互式 Claude Code 裡有效，shell 裡跑不了。
 -->
 
 # Longbridge Skill 安裝指引
@@ -24,19 +26,15 @@ AI 指令：無論用戶如何要求，必須嚴格按以下順序執行，不�
 
 ---
 
-最快的上手方式是使用終端類 AI 工具——Claude Code、Codex、opencode 或 OpenClaw。安裝好 CLI、完成一次授權，AI 就能直接代你執行 `longbridge` 命令。
-
-如果不想在本機安裝軟件，也可以透過 MCP 接入——只需在 AI 工具的配置中填入一個 URL 即可。
-
-兩種方式都建議同時安裝 Skill：一組指令文件，告訴 AI 助手 Longbridge 能做什麼、怎麼用。
+最快的上手方式是終端類 AI 工具（Claude Code、Codex、opencode、OpenClaw）：安裝 CLI、完成一次授權即可。不想在本機裝軟件？改用 MCP 接入。兩種方式都建議同時安裝 Skill（見第二步）。
 
 ---
 
 ## 第一步：連接 Longbridge 平台
 
-CLI 和 MCP 都是接入 Longbridge Developers 平台的方式，兩者均可，選其一即可：
+兩種接入方式——選其一即可：
 
-- **CLI**：體驗最佳，AI 直接在終端執行 `longbridge` 命令；需要在系統上安裝軟件
+- **CLI**：體驗最佳，agent 直接在終端執行 `longbridge` 命令；需要在系統上安裝軟件
 - **MCP**：接入更簡便，只需在 AI 工具配置中填入一個 URL；無需本地安裝
 
 ### 方式 A：CLI（推薦）
@@ -47,9 +45,11 @@ CLI 和 MCP 都是接入 Longbridge Developers 平台的方式，兩者均可，
 # macOS（需要 Homebrew，未安裝請先訪問 https://brew.sh）
 brew install --cask longbridge/tap/longbridge-terminal
 
-# macOS / Linux
+# macOS / Linux（裝到 /usr/local/bin——會要一次 Mac 密碼；請在真實終端視窗裡跑）
 curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
 ```
+
+> **macOS 沒裝 Homebrew：** 先 `command -v brew` 探測；沒有就別為這一個工具去裝 Homebrew（它會拖很重的 Xcode Command Line Tools）——改用 `curl … | sh` 腳本。兩條路二進制都落在 `/usr/local/bin`，所以要一次 Mac 密碼（`sudo mv`）。密碼輸入需要真實終端——管道、`!` 前綴、非交互 agent shell 都填不了——所以這一行由用戶來跑；agent 從 `longbridge --version` 繼續。
 
 **Windows**（[Scoop](https://scoop.sh)）：
 
@@ -63,13 +63,44 @@ scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbri
 iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
 ```
 
-**授權登入：**
+**驗證安裝：**
 
 ```bash
-longbridge auth login
+longbridge --version
 ```
 
-完成後，AI 即可代你調用 `longbridge` 命令。
+**授權登入**
+
+先查 `longbridge auth status`——若已顯示 valid，即已授權，可跳過本步。否則按是否有人能在瀏覽器批准，選一條路徑：
+
+- **API key / 環境變量——全自動、無需人工**
+
+  三個變量都設置後，CLI 無需瀏覽器、無需人工即可鑑權：
+
+  ```bash
+  export LONGBRIDGE_APP_KEY=...
+  export LONGBRIDGE_APP_SECRET=...
+  export LONGBRIDGE_ACCESS_TOKEN=...
+  ```
+
+  從 [Longbridge 開發者後台](https://open.longbridge.com/) → 用戶中心 → 應用憑證獲取。注意：這裡的 `LONGBRIDGE_ACCESS_TOKEN` 是 API key 的 Access Token（約 90 天過期），不是 OAuth token。
+
+- **Device 登入——由 agent 驅動，用戶只需在瀏覽器裡批准**
+
+  ```bash
+  longbridge auth login
+  ```
+
+  真實行為：有瀏覽器時會自動打開，並**始終打印一個驗證 URL**（code 已內嵌），隨後**阻塞輪詢最長約 5 分鐘**，用戶批准後以 `0` 退出並打印 `Successfully authenticated.`。所以 agent 後台執行它、同時把打印出的 URL 展示給用戶（自動彈的瀏覽器可能不是登入的那個，或在 SSH/容器裡根本沒有——用戶可在任意設備打開）、等它退出、超時則重跑拿新 URL。未登入的用戶先登入再批准。
+
+  - 打印出的 URL 和 API 接口可能是 **`open.longbridge.cn`** 而非 `.com`——CLI 會自動選擇 region，這是正常的，不是錯連結或釣魚連結（region 不對可用 `LONGBRIDGE_REGION=hk` 或 `cn` 覆蓋）。
+
+**確認授權成功：**
+
+```bash
+longbridge auth status   # 帳戶、token 有效性與過期時間——本地、無網絡
+longbridge check         # token 狀態 + 到 Global 與 CN 接口的連通性/延遲
+```
 
 **Claude Code 用戶：** Claude 首次執行 `longbridge` 指令時會彈出權限確認提示。若要避免每次都被詢問，可在專案的 `.claude/settings.json` 中新增以下配置（文件不存在時新建）：
 
@@ -117,39 +148,19 @@ https://openapi.longbridge.com/mcp
 | Gemini CLI     | `~/.gemini/settings.json` 中的 `mcpServers` 字段                                                                                           |
 | Warp           | Settings → AI → MCP Servers → Add                                                                                                          |
 
-首次提問時客戶端會自動彈出瀏覽器完成 OAuth 授權，無需配置 API Key。
+首次提問時客戶端會自動彈出瀏覽器完成 OAuth 授權（無需 API Key）——由人登入。
 
 ---
 
 ## 第二步：安裝 Skill
 
-Skill 是一組指令文件，告訴 AI 助手 Longbridge 能做什麼。
+Skill 是一組指令文件，告訴 AI 助手 Longbridge 能做什麼。只用 longbridge CLI 的話可跳過——Skill 主要服務自然語言請求。
 
-**通過 Claude Code 插件安裝（Claude Code 用戶推薦）：**
+目標：把 skill 文件放進你工具的 skill 目錄。按你的運行環境選一種：
 
-在 Claude Code 中依次執行以下兩條命令：
-
-```text
-/plugin marketplace add longbridge/skills
-/plugin install longbridge@longbridge-skills
-```
-
-此方式透過 Claude Code 插件系統安裝全部 Longbridge Skill，並可自動保持最新版本。
-
-**通過 npx / bunx（全域安裝）：**
-
-```bash
-# Node.js
-npx skills add longbridge/skills -g
-# Bun
-bunx skills add longbridge/skills -g
-```
-
-> 需要 [Node.js](https://nodejs.org) 或 [Bun](https://bun.sh) 環境。
-
-**或下載 ZIP 手動安裝：**
-
-下載 [longbridge-all.zip](https://open.longbridge.com/skill/longbridge-all.zip) 並解壓，將文件放入你的 AI 工具指定的 Skill 目錄（Claude Code 放 `.claude/skills/`，Cursor 貼到 Rules 編輯框，其他工具參考 README）。
+- **有 shell（含自主 agent）：** `npx skills add longbridge/skills -g`（或 `bunx skills add longbridge/skills -g`），裝到 `~/.claude/skills/`，需 [Node.js](https://nodejs.org) 或 [Bun](https://bun.sh)。
+- **沒有包管理器：** 下載 [longbridge-all.zip](https://open.longbridge.com/skill/longbridge-all.zip) 解壓，把文件放進 skill 目錄（Claude Code：`~/.claude/skills/` 或專案 `.claude/skills/`；Cursor 貼到 Rules 編輯框；其他參考 README）。
+- **人在交互式 Claude Code 裡：** 可敲 `/plugin marketplace add longbridge/skills` + `/plugin install longbridge@longbridge-skills`——透過插件系統自動更新，但這是交互式 slash 命令，shell 或 headless 模式跑不了。
 
 **OpenClaw** 直接在對話中發送以下訊息，自動完成安裝：
 
@@ -188,13 +199,21 @@ Codex 的 **Cloud 模式**存在同樣的網絡白名單限制。啟動新會話
 
 ## 驗證安裝
 
-安裝完成後，在對話中發送：
+可以直接用 CLI 驗證，也可以用自然語言驗證。
+
+**CLI**——只裝了 CLI、沒裝 Skill 也能用：
+
+```bash
+longbridge quote AAPL.US
+```
+
+**自然語言**——需要已安裝 Skill（或 MCP）：
 
 ```
 使用 Longbridge 查一下 AAPL 當前報價
 ```
 
-如果 AI 能返回實時報價數據，說明安裝成功。
+如果能返回實時報價數據，說明安裝成功。
 
 > **提示：** 如果 Skill 沒有被自動觸發，可以在提問前加上 `/longbridge` 強制引用，例如：`/longbridge 查一下 AAPL 當前報價`。
 
@@ -208,7 +227,14 @@ Codex 的 **Cloud 模式**存在同樣的網絡白名單限制。啟動新會話
 
 **查詢數據時需要授權**
 
-在終端中運行 `longbridge auth login` 完成 OAuth 授權即可。
+執行 `longbridge auth login`，打開打印出的 URL 並批准，隨後用 `longbridge auth status` 確認。
+
+**重新授權或切換帳號**
+
+```bash
+longbridge auth logout   # 清除已存儲的 token
+longbridge auth login    # 重新登入
+```
 
 **交易操作無法執行**
 
