@@ -144,7 +144,7 @@
     {
       "slug": "longbridge-buffett-moat-stock-screener",
       "name": "longbridge-buffett-moat-stock-screener",
-      "description": "Buffett-style stock screener — \"What would Buffett buy now?\" Generates 3–5 candidate stocks from a market / sector / preference query via a two-layer model: hard quant filter (ROE 5y ≥15%, debt/asset ≤50%, FCF positive 3y, listed ≥5y, gross margin ≥30%) → qualitative moat scoring (moat 35% / capital allocation 20% / earnings predictability 20% / valuation 15% / runway 10%). Longbridge CLI first, MCP fallback, WebSearch for gaps only. Output: candidate cards with moat-type tag, quantitative highlights, verdict (🟢 meets Buffett criteria / 🟡 partially meets criteria / 🔴 does not meet criteria), deep-dive CTA to `longbridge-buffett-moat-analyzer`. Mandatory holding-period education + data-source appendix. Disqualifies airlines, pre-revenue biotech, ST, listing<5y. Triggers: \"巴菲特会买什么\", \"巴菲特选股\", \"巴菲特风格的股票\", \"护城河选股\", \"宽护城河股票\", \"价值投资选股\", \"10年不动的股票\", \"定价权强的公司\", \"巴菲特會買什麼\", \"巴菲特選股\", \"護城河選股\", \"寬護城河股票\", \"Buffett screener\", \"what would Buffett buy\", \"wide-moat screener\", \"quality compounder screen\", \"Berkshire-style screen\", \"pricing-power screen\".",
+      "description": "Buffett-style stock screener — \"What would Buffett buy now?\" Generates 3–5 candidate stocks from a market / sector / preference query via a two-layer model: hard quant filter (ROE 5y ≥15%, debt/asset ≤50%, FCF positive 3y, listed ≥5y, gross margin ≥30%) → qualitative moat scoring (moat 35% / capital allocation 20% / earnings predictability 20% / valuation 15% / runway 10%). Longbridge CLI first, MCP fallback, WebSearch for gaps only. Output: candidate cards with moat-type tag, quantitative highlights, verdict (🟢 meets Buffett criteria / 🟡 partially meets criteria / 🔴 does not meet criteria), deep-dive CTA to `longbridge-buffett-moat-analyzer`. Mandatory holding-period education + data-source appendix. Disqualifies airlines, pre-revenue biotech, ST, listing<5y. Triggers: \"巴菲特会买什么\", \"巴菲特筛股\", \"巴菲特风格的股票\", \"护城河筛股\", \"宽护城河股票\", \"价值投资筛股\", \"10年不动的股票\", \"定价权强的公司\", \"巴菲特會買什麼\", \"巴菲特篩股\", \"護城河篩股\", \"寬護城河股票\", \"Buffett screener\", \"what would Buffett buy\", \"wide-moat screener\", \"quality compounder screen\", \"Berkshire-style screen\", \"pricing-power screen\".",
       "metadata": {
         "author": "longbridge",
         "version": "1.0.0",
@@ -698,7 +698,7 @@
     {
       "slug": "longbridge-graham-screener",
       "name": "longbridge-graham-screener",
-      "description": "Graham cigar-butt batch screener — runs Benjamin Graham's NCAV / net-net / defensive-investor hard filters across an index or market universe and returns a ranked candidate list with NCAV ratio, PE, PB, dividend yield, debt coverage, 5y earnings stability, Graham buy price, and a dynamic value-trap warning. Longbridge CLI first; MCP fallback if CLI unavailable; WebSearch fills genuine gaps (PMI, sector outlook). Every figure footnoted to its source. Auto-switches model for banks / insurance / REITs and flags <2y IPOs and suspended names. Triggers: \"格雷厄姆筛选\", \"格雷厄姆选股\", \"捡烟蒂榜单\", \"烟蒂股榜\", \"NCAV筛选\", \"NCAV排行榜\", \"净流动资产筛选\", \"防御型投资者选股\", \"撿煙蒂榜單\", \"煙蒂股榜\", \"NCAV篩選\", \"淨流動資產篩選\", \"防禦型投資者選股\", \"Graham screen\", \"Graham screener\", \"NCAV screen\", \"net-net screen\", \"net-net list\", \"cigar-butt screen\", \"defensive investor screen\", \"liquidation value screen\", \"Benjamin Graham screen\".",
+      "description": "Graham cigar-butt batch screener — runs Benjamin Graham's NCAV / net-net / defensive-investor hard filters across an index or market universe and returns a ranked candidate list with NCAV ratio, PE, PB, dividend yield, debt coverage, 5y earnings stability, Graham buy price, and a dynamic value-trap warning. Longbridge CLI first; MCP fallback if CLI unavailable; WebSearch fills genuine gaps (PMI, sector outlook). Every figure footnoted to its source. Auto-switches model for banks / insurance / REITs and flags <2y IPOs and suspended names. Triggers: \"格雷厄姆筛选\", \"格雷厄姆筛股\", \"捡烟蒂榜单\", \"烟蒂股榜\", \"NCAV筛选\", \"NCAV排行榜\", \"净流动资产筛选\", \"防御型投资者筛股\", \"撿煙蒂榜單\", \"煙蒂股榜\", \"NCAV篩選\", \"淨流動資產篩選\", \"防禦型投資者篩股\", \"Graham screen\", \"Graham screener\", \"NCAV screen\", \"net-net screen\", \"net-net list\", \"cigar-butt screen\", \"defensive investor screen\", \"liquidation value screen\", \"Benjamin Graham screen\".",
       "metadata": {
         "author": "longbridge",
         "version": "1.0.0",
@@ -1588,6 +1588,12 @@
         "requires_mcp": false,
         "tier": "read"
       }
+    },
+    {
+      "slug": "longbridge-turtle-signal",
+      "name": "turtle-signal",
+      "description": "基于原版海龟交易法（Turtle Trading）的量化信号扫描与仓位计算工具。通过 longbridge CLI 获取 A股 / 港股 / 美股 / 新加坡股的行情数据，自动计算 ATR（N 值）、突破信号（System 1 / System 2）、止损价、加仓点和 Unit 仓位大小。\n\nUse when users mention 海龟、turtle、海龟交易、海龟信号、turtle signal、turtle trading, or ask about 突破信号（breakout）、ATR、N值、Unit仓位、止损价、加仓点、S1/S2信号、20日高点/低点、55日突破, or request to scan watchlist/index for trading signals using the turtle system. Also triggers when users say \"扫描突破信号\", \"帮我算Unit\", \"海龟止损\", \"海龟系统分析\", or any variation combining a stock name/code with \"海龟\".\n\n**适用场景：**\n- 每日收盘后扫描突破信号（20日/55日高低点突破）\n- 计算单股或批量标的的 ATR、止损价、加仓点\n- 根据账户净值计算合理仓位（Unit）大小\n- 判断现有持仓是否触发出场或加仓条件\n- 扫描自选股 / 指数成分股的海龟信号\n\n**不适用：**\n- 基本面分析（海龟系统纯技术面）\n- 预测价格涨跌方向\n- 自动下单（仅输出信号，用户自行操作）\n- A股/港股/新加坡股做空开仓操作",
+      "metadata": {}
     },
     {
       "slug": "longbridge-valuation",
