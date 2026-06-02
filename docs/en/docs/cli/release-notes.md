@@ -9,8 +9,7 @@ sidebar_icon: newspaper
 
 ### [v0.22.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.2)
 
-- **JSON timestamps now RFC 3339** — `topics` (post and reply timestamps) and account P&L flow records output ISO 8601 / RFC 3339 datetimes instead of raw Unix epochs, consistent with every other command
-- **Cleaner JSON for `rank`, `screener`, `short-positions`, `top-movers`** — internal `counter_id` fields are replaced with the readable `symbol`; `rank` categories and `screener strategies` output is flattened and normalized (drops the `ib_` key prefix, adds `market` and strategy `type`)
+- **JSON timestamps now RFC 3339** — time-series and history commands (`kline`, `kline-history`, `trades`, `intraday`, `capital-flow`, `capital-dist`, `market-temp`, `topics`) and account P&L flows now output ISO 8601 / RFC 3339 datetimes instead of raw Unix epochs
 - **`market-temp --history` default range** — omitting `--start` now defaults to 30 days before the end date instead of today, so a single `--history` call returns a full month of data
 
 ### [v0.22.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.0)

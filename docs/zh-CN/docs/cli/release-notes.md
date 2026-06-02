@@ -9,8 +9,7 @@ sidebar_icon: newspaper
 
 ### [v0.22.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.2)
 
-- **JSON 时间戳统一为 RFC 3339** — `topics`（帖子与回复时间）及账户盈亏流水记录现输出 ISO 8601 / RFC 3339 日期时间，不再使用原始 Unix 时间戳，与其他命令保持一致
-- **`rank`、`screener`、`short-positions`、`top-movers` JSON 输出优化** — 内部 `counter_id` 字段替换为可读的 `symbol`；`rank` 分类与 `screener strategies` 输出经扁平化与规范化处理（去除 `ib_` 键前缀，新增 `market` 与策略 `type`）
+- **JSON 时间戳统一为 RFC 3339** — 时序与历史类命令（`kline`、`kline-history`、`trades`、`intraday`、`capital-flow`、`capital-dist`、`market-temp`、`topics`）及账户盈亏流水现输出 ISO 8601 / RFC 3339 日期时间，不再使用原始 Unix 时间戳
 - **`market-temp --history` 默认区间** — 省略 `--start` 时默认取结束日期前 30 天（此前默认为当天），单次 `--history` 即可返回整月数据
 
 ### [v0.22.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.0)
