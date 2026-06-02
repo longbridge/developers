@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.22.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.2)
+
+- **JSON 時間戳統一為 RFC 3339** — `topics`（帖子與回覆時間）及賬戶盈虧流水記錄現輸出 ISO 8601 / RFC 3339 日期時間，不再使用原始 Unix 時間戳，與其他命令保持一致
+- **`rank`、`screener`、`short-positions`、`top-movers` JSON 輸出優化** — 內部 `counter_id` 欄位替換為可讀的 `symbol`；`rank` 分類與 `screener strategies` 輸出經扁平化與規範化處理（去除 `ib_` 鍵前綴，新增 `market` 與策略 `type`）
+- **`market-temp --history` 默認區間** — 省略 `--start` 時默認取結束日期前 30 天（此前默認為當天），單次 `--history` 即可返回整月數據
+
 ### [v0.22.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.0)
 
 - **新增 `shareholder --top`** — 前 20 大股東（機構、個人、內部人）多報告期持股對比；`--object-id <id>` 查看單一股東持倉歷史及交易明細
