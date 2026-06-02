@@ -20,6 +20,7 @@ order := &trade.SubmitOrder{
     // TriggerPrice    decimal.Decimal  // LIT / MIT
     // TrailingAmount  decimal.Decimal  // TSLPAMT / TSMAMT
     // TrailingPercent decimal.Decimal  // TSLPPCT / TSMPCT
+    // LimitOffset     decimal.Decimal  // required for TSLPAMT / TSLPPCT
     // ExpireDate      *time.Time       // required when TimeInForce = GTD
     // OutsideRTH      trade.OutsideRTHAny  // US pre/post market
     // Remark          string

@@ -1,6 +1,6 @@
 # Go SDK Overview
 
-**Module:** `github.com/longbridge/openapi-go`
+**Module:** `github.com/longbridge/openapi-go` v0.21.0
 **Docs:** https://longbridge.github.io/openapi/go/
 
 ## Install

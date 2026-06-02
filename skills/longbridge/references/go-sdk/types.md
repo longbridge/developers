@@ -62,10 +62,12 @@ trade.TimeTypeGTD  // good-til-date (set ExpireDate)
 ## trade.OutsideRTH (US only)
 
 ```go
-trade.OutsideRTHOnly       // regular hours only
-trade.OutsideRTHAny        // pre & post market
-trade.OutsideRTHOvernight  // overnight
+trade.OutsideRTHOnly     // RTH_ONLY — regular hours only
+trade.OutsideRTHAny      // ANY_TIME — pre & post market
+trade.OutsideRTHUnknown  // default when the order is not a US stock
 ```
+
+> Unlike the Rust SDK, the Go SDK has **no** `Overnight` value here. Enable overnight trading at the config level, not via `OutsideRTH`.
 
 ## trade.OrderStatus (common)
 
