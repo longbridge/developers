@@ -126,6 +126,13 @@ Add Longbridge API docs to IDE/RAG       LLMs.txt / Markdown API
 - **Content** — news, filings, topics (ContentContext + Python fallback): [references/rust-sdk/content.md](references/rust-sdk/content.md)
 - **Types & Enums** — all Rust enums and structs: [references/rust-sdk/types.md](references/rust-sdk/types.md)
 
+### Go SDK
+
+- **Overview** — install, Config, OAuth, contexts, push callbacks: [references/go-sdk/overview.md](references/go-sdk/overview.md)
+- **QuoteContext** — quote methods, Subscribe + On* handlers: [references/go-sdk/quote-context.md](references/go-sdk/quote-context.md)
+- **TradeContext** — SubmitOrder struct, orders, account: [references/go-sdk/trade-context.md](references/go-sdk/trade-context.md)
+- **Types & Enums** — SubType, Period, OrderType, etc.: [references/go-sdk/types.md](references/go-sdk/types.md)
+
 ### AI Integration
 
 - **MCP** — hosted service, self-hosted server, setup & auth: [references/mcp.md](references/mcp.md)
