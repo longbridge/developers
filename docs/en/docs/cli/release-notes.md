@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.22.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.3)
+
+- **`quote` now includes the US overnight session** — `quote <SYMBOL> --format json` now populates `overnight_quote` alongside `pre_market_quote` and `post_market_quote`; previously the overnight field was always `null`, skewing after-close analysis in AI workflows
+- **Account-type banner on holdings commands** — `positions`, `fund-positions`, `assets`, and `portfolio` now print a one-line banner (`Live A/C (real account)` / `Demo A/C (simulated account)`) before the table, so it's clear which account the data belongs to; `--format json` output is unchanged
+
 ### [v0.22.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.2)
 
 - **JSON timestamps now RFC 3339** — time-series and history commands (`kline`, `kline-history`, `trades`, `intraday`, `capital-flow`, `capital-dist`, `market-temp`, `topics`) and account P&L flows now output ISO 8601 / RFC 3339 datetimes instead of raw Unix epochs

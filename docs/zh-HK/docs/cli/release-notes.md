@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.22.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.3)
+
+- **`quote` 新增美股隔夜時段數據** — `quote <SYMBOL> --format json` 現會輸出 `overnight_quote`，與 `pre_market_quote`、`post_market_quote` 並列；此前隔夜欄位始終為 `null`，會影響 AI 工作流中的盤後判斷
+- **持倉類命令顯示賬戶類型 banner** — `positions`、`fund-positions`、`assets`、`portfolio` 現會在表格前打印一行賬戶標識（`Live A/C (real account)` / `Demo A/C (simulated account)`），便於直接區分數據所屬賬戶；`--format json` 輸出保持不變
+
 ### [v0.22.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.2)
 
 - **JSON 時間戳統一為 RFC 3339** — 時序與歷史類命令（`kline`、`kline-history`、`trades`、`intraday`、`capital-flow`、`capital-dist`、`market-temp`、`topics`）及賬戶盈虧流水現輸出 ISO 8601 / RFC 3339 日期時間，不再使用原始 Unix 時間戳
