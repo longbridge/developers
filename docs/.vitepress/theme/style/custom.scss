@@ -54,6 +54,10 @@
   position: relative;
 }
 
+.VPDoc.has-sidebar {
+  margin-top: 48px;
+}
+
 .VPDoc::before {
   content: '';
   position: absolute;

@@ -37,6 +37,8 @@ interface CategoryConfig {
   collapsible?: boolean
   collapsed?: boolean
   link?: string | null | { title: string; slug: string }
+  /** 若设置，该分类在侧边栏渲染为指向此地址的单个链接，不展开子页面（用于由索引页统一索引的目录，如 legal） */
+  indexLink?: string
   childFileSort?: {
     sortByType: 'ext' | 'dir'
     ext?: string
@@ -173,6 +175,22 @@ function generateSidebarItems(
       const subDirPath = path.join(dirPath, dir)
       const subRelativePath = path.join(relativePath, dir)
       const subCategoryConfig = readCategoryConfig(subDirPath)
+
+      // 若分类配置了 indexLink，则在侧边栏渲染为单个链接项，不展开其子页面（由该链接指向的索引页统一索引）
+      if (subCategoryConfig?.indexLink) {
+        const linkVal = subCategoryConfig.indexLink
+        const docsBaseIdx = rootPath.indexOf('/docs')
+        const docsBase = docsBaseIdx >= 0 ? rootPath.slice(0, docsBaseIdx + 5) : rootPath
+        const resolvedLink = path.isAbsolute(linkVal) ? docsBase + linkVal : path.join(subRelativePath, linkVal)
+        const dirTitle = subCategoryConfig.label || formatDirName(dir)
+        const iconKey = subCategoryConfig.icon
+        const iconHtml =
+          iconKey && SIDEBAR_ICONS[iconKey] ? `<span class="sidebar-item-icon">${SIDEBAR_ICONS[iconKey]}</span>` : ''
+        const text = iconHtml ? `${iconHtml}${dirTitle}` : dirTitle
+        dirItems.push({ text, link: resolvedLink, position: subCategoryConfig.position })
+        continue
+      }
+
       const subItems = generateSidebarItems(subDirPath, subRelativePath, rootPath, depth + 1, docsRoot, excludeDirs)
 
       if (subItems.length > 0) {

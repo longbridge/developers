@@ -3,7 +3,7 @@ title: 'User Data Authorisation and Acknowledgement — HK'
 sidebar_label: 'Data Authorisation (HK)'
 id: legal_user-data-authorization-hk
 slug: '/legal/user-data-authorization-hk'
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 Please read this Authorisation carefully before proceeding. **By completing and submitting this Authorisation, you acknowldge and confirm that you have read, understood, and agree to be bound by all terms set out below in connection with the Longbridge Developers.**

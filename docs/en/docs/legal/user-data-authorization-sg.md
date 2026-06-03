@@ -3,7 +3,7 @@ title: 'User Data Authorisation and Acknowledgement — SG'
 sidebar_label: 'Data Authorisation (SG)'
 id: legal_user-data-authorization-sg
 slug: '/legal/user-data-authorization-sg'
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 Please read this Authorisation carefully before proceeding. **By completing and submitting this Authorisation, you acknowledge and confirm that you have read, understood, and agree to be bound by all terms set out below in connection with the Longbridge Developers.**

@@ -3,7 +3,7 @@ title: '用户数据授权与确认 — 新加坡'
 sidebar_label: '数据授权确认（新加坡）'
 id: legal_user-data-authorization-sg
 slug: '/legal/user-data-authorization-sg'
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 请在继续之前仔细阅读本授权书。**通过完成并提交本授权书，您即确认您已阅读、理解并同意受以下与 Longbridge Developers 相关的全部条款约束。**

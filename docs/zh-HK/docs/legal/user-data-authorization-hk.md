@@ -3,7 +3,7 @@ title: '用户數據授權與確認 — 香港'
 sidebar_label: '數據授權確認（香港）'
 id: legal_user-data-authorization-hk
 slug: '/legal/user-data-authorization-hk'
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 請在繼續之前仔細閲讀本授權書。**通過完成並提交本授權書，您即確認您已閲讀、理解並同意受以下與 Longbridge Developers 相關的全部條款約束。**
