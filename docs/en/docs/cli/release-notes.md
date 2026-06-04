@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
+
+- **`constituent` now supports ETFs** — ETF symbols return an asset-allocation breakdown (holdings / regional / asset-class / industry tables); index symbols behave exactly as before
+- **Full US ETF holdings from SEC N-PORT** — for US ETFs, `constituent` fetches the complete portfolio from SEC EDGAR N-PORT filings by default (weight, shares, market value — e.g. all 500+ holdings of `IVV.US`); falls back to the platform's asset-allocation summary when SEC data is unavailable
+
 ### [v0.22.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.3)
 
 - **`quote` now includes the US overnight session** — `quote <SYMBOL> --format json` now populates `overnight_quote` alongside `pre_market_quote` and `post_market_quote`; previously the overnight field was always `null`, skewing after-close analysis in AI workflows

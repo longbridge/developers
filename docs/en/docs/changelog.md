@@ -6,6 +6,26 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-04
+
+### CLI v0.22.4
+
+- **`constituent` now supports ETFs** — ETF symbols return an asset-allocation breakdown (holdings / regional / asset-class / industry); for US ETFs, the complete portfolio holdings are fetched from SEC EDGAR N-PORT filings by default (weight, shares, market value), with fallback to the platform's asset-allocation summary; index symbols behave exactly as before
+
+## 2026-06-03
+
+### CLI v0.22.3
+
+- **`quote` now includes the US overnight session** — `--format json` populates `overnight_quote` alongside `pre_market_quote` and `post_market_quote`, completing after-hours coverage for AI workflows
+- **Account-type banner on holdings commands** — `positions`, `fund-positions`, `assets`, and `portfolio` print a one-line banner (`Live A/C` / `Demo A/C`) before the table, making it clear which account the data belongs to
+
+## 2026-06-02
+
+### CLI v0.22.2
+
+- **JSON timestamps now RFC 3339** — time-series and history commands (`kline`, `trades`, `intraday`, `capital-flow`, etc.) and account P&L flows output ISO 8601 / RFC 3339 datetimes instead of raw Unix epochs, making JSON output directly consumable by AI agents and downstream tools
+- **`market-temp --history` default range** — omitting `--start` now returns a full month of data instead of a single day
+
 ## 2026-05-22
 
 ### CLI v0.22.0

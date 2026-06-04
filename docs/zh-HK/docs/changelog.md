@@ -6,6 +6,26 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-04
+
+### CLI v0.22.4
+
+- **`constituent` 支持 ETF** — ETF 標的返回資產分佈數據（持倉 / 地區 / 資產類別 / 行業）；美股 ETF 默認從 SEC EDGAR N-PORT 文件獲取完整持倉組合（權重、股數、市值），SEC 數據不可用時回退到平台資產分佈摘要；指數標的行為完全不變
+
+## 2026-06-03
+
+### CLI v0.22.3
+
+- **`quote` 新增美股隔夜時段數據** — `--format json` 輸出 `overnight_quote`，與 `pre_market_quote`、`post_market_quote` 並列，補全 AI 工作流的盤後行情覆蓋
+- **持倉類命令顯示賬戶類型標識** — `positions`、`fund-positions`、`assets`、`portfolio` 在表格前打印一行賬戶標識（`Live A/C` / `Demo A/C`），直接區分數據所屬賬戶
+
+## 2026-06-02
+
+### CLI v0.22.2
+
+- **JSON 時間戳改為 RFC 3339** — 時間序列和歷史類命令（`kline`、`trades`、`intraday`、`capital-flow` 等）及賬戶盈虧流水輸出 ISO 8601 / RFC 3339 日期時間，替代原始 Unix 時間戳，JSON 輸出可直接被 AI Agent 和下游工具消費
+- **`market-temp --history` 默認範圍** — 省略 `--start` 時返回完整一個月的數據，而非單日
+
 ## 2026-05-22
 
 ### CLI v0.22.0

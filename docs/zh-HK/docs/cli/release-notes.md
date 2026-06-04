@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
+
+- **`constituent` 支持 ETF** — ETF 標的現返回資產分佈數據（持倉 / 地區 / 資產類別 / 行業四組表格）；指數標的行為完全不變
+- **美股 ETF 完整持倉（SEC N-PORT）** — 美股 ETF 默認從 SEC EDGAR N-PORT 文件獲取完整持倉組合（權重、股數、市值，如 `IVV.US` 全部 500+ 隻持倉）；SEC 數據不可用時回退到平台資產分佈摘要
+
 ### [v0.22.3](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.3)
 
 - **`quote` 新增美股隔夜時段數據** — `quote <SYMBOL> --format json` 現會輸出 `overnight_quote`，與 `pre_market_quote`、`post_market_quote` 並列；此前隔夜欄位始終為 `null`，會影響 AI 工作流中的盤後判斷

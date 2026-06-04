@@ -56,8 +56,41 @@ longbridge constituent HSI.HK --limit 10
 longbridge constituent SPX.US --limit 20 --sort inflow
 ```
 
+### 查看 ETF 持倉
+
+```bash
+longbridge constituent IVV.US
+longbridge constituent QQQ.US --limit 20
+```
+
+對於 ETF 標的，`constituent` 會切換為展示持倉組合，而非指數成份股：
+
+- **美股 ETF** — 默認從 SEC EDGAR N-PORT 文件獲取完整持倉組合，包含每隻持倉的名稱、CUSIP、權重、股數和市值：
+
+```
+ETF Holdings — IVV.US (iShares Core S&P 500 ETF)
+Source: SEC N-PORT, report period 2026-03-31, filed 2026-05-28, 507 holdings
+
+| #  | name           | cusip     | weight | shares      | value(USD)     |
+|----|----------------|-----------|--------|-------------|----------------|
+| 1  | NVIDIA Corp.   | 67066G104 | 7.564% | 312,526,688 | 54,504,654,387 |
+| 2  | Apple, Inc.    | 037833100 | 6.650% | 188,816,321 | 47,919,694,106 |
+...
+... and 457 more (use --limit 0 for all)
+```
+
+- **其他 ETF**（或 SEC 數據不可用時，如 UIT 結構基金 `SPY.US`）— 回退到平台的資產分佈數據，按持倉、地區、資產類別、行業四組表格展示。
+
+注意：
+
+- N-PORT 數據為財季末快照，申報最長可延遲約 60 天——是權威的完整持倉列表，但非實時數據
+- `--limit` 控制持倉行數；`--limit 0` 展示全部；對預先排序的持倉數據，`--sort` / `--order` 不生效
+- 指數標的（如 `HSI.HK`、`.SPX.US`）行為完全不變
+
 ### JSON 輸出
 
 ```bash
 longbridge constituent HSI.HK --format json
+# ETF 持倉以結構化 JSON 輸出（完整列表，不截斷）
+longbridge constituent IVV.US --format json
 ```

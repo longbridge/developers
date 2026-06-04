@@ -6,6 +6,26 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-04
+
+### CLI v0.22.4
+
+- **`constituent` 支持 ETF** — ETF 标的返回资产分布数据（持仓 / 地区 / 资产类别 / 行业）；美股 ETF 默认从 SEC EDGAR N-PORT 文件获取完整持仓组合（权重、股数、市值），SEC 数据不可用时回退到平台资产分布摘要；指数标的行为完全不变
+
+## 2026-06-03
+
+### CLI v0.22.3
+
+- **`quote` 新增美股隔夜时段数据** — `--format json` 输出 `overnight_quote`，与 `pre_market_quote`、`post_market_quote` 并列，补全 AI 工作流的盘后行情覆盖
+- **持仓类命令显示账户类型标识** — `positions`、`fund-positions`、`assets`、`portfolio` 在表格前打印一行账户标识（`Live A/C` / `Demo A/C`），直接区分数据所属账户
+
+## 2026-06-02
+
+### CLI v0.22.2
+
+- **JSON 时间戳改为 RFC 3339** — 时间序列和历史类命令（`kline`、`trades`、`intraday`、`capital-flow` 等）及账户盈亏流水输出 ISO 8601 / RFC 3339 日期时间，替代原始 Unix 时间戳，JSON 输出可直接被 AI Agent 和下游工具消费
+- **`market-temp --history` 默认范围** — 省略 `--start` 时返回完整一个月的数据，而非单日
+
 ## 2026-05-22
 
 ### CLI v0.22.0
