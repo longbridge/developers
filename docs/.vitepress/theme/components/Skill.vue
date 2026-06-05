@@ -1316,7 +1316,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                   <span class="skill-hero-connect-step-num">{{ i + 1 }}</span>
                   <span>{{ step }}</span>
                 </div>
-                <a class="btn btn-dark" href="/connect" target="_self">
+                <a class="btn btn-dark" :href="localePfx + '/connect'" target="_self">
                   <svg
                     width="14"
                     height="14"
