@@ -1773,7 +1773,7 @@ const GETSTARTED = [
             <button
               class="code-copy"
               @click="
-                copyToClipboard('claude mcp add --transport http longbridge \\\n  https://openapi.longbridge.com/mcp')
+                copyToClipboard('claude mcp add --transport http longbridge \\\n  https://mcp.longbridge.com')
               ">
               <svg
                 width="13"
@@ -1792,7 +1792,7 @@ const GETSTARTED = [
           <div class="code-body" style="font-size: 13.5px; line-height: 1.8">
             <div><span class="ln-comment"># One-line install for Claude Code</span></div>
             <div><span class="ln-prompt">$ </span>claude mcp add --transport http longbridge \</div>
-            <div>&nbsp;&nbsp;<span class="ln-str">https://openapi.longbridge.com/mcp</span></div>
+            <div>&nbsp;&nbsp;<span class="ln-str">https://mcp.longbridge.com</span></div>
             <div>&nbsp;</div>
             <div style="color: var(--lb-fg-2)">→ Opening browser for OAuth 2.1…</div>
             <div style="color: var(--lb-fg-2)">✓ Authenticated as jason@longbridge.com</div>

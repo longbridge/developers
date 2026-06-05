@@ -15,7 +15,7 @@ import yaml from 'js-yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const docsRoot = resolve(__dirname, '..')
-const MCP_TOOLS_URL = 'https://openapi.longbridge.com/mcp/tools.json'
+const MCP_TOOLS_URL = 'https://mcp.longbridge.com/mcp/tools.json'
 const MCP_TOOLS_DATA_PATH = resolve(__dirname, 'data/mcp-tools.json')
 const regionCfg = getRegionConfig()
 const regionSrcExclude = computeSrcExclude(docsRoot)

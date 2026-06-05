@@ -75,7 +75,7 @@ pip install longbridge
 {
   "mcpServers": {
     "longbridge": {
-      "url": "https://openapi.longbridge.com/mcp"
+      "url": "https://mcp.longbridge.com"
     }
   }
 }

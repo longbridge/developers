@@ -92,7 +92,7 @@ Works with Claude Desktop, Cursor, Zed, Gemini CLI, Warp, and any tool that supp
 Add the following as a remote MCP server in your AI tool:
 
 ```
-https://openapi.longbridge.com/mcp
+https://mcp.longbridge.com
 ```
 
 For clients that use a JSON config file (Claude Desktop, Cursor, Zed, Gemini CLI, etc.), add this to your MCP config:
@@ -101,13 +101,13 @@ For clients that use a JSON config file (Claude Desktop, Cursor, Zed, Gemini CLI
 {
   "mcpServers": {
     "longbridge": {
-      "url": "https://openapi.longbridge.com/mcp"
+      "url": "https://mcp.longbridge.com"
     }
   }
 }
 ```
 
-> Users in mainland China can use the accelerated endpoint: `https://openapi.longbridge.cn/mcp`
+> Users in mainland China can use the accelerated endpoint: `https://mcp.longbridge.cn`
 
 Where to find the MCP configuration in each client:
 

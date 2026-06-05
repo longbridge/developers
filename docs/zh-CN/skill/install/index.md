@@ -90,7 +90,7 @@ longbridge auth login
 在 AI 工具的 MCP 配置中添加以下服务器地址：
 
 ```
-https://openapi.longbridge.com/mcp
+https://mcp.longbridge.com
 ```
 
 对于使用 JSON 配置文件的客户端（Claude Desktop、Cursor、Zed、Gemini CLI 等），将以下内容添加到 MCP 配置中：
@@ -99,13 +99,13 @@ https://openapi.longbridge.com/mcp
 {
   "mcpServers": {
     "longbridge": {
-      "url": "https://openapi.longbridge.com/mcp"
+      "url": "https://mcp.longbridge.com"
     }
   }
 }
 ```
 
-> 中国大陆用户可使用加速地址：`https://openapi.longbridge.cn/mcp`
+> 中国大陆用户可使用加速地址：`https://mcp.longbridge.cn`
 
 各工具配置入口：
 

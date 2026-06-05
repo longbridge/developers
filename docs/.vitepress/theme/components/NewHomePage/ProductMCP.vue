@@ -50,7 +50,7 @@ const clients = [
     name: 'Claude Code',
     logo: 'https://assets.lbctrl.com/uploads/6932dfac-0f9c-4577-bdd8-fc3d22d4223a/claude.svg',
     type: 'shell' as const,
-    cmd: 'claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp',
+    cmd: 'claude mcp add --transport http longbridge https://mcp.longbridge.com',
   },
   {
     id: 'codex',
@@ -58,7 +58,7 @@ const clients = [
     logo: 'https://assets.lbctrl.com/uploads/88eb58fe-b3bb-4875-90c7-c97e6d8fcc9e/openai.svg',
     type: 'ui' as const,
     steps: ['Settings', 'MCP Servers', 'Add Server'],
-    fields: { Name: 'longbridge', Type: 'Streamable HTTP', URL: 'https://openapi.longbridge.com/mcp' },
+    fields: { Name: 'longbridge', Type: 'Streamable HTTP', URL: 'https://mcp.longbridge.com' },
   },
   {
     id: 'cursor',
@@ -66,14 +66,14 @@ const clients = [
     logo: 'https://assets.lbctrl.com/uploads/f694478e-201b-4e74-a7b6-023639a27805/cursor.svg',
     type: 'ui' as const,
     steps: ['Settings', 'MCP Servers', 'Add Remote MCP Server'],
-    fields: { URL: 'https://openapi.longbridge.com/mcp' },
+    fields: { URL: 'https://mcp.longbridge.com' },
   },
   {
     id: 'zed',
     name: 'Zed',
     logo: 'https://assets.lbctrl.com/uploads/3418077a-9766-4514-bc8e-eef076309689/zed.svg',
     type: 'json' as const,
-    json: { mcpServers: { longbridge: { url: 'https://openapi.longbridge.com/mcp' } } },
+    json: { mcpServers: { longbridge: { url: 'https://mcp.longbridge.com' } } },
   },
   {
     id: 'cherry',
@@ -81,7 +81,7 @@ const clients = [
     logo: 'https://assets.lbctrl.com/uploads/df8f9467-91a5-4bdb-8dde-5127441f0b04/cherrystudio.svg',
     type: 'ui' as const,
     steps: ['Settings', 'MCP Servers', 'Add'],
-    fields: { URL: 'https://openapi.longbridge.com/mcp' },
+    fields: { URL: 'https://mcp.longbridge.com' },
   },
 ]
 
