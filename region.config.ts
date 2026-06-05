@@ -42,6 +42,9 @@ export const regionConfig: Record<string, RegionConfig> = {
       // MCP
       '**/docs/mcp.md',
 
+      // Agent Auth Code
+      '**/docs/agent-auth.md',
+
       // AI Skills
       '**/skill/**',
     ],

@@ -1046,7 +1046,7 @@ const CAP_REFERENCE = [
 const activeCat = ref('All')
 const scenarioIdx = ref(0)
 const activeAgent = ref('OpenClaw')
-const installMode = ref<'connect' | 'prompt'>('prompt')
+const installMode = ref<'connect' | 'prompt'>('connect')
 const copied = ref(false)
 const copiedGetStarted = ref(false)
 
@@ -1298,14 +1298,14 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
           <div class="skill-hero-install">
             <div class="skill-hero-seg">
               <button
-                :class="['skill-hero-seg-btn', installMode === 'prompt' && 'is-active']"
-                @click="installMode = 'prompt'">
-                {{ content.hero.tabPrompt }}
-              </button>
-              <button
                 :class="['skill-hero-seg-btn', installMode === 'connect' && 'is-active']"
                 @click="installMode = 'connect'">
                 {{ content.hero.tabConnect }}
+              </button>
+              <button
+                :class="['skill-hero-seg-btn', installMode === 'prompt' && 'is-active']"
+                @click="installMode = 'prompt'">
+                {{ content.hero.tabPrompt }}
               </button>
             </div>
 
