@@ -34,7 +34,7 @@ sidebar_icon: sparkles
 4. **產生授權碼** — 頁面會產生一個簡短的授權碼和一段可直接貼上的指令文字。
 5. **貼給 AI Agent** — 複製指令文字傳送給助手，Agent 用下面任一方式兌換授權碼。
 
-授權碼有效期 **5 分鐘**，且**僅可使用一次**。
+授權碼有效期 **10 分鐘**，且**僅可使用一次**。
 
 ## 透過 CLI 兌換
 
@@ -68,8 +68,9 @@ claude mcp add --transport http longbridge https://mcp.longbridge.com --header "
 ## 安全說明
 
 - **權限在網頁端預選** — 授權碼只能授予你在授權頁勾選的權限，Agent 無法請求超出授權碼攜帶範圍的權限。
-- **5 分鐘有效期** — 授權碼在產生 5 分鐘後過期。
+- **10 分鐘有效期** — 授權碼在產生 10 分鐘後過期。
 - **一次性使用** — 授權碼在首次成功兌換後即失效，不可重複使用。
+- **請勿分享** — 授權碼等同於一次性授權憑證，只貼給你自己的 AI，不要發給任何其他人。
 - **隨時可撤銷** — 前往 Longbridge 帳戶安全設定，撤銷 **AI Agent** 授權即可終止存取。
 
 遵循最小權限原則：只授予當前任務所需的權限範圍。涉及交易的授權，務必要求 Agent 在下單前與你確認。
@@ -78,7 +79,7 @@ claude mcp add --transport http longbridge https://mcp.longbridge.com --header "
 
 ### 授權碼已過期
 
-授權碼有效期為 5 分鐘。回到 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 重新產生一個，並盡快兌換。
+授權碼有效期為 10 分鐘。回到 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 重新產生一個，並盡快兌換。
 
 ### 授權碼已被使用
 

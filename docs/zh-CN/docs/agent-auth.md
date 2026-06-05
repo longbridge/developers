@@ -34,7 +34,7 @@ sidebar_icon: sparkles
 4. **生成授权码** — 页面会生成一个简短的授权码和一段可直接粘贴的指令文本。
 5. **粘贴给 AI Agent** — 复制指令文本发送给助手，Agent 用下面任一方式兑换授权码。
 
-授权码有效期 **5 分钟**，且**仅可使用一次**。
+授权码有效期 **10 分钟**，且**仅可使用一次**。
 
 ## 通过 CLI 兑换
 
@@ -68,8 +68,9 @@ claude mcp add --transport http longbridge https://mcp.longbridge.com --header "
 ## 安全说明
 
 - **权限在网页端预选** — 授权码只能授予你在授权页勾选的权限，Agent 无法请求超出授权码携带范围的权限。
-- **5 分钟有效期** — 授权码在生成 5 分钟后过期。
+- **10 分钟有效期** — 授权码在生成 10 分钟后过期。
 - **一次性使用** — 授权码在首次成功兑换后即失效，不可重复使用。
+- **请勿分享** — 授权码等同于一次性授权凭证，只粘贴给你自己的 AI，不要发给任何其他人。
 - **随时可撤销** — 前往 Longbridge 账户安全设置，撤销 **AI Agent** 授权即可终止访问。
 
 遵循最小权限原则：只授予当前任务所需的权限范围。涉及交易的授权，务必要求 Agent 在下单前与你确认。
@@ -78,7 +79,7 @@ claude mcp add --transport http longbridge https://mcp.longbridge.com --header "
 
 ### 授权码已过期
 
-授权码有效期为 5 分钟。回到 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 重新生成一个，并尽快兑换。
+授权码有效期为 10 分钟。回到 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 重新生成一个，并尽快兑换。
 
 ### 授权码已被使用
 
