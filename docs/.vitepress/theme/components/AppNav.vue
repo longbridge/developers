@@ -97,6 +97,7 @@ const avatarCloseTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 const avatarMenuItems = computed(() => [
   { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Connect AI', href: '/connect' },
   { title: 'Log out', href: '/log-out' },
 ])
 

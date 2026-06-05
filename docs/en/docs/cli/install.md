@@ -61,6 +61,13 @@ Running `auth login` prints a URL and a short code. Open the URL in any browser,
 and authorize. The token is saved to `~/.longbridge/openapi/tokens/<client_id>` and reused
 automatically by all subsequent commands.
 
+If no browser is available, generate an [Agent Auth Code](/agent-auth) at
+[https://open.longbridge.com/connect](https://open.longbridge.com/connect) and redeem it directly:
+
+```bash
+longbridge auth login --auth-code 6vYzXq3WbKp9TmHd
+```
+
 ### auth logout
 
 Clears the stored OAuth token. The next command or TUI launch will trigger re-authentication.

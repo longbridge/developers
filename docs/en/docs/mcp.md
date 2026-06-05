@@ -118,6 +118,10 @@ Known issue: early versions of Cherry Studio do not support the full OAuth flow.
 
 If another client fails to connect, check its version and MCP support documentation.
 
+:::tip Client can't open the browser?
+If your client has incomplete OAuth support or cannot launch a browser, use an [Agent Auth Code](/agent-auth) instead: generate a one-time code at [https://open.longbridge.com/connect](https://open.longbridge.com/connect), connect to the dedicated endpoint `https://mcp.longbridge.com/agent`, and have the agent redeem it via the `authenticate` tool.
+:::
+
 ## Security recommendations
 
 - **Least privilege**: Only approve the scopes required for your current task; avoid over-granting

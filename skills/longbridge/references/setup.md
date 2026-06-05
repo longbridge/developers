@@ -26,6 +26,19 @@ Authenticate:
 longbridge auth login
 ```
 
+If the browser OAuth flow is unavailable (no browser, headless, or a client that
+can't open links), have the user generate a one-time auth code at
+https://open.longbridge.com/connect, then redeem it:
+
+```bash
+longbridge auth login --auth-code <code>
+```
+
+For MCP clients, redeem the code against the dedicated authorization endpoint
+`https://mcp.longbridge.com/agent` via the `authenticate` tool (auth-only
+channel — the MCP service address remains `https://mcp.longbridge.com`) — see
+[references/mcp.md](references/mcp.md).
+
 ## CLI Update
 
 ```bash

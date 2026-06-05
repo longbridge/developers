@@ -58,6 +58,12 @@ longbridge auth login
 
 執行 `auth login` 後會印出一個 URL 和短碼。在任意瀏覽器中開啟該 URL，輸入短碼並授權。Token 儲存至 `~/.longbridge/openapi/tokens/<client_id>`，後續所有命令自動複用。
 
+如無可用瀏覽器，可在 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 產生[授權碼](/zh-HK/docs/agent-auth)並直接兌換：
+
+```bash
+longbridge auth login --auth-code 6vYzXq3WbKp9TmHd
+```
+
 ### auth logout
 
 清除已儲存的 OAuth Token。下次執行命令或啟動 TUI 時將重新觸發鑑權。

@@ -38,6 +38,16 @@ Add to MCP config in any compatible client:
 4. Credentials are stored by the client; tokens refresh automatically
 5. To revoke: Longbridge account → Security Settings
 
+**No browser? Use an auth code.** If the client can't open a browser or has
+incomplete OAuth support, have the user generate a one-time auth code at
+https://open.longbridge.com/connect, then connect to the dedicated
+**authorization endpoint** `https://mcp.longbridge.com/agent` — an auth-only
+channel, NOT the MCP service address (it allows unauthorized connections and
+exposes only the `authenticate` tool) — and call `authenticate` with that code
+from the unauthorized session. The tool returns a token; configure the client to
+send it as `Authorization: Bearer <token>` against `https://mcp.longbridge.com`
+(e.g. `claude mcp add --transport http longbridge https://mcp.longbridge.com --header "Authorization: Bearer <token>"`).
+
 ### Security Recommendations
 
 - Only approve scopes required for the task (least privilege)
