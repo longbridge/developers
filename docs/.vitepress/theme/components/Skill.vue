@@ -22,6 +22,15 @@ const LOCALE = {
       title1: 'Longbridge Skill',
       title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
       desc: 'With Longbridge Skill, your AI assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can screen stocks, decode earnings, track insider moves, and place orders, all in plain conversation.',
+      tabConnect: 'Connect AI',
+      tabPrompt: 'Copy command',
+      connectLabel: 'Authorization happens upfront — grab a code on the Connect page, hand it to your AI, and it takes care of the rest:',
+      connectSteps: [
+        'Sign in on the Connect page to get a one-time auth code',
+        'Send the authorization snippet to your AI assistant',
+        'Your AI redeems the code and plugs into Longbridge — no browser hops along the way',
+      ],
+      connectCta: 'Connect AI',
       installLabel: 'Copy and send to any AI — it will walk you through install:',
       installLink: 'View installation guide for each client',
       agentsLabel: 'Supported AI tools',
@@ -119,6 +128,15 @@ const LOCALE = {
       title1: 'Longbridge Skill',
       title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
       desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以筛选股票、解读财报、追踪机构动向，并直接下单，全程自然对话。',
+      tabConnect: 'Connect AI',
+      tabPrompt: '复制命令',
+      connectLabel: '授权一步前置——在 Connect 页面拿到授权码，交给 AI，剩下的它来完成：',
+      connectSteps: [
+        '登录 Connect 页面，获取一次性授权码',
+        '将授权指令发送给您的 AI 助手',
+        'AI 自动兑换授权码并接入 Longbridge，全程无需跳转浏览器',
+      ],
+      connectCta: 'Connect AI',
       installLabel: '复制发送给任意 AI——它将引导您完成安装：',
       installLink: '查看各客户端安装指南',
       agentsLabel: '支持的 AI 工具',
@@ -341,6 +359,15 @@ const LOCALE = {
       title1: 'Longbridge Skill',
       title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
       desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以篩選股票、解讀財報、追蹤機構動向，並直接下單，全程自然對話。',
+      tabConnect: 'Connect AI',
+      tabPrompt: '複製命令',
+      connectLabel: '授權一步前置——在 Connect 頁面拿到授權碼，交給 AI，剩下的它來完成：',
+      connectSteps: [
+        '登入 Connect 頁面，獲取一次性授權碼',
+        '將授權指令發送給您的 AI 助手',
+        'AI 自動兌換授權碼並接入 Longbridge，全程無需跳轉瀏覽器',
+      ],
+      connectCta: 'Connect AI',
       installLabel: '複製發送給任意 AI——它將引導您完成安裝：',
       installLink: '查看各客戶端安裝指南',
       agentsLabel: '支援的 AI 工具',
@@ -1019,6 +1046,7 @@ const CAP_REFERENCE = [
 const activeCat = ref('All')
 const scenarioIdx = ref(0)
 const activeAgent = ref('OpenClaw')
+const installMode = ref<'connect' | 'prompt'>('prompt')
 const copied = ref(false)
 const copiedGetStarted = ref(false)
 
@@ -1268,52 +1296,96 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
           </p>
 
           <div class="skill-hero-install">
-            <div class="skill-hero-install-label">{{ content.hero.installLabel }}</div>
-            <div class="skill-hero-install-cmd">
-              <code>{{ installCmd }}</code>
-              <button class="code-copy" @click="copyInstall" :title="copied ? 'Copied!' : 'Copy'">
-                <svg
-                  v-if="!copied"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-                <svg
-                  v-else
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
+            <div class="skill-hero-seg">
+              <button
+                :class="['skill-hero-seg-btn', installMode === 'prompt' && 'is-active']"
+                @click="installMode = 'prompt'">
+                {{ content.hero.tabPrompt }}
+              </button>
+              <button
+                :class="['skill-hero-seg-btn', installMode === 'connect' && 'is-active']"
+                @click="installMode = 'connect'">
+                {{ content.hero.tabConnect }}
               </button>
             </div>
-            <a class="skill-hero-install-link" :href="localePfx + '/skill/install'">
-              {{ content.hero.installLink }}
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </a>
+
+            <template v-if="installMode === 'connect'">
+              <div class="skill-hero-install-label">{{ content.hero.connectLabel }}</div>
+              <div class="skill-hero-connect-card">
+                <div v-for="(step, i) in content.hero.connectSteps" :key="i" class="skill-hero-connect-step">
+                  <span class="skill-hero-connect-step-num">{{ i + 1 }}</span>
+                  <span>{{ step }}</span>
+                </div>
+                <a class="btn btn-dark" href="/connect" target="_self">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M12 8V4H8" />
+                    <rect width="16" height="12" x="4" y="8" rx="2" />
+                    <path d="M2 14h2" />
+                    <path d="M20 14h2" />
+                    <path d="M15 13v2" />
+                    <path d="M9 13v2" />
+                  </svg>
+                  {{ content.hero.connectCta }}
+                </a>
+              </div>
+            </template>
+
+            <template v-else>
+              <div class="skill-hero-install-label">{{ content.hero.installLabel }}</div>
+              <div class="skill-hero-install-cmd">
+                <code>{{ installCmd }}</code>
+                <button class="code-copy" @click="copyInstall" :title="copied ? 'Copied!' : 'Copy'">
+                  <svg
+                    v-if="!copied"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  <svg
+                    v-else
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </button>
+              </div>
+              <a class="skill-hero-install-link" :href="localePfx + '/skill/install'">
+                {{ content.hero.installLink }}
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </a>
+            </template>
           </div>
 
           <div class="skill-hero-agents">
@@ -2154,8 +2226,8 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   gap: 12px;
 }
 .skill-hero-install-label {
-  font-size: 12px;
-  color: var(--lb-fg-3);
+  font-size: 13px;
+  color: var(--lb-fg-2);
   font-weight: 500;
 }
 .skill-hero-install-cmd {
@@ -2177,6 +2249,73 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   white-space: pre;
   flex: 1;
   text-align: left;
+}
+.skill-hero-connect-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 10px;
+  padding: 16px;
+  max-width: 480px;
+  width: 100%;
+}
+.skill-hero-connect-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--lb-fg-2);
+  text-align: left;
+  line-height: 1.5;
+}
+.skill-hero-connect-step-num {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--lb-brand) 14%, transparent);
+  color: var(--lb-brand);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.skill-hero-connect-card .btn {
+  margin-top: 4px;
+  align-self: center;
+}
+.skill-hero-seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--lb-bg-2);
+  border: 1px solid var(--app-card-stroke);
+}
+.skill-hero-seg-btn {
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lb-fg-3);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+.skill-hero-seg-btn:hover {
+  color: var(--lb-fg-1);
+}
+.skill-hero-seg-btn.is-active {
+  color: #fff;
+  background: var(--lb-brand);
 }
 .skill-hero-install-link {
   font-size: 13px;
@@ -2936,6 +3075,14 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 .btn-primary {
   background: var(--lb-brand);
   color: #fff;
+}
+.btn-dark {
+  background: #111;
+  color: #fff;
+}
+.dark .btn-dark {
+  background: #fff;
+  color: #111;
 }
 
 /* ─── Skills Catalog ──────────────────────────────────────────────────────── */
