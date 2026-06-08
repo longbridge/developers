@@ -33,7 +33,7 @@ const LOCALE = {
         label: 'AI Skill',
         title: 'Investment analysis agent for any AI',
         desc: 'Real-time quotes, portfolio data, news sentiment, and market intelligence — works with Claude, ChatGPT, Cursor, Gemini, Codex, Zed, Cherry Studio.',
-        tags: ['100+ Skills'],
+        tags: ['Agent Skills'],
       },
       {
         label: 'CLI',
@@ -79,7 +79,7 @@ const LOCALE = {
       cta: 'CLI Documentation',
     },
     ai: {
-      eyebrow: 'AI Skill · 100+ packaged tools',
+      eyebrow: 'AI Skill · packaged tools',
       title1: 'Unlock market insights, deep research,',
       title2: 'and intelligent trading for your AI.',
       desc: 'With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and place orders — all in plain conversation, no app-switching required.',
@@ -214,7 +214,7 @@ const LOCALE = {
         label: 'AI Skill',
         title: '为任意 AI 打造的投资分析 Agent',
         desc: '实时行情、持仓数据、新闻情绪与市场洞察——兼容 Claude、ChatGPT、Cursor、Gemini、Codex、Zed、Cherry Studio。',
-        tags: ['100+ Skills'],
+        tags: ['Agent Skills'],
       },
       {
         label: 'CLI',
@@ -260,7 +260,7 @@ const LOCALE = {
       cta: 'CLI 文档',
     },
     ai: {
-      eyebrow: 'AI Skill · 100+ 预打包工具',
+      eyebrow: 'AI Skill · 预打包工具',
       title1: '为你的 AI 解锁市场洞察、',
       title2: '深度研究与智能交易',
       desc: '借助 Longbridge Skill，您的 AI 助手可以筛选股票、解读财报、追踪内部人交易、下达订单——全程对话完成，无需切换 App。',
@@ -378,7 +378,7 @@ const LOCALE = {
         label: 'AI Skill',
         title: '為任意 AI 打造的投資分析 Agent',
         desc: '即時行情、持倉數據、新聞情緒與市場洞察——兼容 Claude、ChatGPT、Cursor、Gemini、Codex、Zed、Cherry Studio。',
-        tags: ['100+ Skills'],
+        tags: ['Agent Skills'],
       },
       {
         label: 'CLI',
@@ -424,7 +424,7 @@ const LOCALE = {
       cta: 'CLI 文件',
     },
     ai: {
-      eyebrow: 'AI Skill · 100+ 預打包工具',
+      eyebrow: 'AI Skill · 預打包工具',
       title1: '為你的 AI 解鎖市場洞察、',
       title2: '深度研究與智能交易',
       desc: '借助 Longbridge Skill，您的 AI 助手可以篩選股票、解讀財報、追蹤內部人交易、下達訂單——全程對話完成，無需切換 App。',
@@ -1132,7 +1132,7 @@ const PRODUCTS = [
     label: 'AI Skill',
     title: 'Investment analysis agent for any AI',
     desc: 'Real-time quotes, portfolio data, news sentiment, and market intelligence — works with Claude, ChatGPT, Cursor, Gemini, Codex, Zed, Cherry Studio.',
-    tags: ['100+ Skills'],
+    tags: ['Agent Skills'],
     href: '/skill',
     accent: 'var(--lb-brand)',
   },

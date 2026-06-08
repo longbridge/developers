@@ -44,7 +44,7 @@ const LOCALE = {
     catalog: {
       eyebrow: 'Skill catalog',
       badge: 'SKILL CATALOG',
-      title: '100+ Skills, covering every move in your trading day.',
+      title: 'Skills that cover every move in your trading day.',
       desc: 'Each Skill is a packaged set of tools, callable by any supported AI client. Click any card to see install instructions and details.',
       marketplace: 'Available on Claude Code Plugin Marketplace',
       pluginDesc: 'Copy the commands and run them in Claude Code.',
@@ -150,7 +150,7 @@ const LOCALE = {
     catalog: {
       eyebrow: 'Skill 目录',
       badge: 'SKILL 目录',
-      title: '100+ 个 Skill，覆盖您交易日的每一个动作',
+      title: '覆盖您交易日每一个动作的 Skill',
       desc: '每个 Skill 都是一套打包的工具集，可被任何受支持的 AI 客户端调用。点击任意卡片查看安装说明和详情。',
       marketplace: '已上架 Claude Code 插件市场',
       pluginDesc: '复制命令，在 Claude Code 中运行即可。',
@@ -381,7 +381,7 @@ const LOCALE = {
     catalog: {
       eyebrow: 'Skill 目錄',
       badge: 'SKILL 目錄',
-      title: '100+ 個 Skill，覆蓋您交易日的每一個動作。',
+      title: '覆蓋您交易日每一個動作的 Skill。',
       desc: '每個 Skill 都是一套打包的工具集，可被任何受支援的 AI 客戶端調用。點擊任意卡片查看安裝說明和詳情。',
       marketplace: '已上架 Claude Code 外掛市場',
       pluginDesc: '複製命令，在 Claude Code 中運行即可。',
