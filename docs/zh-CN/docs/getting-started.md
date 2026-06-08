@@ -437,7 +437,7 @@ OAuth Token 应安全存储在应用程序中（如加密文件、安全密钥�
 | `LONGBRIDGE_QUOTE_WS_URL`          | 行情 WebSocket 地址（默认：`wss://openapi-quote.longbridge.com/v2`）                                                    |
 | `LONGBRIDGE_TRADE_WS_URL`          | 交易 WebSocket 地址（默认：`wss://openapi-trade.longbridge.com/v2`）                                                    |
 | `LONGBRIDGE_REGION`                | 覆盖接入点；SDK 会按网络自动选择，若判断不正确可设置（如 `cn`、`hk`）                                                   |
-| `LONGBRIDGE_ENABLE_OVERNIGHT`      | 是否开启夜盘行情，`true` 或 `false`（默认：`false`）；需在 App 行情商店购买「LV1 实时行情 (OpenAPI)」行情卡，仅支持美股 |
+| `LONGBRIDGE_ENABLE_OVERNIGHT`      | 是否开启夜盘行情，`true` 或 `false`（默认：`false`）；夜盘行情免费，仅支持美股 |
 | `LONGBRIDGE_PUSH_CANDLESTICK_MODE` | K 线推送模式，`realtime` 或 `confirmed`（默认：`realtime`）                                                             |
 | `LONGBRIDGE_PRINT_QUOTE_PACKAGES`  | 连接时是否打印行情包，`true` 或 `false`（默认：`true`）                                                                 |
 | `LONGBRIDGE_LOG_PATH`              | 日志文件路径（默认：不写日志）                                                                                          |

@@ -426,7 +426,7 @@ OAuth Token 應安全儲存在應用程式中（如加密檔案、安全金鑰�
 | `LONGBRIDGE_QUOTE_WS_URL`          | 行情 WebSocket 位址（預設：`wss://openapi-quote.longbridge.com/v2`）                                                    |
 | `LONGBRIDGE_TRADE_WS_URL`          | 交易 WebSocket 位址（預設：`wss://openapi-trade.longbridge.com/v2`）                                                    |
 | `LONGBRIDGE_REGION`                | 覆寫接入點；SDK 會依網路自動選擇，若判斷不正確可設定（如 `cn`、`hk`）                                                   |
-| `LONGBRIDGE_ENABLE_OVERNIGHT`      | 是否開啟夜盤行情，`true` 或 `false`（預設：`false`）；需在 App 行情商店購買「LV1 實時行情 (OpenAPI)」行情卡，僅支援美股 |
+| `LONGBRIDGE_ENABLE_OVERNIGHT`      | 是否開啟夜盤行情，`true` 或 `false`（預設：`false`）；夜盤行情免費，僅支援美股 |
 | `LONGBRIDGE_PUSH_CANDLESTICK_MODE` | K 線推送模式，`realtime` 或 `confirmed`（預設：`realtime`）                                                             |
 | `LONGBRIDGE_PRINT_QUOTE_PACKAGES`  | 連線時是否列印行情包，`true` 或 `false`（預設：`true`）                                                                 |
 | `LONGBRIDGE_LOG_PATH`              | 日誌檔案路徑（預設：不寫日誌）                                                                                          |

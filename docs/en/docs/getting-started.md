@@ -424,7 +424,7 @@ Please pay attention to protect your **Access Token** information, anyone who ge
 | `LONGBRIDGE_QUOTE_WS_URL`          | Quote websocket endpoint url (Default: `wss://openapi-quote.longbridge.com/v2`)                                                                                          |
 | `LONGBRIDGE_TRADE_WS_URL`          | Trade websocket endpoint url (Default: `wss://openapi-trade.longbridge.com/v2`)                                                                                          |
 | `LONGBRIDGE_REGION`                | Override API region; SDK auto-selects by network. Set to `cn` or `hk` if incorrect.                                                                                      |
-| `LONGBRIDGE_ENABLE_OVERNIGHT`      | Enable overnight quote, `true` or `false` (Default: `false`). Requires purchasing the "LV1 Real-time Quotes (OpenAPI)" quote card in the Longbridge App. US stocks only. |
+| `LONGBRIDGE_ENABLE_OVERNIGHT`      | Enable overnight quote, `true` or `false` (Default: `false`). Overnight quotes are free. US stocks only. |
 | `LONGBRIDGE_PUSH_CANDLESTICK_MODE` | `realtime` or `confirmed` (Default: `realtime`)                                                                                                                          |
 | `LONGBRIDGE_PRINT_QUOTE_PACKAGES`  | Print quote packages when connected, `true` or `false` (Default: `true`)                                                                                                 |
 | `LONGBRIDGE_LOG_PATH`              | Set the path of the log files (Default: no logs)                                                                                                                         |

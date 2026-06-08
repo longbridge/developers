@@ -90,7 +90,7 @@ sidebar_position: 1
 
 ## Q6：如何取得夜盤行情
 
-- **夜盤數據預設不包含**，需要在手機 Longbridge App 的「行情商店」購買 **「LV1 實時行情 (OpenAPI)」** 行情卡才能取得夜盤數據。
+- **夜盤行情免費提供**，無需額外購買行情卡。
 - 目前夜盤行情**僅支援美股**，港股暫不支援夜盤。
 - 開通夜盤權限後，還需要主動開啟，方式為在鑑權接口的 `metadata` 欄位填入 key `need_over_night_quote`, value `true`。
 

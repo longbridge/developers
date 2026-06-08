@@ -73,7 +73,6 @@ const LOCALE = {
       eyebrow: 'FEATURE COMPARISON',
       title: "What's included in each plan.",
       plans: [
-        { label: 'Nasdaq Basic', tag: 'Free', color: 'var(--lb-up)' },
         { label: 'US LV1', tag: 'Paid', color: 'var(--lb-market-us)' },
         { label: 'OPRA', tag: 'Paid', color: 'var(--lb-ai-mention)' },
         { label: 'HK LV1', tag: 'Free (promo)', color: 'var(--lb-up)' },
@@ -190,7 +189,6 @@ const LOCALE = {
       eyebrow: '功能对比',
       title: '各方案功能一览',
       plans: [
-        { label: 'Nasdaq Basic', tag: '免费', color: 'var(--lb-up)' },
         { label: '美股 LV1', tag: '付费', color: 'var(--lb-market-us)' },
         { label: 'OPRA', tag: '付费', color: 'var(--lb-ai-mention)' },
         { label: '港股 LV1', tag: '推广免费', color: 'var(--lb-up)' },
@@ -301,7 +299,6 @@ const LOCALE = {
       eyebrow: '功能對比',
       title: '各方案功能一覽。',
       plans: [
-        { label: 'Nasdaq Basic', tag: '免費', color: 'var(--lb-up)' },
         { label: '美股 LV1', tag: '付費', color: 'var(--lb-market-us)' },
         { label: 'OPRA', tag: '付費', color: 'var(--lb-ai-mention)' },
         { label: '港股 LV1', tag: '推廣免費', color: 'var(--lb-up)' },
@@ -405,19 +402,19 @@ const FREE_ICONS = [
 const BILLING_CYCLES = [{ key: 'auto' }, { key: 'monthly' }, { key: 'quarterly' }, { key: 'annual', badge: true }]
 
 const MATRIX_ROW_DATA = [
-  [1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1],
-  [1, 1, 0, 0, 0, 0],
-  [1, 1, 0, 0, 0, 0],
-  [0, 1, 0, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0],
-  [0, 0, 0, 1, 1, 0],
-  [0, 0, 0, 1, 1, 0],
-  [0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0],
+  [1, 0, 0, 0, 0],
+  [1, 0, 0, 0, 0],
+  [0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 0],
+  [0, 0, 1, 1, 0],
+  [0, 0, 0, 1, 0],
+  [0, 0, 0, 1, 0],
+  [0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 1],
 ]
 
 const cycle = ref('auto')

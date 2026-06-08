@@ -151,6 +151,6 @@ slug: overview
 | **基礎行情**         | 美/A 股實時報價；港股 BMP（約 15 分鐘延遲，不支持推送） | 開通 OpenAPI 後自動獲得                               |
 | **LV1 實時**（港股） | 港股實時報價 + WebSocket 推送支持                       | 通過行情商城購買「LV1 實時行情 (OpenAPI)」            |
 | **LV2 訂閱**         | Level 2 買賣盤（depth）、港股經紀商隊列（brokers）      | 通過行情商城購買 LV2 訂閱卡                           |
-| **盤前盤後**（美股） | 美股盤前/盤後延伸時段數據                               | 購買 LV1 卡 + 設置 `LONGBRIDGE_ENABLE_OVERNIGHT=true` |
+| **盤前盤後**（美股） | 美股盤前/盤後延伸時段數據                               | 免費，設置 `LONGBRIDGE_ENABLE_OVERNIGHT=true` 即可獲取 |
 
 查看當前權限：[開發者中心](https://open.longbridge.com/dashboard)。購買行情卡：**Longbridge App → 我的 → 我的行情 → 行情商城**。
