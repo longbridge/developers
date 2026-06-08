@@ -27,7 +27,7 @@ sidebar_position: 6
 longbridge finance-calendar report
 ```
 
-顯示從今天起即將發布的財報事件，同時展示近期已發布季度的 EPS 和營收預估值與實際值。如需在網頁與流動端之間交叉對照，可同時查看 Longbridge 最新的官方["美股財報日曆"](https://longbridge.com/calendar/report)。
+顯示從今天起即將發布的財報事件，同時展示近期已發布季度的 EPS 和營收預估值與實際值。你也可以在網頁端與流動端的["美股財報日曆"](https://longbridge.com/calendar/report)中查看相同的財報事件。
 
 ### 自選股中的美股財報
 

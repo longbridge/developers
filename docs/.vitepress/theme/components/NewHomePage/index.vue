@@ -13,7 +13,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: 'Real-time markets,',
       title2: 'built for AI.',
-      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead. Explore the <a href="https://longbridge.com/markets">live market data</a> on Longbridge.',
+      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead. Explore <a href="https://longbridge.com/markets">live market data</a> across every market.',
       cta1: 'Get Started',
       cta2: 'Read the Docs',
       highlights: [
@@ -194,7 +194,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '实时市场数据',
       title2: 'AI 直连真实市场',
-      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。在 Longbridge 探索<a href="https://longbridge.com/markets">实时行情</a>。',
+      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。探索覆盖全球市场的<a href="https://longbridge.com/markets">实时行情</a>。',
       cta1: '开始使用',
       cta2: '阅读文档',
       highlights: [
@@ -358,7 +358,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '即時市場數據，',
       title2: 'AI 直連真實市場',
-      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。在 Longbridge 探索<a href="https://longbridge.com/markets">即時行情</a>。',
+      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。探索覆蓋全球市場的<a href="https://longbridge.com/markets">即時行情</a>。',
       cta1: '開始使用',
       cta2: '閱讀文件',
       highlights: [

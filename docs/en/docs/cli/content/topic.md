@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # longbridge topic
 
-Fetch community discussion topics related to a symbol from the Longbridge platform. Browse the full community on [Longbridge Topics](https://longbridge.com/topics).
+Fetch community discussion topics related to a symbol from the Longbridge platform. Browse the full community on [Topics](https://longbridge.com/topics).
 
 ## Basic Usage
 
