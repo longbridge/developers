@@ -42,7 +42,6 @@ const LOCALE = {
     plan: {
       subscribe: 'Subscribe',
       was: 'Was',
-      freeCta: 'Included on registration',
       items: [
         {
           market: 'US Market',
@@ -159,7 +158,6 @@ const LOCALE = {
     plan: {
       subscribe: '立即订阅',
       was: '原价',
-      freeCta: '注册即可使用',
       items: [
         {
           market: '美股市场',
@@ -270,7 +268,6 @@ const LOCALE = {
     plan: {
       subscribe: '立即訂閱',
       was: '原價',
-      freeCta: '註冊即可使用',
       items: [
         {
           market: '美股市場',
@@ -663,7 +660,6 @@ const matrixRows = computed<MatrixRow[]>(() => {
                 <path d="m12 5 7 7-7 7" />
               </svg>
             </a>
-            <div v-else class="pricing-plan-cta pricing-plan-cta-free">{{ content.plan.freeCta }}</div>
           </div>
         </div>
       </div>
@@ -979,17 +975,6 @@ const matrixRows = computed<MatrixRow[]>(() => {
   margin-top: auto;
   width: 100%;
   justify-content: center;
-}
-.pricing-plan-cta-free {
-  margin-top: auto;
-  width: 100%;
-  text-align: center;
-  padding: 9px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--lb-up);
-  background: color-mix(in srgb, var(--lb-up) 12%, transparent);
 }
 
 /* ---- Feature Matrix ---- */
