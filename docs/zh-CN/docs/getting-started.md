@@ -922,7 +922,7 @@ g++ -std=c++17 account_asset.cpp -o account_asset -llongbridge && ./account_asse
 订阅行情数据请检查 [开发者中心](https://open.longbridge.com/dashboard) - "行情权限"是否正确
 
 - 港股 - BMP 基础报价，无实时行情推送，无法用 WebSocket 订阅
-- 美股 - 纳斯达克 Basic 行情（只限 OpenAPI）
+- 美股 - LV1 实时行情，注册即免费赠送（含盘前、盘中、盘后、夜盘全时段，只限 OpenAPI）
 
 运行前访问 [开发者中心](https://open.longbridge.com/dashboard)，检查确保账户有正确的行情权限。
 
