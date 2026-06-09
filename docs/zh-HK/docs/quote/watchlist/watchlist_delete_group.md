@@ -12,7 +12,6 @@ headingLevel: 2
 
 刪除自選股分組
 
-<QuotePermission level="basic" />
 
 <CliCommand>
 # 刪除指定分組（ID 通過 longbridge watchlist 查詢）

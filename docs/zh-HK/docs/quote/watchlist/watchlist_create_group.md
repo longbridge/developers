@@ -12,7 +12,6 @@ headingLevel: 2
 
 創建自選股分組
 
-<QuotePermission level="basic" />
 
 <CliCommand>
 # 建立新的自選股分組

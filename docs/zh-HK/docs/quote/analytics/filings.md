@@ -12,7 +12,6 @@ headingLevel: 2
 
 獲取指定股票的公告列表。
 
-<QuotePermission level="basic" />
 
 <CliCommand>
 # Apple 監管文件和公告

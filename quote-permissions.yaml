@@ -192,40 +192,40 @@ commands:
 
   # ── 静态数据（无需额外权限）─────────────────────────────────
   static:
-    level: basic
+    level: lv1
 
   calc-index:
-    level: basic
+    level: lv1
 
   capital:
-    level: basic
+    level: lv1
 
   market-temp:
-    level: basic
+    level: lv1
 
   trading:
-    level: basic
+    level: lv1
 
   security-list:
-    level: basic
+    level: lv1
 
   constituent:
-    level: basic
+    level: lv1
 
   participants:
-    level: basic
+    level: lv1
 
   market-status:
-    level: basic
+    level: lv1
 
   subscriptions:
-    level: basic
+    level: lv1
 
   broker-holding:
-    level: basic
+    level: lv1
 
   ah-premium:
-    level: basic
+    level: lv1
 
   # ── 交易统计 ─────────────────────────────────────────────────
   trade-stats:
@@ -245,10 +245,10 @@ commands:
         美股期權：不支持該接口。
 
   anomaly:
-    level: basic
+    level: lv1
 
   filings:
-    level: basic
+    level: lv1
 
   # ── 衍生品 ───────────────────────────────────────────────────
   option:
@@ -266,7 +266,7 @@ commands:
       zh-CN: "OPRA 美股期权行情 (OpenAPI) — OPRA 美股期权实时成交行情及最优买卖一档报价，适用于 OpenAPI"
 
   warrant:
-    level: basic
+    level: lv1
 
   short-positions:
-    level: basic
+    level: lv1
