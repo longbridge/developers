@@ -6,7 +6,6 @@ sidebar_position: 3
 
 該接口用於獲取歷史市場溫度。
 
-<QuotePermission command="market-temp" />
 
 <CliCommand>
 # 港股 2025 年 Q1 歷史溫度
