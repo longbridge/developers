@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get a paginated list of replies for a specific topic.
+Get a paginated list of replies for a specific topic. Browse the discussion on [Topics](https://longbridge.com/topics).
 
 Each reply includes author info, body (plain text), engagement counts, and a `reply_to_id` field: `"0"` indicates a top-level reply; any other value identifies the parent reply for nested replies.
 

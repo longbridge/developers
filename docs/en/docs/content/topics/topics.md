@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the topic/discussion list for a specified security.
+Get the topic/discussion list for a specified security. Browse the full community on [Topics](https://longbridge.com/topics).
 
 <CliCommand>
 # community discussion topics for Tesla

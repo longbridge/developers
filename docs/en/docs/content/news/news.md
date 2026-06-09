@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the news list for a specified security.
+Get the news list for a specified security. Browse the full feed on [News](https://longbridge.com/news).
 
 <CliCommand>
 # latest news for Tesla

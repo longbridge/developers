@@ -13,7 +13,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: 'Real-time markets,',
       title2: 'built for AI.',
-      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead.',
+      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead. Explore <a href="https://longbridge.com/markets">live market data</a> across every market.',
       cta1: 'Get Started',
       cta2: 'Read the Docs',
       highlights: [
@@ -82,7 +82,7 @@ const LOCALE = {
       eyebrow: 'AI Skill · packaged tools',
       title1: 'Unlock market insights, deep research,',
       title2: 'and intelligent trading for your AI.',
-      desc: 'With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and place orders — all in plain conversation, no app-switching required.',
+      desc: 'With Longbridge Skill, your AI assistant can <a href="https://longbridge.com/screener">screen stocks</a>, decode earnings, track insider moves, and place orders — all in plain conversation, no app-switching required.',
       installLabel: 'Copy and send to any AI — it walks you through install:',
       installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\nAnd complete login and test with a market data query.`,
       installOr: '— or via package manager —',
@@ -92,7 +92,7 @@ const LOCALE = {
     mcp: {
       eyebrow: 'Hosted MCP',
       title: 'Connect any AI assistant to live market data — no API keys.',
-      desc: 'Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets real-time quotes, account info, and trading — all in one connection.',
+      desc: 'Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets <a href="https://longbridge.com/markets">real-time quotes</a>, account info, and trading — all in one connection.',
       cta: 'MCP Documentation',
       note: 'OAuth 2.1 — browser opens automatically on first use. No API key needed.',
     },
@@ -194,7 +194,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '实时市场数据',
       title2: 'AI 直连真实市场',
-      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。',
+      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。探索覆盖全球市场的<a href="https://longbridge.com/markets">实时行情</a>。',
       cta1: '开始使用',
       cta2: '阅读文档',
       highlights: [
@@ -263,7 +263,7 @@ const LOCALE = {
       eyebrow: 'AI Skill · 预打包工具',
       title1: '为你的 AI 解锁市场洞察、',
       title2: '深度研究与智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手可以筛选股票、解读财报、追踪内部人交易、下达订单——全程对话完成，无需切换 App。',
+      desc: '借助 Longbridge Skill，您的 AI 助手可以<a href="https://longbridge.com/screener">筛选股票</a>、解读财报、追踪内部人交易、下达订单——全程对话完成，无需切换 App。',
       installLabel: '复制发给任意 AI，它会引导你完成安装：',
       installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
       installOr: '—— 或通过包管理器 ——',
@@ -273,7 +273,7 @@ const LOCALE = {
     mcp: {
       eyebrow: '托管 MCP',
       title: '无需 API Key，让任意 AI 助手连接实时市场数据',
-      desc: '托管 HTTP MCP 服务，支持 OAuth 2.1 认证。您的 AI 编程助手可获取实时行情、账户信息与交易功能——一次连接，全部到位。',
+      desc: '托管 HTTP MCP 服务，支持 OAuth 2.1 认证。您的 AI 编程助手可获取<a href="https://longbridge.com/markets">实时行情</a>、账户信息与交易功能——一次连接，全部到位。',
       cta: 'MCP 文档',
       note: 'OAuth 2.1——首次使用时自动打开浏览器授权，无需 API Key。',
     },
@@ -358,7 +358,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '即時市場數據，',
       title2: 'AI 直連真實市場',
-      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。',
+      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。探索覆蓋全球市場的<a href="https://longbridge.com/markets">即時行情</a>。',
       cta1: '開始使用',
       cta2: '閱讀文件',
       highlights: [
@@ -427,7 +427,7 @@ const LOCALE = {
       eyebrow: 'AI Skill · 預打包工具',
       title1: '為你的 AI 解鎖市場洞察、',
       title2: '深度研究與智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手可以篩選股票、解讀財報、追蹤內部人交易、下達訂單——全程對話完成，無需切換 App。',
+      desc: '借助 Longbridge Skill，您的 AI 助手可以<a href="https://longbridge.com/screener">篩選股票</a>、解讀財報、追蹤內部人交易、下達訂單——全程對話完成，無需切換 App。',
       installLabel: '複製發給任意 AI，它會引導你完成安裝：',
       installOr: '—— 或透過套件管理器 ——',
       agentMore: '+ 任意相容 Skill 的 Agent',
@@ -436,7 +436,7 @@ const LOCALE = {
     mcp: {
       eyebrow: '託管 MCP',
       title: '無需 API Key，讓任意 AI 助手連接即時市場數據',
-      desc: '託管 HTTP MCP 服務，支援 OAuth 2.1 認證。您的 AI 程式設計助手可獲取即時行情、帳戶資訊與交易功能——一次連線，全部到位。',
+      desc: '託管 HTTP MCP 服務，支援 OAuth 2.1 認證。您的 AI 程式設計助手可獲取<a href="https://longbridge.com/markets">即時行情</a>、帳戶資訊與交易功能——一次連線，全部到位。',
       cta: 'MCP 文件',
       note: 'OAuth 2.1——首次使用時自動打開瀏覽器授權，無需 API Key。',
     },
@@ -1300,7 +1300,7 @@ const GETSTARTED = [
           {{ content.hero.title1 }}<br />
           <span :style="{ color: 'var(--lb-brand)' }">{{ content.hero.title2 }}</span>
         </h1>
-        <p class="t-body home-hero-sub">{{ content.hero.desc }}</p>
+        <p class="t-body home-hero-sub" v-html="content.hero.desc"></p>
         <div class="home-hero-cta">
           <a class="btn btn-primary btn-lg" :href="localePath('/docs')">
             {{ content.hero.cta1 }}
@@ -1563,9 +1563,8 @@ const GETSTARTED = [
                 max-width: 520px;
                 line-height: 1.65;
                 font-size: 15px;
-              ">
-              {{ content.ai.desc }}
-            </p>
+              "
+              v-html="content.ai.desc"></p>
 
             <div class="ai-install-block">
               <div class="ai-install-label">{{ content.ai.installLabel }}</div>
@@ -1739,7 +1738,7 @@ const GETSTARTED = [
         <div>
           <span class="eyebrow">{{ content.mcp.eyebrow }}</span>
           <h2 class="h-section" style="margin-top: 18px">{{ content.mcp.title }}</h2>
-          <p class="t-body" style="margin-top: 14px; max-width: 520px">{{ content.mcp.desc }}</p>
+          <p class="t-body" style="margin-top: 14px; max-width: 520px" v-html="content.mcp.desc"></p>
           <div class="mcp-clients">
             <span v-for="c in MCP_CLIENTS" :key="c" class="mcp-client-pill">
               <span class="mcp-client-dot" />

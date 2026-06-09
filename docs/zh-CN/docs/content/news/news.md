@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取指定股票的资讯列表。
+获取指定股票的资讯列表。完整资讯流可访问 [资讯](https://longbridge.com/news)。
 
 <CliCommand>
 # Tesla 最新资讯

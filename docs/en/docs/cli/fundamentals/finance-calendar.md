@@ -27,7 +27,7 @@ Browse upcoming financial events — earnings reports, dividend payments, stock 
 longbridge finance-calendar report
 ```
 
-Shows upcoming earnings events from today. Displays EPS and revenue estimates alongside actual results for recently reported quarters.
+Shows upcoming earnings events from today. Displays EPS and revenue estimates alongside actual results for recently reported quarters. You can also view the same earnings events on web and mobile in the ["Stock Earnings Calendar"](https://longbridge.com/calendar/report).
 
 ### Earnings for watchlist stocks
 

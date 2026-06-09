@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the list of topics I have published.
+Get the list of topics I have published. View them on [Topics](https://longbridge.com/topics).
 
 <CliCommand>
 longbridge topic mine

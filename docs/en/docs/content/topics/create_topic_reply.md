@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Post a reply to a community topic. Supports nesting under an existing reply.
+Post a reply to a community topic. Supports nesting under an existing reply. Browse the community on [Topics](https://longbridge.com/topics).
 
 Only users who have opened a **Longbridge account and hold assets** are allowed to publish community topics and replies via Longbridge Developers API or CLI. Returns `403` otherwise.
 

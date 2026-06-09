@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-根据讨论 ID 获取完整详情，包含正文（Markdown）、作者信息、关联标的与标签、互动数据及详情页链接。
+根据讨论 ID 获取完整详情，包含正文（Markdown）、作者信息、关联标的与标签、互动数据及详情页链接。可在 [社区](https://longbridge.com/topics)查看。
 
 <CliCommand>
 longbridge topic detail 6993508780031016960

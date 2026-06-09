@@ -9,6 +9,12 @@ slug: '/cli/quant/screener'
 
 The `screener` command lets you list saved strategies, run a strategy to get matching stocks, apply ad-hoc filters, and browse all available indicator definitions.
 
+<TipContainer type="tip">
+
+**Try it on the web** — All strategies and filter conditions shown below are also available interactively in the [Stock Screener](https://longbridge.com/screener). Try building a filter there first, then automate it with the CLI.
+
+</TipContainer>
+
 ## screener strategies
 
 List platform-recommended or your own saved screener strategies.

@@ -89,7 +89,7 @@ The [OpenAPI SDK](https://open.longbridge.com/sdk) has done effective frequency 
 
 ## Pricing {#pricing}
 
-Longbridge does not charge any additional fees for activating or using interface services. You only need to open a Longbridge Integrated A/C and get OpenAPI service permissions to use it for free. See the [Pricing](/pricing) page for details on quote data subscription fees. For actual transaction fees, please contact the brokerage firm where you have opened your securities account.
+Longbridge does not charge any additional fees for activating or using interface services. You only need to [open a Longbridge Integrated A/C](https://longbridge.com/hk/download) and get OpenAPI service permissions to use it for free. See the [Pricing](/pricing) page for details on quote data subscription fees. For actual transaction fees, please contact the brokerage firm where you have opened your securities account.
 
 ## Other
 

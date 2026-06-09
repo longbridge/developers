@@ -5,7 +5,7 @@ slug: /quote/pull/quote
 sidebar_position: 2
 ---
 
-This API is used to obtain the real-time quotes of securities, and supports all types of securities.
+This API is used to obtain the real-time quotes of securities, and supports all types of securities. To view these real-time data streams aggregated into live indices, sector heatmaps, and macro market overviews, you can reference the ["Global Markets"](https://longbridge.com/markets).
 
 <QuotePermission command="quote" />
 

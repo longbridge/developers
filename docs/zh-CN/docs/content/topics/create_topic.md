@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-创建一篇新讨论。支持两种内容类型：
+在 [社区](https://longbridge.com/topics)创建一篇新讨论。支持两种内容类型：
 
 | 类型 | `title` | `body` 格式 | 说明 |
 |------|---------|-------------|------|

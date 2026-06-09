@@ -6,7 +6,7 @@ sidebar_position: 3
 
 # longbridge topic
 
-取得 Longbridge 平台上與某標的相關的社區討論帖子。
+取得 Longbridge 平台上與某標的相關的社區討論帖子。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
 
 ## 基本用法
 

@@ -27,7 +27,7 @@ sidebar_position: 6
 longbridge finance-calendar report
 ```
 
-显示从今天起即将发布的财报事件，同时展示近期已发布季度的 EPS 和营收预估值与实际值。
+显示从今天起即将发布的财报事件，同时展示近期已发布季度的 EPS 和营收预估值与实际值。你也可以在网页端与移动端的["美股财报日历"](https://longbridge.com/calendar/report)中查看相同的财报事件。
 
 ### 自选股中的美股财报
 

@@ -9,6 +9,12 @@ slug: '/cli/quant/screener'
 
 `screener` 命令可用於列出已保存的策略、執行策略篩選股票、應用臨時篩選條件，以及瀏覽所有可用指標定義。
 
+<TipContainer type="tip">
+
+**在網頁端體驗** —— 下方展示的所有策略與篩選條件，亦可在 [選股器](https://longbridge.com/screener) 中互動式使用。建議先在那裡搭建篩選條件，再用 CLI 自動化執行。
+
+</TipContainer>
+
 ## screener strategies
 
 列出平台推薦的或你自己保存的選股策略。

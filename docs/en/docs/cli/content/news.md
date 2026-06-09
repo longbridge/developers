@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # longbridge news
 
-Get latest news articles for a symbol, or fetch the full content of an article by ID.
+Get latest news articles for a symbol, or fetch the full content of an article by ID. Browse the full feed on [News](https://longbridge.com/news).
 
 ## Basic Usage
 

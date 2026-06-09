@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取當前登錄用戶發布的討論列表，支持分頁與類型過濾。
+獲取當前登錄用戶發布的討論列表，支持分頁與類型過濾。可在 [社區](https://longbridge.com/topics)查看。
 
 <CliCommand>
 longbridge topic mine

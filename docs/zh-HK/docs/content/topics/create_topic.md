@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-創建一篇新討論。支持兩種內容類型：
+在 [社區](https://longbridge.com/topics)創建一篇新討論。支持兩種內容類型：
 
 | 類型 | `title` | `body` 格式 | 說明 |
 |------|---------|-------------|------|

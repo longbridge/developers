@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取指定股票的討論列表。
+獲取指定股票的討論列表。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
 
 <CliCommand>
 # Tesla 社群討論帖子

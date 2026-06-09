@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-在指定讨论下发布回复，支持嵌套回复已有回复。
+在指定讨论下发布回复，支持嵌套回复已有回复。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
 
 仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。否则返回 `403`。
 

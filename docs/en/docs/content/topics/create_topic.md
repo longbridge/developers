@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Create a new community topic. Two content types are supported:
+Create a new community topic on [Topics](https://longbridge.com/topics). Two content types are supported:
 
 | Type             | `title`      | `body` format   | Notes                                                                                                                  |
 | ---------------- | ------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------- |

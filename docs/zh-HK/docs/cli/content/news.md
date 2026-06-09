@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # longbridge news
 
-取得標的的最新資訊，或透過 ID 取得文章完整內容。
+取得標的的最新資訊，或透過 ID 取得文章完整內容。完整資訊流可瀏覽 [資訊](https://longbridge.com/news)。
 
 ## 基本用法
 

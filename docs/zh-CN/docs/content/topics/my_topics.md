@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取当前登录用户发布的讨论列表，支持分页与类型过滤。
+获取当前登录用户发布的讨论列表，支持分页与类型过滤。可在 [社区](https://longbridge.com/topics)查看。
 
 <CliCommand>
 longbridge topic mine

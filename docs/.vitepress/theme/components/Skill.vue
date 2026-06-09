@@ -292,7 +292,7 @@ const LOCALE = {
       {
         nav: '跨市场选股',
         title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖',
-        desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。',
+        desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。查看所有支持市场的<a href="https://longbridge.com/markets">实时行情</a>。',
         prompt: '从美股和港股中，筛选市值超 500 亿、PE 低于 25 的科技股，且近期出现 MACD 金叉——按市值排序。',
         summary:
           '美股 + 港股科技板块筛选完成——共 8 只股票满足市值 ≥ 500 亿、PE < 25 条件。其中 3 只确认出现近期 MACD 金叉（DIF 上穿 DEA）。',
@@ -523,7 +523,7 @@ const LOCALE = {
       {
         nav: '跨市場選股',
         title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋',
-        desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。',
+        desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。查看所有支援市場的<a href="https://longbridge.com/markets">即時行情</a>。',
         prompt: '從美股和港股中，篩選市值超 500 億、PE 低於 25 的科技股，且近期出現 MACD 金叉——按市值排序。',
         summary:
           '美股 + 港股科技板塊篩選完成——共 8 只股票滿足市值 ≥ 500 億、PE < 25 條件。其中 3 只確認出現近期 MACD 金叉（DIF 上穿 DEA）。',
@@ -860,7 +860,7 @@ const DEMO_SCENARIOS = [
     id: 'screen',
     nav: 'Cross-Market Screening',
     title: 'HK · US · A-share · Singapore — multi-market screening in one shot.',
-    desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results.',
+    desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results. See <a href="https://longbridge.com/markets">live market data</a> for all supported markets.',
     prompt:
       'From US + HK markets, screen for tech stocks with market cap above ¥50B, PE under 25, and recent MACD golden cross — sort by market cap.',
     summary:
@@ -1446,7 +1446,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 
             <div class="skill-demo-main">
               <h3 class="skill-demo-title">{{ activeScenario.title }}</h3>
-              <p class="skill-demo-desc">{{ activeScenario.desc }}</p>
+              <p class="skill-demo-desc" v-html="activeScenario.desc"></p>
 
               <div class="skill-demo-prompt-label">{{ content.demo.tryAsking }}</div>
               <div class="skill-demo-prompt">
