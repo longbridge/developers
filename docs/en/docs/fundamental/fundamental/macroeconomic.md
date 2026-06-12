@@ -14,9 +14,9 @@ Get historical releases for a specific macroeconomic indicator — actual values
 
 <CliCommand>
 # Historical data for Non-Farm Payroll
-longbridge macroeconomic US00175
+longbridge macrodata US00175
 # Date range filter
-longbridge macroeconomic US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic" />

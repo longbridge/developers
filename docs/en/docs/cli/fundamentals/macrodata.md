@@ -1,10 +1,10 @@
 ---
-title: 'macroeconomic'
-sidebar_label: 'macroeconomic'
+title: 'macrodata'
+sidebar_label: 'macrodata'
 sidebar_position: 20
 ---
 
-# longbridge macroeconomic
+# longbridge macrodata
 
 Browse macroeconomic indicators and their historical release data — covering US, HK, CN, EU, JP, and SG markets.
 
@@ -12,15 +12,15 @@ Browse macroeconomic indicators and their historical release data — covering U
 
 | Mode | Usage | Description |
 | ---- | ----- | ----------- |
-| List | `longbridge macroeconomic` | List all available indicators |
-| History | `longbridge macroeconomic <CODE>` | Historical releases for one indicator |
+| List | `longbridge macrodata` | List all available indicators |
+| History | `longbridge macrodata <CODE>` | Historical releases for one indicator |
 
 ## Examples
 
 ### List all indicators
 
 ```bash
-longbridge macroeconomic
+longbridge macrodata
 ```
 
 ```
@@ -34,9 +34,9 @@ US00176  Unemployment Rate       Employment  US        Monthly     Bureau of Lab
 ### Filter by country
 
 ```bash
-longbridge macroeconomic --country US
-longbridge macroeconomic --country HK
-longbridge macroeconomic --country CN
+longbridge macrodata --country US
+longbridge macrodata --country HK
+longbridge macrodata --country CN
 ```
 
 Supported country codes: `HK`, `CN`, `US`, `EU`, `JP`, `SG`.
@@ -44,13 +44,13 @@ Supported country codes: `HK`, `CN`, `US`, `EU`, `JP`, `SG`.
 ### Paginate the list
 
 ```bash
-longbridge macroeconomic --country US --limit 50 --page 2
+longbridge macrodata --country US --limit 50 --page 2
 ```
 
 ### Historical releases for a specific indicator
 
 ```bash
-longbridge macroeconomic US00175
+longbridge macrodata US00175
 ```
 
 ```
@@ -65,17 +65,17 @@ Period      Actual   Forecast  Previous  Revised   Unit
 ### Filter history by date range
 
 ```bash
-longbridge macroeconomic US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON output for AI / scripting
 
 ```bash
 # List as JSON
-longbridge macroeconomic --format json
+longbridge macrodata --format json
 
 # History as JSON
-longbridge macroeconomic US00175 --format json
+longbridge macrodata US00175 --format json
 ```
 
 ## Options

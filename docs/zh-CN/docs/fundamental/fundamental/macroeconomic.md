@@ -14,9 +14,9 @@ headingLevel: 2
 
 <CliCommand>
 # 查询非农就业人数历史数据
-longbridge macroeconomic US00175
+longbridge macrodata US00175
 # 指定日期范围
-longbridge macroeconomic US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic" />

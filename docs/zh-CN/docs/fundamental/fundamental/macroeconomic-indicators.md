@@ -14,9 +14,9 @@ headingLevel: 2
 
 <CliCommand>
 # 列出全部指标
-longbridge macroeconomic
+longbridge macrodata
 # 筛选美国指标
-longbridge macroeconomic --country US
+longbridge macrodata --country US
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_indicators" />

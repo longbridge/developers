@@ -14,9 +14,9 @@ List macroeconomic indicators available through Longbridge, optionally filtered 
 
 <CliCommand>
 # List all indicators
-longbridge macroeconomic
+longbridge macrodata
 # Filter by US indicators
-longbridge macroeconomic --country US
+longbridge macrodata --country US
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_indicators" />

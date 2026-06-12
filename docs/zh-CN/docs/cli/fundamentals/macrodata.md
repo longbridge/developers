@@ -1,10 +1,10 @@
 ---
-title: 'macroeconomic'
-sidebar_label: 'macroeconomic'
+title: 'macrodata'
+sidebar_label: 'macrodata'
 sidebar_position: 20
 ---
 
-# longbridge macroeconomic
+# longbridge macrodata
 
 浏览宏观经济指标及其历史发布数据，覆盖美国、香港、中国大陆、欧元区、日本和新加坡市场。
 
@@ -12,15 +12,15 @@ sidebar_position: 20
 
 | 模式 | 用法 | 描述 |
 | ---- | ---- | ---- |
-| 列表 | `longbridge macroeconomic` | 列出全部可用指标 |
-| 历史 | `longbridge macroeconomic <CODE>` | 查询指定指标的历史数据 |
+| 列表 | `longbridge macrodata` | 列出全部可用指标 |
+| 历史 | `longbridge macrodata <CODE>` | 查询指定指标的历史数据 |
 
 ## 示例
 
 ### 列出全部指标
 
 ```bash
-longbridge macroeconomic
+longbridge macrodata
 ```
 
 ```
@@ -33,9 +33,9 @@ US00175  非农就业人数  Employment  US        Monthly     Bureau of Labor S
 ### 按国家/地区筛选
 
 ```bash
-longbridge macroeconomic --country US
-longbridge macroeconomic --country HK
-longbridge macroeconomic --country CN
+longbridge macrodata --country US
+longbridge macrodata --country HK
+longbridge macrodata --country CN
 ```
 
 支持的国家代码：`HK`、`CN`、`US`、`EU`、`JP`、`SG`。
@@ -43,13 +43,13 @@ longbridge macroeconomic --country CN
 ### 分页查看
 
 ```bash
-longbridge macroeconomic --country US --limit 50 --page 2
+longbridge macrodata --country US --limit 50 --page 2
 ```
 
 ### 查看某个指标的历史发布数据
 
 ```bash
-longbridge macroeconomic US00175
+longbridge macrodata US00175
 ```
 
 ```
@@ -64,14 +64,14 @@ Period      Actual   Forecast  Previous  Revised   Unit
 ### 按日期范围筛选历史数据
 
 ```bash
-longbridge macroeconomic US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON 输出（适合 AI / 脚本）
 
 ```bash
-longbridge macroeconomic --format json
-longbridge macroeconomic US00175 --format json
+longbridge macrodata --format json
+longbridge macrodata US00175 --format json
 ```
 
 ## 选项
