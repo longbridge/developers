@@ -9,7 +9,7 @@ sidebar_icon: newspaper
 
 ### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
-- **新增 `macrodata` 命令** — 瀏覽 600+ 宏觀經濟指標，覆蓋美/港/中/歐/日/新六大市場；列表模式支持 `--country` 篩選，歷史模式支持 `--start`/`--end` 日期區間；`--format json` 滿足 AI / 腳本需求
+- **新增 `macrodata` 命令** — 瀏覽 400+ 宏觀經濟指標，覆蓋美/港/中/歐/日/新六大市場；列表模式支持 `--country` 篩選，歷史模式支持 `--start`/`--end` 日期區間；`--format json` 滿足 AI / 腳本需求
 
 ### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
 
