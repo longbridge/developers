@@ -6,6 +6,16 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-11
+
+### SDK v4.3.1
+
+- **Macroeconomic indicators** — Two new `FundamentalContext` methods: `macroeconomic_indicators` lists all indicators (filter by country), `macroeconomic` returns historical release data (actual / forecast / previous / revised values) for a given indicator code
+
+### CLI vX.Y.Z
+
+- **New `macroeconomic` command** — Browse 600+ macro indicators across US/HK/CN/EU/JP/SG and query historical release data with actual, forecast, previous, and revised values; supports `--country`, `--start`, `--end`, `--limit`, `--page`, `--format json`
+
 ## 2026-06-04
 
 ### CLI v0.22.4

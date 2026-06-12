@@ -6,6 +6,16 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-11
+
+### SDK v4.3.1
+
+- **宏观经济数据接口** — 新增两个 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指标（支持按国家筛选），`macroeconomic` 查询指定指标的历史发布数据（实际值/预期值/前值/修正值）
+
+### CLI vX.Y.Z
+
+- **新增 `macroeconomic` 命令** — 浏览 600+ 宏观指标（覆盖美/港/中/欧/日/新）并查询历史发布数据；支持 `--country`、`--start`、`--end`、`--limit`、`--page`、`--format json`
+
 ## 2026-06-04
 
 ### CLI v0.22.4
