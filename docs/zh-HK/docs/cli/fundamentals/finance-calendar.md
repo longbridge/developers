@@ -6,7 +6,7 @@ sidebar_position: 6
 
 # longbridge finance-calendar
 
-瀏覽即將到來的財經事件——財報發布、股息派發、拆合股、IPO 及宏觀經濟數據，支援按標的、自選股、市場或事件類型篩選。
+瀏覽即將到來的財經事件——財報發布、股息派發、拆合股、IPO 及宏觀數據，支援按標的、自選股、市場或事件類型篩選。
 
 ## 子命令
 
@@ -16,7 +16,7 @@ sidebar_position: 6
 | `dividend`  | 股息公告                     |
 | `split`     | 拆股與合股                   |
 | `ipo`       | IPO 上市                     |
-| `macrodata` | 宏觀經濟數據發布             |
+| `macrodata` | 宏觀數據發布             |
 | `closed`    | 市場休市日                   |
 
 ## 示例
@@ -59,7 +59,7 @@ longbridge finance-calendar split --market HK
 longbridge finance-calendar macrodata --star 3
 ```
 
-只顯示高重要性宏觀經濟數據發布（三星級），涵蓋 CPI、非農就業、美聯儲利率決議等市場重要事件。
+只顯示高重要性宏觀數據發布（三星級），涵蓋 CPI、非農就業、美聯儲利率決議等市場重要事件。
 
 ### IPO 日曆
 

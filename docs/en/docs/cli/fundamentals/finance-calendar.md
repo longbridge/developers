@@ -6,7 +6,7 @@ sidebar_position: 6
 
 # longbridge finance-calendar
 
-Browse upcoming financial events — earnings reports, dividend payments, stock splits, IPOs, and macroeconomic releases — filtered by symbol, watchlist, market, or event type.
+Browse upcoming financial events — earnings reports, dividend payments, stock splits, IPOs, and macrodata releases — filtered by symbol, watchlist, market, or event type.
 
 ## Subcommands
 
@@ -16,7 +16,7 @@ Browse upcoming financial events — earnings reports, dividend payments, stock 
 | `dividend`  | Dividend announcements                      |
 | `split`     | Stock splits and merges                     |
 | `ipo`       | IPO listings                                |
-| `macrodata` | Macroeconomic data releases                 |
+| `macrodata` | Macrodata releases                 |
 | `closed`    | Market closure days                         |
 
 ## Examples
@@ -59,7 +59,7 @@ Shows both split and merge events for Hong Kong-listed stocks.
 longbridge finance-calendar macrodata --star 3
 ```
 
-Filters macroeconomic events to only show high-importance releases (3-star). Covers data like CPI, NFP, Fed rate decisions, and similar market-moving events.
+Filters macrodata events to only show high-importance releases (3-star). Covers data like CPI, NFP, Fed rate decisions, and similar market-moving events.
 
 ### IPO calendar
 

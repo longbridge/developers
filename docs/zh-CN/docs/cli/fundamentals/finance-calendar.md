@@ -6,7 +6,7 @@ sidebar_position: 6
 
 # longbridge finance-calendar
 
-浏览即将到来的财经事件——财报发布、股息派发、拆合股、IPO 及宏观经济数据，支持按标的、自选股、市场或事件类型过滤。
+浏览即将到来的财经事件——财报发布、股息派发、拆合股、IPO 及宏观数据，支持按标的、自选股、市场或事件类型过滤。
 
 ## 子命令
 
@@ -16,7 +16,7 @@ sidebar_position: 6
 | `dividend`  | 股息公告                   |
 | `split`     | 拆股与合股                 |
 | `ipo`       | IPO 上市                   |
-| `macrodata` | 宏观经济数据发布           |
+| `macrodata` | 宏观数据发布           |
 | `closed`    | 市场休市日                 |
 
 ## 示例
@@ -59,7 +59,7 @@ longbridge finance-calendar split --market HK
 longbridge finance-calendar macrodata --star 3
 ```
 
-只显示高重要性宏观经济数据发布（三星级），涵盖 CPI、非农就业、美联储利率决议等市场重要事件。
+只显示高重要性宏观数据发布（三星级），涵盖 CPI、非农就业、美联储利率决议等市场重要事件。
 
 ### IPO 日历
 

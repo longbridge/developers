@@ -6,7 +6,7 @@ sidebar_position: 20
 
 # longbridge macrodata
 
-Browse macroeconomic indicators and their historical release data — covering US, HK, CN, EU, JP, and SG markets.
+Browse macrodata indicators and their historical release data — covering US, HK, CN, EU, JP, and SG markets.
 
 ## Modes
 
