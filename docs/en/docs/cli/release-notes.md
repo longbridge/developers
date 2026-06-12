@@ -7,7 +7,7 @@ sidebar_icon: newspaper
 
 # Release Notes
 
-### [vX.Y.Z](https://github.com/longbridge/longbridge-terminal/releases/tag/vX.Y.Z)
+### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
 - **New `macroeconomic` command** — Browse 600+ macroeconomic indicators across US/HK/CN/EU/JP/SG; list mode with optional `--country` filter, history mode for a specific indicator code with `--start`/`--end` date range; `--format json` for AI/scripting workflows
 
