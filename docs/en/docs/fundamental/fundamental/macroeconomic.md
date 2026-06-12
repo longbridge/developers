@@ -14,9 +14,9 @@ Get historical releases for a specific macroeconomic indicator — actual values
 
 <CliCommand>
 # Historical data for Non-Farm Payroll
-longbridge macrodata US00175
+longbridge macrodata 62267
 # Date range filter
-longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic" />
@@ -45,7 +45,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
-resp = ctx.macroeconomic("US00175", start_date="2024-01-01", end_date="2024-12-31")
+resp = ctx.macroeconomic("62267", start_date="2024-01-01", end_date="2024-12-31")
 print(resp)
 ```
 
@@ -60,7 +60,7 @@ async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
-    resp = await ctx.macroeconomic("US00175", start_date="2024-01-01", end_date="2024-12-31")
+    resp = await ctx.macroeconomic("62267", start_date="2024-01-01", end_date="2024-12-31")
     print(resp)
 
 if __name__ == "__main__":
@@ -79,7 +79,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.macroeconomic('US00175', { startDate: '2024-01-01', endDate: '2024-12-31' })
+  const resp = await ctx.macroeconomic('62267', { startDate: '2024-01-01', endDate: '2024-12-31' })
   console.log(resp)
 }
 main().catch(console.error)
@@ -97,7 +97,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getMacroeconomic("US00175", "2024-01-01", "2024-12-31", null, null).get();
+            var resp = ctx.getMacroeconomic("62267", "2024-01-01", "2024-12-31", null, null).get();
             System.out.println(resp);
         }
     }
@@ -116,7 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.macroeconomic("US00175", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
+    let resp = ctx.macroeconomic("62267", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -133,13 +133,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 {
   "count": 24,
   "info": {
-    "indicator_code": "US00175",
+    "indicator_code": "62267",
     "source_org": "Bureau of Labor Statistics",
     "country": "United States",
-    "name": { "english": "Non-Farm Payroll", "simplified_chinese": "非农就业人数", "traditional_chinese": "非農就業人數" },
+    "name": "Non-Farm Payroll",
     "periodicity": "Monthly",
     "category": "Employment",
-    "describe": { "english": "...", "simplified_chinese": "", "traditional_chinese": "" },
+    "describe": "...",
     "importance": 3,
     "start_date": 1356998400
   },
@@ -152,8 +152,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
       "forecast_value": "165000",
       "revised_value": "212000",
       "next_release_at": 1738492200,
-      "unit": { "english": "Thousand", "simplified_chinese": "千", "traditional_chinese": "千" },
-      "unit_prefix": { "english": "", "simplified_chinese": "", "traditional_chinese": "" }
+      "unit": "Thousand",
+      "unit_prefix": ""
     }
   ]
 }
@@ -191,7 +191,73 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | forecast_value | string | true | Market consensus forecast |
 | revised_value | string | true | Revised value (if any) |
 | next_release_at | int | false | Unix timestamp of next scheduled release |
-| unit | MultiLanguageText | true | Unit (e.g. Thousand, %) |
-| unit_prefix | MultiLanguageText | true | Unit prefix / scale (e.g. millions, billions) |
+| unit | string | true | Unit (e.g. `Thousand`, `%`) |
+| unit_prefix | string | true | Unit prefix / scale (e.g. millions, billions) |
 
-See [MultiLanguageText](#MultiLanguageText) in `macroeconomic_indicators`.
+
+---
+
+## macroeconomic_v2
+
+<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_v2" />
+
+V2 variant adds a `sort` parameter and uses the v2 API endpoint.
+
+### Parameters
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| indicator_code | string | YES | Indicator code from `macroeconomic_indicators` |
+| start_date | string | NO | Start date in `YYYY-MM-DD` format |
+| end_date | string | NO | End date in `YYYY-MM-DD` format |
+| offset | int | NO | Pagination offset. Default: 0 |
+| limit | int | NO | Max records. Default: 100, max: 100 |
+| sort | string | NO | Sort order: `asc` or `desc`. Default: `desc` |
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+resp = ctx.macroeconomic_v2(
+    "62267",
+    start_date="2024-01-01",
+    end_date="2024-12-31",
+    sort="asc",
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const resp = await ctx.macroeconomicV2('62267', {
+  startDate: '2024-01-01',
+  endDate: '2024-12-31',
+  sort: 'asc',
+})
+console.log(resp)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+let resp = ctx.macroeconomic_v2(
+    "62267", Some("2024-01-01"), Some("2024-12-31"), None, None, Some("asc")
+).await?;
+println!("{:?}", resp);
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+sort := "asc"
+resp, err := c.MacroeconomicV2(ctx, "62267", &startDate, &endDate, nil, nil, &sort)
+```
+
+  </TabItem>
+</Tabs>

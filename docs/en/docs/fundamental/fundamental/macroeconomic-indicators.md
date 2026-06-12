@@ -148,22 +148,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "count": 619,
   "list": [
     {
-      "indicator_code": "US00175",
+      "indicator_code": "62267",
       "source_org": "Bureau of Labor Statistics",
       "country": "United States",
-      "name": {
-        "english": "Non-Farm Payroll",
-        "simplified_chinese": "非农就业人数",
-        "traditional_chinese": "非農就業人數"
-      },
+      "name": "Non-Farm Payroll",
       "adjustment_factor": "",
       "periodicity": "Monthly",
       "category": "Employment",
-      "describe": {
-        "english": "Employment situation report...",
-        "simplified_chinese": "",
-        "traditional_chinese": ""
-      },
+      "describe": "Employment situation report...",
       "importance": 3,
       "start_date": 1356998400
     }
@@ -198,20 +190,71 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | indicator_code | string | true | Indicator code (use as input to `macroeconomic`) |
 | source_org | string | true | Publishing organisation |
 | country | string | true | Country name |
-| name | MultiLanguageText | true | Indicator name |
+| name | string | true | Indicator name |
 | adjustment_factor | string | false | Adjustment factor |
 | periodicity | string | true | Release periodicity (e.g. `Monthly`, `Quarterly`) |
 | category | string | true | Indicator category (e.g. `Employment`, `Inflation`) |
-| describe | MultiLanguageText | true | Indicator description |
+| describe | string | true | Indicator description |
 | importance | int | true | Importance level (1 = Low, 2 = Medium, 3 = High) |
 | start_date | int | false | Unix timestamp of data coverage start date |
 
-### MultiLanguageText
 
-<a id="MultiLanguageText"></a>
+---
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| english | string | English text |
-| simplified_chinese | string | Simplified Chinese text |
-| traditional_chinese | string | Traditional Chinese text |
+## macroeconomic_indicators_v2
+
+<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_indicators_v2" />
+
+V2 variant adds a `keyword` parameter for fuzzy name search, and uses the v2 API endpoint.
+
+### Parameters
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| country | MacroeconomicCountry | NO | Filter by country. Omit for all countries. |
+| keyword | string | NO | Fuzzy filter on indicator name (case-insensitive) |
+| offset | int | NO | Pagination offset. Default: 0 |
+| limit | int | NO | Max records per page. Default: 100, max: 1000 |
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+resp = ctx.macroeconomic_indicators_v2(
+    country=MacroeconomicCountry.UnitedStates,
+    keyword="payroll",
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const resp = await ctx.macroeconomicIndicatorsV2({
+  country: MacroeconomicCountry.UnitedStates,
+  keyword: 'payroll',
+})
+console.log(resp)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+let resp = ctx.macroeconomic_indicators_v2(None, Some("payroll"), None, None).await?;
+println!("{:?}", resp);
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+keyword := "payroll"
+resp, err := c.MacroeconomicIndicatorsV2(ctx, nil, &keyword, nil, nil)
+```
+
+  </TabItem>
+</Tabs>

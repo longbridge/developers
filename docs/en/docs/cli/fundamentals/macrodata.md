@@ -25,9 +25,8 @@ longbridge macrodata
 
 ```
 Total: 619
-Code     Name                    Category    Country   Frequency   Source
-US00175  Non-Farm Payroll        Employment  US        Monthly     Bureau of Labor Statistics
-US00176  Unemployment Rate       Employment  US        Monthly     Bureau of Labor Statistics
+Code   Name              Category    Country   Frequency   Source
+62267  Non-Farm Payroll  Employment  US        Monthly     Bureau of Labor Statistics
 ...
 ```
 
@@ -50,7 +49,7 @@ longbridge macrodata --country US --limit 50 --page 2
 ### Historical releases for a specific indicator
 
 ```bash
-longbridge macrodata US00175
+longbridge macrodata 62267
 ```
 
 ```
@@ -65,7 +64,7 @@ Period      Actual   Forecast  Previous  Revised   Unit
 ### Filter history by date range
 
 ```bash
-longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON output for AI / scripting
@@ -75,7 +74,7 @@ longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
 longbridge macrodata --format json
 
 # History as JSON
-longbridge macrodata US00175 --format json
+longbridge macrodata 62267 --format json
 ```
 
 ## Options
@@ -85,6 +84,7 @@ longbridge macrodata US00175 --format json
 | `--country` | Filter list: `HK` \| `CN` \| `US` \| `EU` \| `JP` \| `SG` | All |
 | `--start` | History start date `YYYY-MM-DD` | — |
 | `--end` | History end date `YYYY-MM-DD` | — |
-| `--limit` | Max records (list: max 1000, history: max 100) | 1000 (list) / 20 (history) |
+| `--lang` | Language for names/descriptions: `zh-CN` \| `zh-HK` \| `en` | — |
+| `--limit` | Max records per page (list: max 1000, history: max 100) | 20 |
 | `--page` | Page number, 1-based | 1 |
 | `--format` | `table` or `json` | `table` |

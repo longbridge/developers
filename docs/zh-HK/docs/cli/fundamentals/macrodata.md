@@ -35,15 +35,15 @@ longbridge macrodata --country HK
 ### 查看某個指標的歷史發布數據
 
 ```bash
-longbridge macrodata US00175
-longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 62267
+longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON 輸出（適合 AI / 腳本）
 
 ```bash
 longbridge macrodata --format json
-longbridge macrodata US00175 --format json
+longbridge macrodata 62267 --format json
 ```
 
 ## 選項
@@ -53,6 +53,7 @@ longbridge macrodata US00175 --format json
 | `--country` | 篩選列表：`HK` \| `CN` \| `US` \| `EU` \| `JP` \| `SG` | 全部 |
 | `--start` | 歷史開始日期 `YYYY-MM-DD` | — |
 | `--end` | 歷史結束日期 `YYYY-MM-DD` | — |
-| `--limit` | 最大條數（列表最大 1000，歷史最大 100） | 1000（列表）/ 20（歷史） |
+| `--lang` | 名稱/描述語言：`zh-CN` \| `zh-HK` \| `en` | — |
+| `--limit` | 每頁最大條數（列表最大 1000，歷史最大 100） | 20 |
 | `--page` | 頁碼，從 1 開始 | 1 |
 | `--format` | `table` 或 `json` | `table` |

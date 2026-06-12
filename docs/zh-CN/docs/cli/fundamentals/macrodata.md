@@ -26,7 +26,7 @@ longbridge macrodata
 ```
 Total: 619
 Code     Name          Category    Country   Frequency   Source
-US00175  非农就业人数  Employment  US        Monthly     Bureau of Labor Statistics
+62267  非农就业人数  Employment  US        Monthly     Bureau of Labor Statistics
 ...
 ```
 
@@ -49,7 +49,7 @@ longbridge macrodata --country US --limit 50 --page 2
 ### 查看某个指标的历史发布数据
 
 ```bash
-longbridge macrodata US00175
+longbridge macrodata 62267
 ```
 
 ```
@@ -64,14 +64,14 @@ Period      Actual   Forecast  Previous  Revised   Unit
 ### 按日期范围筛选历史数据
 
 ```bash
-longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON 输出（适合 AI / 脚本）
 
 ```bash
 longbridge macrodata --format json
-longbridge macrodata US00175 --format json
+longbridge macrodata 62267 --format json
 ```
 
 ## 选项
@@ -81,6 +81,7 @@ longbridge macrodata US00175 --format json
 | `--country` | 筛选列表：`HK` \| `CN` \| `US` \| `EU` \| `JP` \| `SG` | 全部 |
 | `--start` | 历史开始日期 `YYYY-MM-DD` | — |
 | `--end` | 历史结束日期 `YYYY-MM-DD` | — |
-| `--limit` | 最大条数（列表最大 1000，历史最大 100） | 1000（列表）/ 20（历史） |
+| `--lang` | 名称/描述语言：`zh-CN` \| `zh-HK` \| `en` | — |
+| `--limit` | 每页最大条数（列表最大 1000，历史最大 100） | 20 |
 | `--page` | 页码，从 1 开始 | 1 |
 | `--format` | `table` 或 `json` | `table` |

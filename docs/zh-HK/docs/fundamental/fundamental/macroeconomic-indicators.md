@@ -106,14 +106,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "count": 619,
   "list": [
     {
-      "indicator_code": "US00175",
+      "indicator_code": "62267",
       "source_org": "Bureau of Labor Statistics",
       "country": "United States",
-      "name": {
-        "english": "Non-Farm Payroll",
-        "simplified_chinese": "非农就业人数",
-        "traditional_chinese": "非農就業人數"
-      },
+      "name": "Non-Farm Payroll",
       "periodicity": "Monthly",
       "category": "Employment",
       "importance": 3,
@@ -139,11 +135,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | indicator_code | string | 是 | 指標代碼（用於 `macroeconomic` 查詢） |
 | source_org | string | 是 | 發布機構 |
 | country | string | 是 | 國家/地區名稱 |
-| name | MultiLanguageText | 是 | 指標名稱（多語言） |
+| name | string | 是 | 指標名稱  |
 | adjustment_factor | string | 否 | 調整因子 |
 | periodicity | string | 是 | 發布頻率（如 `Monthly`、`Quarterly`） |
 | category | string | 是 | 指標分類（如 `Employment`、`Inflation`） |
-| describe | MultiLanguageText | 是 | 指標說明（多語言） |
+| describe | string | 是 | 指標說明  |
 | importance | int | 是 | 重要性（1=低、2=中、3=高） |
 | start_date | int | 否 | 數據起始日期的 Unix 時間戳 |
 
@@ -154,3 +150,44 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | english | string | 英文 |
 | simplified_chinese | string | 簡體中文 |
 | traditional_chinese | string | 繁體中文 |
+
+---
+
+## macroeconomic_indicators_v2
+
+<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_indicators_v2" />
+
+v2 版本新增 `keyword` 參數，支持按指標名稱模糊搜索，使用 v2 API 端點。
+
+### 參數
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| country | MacroeconomicCountry | 否 | 按國家/地區篩選。不填返回全部。 |
+| keyword | string | 否 | 按指標名稱模糊搜索（不區分大小寫） |
+| offset | int | 否 | 分頁偏移量，默認 0 |
+| limit | int | 否 | 每頁最大條數，默認 100，最大 1000 |
+
+### 請求示例
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+resp = ctx.macroeconomic_indicators_v2(
+    country=MacroeconomicCountry.UnitedStates,
+    keyword="payroll",
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+let resp = ctx.macroeconomic_indicators_v2(None, Some("payroll"), None, None).await?;
+println!("{:?}", resp);
+```
+
+  </TabItem>
+</Tabs>

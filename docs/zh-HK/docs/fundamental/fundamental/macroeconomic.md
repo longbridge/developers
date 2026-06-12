@@ -14,9 +14,9 @@ headingLevel: 2
 
 <CliCommand>
 # 查詢非農就業人數歷史數據
-longbridge macrodata US00175
+longbridge macrodata 62267
 # 指定日期範圍
-longbridge macrodata US00175 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic" />
@@ -45,7 +45,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問:", url
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
-resp = ctx.macroeconomic("US00175", start_date="2024-01-01", end_date="2024-12-31")
+resp = ctx.macroeconomic("62267", start_date="2024-01-01", end_date="2024-12-31")
 print(resp)
 ```
 
@@ -61,7 +61,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.macroeconomic('US00175', { startDate: '2024-01-01', endDate: '2024-12-31' })
+  const resp = await ctx.macroeconomic('62267', { startDate: '2024-01-01', endDate: '2024-12-31' })
   console.log(resp)
 }
 main().catch(console.error)
@@ -79,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.macroeconomic("US00175", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
+    let resp = ctx.macroeconomic("62267", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -94,8 +94,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 {
   "count": 24,
   "info": {
-    "indicator_code": "US00175",
-    "name": { "english": "Non-Farm Payroll", "simplified_chinese": "非农就业人数", "traditional_chinese": "非農就業人數" },
+    "indicator_code": "62267",
+    "name": "Non-Farm Payroll",
     "periodicity": "Monthly",
     "category": "Employment",
     "importance": 3
@@ -109,8 +109,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
       "forecast_value": "165000",
       "revised_value": "212000",
       "next_release_at": 1738492200,
-      "unit": { "english": "Thousand", "simplified_chinese": "千", "traditional_chinese": "千" },
-      "unit_prefix": { "english": "", "simplified_chinese": "", "traditional_chinese": "" }
+      "unit": "Thousand",
+      "unit_prefix": ""
     }
   ]
 }
@@ -137,5 +137,45 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | forecast_value | string | 是 | 市場預期值 |
 | revised_value | string | 是 | 修正值 |
 | next_release_at | int | 否 | 下次發布時間 Unix 時間戳 |
-| unit | MultiLanguageText | 是 | 單位（如 Thousand、%） |
-| unit_prefix | MultiLanguageText | 是 | 單位前綴/數量級 |
+| unit | string | 是 | 單位（如 Thousand、%） |
+| unit_prefix | string | 是 | 單位前綴/數量級 |
+
+---
+
+## macroeconomic_v2
+
+<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_v2" />
+
+v2 版本新增 `sort` 參數，使用 v2 API 端點。
+
+### 參數
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| indicator_code | string | 是 | 指標代碼，來自 `macroeconomic_indicators` |
+| start_date | string | 否 | 開始日期，格式 `YYYY-MM-DD` |
+| end_date | string | 否 | 結束日期，格式 `YYYY-MM-DD` |
+| offset | int | 否 | 分頁偏移量，默認 0 |
+| limit | int | 否 | 最大返回條數，默認 100，最大 100 |
+| sort | string | 否 | 排序方向：`asc` 或 `desc`，默認 `desc` |
+
+### 請求示例
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+resp = ctx.macroeconomic_v2("62267", start_date="2024-01-01", end_date="2024-12-31", sort="asc")
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+let resp = ctx.macroeconomic_v2("62267", Some("2024-01-01"), Some("2024-12-31"), None, None, Some("asc")).await?;
+println!("{:?}", resp);
+```
+
+  </TabItem>
+</Tabs>
