@@ -7,6 +7,10 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [vX.Y.Z](https://github.com/longbridge/longbridge-terminal/releases/tag/vX.Y.Z)
+
+- **新增 `macroeconomic` 命令** — 瀏覽 600+ 宏觀經濟指標，覆蓋美/港/中/歐/日/新六大市場；列表模式支持 `--country` 篩選，歷史模式支持 `--start`/`--end` 日期區間；`--format json` 滿足 AI / 腳本需求
+
 ### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
 
 - **`constituent` 支持 ETF** — ETF 標的現返回資產分佈數據（持倉 / 地區 / 資產類別 / 行業四組表格）；指數標的行為完全不變

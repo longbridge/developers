@@ -7,6 +7,10 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [vX.Y.Z](https://github.com/longbridge/longbridge-terminal/releases/tag/vX.Y.Z)
+
+- **New `macroeconomic` command** — Browse 600+ macroeconomic indicators across US/HK/CN/EU/JP/SG; list mode with optional `--country` filter, history mode for a specific indicator code with `--start`/`--end` date range; `--format json` for AI/scripting workflows
+
 ### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
 
 - **`constituent` now supports ETFs** — ETF symbols return an asset-allocation breakdown (holdings / regional / asset-class / industry tables); index symbols behave exactly as before
