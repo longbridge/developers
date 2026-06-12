@@ -40,6 +40,13 @@ longbridge macrodata --country CN
 
 支持的国家代码：`HK`、`CN`、`US`、`EU`、`JP`、`SG`。
 
+### 按关键词搜索
+
+```bash
+longbridge macrodata --keyword CPI
+longbridge macrodata --keyword CPI --country US
+```
+
 ### 分页查看
 
 ```bash
@@ -79,6 +86,7 @@ longbridge macrodata 62267 --format json
 | 选项 | 描述 | 默认值 |
 | ---- | ---- | ------ |
 | `--country` | 筛选列表：`HK` \| `CN` \| `US` \| `EU` \| `JP` \| `SG` | 全部 |
+| `--keyword` | 按指标名称筛选（模糊匹配，仅列表模式） | — |
 | `--start` | 历史开始日期 `YYYY-MM-DD` | — |
 | `--end` | 历史结束日期 `YYYY-MM-DD` | — |
 | `--lang` | 名称/描述语言：`zh-CN` \| `zh-HK` \| `en` | — |

@@ -40,6 +40,13 @@ longbridge macrodata --country CN
 
 Supported country codes: `HK`, `CN`, `US`, `EU`, `JP`, `SG`.
 
+### Search by keyword
+
+```bash
+longbridge macrodata --keyword CPI
+longbridge macrodata --keyword CPI --country US
+```
+
 ### Paginate the list
 
 ```bash
@@ -82,6 +89,7 @@ longbridge macrodata 62267 --format json
 | Option | Description | Default |
 | ------ | ----------- | ------- |
 | `--country` | Filter list: `HK` \| `CN` \| `US` \| `EU` \| `JP` \| `SG` | All |
+| `--keyword` | Filter list by indicator name (fuzzy, list mode only) | — |
 | `--start` | History start date `YYYY-MM-DD` | — |
 | `--end` | History end date `YYYY-MM-DD` | — |
 | `--lang` | Language for names/descriptions: `zh-CN` \| `zh-HK` \| `en` | — |
