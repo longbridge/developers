@@ -78,6 +78,16 @@ claude mcp add --transport http longbridge https://mcp.longbridge.com
 
 ### Codex
 
+在終端執行以下命令：
+
+```bash
+codex mcp add longbridge --url https://mcp.longbridge.com
+```
+
+隨後在 Codex 中按提示完成 OAuth 授權流程。
+
+#### Codex Desktop
+
 1. 點擊右下角 **Settings** → **MCP Servers** → **Add Server**
 2. 在 "Connect to a custom MCP" 介面填寫：
    - Name：`longbridge`

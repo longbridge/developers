@@ -78,6 +78,16 @@ Then open the `claude` terminal interface, type `/mcp`, select `longbridge`, and
 
 ### Codex
 
+Run the following command in your terminal:
+
+```bash
+codex mcp add longbridge --url https://mcp.longbridge.com
+```
+
+Then follow the OAuth authorization flow in Codex when prompted.
+
+#### Codex Desktop
+
 1. Click **Settings** (bottom right) → **MCP Servers** → **Add Server**
 2. In the "Connect to a custom MCP" screen, fill in:
    - Name: `longbridge`
