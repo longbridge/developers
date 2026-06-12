@@ -47,7 +47,24 @@ Actual tool availability depends on your region, account level, and granted OAut
 
 ### ChatGPT
 
-![](https://github.com/user-attachments/assets/088182ee-932b-451f-a495-8e4ba6090148)
+You need to enable [ChatGPT Developer Mode](https://developers.openai.com/api/docs/guides/developer-mode) before you can add Longbridge MCP.
+
+In ChatGPT, go to [Settings → Apps](https://chatgpt.com/#settings/Connectors) → [Advanced settings → Developer mode](https://chatgpt.com/#settings/Connectors/Advanced) and turn on **Developer mode**.
+
+![](https://assets.lbctrl.com/uploads/02e8a24a-be0b-49b2-a4eb-9952bc7a4f9b/enable-chatgpt-dev.png)
+
+Then click **Back** to return to the Apps list, where you can click the **Create app** button to add a new app — this is where you add Longbridge MCP.
+
+Fill in the form:
+
+- Name：`Longbridge`
+- Description：`Investment market insights`
+- Connection (Server URL):`https://mcp.longbridge.com`
+- Authentication：OAuth
+
+Full walkthrough video:
+
+![](https://assets.lbctrl.com/uploads/a9e06030-99e7-4f1b-90a6-d5efd5bb1fe8/longbridge-mcp-for-chatgpt.mp4)
 
 ### Claude Code
 

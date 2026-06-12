@@ -12,22 +12,23 @@ next: false
 Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服務，讓你在 AI 編程助手或對話工具中直接使用 Longbridge 的行情與帳戶能力，無需手動管理 API 金鑰。
 
 :::tip MCP 服務地址
+
 - 全球：`https://mcp.longbridge.com`
 - 中國大陸：`https://mcp.longbridge.cn`（訪問更快）
-:::
+  :::
 
 ## 可用能力
 
 Longbridge MCP 暴露 100+ 工具，覆蓋六大能力域，客戶端連接後會自動發現——無需手動配置。
 
-| 能力 | 覆蓋範圍 |
-| --- | --- |
-| **即時行情** | 報價、K 線、深度、經紀隊列、逐筆、分時資金流 |
-| **基本面與研究** | 公司資料、派息、估值、高管持倉、A/H 溢價 |
-| **衍生品** | 期權鏈、窩輪篩選、發行商、窩輪報價 |
-| **帳戶與組合** | 餘額、持倉、資金流水、自選股及分組 |
-| **交易** | 下單、改單、撤單、可買量估算 |
-| **自動化** | 股價提醒、定投（DCA）計劃 |
+| 能力             | 覆蓋範圍                                     |
+| ---------------- | -------------------------------------------- |
+| **即時行情**     | 報價、K 線、深度、經紀隊列、逐筆、分時資金流 |
+| **基本面與研究** | 公司資料、派息、估值、高管持倉、A/H 溢價     |
+| **衍生品**       | 期權鏈、窩輪篩選、發行商、窩輪報價           |
+| **帳戶與組合**   | 餘額、持倉、資金流水、自選股及分組           |
+| **交易**         | 下單、改單、撤單、可買量估算                 |
+| **自動化**       | 股價提醒、定投（DCA）計劃                    |
 
 實際可用工具因地區、帳戶等級與 OAuth 授權範圍而異。
 
@@ -43,6 +44,27 @@ Longbridge MCP 暴露 100+ 工具，覆蓋六大能力域，客戶端連接後�
 ## 客戶端接入
 
 > 各客戶端的 MCP 配置格式可能隨版本變更，以客戶端官方文件為準。以下提供核心配置參數。
+
+### ChatGPT
+
+需要先開啟 [ChatGPT Developer Mode](https://developers.openai.com/api/docs/guides/developer-mode)，然後才能新增 Longbridge MCP。
+
+在 ChatGPT 中前往 [Settings → Apps](https://chatgpt.com/#settings/Connectors) → [Advanced settings → Developer mode](https://chatgpt.com/#settings/Connectors/Advanced)，並開啟「Developer mode」。
+
+![](https://assets.lbctrl.com/uploads/02e8a24a-be0b-49b2-a4eb-9952bc7a4f9b/enable-chatgpt-dev.png)
+
+之後點擊「Back」返回 Apps 列表，點擊「Create app」按鈕建立新的 App，即可在此新增 Longbridge MCP。
+
+在表單內填寫：
+
+- Name：`Longbridge`
+- Description：`Investment market insights`
+- Connection (Server URL):`https://mcp.longbridge.com`
+- Authentication：OAuth
+
+完整示範影片：
+
+![](https://assets.lbctrl.com/uploads/a9e06030-99e7-4f1b-90a6-d5efd5bb1fe8/longbridge-mcp-for-chatgpt.mp4)
 
 ### Claude Code
 
