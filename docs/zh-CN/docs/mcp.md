@@ -64,7 +64,7 @@ Longbridge MCP 暴露 100+ 工具，覆盖六大能力域，客户端连接后�
 
 完整演示视频：
 
-![](https://assets.lbctrl.com/uploads/a9e06030-99e7-4f1b-90a6-d5efd5bb1fe8/longbridge-mcp-for-chatgpt.mp4)
+<video src="https://assets.lbctrl.com/uploads/a9e06030-99e7-4f1b-90a6-d5efd5bb1fe8/longbridge-mcp-for-chatgpt.mp4" controls />
 
 ### Claude Code
 
