@@ -21,14 +21,17 @@ const LOCALE = {
           title: 'Trading & Account APIs',
           desc: 'Fundamentals, analysis, news, assets, orders — every core API is free.',
         },
-        { title: 'Real-time Market Data', desc: 'US LV1, HK Level 1, CN Level 1 real-time quotes — included free on registration. <a href="https://longbridge.com/markets">View live market data</a> to see what\'s included.' },
+        {
+          title: 'Basic Market Data',
+          desc: 'Nasdaq Basic, HK Level 1, CN Level 1 — bundled with your account. <a href="https://longbridge.com/markets">View live market data</a> to see what\'s included.',
+        },
         { title: 'Push & Pull Data', desc: 'WebSocket real-time push and REST API pull — unlimited.' },
       ],
     },
     realtime: {
       eyebrow: 'REAL-TIME MARKET DATA',
       title: 'Subscribe only to what you need.',
-      desc: 'OpenAPI quote permissions are independent from App / PC / Web. US LV1 is free on registration; subscribe to the rest as needed via Activate via <a href="https://longbridge.com/hk/download">Longbridge App</a> → Me → Quote Store.',
+      desc: 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate via <a href="https://longbridge.com/hk/download">Longbridge App</a> → Me → Quote Store.',
     },
     billing: { label: 'Billing' },
     cycle: {
@@ -47,9 +50,9 @@ const LOCALE = {
           market: 'US Market',
           name: 'US LV1 Real-time',
           badge: '',
-          tagline: 'US LV1 real-time quotes with best bid/ask across pre-market, regular, after-hours, and overnight sessions.',
+          tagline: 'Nasdaq LV1 real-time quotes with best bid/ask, including pre / post-market.',
           coverage: 'US market only',
-          feats: ['US LV1 real-time quotes', 'Pre / post-market & overnight', 'WebSocket real-time push'],
+          feats: ['Nasdaq LV1 real-time quotes', 'Pre / post-market (overnight)', 'WebSocket real-time push'],
         },
         {
           market: 'HK Market',
@@ -73,7 +76,8 @@ const LOCALE = {
       eyebrow: 'FEATURE COMPARISON',
       title: "What's included in each plan.",
       plans: [
-        { label: 'US LV1', tag: 'Free', color: 'var(--lb-market-us)' },
+        { label: 'Nasdaq Basic', tag: 'Free', color: 'var(--lb-up)' },
+        { label: 'US LV1', tag: 'Paid', color: 'var(--lb-market-us)' },
         { label: 'OPRA', tag: 'Paid', color: 'var(--lb-ai-mention)' },
         { label: 'HK LV1', tag: 'Free (promo)', color: 'var(--lb-up)' },
         { label: 'HK LV2', tag: 'Paid', color: 'var(--lb-market-hk)' },
@@ -105,7 +109,7 @@ const LOCALE = {
         },
         {
           q: 'Do I need a subscription to test the API?',
-          a: 'No. Trading, account, and fundamentals APIs are free. US LV1, HK LV1, and CN LV1 real-time quotes are also free on registration.',
+          a: 'No. Trading, account, and fundamentals APIs are free. You can also use Basic Market Data tiers (Nasdaq Basic, HK LV1, CN LV1) for free.',
         },
         {
           q: 'Can I cancel anytime?',
@@ -137,14 +141,17 @@ const LOCALE = {
       price: '免费',
       items: [
         { title: '交易与账户 API', desc: '基本面、分析、资讯、资产、订单——所有核心 API 均免费。' },
-        { title: '实时行情数据', desc: '美股 LV1、港股一档、A 股一档实时行情——注册即免费赠送。<a href="https://longbridge.com/markets">查看实时行情</a>了解包含内容。' },
+        {
+          title: '基础行情数据',
+          desc: '纳斯达克基础行情、港股一档、A 股一档——随账户附赠。<a href="https://longbridge.com/markets">查看实时行情</a>了解包含内容。',
+        },
         { title: '推送与拉取数据', desc: 'WebSocket 实时推送与 REST API 拉取——无限制。' },
       ],
     },
     realtime: {
       eyebrow: '实时行情数据',
       title: '只订阅您需要的数据',
-      desc: 'OpenAPI 行情权限与 App / PC / Web 独立。US LV1 注册即免费赠送，其余按需通过<a href="https://longbridge.com/hk/download">长桥 App</a> → 我的 → 行情商店开通。',
+      desc: 'OpenAPI 行情权限与 App / PC / Web 独立，需单独购买。通过<a href="https://longbridge.com/hk/download">长桥 App</a> → 我的 → 行情商店开通。',
     },
     billing: { label: '计费周期' },
     cycle: {
@@ -163,9 +170,9 @@ const LOCALE = {
           market: '美股市场',
           name: 'US LV1 实时行情',
           badge: '',
-          tagline: '美股 LV1 实时行情，含最优买卖价及盘前、盘中、盘后、夜盘全时段。',
+          tagline: '纳斯达克 LV1 实时行情，含最优买卖价及盘前/盘后数据。',
           coverage: '仅限美股市场',
-          feats: ['美股 LV1 实时行情', '盘前/盘后及夜盘', 'WebSocket 实时推送'],
+          feats: ['纳斯达克 LV1 实时行情', '盘前/盘后（隔夜）', 'WebSocket 实时推送'],
         },
         {
           market: '港股市场',
@@ -189,7 +196,8 @@ const LOCALE = {
       eyebrow: '功能对比',
       title: '各方案功能一览',
       plans: [
-        { label: '美股 LV1', tag: '免费', color: 'var(--lb-market-us)' },
+        { label: 'Nasdaq Basic', tag: '免费', color: 'var(--lb-up)' },
+        { label: '美股 LV1', tag: '付费', color: 'var(--lb-market-us)' },
         { label: 'OPRA', tag: '付费', color: 'var(--lb-ai-mention)' },
         { label: '港股 LV1', tag: '推广免费', color: 'var(--lb-up)' },
         { label: '港股 LV2', tag: '付费', color: 'var(--lb-market-hk)' },
@@ -221,7 +229,7 @@ const LOCALE = {
         },
         {
           q: '测试 API 需要订阅吗？',
-          a: '不需要。交易、账户和基本面 API 均免费。美股 LV1、港股 LV1、A 股 LV1 实时行情也注册即免费赠送。',
+          a: '不需要。交易、账户和基本面 API 均免费。您也可以免费使用基础行情（纳斯达克基础、港股 LV1、A 股 LV1）。',
         },
         { q: '可以随时取消吗？', a: '可以。在下一个计费周期前随时取消。行情权限在已付费周期结束前持续有效。' },
         {
@@ -247,14 +255,17 @@ const LOCALE = {
       price: '免費',
       items: [
         { title: '交易與帳戶 API', desc: '基本面、分析、資訊、資產、訂單——所有核心 API 均免費。' },
-        { title: '即時行情數據', desc: '美股 LV1、港股一檔、A 股一檔即時行情——註冊即免費贈送。<a href="https://longbridge.com/markets">查看即時行情</a>了解包含內容。' },
+        {
+          title: '基礎行情數據',
+          desc: '納斯達克基礎行情、港股一檔、A 股一檔——隨帳戶附贈。<a href="https://longbridge.com/markets">查看即時行情</a>了解包含內容。',
+        },
         { title: '推送與拉取數據', desc: 'WebSocket 即時推送與 REST API 拉取——無限制。' },
       ],
     },
     realtime: {
       eyebrow: '即時行情數據',
       title: '只訂閱您需要的數據。',
-      desc: 'OpenAPI 行情權限與 App / PC / Web 獨立。US LV1 註冊即免費贈送，其餘按需透過<a href="https://longbridge.com/hk/download">長橋 App</a> → 我的 → 行情商店開通。',
+      desc: 'OpenAPI 行情權限與 App / PC / Web 獨立，需單獨購買。透過<a href="https://longbridge.com/hk/download">長橋 App</a> → 我的 → 行情商店開通。',
     },
     billing: { label: '計費週期' },
     cycle: {
@@ -273,9 +284,9 @@ const LOCALE = {
           market: '美股市場',
           name: 'US LV1 即時行情',
           badge: '',
-          tagline: '美股 LV1 即時行情，含最優買賣價及盤前、盤中、盤後、夜盤全時段。',
+          tagline: '納斯達克 LV1 即時行情，含最優買賣價及盤前/盤後數據。',
           coverage: '僅限美股市場',
-          feats: ['美股 LV1 即時行情', '盤前/盤後及夜盤', 'WebSocket 即時推送'],
+          feats: ['納斯達克 LV1 即時行情', '盤前/盤後（隔夜）', 'WebSocket 即時推送'],
         },
         {
           market: '港股市場',
@@ -299,7 +310,8 @@ const LOCALE = {
       eyebrow: '功能對比',
       title: '各方案功能一覽。',
       plans: [
-        { label: '美股 LV1', tag: '免費', color: 'var(--lb-market-us)' },
+        { label: 'Nasdaq Basic', tag: '免費', color: 'var(--lb-up)' },
+        { label: '美股 LV1', tag: '付費', color: 'var(--lb-market-us)' },
         { label: 'OPRA', tag: '付費', color: 'var(--lb-ai-mention)' },
         { label: '港股 LV1', tag: '推廣免費', color: 'var(--lb-up)' },
         { label: '港股 LV2', tag: '付費', color: 'var(--lb-market-hk)' },
@@ -331,7 +343,7 @@ const LOCALE = {
         },
         {
           q: '測試 API 需要訂閱嗎？',
-          a: '不需要。交易、帳戶和基本面 API 均免費。美股 LV1、港股 LV1、A 股 LV1 即時行情也註冊即免費贈送。',
+          a: '不需要。交易、帳戶和基本面 API 均免費。您也可以免費使用基礎行情（納斯達克基礎、港股 LV1、A 股 LV1）。',
         },
         { q: '可以隨時取消嗎？', a: '可以。在下一個計費週期前隨時取消。行情權限在已付費週期結束前持續有效。' },
         {
@@ -360,7 +372,6 @@ const PAID_PLANS = [
     currency: 'HK$',
     color: 'var(--lb-market-us)',
     hasBadge: false,
-    free: true,
     cycles: {
       auto: { price: 558, discount: 22 },
       monthly: { price: 718 },
@@ -373,7 +384,6 @@ const PAID_PLANS = [
     currency: 'HK$',
     color: 'var(--lb-market-hk)',
     hasBadge: true,
-    free: false,
     cycles: {
       auto: { price: 558, discount: 22 },
       monthly: { price: 718 },
@@ -386,7 +396,6 @@ const PAID_PLANS = [
     currency: 'HK$',
     color: 'var(--lb-ai-mention)',
     hasBadge: false,
-    free: false,
     cycles: {
       auto: { price: 22, discount: 45 },
       monthly: { price: 40 },
@@ -405,19 +414,19 @@ const FREE_ICONS = [
 const BILLING_CYCLES = [{ key: 'auto' }, { key: 'monthly' }, { key: 'quarterly' }, { key: 'annual', badge: true }]
 
 const MATRIX_ROW_DATA = [
-  [1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0],
-  [1, 0, 0, 0, 0],
-  [1, 0, 0, 0, 0],
-  [0, 1, 0, 0, 0],
-  [0, 0, 1, 1, 0],
-  [0, 0, 1, 1, 0],
-  [0, 0, 0, 1, 0],
-  [0, 0, 0, 1, 0],
-  [0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1],
+  [1, 1, 0, 0, 0, 0],
+  [1, 1, 0, 0, 0, 0],
+  [1, 1, 0, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 1, 1, 0],
+  [0, 0, 0, 1, 1, 0],
+  [0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 1, 0],
+  [0, 0, 0, 0, 0, 1],
 ]
 
 const cycle = ref('auto')
@@ -593,22 +602,17 @@ const matrixRows = computed<MatrixRow[]>(() => {
             </div>
             <h3 class="pricing-plan-name">{{ p.name }}</h3>
             <div class="pricing-plan-price">
-              <span v-if="p.free" class="pricing-plan-num">{{ content.free.price }}</span>
-              <template v-else>
-                <span class="pricing-plan-cur">{{ p.currency }}</span>
-                <span class="pricing-plan-num">{{ planCycle(p).price }}</span>
-                <span class="pricing-plan-suf">{{ cycleSuffix }}</span>
-                <span v-if="planCycle(p).discount" class="pricing-plan-discount">-{{ planCycle(p).discount }}%</span>
-              </template>
+              <span class="pricing-plan-cur">{{ p.currency }}</span>
+              <span class="pricing-plan-num">{{ planCycle(p).price }}</span>
+              <span class="pricing-plan-suf">{{ cycleSuffix }}</span>
+              <span v-if="planCycle(p).discount" class="pricing-plan-discount">-{{ planCycle(p).discount }}%</span>
             </div>
-            <template v-if="!p.free">
-              <div v-if="planCycle(p).approxMo" class="pricing-plan-approx">
-                ≈{{ p.currency }}{{ planCycle(p).approxMo }}{{ content.suffix.mo }}
-              </div>
-              <div v-else-if="planCycle(p).discount" class="pricing-plan-was">
-                {{ content.plan.was }} <s>{{ p.currency }}{{ p.cycles.monthly.price }}{{ content.suffix.mo }}</s>
-              </div>
-            </template>
+            <div v-if="planCycle(p).approxMo" class="pricing-plan-approx">
+              ≈{{ p.currency }}{{ planCycle(p).approxMo }}{{ content.suffix.mo }}
+            </div>
+            <div v-else-if="planCycle(p).discount" class="pricing-plan-was">
+              {{ content.plan.was }} <s>{{ p.currency }}{{ p.cycles.monthly.price }}{{ content.suffix.mo }}</s>
+            </div>
             <p class="pricing-plan-tag">{{ p.tagline }}</p>
             <div class="pricing-plan-cov">
               <svg
@@ -640,7 +644,6 @@ const matrixRows = computed<MatrixRow[]>(() => {
               </li>
             </ul>
             <a
-              v-if="!p.free"
               class="btn btn-primary pricing-plan-cta"
               href="https://longbridge.com/download"
               target="_blank"

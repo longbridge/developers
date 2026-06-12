@@ -40,7 +40,7 @@ longbridge kline NVDA.US --period day --count 20
 | period        | int32  | 是       | k 線週期，例如：`1000`，详见 [Period](../objects#period---k-線週期)          |
 | count         | int32  | 是       | 數據數量，例如：`100`<br /><br />**校验规则：** <br />請求數量最大為 `1000`  |
 | adjust_type   | int32  | 是       | 復權類型，例如：`0`，详见 [AdjustType](../objects#adjusttype---k-線復權類型) |
-| trade_session | int32  | 否       | 交易時段，0: 盤中，100: 所有延長時段（盤前，盤中，盤後，夜盤）<br/><br/>注意：夜盤數據免費，僅支援美股，需開啟 `enable_overnight` 參數獲取 |
+| trade_session | int32  | 否       | 交易時段，0: 盤中，100: 所有延長時段（盤前，盤中，盤後，夜盤）<br/><br/>注意：夜盤數據已包含在 Nasdaq Basic 中免費提供，僅支援美股；開啟 `enable_overnight` 參數即可獲取 |
 
 ### Protobuf
 

@@ -12,6 +12,7 @@ headingLevel: 2
 
 Create watched group
 
+<QuotePermission level="basic" />
 
 <CliCommand>
 # create a new watchlist group

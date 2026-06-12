@@ -12,22 +12,23 @@ next: false
 Longbridge provides a hosted HTTP MCP (Model Context Protocol) service that lets you use Longbridge market data and account capabilities directly from AI coding assistants and chat tools — without managing API keys manually.
 
 :::tip MCP endpoint
+
 - Global: `https://mcp.longbridge.com`
 - Mainland China: `https://mcp.longbridge.cn` (faster access)
-:::
+  :::
 
 ## Available capabilities
 
 Longbridge MCP exposes 100+ tools across six capability areas. Your client discovers them automatically on connect — no manual configuration.
 
-| Capability | Coverage |
-| --- | --- |
-| **Real-time market data** | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow |
-| **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium |
-| **Derivatives** | Option chains, warrant filters, issuers, warrant quotes |
-| **Account & portfolio** | Balances, positions, cash flow, watchlists and groups |
-| **Trading** | Place / modify / cancel orders, estimate max purchase quantity |
-| **Automation** | Price alerts, scheduled DCA (dollar-cost averaging) plans |
+| Capability                  | Coverage                                                                  |
+| --------------------------- | ------------------------------------------------------------------------- |
+| **Real-time market data**   | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow |
+| **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium  |
+| **Derivatives**             | Option chains, warrant filters, issuers, warrant quotes                   |
+| **Account & portfolio**     | Balances, positions, cash flow, watchlists and groups                     |
+| **Trading**                 | Place / modify / cancel orders, estimate max purchase quantity            |
+| **Automation**              | Price alerts, scheduled DCA (dollar-cost averaging) plans                 |
 
 Actual tool availability depends on your region, account level, and granted OAuth scopes.
 
@@ -43,6 +44,10 @@ Actual tool availability depends on your region, account level, and granted OAut
 ## Client setup
 
 > Configuration format may vary across client versions. Treat your client's official MCP documentation as the source of truth. The core parameter you need is the server URL below.
+
+### ChatGPT
+
+![](https://github.com/user-attachments/assets/088182ee-932b-451f-a495-8e4ba6090148)
 
 ### Claude Code
 

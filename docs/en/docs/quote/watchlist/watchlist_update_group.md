@@ -12,6 +12,7 @@ headingLevel: 2
 
 Update watched group
 
+<QuotePermission level="basic" />
 
 <CliCommand>
 # add symbols to a group

@@ -6,6 +6,7 @@ sidebar_position: 3
 
 This interface is used to get historical market temperature.
 
+<QuotePermission command="market-temp" />
 
 <CliCommand>
 # HK temperature Q1 2025

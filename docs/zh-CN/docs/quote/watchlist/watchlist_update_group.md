@@ -12,6 +12,7 @@ headingLevel: 2
 
 更新自选股分组
 
+<QuotePermission level="basic" />
 
 <CliCommand>
 # 向分组添加标的
