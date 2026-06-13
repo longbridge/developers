@@ -189,12 +189,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | indicator_code | string | true | Indicator code (use as input to `macroeconomic`) |
-| source_org | string | true | Publishing organisation |
 | country | string | true | Country name |
 | name | string | true | Indicator name |
-| adjustment_factor | string | false | Adjustment factor |
 | periodicity | string | true | Release periodicity (e.g. `Monthly`, `Quarterly`) |
-| category | string | true | Indicator category (e.g. `Employment`, `Inflation`) |
 | describe | string | true | Indicator description |
 | importance | int | true | Importance level (1 = Low, 2 = Medium, 3 = High) |
-| start_date | int | false | Unix timestamp of data coverage start date |

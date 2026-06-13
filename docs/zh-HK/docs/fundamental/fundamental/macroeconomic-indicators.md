@@ -132,13 +132,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | 字段 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | indicator_code | string | 是 | 指標代碼（用於 `macroeconomic` 查詢） |
-| source_org | string | 是 | 發布機構 |
 | country | string | 是 | 國家/地區名稱 |
 | name | string | 是 | 指標名稱  |
-| adjustment_factor | string | 否 | 調整因子 |
 | periodicity | string | 是 | 發布頻率（如 `Monthly`、`Quarterly`） |
-| category | string | 是 | 指標分類（如 `Employment`、`Inflation`） |
 | describe | string | 是 | 指標說明  |
 | importance | int | 是 | 重要性（1=低、2=中、3=高） |
-| start_date | int | 否 | 數據起始日期的 Unix 時間戳 |
 
