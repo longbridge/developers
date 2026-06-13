@@ -134,14 +134,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "count": 24,
   "info": {
     "indicator_code": "62267",
-    "source_org": "Bureau of Labor Statistics",
-    "country": "United States",
+    "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",
-    "category": "Employment",
     "describe": "...",
-    "importance": 3,
-    "start_date": 1356998400
+    "importance": 3
   },
   "data": [
     {
@@ -149,11 +146,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
       "release_at": 1735900200,
       "actual_value": "256000",
       "previous_value": "212000",
-      "forecast_value": "165000",
-      "revised_value": "212000",
-      "next_release_at": 1738492200,
-      "unit": "Thousand",
-      "unit_prefix": ""
+      "forecast_value": "165000"
     }
   ]
 }
@@ -189,75 +182,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | actual_value | string | true | Actual released value |
 | previous_value | string | true | Previous period value |
 | forecast_value | string | true | Market consensus forecast |
-| revised_value | string | true | Revised value (if any) |
-| next_release_at | int | false | Unix timestamp of next scheduled release |
-| unit | string | true | Unit (e.g. `Thousand`, `%`) |
-| unit_prefix | string | true | Unit prefix / scale (e.g. millions, billions) |
-
-
----
-
-## macroeconomic_v2
-
-<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_v2" />
-
-V2 variant adds a `sort` parameter and uses the v2 API endpoint.
-
-### Parameters
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| indicator_code | string | YES | Indicator code from `macroeconomic_indicators` |
-| start_date | string | NO | Start date in `YYYY-MM-DD` format |
-| end_date | string | NO | End date in `YYYY-MM-DD` format |
-| offset | int | NO | Pagination offset. Default: 0 |
-| limit | int | NO | Max records. Default: 100, max: 100 |
-| sort | string | NO | Sort order: `asc` or `desc`. Default: `desc` |
-
-### Request Example
-
-<Tabs groupId="request-example">
-  <TabItem value="python" label="Python">
-
-```python
-resp = ctx.macroeconomic_v2(
-    "62267",
-    start_date="2024-01-01",
-    end_date="2024-12-31",
-    sort="asc",
-)
-print(resp)
-```
-
-  </TabItem>
-  <TabItem value="nodejs" label="Node.js">
-
-```javascript
-const resp = await ctx.macroeconomicV2('62267', {
-  startDate: '2024-01-01',
-  endDate: '2024-12-31',
-  sort: 'asc',
-})
-console.log(resp)
-```
-
-  </TabItem>
-  <TabItem value="rust" label="Rust">
-
-```rust
-let resp = ctx.macroeconomic_v2(
-    "62267", Some("2024-01-01"), Some("2024-12-31"), None, None, Some("asc")
-).await?;
-println!("{:?}", resp);
-```
-
-  </TabItem>
-  <TabItem value="go" label="Go">
-
-```go
-sort := "asc"
-resp, err := c.MacroeconomicV2(ctx, "62267", &startDate, &endDate, nil, nil, &sort)
-```
-
-  </TabItem>
-</Tabs>

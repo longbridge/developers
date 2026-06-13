@@ -97,11 +97,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "count": 24,
   "info": {
     "indicator_code": "62267",
-    "source_org": "Bureau of Labor Statistics",
-    "country": "United States",
+    "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",
-    "category": "Employment",
+    "describe": "...",
     "importance": 3
   },
   "data": [
@@ -110,11 +109,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
       "release_at": 1735900200,
       "actual_value": "256000",
       "previous_value": "212000",
-      "forecast_value": "165000",
-      "revised_value": "212000",
-      "next_release_at": 1738492200,
-      "unit": "Thousand",
-      "unit_prefix": ""
+      "forecast_value": "165000"
     }
   ]
 }
@@ -139,47 +134,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | actual_value | string | 是 | 实际值 |
 | previous_value | string | 是 | 前值 |
 | forecast_value | string | 是 | 市场预期值 |
-| revised_value | string | 是 | 修正值 |
-| next_release_at | int | 否 | 下次发布时间 Unix 时间戳 |
-| unit | string | 是 | 单位（如 Thousand、%） |
-| unit_prefix | string | 是 | 单位前缀/数量级（如 百万、十亿） |
-
----
-
-## macroeconomic_v2
-
-<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_v2" />
-
-v2 版本新增 `sort` 参数，使用 v2 API 端点。
-
-### 参数
-
-| 名称 | 类型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| indicator_code | string | 是 | 指标代码，来自 `macroeconomic_indicators` |
-| start_date | string | 否 | 开始日期，格式 `YYYY-MM-DD` |
-| end_date | string | 否 | 结束日期，格式 `YYYY-MM-DD` |
-| offset | int | 否 | 分页偏移量，默认 0 |
-| limit | int | 否 | 最大返回条数，默认 100，最大 100 |
-| sort | string | 否 | 排序方向：`asc` 或 `desc`，默认 `desc` |
-
-### 请求示例
-
-<Tabs groupId="request-example">
-  <TabItem value="python" label="Python">
-
-```python
-resp = ctx.macroeconomic_v2("62267", start_date="2024-01-01", end_date="2024-12-31", sort="asc")
-print(resp)
-```
-
-  </TabItem>
-  <TabItem value="rust" label="Rust">
-
-```rust
-let resp = ctx.macroeconomic_v2("62267", Some("2024-01-01"), Some("2024-12-31"), None, None, Some("asc")).await?;
-println!("{:?}", resp);
-```
-
-  </TabItem>
-</Tabs>
