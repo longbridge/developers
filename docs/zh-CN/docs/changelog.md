@@ -6,6 +6,12 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-13
+
+### SDK v4.3.2
+
+- **宏观经济数据 v2** — `macroeconomic_indicators_v2` 新增 `keyword` 模糊搜索；`macroeconomic_v2` 新增 `sort` 排序参数（`asc`/`desc`）；两个方法均使用 v2 API 端点
+
 ## 2026-06-11
 
 ### SDK v4.3.1
@@ -14,7 +20,7 @@ sidebar_icon: newspaper
 
 ### CLI v0.24.0
 
-- **新增 `macrodata` 命令** — 浏览 400+ 宏观指标（覆盖美/港/中/欧/日/新）并查询历史发布数据；支持 `--country`、`--start`、`--end`、`--limit`、`--page`、`--format json`
+- **新增 `macrodata` 命令** — 浏览 400+ 宏观指标（覆盖美/港/中/欧/日/新）并查询历史发布数据；支持 `--country`、`--keyword`、`--lang`、`--start`、`--end`、`--limit`、`--page`、`--format json`
 
 ## 2026-06-04
 

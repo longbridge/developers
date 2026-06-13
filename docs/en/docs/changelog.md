@@ -6,6 +6,12 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-13
+
+### SDK v4.3.2
+
+- **Macroeconomic indicators v2** — `macroeconomic_indicators_v2` adds `keyword` fuzzy search; `macroeconomic_v2` adds `sort` (`asc`/`desc`) parameter; both use the v2 API endpoint
+
 ## 2026-06-11
 
 ### SDK v4.3.1
@@ -14,7 +20,7 @@ sidebar_icon: newspaper
 
 ### CLI v0.24.0
 
-- **New `macrodata` command** — Browse 400+ macro indicators across US/HK/CN/EU/JP/SG and query historical release data with actual, forecast, previous, and revised values; supports `--country`, `--start`, `--end`, `--limit`, `--page`, `--format json`
+- **New `macrodata` command** — Browse 400+ macro indicators across US/HK/CN/EU/JP/SG and query historical release data with actual, forecast, previous, and revised values; supports `--country`, `--keyword`, `--lang`, `--start`, `--end`, `--limit`, `--page`, `--format json`
 
 ## 2026-06-04
 
