@@ -28,6 +28,7 @@ longbridge macrodata --country US
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | country | MacroeconomicCountry | 否 | 按国家/地区筛选。不填返回全部。 |
+| keyword | string | 否 | 按指标名称模糊搜索（不区分大小写） |
 | offset | int | 否 | 分页偏移量，默认 0 |
 | limit | int | 否 | 每页最大条数，默认 100，最大 1000 |
 
@@ -35,12 +36,12 @@ longbridge macrodata --country US
 
 | 枚举值 | 国家/地区 |
 | ------ | --------- |
-| HongKong | 香港 |
-| China | 中国大陆 |
-| UnitedStates | 美国 |
-| EuroZone | 欧元区 |
-| Japan | 日本 |
-| Singapore | 新加坡 |
+| HK | 香港 |
+| CN | 中国大陆 |
+| US | 美国 |
+| EU | 欧元区 |
+| JP | 日本 |
+| SG | 新加坡 |
 
 ## 请求示例
 
@@ -107,13 +108,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "list": [
     {
       "indicator_code": "62267",
-      "source_org": "Bureau of Labor Statistics",
-      "country": "United States",
+      "country": "US",
       "name": "Non-Farm Payroll",
       "periodicity": "Monthly",
-      "category": "Employment",
-      "importance": 3,
-      "start_date": 1356998400
+      "describe": "Employment situation report...",
+      "importance": 3
     }
   ]
 }
@@ -143,51 +142,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | importance | int | 是 | 重要性（1=低、2=中、3=高） |
 | start_date | int | 否 | 数据起始日期的 Unix 时间戳 |
 
-### MultiLanguageText
-
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| english | string | 英文 |
-| simplified_chinese | string | 简体中文 |
-| traditional_chinese | string | 繁体中文 |
-
----
-
-## macroeconomic_indicators_v2
-
-<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_indicators_v2" />
-
-v2 版本新增 `keyword` 参数，支持按指标名称模糊搜索，使用 v2 API 端点。
-
-### 参数
-
-| 名称 | 类型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| country | MacroeconomicCountry | 否 | 按国家/地区筛选。不填返回全部。 |
-| keyword | string | 否 | 按指标名称模糊搜索（不区分大小写） |
-| offset | int | 否 | 分页偏移量，默认 0 |
-| limit | int | 否 | 每页最大条数，默认 100，最大 1000 |
-
-### 请求示例
-
-<Tabs groupId="request-example">
-  <TabItem value="python" label="Python">
-
-```python
-resp = ctx.macroeconomic_indicators_v2(
-    country=MacroeconomicCountry.UnitedStates,
-    keyword="payroll",
-)
-print(resp)
-```
-
-  </TabItem>
-  <TabItem value="rust" label="Rust">
-
-```rust
-let resp = ctx.macroeconomic_indicators_v2(None, Some("payroll"), None, None).await?;
-println!("{:?}", resp);
-```
-
-  </TabItem>
-</Tabs>

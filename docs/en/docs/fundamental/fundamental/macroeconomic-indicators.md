@@ -28,6 +28,7 @@ longbridge macrodata --country US
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | country | MacroeconomicCountry | NO | Filter by country. Omit for all countries. |
+| keyword | string | NO | Fuzzy search by indicator name (case-insensitive) |
 | offset | int | NO | Pagination offset. Default: 0 |
 | limit | int | NO | Max records per page. Default: 100, max: 1000 |
 
@@ -35,12 +36,12 @@ longbridge macrodata --country US
 
 | Value | Country |
 | ----- | ------- |
-| HongKong | Hong Kong SAR |
-| China | China (Mainland) |
-| UnitedStates | United States |
-| EuroZone | Euro Zone |
-| Japan | Japan |
-| Singapore | Singapore |
+| HK | Hong Kong SAR |
+| CN | China (Mainland) |
+| US | United States |
+| EU | Euro Zone |
+| JP | Japan |
+| SG | Singapore |
 
 ## Request Example
 
@@ -60,6 +61,10 @@ print(resp)
 
 # US only
 resp = ctx.macroeconomic_indicators(country=MacroeconomicCountry.UnitedStates, limit=50)
+print(resp)
+
+# Search by keyword
+resp = ctx.macroeconomic_indicators(keyword="payroll")
 print(resp)
 ```
 
@@ -149,15 +154,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "list": [
     {
       "indicator_code": "62267",
-      "source_org": "Bureau of Labor Statistics",
-      "country": "United States",
+      "country": "US",
       "name": "Non-Farm Payroll",
-      "adjustment_factor": "",
       "periodicity": "Monthly",
-      "category": "Employment",
       "describe": "Employment situation report...",
-      "importance": 3,
-      "start_date": 1356998400
+      "importance": 3
     }
   ]
 }
@@ -197,64 +198,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 | describe | string | true | Indicator description |
 | importance | int | true | Importance level (1 = Low, 2 = Medium, 3 = High) |
 | start_date | int | false | Unix timestamp of data coverage start date |
-
-
----
-
-## macroeconomic_indicators_v2
-
-<SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic_indicators_v2" />
-
-V2 variant adds a `keyword` parameter for fuzzy name search, and uses the v2 API endpoint.
-
-### Parameters
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| country | MacroeconomicCountry | NO | Filter by country. Omit for all countries. |
-| keyword | string | NO | Fuzzy filter on indicator name (case-insensitive) |
-| offset | int | NO | Pagination offset. Default: 0 |
-| limit | int | NO | Max records per page. Default: 100, max: 1000 |
-
-### Request Example
-
-<Tabs groupId="request-example">
-  <TabItem value="python" label="Python">
-
-```python
-resp = ctx.macroeconomic_indicators_v2(
-    country=MacroeconomicCountry.UnitedStates,
-    keyword="payroll",
-)
-print(resp)
-```
-
-  </TabItem>
-  <TabItem value="nodejs" label="Node.js">
-
-```javascript
-const resp = await ctx.macroeconomicIndicatorsV2({
-  country: MacroeconomicCountry.UnitedStates,
-  keyword: 'payroll',
-})
-console.log(resp)
-```
-
-  </TabItem>
-  <TabItem value="rust" label="Rust">
-
-```rust
-let resp = ctx.macroeconomic_indicators_v2(None, Some("payroll"), None, None).await?;
-println!("{:?}", resp);
-```
-
-  </TabItem>
-  <TabItem value="go" label="Go">
-
-```go
-keyword := "payroll"
-resp, err := c.MacroeconomicIndicatorsV2(ctx, nil, &keyword, nil, nil)
-```
-
-  </TabItem>
-</Tabs>
