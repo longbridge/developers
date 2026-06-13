@@ -41,7 +41,7 @@ longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
@@ -76,7 +76,7 @@ use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("请访问: {url}")).await?;
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("请访问：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
     let resp = ctx.macroeconomic("62267", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;

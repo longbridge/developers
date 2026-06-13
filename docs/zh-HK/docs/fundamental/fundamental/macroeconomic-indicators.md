@@ -50,7 +50,7 @@ longbridge macrodata --country US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder, MacroeconomicCountry
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
@@ -85,7 +85,7 @@ use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問: {url}")).await?;
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
     let resp = ctx.macroeconomic_indicators(None, None, None).await?;
