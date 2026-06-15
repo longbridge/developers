@@ -10,7 +10,7 @@ sidebar_icon: newspaper
 
 ### SDK v4.3.2
 
-- **Macroeconomic indicators v2** — `macroeconomic_indicators_v2` adds `keyword` fuzzy search; `macroeconomic_v2` adds `sort` (`asc`/`desc`) parameter; both use the v2 API endpoint
+- **`macroeconomic_indicators` adds `keyword` search** — new optional parameter for fuzzy filtering of indicators by name (case-insensitive)
 
 ## 2026-06-11
 

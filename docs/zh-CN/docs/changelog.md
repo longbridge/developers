@@ -10,7 +10,7 @@ sidebar_icon: newspaper
 
 ### SDK v4.3.2
 
-- **宏观经济数据 v2** — `macroeconomic_indicators_v2` 新增 `keyword` 模糊搜索；`macroeconomic_v2` 新增 `sort` 排序参数（`asc`/`desc`）；两个方法均使用 v2 API 端点
+- **`macroeconomic_indicators` 新增 `keyword` 搜索参数** — 可按指标名称模糊筛选（不区分大小写）
 
 ## 2026-06-11
 
