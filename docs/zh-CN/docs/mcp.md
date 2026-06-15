@@ -9,26 +9,25 @@ next: false
 
 # Longbridge MCP 服务
 
-Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服务，让你在 AI 编程助手或对话工具中直接使用 Longbridge 的行情与账户能力，无需手动管理 API 密钥。
+Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服务，让你在 AI 编程助手或对话工具中直接使用 [Longbridge 行情数据](https://longbridge.com/markets)与账户能力，无需手动管理 API 密钥。
 
 :::tip MCP 服务地址
-
-- 全球：`https://mcp.longbridge.com`
-- 中国大陆：`https://mcp.longbridge.cn`（访问更快）
-  :::
+- 全球：`https://openapi.longbridge.com/mcp`
+- 中国大陆：`https://openapi.longbridge.cn/mcp`（访问更快）
+:::
 
 ## 可用能力
 
 Longbridge MCP 暴露 100+ 工具，覆盖六大能力域，客户端连接后会自动发现——无需手动配置。
 
-| 能力             | 覆盖范围                                     |
-| ---------------- | -------------------------------------------- |
-| **实时行情**     | 报价、K 线、深度、经纪队列、逐笔、分时资金流 |
-| **基本面与研究** | 公司资料、分红、估值、高管持仓、A/H 溢价     |
-| **衍生品**       | 期权链、涡轮筛选、发行商、涡轮报价           |
-| **账户与组合**   | 余额、持仓、资金流水、自选股及分组           |
-| **交易**         | 下单、改单、撤单、可买量估算                 |
-| **自动化**       | 股价提醒、定投（DCA）计划                    |
+| 能力 | 覆盖范围 |
+| --- | --- |
+| **实时行情** | 报价、K 线、深度、经纪队列、逐笔、分时资金流 |
+| **基本面与研究** | 公司资料、分红、估值、高管持仓、A/H 溢价。通过 [Longbridge AI](https://longbridge.com/hk/longbridge-ai) 获取更直观的分析体验。 |
+| **衍生品** | 期权链、涡轮筛选、发行商、涡轮报价 |
+| **账户与组合** | 余额、持仓、资金流水、自选股及分组 |
+| **交易** | 下单、改单、撤单、可买量估算 |
+| **自动化** | 股价提醒、定投（DCA）计划。在 [Longbridge App](https://longbridge.com/hk/download) 中体验这些功能。 |
 
 实际可用工具因地区、账户等级与 OAuth 授权范围而异。
 
@@ -38,61 +37,30 @@ Longbridge MCP 暴露 100+ 工具，覆盖六大能力域，客户端连接后�
 
 ## 前置条件
 
-- 已拥有 Longbridge 账户并完成开户，或开通模拟账户
+- 已拥有 [Longbridge 账户](https://longbridge.com/hk/download) 并完成开户，或开通模拟账户
 - 使用支持 MCP OAuth 2.1 的 AI 客户端（见下方兼容性说明）
 
 ## 客户端接入
 
 > 各客户端的 MCP 配置格式可能随版本变更，以客户端官方文档为准。以下提供核心配置参数。
 
-### ChatGPT
-
-需要先开启 [ChatGPT Developer Mode](https://developers.openai.com/api/docs/guides/developer-mode)，然后才能添加 Longbridge MCP。
-
-在 ChatGPT 中前往 [Settings → Apps](https://chatgpt.com/#settings/Connectors) → [Advanced settings → Developer mode](https://chatgpt.com/#settings/Connectors/Advanced)，并开启「Developer mode」。
-
-![](https://assets.lbctrl.com/uploads/02e8a24a-be0b-49b2-a4eb-9952bc7a4f9b/enable-chatgpt-dev.png)
-
-之后点击「Back」返回 Apps 列表，点击「Create app」按钮创建一个新的 App，即可在此新增 Longbridge MCP。
-
-在表单内填写：
-
-- Name：`Longbridge`
-- Description：`Investment market insights`
-- Connection (Server URL):`https://mcp.longbridge.com`
-- Authentication：OAuth
-
-完整演示视频：
-
-<video src="https://assets.lbctrl.com/uploads/a9e06030-99e7-4f1b-90a6-d5efd5bb1fe8/longbridge-mcp-for-chatgpt.mp4" controls />
-
 ### Claude Code
 
 在终端运行以下命令：
 
 ```bash
-claude mcp add --transport http longbridge https://mcp.longbridge.com
+claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
 ```
 
 然后进入 `claude` 终端界面，输入 `/mcp`，选择 `longbridge`，再选择 **Authenticate** 跟随流程完成 OAuth 授权。
 
 ### Codex
 
-在终端运行以下命令：
-
-```bash
-codex mcp add longbridge --url https://mcp.longbridge.com
-```
-
-随后在 Codex 中按提示完成 OAuth 授权流程。
-
-#### Codex Desktop
-
 1. 点击右下角 **Settings** → **MCP Servers** → **Add Server**
 2. 在 "Connect to a custom MCP" 界面填写：
    - Name：`longbridge`
    - 类型：**Streamable HTTP**
-   - URL：`https://mcp.longbridge.com`
+   - URL：`https://openapi.longbridge.com/mcp`
    - 其他字段留空
 3. 点击 **Save**
 4. 回到 MCP Servers 列表，点击 `longbridge` 条目上的 **Authenticate** 完成 OAuth 授权
@@ -109,7 +77,7 @@ Settings → MCP Servers → 添加 Remote MCP Server，填入上方地址即可
 {
   "mcpServers": {
     "longbridge": {
-      "url": "https://mcp.longbridge.com"
+      "url": "https://openapi.longbridge.com/mcp"
     }
   }
 }
@@ -149,10 +117,6 @@ Longbridge MCP 依赖 **MCP OAuth 2.1** 标准。若客户端未完整实现该�
 已知问题：Cherry Studio 早期版本不支持完整 OAuth 流程，请升级至最新版本。
 
 如遇其他客户端连接失败，请确认客户端版本并查阅其 MCP 支持文档。
-
-:::tip 客户端无法打开浏览器？
-若客户端的 OAuth 实现不完整或无法拉起浏览器，可改用[授权码授权](/zh-CN/docs/agent-auth)：在 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 生成一次性授权码，连接专用端点 `https://mcp.longbridge.com/agent`，让 Agent 通过 `authenticate` 工具兑换。
-:::
 
 ## 安全建议
 

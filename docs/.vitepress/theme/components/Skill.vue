@@ -8,7 +8,6 @@ import { augmentLocale } from './skill-catalog/augment'
 import { locale as _enLocale } from './skill-catalog/en'
 import { locale as _zhCNLocale } from './skill-catalog/zh-CN'
 import { locale as _zhHKLocale } from './skill-catalog/zh-HK'
-import { siteHostname } from '../utils/region'
 const enLocale = augmentLocale(_enLocale)
 const zhCNLocale = augmentLocale(_zhCNLocale)
 const zhHKLocale = augmentLocale(_zhHKLocale)
@@ -21,16 +20,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
-      desc: 'With Longbridge Skill, your AI assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can screen stocks, decode earnings, track insider moves, and place orders, all in plain conversation.',
-      tabConnect: 'Connect AI',
-      tabPrompt: 'Copy command',
-      connectLabel: 'Authorization happens upfront — grab a code on the Connect page, hand it to your AI, and it takes care of the rest:',
-      connectSteps: [
-        'Sign in on the Connect page to get a one-time auth code',
-        'Send the authorization snippet to your AI assistant',
-        'Your AI redeems the code and plugs into Longbridge — no browser hops along the way',
-      ],
-      connectCta: 'Connect AI',
+      desc: 'With Longbridge Skill, your AI assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can <a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">screen stocks</a>, decode earnings, track insider moves, and place orders, all in plain conversation.',
       installLabel: 'Copy and send to any AI — it will walk you through install:',
       installLink: 'View installation guide for each client',
       agentsLabel: 'Supported AI tools',
@@ -44,7 +34,7 @@ const LOCALE = {
     catalog: {
       eyebrow: 'Skill catalog',
       badge: 'SKILL CATALOG',
-      title: 'Skills that cover every move in your trading day.',
+      title: '100+ Skills, covering every move in your trading day.',
       desc: 'Each Skill is a packaged set of tools, callable by any supported AI client. Click any card to see install instructions and details.',
       marketplace: 'Available on Claude Code Plugin Marketplace',
       pluginDesc: 'Copy the commands and run them in Claude Code.',
@@ -87,7 +77,7 @@ const LOCALE = {
     cases: {
       eyebrow: 'SEE IT IN ACTION',
       title: 'Real user cases, real returns.',
-      desc: 'Hand-picked write-ups from the Longbridge community. From quick experiments to fully-deployed quant systems — see what people are shipping with Skill.',
+      desc: 'Hand-picked write-ups from the <a href="https://longbridge.com/en/news" target="_blank" rel="noreferrer">Longbridge community</a>. From quick experiments to fully-deployed quant systems — see what people are shipping with Skill.',
       read: 'Read case',
       award: {
         tag: 'AWARD',
@@ -103,7 +93,7 @@ const LOCALE = {
       recommended: 'Recommended',
       card1: {
         title: 'Copy and send to any AI',
-        desc: 'Paste this message into any AI assistant (Claude, ChatGPT, Cursor) and it will guide you through the installation.',
+        desc: 'Paste this message into any AI assistant (Claude, ChatGPT, Cursor) and it will guide you through the installation.<br>Don\'t have a <a href="https://longbridge.com/hk/download" target="_blank" rel="noreferrer">Longbridge account</a> yet? Sign up first.',
       },
       card2: {
         title: 'Download Skill ZIP',
@@ -114,7 +104,7 @@ const LOCALE = {
         title: 'Install via Npx',
         desc: 'For Claude Code, Codex, and similar tools — installs all skills globally.',
       },
-      installCmd: `Install Longbridge AI toolkit following the guide:\n${siteHostname}/skill/install.md\n\And complete login and test with a market data query.`,
+      installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\And complete login and test with a market data query.`,
       footer: {
         also: 'Also available on',
         and: 'and',
@@ -127,16 +117,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以筛选股票、解读财报、追踪机构动向，并直接下单，全程自然对话。',
-      tabConnect: 'Connect AI',
-      tabPrompt: '复制命令',
-      connectLabel: '授权一步前置——在 Connect 页面拿到授权码，交给 AI，剩下的它来完成：',
-      connectSteps: [
-        '登录 Connect 页面，获取一次性授权码',
-        '将授权指令发送给您的 AI 助手',
-        'AI 自动兑换授权码并接入 Longbridge，全程无需跳转浏览器',
-      ],
-      connectCta: 'Connect AI',
+      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以<a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">筛选股票</a>、解读财报、追踪机构动向，并直接下单，全程自然对话。',
       installLabel: '复制发送给任意 AI——它将引导您完成安装：',
       installLink: '查看各客户端安装指南',
       agentsLabel: '支持的 AI 工具',
@@ -150,7 +131,7 @@ const LOCALE = {
     catalog: {
       eyebrow: 'Skill 目录',
       badge: 'SKILL 目录',
-      title: '覆盖您交易日每一个动作的 Skill',
+      title: '100+ 个 Skill，覆盖您交易日的每一个动作',
       desc: '每个 Skill 都是一套打包的工具集，可被任何受支持的 AI 客户端调用。点击任意卡片查看安装说明和详情。',
       marketplace: '已上架 Claude Code 插件市场',
       pluginDesc: '复制命令，在 Claude Code 中运行即可。',
@@ -193,7 +174,7 @@ const LOCALE = {
     cases: {
       eyebrow: '实战案例',
       title: '真实用户案例，真实回报',
-      desc: '精选长桥社区用户分享。从快速实验到全面部署的量化系统——看看大家用 Skill 在做什么。',
+      desc: '精选<a href="https://longbridge.com/zh-CN/news" target="_blank" rel="noreferrer">长桥社区</a>用户分享。从快速实验到全面部署的量化系统——看看大家用 Skill 在做什么。',
       read: '阅读案例',
       award: {
         tag: '奖励',
@@ -226,7 +207,7 @@ const LOCALE = {
       recommended: '推荐',
       card1: {
         title: '复制发送给任意 AI',
-        desc: '将此消息粘贴到任意 AI 助手（Claude、ChatGPT、Cursor），它将引导您完成安装。',
+        desc: '将此消息粘贴到任意 AI 助手（Claude、ChatGPT、Cursor），它将引导您完成安装。<br>还没有<a href="https://longbridge.com/hk/download" target="_blank" rel="noreferrer">长桥账户</a>？先注册。',
       },
       card2: {
         title: '下载 Skill ZIP 包',
@@ -237,7 +218,7 @@ const LOCALE = {
         title: '通过 Npx 安装',
         desc: '适用于 Claude Code、Codex 等工具——全局安装所有 Skill。',
       },
-      installCmd: `请按照以下指南安装 Longbridge AI toolkit：\n${siteHostname}/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
+      installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
       footer: {
         also: '也可在以下平台获取',
         and: '和',
@@ -270,7 +251,7 @@ const LOCALE = {
         'SEC / 监管文件（完整 Markdown 内容）',
       ],
       calendar: ['按标的查看即将发布的财报', '重要宏观数据事件', '按市场查看即将派息事件', '交易时段安排与节假日历'],
-      news: ['按标的获取最新资讯', '社区讨论话题', '自选股分组：查看、新建、编辑、删除'],
+      news: ['<a href="https://longbridge.com/zh-CN/news" target="_blank" rel="noreferrer">按标的获取最新资讯</a>', '社区讨论话题', '自选股分组：查看、新建、编辑、删除'],
       account: [
         '全子账户股票持仓',
         '全子账户基金持仓',
@@ -291,8 +272,8 @@ const LOCALE = {
     demos: [
       {
         nav: '跨市场选股',
-        title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖',
-        desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。查看所有支持市场的<a href="https://longbridge.com/markets">实时行情</a>。',
+        title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖。查看<a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">所有支持市场的实时行情</a>。',
+        desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。',
         prompt: '从美股和港股中，筛选市值超 500 亿、PE 低于 25 的科技股，且近期出现 MACD 金叉——按市值排序。',
         summary:
           '美股 + 港股科技板块筛选完成——共 8 只股票满足市值 ≥ 500 亿、PE < 25 条件。其中 3 只确认出现近期 MACD 金叉（DIF 上穿 DEA）。',
@@ -358,16 +339,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以篩選股票、解讀財報、追蹤機構動向，並直接下單，全程自然對話。',
-      tabConnect: 'Connect AI',
-      tabPrompt: '複製命令',
-      connectLabel: '授權一步前置——在 Connect 頁面拿到授權碼，交給 AI，剩下的它來完成：',
-      connectSteps: [
-        '登入 Connect 頁面，獲取一次性授權碼',
-        '將授權指令發送給您的 AI 助手',
-        'AI 自動兌換授權碼並接入 Longbridge，全程無需跳轉瀏覽器',
-      ],
-      connectCta: 'Connect AI',
+      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以<a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">篩選股票</a>、解讀財報、追蹤機構動向，並直接下單，全程自然對話。',
       installLabel: '複製發送給任意 AI——它將引導您完成安裝：',
       installLink: '查看各客戶端安裝指南',
       agentsLabel: '支援的 AI 工具',
@@ -381,7 +353,7 @@ const LOCALE = {
     catalog: {
       eyebrow: 'Skill 目錄',
       badge: 'SKILL 目錄',
-      title: '覆蓋您交易日每一個動作的 Skill。',
+      title: '100+ 個 Skill，覆蓋您交易日的每一個動作。',
       desc: '每個 Skill 都是一套打包的工具集，可被任何受支援的 AI 客戶端調用。點擊任意卡片查看安裝說明和詳情。',
       marketplace: '已上架 Claude Code 外掛市場',
       pluginDesc: '複製命令，在 Claude Code 中運行即可。',
@@ -424,7 +396,7 @@ const LOCALE = {
     cases: {
       eyebrow: '實戰案例',
       title: '真實用戶案例，真實回報。',
-      desc: '精選長橋社區用戶分享。從快速實驗到全面部署的量化系統——看看大家用 Skill 在做什麼。',
+      desc: '精選<a href="https://longbridge.com/zh-HK/news" target="_blank" rel="noreferrer">長橋社區</a>用戶分享。從快速實驗到全面部署的量化系統——看看大家用 Skill 在做什麼。',
       read: '閱讀案例',
       award: {
         tag: '獎勵',
@@ -457,7 +429,7 @@ const LOCALE = {
       recommended: '推薦',
       card1: {
         title: '複製發送給任意 AI',
-        desc: '將此消息貼上到任意 AI 助手（Claude、ChatGPT、Cursor），它將引導您完成安裝。',
+        desc: '將此消息貼上到任意 AI 助手（Claude、ChatGPT、Cursor），它將引導您完成安裝。<br>還未有<a href="https://longbridge.com/hk/download" target="_blank" rel="noreferrer">長橋帳戶</a>？先行注冊。',
       },
       card2: {
         title: '下載 Skill ZIP 包',
@@ -468,7 +440,7 @@ const LOCALE = {
         title: '透過 Npx 安裝',
         desc: '適用於 Claude Code、Codex 等工具——全局安裝所有 Skill。',
       },
-      installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\n${siteHostname}/skill/install.md\n\n安裝完成後，完成登錄授權，查詢一支股票行情確認可用。`,
+      installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安裝完成後，完成登錄授權，查詢一支股票行情確認可用。`,
       footer: {
         also: '也可在以下平台獲取',
         and: '及',
@@ -501,7 +473,7 @@ const LOCALE = {
         'SEC / 監管文件（完整 Markdown 內容）',
       ],
       calendar: ['按標的查看即將發佈的業績', '重要宏觀數據事件', '按市場查看即將派息事件', '交易時段安排與節假日曆'],
-      news: ['按標的獲取最新資訊', '社區討論話題', '自選股分組：查看、新建、編輯、刪除'],
+      news: ['<a href="https://longbridge.com/zh-HK/news" target="_blank" rel="noreferrer">按標的獲取最新資訊</a>', '社區討論話題', '自選股分組：查看、新建、編輯、刪除'],
       account: [
         '全子賬戶股票持倉',
         '全子賬戶基金持倉',
@@ -522,8 +494,8 @@ const LOCALE = {
     demos: [
       {
         nav: '跨市場選股',
-        title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋',
-        desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。查看所有支援市場的<a href="https://longbridge.com/markets">即時行情</a>。',
+        title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋。查看<a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">所有支援市場的即時行情</a>。',
+        desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。',
         prompt: '從美股和港股中，篩選市值超 500 億、PE 低於 25 的科技股，且近期出現 MACD 金叉——按市值排序。',
         summary:
           '美股 + 港股科技板塊篩選完成——共 8 只股票滿足市值 ≥ 500 億、PE < 25 條件。其中 3 只確認出現近期 MACD 金叉（DIF 上穿 DEA）。',
@@ -859,8 +831,8 @@ const DEMO_SCENARIOS = [
   {
     id: 'screen',
     nav: 'Cross-Market Screening',
-    title: 'HK · US · A-share · Singapore — multi-market screening in one shot.',
-    desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results. See <a href="https://longbridge.com/markets">live market data</a> for all supported markets.',
+    title: 'HK · US · A-share · Singapore — multi-market screening in one shot. See <a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">live market data</a> for all supported markets.',
+    desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results.',
     prompt:
       'From US + HK markets, screen for tech stocks with market cap above ¥50B, PE under 25, and recent MACD golden cross — sort by market cap.',
     summary:
@@ -1014,7 +986,7 @@ const CAP_REFERENCE = [
   {
     tKey: 'news',
     items: [
-      'Latest news articles for a symbol',
+      '<a href="https://longbridge.com/en/news" target="_blank" rel="noreferrer">Latest news articles</a> for a symbol',
       'Community discussion topics',
       'Watchlist groups: list, create, update, delete',
     ],
@@ -1046,7 +1018,6 @@ const CAP_REFERENCE = [
 const activeCat = ref('All')
 const scenarioIdx = ref(0)
 const activeAgent = ref('OpenClaw')
-const installMode = ref<'connect' | 'prompt'>('connect')
 const copied = ref(false)
 const copiedGetStarted = ref(false)
 
@@ -1177,9 +1148,9 @@ const INSTALL_CLIENTS = computed(() => {
     },
     manual: {
       label: content.value.catalog.manualLabel,
-      cmd: `# 1. Download ZIP\ncurl -LO ${siteHostname}/skill/${pkg}.zip\n# 2. Extract\nunzip ${pkg}.zip -d ~/.claude/skills/\n# 3. Restart AI client`,
+      cmd: `# 1. Download ZIP\ncurl -LO https://open.longbridge.com/skill/${pkg}.zip\n# 2. Extract\nunzip ${pkg}.zip -d ~/.claude/skills/\n# 3. Restart AI client`,
       uninstall: `rm -rf ~/.claude/skills/${pkg}/`,
-      upgrade: `curl -LO ${siteHostname}/skill/${pkg}.zip\nunzip -o ${pkg}.zip -d ~/.claude/skills/`,
+      upgrade: `curl -LO https://open.longbridge.com/skill/${pkg}.zip\nunzip -o ${pkg}.zip -d ~/.claude/skills/`,
       verify: `ls ~/.claude/skills/${pkg}/`,
     },
   } as Record<string, { label: string; cmd: string; uninstall: string; upgrade: string; verify: string }>
@@ -1292,100 +1263,56 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
           <p
             class="t-body"
             style="margin-top: 24px; max-width: 640px; margin-left: auto; margin-right: auto; font-size: 16px">
-            {{ content.hero.desc }}
+            <span v-html="content.hero.desc"></span>
           </p>
 
           <div class="skill-hero-install">
-            <div class="skill-hero-seg">
-              <button
-                :class="['skill-hero-seg-btn', installMode === 'connect' && 'is-active']"
-                @click="installMode = 'connect'">
-                {{ content.hero.tabConnect }}
-              </button>
-              <button
-                :class="['skill-hero-seg-btn', installMode === 'prompt' && 'is-active']"
-                @click="installMode = 'prompt'">
-                {{ content.hero.tabPrompt }}
-              </button>
-            </div>
-
-            <template v-if="installMode === 'connect'">
-              <div class="skill-hero-install-label">{{ content.hero.connectLabel }}</div>
-              <div class="skill-hero-connect-card">
-                <div v-for="(step, i) in content.hero.connectSteps" :key="i" class="skill-hero-connect-step">
-                  <span class="skill-hero-connect-step-num">{{ i + 1 }}</span>
-                  <span>{{ step }}</span>
-                </div>
-                <a class="btn btn-dark" :href="localePfx + '/connect'" target="_self">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M12 8V4H8" />
-                    <rect width="16" height="12" x="4" y="8" rx="2" />
-                    <path d="M2 14h2" />
-                    <path d="M20 14h2" />
-                    <path d="M15 13v2" />
-                    <path d="M9 13v2" />
-                  </svg>
-                  {{ content.hero.connectCta }}
-                </a>
-              </div>
-            </template>
-
-            <template v-else>
-              <div class="skill-hero-install-label">{{ content.hero.installLabel }}</div>
-              <div class="skill-hero-install-cmd">
-                <code>{{ installCmd }}</code>
-                <button class="code-copy" @click="copyInstall" :title="copied ? 'Copied!' : 'Copy'">
-                  <svg
-                    v-if="!copied"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                  </svg>
-                  <svg
-                    v-else
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </button>
-              </div>
-              <a class="skill-hero-install-link" :href="localePfx + '/skill/install'">
-                {{ content.hero.installLink }}
+            <div class="skill-hero-install-label">{{ content.hero.installLabel }}</div>
+            <div class="skill-hero-install-cmd">
+              <code>{{ installCmd }}</code>
+              <button class="code-copy" @click="copyInstall" :title="copied ? 'Copied!' : 'Copy'">
                 <svg
-                  width="12"
-                  height="12"
+                  v-if="!copied"
+                  width="14"
+                  height="14"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.6"
                   stroke-linecap="round"
                   stroke-linejoin="round">
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                 </svg>
-              </a>
-            </template>
+                <svg
+                  v-else
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </button>
+            </div>
+            <a class="skill-hero-install-link" :href="localePfx + '/skill/install'">
+              {{ content.hero.installLink }}
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
           </div>
 
           <div class="skill-hero-agents">
@@ -1445,8 +1372,8 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
             </aside>
 
             <div class="skill-demo-main">
-              <h3 class="skill-demo-title">{{ activeScenario.title }}</h3>
-              <p class="skill-demo-desc" v-html="activeScenario.desc"></p>
+              <h3 class="skill-demo-title"><span v-html="activeScenario.title"></span></h3>
+              <p class="skill-demo-desc">{{ activeScenario.desc }}</p>
 
               <div class="skill-demo-prompt-label">{{ content.demo.tryAsking }}</div>
               <div class="skill-demo-prompt">
@@ -1633,7 +1560,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 </svg>
               </div>
               <span class="sc-card-pkg">{{ skill.pkg }}</span>
-              <p class="sc-card-desc">{{ skill.desc }}</p>
+              <p class="sc-card-desc"><span v-html="skill.desc"></span></p>
               <div class="sc-card-prompt">
                 <svg
                   width="12"
@@ -1707,7 +1634,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                   style="color: var(--lb-up); flex-shrink: 0; margin-top: 4px">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                <span>{{ item }}</span>
+                <span v-html="item"></span>
               </li>
             </ul>
           </div>
@@ -1722,7 +1649,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
           <span class="eyebrow">{{ content.cases.eyebrow }}</span>
           <h2 class="h-section" style="margin-top: 14px">{{ content.cases.title }}</h2>
           <p class="t-meta" style="margin-top: 10px; line-height: 1.55">
-            {{ content.cases.desc }}
+            <span v-html="content.cases.desc"></span>
           </p>
         </div>
 
@@ -1808,7 +1735,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
             </div>
             <h3 class="h-card" style="margin-top: 16px">{{ content.getstarted.card1.title }}</h3>
             <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
-              {{ content.getstarted.card1.desc }}
+              <span v-html="content.getstarted.card1.desc"></span>
             </p>
             <div class="skill-getstarted-cmd">
               <code>{{ installCmd }}</code>
@@ -1969,7 +1896,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 </div>
               </div>
             </div>
-            <p class="sc-modal-desc">{{ openCatalogSkill.desc }}</p>
+            <p class="sc-modal-desc"><span v-html="openCatalogSkill.desc"></span></p>
             <div class="sc-modal-actions">
               <a
                 class="sc-modal-btn-outline"
@@ -1992,7 +1919,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                   <path d="M7 17 17 7M9 7h8v8" />
                 </svg>
               </a>
-              <a class="sc-modal-btn-outline" :href="`${siteHostname}/skill/${openCatalogSkill.pkg}.zip`">
+              <a class="sc-modal-btn-outline" :href="`https://open.longbridge.com/skill/${openCatalogSkill.pkg}.zip`">
                 <svg
                   width="13"
                   height="13"
@@ -2226,8 +2153,8 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   gap: 12px;
 }
 .skill-hero-install-label {
-  font-size: 13px;
-  color: var(--lb-fg-2);
+  font-size: 12px;
+  color: var(--lb-fg-3);
   font-weight: 500;
 }
 .skill-hero-install-cmd {
@@ -2249,73 +2176,6 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   white-space: pre;
   flex: 1;
   text-align: left;
-}
-.skill-hero-connect-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: var(--lb-bg-2);
-  border: 1px solid var(--app-card-stroke);
-  border-radius: 10px;
-  padding: 16px;
-  max-width: 480px;
-  width: 100%;
-}
-.skill-hero-connect-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--lb-fg-2);
-  text-align: left;
-  line-height: 1.5;
-}
-.skill-hero-connect-step-num {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--lb-brand) 14%, transparent);
-  color: var(--lb-brand);
-  font-size: 11px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1px;
-}
-.skill-hero-connect-card .btn {
-  margin-top: 4px;
-  align-self: center;
-}
-.skill-hero-seg {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 999px;
-  background: var(--lb-bg-2);
-  border: 1px solid var(--app-card-stroke);
-}
-.skill-hero-seg-btn {
-  padding: 6px 18px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--lb-fg-3);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition:
-    color 0.15s,
-    background 0.15s;
-}
-.skill-hero-seg-btn:hover {
-  color: var(--lb-fg-1);
-}
-.skill-hero-seg-btn.is-active {
-  color: #fff;
-  background: var(--lb-brand);
 }
 .skill-hero-install-link {
   font-size: 13px;
@@ -3075,14 +2935,6 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 .btn-primary {
   background: var(--lb-brand);
   color: #fff;
-}
-.btn-dark {
-  background: #111;
-  color: #fff;
-}
-.dark .btn-dark {
-  background: #fff;
-  color: #111;
 }
 
 /* ─── Skills Catalog ──────────────────────────────────────────────────────── */

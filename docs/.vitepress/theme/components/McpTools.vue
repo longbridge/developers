@@ -162,9 +162,12 @@ function getParams(schema?: ToolSchema): ParamRow[] {
 
     <div v-else ref="listRef" class="mcp-tools-list">
     <Accordion v-model="openValue" type="single" collapsible>
+      <template v-for="(tool, idx) in filtered" :key="tool.name">
+      <div
+        v-if="tool.name.startsWith('screener_') && (idx === 0 || !filtered[idx - 1].name.startsWith('screener_'))"
+        class="mcp-screener-note"
+      >{{ t('mcp.screenerNotePrefix') }}<a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">{{ t('mcp.screenerNoteLinkText') }}</a>{{ t('mcp.screenerNoteSuffix') }}</div>
       <AccordionItem
-        v-for="tool in filtered"
-        :key="tool.name"
         :value="tool.name"
       >
         <AccordionTrigger>
@@ -221,6 +224,7 @@ function getParams(schema?: ToolSchema): ParamRow[] {
           </template>
         </AccordionContent>
       </AccordionItem>
+      </template>
     </Accordion>
     </div>
   </div>
@@ -428,5 +432,24 @@ function getParams(schema?: ToolSchema): ParamRow[] {
   color: var(--vp-c-text-3);
   font-size: 0.75rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+}
+
+.mcp-screener-note {
+  margin: 0.75rem 0 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
+  border-left: 3px solid var(--vp-c-brand-1);
+  border-radius: 0 4px 4px 0;
+}
+
+.mcp-screener-note a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+
+.mcp-screener-note a:hover {
+  text-decoration: underline;
 }
 </style>
