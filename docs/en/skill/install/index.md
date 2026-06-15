@@ -144,6 +144,17 @@ In Claude Code, run these two commands:
 
 This installs all Longbridge skills through the Claude Code plugin system and keeps them up to date automatically.
 
+**Via Codex plugin (recommended for Codex users):**
+
+In Codex, run these two commands:
+
+```text
+codex plugin marketplace add longbridge/skills
+codex plugin add longbridge@longbridge-skills
+```
+
+This installs all Longbridge skills through the Codex plugin system and keeps them up to date automatically.
+
 **Via npx / bunx (global install):**
 
 ```bash

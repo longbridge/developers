@@ -142,6 +142,17 @@ Skill 是一组指令文件，告诉 AI 助手 Longbridge 能做什么。
 
 此方式通过 Claude Code 插件系统安装全部 Longbridge Skill，并可自动保持最新版本。
 
+**通过 Codex 插件安装（Codex 用户推荐）：**
+
+在 Codex 中依次执行以下两条命令：
+
+```text
+codex plugin marketplace add longbridge/skills
+codex plugin add longbridge@longbridge-skills
+```
+
+此方式通过 Codex 插件系统安装全部 Longbridge Skill，并可自动保持最新版本。
+
 **通过 npx / bunx（全局安装）：**
 
 ```bash
