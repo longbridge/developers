@@ -96,9 +96,9 @@ const avatarEl = ref<HTMLElement>()
 const avatarCloseTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 const avatarMenuItems = computed(() => [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Connect AI', href: '/connect' },
-  { title: 'Log out', href: '/log-out' },
+  { title: 'Dashboard', href: localePath('/dashboard') },
+  { title: 'Connect AI', href: localePath('/connect') },
+  { title: 'Log out', href: localePath('/log-out') },
 ])
 
 function onAvatarMouseEnter() {
@@ -284,7 +284,7 @@ onUnmounted(() => {
         <!-- Logged-in: Dashboard + Avatar -->
         <ClientOnly>
           <template v-if="isLogin">
-            <a class="btn btn-ghost btn-sm hidden md:inline-flex" target="_self" href="/dashboard">{{
+            <a class="btn btn-ghost btn-sm hidden md:inline-flex" target="_self" :href="localePath('/dashboard')">{{
               t('nav.dashboard')
             }}</a>
             <div
