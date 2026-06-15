@@ -10,13 +10,9 @@ sidebar_icon: newspaper
 
 ### SDK v4.3.2
 
-- **`macroeconomic_indicators` 新增 `keyword` 搜索参数** — 可按指标名称模糊筛选（不区分大小写）
+- **宏观经济数据接口** — 新增两个 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指标（支持按国家筛选、关键词搜索），`macroeconomic` 查询指定指标的历史发布数据（实际值/预期值/前值）
 
 ## 2026-06-11
-
-### SDK v4.3.1
-
-- **宏观经济数据接口** — 新增两个 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指标（支持按国家筛选），`macroeconomic` 查询指定指标的历史发布数据（实际值/预期值/前值/修正值）
 
 ### CLI v0.24.0
 

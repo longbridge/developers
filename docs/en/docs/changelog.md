@@ -10,13 +10,9 @@ sidebar_icon: newspaper
 
 ### SDK v4.3.2
 
-- **`macroeconomic_indicators` adds `keyword` search** — new optional parameter for fuzzy filtering of indicators by name (case-insensitive)
+- **Macroeconomic indicators** — Two new `FundamentalContext` methods: `macroeconomic_indicators` lists all indicators (filter by country, keyword search), `macroeconomic` returns historical release data (actual / forecast / previous values) for a given indicator code
 
 ## 2026-06-11
-
-### SDK v4.3.1
-
-- **Macroeconomic indicators** — Two new `FundamentalContext` methods: `macroeconomic_indicators` lists all indicators (filter by country), `macroeconomic` returns historical release data (actual / forecast / previous / revised values) for a given indicator code
 
 ### CLI v0.24.0
 

@@ -10,13 +10,9 @@ sidebar_icon: newspaper
 
 ### SDK v4.3.2
 
-- **`macroeconomic_indicators` 新增 `keyword` 搜索參數** — 可按指標名稱模糊篩選（不區分大小寫）
+- **宏觀經濟數據接口** — 新增兩個 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指標（支持按國家篩選、關鍵詞搜索），`macroeconomic` 查詢指定指標的歷史發布數據（實際值/預期值/前值）
 
 ## 2026-06-11
-
-### SDK v4.3.1
-
-- **宏觀經濟數據接口** — 新增兩個 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指標（支持按國家篩選），`macroeconomic` 查詢指定指標的歷史發布數據（實際值/預期值/前值/修正值）
 
 ### CLI v0.24.0
 
