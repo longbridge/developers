@@ -35,6 +35,7 @@ longbridge order cancel 693664675163312128
 | Name     | Type   | Required | Description |
 | -------- | ------ | -------- | ----------- |
 | order_id | string | YES      | 訂單 ID     |
+| is_attached | bool | NO      | order_id 是否為附加單 |
 
 ### Request Example
 

@@ -282,7 +282,32 @@ func main() {
         "remark": "",
         "limit_depth_level": 0,
         "monitor_price": "",
-        "trigger_count": 1
+        "trigger_count": 1,
+        "attached_orders": [
+          {
+            "order_id": "706388312699592705",
+            "attached_type_display": 2,
+            "trigger_price": "10.500",
+            "quantity": "200",
+            "executed_qty": "0",
+            "status": "NewStatus",
+            "updated_at": "1651644898",
+            "withdrawn": false,
+            "gtd": "",
+            "time_in_force": "Day",
+            "counter_id": "",
+            "trigger_status": 0,
+            "executed_amount": "0",
+            "tag": 0,
+            "submitted_at": "1651644897",
+            "executed_price": "0.000",
+            "force_only_rth": "RTH_ONLY",
+            "reviewed": false,
+            "activate_order_type": "MIT",
+            "activate_rth": "RTH_ONLY",
+            "submit_price": ""
+          }
+        ]
       }
     ]
   }
@@ -339,3 +364,25 @@ func main() {
 | ∟ limit_depth_level | int32    | true     | 指定買賣檔位   |
 | ∟ monitor_price     | string   | true     | 監控價格       |
 | ∟ trigger_count     | int32    | true     | 觸發次數       |
+| ∟ attached_orders           | object[] | false    | 附加訂單詳情列表 |
+| ∟∟ order_id                 | string   | true     | 附加訂單 ID |
+| ∟∟ attached_type_display    | int32    | true     | 附加訂單類型。**可選值：** `1` - 止盈 `2` - 止損 |
+| ∟∟ trigger_price            | string   | true     | 觸發價格 |
+| ∟∟ quantity                 | string   | true     | 下單數量 |
+| ∟∟ executed_qty             | string   | true     | 成交數量 |
+| ∟∟ status                   | string   | true     | 訂單狀態 |
+| ∟∟ updated_at               | string   | true     | 最近更新時間，格式為時間戳 (秒) |
+| ∟∟ withdrawn                | boolean  | true     | 是否已撤銷 |
+| ∟∟ gtd                      | string   | true     | GTD 到期日期，格式為 `YYYY-MM-DD` |
+| ∟∟ time_in_force            | string   | true     | 訂單有效期類型<br/><br/> **可選值：**<br/> `Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效 |
+| ∟∟ counter_id               | string   | true     | 對應單 ID |
+| ∟∟ trigger_status           | int32    | true     | 附加單激活後的條件單觸發狀態。<br/>`0` - 未激活 <br/>`1` - 監控中 <br/>`2` - 已撤單 <br/>`4` - 已觸發 |
+| ∟∟ executed_amount          | string   | true     | 成交金額 |
+| ∟∟ tag                      | int32    | true     | 訂單標記 |
+| ∟∟ submitted_at             | string   | true     | 下單時間，格式為時間戳 (秒) |
+| ∟∟ executed_price           | string   | true     | 成交價格 |
+| ∟∟ force_only_rth           | string   | true     | 是否僅正常交易時段執行。 |
+| ∟∟ reviewed                 | boolean  | true     | 是否已審核 |
+| ∟∟ activate_order_type      | string   | true     | 觸發後提交的訂單類型，例如 `LIT`（限價單）或 `MIT`（市價單） |
+| ∟∟ activate_rth             | string   | true     | 觸發後提交訂單是否允許盤前盤後。|
+| ∟∟ submit_price             | string   | true     | 委託價格 |
