@@ -48,6 +48,8 @@ const LOCALE = {
       desc: 'Each Skill is a packaged set of tools, callable by any supported AI client. Click any card to see install instructions and details.',
       marketplace: 'Available on Claude Code Plugin Marketplace',
       pluginDesc: 'Copy the commands and run them in Claude Code.',
+      codexMarketplace: 'Available on Codex Plugin Marketplace',
+      codexPluginDesc: 'Copy the commands and run them in Codex.',
       tools: 'tools',
       manualLabel: 'Manual',
       viewSkill: 'View Full Skill',
@@ -154,6 +156,8 @@ const LOCALE = {
       desc: '每个 Skill 都是一套打包的工具集，可被任何受支持的 AI 客户端调用。点击任意卡片查看安装说明和详情。',
       marketplace: '已上架 Claude Code 插件市场',
       pluginDesc: '复制命令，在 Claude Code 中运行即可。',
+      codexMarketplace: '已上架 Codex 插件市场',
+      codexPluginDesc: '复制命令，在 Codex 中运行即可。',
       tools: '个工具',
       manualLabel: '手动安装',
       viewSkill: '查看完整技能',
@@ -385,6 +389,8 @@ const LOCALE = {
       desc: '每個 Skill 都是一套打包的工具集，可被任何受支援的 AI 客戶端調用。點擊任意卡片查看安裝說明和詳情。',
       marketplace: '已上架 Claude Code 外掛市場',
       pluginDesc: '複製命令，在 Claude Code 中運行即可。',
+      codexMarketplace: '已上架 Codex 外掛市場',
+      codexPluginDesc: '複製命令，在 Codex 中運行即可。',
       tools: '個工具',
       manualLabel: '手動安裝',
       viewSkill: '查看完整技能',
@@ -1560,6 +1566,41 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 <div class="sc-plugin-cmd-lines">
                   <code><span class="sc-plugin-kw">/plugin</span> marketplace add longbridge/skills</code>
                   <code><span class="sc-plugin-kw">/plugin</span> install longbridge@longbridge-skills</code>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sc-plugin-bar">
+            <div class="sc-plugin-left">
+              <div class="sc-plugin-icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="rgb(245, 158, 11)"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+              </div>
+              <div>
+                <div class="sc-plugin-title">
+                  {{ content.catalog.codexMarketplace }}
+                  <span class="sc-plugin-badge">PLUGIN</span>
+                </div>
+                <div class="sc-plugin-desc">{{ content.catalog.codexPluginDesc }}</div>
+              </div>
+            </div>
+            <div class="sc-plugin-right">
+              <div class="sc-plugin-cmd-block">
+                <div class="sc-plugin-cmd-lines">
+                  <code><span class="sc-plugin-kw">codex plugin</span> marketplace add longbridge/skills</code>
+                  <code><span class="sc-plugin-kw">codex plugin</span> add longbridge@longbridge-skills</code>
                 </div>
               </div>
             </div>
