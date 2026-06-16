@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-06-16
+
+### CLI v0.23.2
+
+- **Local-time date parsing** — date-only and legacy minute-resolution datetime arguments are interpreted in the user's local timezone before API calls, with RFC 3339 inputs supported for explicit timezone-safe workflows
+- **`market-status` US post-market fix** — US status code `203` now displays as `Post-Market` instead of `Trading`, correcting the after-hours market label
+
 ## 2026-06-04
 
 ### CLI v0.22.4

@@ -20,6 +20,7 @@ Once installed, you can say things like this to your AI assistant and get real a
 - _"NVDA just reported — compare actuals vs analyst estimates, break down revenue by segment, and check if valuation is reasonable"_
 - _"Set a trailing stop on TSLA: trigger a sell if it drops more than 8%, show me the order details before executing"_
 - _"Review my portfolio this month: P&L trend, biggest winner, worst drag, US vs HK allocation"_
+- _"Analyze my account and quantify its exposure to AI, semiconductors, and internet-related stocks."_
 - _"Based on my 5-year long-term DCA plan, I'm due to buy this month's QQQ and SPY within the next two days. Can you check the recent market conditions and let me know if the timing looks reasonable?"_
 
 ---

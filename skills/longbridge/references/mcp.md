@@ -72,6 +72,7 @@ If you need to know what tools are available, ask the AI to list the connected M
 
 # Trade analysis
 "Show my current HK stock positions and unrealized P&L"
+"Analyze my account and quantify its exposure to AI, semiconductors, and internet-related stocks."
 
 # Order placement (always confirm first)
 "I want to buy 100 shares of 700.HK at limit price 50 HKD.

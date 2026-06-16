@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.23.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.23.2)
+
+- **CLI 日期参数按本地时区解析** — 仅日期和旧版精确到分钟的日期时间输入，会先按用户本地时区解析再用于 API 请求；同时支持 RFC 3339 日期时间输入
+- **修复：`market-status` 美股盘后状态标签** — 美股状态码 `203` 现在显示为 `Post-Market` 而非 `Trading`，盘后市场状态展示更准确
+
 ### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
 
 - **`constituent` 支持 ETF** — ETF 标的现返回资产分布数据（持仓 / 地区 / 资产类别 / 行业四组表格）；指数标的行为完全不变
