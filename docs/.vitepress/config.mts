@@ -209,11 +209,7 @@ export default defineConfig(
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ''),
           },
-          '/lb-api': {
-            target: process.env.VITE_PORTAL_API_BASE_URL || 'https://m.longbridge.xyz',
-            changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/lb-api/, '/api'),
-          },
+          // `/lb-api` 由下方 `lb-api-dynamic-proxy` 插件处理，按 cookie 中的 app_id 切换 upstream
         },
       },
       optimizeDeps: {
@@ -248,6 +244,71 @@ export default defineConfig(
         ],
       },
       plugins: [
+        {
+          // dev 时把 `/lb-api/*` 转发到 Portal API；按 cookie 中的 app_id 选 upstream：
+          //  - cookie `x-original-app-id` 或 `app_id` 为 `longbridge_us_uat` → m.longbridge-staging.com
+          //  - 其它 → VITE_PORTAL_API_BASE_URL 或默认 m.longbridge.xyz
+          name: 'lb-api-dynamic-proxy',
+          configureServer(server) {
+            server.middlewares.use('/lb-api', async (req, res) => {
+              try {
+                const cookieHeader = (req.headers.cookie as string) || ''
+                const cookies: Record<string, string> = {}
+                for (const part of cookieHeader.split(/;\s*/)) {
+                  if (!part) continue
+                  const idx = part.indexOf('=')
+                  if (idx === -1) continue
+                  cookies[part.slice(0, idx)] = part.slice(idx + 1)
+                }
+                const appId = cookies['x-original-app-id'] || cookies['app_id']
+                const baseTarget =
+                  appId === 'longbridge_us_uat'
+                    ? 'https://m.longbridge-staging.com'
+                    : process.env.VITE_PORTAL_API_BASE_URL || 'https://m.longbridge.xyz'
+
+                const tail = req.url || '/'
+                const targetUrl = baseTarget + '/api' + (tail === '/' ? '' : tail)
+
+                const headers: Record<string, string> = {}
+                for (const [k, v] of Object.entries(req.headers)) {
+                  if (v == null) continue
+                  const lower = k.toLowerCase()
+                  if (lower === 'host' || lower === 'connection' || lower === 'content-length') continue
+                  headers[k] = Array.isArray(v) ? v.join(', ') : String(v)
+                }
+
+                const method = req.method || 'GET'
+                const hasBody = method !== 'GET' && method !== 'HEAD'
+                let body: Uint8Array | undefined
+                if (hasBody) {
+                  const chunks: Buffer[] = []
+                  for await (const chunk of req as AsyncIterable<Buffer>) chunks.push(chunk)
+                  const merged = Buffer.concat(chunks)
+                  body = new Uint8Array(merged.buffer, merged.byteOffset, merged.byteLength)
+                }
+
+                const upstream = await fetch(targetUrl, {
+                  method,
+                  headers,
+                  body: body as BodyInit | undefined,
+                  redirect: 'manual',
+                })
+
+                res.statusCode = upstream.status
+                upstream.headers.forEach((value, key) => {
+                  const lower = key.toLowerCase()
+                  if (lower === 'content-encoding' || lower === 'content-length' || lower === 'transfer-encoding') return
+                  res.setHeader(key, value)
+                })
+                const buf = Buffer.from(await upstream.arrayBuffer())
+                res.end(buf)
+              } catch (err) {
+                res.statusCode = 502
+                res.end(`lb-api proxy error: ${(err as Error).message}`)
+              }
+            })
+          },
+        },
         {
           name: 'gc-between-bundles',
           buildEnd() {
