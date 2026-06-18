@@ -5,7 +5,7 @@ type curl > /dev/null || { echo "curl: not found"; exit 1; }
 repo='longbridge/longbridge-terminal'
 
 get_latest_release() {
-  tag=$(curl --silent "https://open.longbridge.com/$repo/releases/latest")
+  tag=$(curl --silent "https://assets.lbkrs.com/github/release/longbridge-terminal/latest")
   if [ -z "$tag" ]; then
     echo "Failed to fetch the latest release." >&2
     return 1
@@ -47,7 +47,7 @@ if [ "$platform" = "linux" ]; then
   libc='-musl'
 fi
 
-download_url=https://open.longbridge.com/github/release/longbridge-terminal/$version/$package_name-$platform$libc-$arch.tar.gz
+download_url=https://assets.lbkrs.com/github/release/longbridge-terminal/$version/$package_name-$platform$libc-$arch.tar.gz
 echo $download_url
 
 tmp_dir=$(mktemp -d)
