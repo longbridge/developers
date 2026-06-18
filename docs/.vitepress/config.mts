@@ -15,9 +15,9 @@ import yaml from 'js-yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const docsRoot = resolve(__dirname, '..')
-const MCP_TOOLS_URL = 'https://mcp.longbridge.com/mcp/tools.json'
 const MCP_TOOLS_DATA_PATH = resolve(__dirname, 'data/mcp-tools.json')
 const regionCfg = getRegionConfig()
+const MCP_TOOLS_URL = `${regionCfg?.mcpHostname || 'https://mcp.longbridge.com'}/mcp/tools.json`
 const regionSrcExclude = computeSrcExclude(docsRoot)
 
 // Google One Tap：proxy 由环境变量 PROXY 控制（CI 与本地 dev:canary/build:canary 脚本显式注入），

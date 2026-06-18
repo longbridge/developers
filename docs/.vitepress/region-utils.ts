@@ -32,6 +32,10 @@ export function buildRegionUrlReplacements(): [string, string][] {
     pairs.push(['https://openapi.longbridge.com', config.apiBaseUrl])
     pairs.push(['openapi.longbridge.com', config.apiBaseUrl.replace(/^https?:\/\//, '')])
   }
+  if (config.mcpHostname && config.mcpHostname !== 'https://mcp.longbridge.com') {
+    pairs.push(['https://mcp.longbridge.com', config.mcpHostname])
+    pairs.push(['mcp.longbridge.com', config.mcpHostname.replace(/^https?:\/\//, '')])
+  }
   return pairs
 }
 
