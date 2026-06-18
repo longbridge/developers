@@ -1,7 +1,16 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { getRegionConfig } from '../docs/.vitepress/region-utils'
+import { getRegionConfig, buildRegionUrlReplacements } from '../docs/.vitepress/region-utils'
+
+const regionUrlReplacements = buildRegionUrlReplacements()
+
+function applyRegionUrlRewrite(content: string): string {
+  for (const [from, to] of regionUrlReplacements) {
+    content = content.split(from).join(to)
+  }
+  return content
+}
 
 // Simple capitalize function to replace lodash
 function capitalize(str: string): string {
@@ -229,6 +238,7 @@ function generateLLMSTxt(): void {
 
     // Extract content from index.md
     let introContent = fs.readFileSync(path.join(__dirname, './llms-intro.md'), 'utf8')
+    introContent = applyRegionUrlRewrite(introContent)
 
     content = `${introContent}\n\n## SDK \n\n${markdownList}`
 

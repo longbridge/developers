@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process'
 import { localesConfig } from './config/locales'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import { rewriteMarkdownPath } from './utils'
-import { getRegionConfig, computeSrcExclude } from './region-utils'
+import { getRegionConfig, computeSrcExclude, buildRegionUrlReplacements } from './region-utils'
 import * as cheerio from 'cheerio'
 import yaml from 'js-yaml'
 
@@ -49,12 +49,9 @@ export default defineConfig(
     markdown: markdownConfig,
     transformHtml(code) {
       let html = insertScript(code)
-      // Region URL rewriting: replace global hostnames (site + API) with region hostnames in final HTML
-      if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {
-        html = html.split('https://open.longbridge.com').join(regionCfg.siteHostname)
-      }
-      if (regionCfg?.apiBaseUrl && regionCfg.apiBaseUrl !== 'https://openapi.longbridge.com') {
-        html = html.split('https://openapi.longbridge.com').join(regionCfg.apiBaseUrl)
+      // Region URL rewriting: replace global hostnames (URL form + bare-text form) with region hostnames in final HTML
+      for (const [from, to] of buildRegionUrlReplacements()) {
+        html = html.split(from).join(to)
       }
       return html
     },
@@ -130,14 +127,8 @@ export default defineConfig(
 
       rmSync(tmpDir, { recursive: true, force: true })
 
-      // Region URL rewriting for static assets (site + API hostnames)
-      const staticReplacements: [string, string][] = []
-      if (regionCfg?.siteHostname && regionCfg.siteHostname !== 'https://open.longbridge.com') {
-        staticReplacements.push(['https://open.longbridge.com', regionCfg.siteHostname])
-      }
-      if (regionCfg?.apiBaseUrl && regionCfg.apiBaseUrl !== 'https://openapi.longbridge.com') {
-        staticReplacements.push(['https://openapi.longbridge.com', regionCfg.apiBaseUrl])
-      }
+      // Region URL rewriting for static assets (site + API hostnames, URL + bare-text form)
+      const staticReplacements = buildRegionUrlReplacements()
       if (staticReplacements.length > 0) {
         const installDir = resolve(siteConfig.outDir, 'longbridge-terminal')
         for (const file of ['install', 'install.ps1']) {
@@ -263,6 +254,27 @@ export default defineConfig(
             if (!id.endsWith('.yaml') && !id.endsWith('.yml')) return
             const data = yaml.load(src)
             return { code: `export default ${JSON.stringify(data)}`, map: null }
+          },
+        },
+        {
+          // Rewrite hardcoded global hostnames in source modules (Vue / TS / JSON) for region builds.
+          // markdown-it plugin + transformHtml don't reach Vite-compiled string literals.
+          name: 'region-source-url-rewrite',
+          enforce: 'pre' as const,
+          transform(src: string, id: string) {
+            if (id.includes('node_modules')) return
+            if (!/\.(vue|ts|tsx|js|jsx|json|ya?ml)(\?|$)/.test(id)) return
+            const replacements = buildRegionUrlReplacements()
+            if (replacements.length === 0) return
+            let code = src
+            let changed = false
+            for (const [from, to] of replacements) {
+              if (code.includes(from)) {
+                code = code.split(from).join(to)
+                changed = true
+              }
+            }
+            return changed ? { code, map: null } : undefined
           },
         },
         {

@@ -12,7 +12,7 @@
     "dev:cn": "cross-env VITE_REGION=cn VITE_API_BASE_URL=https://openapi.longbridge.cn VITE_SITE_HOSTNAME=https://open.longbridge.cn npx vitepress dev docs",
     "build:canary": "cross-env \"NODE_OPTIONS=--max-old-space-size=12288 --expose-gc\" PROXY=canary VITE_API_BASE_URL=https://openapi.longbridge.xyz npx vitepress build docs && bun run build:llms && bun run build:copy-routes",
     "build:release": "cross-env \"NODE_OPTIONS=--max-old-space-size=12288 --expose-gc\" VITE_API_BASE_URL=https://openapi.longbridge.com npx vitepress build docs && bun run build:llms && bun run build:copy-routes",
-    "build:cn": "cross-env \"NODE_OPTIONS=--max-old-space-size=12288 --expose-gc\" VITE_REGION=cn VITE_API_BASE_URL=https://openapi.longbridge.cn VITE_PORTAL_GATEWAY_BASE_URL=https://m.lbkrs.com VITE_SITE_HOSTNAME=https://open.longbridge.cn npx vitepress build docs && bun run build:llms && bun run build:copy-routes",
+    "build:cn": "cross-env \"NODE_OPTIONS=--max-old-space-size=12288 --expose-gc\" VITE_REGION=cn VITE_API_BASE_URL=https://openapi.longbridge.cn VITE_PORTAL_GATEWAY_BASE_URL=https://m.lbkrs.com VITE_SITE_HOSTNAME=https://open.longbridge.cn npx vitepress build docs && cross-env VITE_REGION=cn bun run build:llms && bun run build:copy-routes",
     "build:llms": "bun run scripts/normalize_md.ts && bun run scripts/generate-llms.ts",
     "build:copy-routes": "bun run scripts/copy-routes.ts",
     "preview": "vitepress preview docs",

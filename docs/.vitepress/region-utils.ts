@@ -16,6 +16,26 @@ export function getRegionConfig(): RegionConfig | undefined {
 }
 
 /**
+ * URL replacements for region-aware rewriting.
+ * Returns both `https://`-prefixed (URLs) and bare hostname (link display text / inline mentions) pairs.
+ * Order is significant: protocol-prefixed rules first so bare rules don't double-match.
+ */
+export function buildRegionUrlReplacements(): [string, string][] {
+  const config = getRegionConfig()
+  if (!config) return []
+  const pairs: [string, string][] = []
+  if (config.siteHostname && config.siteHostname !== 'https://open.longbridge.com') {
+    pairs.push(['https://open.longbridge.com', config.siteHostname])
+    pairs.push(['open.longbridge.com', config.siteHostname.replace(/^https?:\/\//, '')])
+  }
+  if (config.apiBaseUrl && config.apiBaseUrl !== 'https://openapi.longbridge.com') {
+    pairs.push(['https://openapi.longbridge.com', config.apiBaseUrl])
+    pairs.push(['openapi.longbridge.com', config.apiBaseUrl.replace(/^https?:\/\//, '')])
+  }
+  return pairs
+}
+
+/**
  * Check if a page path is included in the current region's whitelist.
  * When no region is set (global build), all pages are included.
  *
