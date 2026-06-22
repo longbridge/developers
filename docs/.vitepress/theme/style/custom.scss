@@ -58,6 +58,15 @@
   margin-top: 48px;
 }
 
+.Layout.is-whale-app .VPDoc.has-sidebar {
+  margin-top: 0;
+}
+
+// whale app 还未适配文档页脚（Markdown / Edit / Last Updated / 上一页下一页），先整体隐藏
+.Layout.is-whale-app .VPDocFooter {
+  display: none;
+}
+
 .VPDoc::before {
   content: '';
   position: absolute;

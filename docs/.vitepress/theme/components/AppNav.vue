@@ -6,6 +6,7 @@ import endsWith from 'lodash/endsWith'
 import { useLocalePath, getBasenameLocale } from '../utils/i18n'
 import { createLoginRedirectPath } from '../utils/navigate'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
+import { detectWhaleApp } from '../composables/useWhaleApp'
 import { useAvatar } from './UserAvatar/uesAvatar'
 import UserAvatarIcon from './UserAvatar/UserAvatarIcon.vue'
 import UserAvatarDropdown from './UserAvatar/UserAvatarDropdown.vue'
@@ -128,7 +129,8 @@ onMounted(() => {
   initLoginState()
   document.addEventListener('click', onAvatarClickOutside)
 
-  if (!isCnDomain) {
+  // AI 客服 support-widget 还未适配 app，whale app 环境下不加载
+  if (!isCnDomain && !detectWhaleApp()) {
     const swSrc = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
     const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
     window.SupportWidgetConfig = {

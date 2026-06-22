@@ -8,6 +8,7 @@ import { createLoginRedirectPath } from '../../utils/navigate'
 import { useI18n } from 'vue-i18n'
 import { useAvatar } from './uesAvatar'
 import { isLoginState, initLoginState } from '../../composables/useLoginState'
+import { detectWhaleApp } from '../../composables/useWhaleApp'
 import endsWith from 'lodash/endsWith'
 
 const { t } = useI18n()
@@ -20,6 +21,9 @@ const isLogin = isLoginState
 
 onMounted(() => {
   initLoginState()
+
+  // AI 客服 support-widget 还未适配 app，whale app 环境下不加载
+  if (detectWhaleApp()) return
 
   const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
   const loginUrl = createLoginRedirectPath({
