@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, useSlots } from 'vue'
+import { computed, provide, useSlots, onMounted, onUnmounted } from 'vue'
 
 import VPBackdrop from 'vitepress/dist/client/theme-default/components/VPBackdrop.vue'
 import VPContent from 'vitepress/dist/client/theme-default/components/VPContent.vue'
@@ -33,6 +33,22 @@ const { isWhaleApp } = useWhaleApp()
 const isApiReference = computed(() => frontmatter.value.layout === 'api-reference')
 
 provide('hero-image-slot-exists', heroImageSlotExists)
+
+// 根据滚动距离切换 <html>.vp-scrolled，控制 VPLocalNav 的显隐
+let onScroll: (() => void) | null = null
+onMounted(() => {
+  const navHeight =
+    parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vp-nav-height')) || 60
+  onScroll = () => {
+    document.documentElement.classList.toggle('vp-scrolled', window.scrollY > navHeight)
+  }
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onUnmounted(() => {
+  if (onScroll) window.removeEventListener('scroll', onScroll)
+  document.documentElement.classList.remove('vp-scrolled')
+})
 </script>
 
 <template>
