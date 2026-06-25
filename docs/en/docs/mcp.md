@@ -23,11 +23,11 @@ Longbridge MCP exposes 100+ tools across six capability areas. Your client disco
 | Capability | Coverage |
 | --- | --- |
 | **Real-time market data** | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow |
-| **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium. Access these insights via [Longbridge AI](https://longbridge.com/hk/longbridge-ai) for a guided experience. |
+| **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium |
 | **Derivatives** | Option chains, warrant filters, issuers, warrant quotes |
 | **Account & portfolio** | Balances, positions, cash flow, watchlists and groups |
 | **Trading** | Place / modify / cancel orders, estimate max purchase quantity |
-| **Automation** | Price alerts, scheduled DCA (dollar-cost averaging) plans. Try these features in the [Longbridge app](https://longbridge.com/hk/download) first. |
+| **Automation** | Price alerts, scheduled DCA (dollar-cost averaging) plans |
 
 Actual tool availability depends on your region, account level, and granted OAuth scopes.
 

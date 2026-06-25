@@ -93,7 +93,7 @@ const LOCALE = {
       recommended: 'Recommended',
       card1: {
         title: 'Copy and send to any AI',
-        desc: 'Paste this message into any AI assistant (Claude, ChatGPT, Cursor) and it will guide you through the installation.<br>Don\'t have a <a href="https://longbridge.com/hk/download" target="_blank" rel="noreferrer">Longbridge account</a> yet? Sign up first.',
+        desc: 'Paste this message into any AI assistant (Claude, ChatGPT, Cursor) and it will guide you through the installation.',
       },
       card2: {
         title: 'Download Skill ZIP',
@@ -207,7 +207,7 @@ const LOCALE = {
       recommended: '推荐',
       card1: {
         title: '复制发送给任意 AI',
-        desc: '将此消息粘贴到任意 AI 助手（Claude、ChatGPT、Cursor），它将引导您完成安装。<br>还没有<a href="https://longbridge.com/hk/download" target="_blank" rel="noreferrer">长桥账户</a>？先注册。',
+        desc: '将此消息粘贴到任意 AI 助手（Claude、ChatGPT、Cursor），它将引导您完成安装。',
       },
       card2: {
         title: '下载 Skill ZIP 包',
@@ -272,7 +272,7 @@ const LOCALE = {
     demos: [
       {
         nav: '跨市场选股',
-        title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖。查看<a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">所有支持市场的实时行情</a>。',
+        title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖',
         desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。',
         prompt: '从美股和港股中，筛选市值超 500 亿、PE 低于 25 的科技股，且近期出现 MACD 金叉——按市值排序。',
         summary:
@@ -429,7 +429,7 @@ const LOCALE = {
       recommended: '推薦',
       card1: {
         title: '複製發送給任意 AI',
-        desc: '將此消息貼上到任意 AI 助手（Claude、ChatGPT、Cursor），它將引導您完成安裝。<br>還未有<a href="https://longbridge.com/hk/download" target="_blank" rel="noreferrer">長橋帳戶</a>？先行注冊。',
+        desc: '將此消息貼上到任意 AI 助手（Claude、ChatGPT、Cursor），它將引導您完成安裝。',
       },
       card2: {
         title: '下載 Skill ZIP 包',
@@ -494,7 +494,7 @@ const LOCALE = {
     demos: [
       {
         nav: '跨市場選股',
-        title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋。查看<a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">所有支援市場的即時行情</a>。',
+        title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋',
         desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。',
         prompt: '從美股和港股中，篩選市值超 500 億、PE 低於 25 的科技股，且近期出現 MACD 金叉——按市值排序。',
         summary:
@@ -831,7 +831,7 @@ const DEMO_SCENARIOS = [
   {
     id: 'screen',
     nav: 'Cross-Market Screening',
-    title: 'HK · US · A-share · Singapore — multi-market screening in one shot. See <a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">live market data</a> for all supported markets.',
+    title: 'HK · US · A-share · Singapore — multi-market screening in one shot.',
     desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results.',
     prompt:
       'From US + HK markets, screen for tech stocks with market cap above ¥50B, PE under 25, and recent MACD golden cross — sort by market cap.',
@@ -1372,7 +1372,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
             </aside>
 
             <div class="skill-demo-main">
-              <h3 class="skill-demo-title"><span v-html="activeScenario.title"></span></h3>
+              <h3 class="skill-demo-title">{{ activeScenario.title }}</h3>
               <p class="skill-demo-desc">{{ activeScenario.desc }}</p>
 
               <div class="skill-demo-prompt-label">{{ content.demo.tryAsking }}</div>
@@ -1560,7 +1560,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 </svg>
               </div>
               <span class="sc-card-pkg">{{ skill.pkg }}</span>
-              <p class="sc-card-desc"><span v-html="skill.desc"></span></p>
+              <p class="sc-card-desc">{{ skill.desc }}</p>
               <div class="sc-card-prompt">
                 <svg
                   width="12"
@@ -1735,7 +1735,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
             </div>
             <h3 class="h-card" style="margin-top: 16px">{{ content.getstarted.card1.title }}</h3>
             <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
-              <span v-html="content.getstarted.card1.desc"></span>
+              {{ content.getstarted.card1.desc }}
             </p>
             <div class="skill-getstarted-cmd">
               <code>{{ installCmd }}</code>
@@ -1896,7 +1896,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 </div>
               </div>
             </div>
-            <p class="sc-modal-desc"><span v-html="openCatalogSkill.desc"></span></p>
+            <p class="sc-modal-desc">{{ openCatalogSkill.desc }}</p>
             <div class="sc-modal-actions">
               <a
                 class="sc-modal-btn-outline"
