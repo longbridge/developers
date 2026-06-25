@@ -21,7 +21,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
-      desc: 'With Longbridge Skill, your AI assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can screen stocks, decode earnings, track insider moves, and place orders, all in plain conversation.',
+      desc: 'With Longbridge Skill, your AI assistant — Claude, Cursor, ChatGPT, Gemini, Codex — can <a href="https://longbridge.com/screener">screen stocks</a>, decode earnings, track insider moves, and place orders, all in plain conversation.',
       tabConnect: 'Connect AI',
       tabPrompt: 'Copy command',
       connectLabel: 'Authorization happens upfront — grab a code on the Connect page, hand it to your AI, and it takes care of the rest:',
@@ -91,7 +91,7 @@ const LOCALE = {
     cases: {
       eyebrow: 'SEE IT IN ACTION',
       title: 'Real user cases, real returns.',
-      desc: 'Hand-picked write-ups from the Longbridge community. From quick experiments to fully-deployed quant systems — see what people are shipping with Skill.',
+      desc: 'Hand-picked write-ups from the <a href="https://longbridge.com/en/news">Longbridge community</a>. From quick experiments to fully-deployed quant systems — see what people are shipping with Skill.',
       read: 'Read case',
       award: {
         tag: 'AWARD',
@@ -131,7 +131,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以筛选股票、解读财报、追踪机构动向，并直接下单，全程自然对话。',
+      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以<a href="https://longbridge.com/screener">筛选股票</a>、解读财报、追踪机构动向，并直接下单，全程自然对话。',
       tabConnect: 'Connect AI',
       tabPrompt: '复制命令',
       connectLabel: '授权一步前置——在 Connect 页面拿到授权码，交给 AI，剩下的它来完成：',
@@ -201,7 +201,7 @@ const LOCALE = {
     cases: {
       eyebrow: '实战案例',
       title: '真实用户案例，真实回报',
-      desc: '精选长桥社区用户分享。从快速实验到全面部署的量化系统——看看大家用 Skill 在做什么。',
+      desc: '精选<a href="https://longbridge.com/news">长桥社区</a>用户分享。从快速实验到全面部署的量化系统——看看大家用 Skill 在做什么。',
       read: '阅读案例',
       award: {
         tag: '奖励',
@@ -278,7 +278,7 @@ const LOCALE = {
         'SEC / 监管文件（完整 Markdown 内容）',
       ],
       calendar: ['按标的查看即将发布的财报', '重要宏观数据事件', '按市场查看即将派息事件', '交易时段安排与节假日历'],
-      news: ['按标的获取最新资讯', '社区讨论话题', '自选股分组：查看、新建、编辑、删除'],
+      news: ['按标的获取<a href="https://longbridge.com/news">最新资讯</a>', '社区讨论话题', '自选股分组：查看、新建、编辑、删除'],
       account: [
         '全子账户股票持仓',
         '全子账户基金持仓',
@@ -366,7 +366,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以篩選股票、解讀財報、追蹤機構動向，並直接下單，全程自然對話。',
+      desc: '借助 Longbridge Skill，您的 AI 助手——Claude、Cursor、ChatGPT、Gemini、Codex——可以<a href="https://longbridge.com/screener">篩選股票</a>、解讀財報、追蹤機構動向，並直接下單，全程自然對話。',
       tabConnect: 'Connect AI',
       tabPrompt: '複製命令',
       connectLabel: '授權一步前置——在 Connect 頁面拿到授權碼，交給 AI，剩下的它來完成：',
@@ -436,7 +436,7 @@ const LOCALE = {
     cases: {
       eyebrow: '實戰案例',
       title: '真實用戶案例，真實回報。',
-      desc: '精選長橋社區用戶分享。從快速實驗到全面部署的量化系統——看看大家用 Skill 在做什麼。',
+      desc: '精選<a href="https://longbridge.com/news">長橋社區</a>用戶分享。從快速實驗到全面部署的量化系統——看看大家用 Skill 在做什麼。',
       read: '閱讀案例',
       award: {
         tag: '獎勵',
@@ -513,7 +513,7 @@ const LOCALE = {
         'SEC / 監管文件（完整 Markdown 內容）',
       ],
       calendar: ['按標的查看即將發佈的業績', '重要宏觀數據事件', '按市場查看即將派息事件', '交易時段安排與節假日曆'],
-      news: ['按標的獲取最新資訊', '社區討論話題', '自選股分組：查看、新建、編輯、刪除'],
+      news: ['按標的獲取<a href="https://longbridge.com/news">最新資訊</a>', '社區討論話題', '自選股分組：查看、新建、編輯、刪除'],
       account: [
         '全子賬戶股票持倉',
         '全子賬戶基金持倉',
@@ -1026,7 +1026,7 @@ const CAP_REFERENCE = [
   {
     tKey: 'news',
     items: [
-      'Latest news articles for a symbol',
+      '<a href="https://longbridge.com/en/news">Latest news articles</a> for a symbol',
       'Community discussion topics',
       'Watchlist groups: list, create, update, delete',
     ],
@@ -1304,9 +1304,8 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
           </h1>
           <p
             class="t-body"
-            style="margin-top: 24px; max-width: 640px; margin-left: auto; margin-right: auto; font-size: 16px">
-            {{ content.hero.desc }}
-          </p>
+            style="margin-top: 24px; max-width: 640px; margin-left: auto; margin-right: auto; font-size: 16px"
+            v-html="content.hero.desc"></p>
 
           <div class="skill-hero-install">
             <div class="skill-hero-seg">
@@ -1662,7 +1661,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 </svg>
               </div>
               <span class="sc-card-pkg">{{ skill.pkg }}</span>
-              <p class="sc-card-desc">{{ skill.desc }}</p>
+              <p class="sc-card-desc" v-html="skill.desc"></p>
               <div class="sc-card-prompt">
                 <svg
                   width="12"
@@ -1736,7 +1735,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                   style="color: var(--lb-up); flex-shrink: 0; margin-top: 4px">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                <span>{{ item }}</span>
+                <span v-html="item"></span>
               </li>
             </ul>
           </div>
@@ -1750,9 +1749,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
         <div style="text-align: left; max-width: 640px; margin-bottom: 32px">
           <span class="eyebrow">{{ content.cases.eyebrow }}</span>
           <h2 class="h-section" style="margin-top: 14px">{{ content.cases.title }}</h2>
-          <p class="t-meta" style="margin-top: 10px; line-height: 1.55">
-            {{ content.cases.desc }}
-          </p>
+          <p class="t-meta" style="margin-top: 10px; line-height: 1.55" v-html="content.cases.desc"></p>
         </div>
 
         <div class="user-cases-grid">
@@ -1836,9 +1833,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
               </svg>
             </div>
             <h3 class="h-card" style="margin-top: 16px">{{ content.getstarted.card1.title }}</h3>
-            <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1">
-              {{ content.getstarted.card1.desc }}
-            </p>
+            <p class="t-meta" style="margin-top: 8px; line-height: 1.55; flex: 1" v-html="content.getstarted.card1.desc"></p>
             <div class="skill-getstarted-cmd">
               <code>{{ installCmd }}</code>
               <button class="code-copy" @click="copyGetStarted" :title="copiedGetStarted ? 'Copied!' : 'Copy'">

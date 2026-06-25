@@ -9,7 +9,7 @@ sidebar_icon: sparkles
 
 # LLMs 組件
 
-我們提供了一些用於 LLM（大型語言模型）的組件，您可以輕鬆訪問和分析金融數據、實時市場數據，甚至可以讓 AI 提交訂單。
+我們提供了一些用於 LLM（大型語言模型）的組件，您可以輕鬆訪問和分析金融數據、[實時市場數據](https://longbridge.com/markets)，甚至可以讓 AI 提交訂單。
 
 <video src="https://pub.lbkrs.com/files/202503/SGozJNWBfYpta73i/longport-mcp.mp4" width="100%" autoplay loop controls  />
 

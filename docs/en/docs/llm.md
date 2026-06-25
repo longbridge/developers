@@ -9,7 +9,7 @@ id: llm
 
 # LLMs Components
 
-We provide several components for LLMs (Large Language Models) that allow you to easily access and analyze financial data, real-time market data, and even enable AI to place orders.
+We provide several components for LLMs (Large Language Models) that allow you to easily access and analyze financial data, [real-time market data](https://longbridge.com/markets), and even enable AI to place orders.
 
 <video src="https://pub.lbkrs.com/files/202503/SGozJNWBfYpta73i/longport-mcp.mp4" width="100%" autoplay loop controls  />
 

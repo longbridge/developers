@@ -166,7 +166,7 @@ Let's take obtaining assets as an example to demonstrate how to use the SDK.
 
 ## Configuration
 
-1. Download App and open an account.
+1. [Download App](https://longbridge.com/hk/download) and open an account.
 2. Get authentication credentials from [Longbridge Developers](https://open.longbridge.com) official website
 
 ### Authentication Methods

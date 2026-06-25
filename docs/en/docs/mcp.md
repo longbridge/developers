@@ -9,7 +9,7 @@ next: false
 
 # Longbridge MCP Service
 
-Longbridge provides a hosted HTTP MCP (Model Context Protocol) service that lets you use Longbridge market data and account capabilities directly from AI coding assistants and chat tools — without managing API keys manually.
+Longbridge provides a hosted HTTP MCP (Model Context Protocol) service that lets you use [Longbridge market data](https://longbridge.com/markets) and account capabilities directly from AI coding assistants and chat tools — without managing API keys manually.
 
 :::tip MCP endpoint
 
@@ -23,7 +23,7 @@ Longbridge MCP exposes 100+ tools across six capability areas. Your client disco
 
 | Capability                  | Coverage                                                                  |
 | --------------------------- | ------------------------------------------------------------------------- |
-| **Real-time market data**   | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow |
+| **[Real-time market data](https://longbridge.com/markets)**   | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow |
 | **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium  |
 | **Derivatives**             | Option chains, warrant filters, issuers, warrant quotes                   |
 | **Account & portfolio**     | Balances, positions, cash flow, watchlists and groups                     |
@@ -38,7 +38,7 @@ Actual tool availability depends on your region, account level, and granted OAut
 
 ## Prerequisites
 
-- An active Longbridge account with onboarding completed, or a paper trading account
+- An active [Longbridge account](https://longbridge.com/hk/download) with onboarding completed, or a paper trading account
 - An AI client that supports MCP OAuth 2.1 (see compatibility note below)
 
 ## Client setup
@@ -159,7 +159,7 @@ If your client has incomplete OAuth support or cannot launch a browser, use an [
 - **Least privilege**: Only approve the scopes required for your current task; avoid over-granting
 - **Trading confirmation**: For any order placement prompt, explicitly instruct the AI to ask for human confirmation before executing
 - **Credential handling**: OAuth credentials are managed by your client; avoid copying them into untrusted environments
-- **Regular review**: Periodically check and revoke unused authorizations in your Longbridge account security settings
+- **Regular review**: Periodically check and revoke unused authorizations in your [Longbridge account](https://longbridge.com/hk/download) security settings
 
 ## Recommended usage pattern
 
