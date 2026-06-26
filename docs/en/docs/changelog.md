@@ -16,7 +16,7 @@ sidebar_icon: newspaper
 ### CLI v0.24.0
 
 - **New `macrodata` command** — Browse 400+ macro indicators across US/HK/CN/EU/JP/SG and query historical release data with actual, forecast, previous, and revised values; supports `--country`, `--keyword`, `--lang`, `--start`, `--end`, `--limit`, `--page`, `--format json`
-- MCP server (v0.7.0) updated in sync — `macrodata_indicators` and `macrodata` tools now available to AI agents via the Longbridge MCP server
+- MCP server updated in sync — `macrodata_indicators` and `macrodata` tools now available to AI agents via the Longbridge MCP server
 
 ## 2026-06-16
 
