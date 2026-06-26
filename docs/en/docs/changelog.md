@@ -14,7 +14,7 @@ sidebar_icon: newspaper
 
 ## 2026-06-11
 
-### CLI v0.24.0
+### CLI v0.23.4
 
 - **New `macrodata` command** — Browse 400+ macro indicators across US/HK/CN/EU/JP/SG and query historical release data with actual, forecast, previous, and revised values; supports `--country`, `--keyword`, `--lang`, `--start`, `--end`, `--limit`, `--page`, `--format json`
 

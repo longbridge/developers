@@ -14,7 +14,7 @@ sidebar_icon: newspaper
 
 ## 2026-06-11
 
-### CLI v0.24.0
+### CLI v0.23.4
 
 - **新增 `macrodata` 命令** — 瀏覽 400+ 宏觀指標（覆蓋美/港/中/歐/日/新）並查詢歷史發布數據；支持 `--country`、`--keyword`、`--lang`、`--start`、`--end`、`--limit`、`--page`、`--format json`
 
