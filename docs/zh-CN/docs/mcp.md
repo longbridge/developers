@@ -119,6 +119,22 @@ Settings → MCP Servers → 添加 Remote MCP Server，填入上方地址即可
 
 设置 → MCP 服务器 → 添加，填入上方地址即可。
 
+### Manus
+
+在 Manus 中打开 **Plugins** 窗口，点击右侧的 **Create** 按钮，从弹出菜单中选择 **Import MCP by JSON**，粘贴以下 JSON 即可完成导入：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+![](https://assets.lbctrl.com/uploads/f3aa3f71-c7a1-48b3-91dc-ea82a7018b53/scr-20260625-ttzy.png)
+
 ## OAuth 授权流程
 
 Longbridge MCP 使用标准 OAuth 2.1 授权，你无需向客户端提供 API 密钥或 Token。

@@ -119,6 +119,22 @@ Add the following to your `settings.json` under the `context_servers` key (key n
 
 Settings → MCP Servers → Add, then enter the URL above.
 
+### Manus
+
+In Manus, open the **Plugins** window, click the **Create** button on the right side, and select **Import MCP by JSON** from the menu. Paste the following JSON to complete the import:
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+![](https://assets.lbctrl.com/uploads/f3aa3f71-c7a1-48b3-91dc-ea82a7018b53/scr-20260625-ttzy.png)
+
 ## OAuth authorization flow
 
 Longbridge MCP uses standard OAuth 2.1. You never need to paste API keys or tokens into the client.
