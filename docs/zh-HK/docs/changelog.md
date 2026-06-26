@@ -13,7 +13,7 @@ sidebar_icon: newspaper
 - **宏觀經濟數據接口** — 新增兩個 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指標（支持按國家篩選、關鍵詞搜索），`macroeconomic` 查詢指定指標的歷史發布數據（實際值/預期值/前值）
 
 
-### CLI v0.23.4
+### CLI v0.24.0
 
 - **新增 `macrodata` 命令** — 瀏覽 400+ 宏觀指標（覆蓋美/港/中/歐/日/新）並查詢歷史發布數據；支持 `--country`、`--keyword`、`--lang`、`--start`、`--end`、`--limit`、`--page`、`--format json`
 

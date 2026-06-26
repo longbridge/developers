@@ -13,7 +13,7 @@ sidebar_icon: newspaper
 - **宏观经济数据接口** — 新增两个 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指标（支持按国家筛选、关键词搜索），`macroeconomic` 查询指定指标的历史发布数据（实际值/预期值/前值）
 
 
-### CLI v0.23.4
+### CLI v0.24.0
 
 - **新增 `macrodata` 命令** — 浏览 400+ 宏观指标（覆盖美/港/中/欧/日/新）并查询历史发布数据；支持 `--country`、`--keyword`、`--lang`、`--start`、`--end`、`--limit`、`--page`、`--format json`
 
