@@ -11,6 +11,15 @@ sidebar_icon: newspaper
 
 - **新增 `macrodata` 命令** — 浏览 400+ 宏观数据指标，覆盖美/港/中/欧/日/新六大市场；列表模式支持 `--country` 筛选，历史模式支持 `--start`/`--end` 日期区间；`--format json` 满足 AI / 脚本需求
 
+### [v0.23.2](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.23.2)
+
+- **CLI 日期参数按本地时区解析** — 仅日期和旧版精确到分钟的日期时间输入，会先按用户本地时区解析再用于 API 请求；同时支持 RFC 3339 日期时间输入
+- **修复：`market-status` 美股盘后状态标签** — 美股状态码 `203` 现在显示为 `Post-Market` 而非 `Trading`，盘后市场状态展示更准确
+
+### [v0.23.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.23.0)
+
+- **授权码登录** — `auth login --auth-code <CODE>` 现可通过 `/connect` 授权码交换完成登录，支持 AI Agent 与托管环境中的无浏览器登录流程
+
 ### [v0.22.4](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.22.4)
 
 - **`constituent` 支持 ETF** — ETF 标的现返回资产分布数据（持仓 / 地区 / 资产类别 / 行业四组表格）；指数标的行为完全不变

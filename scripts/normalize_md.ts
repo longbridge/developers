@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import { globSync } from 'glob'
 import { rewriteMarkdownPath } from '../docs/.vitepress/utils'
+import { buildRegionUrlReplacements } from '../docs/.vitepress/region-utils'
 import {
   QUOTE_COMMANDS,
   QUOTE_PERMISSION_TITLE,
@@ -16,6 +17,15 @@ import {
 
 type Locale = QuoteLocale
 
+const regionUrlReplacements = buildRegionUrlReplacements()
+
+function applyRegionUrlRewrite(content: string): string {
+  for (const [from, to] of regionUrlReplacements) {
+    content = content.split(from).join(to)
+  }
+  return content
+}
+
 /**
  * Process Markdown file
  * @param filePath file path
@@ -29,6 +39,7 @@ function processMarkdownFile(filePath: string, outputPath: string, locale: Local
   // Need to implement regex to match <SDKLinks ... /> tags and replace with Markdown tables
   content = parseSDKLinks(content, locale)
   content = parseQuotePermission(content, locale)
+  content = applyRegionUrlRewrite(content)
 
   const relativePath = path.relative(docsDir, filePath)
 

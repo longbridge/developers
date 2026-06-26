@@ -9,7 +9,7 @@ next: false
 
 # Longbridge MCP 服務
 
-Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服務，讓你在 AI 編程助手或對話工具中直接使用 Longbridge 的行情與帳戶能力，無需手動管理 API 金鑰。
+Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服務，讓你在 AI 編程助手或對話工具中直接使用 [Longbridge 的行情](https://longbridge.com/markets)與帳戶能力，無需手動管理 API 金鑰。
 
 :::tip MCP 服務地址
 
@@ -23,8 +23,14 @@ Longbridge MCP 暴露 100+ 工具，覆蓋六大能力域，客戶端連接後�
 
 | 能力             | 覆蓋範圍                                     |
 | ---------------- | -------------------------------------------- |
-| **即時行情**     | 報價、K 線、深度、經紀隊列、逐筆、分時資金流 |
-| **基本面與研究** | 公司資料、派息、估值、高管持倉、A/H 溢價、宏觀經濟指標   |
+| 能力             | 覆蓋範圍                                                   |
+| ---------------- | ---------------------------------------------------------- |
+| **[即時行情](https://longbridge.com/markets)**     | 報價、K 線、深度、經紀隊列、逐筆、分時資金流               |
+| **基本面與研究** | 公司資料、派息、估值、高管持倉、A/H 溢價、宏觀經濟指標     |
+| **衍生品**       | 期權鏈、窩輪篩選、發行商、窩輪報價                         |
+| **賬戶與組合**   | 餘額、持倉、資金流水、自選股及分組                         |
+| **交易**         | 下單、改單、撤單、可買量估算                               |
+| **自動化**       | 股價提醒、定投（DCA）計劃                                  |
 | **衍生品**       | 期權鏈、窩輪篩選、發行商、窩輪報價           |
 | **帳戶與組合**   | 餘額、持倉、資金流水、自選股及分組           |
 | **交易**         | 下單、改單、撤單、可買量估算                 |
@@ -38,7 +44,7 @@ Longbridge MCP 暴露 100+ 工具，覆蓋六大能力域，客戶端連接後�
 
 ## 前置條件
 
-- 已擁有 Longbridge 帳戶並完成開戶，或開通模擬帳戶
+- 已擁有 [Longbridge 帳戶](https://longbridge.com/hk/download)並完成開戶，或開通模擬帳戶
 - 使用支援 MCP OAuth 2.1 的 AI 客戶端（見下方相容性說明）
 
 ## 客戶端接入
@@ -119,6 +125,22 @@ Settings → MCP Servers → 添加 Remote MCP Server，填入上方地址即可
 
 設定 → MCP 伺服器 → 添加，填入上方地址即可。
 
+### Manus
+
+在 Manus 中開啟 **Plugins** 視窗，點擊右側的 **Create** 按鈕，從彈出選單中選擇 **Import MCP by JSON**，貼上以下 JSON 即可完成匯入：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+![](https://assets.lbctrl.com/uploads/f3aa3f71-c7a1-48b3-91dc-ea82a7018b53/scr-20260625-ttzy.png)
+
 ## OAuth 授權流程
 
 Longbridge MCP 使用標準 OAuth 2.1 授權，你無需向客戶端提供 API 金鑰或 Token。
@@ -159,7 +181,7 @@ Longbridge MCP 依賴 **MCP OAuth 2.1** 標準。若客戶端未完整實作該�
 - **最小權限**：授權時僅同意當前任務所需的 scope，避免過度授權
 - **交易確認**：涉及下單等交易操作時，在 AI 提示詞中明確要求執行前人工確認
 - **憑證安全**：OAuth 憑證由客戶端管理，避免將其複製至不受信任的環境
-- **定期審查**：定期在 Longbridge 帳戶安全設定中檢查並撤銷不再使用的授權
+- **定期審查**：定期在 [Longbridge 帳戶](https://longbridge.com/hk/download)安全設定中檢查並撤銷不再使用的授權
 
 ## 推薦使用方式
 

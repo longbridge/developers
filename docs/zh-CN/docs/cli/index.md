@@ -7,7 +7,7 @@ sidebar_icon: book_open
 
 # Longbridge CLI
 
-Longbridge CLI（`longbridge`）是面向 Longbridge OpenAPI 全端点的 AI 原生命令行工具，提供 130+ 条命令，覆盖实时行情、基本面数据、账户管理与交易。适用于脚本自动化、AI Agent 工具调用及日常终端工作流。
+Longbridge CLI（`longbridge`）是面向 Longbridge OpenAPI 全端点的 AI 原生命令行工具，提供 130+ 条命令，覆盖[实时行情](https://longbridge.com/markets)、基本面数据、账户管理与交易。适用于脚本自动化、AI Agent 工具调用及日常终端工作流。
 
 **GitHub：** [longbridge/longbridge-terminal](https://github.com/longbridge/longbridge-terminal)
 
@@ -32,7 +32,7 @@ longbridge quote AAPL.US --format json
 
 ## JSON 输出
 
-所有命令均支持 `--format json`，输出机器可读格式，方便管道传递、`jq` 处理或 AI Agent 调用：
+所有命令均支持 `--format json`，输出机器可读格式，方便管道传递、`jq` 处理或 [AI Agent](https://longbridge.com/en/ai) 调用：
 
 ```bash
 longbridge positions --format json

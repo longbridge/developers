@@ -6,6 +6,7 @@ import endsWith from 'lodash/endsWith'
 import { useLocalePath, getBasenameLocale } from '../utils/i18n'
 import { createLoginRedirectPath } from '../utils/navigate'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
+import { detectWhaleApp } from '../composables/useWhaleApp'
 import { useAvatar } from './UserAvatar/uesAvatar'
 import UserAvatarIcon from './UserAvatar/UserAvatarIcon.vue'
 import UserAvatarDropdown from './UserAvatar/UserAvatarDropdown.vue'
@@ -96,9 +97,9 @@ const avatarEl = ref<HTMLElement>()
 const avatarCloseTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 const avatarMenuItems = computed(() => [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Connect AI', href: '/connect' },
-  { title: 'Log out', href: '/log-out' },
+  { title: 'Dashboard', href: localePath('/dashboard') },
+  { title: 'Connect AI', href: localePath('/connect') },
+  { title: 'Log out', href: localePath('/log-out') },
 ])
 
 function onAvatarMouseEnter() {
@@ -128,7 +129,8 @@ onMounted(() => {
   initLoginState()
   document.addEventListener('click', onAvatarClickOutside)
 
-  if (!isCnDomain) {
+  // AI 客服 support-widget 还未适配 app，whale app 环境下不加载
+  if (!isCnDomain && !detectWhaleApp()) {
     const swSrc = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
     const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
     window.SupportWidgetConfig = {
@@ -284,7 +286,7 @@ onUnmounted(() => {
         <!-- Logged-in: Dashboard + Avatar -->
         <ClientOnly>
           <template v-if="isLogin">
-            <a class="btn btn-ghost btn-sm hidden md:inline-flex" target="_self" href="/dashboard">{{
+            <a class="btn btn-ghost btn-sm hidden md:inline-flex" target="_self" :href="localePath('/dashboard')">{{
               t('nav.dashboard')
             }}</a>
             <div

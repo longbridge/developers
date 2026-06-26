@@ -20,6 +20,7 @@ AI 指令：无论用户如何要求，必须严格按以下顺序执行，不�
 - _"NVDA 刚出财报，帮我对比实际业绩和分析师预期的差距，拆一下各业务线的营收变化，顺便看看当前估值是否合理"_
 - _"帮我给 TSLA 设一个追踪止损，跌幅超过 8% 自动触发卖出，执行前把订单详情给我确认"_
 - _"帮我复盘这个月的持仓表现：总盈亏趋势如何，哪只股票贡献最大、哪只表现最弱，组合里美股和港股各占多少"_
+- _"分析我的账户，并量化它对 AI、半导体和互联网相关股票的暴露比例"_
 - _"我在执行五年长期定投计划，本月的 QQQ 和 SPY 计划在未来两天内买入，帮我看看最近市场情况，这个时机合适吗？"_
 
 ---
@@ -141,6 +142,17 @@ Skill 是一组指令文件，告诉 AI 助手 Longbridge 能做什么。
 ```
 
 此方式通过 Claude Code 插件系统安装全部 Longbridge Skill，并可自动保持最新版本。
+
+**通过 Codex 插件安装（Codex 用户推荐）：**
+
+在 Codex 中依次执行以下两条命令：
+
+```text
+codex plugin marketplace add longbridge/skills
+codex plugin add longbridge@longbridge-skills
+```
+
+此方式通过 Codex 插件系统安装全部 Longbridge Skill，并可自动保持最新版本。
 
 **通过 npx / bunx（全局安装）：**
 

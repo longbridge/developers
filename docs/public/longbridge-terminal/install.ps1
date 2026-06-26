@@ -14,7 +14,7 @@ $installDir  = Join-Path $env:LOCALAPPDATA 'Programs\longbridge'
 Write-Host "Fetching latest release..."
 
 try {
-    $version = (Invoke-WebRequest -Uri "https://open.longbridge.com/$repo/releases/latest" -UseBasicParsing -TimeoutSec 15).Content.Trim()
+    $version = (Invoke-WebRequest -Uri "https://assets.lbkrs.com/github/release/longbridge-terminal/latest" -UseBasicParsing -TimeoutSec 15).Content.Trim()
     if (-not $version) {
         throw "Failed to fetch the latest release."
     }
@@ -26,7 +26,7 @@ Write-Host "Latest release: $version"
 
 # ── Download ──────────────────────────────────────────────────────────────────
 
-$downloadUrl = "https://open.longbridge.com/github/release/longbridge-terminal/$version/$packageName-windows-amd64.zip"
+$downloadUrl = "https://assets.lbkrs.com/github/release/longbridge-terminal/$version/$packageName-windows-amd64.zip"
 
 Write-Host "Downloading $packageName@$version ..."
 Write-Host $downloadUrl

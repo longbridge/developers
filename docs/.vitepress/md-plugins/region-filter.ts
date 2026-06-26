@@ -1,7 +1,7 @@
 import type MarkdownItAsync from 'markdown-it'
 import type Token from 'markdown-it/lib/token.mjs'
 import picomatch from 'picomatch'
-import { getRegionConfig } from '../region-utils'
+import { getRegionConfig, buildRegionUrlReplacements } from '../region-utils'
 
 /**
  * Markdown-it plugin that removes sections (heading + content) based on region config.
@@ -11,14 +11,8 @@ export function RegionFilterPlugin(md: MarkdownItAsync) {
   const config = getRegionConfig()
   if (!config) return
 
-  // URL rewriting: replace global hostnames (site + API) with region hostnames in all inline tokens
-  const urlReplacements: [string, string][] = []
-  if (config.siteHostname && config.siteHostname !== 'https://open.longbridge.com') {
-    urlReplacements.push(['https://open.longbridge.com', config.siteHostname])
-  }
-  if (config.apiBaseUrl && config.apiBaseUrl !== 'https://openapi.longbridge.com') {
-    urlReplacements.push(['https://openapi.longbridge.com', config.apiBaseUrl])
-  }
+  // URL rewriting: replace global hostnames (site + API, both URL and bare-text form) with region hostnames
+  const urlReplacements = buildRegionUrlReplacements()
   if (urlReplacements.length > 0) {
     md.core.ruler.push('region_url_rewrite', (state) => {
       for (const token of state.tokens) {

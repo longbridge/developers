@@ -12,6 +12,8 @@ export interface RegionConfig {
   portalGatewayBaseUrl: string
   /** Site hostname for canonical URLs, sitemap, etc. */
   siteHostname: string
+  /** MCP server hostname for this region (used both for build-time tools fetch and runtime URLs shown to users) */
+  mcpHostname: string
   /**
    * Page whitelist — only pages matching these glob patterns are included.
    * Uses `**` prefix to match across all locale directories (en, zh-CN, zh-HK).
@@ -29,6 +31,7 @@ export const regionConfig: Record<string, RegionConfig> = {
     apiBaseUrl: 'https://openapi.longbridge.cn',
     portalGatewayBaseUrl: 'https://m.lbkrs.com',
     siteHostname: 'https://open.longbridge.cn',
+    mcpHostname: 'https://mcp.longbridge.cn',
 
     excludeNavLinks: ['/', '/docs/api', '/sdk'],
 

@@ -12,7 +12,7 @@ headingLevel: 2
 
 在指定討論下發布回覆，支持嵌套回覆已有回覆。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
 
-僅限 **Longbridge 開戶且持有資產** 的用戶才允許通過 Longbridge Developers 的 API 或 CLI 發布社區討論和回覆。否則返回 `403`。
+僅限 **[Longbridge 開戶](https://longbridge.com/hk/download)且持有資產** 的用戶才允許通過 Longbridge Developers 的 API 或 CLI 發布社區討論和回覆。否則返回 `403`。
 
 **正文格式：** 僅支持純文本，不支持 HTML 或 Markdown。
 

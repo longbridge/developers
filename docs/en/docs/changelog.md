@@ -18,6 +18,13 @@ sidebar_icon: newspaper
 
 - **New `macrodata` command** — Browse 400+ macro indicators across US/HK/CN/EU/JP/SG and query historical release data with actual, forecast, previous, and revised values; supports `--country`, `--keyword`, `--lang`, `--start`, `--end`, `--limit`, `--page`, `--format json`
 
+## 2026-06-16
+
+### CLI v0.23.2
+
+- **Local-time date parsing** — date-only and legacy minute-resolution datetime arguments are interpreted in the user's local timezone before API calls, with RFC 3339 inputs supported for explicit timezone-safe workflows
+- **`market-status` US post-market fix** — US status code `203` now displays as `Post-Market` instead of `Trading`, correcting the after-hours market label
+
 ## 2026-06-04
 
 ### CLI v0.22.4

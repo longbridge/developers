@@ -9,7 +9,7 @@ next: false
 
 # Longbridge MCP 服务
 
-Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服务，让你在 AI 编程助手或对话工具中直接使用 Longbridge 的行情与账户能力，无需手动管理 API 密钥。
+Longbridge 提供托管的 HTTP MCP（Model Context Protocol）服务，让你在 AI 编程助手或对话工具中直接使用 [Longbridge 的行情](https://longbridge.com/markets)与账户能力，无需手动管理 API 密钥。
 
 :::tip MCP 服务地址
 
@@ -23,7 +23,7 @@ Longbridge MCP 暴露 100+ 工具，覆盖六大能力域，客户端连接后�
 
 | 能力             | 覆盖范围                                                 |
 | ---------------- | -------------------------------------------------------- |
-| **实时行情**     | 报价、K 线、深度、经纪队列、逐笔、分时资金流             |
+| **[实时行情](https://longbridge.com/markets)**     | 报价、K 线、深度、经纪队列、逐笔、分时资金流             |
 | **基本面与研究** | 公司资料、分红、估值、高管持仓、A/H 溢价、宏观经济指标   |
 | **衍生品**       | 期权链、涡轮筛选、发行商、涡轮报价                       |
 | **账户与组合**   | 余额、持仓、资金流水、自选股及分组                       |
@@ -38,7 +38,7 @@ Longbridge MCP 暴露 100+ 工具，覆盖六大能力域，客户端连接后�
 
 ## 前置条件
 
-- 已拥有 Longbridge 账户并完成开户，或开通模拟账户
+- 已拥有 [Longbridge 账户](https://longbridge.com/hk/download)并完成开户，或开通模拟账户
 - 使用支持 MCP OAuth 2.1 的 AI 客户端（见下方兼容性说明）
 
 ## 客户端接入
@@ -119,6 +119,22 @@ Settings → MCP Servers → 添加 Remote MCP Server，填入上方地址即可
 
 设置 → MCP 服务器 → 添加，填入上方地址即可。
 
+### Manus
+
+在 Manus 中打开 **Plugins** 窗口，点击右侧的 **Create** 按钮，从弹出菜单中选择 **Import MCP by JSON**，粘贴以下 JSON 即可完成导入：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+![](https://assets.lbctrl.com/uploads/f3aa3f71-c7a1-48b3-91dc-ea82a7018b53/scr-20260625-ttzy.png)
+
 ## OAuth 授权流程
 
 Longbridge MCP 使用标准 OAuth 2.1 授权，你无需向客户端提供 API 密钥或 Token。
@@ -159,7 +175,7 @@ Longbridge MCP 依赖 **MCP OAuth 2.1** 标准。若客户端未完整实现该�
 - **最小权限**：授权时仅同意当前任务所需的 scope，避免过度授权
 - **交易确认**：涉及下单等交易操作时，在 AI 提示词中明确要求执行前人工确认
 - **凭证安全**：OAuth 凭证由客户端管理，避免将其复制到不受信任的环境
-- **定期审查**：定期在 Longbridge 账户安全设置中检查并撤销不再使用的授权
+- **定期审查**：定期在 [Longbridge 账户](https://longbridge.com/hk/download)安全设置中检查并撤销不再使用的授权
 
 ## 推荐使用方式
 

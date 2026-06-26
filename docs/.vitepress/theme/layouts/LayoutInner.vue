@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, useSlots } from 'vue'
+import { computed, provide, useSlots, onMounted, onUnmounted } from 'vue'
 
 import VPBackdrop from 'vitepress/dist/client/theme-default/components/VPBackdrop.vue'
 import VPContent from 'vitepress/dist/client/theme-default/components/VPContent.vue'
@@ -12,7 +12,7 @@ import AppNav from '../components/AppNav.vue'
 import { useData } from 'vitepress'
 import { registerWatchers } from 'vitepress/dist/client/theme-default/composables/layout.js'
 import { useSidebarControl } from 'vitepress/dist/client/theme-default/composables/sidebar.js'
-import { useTryItMode } from '../composables'
+import { useTryItMode, useWhaleApp } from '../composables'
 import TryItContent from '../components/TryIt/Content.vue'
 import ContentWrapper from './Content.vue'
 import 'vitepress/theme'
@@ -29,20 +29,37 @@ const slots = useSlots()
 const heroImageSlotExists = computed(() => !!slots['home-hero-image'])
 
 const { showTryIt } = useTryItMode()
+const { isWhaleApp } = useWhaleApp()
 const isApiReference = computed(() => frontmatter.value.layout === 'api-reference')
 
 provide('hero-image-slot-exists', heroImageSlotExists)
+
+// 根据滚动距离切换 <html>.vp-scrolled，控制 VPLocalNav 的显隐
+let onScroll: (() => void) | null = null
+onMounted(() => {
+  const navHeight =
+    parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vp-nav-height')) || 60
+  onScroll = () => {
+    document.documentElement.classList.toggle('vp-scrolled', window.scrollY > navHeight)
+  }
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onUnmounted(() => {
+  if (onScroll) window.removeEventListener('scroll', onScroll)
+  document.documentElement.classList.remove('vp-scrolled')
+})
 </script>
 
 <template>
   <!-- @vue-ignore -->
-  <div v-if="frontmatter.layout !== false" class="Layout" :class="frontmatter.pageClass">
+  <div v-if="frontmatter.layout !== false" class="Layout" :class="[frontmatter.pageClass, { 'is-whale-app': isWhaleApp }]">
     <slot name="layout-top" />
     <ProgressBar />
     <VPSkipLink />
     <VPBackdrop class="backdrop" :show="isSidebarOpen" @click="closeSidebar" />
-    <AppNav />
-    <VPLocalNav v-if="!isApiReference" :open="isSidebarOpen" @open-menu="openSidebar" />
+    <AppNav v-if="!isWhaleApp" />
+    <VPLocalNav v-if="!isApiReference && !isWhaleApp" :open="isSidebarOpen" @open-menu="openSidebar" />
 
     <VPSidebar v-if="!isApiReference" :open="isSidebarOpen">
       <template #sidebar-nav-before><slot name="sidebar-nav-before" /></template>
@@ -53,7 +70,7 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #page-top><slot name="page-top" /></template>
       <template #page-bottom>
         <slot name="page-bottom" />
-        <div v-if="frontmatter.pageClass !== 'new-home-page'" class="max-w-[1200px] mx-auto">
+        <div v-if="frontmatter.pageClass !== 'new-home-page' && !isWhaleApp" class="max-w-[1200px] mx-auto">
           <Footer />
         </div>
       </template>
@@ -75,7 +92,7 @@ provide('hero-image-slot-exists', heroImageSlotExists)
       <template #doc-top><slot name="doc-top" /></template>
       <template #doc-bottom>
         <slot name="doc-bottom" />
-        <Footer />
+        <Footer v-if="!isWhaleApp" />
       </template>
 
       <template #aside-top><slot name="aside-top" /></template>

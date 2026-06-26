@@ -12,7 +12,7 @@ const LOCALE = {
       eyebrow: 'PRICING',
       title1: 'Build for free.',
       title2: 'Pay only for real-time market data.',
-      desc: 'Core API features — trading, accounts, fundamentals, <a href="https://longbridge.com/news">news</a> — are completely free. Subscribe to real-time market data only when you need it.',
+      desc: 'Core API features — trading, accounts, fundamentals, <a href="https://longbridge.com/news">news</a> — are completely free. Subscribe to real-time <a href="https://longbridge.com/markets">market data</a> only when you need it.',
     },
     free: {
       price: 'Free',
@@ -135,7 +135,7 @@ const LOCALE = {
       eyebrow: '定价',
       title1: '免费开始构建',
       title2: '仅为实时行情数据付费',
-      desc: '交易、账户、基本面、<a href="https://longbridge.com/news">资讯</a>等核心 API 功能完全免费。仅在需要时订阅实时行情数据。',
+      desc: '交易、账户、基本面、<a href="https://longbridge.com/news">资讯</a>等核心 API 功能完全免费。仅在需要时订阅实时<a href="https://longbridge.com/markets">行情数据</a>。',
     },
     free: {
       price: '免费',
@@ -249,7 +249,7 @@ const LOCALE = {
       eyebrow: '定價',
       title1: '免費開始構建。',
       title2: '僅為即時行情數據付費。',
-      desc: '交易、帳戶、基本面、<a href="https://longbridge.com/news">資訊</a>等核心 API 功能完全免費。僅在需要時訂閱即時行情數據。',
+      desc: '交易、帳戶、基本面、<a href="https://longbridge.com/news">資訊</a>等核心 API 功能完全免費。僅在需要時訂閱即時<a href="https://longbridge.com/markets">行情數據</a>。',
     },
     free: {
       price: '免費',

@@ -96,11 +96,17 @@ html.dark .vp-doc th {
 }
 
 .VPDocFooter > .edit-info {
-  flex: 1;
-  min-width: 0;
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
+  display: contents;
+}
+
+.VPDocFooter .edit-link {
+  margin: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.VPDocFooter .VPLastUpdated {
+  margin-left: auto;
+  white-space: normal;
   padding-bottom: 0 !important;
 }
 
