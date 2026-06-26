@@ -8,7 +8,7 @@ sidebar_icon: newspaper
 
 ## 2026-06-13
 
-### SDK v4.3.2
+### SDK v4.3.3
 
 - **宏观经济数据接口** — 新增两个 `FundamentalContext` 方法：`macroeconomic_indicators` 列出全部指标（支持按国家筛选、关键词搜索），`macroeconomic` 查询指定指标的历史发布数据（实际值/预期值/前值）
 

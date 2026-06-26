@@ -8,7 +8,7 @@ sidebar_icon: newspaper
 
 ## 2026-06-13
 
-### SDK v4.3.2
+### SDK v4.3.3
 
 - **Macroeconomic indicators** — Two new `FundamentalContext` methods: `macroeconomic_indicators` lists all indicators (filter by country, keyword search), `macroeconomic` returns historical release data (actual / forecast / previous values) for a given indicator code
 
