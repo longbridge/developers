@@ -17,6 +17,10 @@ sidebar_icon: newspaper
 
 - **新增 `macrodata` 命令** — 浏览 400+ 宏观指标（覆盖美/港/中/欧/日/新）并查询历史发布数据；支持 `--country`、`--keyword`、`--lang`、`--start`、`--end`、`--limit`、`--page`、`--format json`
 
+### MCP v0.7.0
+
+- **新增 `macrodata_indicators` 和 `macrodata` 工具** — CLI macrodata 命令的 MCP 等价工具，可供 AI Agent 通过 Longbridge MCP 服务调用
+
 ## 2026-06-16
 
 ### CLI v0.23.2
