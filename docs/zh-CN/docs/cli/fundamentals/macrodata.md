@@ -81,6 +81,58 @@ longbridge macrodata --format json
 longbridge macrodata 62267 --format json
 ```
 
+**列表 JSON 结构：**
+
+```json
+{
+  "count": 619,
+  "page": 1,
+  "limit": 20,
+  "has_more": true,
+  "list": [
+    {
+      "indicator_code": "62267",
+      "country": "US",
+      "name": "Non-Farm Payroll",
+      "periodicity": "Monthly",
+      "importance": 3
+    }
+  ]
+}
+```
+
+**历史 JSON 结构：**
+
+```json
+{
+  "count": 24,
+  "page": 1,
+  "limit": 20,
+  "has_more": true,
+  "info": {
+    "indicator_code": "62267",
+    "country": "US",
+    "name": "Non-Farm Payroll",
+    "periodicity": "Monthly",
+    "importance": 3
+  },
+  "data": [
+    {
+      "period": "2026-05-01",
+      "release_at": 1781094600,
+      "actual_value": "272000",
+      "previous_value": "265000",
+      "forecast_value": "250000",
+      "unit": "Thousand"
+    }
+  ]
+}
+```
+
+:::tip
+`actual_value` 为空时表示数据尚未发布（仅有 `forecast_value`）。`has_more: true` 表示还有更多数据，用 `--page` 翻页。
+:::
+
 ## 选项
 
 | 选项 | 描述 | 默认值 |

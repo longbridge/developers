@@ -84,6 +84,58 @@ longbridge macrodata --format json
 longbridge macrodata 62267 --format json
 ```
 
+**List JSON structure:**
+
+```json
+{
+  "count": 619,
+  "page": 1,
+  "limit": 20,
+  "has_more": true,
+  "list": [
+    {
+      "indicator_code": "62267",
+      "country": "US",
+      "name": "Non-Farm Payroll",
+      "periodicity": "Monthly",
+      "importance": 3
+    }
+  ]
+}
+```
+
+**History JSON structure:**
+
+```json
+{
+  "count": 24,
+  "page": 1,
+  "limit": 20,
+  "has_more": true,
+  "info": {
+    "indicator_code": "62267",
+    "country": "US",
+    "name": "Non-Farm Payroll",
+    "periodicity": "Monthly",
+    "importance": 3
+  },
+  "data": [
+    {
+      "period": "2026-05-01",
+      "release_at": 1781094600,
+      "actual_value": "272000",
+      "previous_value": "265000",
+      "forecast_value": "250000",
+      "unit": "Thousand"
+    }
+  ]
+}
+```
+
+:::tip
+`actual_value` is empty when the data has not yet been released (only `forecast_value` is available). `has_more: true` means additional pages exist — use `--page` to paginate.
+:::
+
 ## Options
 
 | Option | Description | Default |
