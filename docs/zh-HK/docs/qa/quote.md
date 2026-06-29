@@ -90,7 +90,7 @@ sidebar_position: 1
 
 ## Q6：如何取得夜盤行情
 
-- **夜盤行情已包含在 Nasdaq Basic 中免費提供**，無需購買行情卡。
+- **夜盤行情已包含在 US LV1 中免費提供**，無需購買行情卡。
 - 目前夜盤行情**僅支援美股**，港股暫不支援夜盤。
 - 開通夜盤權限後，還需要主動開啟，方式為在鑑權接口的 `metadata` 欄位填入 key `need_over_night_quote`, value `true`。
 

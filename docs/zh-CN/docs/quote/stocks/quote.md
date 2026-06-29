@@ -268,7 +268,7 @@ func main() {
 | ∟∟ high             | string   | 最高价                                                                          |
 | ∟∟ low              | string   | 最低价                                                                          |
 | ∟∟ prev_close       | string   | 上一个交易阶段的收盘价                                                          |
-| ∟ overnight_quote   | object   | 美股夜盘交易行情<br/><br/>注意：需开启 `enable_overnight` 参数获取，否则会返回 null（夜盘行情已包含在 Nasdaq Basic 中免费提供，仅支持美股） |
+| ∟ overnight_quote   | object   | 美股夜盘交易行情<br/><br/>注意：需开启 `enable_overnight` 参数获取，否则会返回 null（夜盘行情已包含在 US LV1 中免费提供，仅支持美股） |
 | ∟∟ last_done        | string   | 最新价                                                                          |
 | ∟∟ timestamp        | int64    | 最新成交的时间戳                                                                |
 | ∟∟ volume           | int64    | 成交量                                                                          |

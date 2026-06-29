@@ -90,7 +90,7 @@ The security code uses the `ticker.region` format, `ticker` represents the code 
 
 ## Q6: How to enable Overnight quote
 
-- **Overnight quotes are included free in Nasdaq Basic.** No quote card purchase is required.
+- **Overnight quotes are included free in US LV1.** No quote card purchase is required.
 - Overnight quotes are currently **only available for US stocks**. Hong Kong stocks do not support overnight quotes.
 - After obtaining the overnight quote permission, you still need to actively enable it by filling in the key `need_over_night_quote`, value `true` in the `metadata` field of the authentication interface.
 
