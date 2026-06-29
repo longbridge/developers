@@ -40,7 +40,7 @@ longbridge order sell TSLA.US 100 --price 260.00
 | trailing_percent   | string | NO       | 跟踪涨跌幅，单位为百分比，例如 "2.5" 表示 "2.5%"<br/><br/> `TSLPPCT` 订单必填                                                             |
 | expire_date        | string | NO       | 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05`<br/><br/> time_in_force 为 `GTD` 时必填                                           |
 | side               | string | YES      | 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出                                                                      |
-| outside_rth        | string | NO       | 是否允许盘前盘后，美股必填<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘 |
+| outside_rth        | string | NO       | 是否允许盘前盘后，美股必填<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘<br/> `OPTION_PRE_MARKET` - 夜盘期权 |
 | time_in_force      | string | YES      | 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效                               |
 | remark             | string | NO       | 备注 (最大 64 字符)                                                                                                                       |
 | limit_depth_level  | int32  | NO       | 指定买卖档位，取值范围为 -5 ～ 0 ～ 5，负数代表买盘档位（如 -1 表示买一），<br/>正数代表卖盘档位（如 1 表示卖一），为 0 时 limit_offset 参数生效<br/>`TSLPAMT` / `TSLPPCT` 订单有效 |

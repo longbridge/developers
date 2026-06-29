@@ -44,7 +44,7 @@ longbridge order sell TSLA.US 100 --price 260.00
 | trailing_percent   | string | NO       | 跟蹤漲跌幅<br/><br/> `TSLPPCT` 訂單必填                                                                                                   |
 | expire_date        | string | NO       | 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05`<br/><br/> time_in_force 為 `GTD` 時必填                                           |
 | side               | string | YES      | 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出                                                                      |
-| outside_rth        | string | NO       | 是否允許盤前盤後，美股必填<br/><br/> **可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後<br/> `OVERNIGHT` - 夜盤 |
+| outside_rth        | string | NO       | 是否允許盤前盤後，美股必填<br/><br/> **可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後<br/> `OVERNIGHT` - 夜盤<br/> `OPTION_PRE_MARKET` - 夜盤期權 |
 | time_in_force      | string | YES      | 訂單有效期類型<br/><br/> **可選值：**<br/> `Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效                               |
 | remark             | string | NO       | 備註 (最大 64 字符)                                                                                                                       |
 | limit_depth_level  | int32  | NO       | 指定買賣檔位，取值範圍為 -5 ～ 0 ～ 5，負數代表買盤檔位（例如 -1 表示買一），<br/>正數代表賣盤檔位（例如 1 表示賣一），當為 0 時 limit_offset 參數生效<br/>`TSLPAMT` / `TSLPPCT` 訂單有效 |
