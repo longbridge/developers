@@ -20,7 +20,7 @@ ui:
 # ── 权限等级定义 ─────────────────────────────────────────────────
 levels:
   basic:
-    label: { en: 'Basic', zh-CN: '基础行情', zh-HK: '基礎行情' }
+    label: { en: 'Free', zh-CN: '免费', zh-HK: '免費' }
     description:
       en: 'Included with OpenAPI activation — no extra purchase needed.'
       zh-CN: '开通 OpenAPI 后自动获得，无需额外购买。'
