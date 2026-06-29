@@ -113,7 +113,7 @@ Option Volume Daily — AAPL.US
 
 ## Requirements
 
-`option quote` requires an options account and options market data permission. `option chain` and `option volume` work with Level 1 quote access. See [Quote Permissions](/docs/quote/) for subscription details.
+`option quote` requires an options account and options market data permission. `option chain` and `option volume` work with LV1 quote access. See [Quote Permissions](/docs/quote/) for subscription details.
 
 ## Notes
 

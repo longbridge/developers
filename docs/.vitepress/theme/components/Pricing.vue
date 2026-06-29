@@ -23,7 +23,7 @@ const LOCALE = {
         },
         {
           title: 'Basic Market Data',
-          desc: 'US LV1, HK Level 1, CN Level 1 — bundled with your account. <a href="https://longbridge.com/markets">View live market data</a> to see what\'s included.',
+          desc: 'US LV1, HK LV1, CN LV1 — bundled with your account. <a href="https://longbridge.com/markets">View live market data</a> to see what\'s included.',
         },
         { title: 'Push & Pull Data', desc: 'WebSocket real-time push and REST API pull — unlimited.' },
       ],

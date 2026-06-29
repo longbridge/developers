@@ -113,7 +113,7 @@ Option Volume Daily — AAPL.US
 
 ## 權限要求
 
-`option quote` 需要期權帳戶及期權行情權限；`option chain` 和 `option volume` 需要一級行情權限。參見[行情訂閱](/zh-HK/docs/quote/)了解權限詳情。
+`option quote` 需要期權帳戶及期權行情權限；`option chain` 和 `option volume` 需要 LV1 行情權限。參見[行情訂閱](/zh-HK/docs/quote/)了解權限詳情。
 
 ## 說明
 
