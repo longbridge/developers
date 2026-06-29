@@ -81,7 +81,7 @@ commands:
 
   # ── 盘口深度 ─────────────────────────────────────────────────
   depth:
-    level: lv1
+    level: basic
     description:
       en: |-
         US stocks: US LV1 1-level bid/ask included free by default (pre-market, regular, after-hours, and overnight sessions).
