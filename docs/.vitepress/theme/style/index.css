@@ -96,7 +96,7 @@ html.dark .vp-doc th {
 }
 
 .VPDocFooter > .edit-info {
-  display: contents;
+  display: contents !important;
 }
 
 .VPDocFooter .edit-link {
