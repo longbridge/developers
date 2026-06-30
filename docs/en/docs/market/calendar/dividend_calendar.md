@@ -19,16 +19,15 @@ longbridge finance-calendar dividend --filter positions
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
-
 ## Parameters
 
 > **SDK method parameters.**
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| start | string | YES | Start date, YYYY-MM-DD |
-| end | string | YES | End date, YYYY-MM-DD |
-| market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
+| Name   | Type   | Required | Description                                          |
+| ------ | ------ | -------- | ---------------------------------------------------- |
+| start  | string | YES      | Start date, YYYY-MM-DD                               |
+| end    | string | YES      | End date, YYYY-MM-DD                                 |
+| market | string | NO       | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
 
 ## Request Example
 
@@ -36,14 +35,24 @@ longbridge finance-calendar dividend --filter positions
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import CalendarContext, Config, OAuthBuilder
+from longbridge.openapi import (
+    CalendarCategory,
+    CalendarContext,
+    Config,
+    OAuthBuilder,
+)
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = CalendarContext(config)
 
-resp = ctx.dividend_calendar("AAPL.US")
-print(resp)
+resp = ctx.finance_calendar(
+    CalendarCategory.Dividend, "2026-06-30", "2026-06-30", "US"
+)
+
+for group in resp.list:
+    for info in group.infos:
+        print(f"  - {info.symbol:12} | {info.counter_name} | {info.date}")
 ```
 
   </TabItem>
@@ -51,15 +60,27 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncCalendarContext, Config, OAuthBuilder
+from longbridge.openapi import (
+    AsyncCalendarContext,
+    CalendarCategory,
+    Config,
+    OAuthBuilder,
+)
 
 async def main() -> None:
-    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    oauth = await OAuthBuilder("your-client-id").build_async(
+        lambda url: print("Visit:", url)
+    )
     config = Config.from_oauth(oauth)
     ctx = AsyncCalendarContext.create(config)
 
-    resp = await ctx.dividend_calendar("AAPL.US")
-    print(resp)
+    resp = await ctx.finance_calendar(
+        CalendarCategory.Dividend, "2026-06-30", "2026-06-30", "US"
+    )
+
+    for group in resp.list:
+        for info in group.infos:
+            print(f"  - {info.symbol:12} | {info.counter_name} | {info.date}")
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -69,7 +90,7 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, CalendarContext, OAuth } = require('longbridge')
+const { CalendarCategory, CalendarContext, Config, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
@@ -77,7 +98,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = CalendarContext.new(config)
-  const resp = await ctx.dividend_calendar('AAPL.US')
+  const resp = await ctx.financeCalendar(CalendarCategory.Dividend, '2026-06-30', '2026-06-30', 'US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -95,7 +116,12 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              CalendarContext ctx = CalendarContext.create(config)) {
-            var resp = ctx.getDividendCalendar("AAPL.US").get();
+            FinanceCalendarOptions opts = new FinanceCalendarOptions();
+            opts.category = CalendarCategory.Dividend;
+            opts.start = "2026-06-30";
+            opts.end = "2026-06-30";
+            opts.market = "US";
+            var resp = ctx.getFinanceCalendar(opts).get();
             System.out.println(resp);
         }
     }
@@ -107,14 +133,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, calendar::CalendarContext, Config};
+use longbridge::{oauth::OAuthBuilder, calendar::{CalendarCategory, CalendarContext}, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.dividend_calendar("AAPL.US").await?;
+    let resp = ctx.finance_calendar(CalendarCategory::Dividend, "2026-06-30", "2026-06-30", Some("US".to_string())).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -137,7 +163,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             CalendarContext ctx = CalendarContext::create(config);
-            ctx.dividend_calendar("AAPL.US", [](auto resp) {
+            ctx.finance_calendar(CalendarCategory::Dividend, "2026-06-30", "2026-06-30", "US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -156,9 +182,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/longbridge/openapi-go/calendar"
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/calendar"
 )
 
 func main() {
@@ -176,7 +202,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.DividendCalendar(context.Background(), "AAPL.US")
+	market := "US"
+	resp, err := c.FinanceCalendar(context.Background(), calendar.CalendarCategoryDividend, "2026-06-30", "2026-06-30", &market)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -189,7 +216,6 @@ func main() {
 
 ## Response
 
-
 ### Response Example
 
 ```json
@@ -197,10 +223,10 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "date": "2026-04-30",
+    "date": "2026-06-30",
     "list": [
       {
-        "date": "2026-04-30",
+        "date": "2026-06-30",
         "count": 275,
         "infos": [
           {
@@ -210,7 +236,7 @@ func main() {
             "counter_name": "Apple Inc.",
             "event_type": "",
             "activity_type": "",
-            "date": "2026-05-14",
+            "date": "2026-06-30",
             "datetime": "",
             "content": "",
             "star": 0,
@@ -230,10 +256,10 @@ func main() {
 
 ### Response Status
 
-| Status | Description | Schema |
-| ------ | ----------- | ------ |
+| Status | Description | Schema                                            |
+| ------ | ----------- | ------------------------------------------------- |
 | 200    | Success     | [CalendarEventsResponse](#CalendarEventsResponse) |
-| 400    | Bad request | None   |
+| 400    | Bad request | None                                              |
 
 ## Schemas
 
@@ -241,40 +267,40 @@ func main() {
 
 <a id="CalendarEventsResponse"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| date | string | false | Response date |
-| list | object[] | true | List of calendar date groups, see [CalendarDateGroup](#CalendarDateGroup) |
+| Name | Type     | Required | Description                                                               |
+| ---- | -------- | -------- | ------------------------------------------------------------------------- |
+| date | string   | false    | Response date                                                             |
+| list | object[] | true     | List of calendar date groups, see [CalendarDateGroup](#CalendarDateGroup) |
 
 ### CalendarDateGroup
 
 <a id="CalendarDateGroup"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| date | string | true | Date |
-| count | integer | false | Number of events on this date |
-| infos | object[] | true | List of calendar events, see [CalendarEventInfo](#CalendarEventInfo) |
+| Name  | Type     | Required | Description                                                          |
+| ----- | -------- | -------- | -------------------------------------------------------------------- |
+| date  | string   | true     | Date                                                                 |
+| count | integer  | false    | Number of events on this date                                        |
+| infos | object[] | true     | List of calendar events, see [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo
 
 <a id="CalendarEventInfo"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| id | string | false | Event ID |
-| symbol | string | false | Security symbol |
-| market | string | false | Market |
-| counter_name | string | false | Security name |
-| event_type | string | false | Event type |
-| activity_type | string | false | Activity type |
-| date | string | false | Event date |
-| datetime | string | false | Event datetime |
-| date_type | string | false | Date type |
-| content | string | false | Event content description |
-| currency | string | false | Currency |
-| star | integer | false | Importance rating (1-3) |
-| icon | string | false | Icon URL |
-| chart_uid | string | false | Chart identifier |
-| financial_market_time | string | false | Financial market time |
-| data_kv | object[] | false | Key-value data pairs |
+| Name                  | Type     | Required | Description               |
+| --------------------- | -------- | -------- | ------------------------- |
+| id                    | string   | false    | Event ID                  |
+| symbol                | string   | false    | Security symbol           |
+| market                | string   | false    | Market                    |
+| counter_name          | string   | false    | Security name             |
+| event_type            | string   | false    | Event type                |
+| activity_type         | string   | false    | Activity type             |
+| date                  | string   | false    | Event date                |
+| datetime              | string   | false    | Event datetime            |
+| date_type             | string   | false    | Date type                 |
+| content               | string   | false    | Event content description |
+| currency              | string   | false    | Currency                  |
+| star                  | integer  | false    | Importance rating (1-3)   |
+| icon                  | string   | false    | Icon URL                  |
+| chart_uid             | string   | false    | Chart identifier          |
+| financial_market_time | string   | false    | Financial market time     |
+| data_kv               | object[] | false    | Key-value data pairs      |

@@ -1,7 +1,7 @@
 ---
-slug: /market/calendar/meeting-calendar
-title: Meeting Calendar
-sidebar_position: 6
+slug: /market/calendar/merge-calendar
+title: 合併日曆
+sidebar_position: 7
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,24 +10,24 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Browse upcoming shareholder meetings and company events.
+瀏覽即將發生的合併與併購事件。
 
 <CliCommand>
-longbridge finance-calendar meeting
-longbridge finance-calendar meeting --market US
+longbridge finance-calendar merge
+longbridge finance-calendar merge --market US
 </CliCommand>
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 ## Parameters
 
-> **SDK method parameters.**
+> **SDK 方法參數。**
 
-| Name   | Type   | Required | Description                                          |
-| ------ | ------ | -------- | ---------------------------------------------------- |
-| start  | string | YES      | Start date, YYYY-MM-DD                               |
-| end    | string | YES      | End date, YYYY-MM-DD                                 |
-| market | string | NO       | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
+| Name   | Type   | Required | Description                                  |
+| ------ | ------ | -------- | -------------------------------------------- |
+| start  | string | YES      | 開始日期，格式 YYYY-MM-DD                    |
+| end    | string | YES      | 結束日期，格式 YYYY-MM-DD                    |
+| market | string | NO       | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
 
 ## Request Example
 
@@ -47,7 +47,7 @@ config = Config.from_oauth(oauth)
 ctx = CalendarContext(config)
 
 resp = ctx.finance_calendar(
-    CalendarCategory.Meeting, "2026-06-30", "2026-06-30", "US"
+    CalendarCategory.Merge, "2026-06-30", "2026-06-30", "US"
 )
 
 for group in resp.list:
@@ -75,7 +75,7 @@ async def main() -> None:
     ctx = AsyncCalendarContext.create(config)
 
     resp = await ctx.finance_calendar(
-        CalendarCategory.Meeting, "2026-06-30", "2026-06-30", "US"
+        CalendarCategory.Merge, "2026-06-30", "2026-06-30", "US"
     )
 
     for group in resp.list:
@@ -98,7 +98,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = CalendarContext.new(config)
-  const resp = await ctx.financeCalendar(CalendarCategory.Meeting, '2026-06-30', '2026-06-30', 'US')
+  const resp = await ctx.financeCalendar(CalendarCategory.Merge, '2026-06-30', '2026-06-30', 'US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -117,7 +117,7 @@ class Main {
              Config config = Config.fromOAuth(oauth);
              CalendarContext ctx = CalendarContext.create(config)) {
             FinanceCalendarOptions opts = new FinanceCalendarOptions();
-            opts.category = CalendarCategory.Meeting;
+            opts.category = CalendarCategory.Merge;
             opts.start = "2026-06-30";
             opts.end = "2026-06-30";
             opts.market = "US";
@@ -140,7 +140,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.finance_calendar(CalendarCategory::Meeting, "2026-06-30", "2026-06-30", Some("US".to_string())).await?;
+    let resp = ctx.finance_calendar(CalendarCategory::Merge, "2026-06-30", "2026-06-30", Some("US".to_string())).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -163,7 +163,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             CalendarContext ctx = CalendarContext::create(config);
-            ctx.finance_calendar(CalendarCategory::Meeting, "2026-06-30", "2026-06-30", "US", [](auto resp) {
+            ctx.finance_calendar(CalendarCategory::Merge, "2026-06-30", "2026-06-30", "US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -203,7 +203,7 @@ func main() {
 	}
 	defer c.Close()
 	market := "US"
-	resp, err := c.FinanceCalendar(context.Background(), calendar.CalendarCategoryMeeting, "2026-06-30", "2026-06-30", &market)
+	resp, err := c.FinanceCalendar(context.Background(), calendar.CalendarCategoryMerge, "2026-06-30", "2026-06-30", &market)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -258,8 +258,8 @@ func main() {
 
 | Status | Description | Schema                                            |
 | ------ | ----------- | ------------------------------------------------- |
-| 200    | Success     | [CalendarEventsResponse](#CalendarEventsResponse) |
-| 400    | Bad request | None                                              |
+| 200    | 成功        | [CalendarEventsResponse](#CalendarEventsResponse) |
+| 400    | 請求錯誤    | None                                              |
 
 ## Schemas
 
@@ -267,40 +267,40 @@ func main() {
 
 <a id="CalendarEventsResponse"></a>
 
-| Name | Type     | Required | Description                                                               |
-| ---- | -------- | -------- | ------------------------------------------------------------------------- |
-| date | string   | false    | Response date                                                             |
-| list | object[] | true     | List of calendar date groups, see [CalendarDateGroup](#CalendarDateGroup) |
+| Name | Type     | Required | Description                                                  |
+| ---- | -------- | -------- | ------------------------------------------------------------ |
+| date | string   | 否       | 響應日期                                                     |
+| list | object[] | 是       | 日曆日期分組列表，見 [CalendarDateGroup](#CalendarDateGroup) |
 
 ### CalendarDateGroup
 
 <a id="CalendarDateGroup"></a>
 
-| Name  | Type     | Required | Description                                                          |
-| ----- | -------- | -------- | -------------------------------------------------------------------- |
-| date  | string   | true     | Date                                                                 |
-| count | integer  | false    | Number of events on this date                                        |
-| infos | object[] | true     | List of calendar events, see [CalendarEventInfo](#CalendarEventInfo) |
+| Name  | Type     | Required | Description                                              |
+| ----- | -------- | -------- | -------------------------------------------------------- |
+| date  | string   | 是       | 日期                                                     |
+| count | integer  | 否       | 該日期的事件數量                                         |
+| infos | object[] | 是       | 日曆事件列表，見 [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo
 
 <a id="CalendarEventInfo"></a>
 
-| Name                  | Type     | Required | Description               |
-| --------------------- | -------- | -------- | ------------------------- |
-| id                    | string   | false    | Event ID                  |
-| symbol                | string   | false    | Security symbol           |
-| market                | string   | false    | Market                    |
-| counter_name          | string   | false    | Security name             |
-| event_type            | string   | false    | Event type                |
-| activity_type         | string   | false    | Activity type             |
-| date                  | string   | false    | Event date                |
-| datetime              | string   | false    | Event datetime            |
-| date_type             | string   | false    | Date type                 |
-| content               | string   | false    | Event content description |
-| currency              | string   | false    | Currency                  |
-| star                  | integer  | false    | Importance rating (1-3)   |
-| icon                  | string   | false    | Icon URL                  |
-| chart_uid             | string   | false    | Chart identifier          |
-| financial_market_time | string   | false    | Financial market time     |
-| data_kv               | object[] | false    | Key-value data pairs      |
+| Name                  | Type     | Required | Description      |
+| --------------------- | -------- | -------- | ---------------- |
+| id                    | string   | 否       | 事件 ID          |
+| symbol                | string   | 否       | 證券代碼         |
+| market                | string   | 否       | 市場             |
+| counter_name          | string   | 否       | 證券名稱         |
+| event_type            | string   | 否       | 事件類型         |
+| activity_type         | string   | 否       | 活動類型         |
+| date                  | string   | 否       | 事件日期         |
+| datetime              | string   | 否       | 事件時間         |
+| date_type             | string   | 否       | 日期類型         |
+| content               | string   | 否       | 事件內容描述     |
+| currency              | string   | 否       | 貨幣             |
+| star                  | integer  | 否       | 重要性（1-3 星） |
+| icon                  | string   | 否       | 圖標鏈接         |
+| chart_uid             | string   | 否       | 圖表標識符       |
+| financial_market_time | string   | 否       | 金融市場時間     |
+| data_kv               | object[] | 否       | 鍵值數據對       |

@@ -19,16 +19,15 @@ longbridge finance-calendar macrodata --market US
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
-
 ## Parameters
 
 > **SDK 方法參數。**
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| start | string | YES | 開始日期，格式 YYYY-MM-DD |
-| end | string | YES | 結束日期，格式 YYYY-MM-DD |
-| market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
+| Name   | Type   | Required | Description                                  |
+| ------ | ------ | -------- | -------------------------------------------- |
+| start  | string | YES      | 開始日期，格式 YYYY-MM-DD                    |
+| end    | string | YES      | 結束日期，格式 YYYY-MM-DD                    |
+| market | string | NO       | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
 
 ## Request Example
 
@@ -36,14 +35,24 @@ longbridge finance-calendar macrodata --market US
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import CalendarContext, Config, OAuthBuilder
+from longbridge.openapi import (
+    CalendarCategory,
+    CalendarContext,
+    Config,
+    OAuthBuilder,
+)
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = CalendarContext(config)
 
-resp = ctx.macro_calendar("AAPL.US")
-print(resp)
+resp = ctx.finance_calendar(
+    CalendarCategory.MacroData, "2026-06-30", "2026-06-30", "US"
+)
+
+for group in resp.list:
+    for info in group.infos:
+        print(f"  - {info.content} | {info.date}")
 ```
 
   </TabItem>
@@ -51,15 +60,27 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncCalendarContext, Config, OAuthBuilder
+from longbridge.openapi import (
+    AsyncCalendarContext,
+    CalendarCategory,
+    Config,
+    OAuthBuilder,
+)
 
 async def main() -> None:
-    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    oauth = await OAuthBuilder("your-client-id").build_async(
+        lambda url: print("Visit:", url)
+    )
     config = Config.from_oauth(oauth)
     ctx = AsyncCalendarContext.create(config)
 
-    resp = await ctx.macro_calendar("AAPL.US")
-    print(resp)
+    resp = await ctx.finance_calendar(
+        CalendarCategory.MacroData, "2026-06-30", "2026-06-30", "US"
+    )
+
+    for group in resp.list:
+        for info in group.infos:
+            print(f"  - {info.content} | {info.date}")
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -69,7 +90,7 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, CalendarContext, OAuth } = require('longbridge')
+const { CalendarCategory, CalendarContext, Config, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
@@ -77,7 +98,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = CalendarContext.new(config)
-  const resp = await ctx.macro_calendar('AAPL.US')
+  const resp = await ctx.financeCalendar(CalendarCategory.MacroData, '2026-06-30', '2026-06-30', 'US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -95,7 +116,12 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              CalendarContext ctx = CalendarContext.create(config)) {
-            var resp = ctx.getMacroCalendar("AAPL.US").get();
+            FinanceCalendarOptions opts = new FinanceCalendarOptions();
+            opts.category = CalendarCategory.MacroData;
+            opts.start = "2026-06-30";
+            opts.end = "2026-06-30";
+            opts.market = "US";
+            var resp = ctx.getFinanceCalendar(opts).get();
             System.out.println(resp);
         }
     }
@@ -107,14 +133,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, calendar::CalendarContext, Config};
+use longbridge::{oauth::OAuthBuilder, calendar::{CalendarCategory, CalendarContext}, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.macro_calendar("AAPL.US").await?;
+    let resp = ctx.finance_calendar(CalendarCategory::MacroData, "2026-06-30", "2026-06-30", Some("US".to_string())).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -137,7 +163,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             CalendarContext ctx = CalendarContext::create(config);
-            ctx.macro_calendar("AAPL.US", [](auto resp) {
+            ctx.finance_calendar(CalendarCategory::MacroData, "2026-06-30", "2026-06-30", "US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -156,9 +182,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/longbridge/openapi-go/calendar"
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
-	"github.com/longbridge/openapi-go/calendar"
 )
 
 func main() {
@@ -176,7 +202,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.MacroCalendar(context.Background(), "AAPL.US")
+	market := "US"
+	resp, err := c.FinanceCalendar(context.Background(), calendar.CalendarCategoryMacroData, "2026-06-30", "2026-06-30", &market)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -189,7 +216,6 @@ func main() {
 
 ## Response
 
-
 ### Response Example
 
 ```json
@@ -197,22 +223,22 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "date": "2026-04-30",
+    "date": "2026-06-30",
     "list": [
       {
-        "date": "2026-05-02",
+        "date": "2026-06-30",
         "count": 0,
         "infos": [
           {
             "id": "12345",
-            "symbol": "AAPL.US",
+            "symbol": "",
             "market": "US",
-            "counter_name": "Apple Inc.",
+            "counter_name": "",
             "event_type": "",
             "activity_type": "",
-            "date": "2026-05-14",
+            "date": "2026-06-30",
             "datetime": "",
-            "content": "",
+            "content": "US Core PPI MoM",
             "star": 0,
             "currency": "",
             "icon": "",
@@ -230,10 +256,10 @@ func main() {
 
 ### Response Status
 
-| Status | Description | Schema |
-| ------ | ----------- | ------ |
-| 200    | 成功     | [CalendarEventsResponse](#CalendarEventsResponse) |
-| 400    | 請求錯誤 | None   |
+| Status | Description | Schema                                            |
+| ------ | ----------- | ------------------------------------------------- |
+| 200    | 成功        | [CalendarEventsResponse](#CalendarEventsResponse) |
+| 400    | 請求錯誤    | None                                              |
 
 ## Schemas
 
@@ -241,40 +267,40 @@ func main() {
 
 <a id="CalendarEventsResponse"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| date | string | 否 | 響應日期 |
-| list | object[] | 是 | 日曆日期分組列表，見 [CalendarDateGroup](#CalendarDateGroup) |
+| Name | Type     | Required | Description                                                  |
+| ---- | -------- | -------- | ------------------------------------------------------------ |
+| date | string   | 否       | 響應日期                                                     |
+| list | object[] | 是       | 日曆日期分組列表，見 [CalendarDateGroup](#CalendarDateGroup) |
 
 ### CalendarDateGroup
 
 <a id="CalendarDateGroup"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| date | string | 是 | 日期 |
-| count | integer | 否 | 該日期的事件數量 |
-| infos | object[] | 是 | 日曆事件列表，見 [CalendarEventInfo](#CalendarEventInfo) |
+| Name  | Type     | Required | Description                                              |
+| ----- | -------- | -------- | -------------------------------------------------------- |
+| date  | string   | 是       | 日期                                                     |
+| count | integer  | 否       | 該日期的事件數量                                         |
+| infos | object[] | 是       | 日曆事件列表，見 [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo
 
 <a id="CalendarEventInfo"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| id | string | 否 | 事件 ID |
-| symbol | string | 否 | 證券代碼 |
-| market | string | 否 | 市場 |
-| counter_name | string | 否 | 證券名稱 |
-| event_type | string | 否 | 事件類型 |
-| activity_type | string | 否 | 活動類型 |
-| date | string | 否 | 事件日期 |
-| datetime | string | 否 | 事件時間 |
-| date_type | string | 否 | 日期類型 |
-| content | string | 否 | 事件內容描述 |
-| currency | string | 否 | 貨幣 |
-| star | integer | 否 | 重要性（1-3 星） |
-| icon | string | 否 | 圖標鏈接 |
-| chart_uid | string | 否 | 圖表標識符 |
-| financial_market_time | string | 否 | 金融市場時間 |
-| data_kv | object[] | 否 | 鍵值數據對 |
+| Name                  | Type     | Required | Description      |
+| --------------------- | -------- | -------- | ---------------- |
+| id                    | string   | 否       | 事件 ID          |
+| symbol                | string   | 否       | 證券代碼         |
+| market                | string   | 否       | 市場             |
+| counter_name          | string   | 否       | 證券名稱         |
+| event_type            | string   | 否       | 事件類型         |
+| activity_type         | string   | 否       | 活動類型         |
+| date                  | string   | 否       | 事件日期         |
+| datetime              | string   | 否       | 事件時間         |
+| date_type             | string   | 否       | 日期類型         |
+| content               | string   | 否       | 事件內容描述     |
+| currency              | string   | 否       | 貨幣             |
+| star                  | integer  | 否       | 重要性（1-3 星） |
+| icon                  | string   | 否       | 圖標鏈接         |
+| chart_uid             | string   | 否       | 圖表標識符       |
+| financial_market_time | string   | 否       | 金融市場時間     |
+| data_kv               | object[] | 否       | 鍵值數據對       |
