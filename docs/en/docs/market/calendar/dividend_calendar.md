@@ -14,7 +14,7 @@ Get upcoming and past dividend events including ex-date, pay date, and dividend 
 
 <CliCommand>
 longbridge finance-calendar dividend
-longbridge finance-calendar dividend --filter positions
+longbridge finance-calendar dividend --market US
 </CliCommand>
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />

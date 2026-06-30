@@ -14,7 +14,7 @@ headingLevel: 2
 
 <CliCommand>
 longbridge finance-calendar dividend
-longbridge finance-calendar dividend --filter positions
+longbridge finance-calendar dividend --market US
 </CliCommand>
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
