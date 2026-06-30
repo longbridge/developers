@@ -1,6 +1,6 @@
 ---
 slug: /market/calendar/meeting-calendar
-title: Meeting Calendar
+title: 股东大会日历
 sidebar_position: 6
 language_tabs: false
 toc_footers: []
@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Browse upcoming shareholder meetings and company events.
+浏览即将举行的股东大会及公司事件。
 
 <CliCommand>
 longbridge finance-calendar meeting
@@ -21,13 +21,13 @@ longbridge finance-calendar meeting --market US
 
 ## Parameters
 
-> **SDK method parameters.**
+> **SDK 方法参数。**
 
-| Name   | Type   | Required | Description                                          |
-| ------ | ------ | -------- | ---------------------------------------------------- |
-| start  | string | YES      | Start date, YYYY-MM-DD                               |
-| end    | string | YES      | End date, YYYY-MM-DD                                 |
-| market | string | NO       | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
+| Name   | Type   | Required | Description                                  |
+| ------ | ------ | -------- | -------------------------------------------- |
+| start  | string | YES      | 开始日期，格式 YYYY-MM-DD                    |
+| end    | string | YES      | 结束日期，格式 YYYY-MM-DD                    |
+| market | string | NO       | 市场筛选：US、HK、SH、SZ，不填则返回所有市场 |
 
 ## Request Example
 
@@ -258,8 +258,8 @@ func main() {
 
 | Status | Description | Schema                                            |
 | ------ | ----------- | ------------------------------------------------- |
-| 200    | Success     | [CalendarEventsResponse](#CalendarEventsResponse) |
-| 400    | Bad request | None                                              |
+| 200    | 成功        | [CalendarEventsResponse](#CalendarEventsResponse) |
+| 400    | 请求错误    | None                                              |
 
 ## Schemas
 
@@ -267,40 +267,40 @@ func main() {
 
 <a id="CalendarEventsResponse"></a>
 
-| Name | Type     | Required | Description                                                               |
-| ---- | -------- | -------- | ------------------------------------------------------------------------- |
-| date | string   | false    | Response date                                                             |
-| list | object[] | true     | List of calendar date groups, see [CalendarDateGroup](#CalendarDateGroup) |
+| Name | Type     | Required | Description                                                  |
+| ---- | -------- | -------- | ------------------------------------------------------------ |
+| date | string   | 否       | 响应日期                                                     |
+| list | object[] | 是       | 日历日期分组列表，见 [CalendarDateGroup](#CalendarDateGroup) |
 
 ### CalendarDateGroup
 
 <a id="CalendarDateGroup"></a>
 
-| Name  | Type     | Required | Description                                                          |
-| ----- | -------- | -------- | -------------------------------------------------------------------- |
-| date  | string   | true     | Date                                                                 |
-| count | integer  | false    | Number of events on this date                                        |
-| infos | object[] | true     | List of calendar events, see [CalendarEventInfo](#CalendarEventInfo) |
+| Name  | Type     | Required | Description                                              |
+| ----- | -------- | -------- | -------------------------------------------------------- |
+| date  | string   | 是       | 日期                                                     |
+| count | integer  | 否       | 该日期的事件数量                                         |
+| infos | object[] | 是       | 日历事件列表，见 [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo
 
 <a id="CalendarEventInfo"></a>
 
-| Name                  | Type     | Required | Description               |
-| --------------------- | -------- | -------- | ------------------------- |
-| id                    | string   | false    | Event ID                  |
-| symbol                | string   | false    | Security symbol           |
-| market                | string   | false    | Market                    |
-| counter_name          | string   | false    | Security name             |
-| event_type            | string   | false    | Event type                |
-| activity_type         | string   | false    | Activity type             |
-| date                  | string   | false    | Event date                |
-| datetime              | string   | false    | Event datetime            |
-| date_type             | string   | false    | Date type                 |
-| content               | string   | false    | Event content description |
-| currency              | string   | false    | Currency                  |
-| star                  | integer  | false    | Importance rating (1-3)   |
-| icon                  | string   | false    | Icon URL                  |
-| chart_uid             | string   | false    | Chart identifier          |
-| financial_market_time | string   | false    | Financial market time     |
-| data_kv               | object[] | false    | Key-value data pairs      |
+| Name                  | Type     | Required | Description      |
+| --------------------- | -------- | -------- | ---------------- |
+| id                    | string   | 否       | 事件 ID          |
+| symbol                | string   | 否       | 证券代码         |
+| market                | string   | 否       | 市场             |
+| counter_name          | string   | 否       | 证券名称         |
+| event_type            | string   | 否       | 事件类型         |
+| activity_type         | string   | 否       | 活动类型         |
+| date                  | string   | 否       | 事件日期         |
+| datetime              | string   | 否       | 事件时间         |
+| date_type             | string   | 否       | 日期类型         |
+| content               | string   | 否       | 事件内容描述     |
+| currency              | string   | 否       | 货币             |
+| star                  | integer  | 否       | 重要性（1-3 星） |
+| icon                  | string   | 否       | 图标链接         |
+| chart_uid             | string   | 否       | 图表标识符       |
+| financial_market_time | string   | 否       | 金融市场时间     |
+| data_kv               | object[] | 否       | 键值数据对       |
