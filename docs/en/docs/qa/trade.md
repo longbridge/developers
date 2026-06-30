@@ -41,3 +41,7 @@ You can use the trading API `/v1/trade/estimate/buy_limit` to estimate the avail
 ## Q8: What does it mean when the order placement API returns "User authentication failed"?
 
 This error usually indicates that the user does not have permission for the corresponding trading operation, such as options trading or short selling U.S. stocks. You can complete the permission opening process guided by the order placement in the app. After obtaining the necessary permissions, you can continue trading or performing other operations through OpenAPI.
+
+## Q9: Does U.S. options trading support pre-market trading?
+
+Pre-market options trading is not currently supported. We are planning to add this feature, including multi-leg options, which will be released together. We will update the documentation once it becomes available.
