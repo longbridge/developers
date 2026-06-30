@@ -26,7 +26,7 @@ SDK 包名已從 `longport` 更名為 `longbridge`，舊包名 `longport` 已廢
 
 ### 安裝 SDK
 
-你可以通過 Pip 安裝 SDK，或者直接訪問 [PyPI](https://pypi.org/project/longbridge/) 頁面來下載。
+你可以通過 pip 安裝 SDK，或者直接訪問 [PyPI](https://pypi.org/project/longbridge/) 頁面來下載。
 
 ```bash
 $ pip install longbridge

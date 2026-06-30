@@ -34,7 +34,7 @@ sidebar_position: 5
         <td><a href="../quote/pull/brokers">获取标的经纪队列</a></td>
     </tr>
     <tr>
-        <td><a href="../quote/pull/broker-ids">获取券商席位 id</a></td>
+        <td><a href="../quote/pull/broker-ids">获取券商席位 ID</a></td>
     </tr>
     <tr>
         <td><a href="../quote/pull/trade">获取标的成交明细</a></td>

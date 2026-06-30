@@ -33,7 +33,7 @@ slug: overview
         <td><a href="./pull/brokers">获取标的经纪队列</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/broker-ids">获取券商席位 id</a></td>
+        <td><a href="./pull/broker-ids">获取券商席位 ID</a></td>
     </tr>
     <tr>
         <td><a href="./pull/trade">获取标的成交明细</a></td>
@@ -72,7 +72,7 @@ slug: overview
         <td><a href="./pull/calc-index">获取标的计算指标</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/history-candlestick">获取标的历史 k 线</a></td>
+        <td><a href="./pull/history-candlestick">获取标的历史 K 线</a></td>
     </tr>
     <tr>
         <td rowspan="3">订阅</td>

@@ -53,5 +53,5 @@ Fields Descriptions:
 | signature  | 128                                   | 16              | exists when `verify` is `1`                                                                                |
 
 :::info
-Using specific protobuf defination to encode/decode body data
+Using specific protobuf definition to encode/decode body data
 :::

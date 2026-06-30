@@ -36,7 +36,7 @@ Cases server will close the connection:
 6. session expired when reconnect
 7. duplicate connection have been created
 
-The reason why server close the connection will send by close packet, protobuf defination:
+The reason why server close the connection will send by close packet, protobuf definition:
 
 ```protobuf
 message Close {
@@ -140,4 +140,4 @@ message ReconnectResponse {
 
 ## Protobuf
 
-All control command protobuf definations are opensource in [GitHub](https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto)
+All control command protobuf definitions are opensource in [GitHub](https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto)

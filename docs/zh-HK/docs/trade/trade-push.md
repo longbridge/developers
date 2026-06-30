@@ -15,7 +15,7 @@ from decimal import Decimal
 from longbridge.openapi import TradeContext, Config, OrderSide, OrderType, TimeInForceType, PushOrderChanged, TopicType, OAuthBuilder
 
 def on_order_changed(event: PushOrderChanged):
-print(event)
+    print(event)
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
