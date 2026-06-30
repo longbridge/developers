@@ -35,5 +35,16 @@
     "editor.quickSuggestions": {
       "strings": true
     }
-  }
+  },
+  "cSpell.words": [
+    "Helora",
+    "helora",
+    "Longbridge",
+    "longbridge",
+    "longport",
+    "vitepress",
+    "VITE",
+    "lbkrs",
+    "lbctrl"
+  ]
 }

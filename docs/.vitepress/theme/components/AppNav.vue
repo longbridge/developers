@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineAsyncComponent, watch } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useI18n } from 'vue-i18n'
-import endsWith from 'lodash/endsWith'
 import { useLocalePath, getBasenameLocale } from '../utils/i18n'
 import { createLoginRedirectPath } from '../utils/navigate'
 import { isLoginState, initLoginState } from '../composables/useLoginState'
@@ -125,32 +124,89 @@ function openSearch() {
   )
 }
 
+// Helora 客服：SDK 由 vitepress head 配置静态注入到所有页面（见 config.mts），
+// 这里只负责等 window.Helora 就绪 → boot → 订阅事件 → 主题/语言同步
+const heloraDisposers: Array<() => void> = []
+let heloraBooted = false
+
+function buildHeloraBootConfig(locale: string) {
+  // Helora SDK 用 data-helora-proxy 属性记录构建时的 proxy 选择，避免在客户端再做 host 判断
+  const tag = document.querySelector<HTMLScriptElement>('script[data-helora-proxy]')
+  const proxy = (tag?.dataset.heloraProxy as 'prod' | 'staging') || 'staging'
+  return {
+    proxy,
+    guest: true,
+    configPlatform: 'web' as const,
+    configKey: 'helora-agent-openapi',
+    source: 'web_openapi',
+    locale,
+    theme: { mode: (isDark.value ? 'dark' : 'light') as 'dark' | 'light' },
+    headerActions: [
+      {
+        id: 'issue',
+        label: t('helora.submitIssue'),
+        icon: 'alert-circle',
+        intent: 'event' as const,
+      },
+    ],
+  }
+}
+
+function bootHelora() {
+  const Helora = window.Helora
+  if (!Helora) return false
+  Helora.boot(buildHeloraBootConfig(currentLocale.value))
+  heloraBooted = true
+
+  // 订阅 header action（提交问题按钮）
+  const offAction = Helora.on?.('headerAction', (payload: { id?: string }) => {
+    if (payload?.id === 'issue') {
+      window.open('https://github.com/longbridge/openapi/issues/new', '_blank', 'noopener,noreferrer')
+    }
+  })
+  if (typeof offAction === 'function') heloraDisposers.push(offAction)
+  return true
+}
+
+function waitForHeloraAndBoot() {
+  if (bootHelora()) return
+  // SDK 是 async script，可能在 onMounted 时还没加载完。轮询 + 兜底超时
+  let tries = 0
+  const timer = window.setInterval(() => {
+    tries += 1
+    if (bootHelora() || tries > 100) window.clearInterval(timer)
+  }, 100)
+  heloraDisposers.push(() => window.clearInterval(timer))
+}
+
 onMounted(() => {
   initLoginState()
   document.addEventListener('click', onAvatarClickOutside)
 
-  // AI 客服 support-widget 还未适配 app，whale app 环境下不加载
-  if (!isCnDomain && !detectWhaleApp()) {
-    const swSrc = 'https://assets.lbkrs.com/h5hub/support-widget/support-widget-1.0.7.iife.js'
-    const isProd = !endsWith(location.hostname, '.xyz') && !import.meta.env.DEV
-    window.SupportWidgetConfig = {
-      isLoggedIn: function () {
-        return isLogin.value
-      },
-      loginUrl: createLoginRedirectPath({ sw_open: '1' }),
-      proxy: isProd ? 'prod' : 'staging',
-    }
-    if (!document.querySelector(`script[src="${swSrc}"]`)) {
-      const script = document.createElement('script')
-      script.src = swSrc
-      script.async = true
-      document.head.appendChild(script)
-    }
+  // Helora 客服在 whale app 内嵌 webview 与 cn 站点不加载（前者宿主自带，后者尚未接入）
+  if (detectWhaleApp() || isCnDomain) {
+    return
   }
+
+  waitForHeloraAndBoot()
+
+  // 主题切换 → 通知 Helora 热更新（语言切换走整页刷新，下次 mount 直接以新 locale boot，无需 watch）
+  watch(isDark, (dark) => {
+    if (!heloraBooted) return
+    window.Helora?.setThemeMode?.(dark ? 'dark' : 'light')
+  })
 })
 onUnmounted(() => {
   document.removeEventListener('click', onAvatarClickOutside)
   if (avatarCloseTimer.value) clearTimeout(avatarCloseTimer.value)
+  heloraDisposers.splice(0).forEach((dispose) => {
+    try {
+      dispose()
+    } catch {
+      // ignore
+    }
+  })
+  heloraBooted = false
 })
 </script>
 
