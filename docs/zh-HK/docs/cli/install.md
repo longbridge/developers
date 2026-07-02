@@ -7,7 +7,7 @@ sidebar_icon: arrow-down-to-line
 
 # 安裝
 
-安裝 CLI 並完成 Longbridge 帳戶鑑權。
+安裝 CLI 並完成 [Longbridge 帳戶](https://longbridge.com/hk/download)鑑權。
 
 原始碼與發佈版本：[longbridge/longbridge-terminal](https://github.com/longbridge/longbridge-terminal){target="_blank"}
 

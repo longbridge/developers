@@ -96,7 +96,7 @@ const LOCALE = {
       items: [
         {
           q: 'Are OpenAPI quote subscriptions separate from the App?',
-          a: 'Yes. OpenAPI quote permissions are independent from App / PC / Web. Activate via Longbridge App → Me → Quote Store.',
+          a: 'Yes. OpenAPI quote permissions are independent from App / PC / Web. Activate via <a href="https://longbridge.com/hk/en/download">Longbridge App</a> → Me → Quote Store.',
         },
         {
           q: 'Do I need a subscription to test the API?',
@@ -116,7 +116,7 @@ const LOCALE = {
         },
         {
           q: 'What payment methods are accepted?',
-          a: 'All payments are processed through your Longbridge account. Settled in HKD; cross-currency settled at exchange-rate.',
+          a: 'All payments are processed through your <a href="https://longbridge.com/hk/en/download">Longbridge account</a>. Settled in HKD; cross-currency settled at exchange-rate.',
         },
       ],
     },
@@ -207,7 +207,7 @@ const LOCALE = {
       items: [
         {
           q: 'OpenAPI 行情订阅与 App 是否独立？',
-          a: '是的。OpenAPI 行情权限与 App / PC / Web 完全独立。通过长桥 App → 我的 → 行情商店开通。',
+          a: '是的。OpenAPI 行情权限与 App / PC / Web 完全独立。通过<a href="https://longbridge.com/hk/en/download">长桥 App</a> → 我的 → 行情商店开通。',
         },
         {
           q: '测试 API 需要订阅吗？',
@@ -222,7 +222,7 @@ const LOCALE = {
           q: 'REST 或 WebSocket 有使用限制吗？',
           a: '没有硬性使用上限。频率限制随账户等级调整。详情请参阅频率限制文档。',
         },
-        { q: '支持哪些付款方式？', a: '所有付款均通过长桥账户处理，以港元结算；跨币种按汇率换算。' },
+        { q: '支持哪些付款方式？', a: '所有付款均通过<a href="https://longbridge.com/hk/en/download">长桥账户</a>处理，以港元结算；跨币种按汇率换算。' },
       ],
     },
   },
@@ -312,7 +312,7 @@ const LOCALE = {
       items: [
         {
           q: 'OpenAPI 行情訂閱與 App 是否獨立？',
-          a: '是的。OpenAPI 行情權限與 App / PC / Web 完全獨立。透過長橋 App → 我的 → 行情商店開通。',
+          a: '是的。OpenAPI 行情權限與 App / PC / Web 完全獨立。透過<a href="https://longbridge.com/hk/en/download">長橋 App</a> → 我的 → 行情商店開通。',
         },
         {
           q: '測試 API 需要訂閱嗎？',
@@ -327,7 +327,7 @@ const LOCALE = {
           q: 'REST 或 WebSocket 有使用限制嗎？',
           a: '沒有硬性使用上限。頻率限制隨帳戶等級調整。詳情請參閱頻率限制文件。',
         },
-        { q: '支援哪些付款方式？', a: '所有付款均透過長橋帳戶處理，以港元結算；跨幣種按匯率換算。' },
+        { q: '支援哪些付款方式？', a: '所有付款均透過<a href="https://longbridge.com/hk/en/download">長橋帳戶</a>處理，以港元結算；跨幣種按匯率換算。' },
       ],
     },
   },

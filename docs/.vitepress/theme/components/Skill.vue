@@ -262,7 +262,7 @@ const LOCALE = {
         '日内资金流向时间序列',
         '市场情绪温度指数（0–100）',
         '基础静态参数（手数、股本、EPS）',
-        '期权报价与期权链',
+        '<a href="https://longbridge.com/markets">期权报价</a>与期权链',
         '权证报价及按标的筛选权证',
       ],
       fundamentals: [
@@ -497,7 +497,7 @@ const LOCALE = {
         '日內資金流向時間序列',
         '市場情緒溫度指數（0–100）',
         '基礎靜態參數（手數、股本、EPS）',
-        '期權報價與期權鏈',
+        '<a href="https://longbridge.com/markets">期權報價</a>與期權鏈',
         '權證報價及按標的篩選權證',
       ],
       fundamentals: [
@@ -995,7 +995,7 @@ const CAP_REFERENCE = [
       'Intraday capital flow & distribution',
       'Market sentiment temperature index (0–100)',
       'Static reference info (lot size, shares, EPS)',
-      'Option quotes & option chain',
+      '<a href="https://longbridge.com/markets">Option quotes</a> & option chain',
       'Warrant quotes & warrants by underlying',
     ],
   },

@@ -7,7 +7,7 @@ sidebar_icon: arrow-down-to-line
 
 # 安装
 
-安装 CLI 并完成 Longbridge 账户鉴权。
+安装 CLI 并完成 [Longbridge 账户](https://longbridge.com/hk/download)鉴权。
 
 源码与发布版本：[longbridge/longbridge-terminal](https://github.com/longbridge/longbridge-terminal){target="_blank"}
 

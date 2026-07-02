@@ -24,7 +24,7 @@ Longbridge MCP exposes 100+ tools across six capability areas. Your client disco
 | Capability                  | Coverage                                                                                           |
 | --------------------------- | -------------------------------------------------------------------------------------------------- |
 | **[Real-time market data](https://longbridge.com/markets)**   | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow                          |
-| **Fundamentals & research** | Company profiles, dividends, valuations, executive holdings, A/H premium, macroeconomic indicators |
+| **Fundamentals & research** | Company profiles, [dividends](https://longbridge.com/calendar/dividend), valuations, executive holdings, A/H premium, macroeconomic indicators |
 | **Derivatives**             | Option chains, warrant filters, issuers, warrant quotes                                            |
 | **Account & portfolio**     | Balances, positions, cash flow, watchlists and groups                                              |
 | **Trading**                 | Place / modify / cancel orders, estimate max purchase quantity                                     |
@@ -179,7 +179,7 @@ If your client has incomplete OAuth support or cannot launch a browser, use an [
 
 ## Recommended usage pattern
 
-1. **Start with read-only tools**: Begin with market data, account overview, and position queries to learn tool behavior at low risk
+1. **Start with read-only tools**: Begin with [market data](https://longbridge.com/markets), account overview, and position queries to learn tool behavior at low risk
 2. **Gradually enable trading**: Enable order placement only after verifying scope configuration and your own risk controls
 3. **Add guardrails in prompts**: For example, "keep each trade under X", "always confirm with me before placing an order"
 

@@ -70,7 +70,7 @@ const LOCALE = {
       eyebrow: 'Longbridge CLI',
       title: 'AI-native command-line tool, covering every OpenAPI.',
       feats: [
-        ['130+ commands', 'Market data, trading, fundamentals — all in your shell.'],
+        ['130+ commands', '<a href="https://longbridge.com/markets">Market data</a>, trading, fundamentals — all in your shell.'],
         ['--format json output', "Pipe into jq, awk, or any AI agent's tool channel."],
         ['Multi-period candlesticks', 'Daily, hourly, 15-min, 5-min, 1-min — all from one flag.'],
         ['Portfolio P&L view', 'Position breakdown with allocation drill-down.'],
@@ -152,7 +152,7 @@ const LOCALE = {
         },
         {
           h: 'Real-time Push',
-          body: 'WebSocket push for quotes, order depth, trades, and order status — <60 ms latency.',
+          body: 'WebSocket push for <a href="https://longbridge.com/markets">quotes</a>, order depth, trades, and order status — &lt;60 ms latency.',
         },
         {
           h: 'OAuth 2.0 + Async',
@@ -251,7 +251,7 @@ const LOCALE = {
       eyebrow: 'Longbridge CLI',
       title: 'AI 原生命令行工具，覆盖所有 OpenAPI',
       feats: [
-        ['130+ 条命令', '行情、交易、基本面——全在终端中触手可及。'],
+        ['130+ 条命令', '<a href="https://longbridge.com/markets">行情</a>、交易、基本面——全在终端中触手可及。'],
         ['--format json 输出', '可直接管道传输给 jq、awk 或任意 AI Agent 工具通道。'],
         ['多周期 K 线', '日线、小时线、15 分钟、5 分钟、1 分钟——一个参数搞定。'],
         ['投资组合盈亏视图', '持仓明细及配置占比下钻分析。'],
@@ -324,7 +324,7 @@ const LOCALE = {
           body: '无额外 API 费用。用真实市场数据进行模拟交易，无需证券账户。',
           strong: '零 API 费用',
         },
-        { h: '实时推送', body: 'WebSocket 推送报价、买卖盘深度、成交及订单状态，延迟 < 60 ms。' },
+        { h: '实时推送', body: 'WebSocket 推送<a href="https://longbridge.com/markets">报价</a>、买卖盘深度、成交及订单状态，延迟 &lt; 60 ms。' },
         { h: 'OAuth 2.0 + 异步', body: '自动令牌管理，支持现代 async/await 模式及内置限速控制。' },
       ],
       cta: 'SDK 文档',
@@ -415,7 +415,7 @@ const LOCALE = {
       eyebrow: 'Longbridge CLI',
       title: 'AI 原生命令列工具，覆蓋所有 OpenAPI',
       feats: [
-        ['130+ 條命令', '行情、交易、基本面——全在終端中觸手可及。'],
+        ['130+ 條命令', '<a href="https://longbridge.com/markets">行情</a>、交易、基本面——全在終端中觸手可及。'],
         ['--format json 輸出', '可直接管道傳輸給 jq、awk 或任意 AI Agent 工具通道。'],
         ['多週期 K 線', '日線、小時線、15 分鐘、5 分鐘、1 分鐘——一個參數搞定。'],
         ['投資組合盈虧視圖', '持倉明細及配置佔比下鑽分析。'],
@@ -487,7 +487,7 @@ const LOCALE = {
           body: '無額外 API 費用。用真實市場數據進行模擬交易，無需證券帳戶。',
           strong: '零 API 費用',
         },
-        { h: '即時推送', body: 'WebSocket 推送報價、買賣盤深度、成交及訂單狀態，延遲 < 60 ms。' },
+        { h: '即時推送', body: 'WebSocket 推送<a href="https://longbridge.com/markets">報價</a>、買賣盤深度、成交及訂單狀態，延遲 &lt; 60 ms。' },
         { h: 'OAuth 2.0 + 非同步', body: '自動令牌管理，支援現代 async/await 模式及內建限速控制。' },
       ],
       cta: 'SDK 文件',
@@ -1435,7 +1435,7 @@ const GETSTARTED = [
               </svg>
               <div>
                 <div style="font-weight: 600; color: var(--lb-fg-1); font-size: 14px">{{ h }}</div>
-                <div class="t-meta" style="font-size: 13px; margin-top: 2px">{{ d }}</div>
+                <div class="t-meta" style="font-size: 13px; margin-top: 2px" v-html="d"></div>
               </div>
             </li>
           </ul>
@@ -2114,7 +2114,7 @@ const GETSTARTED = [
               </div>
               <div style="flex: 1; min-width: 0">
                 <div class="sdk-feat-h">{{ content.sdk.feats[2].h }}</div>
-                <div class="sdk-feat-body">{{ content.sdk.feats[2].body }}</div>
+                <div class="sdk-feat-body" v-html="content.sdk.feats[2].body"></div>
               </div>
             </div>
             <!-- OAuth 2.0 -->

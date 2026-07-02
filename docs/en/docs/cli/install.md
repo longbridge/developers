@@ -7,7 +7,7 @@ sidebar_icon: arrow-down-to-line
 
 # Installation
 
-Install the CLI and authenticate with your Longbridge account.
+Install the CLI and authenticate with your [Longbridge account](https://longbridge.com/hk/download).
 
 Source code and release binaries: [longbridge/longbridge-terminal](https://github.com/longbridge/longbridge-terminal){target="_blank"}
 
