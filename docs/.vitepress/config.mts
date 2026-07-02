@@ -26,7 +26,7 @@ const oneTapProxy = process.env.PROXY === 'canary' ? 'canary' : 'production'
 
 // Helora 客服 SDK：canary / 本地 dev / 非 release 走 .dev 包；只有 build:release 走 release 包
 const isReleaseBuild = process.env.PROXY !== 'canary' && process.env.NODE_ENV === 'production'
-const heloraScriptSrc = 'https://assets.lbkrs.com/h5hub/helora-embed/helora-embed-1.0.0.iife.js'
+const heloraScriptSrc = 'https://assets.lbkrs.com/h5hub/helora-embed/helora-embed-1.0.1.iife.js'
 
 const insertScript = (html: string) => {
   const $ = cheerio.load(html)
