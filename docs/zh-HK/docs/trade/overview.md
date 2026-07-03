@@ -17,7 +17,7 @@ sidebar_position: 1
     </thead>
     <tbody>
     <tr>
-        <td rowspan="7">交易</td>
+        <td rowspan="8">交易</td>
         <td><a href="./order/submit">委托下單</a></td>
     </tr>
     <tr>
@@ -37,6 +37,9 @@ sidebar_position: 1
     </tr>
     <tr>
         <td><a href="./execution/history_executions">獲取曆史成交明細</a></td>
+    </tr>
+    <tr>
+        <td><a href="./execution/all_executions">獲取全部成交明細</a></td>
     </tr>
 <tr>
         <td rowspan="4">資產</td>
