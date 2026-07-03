@@ -270,3 +270,20 @@ commands:
 
   short-positions:
     level: basic
+
+  # ── K 线推送 ─────────────────────────────────────────────────
+  candlesticks:
+    level: basic
+    description:
+      en: |-
+        US stocks: US LV1 real-time quotes included free by default.
+        HK stocks: LV1 real-time quotes included by default.
+        Candlestick push requires the same permission as quote subscription.
+      zh-CN: |-
+        美股：默认免费赠送 US LV1 实时行情。
+        港股：默认赠送 LV1 实时行情。
+        K 线推送所需权限与订阅行情相同。
+      zh-HK: |-
+        美股：預設免費贈送 US LV1 實時行情。
+        港股：預設贈送 LV1 實時行情。
+        K 線推送所需權限與訂閱行情相同。
