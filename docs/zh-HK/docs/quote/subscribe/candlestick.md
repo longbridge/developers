@@ -9,7 +9,7 @@ sidebar_position: 9
 
 :::tip
 
-本頁介紹的是**推送** API（`subscribe_candlesticks`）。如需按需拉取歷史 K 線數據，請參見 [K 線 - 拉取](/quote/stocks/candlestick)。
+本頁介紹的是**推送** API（`subscribe_candlesticks`）。如需按需拉取歷史 K 線數據，請參見 [K 線 - 拉取](/quote/pull/candlestick)。
 
 :::
 
@@ -30,7 +30,7 @@ sidebar_position: 9
 | Name                | Type     | Description                                                                              |
 |---------------------|----------|------------------------------------------------------------------------------------------|
 | symbol              | string   | 標的代碼，例如：`AAPL.US`                                                                |
-| period              | int32    | K 線週期，詳見 [Period](../objects#period---candlestick-period)                          |
+| period              | int32    | K 線週期，詳見 [Period](../objects#period---k-線週期)                                    |
 | candlestick         | object   | K 線數據                                                                                 |
 | ∟ close             | string   | 收盤價                                                                                   |
 | ∟ open              | string   | 開盤價                                                                                   |

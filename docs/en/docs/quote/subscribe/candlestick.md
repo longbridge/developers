@@ -9,7 +9,7 @@ Real-time candlestick (K-line) data push for subscribed securities. The callback
 
 :::tip
 
-This page covers the **push** API (`subscribe_candlesticks`). To pull historical candlestick data on demand, see [Candlestick - Pull](/quote/stocks/candlestick).
+This page covers the **push** API (`subscribe_candlesticks`). To pull historical candlestick data on demand, see [Candlestick - Pull](/quote/pull/candlestick).
 
 :::
 
