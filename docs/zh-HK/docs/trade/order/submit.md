@@ -50,6 +50,24 @@ longbridge order sell TSLA.US 100 --price 260.00
 | limit_depth_level  | int32  | NO       | 指定買賣檔位，取值範圍為 -5 ～ 0 ～ 5，負數代表買盤檔位（例如 -1 表示買一），<br/>正數代表賣盤檔位（例如 1 表示賣一），當為 0 時 limit_offset 參數生效<br/>`TSLPAMT` / `TSLPPCT` 訂單有效 |
 | monitor_price      | string |  NO      | 監控價格，需要達到該價格才會開始監控，更新參考價<br/>`TSLPAMT` / `TSLPPCT` 訂單有效 |
 | trigger_count      | int32  |  NO      | 觸發次數，取值範圍 0 ~ 3，表示在 1 分鐘內觸發多次才會觸發訂單，<br/>`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 訂單有效 |
+| client_request_id  | string | NO       | 冪等性請求 ID，用於防止重複下單。服務器會快取該請求 ID 10 分鐘。在此期間內如果收到相同 ID 的請求，將返回原始響應而不建立重複訂單。必須是唯一標識符（如 UUID）。 |
+
+### 冪等性
+
+為了防止由於網路重試或客戶端故障而導致訂單重複，您可以使用 `client_request_id` 參數：
+
+- **用途**：防止相同請求重試時建立重複訂單
+- **快取時長**：10 分鐘（服務器端）
+- **格式**：每個請求需要一個唯一字符串（如 UUID 或自定義標識符）
+- **行為**：如果在 10 分鐘內收到相同的 `client_request_id`，服務器將返回原始請求的快取響應，而不建立新訂單
+
+#### 冪等性示例
+
+```
+首次請求：client_request_id="abc123-uuid-request" → 建立訂單，ID 為 12345
+重試請求（10 分鐘內，相同 ID）：client_request_id="abc123-uuid-request" → 返回現有訂單 ID 12345（無重複）
+新請求：client_request_id="xyz789-uuid-request" → 建立新訂單
+```
 
 ### Request Example
 

@@ -50,6 +50,24 @@ longbridge order sell TSLA.US 100 --price 260.00
 | limit_depth_level  | int32  | NO       | Specifies the bid/ask depth level. Value range is -5 ~ 0 ~ 5. <br/>Negative numbers indicate bid levels (e.g., -1 means best bid level 1),<br/>positive numbers indicate ask levels (e.g., 1 means best ask level 1).<br/>When set to 0, the `limit_offset` parameter takes effect.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders. |
 | monitor_price      | string | NO       | Monitoring price. <br/>Monitoring starts only after reaching this price, updating the reference price.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders.                                                                                                                                                                              |
 | trigger_count      | int32  | NO       | Number of triggers. Value range is 0 ~ 3.<br/>Specifies that within 1 minute, the order will only be placed after being triggered multiple times.<br/>Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders.                                                                                                                   |
+| client_request_id  | string | NO       | Idempotent request ID for preventing duplicate order submissions. The server caches this request ID for 10 minutes. If a request with the same ID is received within this period, it returns the same response without creating a duplicate order. Must be a unique identifier (e.g., UUID). |
+
+### Idempotency
+
+To ensure orders are not duplicated due to network retries or client failures, you can use the `client_request_id` parameter:
+
+- **Purpose**: Prevents duplicate order creation when the same request is retried
+- **Cache Duration**: 10 minutes (server-side)
+- **Format**: Any unique string per request (e.g., UUID, or a client-generated identifier)
+- **Behavior**: If the same `client_request_id` is received within 10 minutes, the server returns the cached response from the original request without creating a new order
+
+#### Idempotency Example
+
+```
+First request:  client_request_id="abc123-uuid-request" → Creates order with ID 12345
+Retry (same ID within 10 min): client_request_id="abc123-uuid-request" → Returns existing order ID 12345 (no duplicate)
+New request:    client_request_id="xyz789-uuid-request" → Creates new order with different ID
+```
 
 ### Request Example
 

@@ -46,6 +46,24 @@ longbridge order sell TSLA.US 100 --price 260.00
 | limit_depth_level  | int32  | NO       | 指定买卖档位，取值范围为 -5 ～ 0 ～ 5，负数代表买盘档位（如 -1 表示买一），<br/>正数代表卖盘档位（如 1 表示卖一），为 0 时 limit_offset 参数生效<br/>`TSLPAMT` / `TSLPPCT` 订单有效 |
 | monitor_price      | string |  NO      | 监控价格，需要达到该价格才会开始监控，更新参考价<br/>`TSLPAMT` / `TSLPPCT` 订单有效 |
 | trigger_count      | int32  |  NO      | 触发次数，取值范围 0 ~ 3, 表示在 1 分钟内触发多次才会触发订单<br/>`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 订单有效 |
+| client_request_id  | string | NO       | 幂等性请求 ID，用于防止重复下单。服务器会缓存该请求 ID 10 分钟。在此期间内如果收到相同 ID 的请求，将返回原始响应而不创建重复订单。必须是唯一标识符（如 UUID）。 |
+
+## 幂等性
+
+为了防止由于网络重试或客户端故障而导致订单重复，您可以使用 `client_request_id` 参数：
+
+- **用途**：防止相同请求重试时创建重复订单
+- **缓存时长**：10 分钟（服务器端）
+- **格式**：每个请求需要一个唯一字符串（如 UUID 或自定义标识符）
+- **行为**：如果在 10 分钟内收到相同的 `client_request_id`，服务器将返回原始请求的缓存响应，而不创建新订单
+
+#### 幂等性示例
+
+```
+首次请求：client_request_id="abc123-uuid-request" → 创建订单，ID 为 12345
+重试请求（10 分钟内，相同 ID）：client_request_id="abc123-uuid-request" → 返回现有订单 ID 12345（无重复）
+新请求：client_request_id="xyz789-uuid-request" → 创建新订单
+```
 
 ## Examples
 
