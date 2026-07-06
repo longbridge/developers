@@ -65,6 +65,16 @@ longbridge order sell TSLA.US 100 --price 260.00
 新请求：client_request_id="xyz789-uuid-request" → 创建新订单
 ```
 
+#### 不传 client_request_id 的情况
+
+如果不提供 `client_request_id`（或传空值），请求仍会正常成功并创建订单。但是**幂等拦截将被跳过**，这意味着：
+
+- 每个请求（即使内容完全相同）都会创建单独的订单
+- 网络重试或意外重复请求可能导致订单重复
+- 服务器不会对该请求进行缓存
+
+强烈建议在关键下单操作中始终提供唯一的 `client_request_id`，以防止意外的重复订单。
+
 ## Examples
 
 为了方便理解，我们下面以 Python 作为示例，介绍如何实现一些场景的下单操作。

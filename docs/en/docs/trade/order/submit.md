@@ -69,6 +69,16 @@ Retry (same ID within 10 min): client_request_id="abc123-uuid-request" → Retur
 New request:    client_request_id="xyz789-uuid-request" → Creates new order with different ID
 ```
 
+#### When Omitting client_request_id
+
+If you do not provide `client_request_id` (or pass an empty value), the request will still succeed and create an order normally. However, **idempotency protection will be skipped**, meaning:
+
+- Each request (even identical ones) will create a separate order
+- Network retries or accidental duplicate requests may result in duplicate orders
+- No server-side caching of the request will be performed
+
+It is strongly recommended to always provide a unique `client_request_id` for critical order submissions to prevent unintended duplicates.
+
 ### Request Example
 
 <Tabs groupId="request-example">

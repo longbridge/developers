@@ -69,6 +69,16 @@ longbridge order sell TSLA.US 100 --price 260.00
 新請求：client_request_id="xyz789-uuid-request" → 建立新訂單
 ```
 
+#### 不傳 client_request_id 的情況
+
+如果不提供 `client_request_id`（或傳空值），請求仍會正常成功並建立訂單。但是**冪等攔截將被跳過**，這意味著：
+
+- 每個請求（即使內容完全相同）都會建立單獨的訂單
+- 網路重試或意外重複請求可能導致訂單重複
+- 服務器不會對該請求進行快取
+
+強烈建議在關鍵下單操作中始終提供唯一的 `client_request_id`，以防止意外的重複訂單。
+
 ### Request Example
 
 <Tabs groupId="request-example">
