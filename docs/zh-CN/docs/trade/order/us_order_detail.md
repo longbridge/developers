@@ -16,6 +16,12 @@ headingLevel: 2
 
 获取美股指定委托的详情，包括成交历史，可选获取关联子委托。
 
+
+<CliCommand>
+# 查看美股委托详情
+longbridge order detail 701276261045858304
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_order_detail" />
 
 ## 参数

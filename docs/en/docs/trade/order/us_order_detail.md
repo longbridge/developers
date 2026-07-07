@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get detail for a specific US order — execution history, order status, and any attached child orders.
 
+
+<CliCommand>
+# View US order detail
+longbridge order detail 701276261045858304
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_order_detail" />
 
 ## Parameters
