@@ -131,9 +131,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   <TabItem value="go" label="Go">
 
 ```go
-resp, err := c.QueryUSOrders(ctx, &trade.GetUSHistoryOrders{Page: 1, Limit: 20})
-if err != nil { log.Fatal(err) }
-fmt.Printf("%+v\n", resp)
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	page := int32(1)
+	limit := int32(20)
+	resp, err := c.QueryUSOrders(context.Background(), &trade.GetUSHistoryOrders{Page: page, Limit: limit})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
 ```
 
   </TabItem>
