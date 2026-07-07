@@ -5,7 +5,7 @@ slug: /quote/pull/brokers
 sidebar_position: 6
 ---
 
-:::warning 美股數據中心賬戶不支援
+:::warning Longbridge US 賬戶
 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
 :::
 

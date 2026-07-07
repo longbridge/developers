@@ -103,7 +103,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 
 返回美股的关键财务指标：营收、净利润、EPS、利润率和增长率。
 
-:::warning 仅限美股账户
+:::warning Longbridge US 账户
 `financial-report key-metrics` 仅适用于美国数据中心账户。
 :::
 

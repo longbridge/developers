@@ -8,7 +8,7 @@ sidebar_position: 21
 
 List regulatory documents for a US ETF — prospectus, fact sheets, and other filings.
 
-:::warning US Data-Center Accounts Only
+:::warning Longbridge US Accounts
 This command is only available for US data-center accounts.
 :::
 

@@ -4,7 +4,7 @@ sidebar_label: 'dca'
 sidebar_position: 10
 ---
 
-:::warning 美股数据中心账户不支持
+:::warning Longbridge US 账户
 此命令需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户不支持此命令。AP 账户可操作任意标的，包括美股。
 :::
 

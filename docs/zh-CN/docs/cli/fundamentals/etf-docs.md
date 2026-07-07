@@ -8,7 +8,7 @@ sidebar_position: 21
 
 列出美股 ETF 的监管文件，包括招股书、事实说明书及申报文件。
 
-:::warning 仅限美股账户
+:::warning Longbridge US 账户
 此命令仅适用于美国数据中心账户。
 :::
 

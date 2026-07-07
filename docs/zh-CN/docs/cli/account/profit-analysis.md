@@ -96,7 +96,7 @@ longbridge profit-analysis realized --category option --currency USD
 
 按资产类别返回美股账户的已实现盈亏明细。
 
-:::warning 仅限美股账户
+:::warning Longbridge US 账户
 `profit-analysis realized` 仅适用于美国数据中心账户。
 :::
 

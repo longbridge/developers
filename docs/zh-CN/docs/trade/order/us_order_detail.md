@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning 仅限美股账户
+:::warning Longbridge US 账户
 此方法仅适用于美国数据中心账户。
 :::
 

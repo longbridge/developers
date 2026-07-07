@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning US Data-Center Accounts Only
+:::warning Longbridge US Accounts
 This method is only available for US data-center accounts.
 :::
 
