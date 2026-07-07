@@ -77,7 +77,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = TradeContext.new(config)
-  const resp = await ctx.usRealizedPl("USD", category="STOCK")
+  const resp = await ctx.usRealizedPl("USD", "STOCK")
   console.log(resp)
 }
 main().catch(console.error)
@@ -95,7 +95,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              TradeContext ctx = TradeContext.create(config)) {
-            var resp = ctx.getUsRealizedPl("USD", category="STOCK").get();
+            var resp = ctx.getUsRealizedPl("USD", "STOCK").get();
             System.out.println(resp);
         }
     }

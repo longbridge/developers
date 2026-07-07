@@ -78,7 +78,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.usFinancialStatementV3("AAPL.US", kind="IS", report="annual")
+  const resp = await ctx.usFinancialStatementV3("AAPL.US", "IS", "annual")
   console.log(resp)
 }
 main().catch(console.error)
@@ -96,7 +96,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsFinancialStatementV3("AAPL.US", kind="IS", report="annual").get();
+            var resp = ctx.getUsFinancialStatementV3("AAPL.US", "IS", "annual").get();
             System.out.println(resp);
         }
     }

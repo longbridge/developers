@@ -76,7 +76,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.usAnalystConsensus("AAPL.US", report="annual")
+  const resp = await ctx.usAnalystConsensus("AAPL.US", "annual")
   console.log(resp)
 }
 main().catch(console.error)
@@ -94,7 +94,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsAnalystConsensus("AAPL.US", report="annual").get();
+            var resp = ctx.getUsAnalystConsensus("AAPL.US", "annual").get();
             System.out.println(resp);
         }
     }
