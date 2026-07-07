@@ -77,3 +77,7 @@ longbridge valuation TSLA.US --history --indicator pb --format json
 ```
 
 The `desc` field provides a human-readable summary of how the current valuation compares to historical range and industry peers. The `list` array contains the time series data points.
+
+:::info US Accounts
+For `.US` symbols on US data-center accounts, `valuation` routes to the US valuation overview API automatically.
+:::

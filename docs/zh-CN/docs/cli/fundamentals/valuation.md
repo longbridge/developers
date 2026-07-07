@@ -77,3 +77,7 @@ longbridge valuation TSLA.US --history --indicator pb --format json
 ```
 
 `desc` 字段提供当前估值与历史区间及行业同类对比的可读摘要；`list` 数组包含时间序列数据点。
+
+:::info 美股账户
+美国数据中心账户的 `.US` 标的，`valuation` 会自动路由至美股估值概览 API。
+:::

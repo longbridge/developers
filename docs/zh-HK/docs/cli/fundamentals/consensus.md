@@ -56,3 +56,7 @@ longbridge consensus TSLA.US --format json
 ```
 
 每條 `details` 記錄包含指標名稱、一致性預測值，以及實際結果是否已發布。完整響應中的 `current_index` 標示當前所在的報告期。
+
+:::info 美股賬戶
+美國數據中心賬戶的 `.US` 標的，`consensus` 會自動路由至美股分析師一致預期 API。
+:::

@@ -41,3 +41,7 @@ longbridge company 700.HK
 ```bash
 longbridge company TSLA.US --format json
 ```
+
+:::info 美股賬戶
+美國數據中心賬戶的 `.US` 標的，`company` 會自動路由至美股公司概覽 API。
+:::

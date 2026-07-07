@@ -42,3 +42,7 @@ Shows key company information including founding date, number of employees, IPO 
 ```bash
 longbridge company TSLA.US --format json
 ```
+
+:::info US Accounts
+For `.US` symbols on US data-center accounts, `company` routes to the US company overview API automatically.
+:::

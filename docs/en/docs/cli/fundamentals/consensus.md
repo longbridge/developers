@@ -56,3 +56,7 @@ longbridge consensus TSLA.US --format json
 ```
 
 Each `details` entry includes the metric key, the consensus estimate value, and whether the actual result has already been released. `current_index` in the full response indicates which period in the list is the current one.
+
+:::info US Accounts
+For `.US` symbols on US data-center accounts, `consensus` routes to the US analyst consensus API automatically.
+:::

@@ -66,3 +66,7 @@ longbridge dividend AAPL.US --format json
 ```
 
 返回包含 `ex_date`、`payment_date`、`record_date` 及 `desc` 字段（如 `"Dividend: USD 0.26/share"`）的結構化 JSON，適合傳入腳本或跟蹤工具處理。
+
+:::info 美股賬戶
+美國數據中心賬戶：`.US` ETF 標的路由至美股 ETF 分紅 API；`.US` 股票標的路由至美股公司分紅 API。
+:::

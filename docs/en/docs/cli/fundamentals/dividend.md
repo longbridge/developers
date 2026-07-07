@@ -66,3 +66,7 @@ longbridge dividend AAPL.US --format json
 ```
 
 Returns structured JSON with `ex_date`, `payment_date`, `record_date`, and a `desc` field containing the dividend amount description (e.g., `"Dividend: USD 0.26/share"`) — suitable for piping into scripts or tracking tools.
+
+:::info US Accounts
+For US data-center accounts: `.US` ETF symbols route to the US ETF dividend API; `.US` stock symbols route to the US company dividends API.
+:::
