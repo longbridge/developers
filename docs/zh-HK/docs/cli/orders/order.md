@@ -89,6 +89,25 @@ longbridge order detail 701276261045858304
 
 返回該委託的成交明細、時間戳和成交資訊。
 
+### 查看關聯子委託（美股賬戶）
+
+```bash
+longbridge order detail 701276261045858304 --attached
+```
+
+同時獲取關聯的子委託（如括號單、OCO 委託）。僅限美股賬戶。
+
+### 按狀態和方向篩選委託（美股賬戶）
+
+```bash
+longbridge order --status pending
+longbridge order --status history --action buy
+```
+
+:::info 美股賬戶
+美國數據中心賬戶會自動路由至美股 API。`--status` 和 `--action` 僅對美股賬戶生效。
+:::
+
 ### 撤銷待成交委託
 
 ```bash
@@ -106,6 +125,14 @@ longbridge order replace 701276261045858304 --qty 5 --price 350.00
 ```
 
 `--qty` 為必填項。省略 `--price` 則保持當前限價不變。在腳本中使用 `-y` 跳過確認提示。
+
+## 選項
+
+| 選項 | 描述 | 默認值 |
+| ---- | ---- | ------ |
+| `--status` | 委託狀態篩選：`pending` \| `history` \| `all`（美股賬戶） | all |
+| `--action` | 方向篩選：`buy` \| `sell`（美股賬戶） | — |
+| `--attached` | 在 `order detail` 中顯示關聯子委託（美股賬戶） | false |
 
 ## 權限要求
 

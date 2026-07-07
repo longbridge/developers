@@ -89,6 +89,28 @@ longbridge order detail 701276261045858304
 
 Returns execution details, timestamps, and fill information for the order.
 
+### View attached child order (US accounts)
+
+```bash
+longbridge order detail 701276261045858304 --attached
+```
+
+Fetches the order detail along with its attached child order (e.g. bracket or OCO orders). US accounts only.
+
+### Filter US orders by status and side
+
+```bash
+# Pending orders only
+longbridge order --status pending
+
+# Filled buy orders
+longbridge order --status history --action buy
+```
+
+:::info US Accounts
+For US data-center accounts, `order` routes to the US API automatically. Use `--status` and `--action` to filter US order history. These flags are ignored for non-US accounts.
+:::
+
 ### Cancel a pending order
 
 ```bash
@@ -106,6 +128,14 @@ longbridge order replace 701276261045858304 --qty 5 --price 350.00
 ```
 
 `--qty` is required. Omit `--price` to keep the current limit price. Use `-y` to skip the confirmation prompt in scripts.
+
+## Options
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| `--status` | Filter orders: `pending` \| `history` \| `all` (US accounts) | all |
+| `--action` | Filter by side: `buy` \| `sell` (US accounts) | — |
+| `--attached` | Show attached child order in `order detail` (US accounts) | false |
 
 ## Requirements
 

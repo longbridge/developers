@@ -89,6 +89,28 @@ longbridge order detail 701276261045858304
 
 返回该委托的成交明细、时间戳和成交信息。
 
+### 查看关联子委托（美股账户）
+
+```bash
+longbridge order detail 701276261045858304 --attached
+```
+
+同时获取关联的子委托（如括号单、OCO 委托）。仅限美股账户。
+
+### 按状态和方向筛选委托（美股账户）
+
+```bash
+# 仅查看待成交委托
+longbridge order --status pending
+
+# 查看历史买入委托
+longbridge order --status history --action buy
+```
+
+:::info 美股账户
+美国数据中心账户会自动路由至美股 API。`--status` 和 `--action` 仅对美股账户生效。
+:::
+
 ### 撤销待成交委托
 
 ```bash
@@ -106,6 +128,14 @@ longbridge order replace 701276261045858304 --qty 5 --price 350.00
 ```
 
 `--qty` 为必填项。省略 `--price` 则保持当前限价不变。在脚本中使用 `-y` 跳过确认提示。
+
+## 选项
+
+| 选项 | 描述 | 默认值 |
+| ---- | ---- | ------ |
+| `--status` | 委托状态筛选：`pending` \| `history` \| `all`（美股账户） | all |
+| `--action` | 方向筛选：`buy` \| `sell`（美股账户） | — |
+| `--attached` | 在 `order detail` 中显示关联子委托（美股账户） | false |
 
 ## 权限要求
 
