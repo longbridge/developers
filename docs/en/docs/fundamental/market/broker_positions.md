@@ -10,8 +10,8 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning Not Available for US Accounts
-This method is only available for AP data-center accounts (HK, Singapore). US data-center accounts will receive a region restriction error.
+:::warning Not Available for US Data-Center Accounts
+This method requires an AP data-center account (HK / Singapore). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
 :::
 
 View broker holding positions for HK-listed stocks, including top buyers/sellers and full detail.

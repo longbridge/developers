@@ -4,8 +4,8 @@ sidebar_label: 'broker-holding'
 sidebar_position: 15
 ---
 
-:::warning 不支援美股賬戶
-此命令需要 AP 數據中心賬戶（香港或新加坡）。美股數據中心賬戶不支援此命令。
+:::warning 美股數據中心賬戶不支援
+此命令需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶不支援此命令。AP 賬戶可操作任意標的，包括美股。
 :::
 
 # longbridge broker-holding
