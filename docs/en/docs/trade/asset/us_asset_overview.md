@@ -48,3 +48,15 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `USAssetOverview` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| account_type | string | Account type identifier |
+| asset_timestamp | datetime | Snapshot time of the asset data |
+| cash_buy_power | string | Available buying power (cash) |
+| cash_list | object[] | Cash balances by currency |
+| crypto_list | object[] | Crypto holdings with quantity and value |

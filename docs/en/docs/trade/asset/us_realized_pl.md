@@ -52,3 +52,19 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `USRealizedPL` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| realized_pl_list | USRealizedPLEntry[] | P&L breakdown by asset category |
+
+Each `USRealizedPLEntry` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| category | int | Asset category (1=stock, 2=option, 3=crypto) |
+| currency | string | Currency code, e.g. `USD` |
+| metrics | object[] | P&L metrics for different time periods |

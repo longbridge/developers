@@ -56,3 +56,14 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `QueryUSOrdersResponse` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| orders | USOrder[] | List of orders matching the filter |
+| total_count | int | Total number of matching orders |
+
+Each `USOrder` contains: `order_id`, symbol, side, status, quantity, price, executed quantity/price, and creation timestamp.

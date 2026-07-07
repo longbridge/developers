@@ -50,3 +50,13 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `USOrderDetailResponse` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| order | object | Full order object with status and fill details |
+| order_histories | object[] | Historical status changes for the order |
+| current_attached_order | object | Attached child order (e.g. bracket/OCO), if any |
