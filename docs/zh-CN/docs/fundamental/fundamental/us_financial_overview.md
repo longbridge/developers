@@ -155,4 +155,4 @@ func main() {
 
 ## 响应
 
-返回一个结构灵活的 JSON 对象 其结构因公司和报告周期而异。 对象包含财务摘要数据 including income, balance sheet, and cash flow indicators. 可通过 CLI 使用 `--format json` 或打印原始响应来查看具体标的的数据结构。
+返回结构灵活的 JSON 对象，内容因公司和报告周期而异，包含损益、资产负债和现金流摘要数据。可通过 CLI 使用 `--format json` 或打印原始响应查看具体标的的数据结构。

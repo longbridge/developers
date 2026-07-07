@@ -155,4 +155,4 @@ func main() {
 
 ## 響應
 
-返回一個結構靈活的 JSON 對象 其結構因公司和報告週期而異。 對象包含財務摘要數據 including income, balance sheet, and cash flow indicators. 可通過 CLI 使用 `--format json` 或打印原始響應來查看具體標的的數據結構。
+返回結構靈活的 JSON 對象，內容因公司和報告週期而異，包含損益、資產負債和現金流摘要數據。可通過 CLI 使用 `--format json` 或打印原始響應查看具體標的的數據結構。

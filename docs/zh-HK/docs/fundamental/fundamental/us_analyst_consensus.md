@@ -155,4 +155,4 @@ func main() {
 
 ## 響應
 
-返回一個結構靈活的 JSON 對象 包含分析師一致預期數據 — revenue and EPS forecasts, target price distribution, and buy/hold/sell rating breakdown. 具體字段因數據可用性而異。 可通過 CLI 使用 `--format json` 或打印原始響應查看數據結構。
+返回結構靈活的 JSON 對象，包含分析師一致預期數據（營收和 EPS 預測、目標價分佈、買入/持有/賣出評級分佈）。具體字段因數據可用性而異。可通過 CLI 使用 `--format json` 或打印原始響應查看數據結構。

@@ -155,4 +155,4 @@ func main() {
 
 ## 響應
 
-返回一個結構靈活的 JSON 對象 包含關鍵財務指標 (revenue, net income, EPS, margins, growth rates) for the requested period. 具體字段因公司而異。 可通過 CLI 使用 `--format json` 或打印原始響應查看數據結構。
+返回結構靈活的 JSON 對象，包含關鍵財務指標（營收、淨利潤、EPS、利潤率和增長率）。具體字段因公司而異。可通過 CLI 使用 `--format json` 或打印原始響應查看數據結構。

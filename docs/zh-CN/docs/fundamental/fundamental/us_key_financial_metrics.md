@@ -155,4 +155,4 @@ func main() {
 
 ## 响应
 
-返回一个结构灵活的 JSON 对象 包含关键财务指标 (revenue, net income, EPS, margins, growth rates) for the requested period. 具体字段因公司而异。 可通过 CLI 使用 `--format json` 或打印原始响应查看数据结构。
+返回结构灵活的 JSON 对象，包含关键财务指标（营收、净利润、EPS、利润率和增长率）。具体字段因公司而异。可通过 CLI 使用 `--format json` 或打印原始响应查看数据结构。
