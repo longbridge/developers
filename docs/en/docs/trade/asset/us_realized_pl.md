@@ -16,6 +16,13 @@ This method is only available for US data-center accounts.
 
 Get realized profit and loss for a US account, broken down by asset category.
 
+<CliCommand>
+# US realized P&L
+longbridge profit-analysis realized
+# Filter by stock
+longbridge profit-analysis realized --category stock
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_realized_pl" />
 
 ## Parameters

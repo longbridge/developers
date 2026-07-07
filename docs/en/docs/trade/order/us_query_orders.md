@@ -16,6 +16,13 @@ This method is only available for US data-center accounts.
 
 Query historical and pending orders for US accounts with pagination and filtering.
 
+<CliCommand>
+# List US orders
+longbridge order
+# Filter pending orders
+longbridge order --status pending
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_query_orders" />
 
 ## Parameters

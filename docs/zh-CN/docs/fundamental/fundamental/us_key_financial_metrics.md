@@ -16,6 +16,12 @@ headingLevel: 2
 
 获取美股关键财务指标——营收、净利润、EPS、利润率和增长率。
 
+<CliCommand>
+# 关键财务指标（美股账户）
+longbridge financial-report key-metrics AAPL.US
+longbridge financial-report key-metrics AAPL.US --report quarterly
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_key_financial_metrics" />
 
 ## 参数

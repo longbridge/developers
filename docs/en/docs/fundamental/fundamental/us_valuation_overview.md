@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get valuation overview for a US stock — current valuation indicators and historical range.
 
+<CliCommand>
+# US valuation overview
+longbridge valuation AAPL.US
+longbridge valuation NVDA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_valuation_overview" />
 
 ## Parameters

@@ -16,6 +16,11 @@ This method is only available for US data-center accounts.
 
 Get an overview of US account assets — buying power, cash, stocks, options, and crypto.
 
+<CliCommand>
+# US account asset overview
+longbridge positions
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_asset_overview" />
 
 ## Parameters

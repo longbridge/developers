@@ -16,6 +16,12 @@ headingLevel: 2
 
 按報告週期獲取美股財務概覽——損益、資產負債和現金流摘要。
 
+<CliCommand>
+# 美股財務概覽
+longbridge financial-report AAPL.US
+longbridge financial-report TSLA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_overview" />
 
 ## 參數

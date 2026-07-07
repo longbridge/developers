@@ -16,6 +16,13 @@ headingLevel: 2
 
 查詢美股賬戶的歷史委託和待成交委託，支持分頁和篩選。
 
+<CliCommand>
+# 查詢美股委託
+longbridge order
+# 篩選待成交委託
+longbridge order --status pending
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_query_orders" />
 
 ## 參數

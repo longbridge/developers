@@ -16,6 +16,12 @@ headingLevel: 2
 
 获取美股分析师一致预期——营收、EPS 预测及买入/持有/卖出评级。
 
+<CliCommand>
+# 美股分析师一致预期
+longbridge consensus AAPL.US
+longbridge consensus NVDA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_analyst_consensus" />
 
 ## 参数

@@ -16,6 +16,12 @@ headingLevel: 2
 
 獲取美股分析師一致預期——營收、EPS 預測及買入/持有/賣出評級。
 
+<CliCommand>
+# 美股分析師一致預期
+longbridge consensus AAPL.US
+longbridge consensus NVDA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_analyst_consensus" />
 
 ## 參數

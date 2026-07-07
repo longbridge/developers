@@ -16,6 +16,12 @@ headingLevel: 2
 
 获取美股公司概览信息——简介、市值、排名标签和详情链接。
 
+<CliCommand>
+# 美股公司概览
+longbridge company AAPL.US
+longbridge company TSLA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_company_overview" />
 
 ## 参数

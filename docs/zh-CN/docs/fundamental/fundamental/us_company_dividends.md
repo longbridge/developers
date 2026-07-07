@@ -16,6 +16,12 @@ headingLevel: 2
 
 获取美股股票分红历史——TTM 股息率、派息次数及逐笔分红记录。
 
+<CliCommand>
+# 公司分红（美股账户）
+longbridge dividend AAPL.US
+longbridge dividend MSFT.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_company_dividends" />
 
 ## 参数

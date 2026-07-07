@@ -16,6 +16,13 @@ headingLevel: 2
 
 獲取美股指定財務報表（損益表、資產負債表或現金流量表）。
 
+<CliCommand>
+# 損益表
+longbridge financial-report AAPL.US --kind IS
+# 資產負債表
+longbridge financial-report AAPL.US --kind BS
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement_v3" />
 
 ## 參數

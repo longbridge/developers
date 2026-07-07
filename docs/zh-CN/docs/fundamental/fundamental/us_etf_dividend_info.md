@@ -16,6 +16,12 @@ headingLevel: 2
 
 获取美股 ETF 分红信息——TTM 股息率、派息频率及财年明细。
 
+<CliCommand>
+# ETF 分红信息（美股账户）
+longbridge dividend IVV.US
+longbridge dividend SPY.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_etf_dividend_info" />
 
 ## 参数

@@ -16,6 +16,11 @@ This method is only available for US data-center accounts.
 
 Get overview data for a US crypto trading pair — all-time highs/lows, asset info, and currency details.
 
+<CliCommand>
+# US crypto overview
+longbridge static DOGEUSD.BKKT
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="us_crypto_overview" />
 
 ## Parameters

@@ -16,6 +16,12 @@ headingLevel: 2
 
 列出美股 ETF 的監管文件——招股書、事實說明書和年報。
 
+<CliCommand>
+# 美股 ETF 監管文件
+longbridge etf-docs IVV.US
+longbridge etf-docs SPY.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_etf_files" />
 
 ## 參數

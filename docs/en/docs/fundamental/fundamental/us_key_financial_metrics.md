@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get key financial metrics for a US stock — revenue, net income, EPS, margins, and growth rates.
 
+<CliCommand>
+# Key financial metrics (US accounts)
+longbridge financial-report key-metrics AAPL.US
+longbridge financial-report key-metrics AAPL.US --report quarterly
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_key_financial_metrics" />
 
 ## Parameters

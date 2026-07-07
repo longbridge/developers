@@ -16,6 +16,12 @@ headingLevel: 2
 
 獲取美股估值概覽——當前估值指標及歷史區間。
 
+<CliCommand>
+# 美股估值概覽
+longbridge valuation AAPL.US
+longbridge valuation NVDA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_valuation_overview" />
 
 ## 參數

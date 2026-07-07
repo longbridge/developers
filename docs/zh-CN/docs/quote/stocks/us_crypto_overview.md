@@ -16,6 +16,11 @@ headingLevel: 2
 
 获取美股加密货币交易对的概览信息——历史最高/最低价、资产详情和货币信息。
 
+<CliCommand>
+# 美股加密货币概览
+longbridge static DOGEUSD.BKKT
+</CliCommand>
+
 <SDKLinks module="quote" klass="QuoteContext" method="us_crypto_overview" />
 
 ## 参数

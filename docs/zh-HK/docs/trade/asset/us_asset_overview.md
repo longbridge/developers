@@ -16,6 +16,11 @@ headingLevel: 2
 
 獲取美股賬戶資產概覽——買入力、現金、股票、期權和加密貨幣。
 
+<CliCommand>
+# 美股賬戶資產概覽
+longbridge positions
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_asset_overview" />
 
 ## 參數

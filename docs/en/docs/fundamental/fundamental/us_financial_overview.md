@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get financial overview for a US stock by reporting period — income, balance sheet, and cash flow summary.
 
+<CliCommand>
+# US financial overview
+longbridge financial-report AAPL.US
+longbridge financial-report TSLA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_overview" />
 
 ## Parameters

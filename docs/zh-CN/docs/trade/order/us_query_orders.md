@@ -16,6 +16,13 @@ headingLevel: 2
 
 查询美股账户的历史委托和待成交委托，支持分页和筛选。
 
+<CliCommand>
+# 查询美股委托
+longbridge order
+# 筛选待成交委托
+longbridge order --status pending
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_query_orders" />
 
 ## 参数

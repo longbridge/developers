@@ -16,6 +16,13 @@ This method is only available for US data-center accounts.
 
 Get a specific financial statement (income statement, balance sheet, or cash flow) for a US stock.
 
+<CliCommand>
+# Income statement
+longbridge financial-report AAPL.US --kind IS
+# Balance sheet
+longbridge financial-report AAPL.US --kind BS
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement_v3" />
 
 ## Parameters

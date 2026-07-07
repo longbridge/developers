@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get dividend history for a US stock — TTM yield, payout count, and individual dividend records.
 
+<CliCommand>
+# Company dividends (US accounts)
+longbridge dividend AAPL.US
+longbridge dividend MSFT.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_company_dividends" />
 
 ## Parameters

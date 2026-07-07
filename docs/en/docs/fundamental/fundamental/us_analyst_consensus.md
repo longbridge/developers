@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get analyst consensus estimates for a US stock — revenue, EPS forecasts, and buy/hold/sell ratings.
 
+<CliCommand>
+# US analyst consensus
+longbridge consensus AAPL.US
+longbridge consensus NVDA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_analyst_consensus" />
 
 ## Parameters

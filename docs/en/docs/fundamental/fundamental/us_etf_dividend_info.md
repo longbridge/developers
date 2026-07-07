@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get dividend information for a US ETF — TTM dividend yield, payout frequency, and fiscal year breakdown.
 
+<CliCommand>
+# ETF dividend info (US accounts)
+longbridge dividend IVV.US
+longbridge dividend SPY.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_etf_dividend_info" />
 
 ## Parameters

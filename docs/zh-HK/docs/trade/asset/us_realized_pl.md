@@ -16,6 +16,13 @@ headingLevel: 2
 
 獲取美股賬戶已實現盈虧，按資產類別（股票/期權/加密貨幣）分組。
 
+<CliCommand>
+# 美股已實現盈虧
+longbridge profit-analysis realized
+# 按股票類別篩選
+longbridge profit-analysis realized --category stock
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_realized_pl" />
 
 ## 參數

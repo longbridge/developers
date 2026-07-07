@@ -16,6 +16,13 @@ headingLevel: 2
 
 获取美股账户已实现盈亏，按资产类别（股票/期权/加密货币）分组。
 
+<CliCommand>
+# 美股已实现盈亏
+longbridge profit-analysis realized
+# 按股票类别筛选
+longbridge profit-analysis realized --category stock
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_realized_pl" />
 
 ## 参数

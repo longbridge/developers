@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 List regulatory documents for a US ETF — prospectus, fact sheets, and annual reports.
 
+<CliCommand>
+# US ETF regulatory documents
+longbridge etf-docs IVV.US
+longbridge etf-docs SPY.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_etf_files" />
 
 ## Parameters

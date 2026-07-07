@@ -16,6 +16,12 @@ This method is only available for US data-center accounts.
 
 Get company overview for a US stock — introduction, market cap, ranking tags, and detail URL.
 
+<CliCommand>
+# US company overview
+longbridge company AAPL.US
+longbridge company TSLA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_company_overview" />
 
 ## Parameters

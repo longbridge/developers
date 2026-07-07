@@ -16,6 +16,12 @@ headingLevel: 2
 
 獲取美股關鍵財務指標——營收、淨利潤、EPS、利潤率和增長率。
 
+<CliCommand>
+# 關鍵財務指標（美股賬戶）
+longbridge financial-report key-metrics AAPL.US
+longbridge financial-report key-metrics AAPL.US --report quarterly
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_key_financial_metrics" />
 
 ## 參數

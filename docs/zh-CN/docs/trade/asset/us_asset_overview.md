@@ -16,6 +16,11 @@ headingLevel: 2
 
 获取美股账户资产概览——买入力、现金、股票、期权和加密货币。
 
+<CliCommand>
+# 美股账户资产概览
+longbridge positions
+</CliCommand>
+
 <SDKLinks module="trade" klass="TradeContext" method="us_asset_overview" />
 
 ## 参数

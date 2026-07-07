@@ -16,6 +16,12 @@ headingLevel: 2
 
 按报告周期获取美股财务概览——损益、资产负债和现金流摘要。
 
+<CliCommand>
+# 美股财务概览
+longbridge financial-report AAPL.US
+longbridge financial-report TSLA.US
+</CliCommand>
+
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_overview" />
 
 ## 参数
