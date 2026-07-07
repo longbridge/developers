@@ -24,7 +24,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_key_financial_metrics" />
 
-## 參數
+## Parameters
 
 > **SDK 方法參數。**
 
@@ -33,7 +33,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 | symbol | string | 是 | 股票代碼，如 `AAPL.US` |
 | report | string | 否 | 報告週期：`annual` 或 `quarterly`（默認：annual）|
 
-## 請求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -164,11 +164,11 @@ func main() {
 </Tabs>
 
 
-## 響應
+## Response
 
 返回結構靈活的 JSON 對象，包含關鍵財務指標（營收、淨利潤、EPS、利潤率和增長率），具體字段因公司而異。
 
-### 響應狀態
+### Response Status
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |

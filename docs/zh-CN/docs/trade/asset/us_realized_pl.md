@@ -25,7 +25,7 @@ longbridge profit-analysis realized --category stock
 
 <SDKLinks module="trade" klass="TradeContext" method="us_realized_pl" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -34,7 +34,7 @@ longbridge profit-analysis realized --category stock
 | currency | string | 是 | 结算货币，例如 `USD` |
 | category | string | 否 | 资产类别：`ALL` \| `STOCK` \| `OPTION` \| `CRYPTO`（默认：`ALL`） |
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -137,9 +137,9 @@ fmt.Printf("%+v\n", resp)
 
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -162,14 +162,14 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [USRealizedPL](#USRealizedPL) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### USRealizedPL
 

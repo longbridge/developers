@@ -24,7 +24,7 @@ longbridge dividend SPY.US
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_etf_dividend_info" />
 
-## 參數
+## Parameters
 
 > **SDK 方法參數。**
 
@@ -32,7 +32,7 @@ longbridge dividend SPY.US
 | ---- | ---- | ---- | ---- |
 | symbol | string | 是 | ETF 代碼，如 `IVV.US` |
 
-## 請求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -164,9 +164,9 @@ func main() {
 
 
 
-## 響應
+## Response
 
-### 響應示例
+### Response Example
 
 ```json
 {
@@ -186,14 +186,14 @@ func main() {
 }
 ```
 
-### 響應狀態
+### Response Status
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [UsETFDividendInfo](#UsETFDividendInfo) |
 | 400    | 請求錯誤 | None   |
 
-## 數據結構
+## Schemas
 
 ### UsETFDividendInfo
 

@@ -25,7 +25,7 @@ longbridge order --status pending
 
 <SDKLinks module="trade" klass="TradeContext" method="us_query_orders" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -39,7 +39,7 @@ longbridge order --status pending
 | page | int32 | 否 | 页码，从 1 开始（默认：1） |
 | limit | int32 | 否 | 每页数量（默认：20） |
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -141,9 +141,9 @@ fmt.Printf("%+v\n", resp)
 
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -164,14 +164,14 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [QueryUSOrdersResponse](#QueryUSOrdersResponse) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### QueryUSOrdersResponse
 

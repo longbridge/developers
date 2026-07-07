@@ -23,11 +23,11 @@ longbridge positions
 
 <SDKLinks module="trade" klass="TradeContext" method="us_asset_overview" />
 
-## 参数
+## Parameters
 
 无需参数。
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -129,9 +129,9 @@ fmt.Printf("%+v\n", resp)
 
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -148,14 +148,14 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [USAssetOverview](#USAssetOverview) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### USAssetOverview
 

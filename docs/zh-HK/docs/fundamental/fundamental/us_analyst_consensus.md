@@ -24,7 +24,7 @@ longbridge consensus NVDA.US
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_analyst_consensus" />
 
-## 參數
+## Parameters
 
 > **SDK 方法參數。**
 
@@ -33,7 +33,7 @@ longbridge consensus NVDA.US
 | symbol | string | 是 | 股票代碼，如 `AAPL.US` |
 | report | string | 否 | 報告週期：`annual` 或 `quarterly`（默認：annual）|
 
-## 請求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -164,11 +164,11 @@ func main() {
 </Tabs>
 
 
-## 響應
+## Response
 
 返回結構靈活的 JSON 對象，包含分析師一致預期數據（營收/EPS 預測、目標價分佈、買入/持有/賣出分佈），具體字段因數據可用性而異。
 
-### 響應狀態
+### Response Status
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |

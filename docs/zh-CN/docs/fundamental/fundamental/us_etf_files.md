@@ -24,7 +24,7 @@ longbridge etf-docs SPY.US
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_etf_files" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -33,7 +33,7 @@ longbridge etf-docs SPY.US
 | symbol | string | 是 | ETF 代码，如 `IVV.US` |
 | size | int | 否 | 最大返回文件数 |
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -164,9 +164,9 @@ func main() {
 </Tabs>
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -177,14 +177,14 @@ func main() {
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [UsETFFileList](#UsETFFileList) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### UsETFFileList
 

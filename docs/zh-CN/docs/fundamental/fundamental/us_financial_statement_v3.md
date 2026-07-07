@@ -25,7 +25,7 @@ longbridge financial-report AAPL.US --kind BS
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement_v3" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -35,7 +35,7 @@ longbridge financial-report AAPL.US --kind BS
 | kind | string | 是 | 报表类型：`IS`（损益表）、`BS`（资产负债表）、`CF`（现金流量表）|
 | report | string | 否 | 报告周期 |
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -167,9 +167,9 @@ func main() {
 
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -189,14 +189,14 @@ func main() {
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [UsFinancialStatement](#UsFinancialStatement) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### UsFinancialStatement
 

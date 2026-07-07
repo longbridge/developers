@@ -24,7 +24,7 @@ longbridge order detail 701276261045858304
 
 <SDKLinks module="trade" klass="TradeContext" method="us_order_detail" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -32,7 +32,7 @@ longbridge order detail 701276261045858304
 | ---- | ---- | ---- | ---- |
 | order_id | string | 是 | 委托 ID |
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -134,9 +134,9 @@ fmt.Printf("%+v\n", resp)
 
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -159,14 +159,14 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [USOrderDetailResponse](#USOrderDetailResponse) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### USOrderDetailResponse
 

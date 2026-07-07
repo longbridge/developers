@@ -24,7 +24,7 @@ longbridge financial-report TSLA.US
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_overview" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -33,7 +33,7 @@ longbridge financial-report TSLA.US
 | symbol | string | 是 | 股票代码，如 `AAPL.US` |
 | report | string | 否 | 报告周期：`annual` 或 `quarterly`（默认：annual）|
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -164,11 +164,11 @@ func main() {
 </Tabs>
 
 
-## 响应
+## Response
 
 返回结构灵活的 JSON 对象，内容因公司和报告周期而异，包含损益、资产负债和现金流摘要数据。
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |

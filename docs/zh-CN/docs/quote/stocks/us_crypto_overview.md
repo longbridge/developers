@@ -23,7 +23,7 @@ longbridge static DOGEUSD.BKKT
 
 <SDKLinks module="quote" klass="QuoteContext" method="us_crypto_overview" />
 
-## 参数
+## Parameters
 
 > **SDK 方法参数。**
 
@@ -31,7 +31,7 @@ longbridge static DOGEUSD.BKKT
 | ---- | ---- | ---- | ---- |
 | symbol | string | 是 | 加密货币交易对，例如 `DOGEUSD.BKKT` |
 
-## 请求示例
+## Request Example
 
 <Tabs groupId="request-example">
   <TabItem value="python" label="Python">
@@ -146,9 +146,9 @@ fmt.Printf("%+v\n", resp)
 | all_time_low_date | string | 历史最低价日期 |
 
 
-## 响应
+## Response
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -164,14 +164,14 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应状态
+### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [CryptoOverview](#CryptoOverview) |
 | 400    | 请求错误 | None   |
 
-## 数据结构
+## Schemas
 
 ### CryptoOverview
 
