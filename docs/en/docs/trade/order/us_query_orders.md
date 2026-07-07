@@ -140,23 +140,57 @@ fmt.Printf("%+v\n", resp)
 
 ## Response
 
-Returns `QueryUSOrdersResponse` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| orders | USOrder[] | List of orders matching the filter |
-| total_count | int | Total number of matching orders |
+```json
+{
+  "orders": [
+    {
+      "order_id": "701276261045858304",
+      "symbol": "AAPL.US",
+      "side": "Buy",
+      "status": "Filled",
+      "qty": "10",
+      "price": "185.00",
+      "executed_qty": "10",
+      "executed_price": "184.95",
+      "created_at": 1751866334
+    }
+  ],
+  "total_count": 1
+}
+```
 
-Each `USOrder` contains:
+### Response Status
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| order_id | string | Unique order ID |
-| symbol | string | Trading symbol (e.g. `AAPL.US`) |
-| side | string | `Buy` or `Sell` |
-| status | string | Order status |
-| qty | string | Order quantity |
-| price | string | Order price |
-| executed_qty | string | Executed quantity |
-| executed_price | string | Executed price |
-| created_at | int64 | Creation time (Unix seconds) |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [QueryUSOrdersResponse](#QueryUSOrdersResponse) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### QueryUSOrdersResponse
+
+<a id="QueryUSOrdersResponse"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| orders | USOrder[] | true | List of matching orders |
+| total_count | int | true | Total number of matching orders |
+
+### USOrder
+
+<a id="USOrder"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| order_id | string | true | Unique order ID |
+| symbol | string | true | Trading symbol (e.g. `AAPL.US`) |
+| side | string | true | `Buy` or `Sell` |
+| status | string | true | Order status (e.g. `Filled`, `New`, `PartialFilled`) |
+| qty | string | true | Order quantity |
+| price | string | true | Order price |
+| executed_qty | string | true | Executed quantity |
+| executed_price | string | true | Average executed price |
+| created_at | int64 | true | Creation time (Unix seconds) |

@@ -136,24 +136,62 @@ fmt.Printf("%+v\n", resp)
 
 ## Response
 
-Returns `USRealizedPL` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| realized_pl_list | USRealizedPLEntry[] | P&L breakdown by asset category |
+```json
+{
+  "realized_pl_list": [
+    {
+      "category": 1,
+      "currency": "USD",
+      "metrics": [
+        {"amount": "1250.50", "period": 1, "rate": "0.0312"}
+      ]
+    },
+    {
+      "category": 3,
+      "currency": "USD",
+      "metrics": [
+        {"amount": "-85.20", "period": 1, "rate": "-0.0215"}
+      ]
+    }
+  ]
+}
+```
 
-Each `USRealizedPLEntry` contains:
+### Response Status
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| category | int | Asset category: `1`=stock, `2`=option, `3`=crypto |
-| currency | string | Currency code (e.g. `USD`) |
-| metrics | USRealizedPLMetric[] | P&L metrics for different time periods |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [USRealizedPL](#USRealizedPL) |
+| 400    | Bad request | None   |
 
-Each `USRealizedPLMetric` contains:
+## Schemas
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| amount | string | Realized P&L amount |
-| period | int | Time period |
-| rate | string | Return rate (%) |
+### USRealizedPL
+
+<a id="USRealizedPL"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| realized_pl_list | USRealizedPLEntry[] | true | P&L breakdown by asset category |
+
+### USRealizedPLEntry
+
+<a id="USRealizedPLEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| category | int | true | Asset category: `1`=stock, `2`=option, `3`=crypto |
+| currency | string | true | Currency code (e.g. `USD`) |
+| metrics | USRealizedPLMetric[] | true | P&L metrics by time period |
+
+### USRealizedPLMetric
+
+<a id="USRealizedPLMetric"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| amount | string | true | Realized P&L amount |
+| period | int | true | Time period |
+| rate | string | true | Return rate (%) |

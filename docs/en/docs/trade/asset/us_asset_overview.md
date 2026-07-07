@@ -130,27 +130,59 @@ fmt.Printf("%+v\n", resp)
 
 ## Response
 
-Returns `USAssetOverview` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| account_type | string | Account type identifier |
-| asset_timestamp | int64 | Snapshot time (Unix seconds) |
-| cash_buy_power | string | Available buying power |
-| cash_list | USCashEntry[] | Cash balances by currency |
-| stock_list | USStockEntry[] | Stock positions |
-| crypto_list | USCryptoEntry[] | Crypto positions |
+```json
+{
+  "account_type": "US",
+  "asset_timestamp": 1751866334,
+  "cash_buy_power": "12500.00",
+  "cash_list": [
+    {"currency": "USD", "amount": "12500.00"}
+  ],
+  "stock_list": [],
+  "crypto_list": [
+    {"symbol": "BTCUSD.BKKT", "quantity": "0.5"}
+  ]
+}
+```
 
-Each `USCashEntry` contains:
+### Response Status
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| currency | string | Currency code (e.g. `USD`) |
-| amount | string | Cash amount |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [USAssetOverview](#USAssetOverview) |
+| 400    | Bad request | None   |
 
-Each `USCryptoEntry` contains:
+## Schemas
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| symbol | string | Crypto trading-pair symbol |
-| quantity | string | Quantity held |
+### USAssetOverview
+
+<a id="USAssetOverview"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| account_type | string | true | Account type identifier |
+| asset_timestamp | int64 | true | Snapshot time (Unix seconds) |
+| cash_buy_power | string | true | Available buying power |
+| cash_list | USCashEntry[] | false | Cash balances by currency |
+| stock_list | USStockEntry[] | false | Stock positions |
+| crypto_list | USCryptoEntry[] | false | Crypto positions |
+
+### USCashEntry
+
+<a id="USCashEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| currency | string | true | Currency code (e.g. `USD`) |
+| amount | string | true | Cash amount |
+
+### USCryptoEntry
+
+<a id="USCryptoEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Crypto trading-pair symbol |
+| quantity | string | true | Quantity held |

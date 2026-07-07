@@ -132,16 +132,43 @@ fmt.Printf("%+v\n", resp)
 
 ## Response
 
-Returns `CryptoOverview` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| symbol | string | Trading-pair symbol (e.g. `DOGEUSD.BKKT`) |
-| name | string | Asset name |
-| ticker | string | Short ticker |
-| base_asset | string | Base asset code (e.g. `DOGE`) |
-| currency | string | Quote currency (e.g. `USD`) |
-| all_time_high | string | All-time high price |
-| all_time_high_date | string | Date of all-time high |
-| all_time_low | string | All-time low price |
-| all_time_low_date | string | Date of all-time low |
+```json
+{
+  "symbol": "DOGEUSD.BKKT",
+  "name": "Dogecoin",
+  "ticker": "DOGE",
+  "base_asset": "DOGE",
+  "currency": "USD",
+  "all_time_high": "0.7376",
+  "all_time_high_date": "2021-05-08",
+  "all_time_low": "0.0000869",
+  "all_time_low_date": "2015-05-06"
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [CryptoOverview](#CryptoOverview) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### CryptoOverview
+
+<a id="CryptoOverview"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Trading-pair symbol (e.g. `DOGEUSD.BKKT`) |
+| name | string | true | Asset name |
+| ticker | string | true | Short ticker |
+| base_asset | string | true | Base asset code (e.g. `DOGE`) |
+| currency | string | true | Quote currency (e.g. `USD`) |
+| all_time_high | string | true | All-time high price |
+| all_time_high_date | string | true | Date of all-time high |
+| all_time_low | string | true | All-time low price |
+| all_time_low_date | string | true | Date of all-time low |
