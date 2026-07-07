@@ -1,0 +1,53 @@
+---
+slug: us_order_detail
+title: US Order Detail
+sidebar_position: 11
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning US Only
+This method is only available for US data-center accounts.
+:::
+
+Get detail for a specific US order — execution history and optionally the attached child order.
+
+<SDKLinks module="trade" klass="TradeContext" method="us_order_detail" />
+
+## Parameters
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| order_id | string | YES | Order ID |
+| is_attached | bool | NO | Include attached child order (default: false) |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_order_detail("701276261045858304", is_attached=False)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+resp, err := c.USOrderDetail(ctx, "701276261045858304")
+if err != nil { log.Fatal(err) }
+fmt.Printf("%+v\n", resp)
+```
+
+  </TabItem>
+</Tabs>
