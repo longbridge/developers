@@ -5,6 +5,10 @@ slug: /quote/push/broker
 sidebar_position: 7
 ---
 
+:::warning Not for Longbridge US Accounts
+This method requires an AP data-center account (HK / Singapore). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+:::
+
 Real-time brokers data push of the subscribed security.
 
 <QuotePermission command="brokers" />

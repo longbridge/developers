@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Longbridge US 账户不支持
+此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+:::
+
 暂停或恢复已有的定投。
 
 <CliCommand>

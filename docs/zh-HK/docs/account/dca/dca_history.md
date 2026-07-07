@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Longbridge US 賬戶不支援
+此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+:::
+
 獲取指定定投的執行歷史，包含交易日期、金額和價格。
 
 <CliCommand>

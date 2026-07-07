@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Not for Longbridge US Accounts
+This method requires an AP data-center account (HK / Singapore). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+:::
+
 Resume a previously paused DCA plan.
 
 <CliCommand>

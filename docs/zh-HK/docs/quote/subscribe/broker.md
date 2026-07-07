@@ -5,6 +5,10 @@ slug: /quote/push/broker
 sidebar_position: 7
 ---
 
+:::warning Longbridge US 賬戶不支援
+此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+:::
+
 訂閱標的的實時經紀隊列數據。
 
 <QuotePermission command="brokers" />
