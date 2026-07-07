@@ -83,3 +83,24 @@ longbridge profit-analysis by-market US --size 50
 ## 權限要求
 
 需要 OAuth 帳戶權限。參見[帳戶權限設置](/zh-HK/docs/trade/)。
+
+## 子命令
+
+### `realized` — 已實現盈虧（美股賬戶）
+
+```bash
+longbridge profit-analysis realized
+longbridge profit-analysis realized --category stock
+longbridge profit-analysis realized --category option --currency USD
+```
+
+按資產類別返回美股賬戶的已實現盈虧明細。
+
+:::warning 僅限美股賬戶
+`profit-analysis realized` 僅適用於美國數據中心賬戶。
+:::
+
+| 選項 | 描述 | 默認值 |
+| ---- | ---- | ------ |
+| `--category` | 資產類別：`all` \| `stock` \| `option` \| `crypto` | all |
+| `--currency` | 結算貨幣 | USD |

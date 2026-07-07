@@ -83,3 +83,24 @@ longbridge profit-analysis by-market US --size 50
 ## 权限要求
 
 需要 OAuth 账户权限。参见[账户权限设置](/zh-CN/docs/trade/)。
+
+## 子命令
+
+### `realized` — 已实现盈亏（美股账户）
+
+```bash
+longbridge profit-analysis realized
+longbridge profit-analysis realized --category stock
+longbridge profit-analysis realized --category option --currency USD
+```
+
+按资产类别返回美股账户的已实现盈亏明细。
+
+:::warning 仅限美股账户
+`profit-analysis realized` 仅适用于美国数据中心账户。
+:::
+
+| 选项 | 描述 | 默认值 |
+| ---- | ---- | ------ |
+| `--category` | 资产类别：`all` \| `stock` \| `option` \| `crypto` | all |
+| `--currency` | 结算货币 | USD |

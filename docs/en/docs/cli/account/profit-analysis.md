@@ -83,3 +83,24 @@ Shows stock P&L filtered by market with pagination support.
 ## Requirements
 
 OAuth account permission required. See the [account permission setup](/docs/trade/) guide.
+
+## Subcommands
+
+### `realized` — Realized P&L (US accounts)
+
+```bash
+longbridge profit-analysis realized
+longbridge profit-analysis realized --category stock
+longbridge profit-analysis realized --category option --currency USD
+```
+
+Returns realized profit and loss breakdown by asset category for US accounts.
+
+:::warning US Only
+`profit-analysis realized` is only available for US data-center accounts.
+:::
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| `--category` | Asset category: `all` \| `stock` \| `option` \| `crypto` | all |
+| `--currency` | Settlement currency | USD |
