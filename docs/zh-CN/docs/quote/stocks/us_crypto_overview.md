@@ -123,9 +123,39 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   <TabItem value="go" label="Go">
 
 ```go
-resp, err := c.CryptoOverview(ctx, "DOGEUSD.BKKT")
-if err != nil { log.Fatal(err) }
-fmt.Printf("%+v\n", resp)
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/quote"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := quote.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.CryptoOverview(context.Background(), "DOGEUSD.BKKT")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
 ```
 
   </TabItem>
