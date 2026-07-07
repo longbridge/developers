@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning US Only
+:::warning US Data-Center Accounts Only
 This method is only available for US data-center accounts.
 :::
 

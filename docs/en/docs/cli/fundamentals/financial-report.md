@@ -106,7 +106,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 
 Returns key financial indicators for US stocks: revenue, net income, EPS, margins, and growth rates.
 
-:::warning US Only
+:::warning US Data-Center Accounts Only
 `financial-report key-metrics` is only available for US data-center accounts.
 :::
 

@@ -96,7 +96,7 @@ longbridge profit-analysis realized --category option --currency USD
 
 Returns realized profit and loss breakdown by asset category for US accounts.
 
-:::warning US Only
+:::warning US Data-Center Accounts Only
 `profit-analysis realized` is only available for US data-center accounts.
 :::
 
