@@ -4,7 +4,7 @@ sidebar_label: 'dca'
 sidebar_position: 10
 ---
 
-:::warning Not Available for US Data-Center Accounts
+:::warning Not for Longbridge US Accounts
 This command requires an AP data-center account (HK / Singapore). US data-center accounts are not supported. AP accounts can use this command with any supported symbol, including US stocks.
 :::
 

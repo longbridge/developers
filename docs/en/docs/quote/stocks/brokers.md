@@ -5,7 +5,7 @@ slug: /quote/pull/brokers
 sidebar_position: 6
 ---
 
-:::warning Not Available for US Data-Center Accounts
+:::warning Not for Longbridge US Accounts
 This method requires an AP data-center account (HK / Singapore). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
 :::
 
