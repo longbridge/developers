@@ -4,6 +4,10 @@ sidebar_label: 'broker-holding'
 sidebar_position: 15
 ---
 
+:::warning 不支援美股賬戶
+此命令需要 AP 數據中心賬戶（香港或新加坡）。美股數據中心賬戶不支援此命令。
+:::
+
 # longbridge broker-holding
 
 查看港股經紀商持倉——最大買入/賣出經紀商、完整持倉明細，以及指定經紀商的逐日變動。

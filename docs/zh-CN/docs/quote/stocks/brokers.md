@@ -5,6 +5,10 @@ slug: /quote/pull/brokers
 sidebar_position: 6
 ---
 
+:::warning 不支持美股账户
+此方法仅适用于 AP 数据中心账户（香港、新加坡）。美股数据中心账户将收到区域限制错误。
+:::
+
 该接口用于获取标的的实时经纪队列数据。
 
 <QuotePermission command="brokers" />

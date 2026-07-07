@@ -5,6 +5,10 @@ slug: /quote/pull/brokers
 sidebar_position: 6
 ---
 
+:::warning Not Available for US Accounts
+This method is only available for AP data-center accounts (HK, Singapore). US data-center accounts will receive a region restriction error.
+:::
+
 This API is used to obtain the real-time broker queue data of security.
 
 <QuotePermission command="brokers" />

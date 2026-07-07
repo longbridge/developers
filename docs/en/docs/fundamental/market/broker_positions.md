@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Not Available for US Accounts
+This method is only available for AP data-center accounts (HK, Singapore). US data-center accounts will receive a region restriction error.
+:::
+
 View broker holding positions for HK-listed stocks, including top buyers/sellers and full detail.
 
 <CliCommand>

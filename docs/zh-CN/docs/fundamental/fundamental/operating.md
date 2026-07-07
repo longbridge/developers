@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning 不支持美股账户
+此方法仅适用于 AP 数据中心账户（香港、新加坡）。美股数据中心账户将收到区域限制错误。
+:::
+
 按财报期获取经营数据及核心财务指标摘要。
 
 <CliCommand>

@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Not Available for US Accounts
+This method is only available for AP data-center accounts (HK, Singapore). US data-center accounts will receive a region restriction error.
+:::
+
 Get operating metrics and financial indicator summaries by report period.
 
 <CliCommand>

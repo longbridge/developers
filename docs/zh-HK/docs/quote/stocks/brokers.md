@@ -5,6 +5,10 @@ slug: /quote/pull/brokers
 sidebar_position: 6
 ---
 
+:::warning 不支援美股賬戶
+此方法僅適用於 AP 數據中心賬戶（香港、新加坡）。美股數據中心賬戶將收到區域限制錯誤。
+:::
+
 該接口用於獲取標的的實時經紀隊列數據。
 
 <QuotePermission command="brokers" />
