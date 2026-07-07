@@ -134,26 +134,65 @@ fmt.Printf("%+v\n", resp)
 </Tabs>
 
 
+
 ## 響應
 
-返回 `USRealizedPL` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| realized_pl_list | USRealizedPLEntry[] | 按資產類別分列的盈虧明細 |
+```json
+{
+  "realized_pl_list": [
+    {
+      "category": 1,
+      "currency": "USD",
+      "metrics": [
+        {"amount": "1250.50", "period": 1, "rate": "0.0312"}
+      ]
+    },
+    {
+      "category": 3,
+      "currency": "USD",
+      "metrics": [
+        {"amount": "-85.20", "period": 1, "rate": "-0.0215"}
+      ]
+    }
+  ]
+}
+```
 
-每條 `USRealizedPLEntry` 包含：
+### 響應 Status
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| category | int | 資產類別：`1`=股票，`2`=期權，`3`=加密貨幣 |
-| currency | string | 貨幣代碼，如 `USD` |
-| metrics | USRealizedPLMetric[] | 不同時期的盈虧指標 |
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USRealizedPL](#USRealizedPL) |
+| 400    | 請求錯誤 | None   |
 
-每條 `USRealizedPLMetric` 包含：
+## 數據結構
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| amount | string | 已實現盈虧金額 |
-| period | int | 時間週期 |
-| rate | string | 收益率（%） |
+### USRealizedPL
+
+<a id="USRealizedPL"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| realized_pl_list | USRealizedPLEntry[] | true | 按資產類別分列的盈虧明細 |
+
+### USRealizedPLEntry
+
+<a id="USRealizedPLEntry"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| category | int | true | 資產類別：`1`=股票，`2`=期權，`3`=加密貨幣 |
+| currency | string | true | 貨幣代碼，如 `USD` |
+| metrics | USRealizedPLMetric[] | true | 按時期分列的盈虧指標 |
+
+### USRealizedPLMetric
+
+<a id="USRealizedPLMetric"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| amount | string | true | 已實現盈虧金額 |
+| period | int | true | 時間週期 |
+| rate | string | true | 收益率（%） |

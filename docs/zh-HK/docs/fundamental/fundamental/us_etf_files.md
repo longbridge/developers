@@ -153,11 +153,34 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## 響應
 
-返回 `UsETFFileList` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| files | object[] | ETF 文件列表 |
-| files[].name | string | 文件名稱 (e.g. `iShares Core S&P 500 ETF Prospectus`) |
+```json
+{
+  "files": [
+    {"name": "iShares Core S&P 500 ETF Prospectus"},
+    {"name": "iShares Core S&P 500 ETF Annual Report"}
+  ]
+}
+```
+
+### 響應 Status
+
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsETFFileList](#UsETFFileList) |
+| 400    | 請求錯誤 | None   |
+
+## 數據結構
+
+### UsETFFileList
+
+<a id="UsETFFileList"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| files | ETFFile[] | true | ETF 監管文件列表 |
+| ∟ name | string | true | 文件名稱 |

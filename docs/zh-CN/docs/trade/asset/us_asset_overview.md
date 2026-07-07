@@ -128,29 +128,62 @@ fmt.Printf("%+v\n", resp)
 </Tabs>
 
 
+
 ## 响应
 
-返回 `USAssetOverview` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| account_type | string | 账户类型标识 |
-| asset_timestamp | int64 | 资产数据快照时间（Unix 秒） |
-| cash_buy_power | string | 可用买入力 |
-| cash_list | USCashEntry[] | 按货币分列的现金余额 |
-| stock_list | USStockEntry[] | 股票持仓 |
-| crypto_list | USCryptoEntry[] | 加密货币持仓 |
+```json
+{
+  "account_type": "US",
+  "asset_timestamp": 1751866334,
+  "cash_buy_power": "12500.00",
+  "cash_list": [
+    {"currency": "USD", "amount": "12500.00"}
+  ],
+  "stock_list": [],
+  "crypto_list": [
+    {"symbol": "BTCUSD.BKKT", "quantity": "0.5"}
+  ]
+}
+```
 
-每条 `USCashEntry` 包含：
+### 响应 Status
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| currency | string | 货币代码，如 `USD` |
-| amount | string | 现金金额 |
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USAssetOverview](#USAssetOverview) |
+| 400    | 请求错误 | None   |
 
-每条 `USCryptoEntry` 包含：
+## 数据结构
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| symbol | string | 加密货币交易对代码 |
-| quantity | string | 持有数量 |
+### USAssetOverview
+
+<a id="USAssetOverview"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| account_type | string | true | 账户类型标识 |
+| asset_timestamp | int64 | true | 资产数据快照时间（Unix 秒） |
+| cash_buy_power | string | true | 可用买入力 |
+| cash_list | USCashEntry[] | false | 按货币分列的现金余额 |
+| stock_list | USStockEntry[] | false | 股票持仓 |
+| crypto_list | USCryptoEntry[] | false | 加密货币持仓 |
+
+### USCashEntry
+
+<a id="USCashEntry"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| currency | string | true | 货币代码，如 `USD` |
+| amount | string | true | 现金金额 |
+
+### USCryptoEntry
+
+<a id="USCryptoEntry"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| symbol | string | true | 加密货币交易对代码 |
+| quantity | string | true | 持有数量 |

@@ -134,26 +134,65 @@ fmt.Printf("%+v\n", resp)
 </Tabs>
 
 
+
 ## 响应
 
-返回 `USRealizedPL` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| realized_pl_list | USRealizedPLEntry[] | 按资产类别分列的盈亏明细 |
+```json
+{
+  "realized_pl_list": [
+    {
+      "category": 1,
+      "currency": "USD",
+      "metrics": [
+        {"amount": "1250.50", "period": 1, "rate": "0.0312"}
+      ]
+    },
+    {
+      "category": 3,
+      "currency": "USD",
+      "metrics": [
+        {"amount": "-85.20", "period": 1, "rate": "-0.0215"}
+      ]
+    }
+  ]
+}
+```
 
-每条 `USRealizedPLEntry` 包含：
+### 响应 Status
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| category | int | 资产类别：`1`=股票，`2`=期权，`3`=加密货币 |
-| currency | string | 货币代码，如 `USD` |
-| metrics | USRealizedPLMetric[] | 不同时期的盈亏指标 |
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USRealizedPL](#USRealizedPL) |
+| 400    | 请求错误 | None   |
 
-每条 `USRealizedPLMetric` 包含：
+## 数据结构
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| amount | string | 已实现盈亏金额 |
-| period | int | 时间周期 |
-| rate | string | 收益率（%） |
+### USRealizedPL
+
+<a id="USRealizedPL"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| realized_pl_list | USRealizedPLEntry[] | true | 按资产类别分列的盈亏明细 |
+
+### USRealizedPLEntry
+
+<a id="USRealizedPLEntry"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| category | int | true | 资产类别：`1`=股票，`2`=期权，`3`=加密货币 |
+| currency | string | true | 货币代码，如 `USD` |
+| metrics | USRealizedPLMetric[] | true | 按时期分列的盈亏指标 |
+
+### USRealizedPLMetric
+
+<a id="USRealizedPLMetric"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| amount | string | true | 已实现盈亏金额 |
+| period | int | true | 时间周期 |
+| rate | string | true | 收益率（%） |

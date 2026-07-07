@@ -153,22 +153,49 @@ func main() {
 </Tabs>
 
 
+
 ## 響應
 
-返回 `UsETFDividendInfo` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| dividend_ttm | string | 過去 12 個月每股股息 |
-| dividend_yield_ttm | string | TTM 股息率（%） |
-| dividend_freq | string | 派息頻率（如 `Quarterly`） |
-| currency | string | 貨幣代碼，如 `USD` |
-| fiscal_year_info | FiscalYearDividend[] | 按財年分列的年度分紅明細 |
+```json
+{
+  "dividend_ttm": "6.84",
+  "dividend_yield_ttm": "0.0134",
+  "dividend_freq": "Quarterly",
+  "currency": "USD",
+  "fiscal_year_info": [
+    {
+      "year": "2025",
+      "total_dividend": "6.52",
+      "records": [
+        {"ex_date": "2025-12-20", "amount": "1.68"}
+      ]
+    }
+  ]
+}
+```
 
-每條 `FiscalYearDividend` 包含：
+### 響應 Status
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| year | string | 財年 |
-| total_dividend | string | 年度總股息 |
-| records | object[] | 逐筆支付記錄 |
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsETFDividendInfo](#UsETFDividendInfo) |
+| 400    | 請求錯誤 | None   |
+
+## 數據結構
+
+### UsETFDividendInfo
+
+<a id="UsETFDividendInfo"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| dividend_ttm | string | true | 過去 12 個月每股股息 |
+| dividend_yield_ttm | string | true | TTM 股息率（%） |
+| dividend_freq | string | true | 派息頻率（如 `Quarterly`） |
+| currency | string | true | 貨幣代碼，如 `USD` |
+| fiscal_year_info | FiscalYearDividend[] | false | Annual dividend breakdown |
+| ∟ year | string | true | 財年 |
+| ∟ total_dividend | string | true | 年度總股息 |
+| ∟ records | object[] | false | 逐筆支付記錄 |

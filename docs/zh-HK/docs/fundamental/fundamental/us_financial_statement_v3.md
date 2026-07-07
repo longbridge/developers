@@ -156,21 +156,48 @@ func main() {
 </Tabs>
 
 
+
 ## 響應
 
-返回 `UsFinancialStatement` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| revenue | string | 總營收 |
-| net_income | string | 淨利潤 |
-| net_margin | string | 淨利潤率 |
-| periods | FinancialPeriod[] | 包含逐行數據的報告期列表 |
-| currency | string | 貨幣代碼，如 `USD` |
+```json
+{
+  "revenue": "124300000000",
+  "net_income": "30520000000",
+  "net_margin": "0.2454",
+  "periods": [
+    {
+      "date": "2026-03-31",
+      "values": {
+        "total_assets": "364840000000",
+        "total_liabilities": "291040000000"
+      }
+    }
+  ],
+  "currency": "USD"
+}
+```
 
-每條 `FinancialPeriod` 包含：
+### 響應 Status
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| date | string | 報告期日期 |
-| values | map[string]any | 以指標名稱為鍵的財務行項目 |
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsFinancialStatement](#UsFinancialStatement) |
+| 400    | 請求錯誤 | None   |
+
+## 數據結構
+
+### UsFinancialStatement
+
+<a id="UsFinancialStatement"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| revenue | string | true | 總營收 |
+| net_income | string | true | 淨利潤 |
+| net_margin | string | true | 淨利潤率 |
+| periods | FinancialPeriod[] | true | 包含逐行數據的報告期列表 |
+| ∟ date | string | true | 報告期日期 |
+| ∟ values | map[string]any | true | 以指標名稱為鍵的財務行項目 |
+| currency | string | true | 貨幣代碼，如 `USD` |

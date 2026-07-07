@@ -143,18 +143,46 @@ fmt.Printf("%+v\n", resp)
 | all_time_low | string | 历史最低价 |
 | all_time_low_date | string | 历史最低价日期 |
 
+
 ## 响应
 
-返回 `CryptoOverview` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| symbol | string | 交易对代码，如 `DOGEUSD.BKKT` |
-| name | string | 资产名称 |
-| ticker | string | 简短代码 |
-| base_asset | string | 基础资产代码，如 `DOGE` |
-| currency | string | 计价货币，如 `USD` |
-| all_time_high | string | 历史最高价 |
-| all_time_high_date | string | 历史最高价日期 |
-| all_time_low | string | 历史最低价 |
-| all_time_low_date | string | 历史最低价日期 |
+```json
+{
+  "symbol": "DOGEUSD.BKKT",
+  "name": "Dogecoin",
+  "ticker": "DOGE",
+  "base_asset": "DOGE",
+  "currency": "USD",
+  "all_time_high": "0.7376",
+  "all_time_high_date": "2021-05-08",
+  "all_time_low": "0.0000869",
+  "all_time_low_date": "2015-05-06"
+}
+```
+
+### 响应 Status
+
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [CryptoOverview](#CryptoOverview) |
+| 400    | 请求错误 | None   |
+
+## 数据结构
+
+### CryptoOverview
+
+<a id="CryptoOverview"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| symbol | string | true | 交易对代码，如 `DOGEUSD.BKKT` |
+| name | string | true | 资产名称 |
+| ticker | string | true | 简短代码 |
+| base_asset | string | true | 基础资产代码，如 `DOGE` |
+| currency | string | true | 计价货币，如 `USD` |
+| all_time_high | string | true | 历史最高价 |
+| all_time_high_date | string | true | 历史最高价日期 |
+| all_time_low | string | true | 历史最低价 |
+| all_time_low_date | string | true | 历史最低价日期 |

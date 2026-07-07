@@ -152,14 +152,38 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## 响应
 
-返回 `UsCompanyOverview` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| intro | string | 公司简介 |
-| market_cap | string | 市值 |
-| ccy_symbol | string | 货币符号 |
-| top_rank_tags | string[] | 排名标签列表 |
-| detail_url | string | 公司详情页链接 |
+```json
+{
+  "intro": "Apple Inc. designs, manufactures, and markets smartphones, personal computers...",
+  "market_cap": "3150000000000",
+  "ccy_symbol": "USD",
+  "top_rank_tags": ["S&P 500", "NASDAQ 100"],
+  "detail_url": "https://longbridge.com/stocks/AAPL.US"
+}
+```
+
+### 响应 Status
+
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsCompanyOverview](#UsCompanyOverview) |
+| 400    | 请求错误 | None   |
+
+## 数据结构
+
+### UsCompanyOverview
+
+<a id="UsCompanyOverview"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| intro | string | true | 公司简介 |
+| market_cap | string | true | 市值 |
+| ccy_symbol | string | true | 货币符号 |
+| top_rank_tags | string[] | false | 排名标签列表 |
+| detail_url | string | false | 公司详情页链接 |

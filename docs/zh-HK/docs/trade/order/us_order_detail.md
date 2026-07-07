@@ -131,33 +131,72 @@ fmt.Printf("%+v\n", resp)
 </Tabs>
 
 
+
 ## 響應
 
-返回 `USOrderDetailResponse` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| order | USOrder | 含狀態和成交詳情的完整委託資訊 |
-| order_histories | USOrderHistory[] | 該委託的歷史狀態變更記錄 |
-| current_attached_order | USOrder \| null | 關聯子委託（括號單/OCO），無則為 null |
+```json
+{
+  "order": {
+    "order_id": "701276261045858304",
+    "symbol": "AAPL.US",
+    "side": "Buy",
+    "status": "Filled",
+    "qty": "10",
+    "price": "185.00",
+    "executed_qty": "10",
+    "executed_price": "184.95",
+    "created_at": 1751866334
+  },
+  "order_histories": [
+    {"status": "New", "done_at": 1751866334},
+    {"status": "Filled", "done_at": 1751866400}
+  ],
+  "current_attached_order": null
+}
+```
 
-每條 `USOrder` 包含：
+### 響應 Status
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| order_id | string | 委託唯一 ID |
-| symbol | string | 交易標的，如 `AAPL.US` |
-| side | string | `Buy`（買入）或 `Sell`（賣出） |
-| status | string | 委託狀態 |
-| qty | string | 委託數量 |
-| price | string | 委託價格 |
-| executed_qty | string | 已成交數量 |
-| executed_price | string | 成交價格 |
-| created_at | int64 | 創建時間（Unix 秒） |
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USOrderDetailResponse](#USOrderDetailResponse) |
+| 400    | 請求錯誤 | None   |
 
-每條 `USOrderHistory` 包含：
+## 數據結構
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| status | string | 委託狀態 at this point |
-| done_at | int64 | 時間戳（Unix 秒） |
+### USOrderDetailResponse
+
+<a id="USOrderDetailResponse"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| order | USOrder | true | 完整委託詳情 |
+| order_histories | USOrderHistory[] | true | 歷史狀態變更記錄 |
+| current_attached_order | USOrder \| null | false | 關聯子委託（括號單/OCO），無則為 null |
+
+### USOrder
+
+<a id="USOrder"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| order_id | string | true | 委託唯一 ID |
+| symbol | string | true | 交易標的，如 `AAPL.US` |
+| side | string | true | `Buy`（買入）或 `Sell`（賣出） |
+| status | string | true | 委託狀態 |
+| qty | string | true | 委託數量 |
+| price | string | true | 委託價格 |
+| executed_qty | string | true | 已成交數量 |
+| executed_price | string | true | 平均成交價格 |
+| created_at | int64 | true | 創建時間（Unix 秒） |
+
+### USOrderHistory
+
+<a id="USOrderHistory"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| status | string | true | 委託狀態 at this point |
+| done_at | int64 | true | 時間戳（Unix 秒） |

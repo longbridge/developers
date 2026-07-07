@@ -138,25 +138,60 @@ fmt.Printf("%+v\n", resp)
 </Tabs>
 
 
+
 ## 响应
 
-返回 `QueryUSOrdersResponse` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| orders | USOrder[] | 符合筛选条件的委托列表 |
-| total_count | int | 满足条件的委托总数 |
+```json
+{
+  "orders": [
+    {
+      "order_id": "701276261045858304",
+      "symbol": "AAPL.US",
+      "side": "Buy",
+      "status": "Filled",
+      "qty": "10",
+      "price": "185.00",
+      "executed_qty": "10",
+      "executed_price": "184.95",
+      "created_at": 1751866334
+    }
+  ],
+  "total_count": 1
+}
+```
 
-每条 `USOrder` 包含：
+### 响应 Status
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| order_id | string | 委托唯一 ID |
-| symbol | string | 交易标的，如 `AAPL.US` |
-| side | string | `Buy`（买入）或 `Sell`（卖出） |
-| status | string | 委托状态 |
-| qty | string | 委托数量 |
-| price | string | 委托价格 |
-| executed_qty | string | 已成交数量 |
-| executed_price | string | 成交价格 |
-| created_at | int64 | 创建时间（Unix 秒） |
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [QueryUSOrdersResponse](#QueryUSOrdersResponse) |
+| 400    | 请求错误 | None   |
+
+## 数据结构
+
+### QueryUSOrdersResponse
+
+<a id="QueryUSOrdersResponse"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| orders | USOrder[] | true | 符合筛选条件的委托列表 |
+| total_count | int | true | 满足条件的委托总数 |
+
+### USOrder
+
+<a id="USOrder"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| order_id | string | true | 委托唯一 ID |
+| symbol | string | true | 交易标的，如 `AAPL.US` |
+| side | string | true | `Buy`（买入）或 `Sell`（卖出） |
+| status | string | true | 委托状态（如 `Filled`、`New`、`PartialFilled`） |
+| qty | string | true | 委托数量 |
+| price | string | true | 委托价格 |
+| executed_qty | string | true | 已成交数量 |
+| executed_price | string | true | 平均成交价格 |
+| created_at | int64 | true | 创建时间（Unix 秒） |

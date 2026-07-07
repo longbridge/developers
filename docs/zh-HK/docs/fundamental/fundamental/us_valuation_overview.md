@@ -152,14 +152,41 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## 響應
 
-返回 `UsValuationOverview` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| indicator | string | 估值指標名稱 |
-| current_indicator | object | 當前估值指標數據 |
-| range | int | 歷史百分位區間 |
-| date | string | 估值日期 |
-| ai_summary | string | AI 生成的估值摘要 |
+```json
+{
+  "indicator": "PE",
+  "current_indicator": {
+    "circle": "35.2"
+  },
+  "range": 72,
+  "date": "2026-07-01",
+  "ai_summary": "Apple's PE ratio of 35.2 is in the 72nd percentile..."
+}
+```
+
+### 響應 Status
+
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsValuationOverview](#UsValuationOverview) |
+| 400    | 請求錯誤 | None   |
+
+## 數據結構
+
+### UsValuationOverview
+
+<a id="UsValuationOverview"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| indicator | string | true | 估值指標名稱（如 `PE`、`PB`） |
+| current_indicator | object | true | 當前估值數據 |
+| ∟ circle | string | true | 當前指標數值 |
+| range | int | true | 歷史百分位（0–100） |
+| date | string | true | 估值日期 |
+| ai_summary | string | false | AI 生成的估值摘要 |

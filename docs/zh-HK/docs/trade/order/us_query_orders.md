@@ -138,25 +138,60 @@ fmt.Printf("%+v\n", resp)
 </Tabs>
 
 
+
 ## 響應
 
-返回 `QueryUSOrdersResponse` ，包含以下字段：
+### 響應 Example
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| orders | USOrder[] | 符合篩選條件的委託列表 |
-| total_count | int | 滿足條件的委託總數 |
+```json
+{
+  "orders": [
+    {
+      "order_id": "701276261045858304",
+      "symbol": "AAPL.US",
+      "side": "Buy",
+      "status": "Filled",
+      "qty": "10",
+      "price": "185.00",
+      "executed_qty": "10",
+      "executed_price": "184.95",
+      "created_at": 1751866334
+    }
+  ],
+  "total_count": 1
+}
+```
 
-每條 `USOrder` 包含：
+### 響應 Status
 
-| 字段 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| order_id | string | 委託唯一 ID |
-| symbol | string | 交易標的，如 `AAPL.US` |
-| side | string | `Buy`（買入）或 `Sell`（賣出） |
-| status | string | 委託狀態 |
-| qty | string | 委託數量 |
-| price | string | 委託價格 |
-| executed_qty | string | 已成交數量 |
-| executed_price | string | 成交價格 |
-| created_at | int64 | 創建時間（Unix 秒） |
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [QueryUSOrdersResponse](#QueryUSOrdersResponse) |
+| 400    | 請求錯誤 | None   |
+
+## 數據結構
+
+### QueryUSOrdersResponse
+
+<a id="QueryUSOrdersResponse"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| orders | USOrder[] | true | 符合篩選條件的委託列表 |
+| total_count | int | true | 滿足條件的委託總數 |
+
+### USOrder
+
+<a id="USOrder"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| order_id | string | true | 委託唯一 ID |
+| symbol | string | true | 交易標的，如 `AAPL.US` |
+| side | string | true | `Buy`（買入）或 `Sell`（賣出） |
+| status | string | true | 委託狀態（如 `Filled`、`New`、`PartialFilled`） |
+| qty | string | true | 委託數量 |
+| price | string | true | 委託價格 |
+| executed_qty | string | true | 已成交數量 |
+| executed_price | string | true | 平均成交價格 |
+| created_at | int64 | true | 創建時間（Unix 秒） |

@@ -156,21 +156,48 @@ func main() {
 </Tabs>
 
 
+
 ## 响应
 
-返回 `UsFinancialStatement` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| revenue | string | 总营收 |
-| net_income | string | 净利润 |
-| net_margin | string | 净利润率 |
-| periods | FinancialPeriod[] | 包含逐行数据的报告期列表 |
-| currency | string | 货币代码，如 `USD` |
+```json
+{
+  "revenue": "124300000000",
+  "net_income": "30520000000",
+  "net_margin": "0.2454",
+  "periods": [
+    {
+      "date": "2026-03-31",
+      "values": {
+        "total_assets": "364840000000",
+        "total_liabilities": "291040000000"
+      }
+    }
+  ],
+  "currency": "USD"
+}
+```
 
-每条 `FinancialPeriod` 包含：
+### 响应 Status
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| date | string | 报告期日期 |
-| values | map[string]any | 以指标名称为键的财务行项目 |
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsFinancialStatement](#UsFinancialStatement) |
+| 400    | 请求错误 | None   |
+
+## 数据结构
+
+### UsFinancialStatement
+
+<a id="UsFinancialStatement"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| revenue | string | true | 总营收 |
+| net_income | string | true | 净利润 |
+| net_margin | string | true | 净利润率 |
+| periods | FinancialPeriod[] | true | 包含逐行数据的报告期列表 |
+| ∟ date | string | true | 报告期日期 |
+| ∟ values | map[string]any | true | 以指标名称为键的财务行项目 |
+| currency | string | true | 货币代码，如 `USD` |

@@ -153,20 +153,42 @@ func main() {
 </Tabs>
 
 
+
 ## 响应
 
-返回 `UsCompanyDividends` ，包含以下字段：
+### 响应 Example
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| dividend_ttm | string | 过去 12 个月每股股息 |
-| dividend_yield_ttm | string | TTM 股息率（%） |
-| payouts | string | 过去一年派息次数 |
-| currency | string | 货币代码，如 `USD` |
-| items | USDividendItem[] | 逐笔分红记录 |
+```json
+{
+  "dividend_ttm": "1.00",
+  "dividend_yield_ttm": "0.0053",
+  "payouts": "4",
+  "currency": "USD",
+  "items": [
+    {"dividend": "0.25"},
+    {"dividend": "0.25"}
+  ]
+}
+```
 
-每条 `USDividendItem` 包含：
+### 响应 Status
 
-| 字段 | 类型 | 描述 |
-| ---- | ---- | ---- |
-| dividend | string | 每股分红金额 |
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [UsCompanyDividends](#UsCompanyDividends) |
+| 400    | 请求错误 | None   |
+
+## 数据结构
+
+### UsCompanyDividends
+
+<a id="UsCompanyDividends"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| dividend_ttm | string | true | 过去 12 个月每股股息 |
+| dividend_yield_ttm | string | true | TTM 股息率（%） |
+| payouts | string | true | 过去一年派息次数 |
+| currency | string | true | 货币代码，如 `USD` |
+| items | USDividendItem[] | false | 逐笔分红记录 |
+| ∟ dividend | string | true | 每股分红金额 |
