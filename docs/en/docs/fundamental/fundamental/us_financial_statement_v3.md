@@ -74,3 +74,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `UsFinancialStatement` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| revenue | string | Total revenue |
+| net_income | string | Net income |
+| net_margin | string | Net profit margin |
+| periods | object[] | List of reporting periods with line-item values |
+| currency | string | Currency code, e.g. `USD` |

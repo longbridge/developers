@@ -73,3 +73,7 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns a flexible JSON object containing key financial metrics (revenue, net income, EPS, margins, growth rates) for the requested period. The exact fields vary by company. Use `--format json` in the CLI or print the raw response to inspect the structure.

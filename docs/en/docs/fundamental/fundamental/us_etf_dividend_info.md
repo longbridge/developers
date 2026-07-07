@@ -72,3 +72,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `UsETFDividendInfo` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| dividend_ttm | string | Trailing twelve-month dividend per share |
+| dividend_yield_ttm | string | TTM dividend yield (%) |
+| dividend_freq | string | Payout frequency (e.g. `Quarterly`) |
+| currency | string | Currency code, e.g. `USD` |
+| fiscal_year_info | object[] | Annual dividend breakdown by fiscal year |

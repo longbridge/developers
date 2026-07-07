@@ -73,3 +73,7 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns a flexible JSON object containing analyst consensus data — revenue and EPS forecasts, target price distribution, and buy/hold/sell rating breakdown. The exact fields vary by data availability. Use `--format json` in the CLI or print the raw response to inspect the structure.

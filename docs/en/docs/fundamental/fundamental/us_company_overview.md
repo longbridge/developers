@@ -72,3 +72,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `UsCompanyOverview` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| intro | string | Company introduction |
+| market_cap | string | Market capitalization |
+| ccy_symbol | string | Currency symbol |
+| top_rank_tags | string[] | Ranking tag labels |
+| detail_url | string | Link to full company detail page |

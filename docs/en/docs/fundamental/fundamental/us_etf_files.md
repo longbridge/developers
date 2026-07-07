@@ -73,3 +73,12 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `UsETFFileList` with the following field:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| files | object[] | List of ETF documents |
+| files[].name | string | Document name (e.g. `iShares Core S&P 500 ETF Prospectus`) |

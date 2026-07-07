@@ -72,3 +72,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## Response
+
+Returns `UsValuationOverview` with the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| indicator | string | Valuation indicator name |
+| current_indicator | object | Current indicator value |
+| range | int | Historical percentile range |
+| date | string | Valuation date |
+| ai_summary | string | AI-generated valuation summary |
