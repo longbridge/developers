@@ -114,7 +114,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("请访问：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = TradeContext::new(config);
-    let resp = ctx.us_realized_pl("USD", category="STOCK").await?;
+    let resp = ctx.us_realized_pl("USD", "STOCK").await?;
     println!("{:?}", resp);
     Ok(())
 }

@@ -113,7 +113,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("请访问：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.us_analyst_consensus("AAPL.US", report="annual").await?;
+    let resp = ctx.us_analyst_consensus("AAPL.US", "annual").await?;
     println!("{:?}", resp);
     Ok(())
 }

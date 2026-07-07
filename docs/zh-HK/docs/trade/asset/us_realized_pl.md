@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning 僅限美股賬戶
+:::warning Longbridge US 賬戶
 此方法僅適用於美國數據中心賬戶。
 :::
 
@@ -114,7 +114,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = TradeContext::new(config);
-    let resp = ctx.us_realized_pl("USD", category="STOCK").await?;
+    let resp = ctx.us_realized_pl("USD", "STOCK").await?;
     println!("{:?}", resp);
     Ok(())
 }
