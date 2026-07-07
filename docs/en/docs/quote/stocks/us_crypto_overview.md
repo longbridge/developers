@@ -25,6 +25,8 @@ longbridge static DOGEUSD.BKKT
 
 ## Parameters
 
+> **SDK method parameters.**
+
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | Crypto symbol, e.g. `DOGEUSD.BKKT` |

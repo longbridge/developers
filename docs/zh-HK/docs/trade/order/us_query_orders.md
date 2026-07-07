@@ -27,6 +27,8 @@ longbridge order --status pending
 
 ## 參數
 
+> **SDK 方法參數。**
+
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | symbol | string | 否 | 按標的篩選，例如 `AAPL.US` |

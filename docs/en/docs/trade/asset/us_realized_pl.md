@@ -27,6 +27,8 @@ longbridge profit-analysis realized --category stock
 
 ## Parameters
 
+> **SDK method parameters.**
+
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | currency | string | YES | Settlement currency, e.g. `USD` |

@@ -27,6 +27,8 @@ longbridge profit-analysis realized --category stock
 
 ## 參數
 
+> **SDK 方法參數。**
+
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | currency | string | 是 | 結算貨幣，例如 `USD` |

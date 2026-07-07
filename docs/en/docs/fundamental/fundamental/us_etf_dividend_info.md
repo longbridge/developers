@@ -26,6 +26,8 @@ longbridge dividend SPY.US
 
 ## Parameters
 
+> **SDK method parameters.**
+
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | ETF symbol, e.g. `IVV.US` |
@@ -136,15 +138,23 @@ import (
 
 func main() {
     o := oauth.New("your-client-id").
-        OnOpenURL(func(url string) { fmt.Println("Open:", url) })
+        OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
     if err := o.Build(context.Background()); err != nil {
         log.Fatal(err)
     }
-    conf, _ := config.New(config.WithOAuthClient(o))
-    c, _ := fundamental.NewFromCfg(conf)
+    conf, err := config.New(config.WithOAuthClient(o))
+    if err != nil {
+        log.Fatal(err)
+    }
+    c, err := fundamental.NewFromCfg(conf)
+    if err != nil {
+        log.Fatal(err)
+    }
     defer c.Close()
     resp, err := c.ETFDividendInfo(context.Background(), "IVV.US")
-    if err != nil { log.Fatal(err) }
+    if err != nil {
+        log.Fatal(err)
+    }
     fmt.Printf("%+v\n", resp)
 }
 ```

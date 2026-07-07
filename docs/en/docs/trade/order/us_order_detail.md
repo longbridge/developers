@@ -26,6 +26,8 @@ longbridge order detail 701276261045858304
 
 ## Parameters
 
+> **SDK method parameters.**
+
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | order_id | string | YES | Order ID |

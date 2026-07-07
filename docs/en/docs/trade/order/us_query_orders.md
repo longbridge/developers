@@ -27,6 +27,8 @@ longbridge order --status pending
 
 ## Parameters
 
+> **SDK method parameters.**
+
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | NO | Filter by symbol, e.g. `AAPL.US` |

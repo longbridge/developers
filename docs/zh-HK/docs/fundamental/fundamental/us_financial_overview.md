@@ -26,6 +26,8 @@ longbridge financial-report TSLA.US
 
 ## 參數
 
+> **SDK 方法參數。**
+
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | symbol | string | 是 | 股票代碼，如 `AAPL.US` |
@@ -137,15 +139,23 @@ import (
 
 func main() {
     o := oauth.New("your-client-id").
-        OnOpenURL(func(url string) { fmt.Println("Open:", url) })
+        OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
     if err := o.Build(context.Background()); err != nil {
         log.Fatal(err)
     }
-    conf, _ := config.New(config.WithOAuthClient(o))
-    c, _ := fundamental.NewFromCfg(conf)
+    conf, err := config.New(config.WithOAuthClient(o))
+    if err != nil {
+        log.Fatal(err)
+    }
+    c, err := fundamental.NewFromCfg(conf)
+    if err != nil {
+        log.Fatal(err)
+    }
     defer c.Close()
     resp, err := c.FinancialOverview(context.Background(), "AAPL.US", "annual")
-    if err != nil { log.Fatal(err) }
+    if err != nil {
+        log.Fatal(err)
+    }
     fmt.Printf("%+v\n", resp)
 }
 ```

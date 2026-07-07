@@ -27,6 +27,8 @@ longbridge profit-analysis realized --category stock
 
 ## 参数
 
+> **SDK 方法参数。**
+
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | currency | string | 是 | 结算货币，例如 `USD` |

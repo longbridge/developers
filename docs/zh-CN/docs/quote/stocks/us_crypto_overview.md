@@ -25,6 +25,8 @@ longbridge static DOGEUSD.BKKT
 
 ## 参数
 
+> **SDK 方法参数。**
+
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | symbol | string | 是 | 加密货币交易对，例如 `DOGEUSD.BKKT` |
