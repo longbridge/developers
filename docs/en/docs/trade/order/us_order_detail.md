@@ -14,7 +14,7 @@ headingLevel: 2
 This method is only available for US data-center accounts.
 :::
 
-Get detail for a specific US order — execution history and optionally the attached child order.
+Get detail for a specific US order — execution history, order status, and any attached child orders.
 
 <SDKLinks module="trade" klass="TradeContext" method="us_order_detail" />
 
@@ -23,7 +23,6 @@ Get detail for a specific US order — execution history and optionally the atta
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | order_id | string | YES | Order ID |
-| is_attached | bool | NO | Include attached child order (default: false) |
 
 ## Request Example
 
@@ -36,7 +35,7 @@ from longbridge.openapi import TradeContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
-resp = ctx.us_order_detail("701276261045858304", is_attached=False)
+resp = ctx.us_order_detail("701276261045858304")
 print(resp)
 ```
 

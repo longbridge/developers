@@ -23,9 +23,9 @@ headingLevel: 2
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | symbol | string | 否 | 按標的篩選，例如 `AAPL.US` |
-| side | OrderSide | 否 | 按方向篩選：Buy 或 Sell |
-| start_at | int64 | 否 | 開始時間（Unix 秒） |
-| end_at | int64 | 否 | 結束時間（Unix 秒） |
+| action | int | 否 | 方向篩選：`0`=全部，`1`=買入，`2`=賣出（默認：`0`） |
+| start_at | int64 | 否 | 開始時間（Unix 秒）；`0` = 最近 90 天 |
+| end_at | int64 | 否 | 結束時間（Unix 秒）；`0` = 當前時間 |
 | query_type | int32 | 否 | 0=全部，1=待成交，2=已成交（默認：0） |
 | page | int32 | 否 | 頁碼，從 1 開始（默認：1） |
 | limit | int32 | 否 | 每頁數量（默認：20） |
@@ -41,7 +41,7 @@ from longbridge.openapi import TradeContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
-resp = ctx.query_us_orders()
+resp = ctx.us_query_orders()
 print(resp)
 ```
 

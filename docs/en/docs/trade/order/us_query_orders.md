@@ -23,12 +23,12 @@ Query historical and pending orders for US accounts with pagination and filterin
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | NO | Filter by symbol, e.g. `AAPL.US` |
-| side | OrderSide | NO | Filter by side: Buy or Sell |
-| start_at | int64 | NO | Start time (Unix seconds) |
-| end_at | int64 | NO | End time (Unix seconds) |
-| query_type | int32 | NO | 0=all, 1=pending, 2=filled (default: 0) |
-| page | int32 | NO | Page number, 1-based (default: 1) |
-| limit | int32 | NO | Page size (default: 20) |
+| action | int | NO | Direction filter: `0`=all, `1`=buy, `2`=sell (default: `0`) |
+| start_at | int64 | NO | Start time (Unix seconds); `0` = last 90 days |
+| end_at | int64 | NO | End time (Unix seconds); `0` = now |
+| query_type | int | NO | `0`=all (incl. rejected), `1`=pending, `2`=filled only (default: `0`) |
+| page | int | NO | Page number, 1-based (default: `1`) |
+| limit | int | NO | Page size (default: `20`) |
 
 ## Request Example
 
@@ -41,7 +41,7 @@ from longbridge.openapi import TradeContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
-resp = ctx.query_us_orders()
+resp = ctx.us_query_orders()
 print(resp)
 ```
 

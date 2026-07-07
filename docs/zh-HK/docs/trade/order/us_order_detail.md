@@ -23,7 +23,6 @@ headingLevel: 2
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | order_id | string | 是 | 委託 ID |
-| is_attached | bool | 否 | 是否返回關聯子委託（默認：false） |
 
 ## 請求示例
 
@@ -36,7 +35,7 @@ from longbridge.openapi import TradeContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
-resp = ctx.us_order_detail("701276261045858304", is_attached=False)
+resp = ctx.us_order_detail("701276261045858304")
 print(resp)
 ```
 
