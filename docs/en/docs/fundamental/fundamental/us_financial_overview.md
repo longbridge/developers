@@ -1,5 +1,5 @@
 ---
-slug: /us_financial_overview
+slug: us_financial_overview
 title: US Financial Overview
 sidebar_position: 32
 language_tabs: false

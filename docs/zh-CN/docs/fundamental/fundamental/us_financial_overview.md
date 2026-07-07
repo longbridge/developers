@@ -1,5 +1,5 @@
 ---
-slug: /us_financial_overview
+slug: us_financial_overview
 title: 美股财务概览
 sidebar_position: 32
 language_tabs: false
@@ -22,8 +22,8 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | 股票代码，如 `AAPL.US` |
-| report | string | NO | 报告周期：`annual` 或 `quarterly`（默认：annual）|
+| symbol | string | 是 | 股票代码，如 `AAPL.US` |
+| report | string | 否 | 报告周期：`annual` 或 `quarterly`（默认：annual）|
 
 ## 请求示例
 

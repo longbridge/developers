@@ -1,5 +1,5 @@
 ---
-slug: /us_key_financial_metrics
+slug: us_key_financial_metrics
 title: US Key Financial Metrics
 sidebar_position: 34
 language_tabs: false

@@ -50,3 +50,17 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## 響應字段
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| symbol | string | 交易對代碼 |
+| name | string | 資產名稱 |
+| ticker | string | 簡短代碼 |
+| base_asset | string | 基礎資產代碼 |
+| currency | string | 計價貨幣 |
+| all_time_high | string | 歷史最高價 |
+| all_time_high_date | string | 歷史最高價日期 |
+| all_time_low | string | 歷史最低價 |
+| all_time_low_date | string | 歷史最低價日期 |

@@ -1,5 +1,5 @@
 ---
-slug: /us_company_dividends
+slug: us_company_dividends
 title: US Company Dividends
 sidebar_position: 37
 language_tabs: false

@@ -1,5 +1,5 @@
 ---
-slug: /us_analyst_consensus
+slug: us_analyst_consensus
 title: US Analyst Consensus
 sidebar_position: 35
 language_tabs: false

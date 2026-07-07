@@ -1,5 +1,5 @@
 ---
-slug: /us_etf_files
+slug: us_etf_files
 title: 美股 ETF 文件
 sidebar_position: 38
 language_tabs: false
@@ -22,8 +22,8 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | ETF 代碼，如 `IVV.US` |
-| size | int | NO | 最大返回文件數 |
+| symbol | string | 是 | ETF 代碼，如 `IVV.US` |
+| size | int | 否 | 最大返回文件數 |
 
 ## 請求示例
 

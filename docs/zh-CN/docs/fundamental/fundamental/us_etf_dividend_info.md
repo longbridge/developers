@@ -1,5 +1,5 @@
 ---
-slug: /us_etf_dividend_info
+slug: us_etf_dividend_info
 title: 美股 ETF 分红信息
 sidebar_position: 36
 language_tabs: false
@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | ETF 代码，如 `IVV.US` |
+| symbol | string | 是 | ETF 代码，如 `IVV.US` |
 
 ## 请求示例
 

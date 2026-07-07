@@ -1,5 +1,5 @@
 ---
-slug: /us_financial_statement_v3
+slug: us_financial_statement_v3
 title: 美股財務報表
 sidebar_position: 33
 language_tabs: false
@@ -22,9 +22,9 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | 股票代碼，如 `AAPL.US` |
-| kind | string | YES | 報表類型：`IS`（損益表）、`BS`（資產負債表）、`CF`（現金流量表）|
-| report | string | NO | 報告週期 |
+| symbol | string | 是 | 股票代碼，如 `AAPL.US` |
+| kind | string | 是 | 報表類型：`IS`（損益表）、`BS`（資產負債表）、`CF`（現金流量表）|
+| report | string | 否 | 報告週期 |
 
 ## 請求示例
 

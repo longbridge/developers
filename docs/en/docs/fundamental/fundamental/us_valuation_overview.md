@@ -1,5 +1,5 @@
 ---
-slug: /us_valuation_overview
+slug: us_valuation_overview
 title: US Valuation Overview
 sidebar_position: 31
 language_tabs: false

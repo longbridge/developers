@@ -1,5 +1,5 @@
 ---
-slug: /us_analyst_consensus
+slug: us_analyst_consensus
 title: 美股分析師一致預期
 sidebar_position: 35
 language_tabs: false
@@ -22,8 +22,8 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | 股票代碼，如 `AAPL.US` |
-| report | string | NO | 報告週期：`annual` 或 `quarterly`（默認：annual）|
+| symbol | string | 是 | 股票代碼，如 `AAPL.US` |
+| report | string | 否 | 報告週期：`annual` 或 `quarterly`（默認：annual）|
 
 ## 請求示例
 

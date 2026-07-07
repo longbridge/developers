@@ -1,5 +1,5 @@
 ---
-slug: /us_etf_dividend_info
+slug: us_etf_dividend_info
 title: US ETF Dividend Info
 sidebar_position: 36
 language_tabs: false

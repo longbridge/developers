@@ -1,5 +1,5 @@
 ---
-slug: /us_valuation_overview
+slug: us_valuation_overview
 title: 美股估值概览
 sidebar_position: 31
 language_tabs: false
@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | 股票代码，如 `AAPL.US` |
+| symbol | string | 是 | 股票代码，如 `AAPL.US` |
 
 ## 请求示例
 

@@ -1,5 +1,5 @@
 ---
-slug: /us_company_overview
+slug: us_company_overview
 title: US Company Overview
 sidebar_position: 30
 language_tabs: false

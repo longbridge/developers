@@ -1,5 +1,5 @@
 ---
-slug: /us_etf_files
+slug: us_etf_files
 title: US ETF Files
 sidebar_position: 38
 language_tabs: false

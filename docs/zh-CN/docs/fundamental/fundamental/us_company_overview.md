@@ -1,5 +1,5 @@
 ---
-slug: /us_company_overview
+slug: us_company_overview
 title: 美股公司概览
 sidebar_position: 30
 language_tabs: false
@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | 股票代码，如 `AAPL.US` |
+| symbol | string | 是 | 股票代码，如 `AAPL.US` |
 
 ## 请求示例
 

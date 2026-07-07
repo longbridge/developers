@@ -1,5 +1,5 @@
 ---
-slug: /us_financial_statement_v3
+slug: us_financial_statement_v3
 title: US Financial Statement
 sidebar_position: 33
 language_tabs: false

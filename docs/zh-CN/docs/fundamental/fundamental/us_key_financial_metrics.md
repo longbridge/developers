@@ -1,5 +1,5 @@
 ---
-slug: /us_key_financial_metrics
+slug: us_key_financial_metrics
 title: 美股关键财务指标
 sidebar_position: 34
 language_tabs: false
@@ -22,8 +22,8 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | YES | 股票代码，如 `AAPL.US` |
-| report | string | NO | 报告周期：`annual` 或 `quarterly`（默认：annual）|
+| symbol | string | 是 | 股票代码，如 `AAPL.US` |
+| report | string | 否 | 报告周期：`annual` 或 `quarterly`（默认：annual）|
 
 ## 请求示例
 
