@@ -96,3 +96,28 @@ longbridge financial-report snapshot TSLA.US --report qf --year 2025 --period 4
 ```
 
 Use `--report qf --year <YEAR> --period <1-4>` to retrieve a specific quarter.
+
+### Key financial metrics (US accounts)
+
+```bash
+longbridge financial-report key-metrics AAPL.US
+longbridge financial-report key-metrics AAPL.US --report quarterly
+```
+
+Returns key financial indicators for US stocks: revenue, net income, EPS, margins, and growth rates.
+
+:::warning US Only
+`financial-report key-metrics` is only available for US data-center accounts.
+:::
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+| `--report` | Reporting period: `annual` \| `quarterly` | annual |
+
+:::info US Accounts
+For `.US` symbols on US data-center accounts:
+- Omitting `--kind` returns a financial overview via the US API
+- Specifying `--kind IS`, `BS`, or `CF` returns the detailed statement via the US API
+
+Note: `--kind` defaults to an empty string (not `ALL`) to enable this US routing behavior.
+:::

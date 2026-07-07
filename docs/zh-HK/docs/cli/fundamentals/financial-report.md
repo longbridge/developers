@@ -93,3 +93,28 @@ Apple Inc. (AAPL)    Q1 FY2026    Jan 2026 – Mar 2026    USD
 # 查詢歷史特定季度
 longbridge financial-report snapshot TSLA.US --report qf --year 2025 --period 4
 ```
+
+### 關鍵財務指標（美股賬戶）
+
+```bash
+longbridge financial-report key-metrics AAPL.US
+longbridge financial-report key-metrics AAPL.US --report quarterly
+```
+
+返回美股的關鍵財務指標：營收、淨利潤、EPS、利潤率和增長率。
+
+:::warning 僅限美股賬戶
+`financial-report key-metrics` 僅適用於美國數據中心賬戶。
+:::
+
+| 選項 | 描述 | 默認值 |
+| ---- | ---- | ------ |
+| `--report` | 報告週期：`annual` \| `quarterly` | annual |
+
+:::info 美股賬戶
+對於美國數據中心賬戶的 `.US` 標的：
+- 不指定 `--kind` 時，透過美股 API 返回財務概覽
+- 指定 `--kind IS`、`BS` 或 `CF` 時，透過美股 API 返回詳細報表
+
+注意：`--kind` 默認為空字符串（非 `ALL`），以支持美股路由邏輯。
+:::
