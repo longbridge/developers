@@ -209,6 +209,18 @@ func main() {
 | currency | string | 是 | 貨幣代碼，如 `USD` |
 | amount | string | 是 | 現金金額 |
 
+### USStockEntry
+
+<a id="USStockEntry"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| symbol | string | 是 | 股票代碼，如 `AAPL.US` |
+| quantity | string | 是 | 持有數量 |
+| cost_price | string | 否 | 平均持倉成本價 |
+| current_price | string | 否 | 當前市場價格 |
+| market_value | string | 否 | 當前市值 |
+
 ### USCryptoEntry
 
 <a id="USCryptoEntry"></a>

@@ -208,6 +208,18 @@ func main() {
 | currency | string | true | Currency code (e.g. `USD`) |
 | amount | string | true | Cash amount |
 
+### USStockEntry
+
+<a id="USStockEntry"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | true | Stock symbol (e.g. `AAPL.US`) |
+| quantity | string | true | Quantity held |
+| cost_price | string | false | Average cost price |
+| current_price | string | false | Current market price |
+| market_value | string | false | Current market value |
+
 ### USCryptoEntry
 
 <a id="USCryptoEntry"></a>

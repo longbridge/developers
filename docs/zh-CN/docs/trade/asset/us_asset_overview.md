@@ -209,6 +209,18 @@ func main() {
 | currency | string | 是 | 货币代码，如 `USD` |
 | amount | string | 是 | 现金金额 |
 
+### USStockEntry
+
+<a id="USStockEntry"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| symbol | string | 是 | 股票代码，如 `AAPL.US` |
+| quantity | string | 是 | 持有数量 |
+| cost_price | string | 否 | 平均持仓成本价 |
+| current_price | string | 否 | 当前市场价格 |
+| market_value | string | 否 | 当前市值 |
+
 ### USCryptoEntry
 
 <a id="USCryptoEntry"></a>
