@@ -9,7 +9,7 @@ export const locale: CatalogLocale = {
       tools: 10,
       tagType: 'hot',
       name: 'Longbridge Overview',
-      desc: 'Full-stack financial data and trading platform — CLI, Python/Rust SDK, MCP, and LLM integration. The catch-all entry point for any market or account query.',
+      desc: 'Full-stack financial data and trading platform — ChatGPT App, CLI, Python/Rust SDK, MCP, and LLM integration. The catch-all entry point for any market or account query.',
       prompt: 'What is NVDA\'s current price, recent news, and how does it affect my positions?',
     },
     {

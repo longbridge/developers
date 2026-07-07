@@ -1,6 +1,17 @@
 # MCP Server
 
-Longbridge provides MCP (Model Context Protocol) support in two modes: a hosted cloud service and a self-hosted binary.
+Longbridge provides MCP (Model Context Protocol) support through the official ChatGPT App, a hosted cloud service for other MCP clients, and a self-hosted binary.
+
+## ChatGPT App
+
+Longbridge is available directly in ChatGPT Apps.
+
+On ChatGPT web, desktop, or mobile:
+
+1. Open Apps
+2. Search for `longbridge`, or open https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef directly
+3. Select Longbridge and complete the authorization login
+4. Type `@longbridge` in the ChatGPT message box to start Longbridge MCP and query data
 
 ## Hosted MCP Service
 
@@ -10,7 +21,7 @@ No API keys needed — uses OAuth 2.1. The AI client handles the browser authori
 
 ### Client Configuration
 
-Add to MCP config in any compatible client:
+For non-ChatGPT MCP clients, add Longbridge to the MCP config:
 
 ```json
 {
@@ -26,13 +37,13 @@ Add to MCP config in any compatible client:
 
 - **Cursor**: Settings → MCP Servers → Add Remote MCP Server
 - **Claude Code**: `claude mcp add longbridge https://mcp.longbridge.com`
-- **ChatGPT**: Settings → Connectors
+- **ChatGPT**: https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef or Apps → search `longbridge` → authorize, then use `@longbridge`
 - **Zed**: `context_servers` in `settings.json`
 - **Cherry Studio**: Settings → MCP Servers → Add (requires latest version for OAuth support)
 
 ### OAuth Authorization Flow
 
-1. Add the config and call any tool — this triggers the OAuth flow
+1. ChatGPT authorizes while adding Longbridge from Apps; other clients add the config and call any tool to trigger OAuth
 2. Client opens a browser tab to Longbridge login & consent page
 3. Sign in with your Longbridge account and approve scopes
 4. Credentials are stored by the client; tokens refresh automatically

@@ -13,7 +13,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: 'Real-time markets,',
       title2: 'built for AI.',
-      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead. Explore <a href="https://longbridge.com/markets">live market data</a> across every market.',
+      desc: 'Real-time market data, quantitative research, and AI-powered analysis — through AI Skill, CLI, MCP, SDK and OpenAPI. One credential, every market, zero overhead. Explore <a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">live market data</a> across every market.',
       cta1: 'Get Started',
       cta2: 'Read the Docs',
       highlights: [
@@ -32,7 +32,7 @@ const LOCALE = {
       {
         label: 'AI Skill',
         title: 'Investment analysis agent for any AI',
-        desc: 'Real-time quotes, portfolio data, news sentiment, and market intelligence — works with Claude, ChatGPT, Cursor, Gemini, Codex, Zed, Cherry Studio.',
+        desc: 'Use Longbridge in ChatGPT Apps with @longbridge, or give Claude, Cursor, Gemini, Codex, Zed, and Cherry Studio live market intelligence.',
         tags: ['Agent Skills'],
       },
       {
@@ -43,9 +43,9 @@ const LOCALE = {
       },
       {
         label: 'MCP',
-        title: 'Hosted MCP server',
-        desc: 'OAuth 2.1 authentication — drop into Claude Code, Cursor, Codex, Zed, Cherry Studio in one line. Your AI gets real positions and live quotes.',
-        tags: ['OAuth 2.1', 'Hosted'],
+        title: 'ChatGPT App + hosted MCP',
+        desc: 'Official ChatGPT App plus hosted OAuth 2.1 MCP for Codex, Claude Code, Cursor, Zed, and Cherry Studio.',
+        tags: ['ChatGPT App', 'OAuth 2.1'],
       },
       {
         label: 'SDK',
@@ -91,10 +91,10 @@ const LOCALE = {
     },
     mcp: {
       eyebrow: 'Hosted MCP',
-      title: 'Connect any AI assistant to live market data — no API keys.',
-      desc: 'Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets <a href="https://longbridge.com/markets">real-time quotes</a>, account info, and trading — all in one connection.',
+      title: 'Connect ChatGPT and AI assistants to live market data — no API keys.',
+      desc: 'Open the <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>, authorize, then use <code>@longbridge</code>. Other AI clients connect through hosted HTTP MCP with OAuth 2.1.',
       cta: 'MCP Documentation',
-      note: 'OAuth 2.1 — browser opens automatically on first use. No API key needed.',
+      note: 'ChatGPT Apps first; other clients use OAuth 2.1 on first use. No API key needed.',
     },
     apiCaps: {
       eyebrow: 'API Capabilities',
@@ -194,7 +194,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '实时市场数据',
       title2: 'AI 直连真实市场',
-      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。探索覆盖全球市场的<a href="https://longbridge.com/markets">实时行情</a>。',
+      desc: '实时行情、量化研究与 AI 驱动分析——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 一体接入。一套凭证，覆盖所有市场，零额外开销。探索覆盖全球市场的<a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">实时行情</a>。',
       cta1: '开始使用',
       cta2: '阅读文档',
       highlights: [
@@ -213,7 +213,7 @@ const LOCALE = {
       {
         label: 'AI Skill',
         title: '为任意 AI 打造的投资分析 Agent',
-        desc: '实时行情、持仓数据、新闻情绪与市场洞察——兼容 Claude、ChatGPT、Cursor、Gemini、Codex、Zed、Cherry Studio。',
+        desc: '在 ChatGPT Apps 中通过 @longbridge 使用 Longbridge，也可为 Claude、Cursor、Gemini、Codex、Zed、Cherry Studio 提供实时市场智能。',
         tags: ['Agent Skills'],
       },
       {
@@ -224,9 +224,9 @@ const LOCALE = {
       },
       {
         label: 'MCP',
-        title: '托管 MCP 服务器',
-        desc: 'OAuth 2.1 认证——一行命令接入 Claude Code、Cursor、Codex、Zed、Cherry Studio。您的 AI 可获取真实持仓与实时行情。',
-        tags: ['OAuth 2.1', '托管'],
+        title: 'ChatGPT App + 托管 MCP',
+        desc: '官方 ChatGPT App，加上面向 Codex、Claude Code、Cursor、Zed、Cherry Studio 的托管 OAuth 2.1 MCP。',
+        tags: ['ChatGPT App', 'OAuth 2.1'],
       },
       {
         label: 'SDK',
@@ -263,7 +263,7 @@ const LOCALE = {
       eyebrow: 'AI Skill · 预打包工具',
       title1: '为你的 AI 解锁市场洞察、',
       title2: '深度研究与智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手可以<a href="https://longbridge.com/screener">筛选股票</a>、解读财报、追踪内部人交易、下达订单——全程对话完成，无需切换 App。',
+      desc: '在 ChatGPT 中打开 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，授权后用 <code>@longbridge</code> 调用。其他 AI 助手可通过 Longbridge Skill <a href="https://longbridge.com/screener">筛选股票</a>、解读财报、追踪内部人交易和下单。',
       installLabel: '复制发给任意 AI，它会引导你完成安装：',
       installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
       installOr: '—— 或通过包管理器 ——',
@@ -272,10 +272,10 @@ const LOCALE = {
     },
     mcp: {
       eyebrow: '托管 MCP',
-      title: '无需 API Key，让任意 AI 助手连接实时市场数据',
-      desc: '托管 HTTP MCP 服务，支持 OAuth 2.1 认证。您的 AI 编程助手可获取<a href="https://longbridge.com/markets">实时行情</a>、账户信息与交易功能——一次连接，全部到位。',
+      title: '无需 API Key，让 ChatGPT 和 AI 助手连接实时市场数据',
+      desc: '打开 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，完成授权后用 <code>@longbridge</code> 调用。其他 AI 客户端可通过托管 HTTP MCP 和 OAuth 2.1 接入。',
       cta: 'MCP 文档',
-      note: 'OAuth 2.1——首次使用时自动打开浏览器授权，无需 API Key。',
+      note: '优先使用 ChatGPT Apps；其他客户端首次使用时通过 OAuth 2.1 授权，无需 API Key。',
     },
     apiCaps: {
       eyebrow: 'API 功能',
@@ -358,7 +358,7 @@ const LOCALE = {
       eyebrow: 'LONGBRIDGE OPENAPI',
       title1: '即時市場數據，',
       title2: 'AI 直連真實市場',
-      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。探索覆蓋全球市場的<a href="https://longbridge.com/markets">即時行情</a>。',
+      desc: '即時行情、量化研究與 AI 驅動分析——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 一體接入。一套憑證，覆蓋所有市場，零額外開銷。探索覆蓋全球市場的<a href="https://longbridge.com/markets" target="_blank" rel="noreferrer">即時行情</a>。',
       cta1: '開始使用',
       cta2: '閱讀文件',
       highlights: [
@@ -377,7 +377,7 @@ const LOCALE = {
       {
         label: 'AI Skill',
         title: '為任意 AI 打造的投資分析 Agent',
-        desc: '即時行情、持倉數據、新聞情緒與市場洞察——兼容 Claude、ChatGPT、Cursor、Gemini、Codex、Zed、Cherry Studio。',
+        desc: '在 ChatGPT Apps 中透過 @longbridge 使用 Longbridge，也可為 Claude、Cursor、Gemini、Codex、Zed、Cherry Studio 提供即時市場智能。',
         tags: ['Agent Skills'],
       },
       {
@@ -388,9 +388,9 @@ const LOCALE = {
       },
       {
         label: 'MCP',
-        title: '託管 MCP 伺服器',
-        desc: 'OAuth 2.1 認證——一行命令接入 Claude Code、Cursor、Codex、Zed、Cherry Studio。您的 AI 可獲取真實持倉與即時行情。',
-        tags: ['OAuth 2.1', '託管'],
+        title: 'ChatGPT App + 託管 MCP',
+        desc: '官方 ChatGPT App，加上面向 Codex、Claude Code、Cursor、Zed、Cherry Studio 的託管 OAuth 2.1 MCP。',
+        tags: ['ChatGPT App', 'OAuth 2.1'],
       },
       {
         label: 'SDK',
@@ -427,18 +427,19 @@ const LOCALE = {
       eyebrow: 'AI Skill · 預打包工具',
       title1: '為你的 AI 解鎖市場洞察、',
       title2: '深度研究與智能交易',
-      desc: '借助 Longbridge Skill，您的 AI 助手可以<a href="https://longbridge.com/screener">篩選股票</a>、解讀財報、追蹤內部人交易、下達訂單——全程對話完成，無需切換 App。',
+      desc: '在 ChatGPT 中打開 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，授權後用 <code>@longbridge</code> 調用。其他 AI 助手可透過 Longbridge Skill <a href="https://longbridge.com/screener">篩選股票</a>、解讀財報、追蹤內部人交易和下單。',
       installLabel: '複製發給任意 AI，它會引導你完成安裝：',
+      installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安裝完成後，完成登錄授權，查詢一支股票行情確認可用。`,
       installOr: '—— 或透過套件管理器 ——',
       agentMore: '+ 任意相容 Skill 的 Agent',
       cta: '瀏覽 Skill 目錄',
     },
     mcp: {
       eyebrow: '託管 MCP',
-      title: '無需 API Key，讓任意 AI 助手連接即時市場數據',
-      desc: '託管 HTTP MCP 服務，支援 OAuth 2.1 認證。您的 AI 程式設計助手可獲取<a href="https://longbridge.com/markets">即時行情</a>、帳戶資訊與交易功能——一次連線，全部到位。',
+      title: '無需 API Key，讓 ChatGPT 和 AI 助手連接即時市場數據',
+      desc: '打開 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，完成授權後用 <code>@longbridge</code> 調用。其他 AI 客戶端可透過託管 HTTP MCP 和 OAuth 2.1 接入。',
       cta: 'MCP 文件',
-      note: 'OAuth 2.1——首次使用時自動打開瀏覽器授權，無需 API Key。',
+      note: '優先使用 ChatGPT Apps；其他客戶端首次使用時透過 OAuth 2.1 授權，無需 API Key。',
     },
     apiCaps: {
       eyebrow: 'API 功能',
@@ -1131,7 +1132,7 @@ const PRODUCTS = [
     icon: 'ai',
     label: 'AI Skill',
     title: 'Investment analysis agent for any AI',
-    desc: 'Real-time quotes, portfolio data, news sentiment, and market intelligence — works with Claude, ChatGPT, Cursor, Gemini, Codex, Zed, Cherry Studio.',
+    desc: 'Use Longbridge in ChatGPT Apps with @longbridge, or give Claude, Cursor, Gemini, Codex, Zed, and Cherry Studio live market intelligence.',
     tags: ['Agent Skills'],
     href: '/skill',
     accent: 'var(--lb-brand)',
@@ -1150,9 +1151,9 @@ const PRODUCTS = [
     key: 'mcp',
     icon: 'bolt',
     label: 'MCP',
-    title: 'Hosted MCP server',
-    desc: 'OAuth 2.1 authentication — drop into Claude Code, Cursor, Codex, Zed, Cherry Studio in one line. Your AI gets real positions and live quotes.',
-    tags: ['OAuth 2.1', 'Hosted'],
+    title: 'ChatGPT App + hosted MCP',
+    desc: 'Official ChatGPT App plus hosted OAuth 2.1 MCP for Codex, Claude Code, Cursor, Zed, and Cherry Studio.',
+    tags: ['ChatGPT App', 'OAuth 2.1'],
     href: '/docs/mcp',
     accent: 'var(--lb-ai-mention)',
   },
@@ -1189,15 +1190,16 @@ const PRODUCTS = [
 ]
 
 const SUPPORTED_AGENTS = [
-  { name: 'Claude Code', initial: 'C', color: '#D97757' },
+  { name: 'ChatGPT', initial: 'G', color: '#10A37F' },
   { name: 'Codex', initial: 'O', color: '#000000' },
+  { name: 'Claude Code', initial: 'C', color: '#D97757' },
   { name: 'Cursor', initial: 'C', color: '#000000' },
   { name: 'Gemini', initial: 'G', color: '#1A73E8' },
   { name: 'OpenClaw', initial: 'O', color: 'var(--lb-brand)' },
   { name: 'Zed', initial: 'Z', color: '#0E40D9' },
 ]
 
-const MCP_CLIENTS = ['Claude Code', 'Codex', 'Gemini', 'Cursor', 'Zed']
+const MCP_CLIENTS = ['ChatGPT', 'Codex', 'Claude Code', 'Gemini', 'Cursor', 'Zed']
 
 const API_CAPS = [
   {

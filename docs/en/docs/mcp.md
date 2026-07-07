@@ -9,7 +9,7 @@ next: false
 
 # Longbridge MCP Service
 
-Longbridge provides a hosted HTTP MCP (Model Context Protocol) service that lets you use [Longbridge market data](https://longbridge.com/markets) and account capabilities directly from AI coding assistants and chat tools — without managing API keys manually.
+Longbridge provides a hosted MCP (Model Context Protocol) service that lets you use [Longbridge market data](https://longbridge.com/markets) and account capabilities directly from ChatGPT, AI coding assistants, and other chat tools — without managing API keys manually.
 
 :::tip MCP endpoint
 
@@ -39,32 +39,27 @@ Actual tool availability depends on your region, account level, and granted OAut
 ## Prerequisites
 
 - An active [Longbridge account](https://longbridge.com/hk/download) with onboarding completed, or a paper trading account
-- An AI client that supports MCP OAuth 2.1 (see compatibility note below)
+- Another AI client that supports MCP OAuth 2.1 (see compatibility note below)
 
 ## Client setup
 
-> Configuration format may vary across client versions. Treat your client's official MCP documentation as the source of truth. The core parameter you need is the server URL below.
+ChatGPT is the recommended starting point because Longbridge is available directly in ChatGPT Apps. For other MCP clients, configuration format may vary across client versions; treat your client's official MCP documentation as the source of truth.
 
 ### ChatGPT
 
-You need to enable [ChatGPT Developer Mode](https://developers.openai.com/api/docs/guides/developer-mode) before you can add Longbridge MCP.
+Longbridge is available as an official ChatGPT App.
 
-In ChatGPT, go to [Settings → Apps](https://chatgpt.com/#settings/Connectors) → [Advanced settings → Developer mode](https://chatgpt.com/#settings/Connectors/Advanced) and turn on **Developer mode**.
+On ChatGPT web, desktop, or mobile:
 
-![](https://assets.lbctrl.com/uploads/02e8a24a-be0b-49b2-a4eb-9952bc7a4f9b/enable-chatgpt-dev.png)
+1. Open **Apps**
+2. Search for `longbridge`, or open the [Longbridge ChatGPT App](https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef) directly
+3. Select **Longbridge** and complete the authorization login
 
-Then click **Back** to return to the Apps list, where you can click the **Create app** button to add a new app — this is where you add Longbridge MCP.
+![Search for Longbridge in ChatGPT Apps](https://assets.lbkrs.com/uploads/aeb84040-b2c7-442d-af46-adfab66297a1/scr-20260707-nbjr.png)
 
-Fill in the form:
+![Authorize the Longbridge ChatGPT App](https://assets.lbkrs.com/uploads/a66bcd75-d747-4259-b684-a689d324716c/scr-20260707-nbno.png)
 
-- Name：`Longbridge`
-- Description：`Investment market insights`
-- Connection (Server URL):`https://mcp.longbridge.com`
-- Authentication：OAuth
-
-Full walkthrough video:
-
-<video src="https://assets.lbctrl.com/uploads/a9e06030-99e7-4f1b-90a6-d5efd5bb1fe8/longbridge-mcp-for-chatgpt.mp4" controls />
+After authorization, type `@longbridge` in the ChatGPT message box to start Longbridge MCP and query market, account, or portfolio data.
 
 ### Claude Code
 
@@ -138,6 +133,8 @@ In Manus, open the **Plugins** window, click the **Create** button on the right 
 ## OAuth authorization flow
 
 Longbridge MCP uses standard OAuth 2.1. You never need to paste API keys or tokens into the client.
+
+In ChatGPT, the authorization happens when you add Longbridge from Apps. In other MCP clients, the first tool call usually starts the browser authorization flow.
 
 ```
 AI client                  Browser                   Longbridge

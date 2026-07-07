@@ -6,9 +6,9 @@ const { lang } = useData()
 
 const LOCALE = {
   en: {
-    title: 'AI Skill',
-    subtitle: 'Unlock market insights, deep research and intelligent trading for your AI',
-    desc: 'With Longbridge Skill, your AI assistant can screen stocks, decode earnings, track insider moves, and place orders — all in plain conversation.',
+    title: 'ChatGPT App + AI Skill',
+    subtitle: 'Use Longbridge in ChatGPT first, or give coding agents market intelligence',
+    desc: 'In ChatGPT, open the <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a> or search longbridge in Apps, authorize, then use @longbridge. For Codex, Claude Code, Cursor, and other agents, Longbridge Skill teaches your AI how to screen stocks, decode earnings, track insider moves, and place orders.',
     cta: 'Skill Installation Guide',
     installLabel: 'Copy and send to any AI — it walks you through install:',
     installCmd: `Install Longbridge AI toolkit following the guide:\nhttps://open.longbridge.com/skill/install.md\n\nAnd complete login and test with a market data query.`,
@@ -52,9 +52,9 @@ const LOCALE = {
     ],
   },
   'zh-CN': {
-    title: 'AI Skill',
-    subtitle: '为你的 AI 解锁市场洞察、深度研究和智能交易',
-    desc: '通过 Longbridge Skill，你的 AI 助手可以选股、解读财报、追踪内部人交易、下单 — 全部通过自然对话完成。',
+    title: 'ChatGPT App + AI Skill',
+    subtitle: '优先在 ChatGPT 使用 Longbridge，也可为编程 Agent 补充市场智能',
+    desc: '在 ChatGPT 中打开 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，或在 Apps 搜索 longbridge 并授权，然后用 @longbridge 调用。Codex、Claude Code、Cursor 等 Agent 可通过 Longbridge Skill 学会选股、解读财报、追踪内部人交易和下单。',
     cta: 'Skill 安装指南',
     installLabel: '复制发给任意 AI，它会引导你完成安装：',
     installCmd: `请按照以下指南安装 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安装完成后，完成登录授权，查询一支股票行情确认可用。`,
@@ -98,9 +98,9 @@ const LOCALE = {
     ],
   },
   'zh-HK': {
-    title: 'AI Skill',
-    subtitle: '為你的 AI 解鎖市場洞察、深度研究和智能交易',
-    desc: '透過 Longbridge Skill，你的 AI 助手可以選股、解讀財報、追蹤內部人交易、下單 — 全部透過自然對話完成。',
+    title: 'ChatGPT App + AI Skill',
+    subtitle: '優先在 ChatGPT 使用 Longbridge，也可為編程 Agent 補充市場智能',
+    desc: '在 ChatGPT 中打開 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，或在 Apps 搜尋 longbridge 並授權，然後用 @longbridge 調用。Codex、Claude Code、Cursor 等 Agent 可透過 Longbridge Skill 學會選股、解讀財報、追蹤內部人交易和下單。',
     cta: 'Skill 安裝指南',
     installLabel: '複製發給任意 AI，它會引導你完成安裝：',
     installCmd: `請按照以下指南安裝 Longbridge AI toolkit：\nhttps://open.longbridge.com/skill/install.md\n\n安裝完成後，完成登錄授權，查詢一支股票行情確認可用。`,
@@ -151,12 +151,16 @@ const activeCapIdx = ref(0)
 
 const agents = [
   {
-    name: 'Claude Code',
-    logo: 'https://assets.lbctrl.com/uploads/6932dfac-0f9c-4577-bdd8-fc3d22d4223a/claude.svg',
+    name: 'ChatGPT',
+    logo: 'https://assets.lbctrl.com/uploads/88eb58fe-b3bb-4875-90c7-c97e6d8fcc9e/openai.svg',
   },
   {
     name: 'Codex',
     logo: 'https://assets.lbctrl.com/uploads/88eb58fe-b3bb-4875-90c7-c97e6d8fcc9e/openai.svg',
+  },
+  {
+    name: 'Claude Code',
+    logo: 'https://assets.lbctrl.com/uploads/6932dfac-0f9c-4577-bdd8-fc3d22d4223a/claude.svg',
   },
   {
     name: 'Cursor',
@@ -294,7 +298,7 @@ function copyCli() {
     <div class="skill-header">
       <h2 class="skill-title">{{ content.title }}</h2>
       <p class="skill-subtitle">{{ content.subtitle }}</p>
-      <p class="skill-desc">{{ content.desc }}</p>
+      <p class="skill-desc" v-html="content.desc"></p>
     </div>
 
     <!-- Install — semantic AI prompt first, CLI second -->

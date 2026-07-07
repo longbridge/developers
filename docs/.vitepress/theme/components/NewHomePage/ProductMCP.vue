@@ -7,36 +7,39 @@ const { lang } = useData()
 const LOCALE = {
   en: {
     title: 'MCP',
-    subtitle: 'Connect your AI assistant to live market data — no API keys required',
-    desc: 'Hosted HTTP MCP service with OAuth 2.1 authentication. Your AI coding assistant gets real-time quotes, account info, and trading capabilities in one connection.',
+    subtitle: 'Connect ChatGPT and AI assistants to live market data — no API keys required',
+    desc: 'Longbridge is available directly in the <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>. Other AI clients can connect to the hosted HTTP MCP service with OAuth 2.1 authentication.',
     tools: [
       { title: 'Market Data', desc: 'Real-time quotes, candlesticks, historical data' },
       { title: 'Account Info', desc: 'Account overview, assets, positions' },
       { title: 'Trading', desc: 'Place, modify, cancel orders' },
     ],
     cta: 'MCP Documentation',
+    note: 'ChatGPT: open the <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a> or Apps → search longbridge → authorize → use @longbridge.',
   },
   'zh-CN': {
     title: 'MCP',
-    subtitle: '让你的 AI 助手连接实时行情 — 无需 API Key',
-    desc: '托管 HTTP MCP 服务，OAuth 2.1 认证。AI 编码助手一次连接即可获得实时行情、账户信息和交易能力。',
+    subtitle: '让 ChatGPT 和 AI 助手连接实时行情 — 无需 API Key',
+    desc: 'Longbridge 已可直接通过 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a> 使用。其他 AI 客户端可通过托管 HTTP MCP 服务和 OAuth 2.1 授权接入。',
     tools: [
       { title: '行情数据', desc: '实时行情、K 线、历史数据' },
       { title: '账户信息', desc: '账户总览、资产、持仓' },
       { title: '交易', desc: '下单、改单、撤单' },
     ],
     cta: 'MCP 文档',
+    note: 'ChatGPT：打开 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，或 Apps → 搜索 longbridge → 授权 → 使用 @longbridge。',
   },
   'zh-HK': {
     title: 'MCP',
-    subtitle: '讓你的 AI 助手連接即時行情 — 無需 API Key',
-    desc: '託管 HTTP MCP 服務，OAuth 2.1 認證。AI 編碼助手一次連接即可獲得即時行情、賬戶信息和交易能力。',
+    subtitle: '讓 ChatGPT 和 AI 助手連接即時行情 — 無需 API Key',
+    desc: 'Longbridge 已可直接透過 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a> 使用。其他 AI 客戶端可透過託管 HTTP MCP 服務和 OAuth 2.1 授權接入。',
     tools: [
       { title: '行情數據', desc: '即時行情、K 線、歷史數據' },
       { title: '賬戶信息', desc: '賬戶總覽、資產、持倉' },
       { title: '交易', desc: '下單、改單、撤單' },
     ],
     cta: 'MCP 文檔',
+    note: 'ChatGPT：打開 <a href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge ChatGPT App</a>，或 Apps → 搜尋 longbridge → 授權 → 使用 @longbridge。',
   },
 }
 
@@ -46,11 +49,12 @@ const activeClient = ref(0)
 
 const clients = [
   {
-    id: 'claude',
-    name: 'Claude Code',
-    logo: 'https://assets.lbctrl.com/uploads/6932dfac-0f9c-4577-bdd8-fc3d22d4223a/claude.svg',
-    type: 'shell' as const,
-    cmd: 'claude mcp add --transport http longbridge https://mcp.longbridge.com',
+    id: 'chatgpt',
+    name: 'ChatGPT',
+    logo: 'https://assets.lbctrl.com/uploads/88eb58fe-b3bb-4875-90c7-c97e6d8fcc9e/openai.svg',
+    type: 'ui' as const,
+    steps: ['Open App link', 'Authorize', 'Use @longbridge'],
+    fields: { Use: '@longbridge' },
   },
   {
     id: 'codex',
@@ -59,6 +63,13 @@ const clients = [
     type: 'ui' as const,
     steps: ['Settings', 'MCP Servers', 'Add Server'],
     fields: { Name: 'longbridge', Type: 'Streamable HTTP', URL: 'https://mcp.longbridge.com' },
+  },
+  {
+    id: 'claude',
+    name: 'Claude Code',
+    logo: 'https://assets.lbctrl.com/uploads/6932dfac-0f9c-4577-bdd8-fc3d22d4223a/claude.svg',
+    type: 'shell' as const,
+    cmd: 'claude mcp add --transport http longbridge https://mcp.longbridge.com',
   },
   {
     id: 'cursor',
@@ -87,12 +98,13 @@ const clients = [
 
 // Diagram node layout (SVG coordinate space)
 const clientNodes = [
-  { name: 'Claude Code', x: 8, w: 108, clickIdx: 0 },
-  { name: 'Codex', x: 124, w: 68, clickIdx: 1 },
-  { name: 'Cursor', x: 200, w: 72, clickIdx: 2 },
-  { name: 'Zed', x: 280, w: 50, clickIdx: 3 },
-  { name: 'Cherry Studio', x: 338, w: 118, clickIdx: 4 },
-  { name: 'Any MCP Client', x: 464, w: 130, clickIdx: -1 },
+  { name: 'ChatGPT', x: 8, w: 82, clickIdx: 0 },
+  { name: 'Codex', x: 98, w: 64, clickIdx: 1 },
+  { name: 'Claude Code', x: 170, w: 104, clickIdx: 2 },
+  { name: 'Cursor', x: 282, w: 68, clickIdx: 3 },
+  { name: 'Zed', x: 358, w: 48, clickIdx: 4 },
+  { name: 'Cherry Studio', x: 414, w: 112, clickIdx: 5 },
+  { name: 'Any Client', x: 534, w: 98, clickIdx: -1 },
 ]
 
 const toolPositions = [
@@ -150,7 +162,7 @@ function copyCmd() {
     <div class="mcp-header">
       <h2 class="mcp-title">{{ content.title }}</h2>
       <p class="mcp-subtitle">{{ content.subtitle }}</p>
-      <p class="mcp-desc">{{ content.desc }}</p>
+      <p class="mcp-desc" v-html="content.desc"></p>
     </div>
 
     <!-- Bus-topology SVG diagram (replaces VueFlow) -->
@@ -358,7 +370,7 @@ function copyCmd() {
         </div>
       </div>
 
-      <p class="mcp-config-note">OAuth 2.1 — browser opens automatically on first use. No API key needed.</p>
+      <p class="mcp-config-note" v-html="content.note"></p>
     </div>
 
     <div class="mcp-cta-wrap">

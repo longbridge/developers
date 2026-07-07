@@ -9,7 +9,7 @@ export const locale: CatalogLocale = {
       tools: 10,
       tagType: 'hot',
       name: '長橋總覽',
-      desc: 'Longbridge 平台總入口，覆蓋 CLI / Python / Rust SDK / MCP / LLMs.txt 整合，可用於任何行情與賬戶查詢。',
+      desc: 'Longbridge 平台總入口，覆蓋 ChatGPT App / CLI / Python / Rust SDK / MCP / LLMs.txt 整合，可用於任何行情與賬戶查詢。',
       prompt: '幫我看下 NVDA 現價、新聞和我的持倉影響。',
     },
     {

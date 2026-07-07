@@ -15,11 +15,11 @@ const LOCALE = {
       },
       skill: {
         title: 'AI Skill',
-        desc: 'Investment analysis agent for real-time quotes, portfolio data, news sentiment, and market intelligence — works with any AI platform.',
+        desc: 'Use Longbridge in ChatGPT Apps with @longbridge, or give Skill-compatible agents real-time quotes, portfolio data, news sentiment, and market intelligence.',
       },
       mcp: {
         title: 'MCP',
-        desc: 'Hosted MCP service with OAuth 2.1 — zero-config integration for Claude Code, Cursor, Codex, Zed, and Cherry Studio.',
+        desc: 'Official ChatGPT App plus hosted OAuth 2.1 MCP for Codex, Claude Code, Cursor, Zed, and Cherry Studio.',
       },
       sdk: {
         title: 'SDK',
@@ -45,11 +45,11 @@ const LOCALE = {
       },
       skill: {
         title: 'AI Skill',
-        desc: '投资分析 AI Agent，提供实时行情、组合数据、新闻情绪和市场洞察 — 兼容任何 AI 平台。',
+        desc: '在 ChatGPT Apps 中通过 @longbridge 使用 Longbridge，也可为兼容 Skill 的 Agent 提供实时行情、组合数据、新闻情绪和市场洞察。',
       },
       mcp: {
         title: 'MCP',
-        desc: '托管 MCP 服务，OAuth 2.1 认证 — 零配置接入 Claude Code、Cursor、Codex、Zed 和 Cherry Studio。',
+        desc: '官方 ChatGPT App，加上面向 Codex、Claude Code、Cursor、Zed 和 Cherry Studio 的托管 OAuth 2.1 MCP。',
       },
       sdk: {
         title: 'SDK',
@@ -72,11 +72,11 @@ const LOCALE = {
       },
       skill: {
         title: 'AI Skill',
-        desc: '投資分析 AI Agent，提供即時行情、組合數據、新聞情緒和市場洞察 — 兼容任何 AI 平台。',
+        desc: '在 ChatGPT Apps 中透過 @longbridge 使用 Longbridge，也可為兼容 Skill 的 Agent 提供即時行情、組合數據、新聞情緒和市場洞察。',
       },
       mcp: {
         title: 'MCP',
-        desc: '託管 MCP 服務，OAuth 2.1 認證 — 零配置接入 Claude Code、Cursor、Codex、Zed 和 Cherry Studio。',
+        desc: '官方 ChatGPT App，加上面向 Codex、Claude Code、Cursor、Zed 和 Cherry Studio 的託管 OAuth 2.1 MCP。',
       },
       sdk: {
         title: 'SDK',

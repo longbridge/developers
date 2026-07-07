@@ -51,12 +51,18 @@ curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | s
 
 ## MCP (for AI tools — no code)
 
+```text
+# ChatGPT web, desktop, and mobile
+https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef
+or Apps → search "longbridge" → authorize → use @longbridge in the message box
+```
+
 ```bash
 # Claude Code
 claude mcp add longbridge https://mcp.longbridge.com
 ```
 
-First tool call triggers an OAuth browser flow. See [references/mcp.md](references/mcp.md) for Cursor, ChatGPT, Zed.
+ChatGPT completes authorization while adding Longbridge from Apps. Other clients trigger an OAuth browser flow on the first tool call. See [references/mcp.md](references/mcp.md) for Cursor, Claude Code, Zed, and other MCP clients.
 
 ## Revoking Authorization
 

@@ -40,7 +40,7 @@ Longbridge Developers is the official developer platform for Longbridge — prov
 | [SDK](https://open.longbridge.com/sdk)                       | Python, Rust, Node.js, Go, Java, C++ apps            |
 | [HTTP / WebSocket API](https://open.longbridge.com/docs/api) | Any language, custom integrations                    |
 | [CLI](https://open.longbridge.com/docs/cli) (`longbridge`)   | Terminal workflows, scripting, AI tool-calling       |
-| [MCP](https://open.longbridge.com/docs/mcp)                  | AI coding assistants (Cursor, Claude, ChatGPT, etc.) |
+| [MCP](https://open.longbridge.com/docs/mcp)                  | ChatGPT Apps and AI assistants (Cursor, Claude, etc.) |
 | [Skill](https://open.longbridge.com/skill)                   | Give any AI direct knowledge of Longbridge APIs      |
 
 ## Quick start
@@ -69,7 +69,9 @@ longbridge quote TSLA.US NVDA.US 700.HK
 pip install longbridge
 ```
 
-**MCP for AI assistants** — add to your MCP client config:
+**MCP for AI assistants** — in ChatGPT web, desktop, or mobile, open the [Longbridge ChatGPT App](https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef) or search `longbridge` in Apps, authorize, then use `@longbridge` in the message box.
+
+For other MCP clients, add Longbridge as a remote MCP server:
 
 ```json
 {
