@@ -49,6 +49,79 @@ print(resp)
 ```
 
   </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncFundamentalContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("請訪問：", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncFundamentalContext.create(config)
+    resp = await ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, FundamentalContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('請訪問此 URL 授權：' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = FundamentalContext.new(config)
+  const resp = await ctx.usFinancialStatementV3("AAPL.US", kind="IS", report="annual")
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.fundamental.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             FundamentalContext ctx = FundamentalContext.create(config)) {
+            var resp = ctx.getUsFinancialStatementV3("AAPL.US", kind="IS", report="annual").get();
+            System.out.println(resp);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問：{url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = FundamentalContext::new(config);
+    let resp = ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual").await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
   <TabItem value="go" label="Go">
 
 ```go
