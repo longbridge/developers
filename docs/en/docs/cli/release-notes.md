@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.25.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.25.0)
+
+- **US market routing** — `company`, `valuation`, `financial-report`, `consensus`, `dividend`, `order`, `positions` auto-route to US APIs for US data-center accounts
+- **New `etf-docs` command** — list ETF regulatory documents (prospectus, fact sheets, annual reports) for US ETFs; `--limit` controls how many to return
+- **New `financial-report key-metrics` subcommand** — key financial indicators for US stocks; supports `--report annual|quarterly`
+- **New `profit-analysis realized` subcommand** — realized P&L by asset category (`--category stock|option|crypto`); US accounts only
+- **New order flags** — `--status pending|history|all` and `--action buy|sell` filter US order history; `order detail --attached` fetches child orders
+
 ### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
 - **New `macrodata` command** — Browse 400+ macrodata indicators across US/HK/CN/EU/JP/SG; list mode with optional `--country` filter, history mode for a specific indicator code with `--start`/`--end` date range; `--format json` for AI/scripting workflows

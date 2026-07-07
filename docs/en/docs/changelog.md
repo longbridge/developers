@@ -6,6 +6,21 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-07-07
+
+### SDK v4.4.0
+
+- **US market APIs** — 14 new methods across `FundamentalContext` (9), `QuoteContext` (1), `TradeContext` (4); all US data-center only
+
+### CLI v0.25.0
+
+- **US market routing** — `company`, `valuation`, `financial-report`, `consensus`, `dividend`, `order`, `positions` now route to US APIs automatically for US data-center accounts
+- **New `etf-docs` command** — list regulatory documents (prospectus, fact sheets) for US ETFs
+- **New `financial-report key-metrics` subcommand** — key financial metrics for US stocks (annual/quarterly)
+- **New `profit-analysis realized` subcommand** — realized P&L breakdown by asset category for US accounts (stock/option/crypto)
+- **New `order --status` / `--action` flags** — filter US order history by status and side
+- **New `order detail --attached` flag** — show attached child order for US accounts
+
 ## 2026-06-25
 
 ### SDK v4.3.3

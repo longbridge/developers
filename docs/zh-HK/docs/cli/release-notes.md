@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.25.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.25.0)
+
+- **美股賬戶路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股數據中心賬戶下自動路由至美股 API
+- **新增 `etf-docs` 命令** — 列出美股 ETF 監管文件（招股書、事實說明書、年報），`--limit` 控制返回數量
+- **新增 `financial-report key-metrics` 子命令** — 美股關鍵財務指標，支持 `--report annual|quarterly`
+- **新增 `profit-analysis realized` 子命令** — 美股賬戶已實現盈虧，支持 `--category stock|option|crypto` 篩選
+- **新增訂單選項** — `--status pending|history|all` 和 `--action buy|sell` 篩選美股歷史委託；`order detail --attached` 獲取關聯子委託
+
 ### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
 - **新增 `macrodata` 命令** — 瀏覽 400+ 宏觀數據指標，覆蓋美/港/中/歐/日/新六大市場；列表模式支持 `--country` 篩選，歷史模式支持 `--start`/`--end` 日期區間；`--format json` 滿足 AI / 腳本需求

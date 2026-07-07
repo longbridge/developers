@@ -6,6 +6,21 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-07-07
+
+### SDK v4.4.0
+
+- **美股市场 API** — 新增 14 个方法，覆盖 `FundamentalContext`（9 个）、`QuoteContext`（1 个）、`TradeContext`（4 个），全部仅限美股数据中心账户
+
+### CLI v0.25.0
+
+- **美股账户路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股数据中心账户下自动路由至美股 API
+- **新增 `etf-docs` 命令** — 列出美股 ETF 的监管文件（招股书、事实说明书等）
+- **新增 `financial-report key-metrics` 子命令** — 美股关键财务指标（支持年报/季报）
+- **新增 `profit-analysis realized` 子命令** — 美股账户按资产类别（股票/期权/加密货币）统计已实现盈亏
+- **新增 `order --status` / `--action` 选项** — 筛选美股历史委托状态和方向
+- **新增 `order detail --attached` 选项** — 获取美股账户关联子委托
+
 ## 2026-06-25
 
 ### SDK v4.3.3
