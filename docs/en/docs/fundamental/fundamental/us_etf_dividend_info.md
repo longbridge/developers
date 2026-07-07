@@ -155,20 +155,46 @@ func main() {
 
 ## Response
 
-Returns `UsETFDividendInfo` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| dividend_ttm | string | TTM dividend per share |
-| dividend_yield_ttm | string | TTM dividend yield (%) |
-| dividend_freq | string | Payout frequency (e.g. `Quarterly`) |
-| currency | string | Currency code (e.g. `USD`) |
-| fiscal_year_info | FiscalYearDividend[] | Annual dividend breakdown by fiscal year |
+```json
+{
+  "dividend_ttm": "6.84",
+  "dividend_yield_ttm": "0.0134",
+  "dividend_freq": "Quarterly",
+  "currency": "USD",
+  "fiscal_year_info": [
+    {
+      "year": "2025",
+      "total_dividend": "6.52",
+      "records": [
+        {"ex_date": "2025-12-20", "amount": "1.68"}
+      ]
+    }
+  ]
+}
+```
 
-Each `FiscalYearDividend` contains:
+### Response Status
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| year | string | Fiscal year |
-| total_dividend | string | Total annual dividend |
-| records | object[] | Individual payment records |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsETFDividendInfo](#UsETFDividendInfo) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### UsETFDividendInfo
+
+<a id="UsETFDividendInfo"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| dividend_ttm | string | true | TTM dividend per share |
+| dividend_yield_ttm | string | true | TTM dividend yield (%) |
+| dividend_freq | string | true | Payout frequency (e.g. `Quarterly`) |
+| currency | string | true | Currency code (e.g. `USD`) |
+| fiscal_year_info | FiscalYearDividend[] | false | Annual dividend breakdown |
+| ∟ year | string | true | Fiscal year |
+| ∟ total_dividend | string | true | Total annual dividend |
+| ∟ records | object[] | false | Individual payment records |

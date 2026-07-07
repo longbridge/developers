@@ -155,9 +155,31 @@ func main() {
 
 ## Response
 
-Returns `UsETFFileList` with the following field:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| files | object[] | List of ETF documents |
-| files[].name | string | Document name (e.g. `iShares Core S&P 500 ETF Prospectus`) |
+```json
+{
+  "files": [
+    {"name": "iShares Core S&P 500 ETF Prospectus"},
+    {"name": "iShares Core S&P 500 ETF Annual Report"}
+  ]
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsETFFileList](#UsETFFileList) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### UsETFFileList
+
+<a id="UsETFFileList"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| files | ETFFile[] | true | List of ETF regulatory documents |
+| ∟ name | string | true | Document name |

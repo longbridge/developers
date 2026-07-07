@@ -154,12 +154,38 @@ func main() {
 
 ## Response
 
-Returns `UsValuationOverview` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| indicator | string | Valuation indicator name |
-| current_indicator | object | Current indicator value |
-| range | int | Historical percentile range |
-| date | string | Valuation date |
-| ai_summary | string | AI-generated valuation summary |
+```json
+{
+  "indicator": "PE",
+  "current_indicator": {
+    "circle": "35.2"
+  },
+  "range": 72,
+  "date": "2026-07-01",
+  "ai_summary": "Apple's PE ratio of 35.2 is in the 72nd percentile..."
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsValuationOverview](#UsValuationOverview) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### UsValuationOverview
+
+<a id="UsValuationOverview"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| indicator | string | true | Valuation indicator name (e.g. `PE`, `PB`) |
+| current_indicator | object | true | Current valuation data |
+| ∟ circle | string | true | Current indicator value |
+| range | int | true | Historical percentile (0–100) |
+| date | string | true | Valuation date |
+| ai_summary | string | false | AI-generated valuation summary |

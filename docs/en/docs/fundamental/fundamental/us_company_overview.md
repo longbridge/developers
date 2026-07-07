@@ -154,12 +154,35 @@ func main() {
 
 ## Response
 
-Returns `UsCompanyOverview` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| intro | string | Company introduction |
-| market_cap | string | Market capitalization |
-| ccy_symbol | string | Currency symbol |
-| top_rank_tags | string[] | Ranking tag labels |
-| detail_url | string | Link to full company detail page |
+```json
+{
+  "intro": "Apple Inc. designs, manufactures, and markets smartphones, personal computers...",
+  "market_cap": "3150000000000",
+  "ccy_symbol": "USD",
+  "top_rank_tags": ["S&P 500", "NASDAQ 100"],
+  "detail_url": "https://longbridge.com/stocks/AAPL.US"
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsCompanyOverview](#UsCompanyOverview) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### UsCompanyOverview
+
+<a id="UsCompanyOverview"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| intro | string | true | Company introduction |
+| market_cap | string | true | Market capitalization |
+| ccy_symbol | string | true | Currency symbol |
+| top_rank_tags | string[] | false | Ranking tag labels |
+| detail_url | string | false | Link to full company detail page |

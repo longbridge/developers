@@ -155,18 +155,39 @@ func main() {
 
 ## Response
 
-Returns `UsCompanyDividends` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| dividend_ttm | string | TTM dividend per share |
-| dividend_yield_ttm | string | TTM dividend yield (%) |
-| payouts | string | Number of payouts in past year |
-| currency | string | Currency code (e.g. `USD`) |
-| items | USDividendItem[] | Individual dividend records |
+```json
+{
+  "dividend_ttm": "1.00",
+  "dividend_yield_ttm": "0.0053",
+  "payouts": "4",
+  "currency": "USD",
+  "items": [
+    {"dividend": "0.25"},
+    {"dividend": "0.25"}
+  ]
+}
+```
 
-Each `USDividendItem` contains:
+### Response Status
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| dividend | string | Dividend amount per share |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsCompanyDividends](#UsCompanyDividends) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### UsCompanyDividends
+
+<a id="UsCompanyDividends"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| dividend_ttm | string | true | TTM dividend per share |
+| dividend_yield_ttm | string | true | TTM dividend yield (%) |
+| payouts | string | true | Number of payouts in past year |
+| currency | string | true | Currency code (e.g. `USD`) |
+| items | USDividendItem[] | false | Individual dividend records |
+| ∟ dividend | string | true | Dividend amount per share |

@@ -155,4 +155,11 @@ func main() {
 
 ## Response
 
-Returns a flexible JSON object containing analyst consensus data — revenue and EPS forecasts, target price distribution, and buy/hold/sell rating breakdown. The exact fields vary by data availability. Use `--format json` in the CLI or print the raw response to inspect the structure.
+Returns a flexible JSON object containing analyst consensus data (revenue/EPS forecasts, target price distribution, buy/hold/sell breakdown). Structure varies by data availability.
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | object |
+| 400    | Bad request | None   |

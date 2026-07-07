@@ -158,19 +158,45 @@ func main() {
 
 ## Response
 
-Returns `UsFinancialStatement` with the following fields:
+### Response Example
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| revenue | string | Total revenue |
-| net_income | string | Net income |
-| net_margin | string | Net profit margin |
-| periods | FinancialPeriod[] | Reporting periods with line-item values |
-| currency | string | Currency code (e.g. `USD`) |
+```json
+{
+  "revenue": "124300000000",
+  "net_income": "30520000000",
+  "net_margin": "0.2454",
+  "periods": [
+    {
+      "date": "2026-03-31",
+      "values": {
+        "total_assets": "364840000000",
+        "total_liabilities": "291040000000"
+      }
+    }
+  ],
+  "currency": "USD"
+}
+```
 
-Each `FinancialPeriod` contains:
+### Response Status
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| date | string | Period date |
-| values | map[string]any | Financial line items keyed by metric name |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsFinancialStatement](#UsFinancialStatement) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### UsFinancialStatement
+
+<a id="UsFinancialStatement"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| revenue | string | true | Total revenue |
+| net_income | string | true | Net income |
+| net_margin | string | true | Net profit margin |
+| periods | FinancialPeriod[] | true | Reporting periods with line-item values |
+| ∟ date | string | true | Period date |
+| ∟ values | map[string]any | true | Financial line items keyed by metric name |
+| currency | string | true | Currency code (e.g. `USD`) |

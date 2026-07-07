@@ -155,4 +155,11 @@ func main() {
 
 ## Response
 
-Returns a flexible JSON object whose structure varies by company and reporting period. The object contains financial summary data including income, balance sheet, and cash flow indicators. Use `--format json` in the CLI or print the raw response to inspect the structure for a specific symbol.
+Returns a flexible JSON object. Structure varies by company and reporting period. Contains income statement, balance sheet, and cash flow summary data.
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | object |
+| 400    | Bad request | None   |
