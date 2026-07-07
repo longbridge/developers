@@ -126,3 +126,15 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## 響應
+
+返回 `USAssetOverview` ，包含以下字段：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| account_type | string | 賬戶類型標識 |
+| asset_timestamp | datetime | 資產數據快照時間 |
+| cash_buy_power | string | 可用買入力（現金） |
+| cash_list | object[] | 按貨幣分列的現金餘額 |
+| crypto_list | object[] | 加密貨幣持倉（含數量和估值） |

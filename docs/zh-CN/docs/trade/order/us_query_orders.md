@@ -136,3 +136,14 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## 响应
+
+返回 `QueryUSOrdersResponse` ，包含以下字段：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| orders | USOrder[] | 符合筛选条件的委托列表 |
+| total_count | int | 满足条件的委托总数 |
+
+Each `USOrder` contains: `order_id`, symbol, side, status, quantity, price, executed quantity/price, and creation timestamp.

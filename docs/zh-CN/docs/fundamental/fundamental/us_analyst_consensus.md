@@ -152,3 +152,7 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 响应
+
+返回一个结构灵活的 JSON 对象 包含分析师一致预期数据 — revenue and EPS forecasts, target price distribution, and buy/hold/sell rating breakdown. 具体字段因数据可用性而异。 可通过 CLI 使用 `--format json` 或打印原始响应查看数据结构。

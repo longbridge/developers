@@ -151,3 +151,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 响应
+
+返回 `UsCompanyDividends` ，包含以下字段：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| dividend_ttm | string | 过去 12 个月每股股息 |
+| dividend_yield_ttm | string | TTM 股息率（%） |
+| payouts | string | 过去一年的派息次数 |
+| currency | string | 货币代码，如 `USD` |
+| items | object[] | 逐笔分红支付记录 |

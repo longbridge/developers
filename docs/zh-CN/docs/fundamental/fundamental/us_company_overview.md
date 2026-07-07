@@ -151,3 +151,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 响应
+
+返回 `UsCompanyOverview` ，包含以下字段：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| intro | string | 公司简介 |
+| market_cap | string | 市值 |
+| ccy_symbol | string | 货币符号 |
+| top_rank_tags | string[] | 排名标签列表 |
+| detail_url | string | 公司详情页链接 |

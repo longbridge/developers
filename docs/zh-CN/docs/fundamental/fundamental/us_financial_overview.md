@@ -152,3 +152,7 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 响应
+
+返回一个结构灵活的 JSON 对象 其结构因公司和报告周期而异。 对象包含财务摘要数据 including income, balance sheet, and cash flow indicators. 可通过 CLI 使用 `--format json` 或打印原始响应来查看具体标的的数据结构。

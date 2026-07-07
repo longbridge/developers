@@ -154,3 +154,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 響應
+
+返回 `UsFinancialStatement` ，包含以下字段：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| revenue | string | 總營收 |
+| net_income | string | 淨利潤 |
+| net_margin | string | 淨利潤率 |
+| periods | object[] | 包含逐行數據的報告期列表 |
+| currency | string | 貨幣代碼，如 `USD` |

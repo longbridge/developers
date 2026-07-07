@@ -152,3 +152,12 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 响应
+
+返回 `UsETFFileList` ，包含以下字段：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| files | object[] | ETF 文件列表 |
+| files[].name | string | 文件名称 (e.g. `iShares Core S&P 500 ETF Prospectus`) |

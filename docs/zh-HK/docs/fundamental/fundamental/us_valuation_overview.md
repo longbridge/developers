@@ -151,3 +151,15 @@ func main() {
 
   </TabItem>
 </Tabs>
+
+## 響應
+
+返回 `UsValuationOverview` ，包含以下字段：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| indicator | string | 估值指標名稱 |
+| current_indicator | object | 當前估值指標數據 |
+| range | int | 歷史百分位區間 |
+| date | string | 估值日期 |
+| ai_summary | string | AI 生成的估值摘要 |

@@ -129,3 +129,13 @@ fmt.Printf("%+v\n", resp)
 
   </TabItem>
 </Tabs>
+
+## 響應
+
+返回 `USOrderDetailResponse` ，包含以下字段：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| order | object | 含狀態及成交詳情的完整委託對象 |
+| order_histories | object[] | 該委託的歷史狀態變更記錄 |
+| current_attached_order | object | 關聯子委託（如括號單/OCO），如有 |
