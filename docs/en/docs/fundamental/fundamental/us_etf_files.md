@@ -22,7 +22,7 @@ List regulatory documents for a US ETF — prospectus, fact sheets, and annual r
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | ETF symbol, e.g. `IVV.US` |
+| symbol | string | YES | ETF symbol, e.g. `IVV.US` |
 | size | int | NO | Maximum number of files to return |
 
 ## Request Example

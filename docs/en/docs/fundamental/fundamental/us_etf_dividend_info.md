@@ -22,7 +22,7 @@ Get dividend information for a US ETF — TTM dividend yield, payout frequency, 
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | ETF symbol, e.g. `IVV.US` |
+| symbol | string | YES | ETF symbol, e.g. `IVV.US` |
 
 ## Request Example
 

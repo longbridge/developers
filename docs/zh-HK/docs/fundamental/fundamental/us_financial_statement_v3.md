@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| counter_id | string | YES | 股票代碼，如 `AAPL.US` |
+| symbol | string | YES | 股票代碼，如 `AAPL.US` |
 | kind | string | YES | 報表類型：`IS`（損益表）、`BS`（資產負債表）、`CF`（現金流量表）|
 | report | string | NO | 報告週期 |
 

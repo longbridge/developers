@@ -22,7 +22,7 @@ Get company overview for a US stock — introduction, market cap, ranking tags, 
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Stock symbol, e.g. `AAPL.US` |
+| symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
 
 ## Request Example
 

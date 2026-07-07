@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| counter_id | string | 是 | 加密货币交易对，例如 `DOGEUSD.BKKT` |
+| symbol | string | 是 | 加密货币交易对，例如 `DOGEUSD.BKKT` |
 
 ## 请求示例
 

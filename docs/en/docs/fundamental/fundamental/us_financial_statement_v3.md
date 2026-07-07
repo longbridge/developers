@@ -22,7 +22,7 @@ Get a specific financial statement (income statement, balance sheet, or cash flo
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Stock symbol, e.g. `AAPL.US` |
+| symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
 | kind | string | YES | Statement type: `IS` (income), `BS` (balance sheet), `CF` (cash flow) |
 | report | string | NO | Period: `annual` or `quarterly` (default: annual) |
 

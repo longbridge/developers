@@ -22,7 +22,7 @@ Get dividend history for a US stock — TTM yield, payout count, and individual 
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Stock symbol, e.g. `AAPL.US` |
+| symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
 
 ## Request Example
 

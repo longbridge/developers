@@ -22,7 +22,7 @@ Get key financial metrics for a US stock — revenue, net income, EPS, margins, 
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Stock symbol, e.g. `AAPL.US` |
+| symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
 | report | string | NO | Period: `annual` or `quarterly` (default: annual) |
 
 ## Request Example

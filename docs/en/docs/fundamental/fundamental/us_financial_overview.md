@@ -22,7 +22,7 @@ Get financial overview for a US stock by reporting period — income, balance sh
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Stock symbol, e.g. `AAPL.US` |
+| symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
 | report | string | NO | Period: `annual` or `quarterly` (default: annual) |
 
 ## Request Example

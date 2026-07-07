@@ -22,7 +22,7 @@ Get overview data for a US crypto trading pair — all-time highs/lows, asset in
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Crypto symbol, e.g. `DOGEUSD.BKKT` |
+| symbol | string | YES | Crypto symbol, e.g. `DOGEUSD.BKKT` |
 
 ## Request Example
 

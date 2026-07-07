@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| counter_id | string | YES | 股票代碼，如 `AAPL.US` |
+| symbol | string | YES | 股票代碼，如 `AAPL.US` |
 | report | string | NO | 報告週期：`annual` 或 `quarterly`（默認：annual）|
 
 ## 請求示例

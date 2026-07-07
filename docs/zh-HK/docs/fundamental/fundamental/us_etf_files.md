@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| counter_id | string | YES | ETF 代碼，如 `IVV.US` |
+| symbol | string | YES | ETF 代碼，如 `IVV.US` |
 | size | int | NO | 最大返回文件數 |
 
 ## 請求示例

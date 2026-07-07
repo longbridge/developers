@@ -22,7 +22,7 @@ headingLevel: 2
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| counter_id | string | YES | ETF 代码，如 `IVV.US` |
+| symbol | string | YES | ETF 代码，如 `IVV.US` |
 
 ## 请求示例
 
