@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Longbridge US 賬戶不支援
+此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+:::
+
 設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
 
 <CliCommand>
