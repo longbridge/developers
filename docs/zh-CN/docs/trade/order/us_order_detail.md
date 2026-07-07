@@ -130,12 +130,34 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## 响应
 
 返回 `USOrderDetailResponse` ，包含以下字段：
 
 | 字段 | 类型 | 描述 |
 | ---- | ---- | ---- |
-| order | object | 含状态及成交详情的完整委托对象 |
-| order_histories | object[] | 该委托的历史状态变更记录 |
-| current_attached_order | object | 关联子委托（如括号单/OCO），如有 |
+| order | USOrder | 含状态和成交详情的完整委托信息 |
+| order_histories | USOrderHistory[] | 该委托的历史状态变更记录 |
+| current_attached_order | USOrder \| null | 关联子委托（括号单/OCO），无则为 null |
+
+每条 `USOrder` 包含：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| order_id | string | 委托唯一 ID |
+| symbol | string | 交易标的，如 `AAPL.US` |
+| side | string | `Buy`（买入）或 `Sell`（卖出） |
+| status | string | 委托状态 |
+| qty | string | 委托数量 |
+| price | string | 委托价格 |
+| executed_qty | string | 已成交数量 |
+| executed_price | string | 成交价格 |
+| created_at | int64 | 创建时间（Unix 秒） |
+
+每条 `USOrderHistory` 包含：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| status | string | 委托状态 at this point |
+| done_at | int64 | 时间戳（Unix 秒） |

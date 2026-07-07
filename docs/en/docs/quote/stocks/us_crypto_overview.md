@@ -129,15 +129,18 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
-## Response Fields
+
+## Response
+
+Returns `CryptoOverview` with the following fields:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| symbol | string | Trading-pair symbol |
+| symbol | string | Trading-pair symbol (e.g. `DOGEUSD.BKKT`) |
 | name | string | Asset name |
 | ticker | string | Short ticker |
-| base_asset | string | Base asset code |
-| currency | string | Quote currency |
+| base_asset | string | Base asset code (e.g. `DOGE`) |
+| currency | string | Quote currency (e.g. `USD`) |
 | all_time_high | string | All-time high price |
 | all_time_high_date | string | Date of all-time high |
 | all_time_low | string | All-time low price |

@@ -133,6 +133,7 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 Returns `USRealizedPL` with the following fields:
@@ -145,6 +146,14 @@ Each `USRealizedPLEntry` contains:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| category | int | Asset category (1=stock, 2=option, 3=crypto) |
-| currency | string | Currency code, e.g. `USD` |
-| metrics | object[] | P&L metrics for different time periods |
+| category | int | Asset category: `1`=stock, `2`=option, `3`=crypto |
+| currency | string | Currency code (e.g. `USD`) |
+| metrics | USRealizedPLMetric[] | P&L metrics for different time periods |
+
+Each `USRealizedPLMetric` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| amount | string | Realized P&L amount |
+| period | int | Time period |
+| rate | string | Return rate (%) |

@@ -137,6 +137,7 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## 响应
 
 返回 `QueryUSOrdersResponse` ，包含以下字段：
@@ -146,4 +147,16 @@ fmt.Printf("%+v\n", resp)
 | orders | USOrder[] | 符合筛选条件的委托列表 |
 | total_count | int | 满足条件的委托总数 |
 
-Each `USOrder` contains: `order_id`, symbol, side, status, quantity, price, executed quantity/price, and creation timestamp.
+每条 `USOrder` 包含：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| order_id | string | 委托唯一 ID |
+| symbol | string | 交易标的，如 `AAPL.US` |
+| side | string | `Buy`（买入）或 `Sell`（卖出） |
+| status | string | 委托状态 |
+| qty | string | 委托数量 |
+| price | string | 委托价格 |
+| executed_qty | string | 已成交数量 |
+| executed_price | string | 成交价格 |
+| created_at | int64 | 创建时间（Unix 秒） |

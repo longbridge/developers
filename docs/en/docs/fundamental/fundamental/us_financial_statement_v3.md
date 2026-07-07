@@ -155,6 +155,7 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 Returns `UsFinancialStatement` with the following fields:
@@ -164,5 +165,12 @@ Returns `UsFinancialStatement` with the following fields:
 | revenue | string | Total revenue |
 | net_income | string | Net income |
 | net_margin | string | Net profit margin |
-| periods | object[] | List of reporting periods with line-item values |
-| currency | string | Currency code, e.g. `USD` |
+| periods | FinancialPeriod[] | Reporting periods with line-item values |
+| currency | string | Currency code (e.g. `USD`) |
+
+Each `FinancialPeriod` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| date | string | Period date |
+| values | map[string]any | Financial line items keyed by metric name |

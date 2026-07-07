@@ -133,6 +133,7 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## 响应
 
 返回 `USRealizedPL` ，包含以下字段：
@@ -141,10 +142,18 @@ fmt.Printf("%+v\n", resp)
 | ---- | ---- | ---- |
 | realized_pl_list | USRealizedPLEntry[] | 按资产类别分列的盈亏明细 |
 
-Each `USRealizedPLEntry` contains:
+每条 `USRealizedPLEntry` 包含：
 
 | 字段 | 类型 | 描述 |
 | ---- | ---- | ---- |
-| category | int | 资产类别（1=股票，2=期权，3=加密货币） |
+| category | int | 资产类别：`1`=股票，`2`=期权，`3`=加密货币 |
 | currency | string | 货币代码，如 `USD` |
-| metrics | object[] | 不同时期的盈亏指标 |
+| metrics | USRealizedPLMetric[] | 不同时期的盈亏指标 |
+
+每条 `USRealizedPLMetric` 包含：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| amount | string | 已实现盈亏金额 |
+| period | int | 时间周期 |
+| rate | string | 收益率（%） |

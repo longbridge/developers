@@ -152,6 +152,7 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## 響應
 
 返回 `UsETFDividendInfo` ，包含以下字段：
@@ -162,4 +163,12 @@ func main() {
 | dividend_yield_ttm | string | TTM 股息率（%） |
 | dividend_freq | string | 派息頻率（如 `Quarterly`） |
 | currency | string | 貨幣代碼，如 `USD` |
-| fiscal_year_info | object[] | 按財年分列的年度分紅明細 |
+| fiscal_year_info | FiscalYearDividend[] | 按財年分列的年度分紅明細 |
+
+每條 `FiscalYearDividend` 包含：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| year | string | 財年 |
+| total_dividend | string | 年度總股息 |
+| records | object[] | 逐筆支付記錄 |

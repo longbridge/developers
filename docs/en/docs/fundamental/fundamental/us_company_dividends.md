@@ -152,14 +152,21 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 Returns `UsCompanyDividends` with the following fields:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| dividend_ttm | string | Trailing twelve-month dividend per share |
+| dividend_ttm | string | TTM dividend per share |
 | dividend_yield_ttm | string | TTM dividend yield (%) |
-| payouts | string | Number of dividend payouts in the past year |
-| currency | string | Currency code, e.g. `USD` |
-| items | object[] | Individual dividend payment records |
+| payouts | string | Number of payouts in past year |
+| currency | string | Currency code (e.g. `USD`) |
+| items | USDividendItem[] | Individual dividend records |
+
+Each `USDividendItem` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| dividend | string | Dividend amount per share |

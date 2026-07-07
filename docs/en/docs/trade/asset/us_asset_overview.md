@@ -127,6 +127,7 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 Returns `USAssetOverview` with the following fields:
@@ -134,7 +135,22 @@ Returns `USAssetOverview` with the following fields:
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | account_type | string | Account type identifier |
-| asset_timestamp | datetime | Snapshot time of the asset data |
-| cash_buy_power | string | Available buying power (cash) |
-| cash_list | object[] | Cash balances by currency |
-| crypto_list | object[] | Crypto holdings with quantity and value |
+| asset_timestamp | int64 | Snapshot time (Unix seconds) |
+| cash_buy_power | string | Available buying power |
+| cash_list | USCashEntry[] | Cash balances by currency |
+| stock_list | USStockEntry[] | Stock positions |
+| crypto_list | USCryptoEntry[] | Crypto positions |
+
+Each `USCashEntry` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| currency | string | Currency code (e.g. `USD`) |
+| amount | string | Cash amount |
+
+Each `USCryptoEntry` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| symbol | string | Crypto trading-pair symbol |
+| quantity | string | Quantity held |

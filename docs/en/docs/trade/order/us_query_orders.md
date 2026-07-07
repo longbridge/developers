@@ -137,6 +137,7 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 Returns `QueryUSOrdersResponse` with the following fields:
@@ -146,4 +147,16 @@ Returns `QueryUSOrdersResponse` with the following fields:
 | orders | USOrder[] | List of orders matching the filter |
 | total_count | int | Total number of matching orders |
 
-Each `USOrder` contains: `order_id`, symbol, side, status, quantity, price, executed quantity/price, and creation timestamp.
+Each `USOrder` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| order_id | string | Unique order ID |
+| symbol | string | Trading symbol (e.g. `AAPL.US`) |
+| side | string | `Buy` or `Sell` |
+| status | string | Order status |
+| qty | string | Order quantity |
+| price | string | Order price |
+| executed_qty | string | Executed quantity |
+| executed_price | string | Executed price |
+| created_at | int64 | Creation time (Unix seconds) |

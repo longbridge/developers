@@ -152,6 +152,7 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## 響應
 
 返回 `UsCompanyDividends` ，包含以下字段：
@@ -160,6 +161,12 @@ func main() {
 | ---- | ---- | ---- |
 | dividend_ttm | string | 過去 12 個月每股股息 |
 | dividend_yield_ttm | string | TTM 股息率（%） |
-| payouts | string | 過去一年的派息次數 |
+| payouts | string | 過去一年派息次數 |
 | currency | string | 貨幣代碼，如 `USD` |
-| items | object[] | 逐筆分紅支付記錄 |
+| items | USDividendItem[] | 逐筆分紅記錄 |
+
+每條 `USDividendItem` 包含：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| dividend | string | 每股分紅金額 |

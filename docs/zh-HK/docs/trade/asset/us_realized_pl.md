@@ -133,6 +133,7 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## 響應
 
 返回 `USRealizedPL` ，包含以下字段：
@@ -141,10 +142,18 @@ fmt.Printf("%+v\n", resp)
 | ---- | ---- | ---- |
 | realized_pl_list | USRealizedPLEntry[] | 按資產類別分列的盈虧明細 |
 
-Each `USRealizedPLEntry` contains:
+每條 `USRealizedPLEntry` 包含：
 
 | 字段 | 類型 | 描述 |
 | ---- | ---- | ---- |
-| category | int | 資產類別（1=股票，2=期權，3=加密貨幣） |
+| category | int | 資產類別：`1`=股票，`2`=期權，`3`=加密貨幣 |
 | currency | string | 貨幣代碼，如 `USD` |
-| metrics | object[] | 不同時期的盈虧指標 |
+| metrics | USRealizedPLMetric[] | 不同時期的盈虧指標 |
+
+每條 `USRealizedPLMetric` 包含：
+
+| 字段 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| amount | string | 已實現盈虧金額 |
+| period | int | 時間週期 |
+| rate | string | 收益率（%） |

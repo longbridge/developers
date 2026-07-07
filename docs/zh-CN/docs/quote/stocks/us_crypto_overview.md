@@ -142,3 +142,19 @@ fmt.Printf("%+v\n", resp)
 | all_time_high_date | string | 历史最高价日期 |
 | all_time_low | string | 历史最低价 |
 | all_time_low_date | string | 历史最低价日期 |
+
+## 响应
+
+返回 `CryptoOverview` ，包含以下字段：
+
+| 字段 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| symbol | string | 交易对代码，如 `DOGEUSD.BKKT` |
+| name | string | 资产名称 |
+| ticker | string | 简短代码 |
+| base_asset | string | 基础资产代码，如 `DOGE` |
+| currency | string | 计价货币，如 `USD` |
+| all_time_high | string | 历史最高价 |
+| all_time_high_date | string | 历史最高价日期 |
+| all_time_low | string | 历史最低价 |
+| all_time_low_date | string | 历史最低价日期 |

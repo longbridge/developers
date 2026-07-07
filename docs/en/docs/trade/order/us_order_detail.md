@@ -130,12 +130,34 @@ fmt.Printf("%+v\n", resp)
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 Returns `USOrderDetailResponse` with the following fields:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| order | object | Full order object with status and fill details |
-| order_histories | object[] | Historical status changes for the order |
-| current_attached_order | object | Attached child order (e.g. bracket/OCO), if any |
+| order | USOrder | Full order detail with status and fill information |
+| order_histories | USOrderHistory[] | Historical status changes for the order |
+| current_attached_order | USOrder \| null | Attached child order (bracket/OCO), null if none |
+
+Each `USOrder` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| order_id | string | Unique order ID |
+| symbol | string | Trading symbol (e.g. `AAPL.US`) |
+| side | string | `Buy` or `Sell` |
+| status | string | Order status |
+| qty | string | Order quantity |
+| price | string | Order price |
+| executed_qty | string | Executed quantity |
+| executed_price | string | Executed price |
+| created_at | int64 | Creation time (Unix seconds) |
+
+Each `USOrderHistory` contains:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| status | string | Order status at this point |
+| done_at | int64 | Timestamp (Unix seconds) |
