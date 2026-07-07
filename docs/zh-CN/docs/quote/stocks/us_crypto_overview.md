@@ -146,7 +146,7 @@ fmt.Printf("%+v\n", resp)
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -162,7 +162,7 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -177,12 +177,12 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | true | 交易对代码，如 `DOGEUSD.BKKT` |
-| name | string | true | 资产名称 |
-| ticker | string | true | 简短代码 |
-| base_asset | string | true | 基础资产代码，如 `DOGE` |
-| currency | string | true | 计价货币，如 `USD` |
-| all_time_high | string | true | 历史最高价 |
-| all_time_high_date | string | true | 历史最高价日期 |
-| all_time_low | string | true | 历史最低价 |
-| all_time_low_date | string | true | 历史最低价日期 |
+| symbol | string | 是 | 交易对代码，如 `DOGEUSD.BKKT` |
+| name | string | 是 | 资产名称 |
+| ticker | string | 是 | 简短代码 |
+| base_asset | string | 是 | 基础资产代码，如 `DOGE` |
+| currency | string | 是 | 计价货币，如 `USD` |
+| all_time_high | string | 是 | 历史最高价 |
+| all_time_high_date | string | 是 | 历史最高价日期 |
+| all_time_low | string | 是 | 历史最低价 |
+| all_time_low_date | string | 是 | 历史最低价日期 |

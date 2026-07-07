@@ -38,7 +38,7 @@ longbridge valuation NVDA.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_valuation_overview("AAPL.US")
@@ -155,7 +155,7 @@ func main() {
 
 ## 響應
 
-### 響應 Example
+### 響應示例
 
 ```json
 {
@@ -169,7 +169,7 @@ func main() {
 }
 ```
 
-### 響應 Status
+### 響應狀態
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |
@@ -184,9 +184,9 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| indicator | string | true | 估值指標名稱（如 `PE`、`PB`） |
-| current_indicator | object | true | 當前估值數據 |
-| ∟ circle | string | true | 當前指標數值 |
-| range | int | true | 歷史百分位（0–100） |
-| date | string | true | 估值日期 |
-| ai_summary | string | false | AI 生成的估值摘要 |
+| indicator | string | 是 | 估值指標名稱（如 `PE`、`PB`） |
+| current_indicator | object | 是 | 當前估值數據 |
+| ∟ circle | string | 是 | 當前指標數值 |
+| range | int | 是 | 歷史百分位（0–100） |
+| date | string | 是 | 估值日期 |
+| ai_summary | string | 否 | AI 生成的估值摘要 |

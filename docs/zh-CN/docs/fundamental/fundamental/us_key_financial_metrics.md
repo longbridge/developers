@@ -39,7 +39,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_key_financial_metrics("AAPL.US", report="annual")
@@ -158,7 +158,7 @@ func main() {
 
 返回结构灵活的 JSON 对象，包含关键财务指标（营收、净利润、EPS、利润率和增长率），具体字段因公司而异。
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |

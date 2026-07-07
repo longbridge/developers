@@ -146,7 +146,7 @@ fmt.Printf("%+v\n", resp)
 
 ## 響應
 
-### 響應 Example
+### 響應示例
 
 ```json
 {
@@ -162,7 +162,7 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 響應 Status
+### 響應狀態
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |
@@ -177,12 +177,12 @@ fmt.Printf("%+v\n", resp)
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | true | 交易對代碼，如 `DOGEUSD.BKKT` |
-| name | string | true | 資產名稱 |
-| ticker | string | true | 簡短代碼 |
-| base_asset | string | true | 基礎資產代碼，如 `DOGE` |
-| currency | string | true | 計價貨幣，如 `USD` |
-| all_time_high | string | true | 歷史最高價 |
-| all_time_high_date | string | true | 歷史最高價日期 |
-| all_time_low | string | true | 歷史最低價 |
-| all_time_low_date | string | true | 歷史最低價日期 |
+| symbol | string | 是 | 交易對代碼，如 `DOGEUSD.BKKT` |
+| name | string | 是 | 資產名稱 |
+| ticker | string | 是 | 簡短代碼 |
+| base_asset | string | 是 | 基礎資產代碼，如 `DOGE` |
+| currency | string | 是 | 計價貨幣，如 `USD` |
+| all_time_high | string | 是 | 歷史最高價 |
+| all_time_high_date | string | 是 | 歷史最高價日期 |
+| all_time_low | string | 是 | 歷史最低價 |
+| all_time_low_date | string | 是 | 歷史最低價日期 |

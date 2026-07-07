@@ -131,7 +131,7 @@ fmt.Printf("%+v\n", resp)
 
 ## 響應
 
-### 響應 Example
+### 響應示例
 
 ```json
 {
@@ -148,7 +148,7 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 響應 Status
+### 響應狀態
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |
@@ -163,12 +163,12 @@ fmt.Printf("%+v\n", resp)
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| account_type | string | true | 賬戶類型標識 |
-| asset_timestamp | int64 | true | 資產數據快照時間（Unix 秒） |
-| cash_buy_power | string | true | 可用買入力 |
-| cash_list | USCashEntry[] | false | 按貨幣分列的現金餘額 |
-| stock_list | USStockEntry[] | false | 股票持倉 |
-| crypto_list | USCryptoEntry[] | false | 加密貨幣持倉 |
+| account_type | string | 是 | 賬戶類型標識 |
+| asset_timestamp | int64 | 是 | 資產數據快照時間（Unix 秒） |
+| cash_buy_power | string | 是 | 可用買入力 |
+| cash_list | USCashEntry[] | 否 | 按貨幣分列的現金餘額 |
+| stock_list | USStockEntry[] | 否 | 股票持倉 |
+| crypto_list | USCryptoEntry[] | 否 | 加密貨幣持倉 |
 
 ### USCashEntry
 
@@ -176,8 +176,8 @@ fmt.Printf("%+v\n", resp)
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| currency | string | true | 貨幣代碼，如 `USD` |
-| amount | string | true | 現金金額 |
+| currency | string | 是 | 貨幣代碼，如 `USD` |
+| amount | string | 是 | 現金金額 |
 
 ### USCryptoEntry
 
@@ -185,5 +185,5 @@ fmt.Printf("%+v\n", resp)
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | true | 加密貨幣交易對代碼 |
-| quantity | string | true | 持有數量 |
+| symbol | string | 是 | 加密貨幣交易對代碼 |
+| quantity | string | 是 | 持有數量 |

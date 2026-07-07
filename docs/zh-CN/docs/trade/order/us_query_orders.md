@@ -141,7 +141,7 @@ fmt.Printf("%+v\n", resp)
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -162,7 +162,7 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -177,8 +177,8 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| orders | USOrder[] | true | 符合筛选条件的委托列表 |
-| total_count | int | true | 满足条件的委托总数 |
+| orders | USOrder[] | 是 | 符合筛选条件的委托列表 |
+| total_count | int | 是 | 满足条件的委托总数 |
 
 ### USOrder
 
@@ -186,12 +186,12 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| order_id | string | true | 委托唯一 ID |
-| symbol | string | true | 交易标的，如 `AAPL.US` |
-| side | string | true | `Buy`（买入）或 `Sell`（卖出） |
-| status | string | true | 委托状态（如 `Filled`、`New`、`PartialFilled`） |
-| qty | string | true | 委托数量 |
-| price | string | true | 委托价格 |
-| executed_qty | string | true | 已成交数量 |
-| executed_price | string | true | 平均成交价格 |
-| created_at | int64 | true | 创建时间（Unix 秒） |
+| order_id | string | 是 | 委托唯一 ID |
+| symbol | string | 是 | 交易标的，如 `AAPL.US` |
+| side | string | 是 | `Buy`（买入）或 `Sell`（卖出） |
+| status | string | 是 | 委托状态（如 `Filled`、`New`、`PartialFilled`） |
+| qty | string | 是 | 委托数量 |
+| price | string | 是 | 委托价格 |
+| executed_qty | string | 是 | 已成交数量 |
+| executed_price | string | 是 | 平均成交价格 |
+| created_at | int64 | 是 | 创建时间（Unix 秒） |

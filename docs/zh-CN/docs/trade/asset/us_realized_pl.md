@@ -137,7 +137,7 @@ fmt.Printf("%+v\n", resp)
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -160,7 +160,7 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -175,7 +175,7 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| realized_pl_list | USRealizedPLEntry[] | true | 按资产类别分列的盈亏明细 |
+| realized_pl_list | USRealizedPLEntry[] | 是 | 按资产类别分列的盈亏明细 |
 
 ### USRealizedPLEntry
 
@@ -183,9 +183,9 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| category | int | true | 资产类别：`1`=股票，`2`=期权，`3`=加密货币 |
-| currency | string | true | 货币代码，如 `USD` |
-| metrics | USRealizedPLMetric[] | true | 按时期分列的盈亏指标 |
+| category | int | 是 | 资产类别：`1`=股票，`2`=期权，`3`=加密货币 |
+| currency | string | 是 | 货币代码，如 `USD` |
+| metrics | USRealizedPLMetric[] | 是 | 按时期分列的盈亏指标 |
 
 ### USRealizedPLMetric
 
@@ -193,6 +193,6 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| amount | string | true | 已实现盈亏金额 |
-| period | int | true | 时间周期 |
-| rate | string | true | 收益率（%） |
+| amount | string | 是 | 已实现盈亏金额 |
+| period | int | 是 | 时间周期 |
+| rate | string | 是 | 收益率（%） |

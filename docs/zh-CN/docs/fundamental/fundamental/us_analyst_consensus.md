@@ -39,7 +39,7 @@ longbridge consensus NVDA.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_analyst_consensus("AAPL.US", report="annual")
@@ -158,7 +158,7 @@ func main() {
 
 返回结构灵活的 JSON 对象，包含分析师一致预期数据（营收/EPS 预测、目标价分布、买入/持有/卖出分布），具体字段因数据可用性而异。
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |

@@ -38,7 +38,7 @@ longbridge dividend MSFT.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_company_dividends("AAPL.US")
@@ -156,7 +156,7 @@ func main() {
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -171,7 +171,7 @@ func main() {
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -186,9 +186,9 @@ func main() {
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| dividend_ttm | string | true | 过去 12 个月每股股息 |
-| dividend_yield_ttm | string | true | TTM 股息率（%） |
-| payouts | string | true | 过去一年派息次数 |
-| currency | string | true | 货币代码，如 `USD` |
-| items | USDividendItem[] | false | 逐笔分红记录 |
-| ∟ dividend | string | true | 每股分红金额 |
+| dividend_ttm | string | 是 | 过去 12 个月每股股息 |
+| dividend_yield_ttm | string | 是 | TTM 股息率（%） |
+| payouts | string | 是 | 过去一年派息次数 |
+| currency | string | 是 | 货币代码，如 `USD` |
+| items | USDividendItem[] | 否 | 逐笔分红记录 |
+| ∟ dividend | string | 是 | 每股分红金额 |

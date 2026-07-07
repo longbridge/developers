@@ -38,7 +38,7 @@ longbridge dividend SPY.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_etf_dividend_info("IVV.US")
@@ -156,7 +156,7 @@ func main() {
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -176,7 +176,7 @@ func main() {
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -191,11 +191,11 @@ func main() {
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| dividend_ttm | string | true | 过去 12 个月每股股息 |
-| dividend_yield_ttm | string | true | TTM 股息率（%） |
-| dividend_freq | string | true | 派息频率（如 `Quarterly`） |
-| currency | string | true | 货币代码，如 `USD` |
-| fiscal_year_info | FiscalYearDividend[] | false | Annual dividend breakdown |
-| ∟ year | string | true | 财年 |
-| ∟ total_dividend | string | true | 年度总股息 |
-| ∟ records | object[] | false | 逐笔支付记录 |
+| dividend_ttm | string | 是 | 过去 12 个月每股股息 |
+| dividend_yield_ttm | string | 是 | TTM 股息率（%） |
+| dividend_freq | string | 是 | 派息频率（如 `Quarterly`） |
+| currency | string | 是 | 货币代码，如 `USD` |
+| fiscal_year_info | FiscalYearDividend[] | 否 | 按财年分列的年度分红明细 |
+| ∟ year | string | 是 | 财年 |
+| ∟ total_dividend | string | 是 | 年度总股息 |
+| ∟ records | object[] | 否 | 逐笔支付记录 |

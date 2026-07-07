@@ -41,7 +41,7 @@ longbridge financial-report AAPL.US --kind BS
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual")
@@ -159,7 +159,7 @@ func main() {
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -179,7 +179,7 @@ func main() {
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -194,10 +194,10 @@ func main() {
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| revenue | string | true | 总营收 |
-| net_income | string | true | 净利润 |
-| net_margin | string | true | 净利润率 |
-| periods | FinancialPeriod[] | true | 包含逐行数据的报告期列表 |
-| ∟ date | string | true | 报告期日期 |
-| ∟ values | map[string]any | true | 以指标名称为键的财务行项目 |
-| currency | string | true | 货币代码，如 `USD` |
+| revenue | string | 是 | 总营收 |
+| net_income | string | 是 | 净利润 |
+| net_margin | string | 是 | 净利润率 |
+| periods | FinancialPeriod[] | 是 | 包含逐行数据的报告期列表 |
+| ∟ date | string | 是 | 报告期日期 |
+| ∟ values | map[string]any | 是 | 以指标名称为键的财务行项目 |
+| currency | string | 是 | 货币代码，如 `USD` |

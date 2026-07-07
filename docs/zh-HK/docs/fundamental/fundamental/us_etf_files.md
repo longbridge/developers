@@ -39,7 +39,7 @@ longbridge etf-docs SPY.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_etf_files("IVV.US")
@@ -156,7 +156,7 @@ func main() {
 
 ## 響應
 
-### 響應 Example
+### 響應示例
 
 ```json
 {
@@ -167,7 +167,7 @@ func main() {
 }
 ```
 
-### 響應 Status
+### 響應狀態
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |
@@ -182,5 +182,5 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| files | ETFFile[] | true | ETF 監管文件列表 |
-| ∟ name | string | true | 文件名稱 |
+| files | ETFFile[] | 是 | ETF 監管文件列表 |
+| ∟ name | string | 是 | 文件名稱 |

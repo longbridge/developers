@@ -38,7 +38,7 @@ longbridge company TSLA.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_company_overview("AAPL.US")
@@ -155,7 +155,7 @@ func main() {
 
 ## 響應
 
-### 響應 Example
+### 響應示例
 
 ```json
 {
@@ -167,7 +167,7 @@ func main() {
 }
 ```
 
-### 響應 Status
+### 響應狀態
 
 | 狀態碼 | 描述 | 結構 |
 | ------ | ---- | ---- |
@@ -182,8 +182,8 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| intro | string | true | 公司簡介 |
-| market_cap | string | true | 市值 |
-| ccy_symbol | string | true | 貨幣符號 |
-| top_rank_tags | string[] | false | 排名標籤列表 |
-| detail_url | string | false | 公司詳情頁連結 |
+| intro | string | 是 | 公司簡介 |
+| market_cap | string | 是 | 市值 |
+| ccy_symbol | string | 是 | 貨幣符號 |
+| top_rank_tags | string[] | 否 | 排名標籤列表 |
+| detail_url | string | 否 | 公司詳情頁連結 |

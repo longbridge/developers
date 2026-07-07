@@ -131,7 +131,7 @@ fmt.Printf("%+v\n", resp)
 
 ## 响应
 
-### 响应 Example
+### 响应示例
 
 ```json
 {
@@ -148,7 +148,7 @@ fmt.Printf("%+v\n", resp)
 }
 ```
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
@@ -163,12 +163,12 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| account_type | string | true | 账户类型标识 |
-| asset_timestamp | int64 | true | 资产数据快照时间（Unix 秒） |
-| cash_buy_power | string | true | 可用买入力 |
-| cash_list | USCashEntry[] | false | 按货币分列的现金余额 |
-| stock_list | USStockEntry[] | false | 股票持仓 |
-| crypto_list | USCryptoEntry[] | false | 加密货币持仓 |
+| account_type | string | 是 | 账户类型标识 |
+| asset_timestamp | int64 | 是 | 资产数据快照时间（Unix 秒） |
+| cash_buy_power | string | 是 | 可用买入力 |
+| cash_list | USCashEntry[] | 否 | 按货币分列的现金余额 |
+| stock_list | USStockEntry[] | 否 | 股票持仓 |
+| crypto_list | USCryptoEntry[] | 否 | 加密货币持仓 |
 
 ### USCashEntry
 
@@ -176,8 +176,8 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| currency | string | true | 货币代码，如 `USD` |
-| amount | string | true | 现金金额 |
+| currency | string | 是 | 货币代码，如 `USD` |
+| amount | string | 是 | 现金金额 |
 
 ### USCryptoEntry
 
@@ -185,5 +185,5 @@ fmt.Printf("%+v\n", resp)
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| symbol | string | true | 加密货币交易对代码 |
-| quantity | string | true | 持有数量 |
+| symbol | string | 是 | 加密货币交易对代码 |
+| quantity | string | 是 | 持有数量 |

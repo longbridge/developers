@@ -39,7 +39,7 @@ longbridge financial-report TSLA.US
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 resp = ctx.us_financial_overview("AAPL.US", report="annual")
@@ -158,7 +158,7 @@ func main() {
 
 返回结构灵活的 JSON 对象，内容因公司和报告周期而异，包含损益、资产负债和现金流摘要数据。
 
-### 响应 Status
+### 响应状态
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
