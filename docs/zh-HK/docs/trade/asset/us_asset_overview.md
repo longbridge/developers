@@ -25,6 +25,8 @@ longbridge positions
 
 ## Parameters
 
+> **SDK 方法參數。**
+
 無需參數。
 
 ## Request Example
