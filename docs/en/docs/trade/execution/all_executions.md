@@ -33,7 +33,7 @@ This API is used to query execution (fill) records, including both buy and sell 
 | order_id | string | NO       | Order ID, example: `701276261045858304`                                                                                                                                                             |
 | start_at | string | NO       | Start time, formatted as a timestamp (second), example: `1650410999`.<br/><br/> If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time. |
 | end_at   | string | NO       | End time, formatted as a timestamp (second), example: `1650410999`. <br/><br/> If the end time is null, the default is the current time or 90 days after of the start time.                         |
-| page     | string | NO       | Page number, starting from `1`. The maximum number of records per query is 1000. If the number of results exceeds 1000, `has_more` will be `true`, use `page` together with `has_more` to paginate. |
+| page     | int32  | NO       | Page number, starting from `1`. The maximum number of records per query is 1000. If the number of results exceeds 1000, `has_more` will be `true`, use `page` together with `has_more` to paginate. |
 
 ### Request Example
 

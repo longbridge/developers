@@ -33,7 +33,7 @@ headingLevel: 2
 | order_id | string | NO       | 订单 ID，例如：`701276261045858304`                                                                                |
 | start_at | string | NO       | 开始时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>开始时间为空时，默认为结束时间或当前时间前九十天。      |
 | end_at   | string | NO       | 结束时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>结束时间为空时，默认为开始时间后九十天或当前时间。      |
-| page     | string | NO       | 页码，从 `1` 开始。单次查询最多返回 1000 条记录，若结果超过 1000 条，`has_more` 为 `true`，可结合 `has_more` 翻页。 |
+| page     | int32  | NO       | 页码，从 `1` 开始。单次查询最多返回 1000 条记录，若结果超过 1000 条，`has_more` 为 `true`，可结合 `has_more` 翻页。 |
 
 ### Request Example
 
