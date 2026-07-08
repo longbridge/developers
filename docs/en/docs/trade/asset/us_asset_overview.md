@@ -25,6 +25,8 @@ longbridge positions
 
 ## Parameters
 
+> **SDK method parameters.**
+
 No parameters required.
 
 ## Request Example
