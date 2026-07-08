@@ -42,7 +42,7 @@ const { t, locale } = useI18n()
 const isCN = computed(() => !isServer() && window.location.host.endsWith('.cn'))
 
 const sgBaseUrl = computed(() =>
-  locale.value === 'en' ? 'https://longbridge.com/sg' : 'https://longbridge.com/sg/zh-CN',
+  locale.value === 'en' ? 'https://longbridge.com/sg' : 'https://longbridge.com/sg/zh-CN'
 )
 
 // 备案文案
@@ -63,13 +63,14 @@ const leftLinks = computed(() => [
   },
 ])
 
-const rightLinks = [
+const rightLinks = computed(() => [
   { href: '/sdk', label: 'SDK' },
   { href: '/docs/mcp', label: 'MCP' },
   { href: '/docs/cli', label: 'CLI' },
   { href: '/docs/llm', label: 'LLM' },
+  { href: '/docs/assets', label: t('footer.assets') },
   { href: 'https://github.com/longbridge/developers/issues', label: 'Feedback' },
-]
+])
 </script>
 
 <style scoped>

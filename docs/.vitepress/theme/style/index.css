@@ -65,14 +65,14 @@ html:root {
 /* Dark mode: align VitePress doc background with LB design system */
 html.dark {
   --vp-c-brand-1: var(--brand-80);
-  --vp-c-bg: #0A0E19;
-  --vp-c-bg-alt: #161A26;
-  --vp-c-bg-soft: #13182A;
-  --vp-c-bg-mute: #161A26;
+  --vp-c-bg: #0a0e19;
+  --vp-c-bg-alt: #161a26;
+  --vp-c-bg-soft: #13182a;
+  --vp-c-bg-mute: #161a26;
 }
 
 html.dark .vp-doc th {
-  background-color: #0E1120;
+  background-color: #0e1120;
 }
 
 /* AppNav is position:fixed; suppress VitePress padding-top only for sidebar pages (which manage their own layout) */
@@ -245,4 +245,125 @@ html.dark .vp-doc th {
 .vp-cli-action:hover {
   color: var(--vp-c-text-1);
   background-color: var(--vp-c-default-soft);
+}
+
+/* Brand assets Markdown HTML layout */
+.vp-doc .brand-assets-markdown {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.vp-doc .brand-asset-markdown-card {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 18px 22px;
+  align-items: start;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  padding: 18px;
+}
+
+.vp-doc .brand-asset-markdown-preview {
+  display: flex;
+  min-height: 124px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.vp-doc .brand-asset-markdown-preview.is-light {
+  background:
+    linear-gradient(45deg, rgba(130, 136, 141, 0.12) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(130, 136, 141, 0.12) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(130, 136, 141, 0.12) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(130, 136, 141, 0.12) 75%), var(--vp-c-bg);
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+  background-size: 16px 16px;
+}
+
+.vp-doc .brand-asset-markdown-preview.is-dark {
+  background: #0a0e19;
+}
+
+.vp-doc .brand-asset-markdown-preview.is-icon {
+  background: linear-gradient(135deg, var(--vp-c-bg-soft), var(--vp-c-bg-alt));
+}
+
+.vp-doc .brand-asset-markdown-preview img {
+  display: block;
+  max-width: min(100%, 320px);
+  max-height: 84px;
+  object-fit: contain;
+}
+
+.vp-doc .brand-asset-markdown-preview.is-icon img {
+  max-width: 72px;
+  max-height: 72px;
+}
+
+.vp-doc .brand-asset-markdown-body {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.vp-doc .brand-asset-markdown-body h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.vp-doc .brand-asset-markdown-body p {
+  margin: 0 !important;
+  line-height: 1.55;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc .brand-asset-markdown-body dl {
+  display: grid;
+  gap: 2px;
+  margin: 0 !important;
+}
+
+.vp-doc .brand-asset-markdown-body dt,
+.vp-doc .brand-asset-markdown-url span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+}
+
+.vp-doc .brand-asset-markdown-body dd {
+  min-width: 0;
+  margin: 0 !important;
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc .brand-asset-markdown-url {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.vp-doc .brand-asset-markdown-url a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 760px) {
+  .vp-doc .brand-asset-markdown-card {
+    grid-template-columns: 1fr;
+  }
 }

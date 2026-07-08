@@ -14,7 +14,15 @@ import path from 'path'
 const distDir = path.resolve('docs/.vitepress/dist')
 
 // Each entry: copy `dir/index.ext` → `dir.ext` (so both paths exist)
-const routes = ['skill/install', 'docs/cli', 'zh-CN/docs/cli', 'zh-HK/docs/cli']
+const routes = [
+  'skill/install',
+  'docs/cli',
+  'zh-CN/docs/cli',
+  'zh-HK/docs/cli',
+  'docs/assets',
+  'zh-CN/docs/assets',
+  'zh-HK/docs/assets',
+]
 
 const exts = ['.html', '.md']
 
