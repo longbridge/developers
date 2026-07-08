@@ -163,13 +163,63 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## Response
 
-Returns a flexible JSON object containing key financial metrics (revenue, net income, EPS, margins, growth rates). Structure varies by company.
+### Response Example
+
+```json
+{
+  "currency": "USD",
+  "report": "annual",
+  "empty_fields": [],
+  "list": [
+    {
+      "ff_period": "A",
+      "ff_year": 2024,
+      "fp_end": "2024-09-28",
+      "report_txt": "FY2024",
+      "rpt_date": "2024-11-01",
+      "fields": {
+        "revenue": "391035000000",
+        "gross_margin": "0.4621",
+        "net_margin": "0.2397",
+        "eps": "6.07"
+      }
+    }
+  ]
+}
+```
 
 ### Response Status
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | object |
+| 200    | Success     | [UsKeyFinancialMetrics](#UsKeyFinancialMetrics) |
 | 400    | Bad request | None   |
+
+## Schemas
+
+### UsKeyFinancialMetrics
+
+<a id="UsKeyFinancialMetrics"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| currency | string | true | Currency code (e.g. `USD`) |
+| report | string | true | Report period type (e.g. `annual`, `quarterly`) |
+| empty_fields | string[] | false | Fields with no data for this period |
+| list | USKeyMetricItem[] | true | Key metric records by period |
+
+### USKeyMetricItem
+
+<a id="USKeyMetricItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| ff_period | string | true | Period type code (e.g. `A`=annual, `Q`=quarterly) |
+| ff_year | int | true | Fiscal year |
+| fp_end | string | true | Period end date (YYYY-MM-DD) |
+| report_txt | string | true | Period label (e.g. `FY2024`) |
+| rpt_date | string | true | Report release date (YYYY-MM-DD) |
+| fields | object | true | Key financial metrics (structure varies by company) |

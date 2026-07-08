@@ -163,13 +163,62 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## Response
 
-Returns a flexible JSON object containing analyst consensus data (revenue/EPS forecasts, target price distribution, buy/hold/sell breakdown). Structure varies by data availability.
+### Response Example
+
+```json
+{
+  "ai_summary": "Analysts remain broadly bullish on AAPL with 35 Buy ratings...",
+  "aichat_data": {
+    "agent_id": "analyst_aapl",
+    "handoff_agent_id": "",
+    "symbol": "AAPL.US",
+    "text": "Analyst consensus summary for AAPL",
+    "chat_type": "consensus",
+    "workflow_type": "analyst"
+  },
+  "currency": "USD",
+  "report": "annual",
+  "list": null,
+  "opt_reports": null,
+  "h5_data": null
+}
+```
 
 ### Response Status
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | object |
+| 200    | Success     | [UsAnalystConsensus](#UsAnalystConsensus) |
 | 400    | Bad request | None   |
+
+## Schemas
+
+### UsAnalystConsensus
+
+<a id="UsAnalystConsensus"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| ai_summary | string | true | AI-generated analyst consensus summary |
+| aichat_data | USAIChatData | true | AI chat context data |
+| currency | string | true | Currency code (e.g. `USD`) |
+| report | string | true | Report period type |
+| list | any | false | Consensus detail list (structure varies) |
+| opt_reports | any | false | Optional report data |
+| h5_data | any | false | H5 display data |
+
+### USAIChatData
+
+<a id="USAIChatData"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| agent_id | string | true | AI agent identifier |
+| handoff_agent_id | string | false | Handoff agent identifier |
+| symbol | string | true | Stock symbol |
+| text | string | true | Chat context text |
+| chat_type | string | true | Chat type |
+| workflow_type | string | true | Workflow type |

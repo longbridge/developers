@@ -164,13 +164,114 @@ func main() {
 </Tabs>
 
 
+
 ## Response
 
-返回结构灵活的 JSON 对象，内容因公司和报告周期而异，包含损益、资产负债和现金流摘要数据。
+### Response Example
+
+```json
+{
+  "ccy_symbol": "USD",
+  "report_type": "annual",
+  "is_list": [
+    {
+      "revenue": "391035000000",
+      "net_income": "93736000000",
+      "net_margin": "0.2397",
+      "report": {
+        "start_date": "2023-10-01",
+        "end_date": "2024-09-28",
+        "report_txt": "FY2024"
+      }
+    }
+  ],
+  "bs_list": [
+    {
+      "debt_assets_ratio": "0.8193",
+      "total_assets": "364840000000",
+      "total_liabilities": "308927000000",
+      "report": {
+        "start_date": "2023-10-01",
+        "end_date": "2024-09-28",
+        "report_txt": "FY2024"
+      }
+    }
+  ],
+  "cf_list": [
+    {
+      "operating": "118254000000",
+      "investing": "-21013000000",
+      "financing": "-89831000000",
+      "report": {
+        "start_date": "2023-10-01",
+        "end_date": "2024-09-28",
+        "report_txt": "FY2024"
+      }
+    }
+  ]
+}
+```
 
 ### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
-| 200    | 成功 | object |
+| 200    | 成功 | [UsFinancialOverview](#UsFinancialOverview) |
 | 400    | 请求错误 | None   |
+
+## Schemas
+
+### UsFinancialOverview
+
+<a id="UsFinancialOverview"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| ccy_symbol | string | 是 | 货币符号 |
+| report_type | string | 是 | 报告类型（如 `annual`、`quarterly`） |
+| is_list | USFinancialISItem[] | 是 | 损益表条目列表 |
+| bs_list | USFinancialBSItem[] | 是 | 资产负债表条目列表 |
+| cf_list | USFinancialCFItem[] | 是 | 现金流量表条目列表 |
+
+### USFinancialISItem
+
+<a id="USFinancialISItem"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| revenue | string | 是 | 总营收 |
+| net_income | string | 是 | 净利润 |
+| net_margin | string | 是 | 净利润率 |
+| report | USReportPeriod | 是 | 报告期信息 |
+
+### USFinancialBSItem
+
+<a id="USFinancialBSItem"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| debt_assets_ratio | string | 是 | 资产负债率 |
+| total_assets | string | 是 | 总资产 |
+| total_liabilities | string | 是 | 总负债 |
+| report | USReportPeriod | 是 | 报告期信息 |
+
+### USFinancialCFItem
+
+<a id="USFinancialCFItem"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| operating | string | 是 | 经营活动现金流 |
+| investing | string | 是 | 投资活动现金流 |
+| financing | string | 是 | 筹资活动现金流 |
+| report | USReportPeriod | 是 | 报告期信息 |
+
+### USReportPeriod
+
+<a id="USReportPeriod"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| start_date | string | 是 | 报告期开始日期 |
+| end_date | string | 是 | 报告期结束日期 |
+| report_txt | string | 是 | 报告期标签（如 `FY2024`、`Q1 2024`） |

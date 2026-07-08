@@ -163,13 +163,114 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## Response
 
-Returns a flexible JSON object. Structure varies by company and reporting period. Contains income statement, balance sheet, and cash flow summary data.
+### Response Example
+
+```json
+{
+  "ccy_symbol": "USD",
+  "report_type": "annual",
+  "is_list": [
+    {
+      "revenue": "391035000000",
+      "net_income": "93736000000",
+      "net_margin": "0.2397",
+      "report": {
+        "start_date": "2023-10-01",
+        "end_date": "2024-09-28",
+        "report_txt": "FY2024"
+      }
+    }
+  ],
+  "bs_list": [
+    {
+      "debt_assets_ratio": "0.8193",
+      "total_assets": "364840000000",
+      "total_liabilities": "308927000000",
+      "report": {
+        "start_date": "2023-10-01",
+        "end_date": "2024-09-28",
+        "report_txt": "FY2024"
+      }
+    }
+  ],
+  "cf_list": [
+    {
+      "operating": "118254000000",
+      "investing": "-21013000000",
+      "financing": "-89831000000",
+      "report": {
+        "start_date": "2023-10-01",
+        "end_date": "2024-09-28",
+        "report_txt": "FY2024"
+      }
+    }
+  ]
+}
+```
 
 ### Response Status
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | object |
+| 200    | Success     | [UsFinancialOverview](#UsFinancialOverview) |
 | 400    | Bad request | None   |
+
+## Schemas
+
+### UsFinancialOverview
+
+<a id="UsFinancialOverview"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| ccy_symbol | string | true | Currency symbol |
+| report_type | string | true | Report type (e.g. `annual`, `quarterly`) |
+| is_list | USFinancialISItem[] | true | Income statement items |
+| bs_list | USFinancialBSItem[] | true | Balance sheet items |
+| cf_list | USFinancialCFItem[] | true | Cash flow items |
+
+### USFinancialISItem
+
+<a id="USFinancialISItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| revenue | string | true | Total revenue |
+| net_income | string | true | Net income |
+| net_margin | string | true | Net profit margin |
+| report | USReportPeriod | true | Reporting period info |
+
+### USFinancialBSItem
+
+<a id="USFinancialBSItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| debt_assets_ratio | string | true | Debt-to-assets ratio |
+| total_assets | string | true | Total assets |
+| total_liabilities | string | true | Total liabilities |
+| report | USReportPeriod | true | Reporting period info |
+
+### USFinancialCFItem
+
+<a id="USFinancialCFItem"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| operating | string | true | Operating cash flow |
+| investing | string | true | Investing cash flow |
+| financing | string | true | Financing cash flow |
+| report | USReportPeriod | true | Reporting period info |
+
+### USReportPeriod
+
+<a id="USReportPeriod"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| start_date | string | true | Period start date (YYYY-MM-DD) |
+| end_date | string | true | Period end date (YYYY-MM-DD) |
+| report_txt | string | true | Period label (e.g. `FY2024`, `Q1 2024`) |

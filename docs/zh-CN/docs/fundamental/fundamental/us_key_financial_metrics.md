@@ -164,13 +164,63 @@ func main() {
 </Tabs>
 
 
+
 ## Response
 
-返回结构灵活的 JSON 对象，包含关键财务指标（营收、净利润、EPS、利润率和增长率），具体字段因公司而异。
+### Response Example
+
+```json
+{
+  "currency": "USD",
+  "report": "annual",
+  "empty_fields": [],
+  "list": [
+    {
+      "ff_period": "A",
+      "ff_year": 2024,
+      "fp_end": "2024-09-28",
+      "report_txt": "FY2024",
+      "rpt_date": "2024-11-01",
+      "fields": {
+        "revenue": "391035000000",
+        "gross_margin": "0.4621",
+        "net_margin": "0.2397",
+        "eps": "6.07"
+      }
+    }
+  ]
+}
+```
 
 ### Response Status
 
 | 状态码 | 描述 | 结构 |
 | ------ | ---- | ---- |
-| 200    | 成功 | object |
+| 200    | 成功 | [UsKeyFinancialMetrics](#UsKeyFinancialMetrics) |
 | 400    | 请求错误 | None   |
+
+## Schemas
+
+### UsKeyFinancialMetrics
+
+<a id="UsKeyFinancialMetrics"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| currency | string | 是 | 货币代码，如 `USD` |
+| report | string | 是 | 报告周期类型（如 `annual`、`quarterly`） |
+| empty_fields | string[] | 否 | 本期无数据的字段列表 |
+| list | USKeyMetricItem[] | 是 | 按报告期排列的关键指标数据 |
+
+### USKeyMetricItem
+
+<a id="USKeyMetricItem"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| ff_period | string | 是 | 报告周期代码（如 `A`=年报、`Q`=季报） |
+| ff_year | int | 是 | 财年 |
+| fp_end | string | 是 | 报告期结束日期 |
+| report_txt | string | 是 | 报告期标签（如 `FY2024`） |
+| rpt_date | string | 是 | 财报发布日期 |
+| fields | object | 是 | 关键财务指标（结构因公司而异） |

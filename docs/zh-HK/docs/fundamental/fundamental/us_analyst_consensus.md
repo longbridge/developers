@@ -164,13 +164,62 @@ func main() {
 </Tabs>
 
 
+
 ## Response
 
-返回結構靈活的 JSON 對象，包含分析師一致預期數據（營收/EPS 預測、目標價分佈、買入/持有/賣出分佈），具體字段因數據可用性而異。
+### Response Example
+
+```json
+{
+  "ai_summary": "Analysts remain broadly bullish on AAPL with 35 Buy ratings...",
+  "aichat_data": {
+    "agent_id": "analyst_aapl",
+    "handoff_agent_id": "",
+    "symbol": "AAPL.US",
+    "text": "Analyst consensus summary for AAPL",
+    "chat_type": "consensus",
+    "workflow_type": "analyst"
+  },
+  "currency": "USD",
+  "report": "annual",
+  "list": null,
+  "opt_reports": null,
+  "h5_data": null
+}
+```
 
 ### Response Status
 
-| 狀態碼 | 描述 | 結構 |
+| 状態码 | 描述 | 结構 |
 | ------ | ---- | ---- |
-| 200    | 成功 | object |
+| 200    | 成功 | [UsAnalystConsensus](#UsAnalystConsensus) |
 | 400    | 請求錯誤 | None   |
+
+## Schemas
+
+### UsAnalystConsensus
+
+<a id="UsAnalystConsensus"></a>
+
+| 名称 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| ai_summary | string | 是 | AI 生成的分析师一致预期摘要 |
+| aichat_data | USAIChatData | 是 | AI 对话上下文數据 |
+| currency | string | 是 | 貨币代码，如 `USD` |
+| report | string | 是 | 報告周期類型 |
+| list | any | 否 | 一致预期明细列表（结構不固定） |
+| opt_reports | any | 否 | 可选報告數据 |
+| h5_data | any | 否 | H5 展示數据 |
+
+### USAIChatData
+
+<a id="USAIChatData"></a>
+
+| 名称 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| agent_id | string | 是 | AI Agent 標识 |
+| handoff_agent_id | string | 否 | 转交 Agent 標识 |
+| symbol | string | 是 | 股票代码 |
+| text | string | 是 | 对话上下文文本 |
+| chat_type | string | 是 | 对话類型 |
+| workflow_type | string | 是 | 工作流類型 |
