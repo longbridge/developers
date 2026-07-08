@@ -256,6 +256,7 @@ func main() {
         "order_id": "693664675163312128",
         "price": "388",
         "quantity": "100",
+        "side": "Buy",
         "symbol": "700.HK",
         "trade_done_at": "1648611351",
         "trade_id": "693664675163312128-1648611351433741210"
@@ -292,3 +293,4 @@ func main() {
 | ∟ trade_done_at | string   | true     | Trade done time, formatted as a timestamp (second)                                                                                                 |
 | ∟ quantity      | string   | true     | Executed quantity                                                                                                                                  |
 | ∟ price         | string   | true     | Executed price                                                                                                                                     |
+| ∟ side          | string   | true     | Trade side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                                                                        |

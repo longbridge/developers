@@ -255,6 +255,7 @@ func main() {
         "order_id": "693664675163312128",
         "price": "388",
         "quantity": "100",
+        "side": "Buy",
         "symbol": "700.HK",
         "trade_done_at": "1648611351",
         "trade_id": "693664675163312128-1648611351433741210"
@@ -291,3 +292,4 @@ func main() {
 | ∟ trade_done_at | string   | true     | 成交时间，格式为时间戳 (秒)                                                                                   |
 | ∟ quantity      | string   | true     | 成交数量                                                                                                      |
 | ∟ price         | string   | true     | 成交价格                                                                                                      |
+| ∟ side          | string   | true     | 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出                                          |

@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-该接口用于获取订单的成交明细，包括买入和卖出的成交记录，同时支持当日成交和历史成交查询。相比当日/历史成交接口，每条记录额外返回买卖方向 `side`。
+该接口用于获取订单的成交明细，包括买入和卖出的成交记录，同时支持当日成交和历史成交查询。
 
 <SDKLinks module="trade" klass="TradeContext" method="all_executions" />
 

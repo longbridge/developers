@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-This API is used to query execution (fill) records, including both buy and sell records. It supports querying today's and historical executions at the same time. Compared with the today/history execution APIs, each record additionally returns the trade `side`.
+This API is used to query execution (fill) records, including both buy and sell records. It supports querying today's and historical executions at the same time.
 
 <SDKLinks module="trade" klass="TradeContext" method="all_executions" />
 
