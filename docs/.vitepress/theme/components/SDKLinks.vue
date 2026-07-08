@@ -180,6 +180,7 @@ const JAVA_ANCHOR_MAP: Record<string, string> = {
   setOnTrades: 'setOnTrades(com.longbridge.quote.TradesHandler)',
   getHistoryExecutions: 'getHistoryExecutions(com.longbridge.trade.GetHistoryExecutionsOptions)',
   getTodayExecutions: 'getTodayExecutions(com.longbridge.trade.GetTodayExecutionsOptions)',
+  getAllExecutions: 'getAllExecutions(com.longbridge.trade.GetAllExecutionsOptions)',
   getHistoryOrders: 'getHistoryOrders(com.longbridge.trade.GetHistoryOrdersOptions)',
   getTodayOrders: 'getTodayOrders(com.longbridge.trade.GetTodayOrdersOptions)',
   replaceOrder: 'replaceOrder(com.longbridge.trade.ReplaceOrderOptions)',
