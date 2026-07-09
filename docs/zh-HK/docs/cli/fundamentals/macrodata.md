@@ -42,15 +42,15 @@ longbridge macrodata --keyword CPI --country US
 ### 查看某個指標的歷史發布數據
 
 ```bash
-longbridge macrodata 62267
-longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 61744
+longbridge macrodata 61744 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON 輸出（適合 AI / 腳本）
 
 ```bash
 longbridge macrodata --format json
-longbridge macrodata 62267 --format json
+longbridge macrodata 61744 --format json
 ```
 
 **列表 JSON 結構：**
@@ -63,7 +63,7 @@ longbridge macrodata 62267 --format json
   "has_more": true,
   "list": [
     {
-      "indicator_code": "62267",
+      "indicator_code": "61744",
       "country": "US",
       "name": "Non-Farm Payroll",
       "periodicity": "Monthly",
@@ -82,7 +82,7 @@ longbridge macrodata 62267 --format json
   "limit": 20,
   "has_more": true,
   "info": {
-    "indicator_code": "62267",
+    "indicator_code": "61744",
     "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",

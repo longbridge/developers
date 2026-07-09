@@ -107,7 +107,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   "count": 619,
   "list": [
     {
-      "indicator_code": "62267",
+      "indicator_code": "61744",
       "country": "US",
       "name": "Non-Farm Payroll",
       "periodicity": "Monthly",

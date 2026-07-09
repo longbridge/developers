@@ -14,9 +14,9 @@ Get historical releases for a specific macroeconomic indicator — actual values
 
 <CliCommand>
 # Historical data for Non-Farm Payroll
-longbridge macrodata 62267
+longbridge macrodata 61744
 # Date range filter
-longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 61744 --start 2024-01-01 --end 2024-12-31
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic" />
@@ -45,7 +45,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
-resp = ctx.macroeconomic("62267", start_date="2024-01-01", end_date="2024-12-31")
+resp = ctx.macroeconomic("61744", start_date="2024-01-01", end_date="2024-12-31")
 print(resp)
 ```
 
@@ -60,7 +60,7 @@ async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
-    resp = await ctx.macroeconomic("62267", start_date="2024-01-01", end_date="2024-12-31")
+    resp = await ctx.macroeconomic("61744", start_date="2024-01-01", end_date="2024-12-31")
     print(resp)
 
 if __name__ == "__main__":
@@ -79,7 +79,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.macroeconomic('62267', { startDate: '2024-01-01', endDate: '2024-12-31' })
+  const resp = await ctx.macroeconomic('61744', { startDate: '2024-01-01', endDate: '2024-12-31' })
   console.log(resp)
 }
 main().catch(console.error)
@@ -97,7 +97,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getMacroeconomic("62267", "2024-01-01", "2024-12-31", null, null).get();
+            var resp = ctx.getMacroeconomic("61744", "2024-01-01", "2024-12-31", null, null).get();
             System.out.println(resp);
         }
     }
@@ -116,7 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.macroeconomic("62267", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
+    let resp = ctx.macroeconomic("61744", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -133,7 +133,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 {
   "count": 24,
   "info": {
-    "indicator_code": "62267",
+    "indicator_code": "61744",
     "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",

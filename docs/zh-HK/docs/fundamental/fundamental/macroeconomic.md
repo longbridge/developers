@@ -14,9 +14,9 @@ headingLevel: 2
 
 <CliCommand>
 # 查詢非農就業人數歷史數據
-longbridge macrodata 62267
+longbridge macrodata 61744
 # 指定日期範圍
-longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 61744 --start 2024-01-01 --end 2024-12-31
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="macroeconomic" />
@@ -45,7 +45,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", u
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
-resp = ctx.macroeconomic("62267", start_date="2024-01-01", end_date="2024-12-31")
+resp = ctx.macroeconomic("61744", start_date="2024-01-01", end_date="2024-12-31")
 print(resp)
 ```
 
@@ -61,7 +61,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.macroeconomic('62267', { startDate: '2024-01-01', endDate: '2024-12-31' })
+  const resp = await ctx.macroeconomic('61744', { startDate: '2024-01-01', endDate: '2024-12-31' })
   console.log(resp)
 }
 main().catch(console.error)
@@ -79,7 +79,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.macroeconomic("62267", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
+    let resp = ctx.macroeconomic("61744", Some("2024-01-01"), Some("2024-12-31"), None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -94,7 +94,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 {
   "count": 24,
   "info": {
-    "indicator_code": "62267",
+    "indicator_code": "61744",
     "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",

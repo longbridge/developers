@@ -26,7 +26,7 @@ longbridge macrodata
 ```
 Total: 619
 Code     Name          Category    Country   Frequency   Source
-62267  非农就业人数  Employment  US        Monthly     Bureau of Labor Statistics
+61744  非农就业人数  Employment  US        Monthly     Bureau of Labor Statistics
 ...
 ```
 
@@ -56,7 +56,7 @@ longbridge macrodata --country US --limit 50 --page 2
 ### 查看某个指标的历史发布数据
 
 ```bash
-longbridge macrodata 62267
+longbridge macrodata 61744
 ```
 
 ```
@@ -71,14 +71,14 @@ Period      Actual   Forecast  Previous  Revised   Unit
 ### 按日期范围筛选历史数据
 
 ```bash
-longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 61744 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON 输出（适合 AI / 脚本）
 
 ```bash
 longbridge macrodata --format json
-longbridge macrodata 62267 --format json
+longbridge macrodata 61744 --format json
 ```
 
 **列表 JSON 结构：**
@@ -91,7 +91,7 @@ longbridge macrodata 62267 --format json
   "has_more": true,
   "list": [
     {
-      "indicator_code": "62267",
+      "indicator_code": "61744",
       "country": "US",
       "name": "Non-Farm Payroll",
       "periodicity": "Monthly",
@@ -110,7 +110,7 @@ longbridge macrodata 62267 --format json
   "limit": 20,
   "has_more": true,
   "info": {
-    "indicator_code": "62267",
+    "indicator_code": "61744",
     "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",

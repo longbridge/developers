@@ -26,7 +26,7 @@ longbridge macrodata
 ```
 Total: 619
 Code   Name              Category    Country   Frequency   Source
-62267  Non-Farm Payroll  Employment  US        Monthly     Bureau of Labor Statistics
+61744  Non-Farm Payroll  Employment  US        Monthly     Bureau of Labor Statistics
 ...
 ```
 
@@ -56,7 +56,7 @@ longbridge macrodata --country US --limit 50 --page 2
 ### Historical releases for a specific indicator
 
 ```bash
-longbridge macrodata 62267
+longbridge macrodata 61744
 ```
 
 ```
@@ -71,7 +71,7 @@ Period      Actual   Forecast  Previous  Revised   Unit
 ### Filter history by date range
 
 ```bash
-longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
+longbridge macrodata 61744 --start 2024-01-01 --end 2024-12-31
 ```
 
 ### JSON output for AI / scripting
@@ -81,7 +81,7 @@ longbridge macrodata 62267 --start 2024-01-01 --end 2024-12-31
 longbridge macrodata --format json
 
 # History as JSON
-longbridge macrodata 62267 --format json
+longbridge macrodata 61744 --format json
 ```
 
 **List JSON structure:**
@@ -94,7 +94,7 @@ longbridge macrodata 62267 --format json
   "has_more": true,
   "list": [
     {
-      "indicator_code": "62267",
+      "indicator_code": "61744",
       "country": "US",
       "name": "Non-Farm Payroll",
       "periodicity": "Monthly",
@@ -113,7 +113,7 @@ longbridge macrodata 62267 --format json
   "limit": 20,
   "has_more": true,
   "info": {
-    "indicator_code": "62267",
+    "indicator_code": "61744",
     "country": "US",
     "name": "Non-Farm Payroll",
     "periodicity": "Monthly",
