@@ -59,7 +59,7 @@ Longbridge 已经作为官方 ChatGPT App 提供。
 
 ![授权 Longbridge ChatGPT App](https://assets.lbkrs.com/uploads/a66bcd75-d747-4259-b684-a689d324716c/scr-20260707-nbno.png)
 
-完成授权后，在 ChatGPT 输入框中输入 `@longbridge`，即可开启 Longbridge MCP 查询行情、账户或持仓数据。
+完成授权后，每次提问时需在消息前加上 `@longbridge`，否则 ChatGPT 不会调用 Longbridge 来查询数据。例如：`@longbridge 查询我的当日订单`。
 
 :::warning ChatGPT 中不含交易下单功能
 由于 ChatGPT 平台规则限制，Longbridge ChatGPT App 不含下单及其他交易相关工具。如需使用交易功能，请改用 Claude Code、Cursor 等其他 MCP 客户端。

@@ -59,7 +59,7 @@ On ChatGPT web, desktop, or mobile:
 
 ![Authorize the Longbridge ChatGPT App](https://assets.lbkrs.com/uploads/a66bcd75-d747-4259-b684-a689d324716c/scr-20260707-nbno.png)
 
-After authorization, type `@longbridge` in the ChatGPT message box to start Longbridge MCP and query market, account, or portfolio data.
+After authorization, prefix every message with `@longbridge` to send it to Longbridge MCP — for example: `@longbridge check my today's orders`. Without this prefix, ChatGPT will not route your question to Longbridge.
 
 :::warning Trading features unavailable in ChatGPT
 Due to ChatGPT platform policies, the Longbridge ChatGPT App does not include order placement and other trading tools. To use trading features, switch to Claude Code, Cursor, or another MCP client.
