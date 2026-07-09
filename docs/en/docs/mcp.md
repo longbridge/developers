@@ -61,6 +61,10 @@ On ChatGPT web, desktop, or mobile:
 
 After authorization, type `@longbridge` in the ChatGPT message box to start Longbridge MCP and query market, account, or portfolio data.
 
+:::warning Trading features unavailable in ChatGPT
+Due to ChatGPT platform policies, the Longbridge ChatGPT App does not include order placement and other trading tools. To use trading features, switch to Claude Code, Cursor, or another MCP client.
+:::
+
 ### Claude Code
 
 Run the following command in your terminal:
