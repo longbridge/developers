@@ -112,9 +112,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 | `--report` | 報告週期：`annual` \| `quarterly` | annual |
 
 :::info 美股賬戶
-對於美國數據中心賬戶的 `.US` 標的：
-- 不指定 `--kind` 時，透過美股 API 返回財務概覽
-- 指定 `--kind IS`、`BS` 或 `CF` 時，透過美股 API 返回詳細報表
+美國數據中心賬戶的 `.US` 標的，不指定 `--kind` 時透過美股 API 返回財務概覽。
 
-注意：`--kind` 默認為空字符串（非 `ALL`），以支持美股路由邏輯。
+如需查看美股詳細的損益表 / 資產負債表 / 現金流量表，請使用 [`financial-statement`](/zh-HK/docs/cli/fundamentals/financial-statement) 命令。
 :::

@@ -8,6 +8,10 @@ sidebar_position: 3
 
 Fetch a fully detailed, line-item financial statement — income statement, balance sheet, or cash flow — for any public company.
 
+
+:::info US Accounts
+For `.US` symbols on US data-center accounts, `financial-statement` calls `us_financial_statement()` — the US-specific detailed statement API.
+:::
 ## Basic Usage
 
 ```bash

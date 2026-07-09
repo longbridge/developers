@@ -18,9 +18,9 @@ headingLevel: 2
 
 <CliCommand>
 # 损益表
-longbridge financial-report AAPL.US --kind IS
+longbridge financial-statement AAPL.US --kind IS
 # 资产负债表
-longbridge financial-report AAPL.US --kind BS
+longbridge financial-statement AAPL.US --kind BS
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement" />

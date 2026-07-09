@@ -115,9 +115,7 @@ Returns key financial indicators for US stocks: revenue, net income, EPS, margin
 | `--report` | Reporting period: `annual` \| `quarterly` | annual |
 
 :::info US Accounts
-For `.US` symbols on US data-center accounts:
-- Omitting `--kind` returns a financial overview via the US API
-- Specifying `--kind IS`, `BS`, or `CF` returns the detailed statement via the US API
+For `.US` symbols on US data-center accounts, omitting `--kind` returns a financial overview via the US API.
 
-Note: `--kind` defaults to an empty string (not `ALL`) to enable this US routing behavior.
+To get detailed income statement / balance sheet / cash flow for US stocks, use the [`financial-statement`](/docs/cli/fundamentals/financial-statement) command instead.
 :::
