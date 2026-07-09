@@ -188,6 +188,7 @@ func main() {
 | 200    | 成功 | [UsCompanyDividends](#UsCompanyDividends) |
 | 400    | 請求錯誤 | None   |
 
+
 ## Schemas
 
 ### UsCompanyDividends
@@ -196,9 +197,45 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| dividend_ttm | string | 是 | 過去 12 個月每股股息 |
-| dividend_yield_ttm | string | 是 | TTM 股息率（%） |
-| payouts | string | 是 | 過去一年派息次數 |
-| currency | string | 是 | 貨幣代碼，如 `USD` |
-| items | USDividendItem[] | 否 | 逐筆分紅記錄 |
-| ∟ dividend | string | 是 | 每股分紅金額 |
+| recent_dividends | USRecentDividend | 是 | 近期分紅摘要 |
+| dividend_history | USDividendHistoryItem[] | 否 | 歷年分紅歷史 |
+| payout_ratios | USDividendHistoryItem[] | 否 | 派息率歷史 |
+| dividend_payout_history | USDividendPayoutRecord[] | 否 | 逐筆分紅派發記錄 |
+
+### USRecentDividend
+
+<a id="USRecentDividend"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| dividend_ttm | string | 過去 12 個月每股股息 |
+| dividend_yield_ttm | string | TTM 股息率（%） |
+| payouts | string | 過去一年派息次數 |
+| currency | string | 貨幣代碼 |
+
+### USDividendHistoryItem
+
+<a id="USDividendHistoryItem"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| fiscal_year | string | 財年 |
+| fiscal_year_range | string | 財年日期範圍 |
+| dividend | string | 年度總股息 |
+| dividend_yield | string | 年度股息率 |
+| dividend_growth_rate | string | 股息同比增長率 |
+| dividend_payout_ratio | string | 派息率 |
+| total_shareholder_yield | string | 股東總回報率 |
+
+### USDividendPayoutRecord
+
+<a id="USDividendPayoutRecord"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| dividend | string | 每股分紅金額 |
+| dividend_type | string | 分紅類型（如 `Cash`） |
+| currency | string | 貨幣代碼 |
+| ex_date | string | 除權日 |
+| payment_date | string | 派息日 |
+| record_date | string | 登記日 |

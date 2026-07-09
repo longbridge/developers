@@ -192,6 +192,7 @@ func main() {
 | 200    | Success     | [UsETFDividendInfo](#UsETFDividendInfo) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### UsETFDividendInfo
@@ -202,9 +203,18 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | dividend_ttm | string | true | TTM dividend per share |
 | dividend_yield_ttm | string | true | TTM dividend yield (%) |
-| dividend_freq | string | true | Payout frequency (e.g. `Quarterly`) |
+| dividend_frequency | string | true | Payout frequency (e.g. `Quarterly`) |
 | currency | string | true | Currency code (e.g. `USD`) |
-| fiscal_year_info | FiscalYearDividend[] | false | Annual dividend breakdown |
-| ∟ year | string | true | Fiscal year |
-| ∟ total_dividend | string | true | Total annual dividend |
-| ∟ records | object[] | false | Individual payment records |
+| fiscal_year_info | USFiscalYearDividend[] | false | Annual dividend breakdown by fiscal year |
+
+### USFiscalYearDividend
+
+<a id="USFiscalYearDividend"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| fiscal_year | string | Fiscal year |
+| fiscal_year_range | string | Fiscal year date range |
+| dividend | string | Total dividend for the year |
+| dividend_yield | string | Dividend yield for the year |
+| currency | string | Currency code |

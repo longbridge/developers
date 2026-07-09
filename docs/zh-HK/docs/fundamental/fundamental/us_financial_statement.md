@@ -167,31 +167,43 @@ func main() {
 
 
 
+
 ## Response
 
 ### Response Example
 
 ```json
 {
-  "revenue": "124300000000",
-  "net_income": "30520000000",
-  "net_margin": "0.2454",
-  "periods": [
+  "currency": "USD",
+  "report": "annual",
+  "empty_fields": [],
+  "list": [
     {
-      "date": "2026-03-31",
-      "values": {
-        "total_assets": "364840000000",
-        "total_liabilities": "291040000000"
-      }
+      "ff_period": "A",
+      "ff_year": 2024,
+      "fp_end": "2024-09-28",
+      "report_txt": "FY2024",
+      "rpt_date": "2024-11-01",
+      "fields": [
+        {
+          "id": "revenue",
+          "name": "总营收",
+          "value": "391035000000",
+          "yoy": "0.0198",
+          "level": 1,
+          "display_order": 1,
+          "field": "revenue",
+          "value_type": "amount"
+        }
+      ]
     }
-  ],
-  "currency": "USD"
+  ]
 }
 ```
 
 ### Response Status
 
-| 狀態碼 | 描述 | 結構 |
+| 狀態碼 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [UsFinancialStatement](#UsFinancialStatement) |
 | 400    | 請求錯誤 | None   |
@@ -204,10 +216,35 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| revenue | string | 是 | 總營收 |
-| net_income | string | 是 | 淨利潤 |
-| net_margin | string | 是 | 淨利潤率 |
-| periods | FinancialPeriod[] | 是 | 包含逐行數據的報告期列表 |
-| ∟ date | string | 是 | 報告期日期 |
-| ∟ values | map[string]any | 是 | 以指標名稱為鍵的財務行項目 |
 | currency | string | 是 | 貨幣代碼，如 `USD` |
+| report | string | 是 | 報告週期類型（如 `annual`、`quarterly`） |
+| empty_fields | string[] | 否 | 本期無數據的字段列表 |
+| list | USFinancialStatementPeriod[] | 是 | 按報告期排列的報表數據 |
+
+### USFinancialStatementPeriod
+
+<a id="USFinancialStatementPeriod"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| ff_period | string | 是 | 報告週期代碼（如 `A`=年报、`Q`=季报） |
+| ff_year | int | 是 | 財年 |
+| fp_end | string | 是 | 報告期結束日期 |
+| report_txt | string | 是 | 報告期標籤（如 `FY2024`） |
+| rpt_date | string | 是 | 財報發布日期 |
+| fields | USFinancialStatementField[] | 是 | 財務行項目列表 |
+
+### USFinancialStatementField
+
+<a id="USFinancialStatementField"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| id | string | 是 | 字段標識 |
+| name | string | 是 | 字段顯示名稱 |
+| value | string | 是 | 字段值 |
+| yoy | string | 否 | 同比變動率 |
+| level | int | 是 | 層級（1=顶层） |
+| display_order | int | 是 | 顯示順序 |
+| field | string | 是 | 字段鍵名 |
+| value_type | string | 是 | 值類型（如 `amount`、`ratio`） |

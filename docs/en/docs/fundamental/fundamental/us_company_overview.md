@@ -183,6 +183,7 @@ func main() {
 | 200    | Success     | [UsCompanyOverview](#UsCompanyOverview) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### UsCompanyOverview
@@ -194,5 +195,27 @@ func main() {
 | intro | string | true | Company introduction |
 | market_cap | string | true | Market capitalization |
 | ccy_symbol | string | true | Currency symbol |
-| top_rank_tags | string[] | false | Ranking tag labels |
+| top_rank_tags | USRankTag[] | false | Ranking tag labels |
 | detail_url | string | false | Link to full company detail page |
+| share_list | USSharelistItem[] | false | Related sharelist items |
+
+### USRankTag
+
+<a id="USRankTag"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| key | string | Tag key identifier |
+| title | string | Tag title |
+| text | string | Tag display text |
+| rank_type | int | Ranking type |
+
+### USSharelistItem
+
+<a id="USSharelistItem"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | string | Sharelist ID |
+| name | string | Sharelist name |
+| chg | string | Change value |

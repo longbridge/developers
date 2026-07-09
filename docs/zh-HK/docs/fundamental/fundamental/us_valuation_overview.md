@@ -163,6 +163,7 @@ func main() {
 </Tabs>
 
 
+
 ## Response
 
 ### Response Example
@@ -170,18 +171,25 @@ func main() {
 ```json
 {
   "indicator": "PE",
-  "current_indicator": {
-    "circle": "35.2"
+  "metrics": {
+    "pe": {
+      "circle": "35.2",
+      "part": "72",
+      "metric": "PE",
+      "desc": "市盈率",
+      "industry_median": "28.4"
+    }
   },
   "range": 72,
   "date": "2026-07-01",
-  "ai_summary": "Apple's PE ratio of 35.2 is in the 72nd percentile..."
+  "ccy_symbol": "USD",
+  "ai_summary": "苹果市盈率处于历史 72 百分位..."
 }
 ```
 
 ### Response Status
 
-| 狀態碼 | 描述 | 結構 |
+| 狀態碼 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [UsValuationOverview](#UsValuationOverview) |
 | 400    | 請求錯誤 | None   |
@@ -194,9 +202,22 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| indicator | string | 是 | 估值指標名稱（如 `PE`、`PB`） |
-| current_indicator | object | 是 | 當前估值數據 |
-| ∟ circle | string | 是 | 當前指標數值 |
+| indicator | string | 是 | 主要估值指標名稱（如 `PE`） |
+| metrics | map[string, USValuationMetric] | 是 | 以指標名稱為鍵的估值指標字典 |
 | range | int | 是 | 歷史百分位（0–100） |
 | date | string | 是 | 估值日期 |
+| ccy_symbol | string | 是 | 貨幣符號 |
 | ai_summary | string | 否 | AI 生成的估值摘要 |
+| aichat_data | USAIChatData | 否 | AI 對話上下文數據 |
+
+### USValuationMetric
+
+<a id="USValuationMetric"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| circle | string | 當前指標數值 |
+| part | string | 百分位位置 |
+| metric | string | 指標名稱 |
+| desc | string | 指標描述 |
+| industry_median | string | 行業中位數 |

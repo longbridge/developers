@@ -193,6 +193,7 @@ func main() {
 | 200    | 成功 | [UsETFDividendInfo](#UsETFDividendInfo) |
 | 400    | 請求錯誤 | None   |
 
+
 ## Schemas
 
 ### UsETFDividendInfo
@@ -203,9 +204,18 @@ func main() {
 | ---- | ---- | ---- | ---- |
 | dividend_ttm | string | 是 | 過去 12 個月每股股息 |
 | dividend_yield_ttm | string | 是 | TTM 股息率（%） |
-| dividend_freq | string | 是 | 派息頻率（如 `Quarterly`） |
+| dividend_frequency | string | 是 | 派息頻率（如 `Quarterly`） |
 | currency | string | 是 | 貨幣代碼，如 `USD` |
-| fiscal_year_info | FiscalYearDividend[] | 否 | 按財年分列的年度分紅明細 |
-| ∟ year | string | 是 | 財年 |
-| ∟ total_dividend | string | 是 | 年度總股息 |
-| ∟ records | object[] | 否 | 逐筆支付記錄 |
+| fiscal_year_info | USFiscalYearDividend[] | 否 | 按財年分列的年度分紅明細 |
+
+### USFiscalYearDividend
+
+<a id="USFiscalYearDividend"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| fiscal_year | string | 財年 |
+| fiscal_year_range | string | 財年日期範圍 |
+| dividend | string | 年度總股息 |
+| dividend_yield | string | 年度股息率 |
+| currency | string | 貨幣代碼 |

@@ -196,6 +196,7 @@ func main() {
 | 200    | 成功 | [USOrderDetailResponse](#USOrderDetailResponse) |
 | 400    | 请求错误 | None   |
 
+
 ## Schemas
 
 ### USOrderDetailResponse
@@ -204,31 +205,28 @@ func main() {
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| order | USOrder | 是 | 完整委托详情 |
-| order_histories | USOrderHistory[] | 是 | 历史状态变更记录 |
-| current_attached_order | USOrder \| null | 否 | 关联子委托（括号单/OCO），无则为 null |
+| order | USOrderDetail \| null | 是 | 完整委托详情，未找到时为 null |
+| current_attached_order | USOrderDetail \| null | 否 | 关联子委托（括号单/OCO），无则为 null |
+| current_millisecond | string | 否 | 服务器时间戳（毫秒） |
 
-### USOrder
+### USOrderDetail
 
-<a id="USOrder"></a>
+<a id="USOrderDetail"></a>
 
-| 名称 | 类型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| order_id | string | 是 | 委托唯一 ID |
-| symbol | string | 是 | 交易标的，如 `AAPL.US` |
-| side | string | 是 | `Buy`（买入）或 `Sell`（卖出） |
-| status | string | 是 | 委托状态 |
-| qty | string | 是 | 委托数量 |
-| price | string | 是 | 委托价格 |
-| executed_qty | string | 是 | 已成交数量 |
-| executed_price | string | 是 | 平均成交价格 |
-| created_at | int64 | 是 | 创建时间（Unix 秒） |
-
-### USOrderHistory
-
-<a id="USOrderHistory"></a>
-
-| 名称 | 类型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| status | string | 是 | 委托状态 at this point |
-| done_at | int64 | 是 | 时间戳（Unix 秒） |
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| id | string | 委托 ID |
+| symbol | string | 交易标的，如 `AAPL.US` |
+| action | int | 方向：1=买入，2=卖出 |
+| order_type | string | 委托类型 |
+| status | string | 委托状态 |
+| price | string | 委托价格 |
+| quantity | string | 委托数量 |
+| executed_qty | string | 已成交数量 |
+| executed_price | string | 平均成交价格 |
+| executed_amount | string | 成交总金额 |
+| currency | string | 货币代码 |
+| submitted_at | string | 提交时间 |
+| done_at | string | 完成时间 |
+| time_in_force | int | 有效期类型 |
+| msg | string | 状态消息 |

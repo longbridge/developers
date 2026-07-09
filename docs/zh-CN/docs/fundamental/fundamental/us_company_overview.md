@@ -184,6 +184,7 @@ func main() {
 | 200    | 成功 | [UsCompanyOverview](#UsCompanyOverview) |
 | 400    | 请求错误 | None   |
 
+
 ## Schemas
 
 ### UsCompanyOverview
@@ -195,5 +196,27 @@ func main() {
 | intro | string | 是 | 公司简介 |
 | market_cap | string | 是 | 市值 |
 | ccy_symbol | string | 是 | 货币符号 |
-| top_rank_tags | string[] | 否 | 排名标签列表 |
+| top_rank_tags | USRankTag[] | 否 | 排名标签列表 |
 | detail_url | string | 否 | 公司详情页链接 |
+| share_list | USSharelistItem[] | 否 | 相关自选列表 |
+
+### USRankTag
+
+<a id="USRankTag"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| key | string | 标签标识 |
+| title | string | 标签标题 |
+| text | string | 标签显示文本 |
+| rank_type | int | 排名类型 |
+
+### USSharelistItem
+
+<a id="USSharelistItem"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| id | string | 自选列表 ID |
+| name | string | 自选列表名称 |
+| chg | string | 变动值 |

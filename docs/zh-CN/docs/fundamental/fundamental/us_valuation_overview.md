@@ -163,6 +163,7 @@ func main() {
 </Tabs>
 
 
+
 ## Response
 
 ### Response Example
@@ -170,12 +171,19 @@ func main() {
 ```json
 {
   "indicator": "PE",
-  "current_indicator": {
-    "circle": "35.2"
+  "metrics": {
+    "pe": {
+      "circle": "35.2",
+      "part": "72",
+      "metric": "PE",
+      "desc": "市盈率",
+      "industry_median": "28.4"
+    }
   },
   "range": 72,
   "date": "2026-07-01",
-  "ai_summary": "Apple's PE ratio of 35.2 is in the 72nd percentile..."
+  "ccy_symbol": "USD",
+  "ai_summary": "苹果市盈率处于历史 72 百分位..."
 }
 ```
 
@@ -194,9 +202,22 @@ func main() {
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| indicator | string | 是 | 估值指标名称（如 `PE`、`PB`） |
-| current_indicator | object | 是 | 当前估值数据 |
-| ∟ circle | string | 是 | 当前指标数值 |
+| indicator | string | 是 | 主要估值指标名称（如 `PE`） |
+| metrics | map[string, USValuationMetric] | 是 | 以指标名称为键的估值指标字典 |
 | range | int | 是 | 历史百分位（0–100） |
 | date | string | 是 | 估值日期 |
+| ccy_symbol | string | 是 | 货币符号 |
 | ai_summary | string | 否 | AI 生成的估值摘要 |
+| aichat_data | USAIChatData | 否 | AI 对话上下文数据 |
+
+### USValuationMetric
+
+<a id="USValuationMetric"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| circle | string | 当前指标数值 |
+| part | string | 百分位位置 |
+| metric | string | 指标名称 |
+| desc | string | 指标描述 |
+| industry_median | string | 行业中位数 |

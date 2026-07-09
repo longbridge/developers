@@ -162,6 +162,7 @@ func main() {
   </TabItem>
 </Tabs>
 
+
 ## Response
 
 ### Response Example
@@ -169,12 +170,27 @@ func main() {
 ```json
 {
   "indicator": "PE",
-  "current_indicator": {
-    "circle": "35.2"
+  "metrics": {
+    "pe": {
+      "circle": "35.2",
+      "part": "72",
+      "metric": "PE",
+      "desc": "Price-to-Earnings ratio",
+      "industry_median": "28.4"
+    }
   },
   "range": 72,
   "date": "2026-07-01",
-  "ai_summary": "Apple's PE ratio of 35.2 is in the 72nd percentile..."
+  "ccy_symbol": "USD",
+  "ai_summary": "Apple's PE ratio is in the 72nd percentile...",
+  "aichat_data": {
+    "agent_id": "valuation_aapl",
+    "handoff_agent_id": "",
+    "symbol": "AAPL.US",
+    "text": "Valuation overview for AAPL",
+    "chat_type": "valuation",
+    "workflow_type": "valuation"
+  }
 }
 ```
 
@@ -193,9 +209,22 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| indicator | string | true | Valuation indicator name (e.g. `PE`, `PB`) |
-| current_indicator | object | true | Current valuation data |
-| ∟ circle | string | true | Current indicator value |
+| indicator | string | true | Primary valuation indicator name (e.g. `PE`) |
+| metrics | map[string, USValuationMetric] | true | Valuation metrics keyed by indicator name |
 | range | int | true | Historical percentile (0–100) |
 | date | string | true | Valuation date |
+| ccy_symbol | string | true | Currency symbol |
 | ai_summary | string | false | AI-generated valuation summary |
+| aichat_data | USAIChatData | false | AI chat context data |
+
+### USValuationMetric
+
+<a id="USValuationMetric"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| circle | string | Current indicator value |
+| part | string | Percentile position |
+| metric | string | Metric name |
+| desc | string | Metric description |
+| industry_median | string | Industry median value |

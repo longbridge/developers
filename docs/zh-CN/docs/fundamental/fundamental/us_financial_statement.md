@@ -167,25 +167,37 @@ func main() {
 
 
 
+
 ## Response
 
 ### Response Example
 
 ```json
 {
-  "revenue": "124300000000",
-  "net_income": "30520000000",
-  "net_margin": "0.2454",
-  "periods": [
+  "currency": "USD",
+  "report": "annual",
+  "empty_fields": [],
+  "list": [
     {
-      "date": "2026-03-31",
-      "values": {
-        "total_assets": "364840000000",
-        "total_liabilities": "291040000000"
-      }
+      "ff_period": "A",
+      "ff_year": 2024,
+      "fp_end": "2024-09-28",
+      "report_txt": "FY2024",
+      "rpt_date": "2024-11-01",
+      "fields": [
+        {
+          "id": "revenue",
+          "name": "总营收",
+          "value": "391035000000",
+          "yoy": "0.0198",
+          "level": 1,
+          "display_order": 1,
+          "field": "revenue",
+          "value_type": "amount"
+        }
+      ]
     }
-  ],
-  "currency": "USD"
+  ]
 }
 ```
 
@@ -204,10 +216,35 @@ func main() {
 
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| revenue | string | 是 | 总营收 |
-| net_income | string | 是 | 净利润 |
-| net_margin | string | 是 | 净利润率 |
-| periods | FinancialPeriod[] | 是 | 包含逐行数据的报告期列表 |
-| ∟ date | string | 是 | 报告期日期 |
-| ∟ values | map[string]any | 是 | 以指标名称为键的财务行项目 |
 | currency | string | 是 | 货币代码，如 `USD` |
+| report | string | 是 | 报告周期类型（如 `annual`、`quarterly`） |
+| empty_fields | string[] | 否 | 本期无数据的字段列表 |
+| list | USFinancialStatementPeriod[] | 是 | 按报告期排列的报表数据 |
+
+### USFinancialStatementPeriod
+
+<a id="USFinancialStatementPeriod"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| ff_period | string | 是 | 报告周期代码（如 `A`=年报、`Q`=季报） |
+| ff_year | int | 是 | 财年 |
+| fp_end | string | 是 | 报告期结束日期 |
+| report_txt | string | 是 | 报告期标签（如 `FY2024`） |
+| rpt_date | string | 是 | 财报发布日期 |
+| fields | USFinancialStatementField[] | 是 | 财务行项目列表 |
+
+### USFinancialStatementField
+
+<a id="USFinancialStatementField"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| id | string | 是 | 字段标识 |
+| name | string | 是 | 字段显示名称 |
+| value | string | 是 | 字段值 |
+| yoy | string | 否 | 同比变动率 |
+| level | int | 是 | 层级（1=顶层） |
+| display_order | int | 是 | 显示顺序 |
+| field | string | 是 | 字段键名 |
+| value_type | string | 是 | 值类型（如 `amount`、`ratio`） |

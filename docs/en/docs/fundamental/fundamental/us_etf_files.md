@@ -183,13 +183,25 @@ func main() {
 | 200    | Success     | [UsETFFileList](#UsETFFileList) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
-### UsETFFileList
+### UsETFFilesResponse
 
-<a id="UsETFFileList"></a>
+<a id="UsETFFilesResponse"></a>
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| files | ETFFile[] | true | List of ETF regulatory documents |
-| ∟ name | string | true | Document name |
+| files | USETFFile[] | true | List of ETF regulatory documents |
+
+### USETFFile
+
+<a id="USETFFile"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| file_name | string | Document file name |
+| file_path | string | Document file path or URL |
+| update_date | string | Last update date |
+| code | string | Document code |
+| format | string | File format (e.g. `pdf`) |

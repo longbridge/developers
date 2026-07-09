@@ -187,6 +187,7 @@ func main() {
 | 200    | 成功 | [USAssetOverview](#USAssetOverview) |
 | 400    | 請求錯誤 | None   |
 
+
 ## Schemas
 
 ### USAssetOverview
@@ -197,7 +198,9 @@ func main() {
 | ---- | ---- | ---- | ---- |
 | account_type | string | 是 | 賬戶類型標識 |
 | asset_timestamp | int64 | 是 | 資產數據快照時間（Unix 秒） |
-| cash_buy_power | string | 是 | 可用買入力 |
+| cash_buy_power | string | 是 | 可用買入力（现金） |
+| overnight_buy_power | string | 是 | 隔夜買入力 |
+| currency | string | 是 | 基礎貨幣 |
 | cash_list | USCashEntry[] | 否 | 按貨幣分列的現金餘額 |
 | stock_list | USStockEntry[] | 否 | 股票持倉 |
 | crypto_list | USCryptoEntry[] | 否 | 加密貨幣持倉 |
@@ -206,28 +209,38 @@ func main() {
 
 <a id="USCashEntry"></a>
 
-| 名稱 | 類型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| currency | string | 是 | 貨幣代碼，如 `USD` |
-| amount | string | 是 | 現金金額 |
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| currency | string | 貨幣代碼 |
+| total_cash | string | 總現金 |
+| settled_cash | string | 已結算現金 |
+| total_amount | string | 含未結算的總金額 |
+| outstanding | string | 未結算金額 |
+| frozen_buy_cash | string | 待成交買單凍結金額 |
 
 ### USStockEntry
 
 <a id="USStockEntry"></a>
 
-| 名稱 | 類型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| symbol | string | 是 | 股票代碼，如 `AAPL.US` |
-| quantity | string | 是 | 持有數量 |
-| cost_price | string | 否 | 平均持倉成本價 |
-| current_price | string | 否 | 當前市場價格 |
-| market_value | string | 否 | 當前市值 |
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| symbol | string | 交易標的，如 `AAPL.US` |
+| quantity | string | 持有數量 |
+| currency | string | 貨幣代碼 |
+| average_cost | string | 平均持倉成本價 |
+| last_done | string | 當前市場價格 |
+| prev_close | string | 上一收盤價 |
+| asset_type | string | 資產類型 |
+| trade_status | string | 交易狀態 |
 
 ### USCryptoEntry
 
 <a id="USCryptoEntry"></a>
 
-| 名稱 | 類型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| symbol | string | 是 | 加密貨幣交易對代碼 |
-| quantity | string | 是 | 持有數量 |
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| symbol | string | 加密貨幣交易對代碼，如 `BTCUSD.BKKT` |
+| average_cost | string | 平均持倉成本價 |
+| currency | string | 計價貨幣 |
+| asset_type | string | 資產類型 |
+| industry_name | string | 行業/分類名稱 |

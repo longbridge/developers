@@ -187,6 +187,7 @@ func main() {
 | 200    | Success     | [UsCompanyDividends](#UsCompanyDividends) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### UsCompanyDividends
@@ -195,9 +196,45 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| dividend_ttm | string | true | TTM dividend per share |
-| dividend_yield_ttm | string | true | TTM dividend yield (%) |
-| payouts | string | true | Number of payouts in past year |
-| currency | string | true | Currency code (e.g. `USD`) |
-| items | USDividendItem[] | false | Individual dividend records |
-| ∟ dividend | string | true | Dividend amount per share |
+| recent_dividends | USRecentDividend | true | Recent dividend summary |
+| dividend_history | USDividendHistoryItem[] | false | Annual dividend history |
+| payout_ratios | USDividendHistoryItem[] | false | Payout ratio history |
+| dividend_payout_history | USDividendPayoutRecord[] | false | Individual payout records |
+
+### USRecentDividend
+
+<a id="USRecentDividend"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| dividend_ttm | string | TTM dividend per share |
+| dividend_yield_ttm | string | TTM dividend yield (%) |
+| payouts | string | Number of payouts in past year |
+| currency | string | Currency code |
+
+### USDividendHistoryItem
+
+<a id="USDividendHistoryItem"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| fiscal_year | string | Fiscal year |
+| fiscal_year_range | string | Fiscal year date range |
+| dividend | string | Total dividend |
+| dividend_yield | string | Dividend yield |
+| dividend_growth_rate | string | Year-over-year dividend growth rate |
+| dividend_payout_ratio | string | Dividend payout ratio |
+| total_shareholder_yield | string | Total shareholder yield |
+
+### USDividendPayoutRecord
+
+<a id="USDividendPayoutRecord"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| dividend | string | Dividend amount per share |
+| dividend_type | string | Dividend type (e.g. `Cash`) |
+| currency | string | Currency code |
+| ex_date | string | Ex-dividend date |
+| payment_date | string | Payment date |
+| record_date | string | Record date |

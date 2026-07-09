@@ -195,6 +195,7 @@ func main() {
 | 200    | Success     | [USOrderDetailResponse](#USOrderDetailResponse) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### USOrderDetailResponse
@@ -203,31 +204,28 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| order | USOrder | true | Full order detail |
-| order_histories | USOrderHistory[] | true | Historical status changes |
-| current_attached_order | USOrder \| null | false | Attached child order (bracket/OCO), null if none |
+| order | USOrderDetail \| null | true | Full order detail, null if not found |
+| current_attached_order | USOrderDetail \| null | false | Attached child order (bracket/OCO), null if none |
+| current_millisecond | string | false | Server timestamp (milliseconds) |
 
-### USOrder
+### USOrderDetail
 
-<a id="USOrder"></a>
+<a id="USOrderDetail"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| order_id | string | true | Unique order ID |
-| symbol | string | true | Trading symbol (e.g. `AAPL.US`) |
-| side | string | true | `Buy` or `Sell` |
-| status | string | true | Order status |
-| qty | string | true | Order quantity |
-| price | string | true | Order price |
-| executed_qty | string | true | Executed quantity |
-| executed_price | string | true | Average executed price |
-| created_at | int64 | true | Creation time (Unix seconds) |
-
-### USOrderHistory
-
-<a id="USOrderHistory"></a>
-
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| status | string | true | Order status at this point |
-| done_at | int64 | true | Timestamp (Unix seconds) |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | string | Order ID |
+| symbol | string | Trading symbol (e.g. `AAPL.US`) |
+| action | int | Order action: 1=Buy, 2=Sell |
+| order_type | string | Order type |
+| status | string | Order status |
+| price | string | Order price |
+| quantity | string | Order quantity |
+| executed_qty | string | Executed quantity |
+| executed_price | string | Average executed price |
+| executed_amount | string | Total executed amount |
+| currency | string | Currency code |
+| submitted_at | string | Submission time |
+| done_at | string | Completion time |
+| time_in_force | int | Time-in-force type |
+| msg | string | Status message |

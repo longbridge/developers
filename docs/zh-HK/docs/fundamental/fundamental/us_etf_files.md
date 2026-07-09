@@ -184,13 +184,25 @@ func main() {
 | 200    | 成功 | [UsETFFileList](#UsETFFileList) |
 | 400    | 請求錯誤 | None   |
 
+
 ## Schemas
 
-### UsETFFileList
+### UsETFFilesResponse
 
-<a id="UsETFFileList"></a>
+<a id="UsETFFilesResponse"></a>
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| files | ETFFile[] | 是 | ETF 監管文件列表 |
-| ∟ name | string | 是 | 文件名稱 |
+| files | USETFFile[] | 是 | ETF 監管文件列表 |
+
+### USETFFile
+
+<a id="USETFFile"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| file_name | string | 文件名稱 |
+| file_path | string | 文件路徑或 URL |
+| update_date | string | 最後更新日期 |
+| code | string | 文件代碼 |
+| format | string | 文件格式（如 `pdf`） |

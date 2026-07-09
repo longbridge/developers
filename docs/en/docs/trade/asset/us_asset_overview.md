@@ -186,6 +186,7 @@ func main() {
 | 200    | Success     | [USAssetOverview](#USAssetOverview) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### USAssetOverview
@@ -196,7 +197,9 @@ func main() {
 | ---- | ---- | -------- | ----------- |
 | account_type | string | true | Account type identifier |
 | asset_timestamp | int64 | true | Snapshot time (Unix seconds) |
-| cash_buy_power | string | true | Available buying power |
+| cash_buy_power | string | true | Available buying power (cash) |
+| overnight_buy_power | string | true | Overnight buying power |
+| currency | string | true | Base currency |
 | cash_list | USCashEntry[] | false | Cash balances by currency |
 | stock_list | USStockEntry[] | false | Stock positions |
 | crypto_list | USCryptoEntry[] | false | Crypto positions |
@@ -205,28 +208,38 @@ func main() {
 
 <a id="USCashEntry"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| currency | string | true | Currency code (e.g. `USD`) |
-| amount | string | true | Cash amount |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| currency | string | Currency code |
+| total_cash | string | Total cash |
+| settled_cash | string | Settled cash |
+| total_amount | string | Total amount including unsettled |
+| outstanding | string | Outstanding (unsettled) amount |
+| frozen_buy_cash | string | Frozen amount for pending buys |
 
 ### USStockEntry
 
 <a id="USStockEntry"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Stock symbol (e.g. `AAPL.US`) |
-| quantity | string | true | Quantity held |
-| cost_price | string | false | Average cost price |
-| current_price | string | false | Current market price |
-| market_value | string | false | Current market value |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| symbol | string | Trading symbol (e.g. `AAPL.US`) |
+| quantity | string | Quantity held |
+| currency | string | Currency code |
+| average_cost | string | Average cost price |
+| last_done | string | Current market price |
+| prev_close | string | Previous close price |
+| asset_type | string | Asset type |
+| trade_status | string | Trading status |
 
 ### USCryptoEntry
 
 <a id="USCryptoEntry"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| symbol | string | true | Crypto trading-pair symbol |
-| quantity | string | true | Quantity held |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| symbol | string | Crypto trading-pair symbol (e.g. `BTCUSD.BKKT`) |
+| average_cost | string | Average cost price |
+| currency | string | Quote currency |
+| asset_type | string | Asset type |
+| industry_name | string | Industry/category name |
