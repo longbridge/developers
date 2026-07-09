@@ -1,6 +1,6 @@
 ---
-slug: us_financial_statement_v3
-title: 美股財務報表
+slug: us_financial_statement
+title: US Financial Statement
 sidebar_position: 33
 language_tabs: false
 toc_footers: []
@@ -10,30 +10,30 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning Longbridge US 賬戶
-此方法僅適用於美國數據中心賬戶。
+:::warning Longbridge US Accounts
+This method is only available for US data-center accounts.
 :::
 
-獲取美股指定財務報表（損益表、資產負債表或現金流量表）。
+Get a specific financial statement (income statement, balance sheet, or cash flow) for a US stock.
 
 <CliCommand>
-# 損益表
+# Income statement
 longbridge financial-report AAPL.US --kind IS
-# 資產負債表
+# Balance sheet
 longbridge financial-report AAPL.US --kind BS
 </CliCommand>
 
-<SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement_v3" />
+<SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement" />
 
 ## Parameters
 
-> **SDK 方法參數。**
+> **SDK method parameters.**
 
-| 名稱 | 類型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| symbol | string | 是 | 股票代碼，如 `AAPL.US` |
-| kind | string | 是 | 報表類型：`IS`（損益表）、`BS`（資產負債表）、`CF`（現金流量表）|
-| report | string | 否 | 報告週期 |
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
+| kind | string | YES | Statement type: `IS` (income), `BS` (balance sheet), `CF` (cash flow) |
+| report | string | NO | Period: `annual` or `quarterly` (default: annual) |
 
 ## Request Example
 
@@ -43,10 +43,10 @@ longbridge financial-report AAPL.US --kind BS
 ```python
 from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 
-oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
-resp = ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual")
+resp = ctx.us_financial_statement("AAPL.US", kind="IS", report="annual")
 print(resp)
 ```
 
@@ -58,10 +58,10 @@ import asyncio
 from longbridge.openapi import AsyncFundamentalContext, Config, OAuthBuilder
 
 async def main() -> None:
-    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("請訪問：", url))
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
-    resp = await ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual")
+    resp = await ctx.us_financial_statement("AAPL.US", kind="IS", report="annual")
     print(resp)
 
 if __name__ == "__main__":
@@ -76,7 +76,7 @@ const { Config, FundamentalContext, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
-    console.log('請訪問此 URL 授權：' + url)
+    console.log('Open this URL to authorize: ' + url)
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
@@ -98,7 +98,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsFinancialStatementV3("AAPL.US", "IS", "annual").get();
+            var resp = ctx.getUsFinancialStatement("AAPL.US", "IS", "annual").get();
             System.out.println(resp);
         }
     }
@@ -114,10 +114,10 @@ use longbridge::{oauth::OAuthBuilder, fundamental::FundamentalContext, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("請訪問：{url}")).await?;
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.us_financial_statement_v3("AAPL.US", "IS", "annual").await?;
+    let resp = ctx.us_financial_statement("AAPL.US", "IS", "annual").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -166,7 +166,6 @@ func main() {
 </Tabs>
 
 
-
 ## Response
 
 ### Response Example
@@ -191,10 +190,10 @@ func main() {
 
 ### Response Status
 
-| 狀態碼 | 描述 | 結構 |
-| ------ | ---- | ---- |
-| 200    | 成功 | [UsFinancialStatement](#UsFinancialStatement) |
-| 400    | 請求錯誤 | None   |
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [UsFinancialStatement](#UsFinancialStatement) |
+| 400    | Bad request | None   |
 
 ## Schemas
 
@@ -202,12 +201,12 @@ func main() {
 
 <a id="UsFinancialStatement"></a>
 
-| 名稱 | 類型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| revenue | string | 是 | 總營收 |
-| net_income | string | 是 | 淨利潤 |
-| net_margin | string | 是 | 淨利潤率 |
-| periods | FinancialPeriod[] | 是 | 包含逐行數據的報告期列表 |
-| ∟ date | string | 是 | 報告期日期 |
-| ∟ values | map[string]any | 是 | 以指標名稱為鍵的財務行項目 |
-| currency | string | 是 | 貨幣代碼，如 `USD` |
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| revenue | string | true | Total revenue |
+| net_income | string | true | Net income |
+| net_margin | string | true | Net profit margin |
+| periods | FinancialPeriod[] | true | Reporting periods with line-item values |
+| ∟ date | string | true | Period date |
+| ∟ values | map[string]any | true | Financial line items keyed by metric name |
+| currency | string | true | Currency code (e.g. `USD`) |

@@ -1,5 +1,5 @@
 ---
-slug: us_financial_statement_v3
+slug: us_financial_statement
 title: 美股财务报表
 sidebar_position: 33
 language_tabs: false
@@ -23,7 +23,7 @@ longbridge financial-report AAPL.US --kind IS
 longbridge financial-report AAPL.US --kind BS
 </CliCommand>
 
-<SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement_v3" />
+<SDKLinks module="fundamental" klass="FundamentalContext" method="us_financial_statement" />
 
 ## Parameters
 
@@ -46,7 +46,7 @@ from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("请访问：", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
-resp = ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual")
+resp = ctx.us_financial_statement("AAPL.US", kind="IS", report="annual")
 print(resp)
 ```
 
@@ -61,7 +61,7 @@ async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("请访问：", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
-    resp = await ctx.us_financial_statement_v3("AAPL.US", kind="IS", report="annual")
+    resp = await ctx.us_financial_statement("AAPL.US", kind="IS", report="annual")
     print(resp)
 
 if __name__ == "__main__":
@@ -98,7 +98,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsFinancialStatementV3("AAPL.US", "IS", "annual").get();
+            var resp = ctx.getUsFinancialStatement("AAPL.US", "IS", "annual").get();
             System.out.println(resp);
         }
     }
@@ -117,7 +117,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("请访问：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.us_financial_statement_v3("AAPL.US", "IS", "annual").await?;
+    let resp = ctx.us_financial_statement("AAPL.US", "IS", "annual").await?;
     println!("{:?}", resp);
     Ok(())
 }
