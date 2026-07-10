@@ -101,7 +101,7 @@ Use `--report qf --year <YEAR> --period <1-4>` to retrieve a specific quarter.
 
 ```bash
 longbridge financial-report key-metrics AAPL.US
-longbridge financial-report key-metrics AAPL.US --report quarterly
+longbridge financial-report key-metrics AAPL.US --report qf
 ```
 
 Returns key financial indicators for US stocks: revenue, net income, EPS, margins, and growth rates.
@@ -112,7 +112,7 @@ Returns key financial indicators for US stocks: revenue, net income, EPS, margin
 
 | Option | Description | Default |
 | ------ | ----------- | ------- |
-| `--report` | Reporting period: `annual` \| `quarterly` | annual |
+| `--report` | Reporting period: `af` (annual), `saf` (semi-annual), `qf` (quarterly), `q1` (Q1), `3q` (Q3) | af |
 
 :::info US Accounts
 For `.US` symbols on US data-center accounts, omitting `--kind` returns a financial overview via the US API.

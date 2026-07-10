@@ -98,7 +98,7 @@ longbridge financial-report snapshot TSLA.US --report qf --year 2025 --period 4
 
 ```bash
 longbridge financial-report key-metrics AAPL.US
-longbridge financial-report key-metrics AAPL.US --report quarterly
+longbridge financial-report key-metrics AAPL.US --report qf
 ```
 
 返回美股的關鍵財務指標：營收、淨利潤、EPS、利潤率和增長率。
@@ -109,7 +109,7 @@ longbridge financial-report key-metrics AAPL.US --report quarterly
 
 | 選項 | 描述 | 默認值 |
 | ---- | ---- | ------ |
-| `--report` | 報告週期：`annual` \| `quarterly` | annual |
+| `--report` | 報告週期：`af`（年報）、`saf`（半年報）、`qf`（季報）、`q1`（Q1）、`3q`（Q3） | annual |
 
 :::info 美股賬戶
 美國數據中心賬戶的 `.US` 標的，不指定 `--kind` 時透過美股 API 返回財務概覽。
