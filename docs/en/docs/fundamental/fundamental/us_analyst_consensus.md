@@ -31,7 +31,7 @@ longbridge consensus NVDA.US
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
-| report | string | NO | Period: `annual` or `quarterly` (default: annual) |
+| report | string | NO | Period: `af` (annual), `saf` (semi-annual), `qf` (quarterly), `q1` (Q1), `3q` (Q3) |
 
 ## Request Example
 
@@ -44,7 +44,7 @@ from longbridge.openapi import FundamentalContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
-resp = ctx.us_analyst_consensus("AAPL.US", report="annual")
+resp = ctx.us_analyst_consensus("AAPL.US", "af")
 print(resp)
 ```
 
@@ -59,7 +59,7 @@ async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
-    resp = await ctx.us_analyst_consensus("AAPL.US", report="annual")
+    resp = await ctx.us_analyst_consensus("AAPL.US", "af")
     print(resp)
 
 if __name__ == "__main__":
@@ -78,7 +78,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.usAnalystConsensus("AAPL.US", "annual")
+  const resp = await ctx.usAnalystConsensus("AAPL.US", "af")
   console.log(resp)
 }
 main().catch(console.error)
@@ -96,7 +96,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsAnalystConsensus("AAPL.US", "annual").get();
+            var resp = ctx.getUsAnalystConsensus("AAPL.US", "af").get();
             System.out.println(resp);
         }
     }
@@ -115,7 +115,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.us_analyst_consensus("AAPL.US", "annual").await?;
+    let resp = ctx.us_analyst_consensus("AAPL.US", "af").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -152,7 +152,7 @@ func main() {
         log.Fatal(err)
     }
     defer c.Close()
-    resp, err := c.AnalystConsensus(context.Background(), "AAPL.US", "annual")
+    resp, err := c.AnalystConsensus(context.Background(), "AAPL.US", "af")
     if err != nil {
         log.Fatal(err)
     }
@@ -180,9 +180,17 @@ func main() {
     "workflow_type": "analyst"
   },
   "currency": "USD",
-  "report": "annual",
-  "list": null,
-  "opt_reports": null,
+  "report": "af",
+  "list": [
+    {
+      "fiscal_year": 2025,
+      "report_txt": "FY2025",
+      "revenue": {"actual": "391035000000", "estimate": "388000000000"},
+      "eps": {"actual": "6.42", "estimate": "6.29"},
+      "ebit": {"actual": "125820000000", "estimate": "122000000000"}
+    }
+  ],
+  "opt_reports": ["af", "qf"],
   "h5_data": null
 }
 ```

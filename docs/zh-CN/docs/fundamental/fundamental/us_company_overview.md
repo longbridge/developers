@@ -172,8 +172,17 @@ func main() {
   "intro": "Apple Inc. designs, manufactures, and markets smartphones, personal computers...",
   "market_cap": "3150000000000",
   "ccy_symbol": "USD",
-  "top_rank_tags": ["S&P 500", "NASDAQ 100"],
-  "detail_url": "https://longbridge.com/stocks/AAPL.US"
+  "top_rank_tags": [
+    {
+      "key": "sp500",
+      "title": "S&P 500",
+      "text": "S&P 500",
+      "rank_type": 1,
+      "highlight_text": ""
+    }
+  ],
+  "detail_url": "https://longbridge.com/stocks/AAPL.US",
+  "share_list": []
 }
 ```
 
