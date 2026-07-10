@@ -50,7 +50,10 @@ from longbridge.openapi import TradeContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("請訪問：", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
-resp = ctx.us_query_orders()  # all defaults; pass args to filter
+# 查詢全部委託（使用默認參數）
+resp = ctx.us_query_orders()
+# 篩選 AAPL.US 買入委託
+resp = ctx.us_query_orders(symbol="AAPL.US", action=1)
 print(resp)
 ```
 

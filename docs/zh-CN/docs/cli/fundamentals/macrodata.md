@@ -24,7 +24,7 @@ longbridge macrodata
 ```
 
 ```
-Total: 619
+Total: 441
 Code     Name          Category    Country   Frequency   Source
 61744  非农就业人数  Employment  US        Monthly     Bureau of Labor Statistics
 ...
