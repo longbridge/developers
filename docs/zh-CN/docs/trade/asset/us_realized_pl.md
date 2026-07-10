@@ -116,7 +116,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("请访问：{url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = TradeContext::new(config);
-    let resp = ctx.us_realized_pl("USD", "STOCK").await?;
+    let opts = longbridge::trade::GetUSRealizedPLOptions {
+        currency: "USD".to_string(),
+        category: "STOCK".to_string(),
+    };
+    let resp = ctx.us_realized_pl(opts).await?;
     println!("{:?}", resp);
     Ok(())
 }

@@ -115,7 +115,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.us_etf_files("IVV.US").await?;
+    let resp = ctx.us_etf_files("IVV.US", None).await?;
     println!("{:?}", resp);
     Ok(())
 }

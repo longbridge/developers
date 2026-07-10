@@ -50,7 +50,7 @@ from longbridge.openapi import TradeContext, Config, OAuthBuilder
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
-resp = ctx.us_query_orders()
+resp = ctx.us_query_orders()  # all defaults; pass args to filter
 print(resp)
 ```
 
@@ -121,7 +121,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = TradeContext::new(config);
-    let resp = ctx.us_query_orders().await?;
+    let opts = longbridge::trade::GetUSHistoryOrders {
+        symbol: None,
+        side: longbridge::trade::OrderSide::Unknown,
+        start_at: 0,
+        end_at: 0,
+    };
+    let resp = ctx.us_query_orders(opts).await?;
     println!("{:?}", resp);
     Ok(())
 }
