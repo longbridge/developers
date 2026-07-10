@@ -37,6 +37,24 @@ breadcrumb: false
 
   <section class="brand-asset-markdown-card">
     <figure class="brand-asset-markdown-preview is-dark">
+      <img src="https://assets.lbkrs.com/uploads/716a4e35-c078-4fd5-9818-b859ad83b51b/app-icon-dark.svg" alt="Icon dark" />
+    </figure>
+    <div class="brand-asset-markdown-body">
+      <h2>Icon (dark)</h2>
+      <p>用於深色背景下需要正方形 Icon 的場景，例如 GitHub Avatar、Twitter Avatar 等。</p>
+      <dl>
+        <dt>格式</dt>
+        <dd>SVG</dd>
+      </dl>
+    </div>
+    <div class="brand-asset-markdown-url">
+      <span>URL</span>
+      <a href="https://assets.lbkrs.com/uploads/716a4e35-c078-4fd5-9818-b859ad83b51b/app-icon-dark.svg">https://assets.lbkrs.com/uploads/716a4e35-c078-4fd5-9818-b859ad83b51b/app-icon-dark.svg</a>
+    </div>
+  </section>
+
+  <section class="brand-asset-markdown-card">
+    <figure class="brand-asset-markdown-preview is-dark">
       <img src="https://assets.lbkrs.com/uploads/37a18fa4-46a4-408c-a36a-560004eb3cfb/longbridge-developers-dark.png" alt="Longbridge Developers Logo dark" />
     </figure>
     <div class="brand-asset-markdown-body">
