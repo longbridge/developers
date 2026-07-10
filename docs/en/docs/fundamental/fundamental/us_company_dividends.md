@@ -169,13 +169,32 @@ func main() {
 
 ```json
 {
-  "dividend_ttm": "1.00",
-  "dividend_yield_ttm": "0.0053",
-  "payouts": "4",
-  "currency": "USD",
-  "items": [
-    {"dividend": "0.25"},
-    {"dividend": "0.25"}
+  "recent_dividends": {
+    "dividend_ttm": "1.00",
+    "dividend_yield_ttm": "0.0053",
+    "payouts": "4",
+    "currency": "USD"
+  },
+  "dividend_history": [
+    {
+      "fiscal_year": "2024",
+      "fiscal_year_range": "2024-01-01 ~ 2024-12-31",
+      "dividend": "1.00",
+      "dividend_yield": "0.0053",
+      "dividend_growth_rate": "0.0408",
+      "dividend_payout_ratio": "0.1497",
+      "total_shareholder_yield": "0.0163"
+    }
+  ],
+  "dividend_payout_history": [
+    {
+      "dividend": "0.25",
+      "dividend_type": "Cash",
+      "currency": "USD",
+      "ex_date": "2024-11-08",
+      "payment_date": "2024-11-14",
+      "record_date": "2024-11-11"
+    }
   ]
 }
 ```

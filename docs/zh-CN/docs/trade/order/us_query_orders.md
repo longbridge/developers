@@ -181,15 +181,15 @@ func main() {
 {
   "orders": [
     {
-      "order_id": "701276261045858304",
+      "id": "701276261045858304",
       "symbol": "AAPL.US",
-      "side": "Buy",
+      "action": "Buy",
+      "order_type": "LO",
       "status": "Filled",
-      "qty": "10",
       "price": "185.00",
-      "executed_qty": "10",
-      "executed_price": "184.95",
-      "created_at": 1751866334
+      "quantity": "10",
+      "submitted_at": 1751866334,
+      "updated_at": 1751866400
     }
   ],
   "total_count": 1

@@ -170,12 +170,38 @@ func main() {
   "account_type": "US",
   "asset_timestamp": 1751866334,
   "cash_buy_power": "12500.00",
+  "overnight_buy_power": "10000.00",
+  "currency": "USD",
   "cash_list": [
-    {"currency": "USD", "amount": "12500.00"}
+    {
+      "currency": "USD",
+      "total_cash": "12500.00",
+      "settled_cash": "12000.00",
+      "total_amount": "12500.00",
+      "outstanding": "500.00",
+      "frozen_buy_cash": "0.00"
+    }
   ],
-  "stock_list": [],
+  "stock_list": [
+    {
+      "symbol": "AAPL.US",
+      "quantity": "10",
+      "currency": "USD",
+      "average_cost": "180.00",
+      "last_done": "185.00",
+      "prev_close": "183.00",
+      "asset_type": "stock",
+      "trade_status": "Normal"
+    }
+  ],
   "crypto_list": [
-    {"symbol": "BTCUSD.BKKT", "quantity": "0.5"}
+    {
+      "symbol": "BTCUSD.BKKT",
+      "average_cost": "50000.00",
+      "currency": "USD",
+      "asset_type": "crypto",
+      "industry_name": "Cryptocurrency"
+    }
   ]
 }
 ```

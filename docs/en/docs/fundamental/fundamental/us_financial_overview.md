@@ -31,7 +31,7 @@ longbridge financial-report TSLA.US
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | Stock symbol, e.g. `AAPL.US` |
-| report | string | NO | Period: `annual` or `quarterly` (default: annual) |
+| report | string | YES | Period: `annual` or `quarterly` (default: annual) |
 
 ## Request Example
 

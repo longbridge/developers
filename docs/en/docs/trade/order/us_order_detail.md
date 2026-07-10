@@ -170,21 +170,24 @@ func main() {
 ```json
 {
   "order": {
-    "order_id": "701276261045858304",
+    "id": "701276261045858304",
     "symbol": "AAPL.US",
-    "side": "Buy",
+    "action": "Buy",
+    "order_type": "LO",
     "status": "Filled",
-    "qty": "10",
     "price": "185.00",
+    "quantity": "10",
     "executed_qty": "10",
     "executed_price": "184.95",
-    "created_at": 1751866334
+    "executed_amount": "1849.50",
+    "currency": "USD",
+    "submitted_at": "1751866334",
+    "done_at": "1751866400",
+    "time_in_force": 0,
+    "msg": ""
   },
-  "order_histories": [
-    {"status": "New", "done_at": 1751866334},
-    {"status": "Filled", "done_at": 1751866400}
-  ],
-  "current_attached_order": null
+  "current_attached_order": null,
+  "current_millisecond": "1751866400000"
 }
 ```
 

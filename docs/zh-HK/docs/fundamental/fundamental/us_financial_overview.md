@@ -31,7 +31,7 @@ longbridge financial-report TSLA.US
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | symbol | string | 是 | 股票代碼，如 `AAPL.US` |
-| report | string | 否 | 報告週期：`annual` 或 `quarterly`（默認：annual）|
+| report | string | 是 | 報告週期：`annual` 或 `quarterly`（默認：annual）|
 
 ## Request Example
 

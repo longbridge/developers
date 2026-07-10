@@ -172,15 +172,15 @@ func main() {
 {
   "dividend_ttm": "6.84",
   "dividend_yield_ttm": "0.0134",
-  "dividend_freq": "Quarterly",
+  "dividend_frequency": "Quarterly",
   "currency": "USD",
   "fiscal_year_info": [
     {
-      "year": "2025",
-      "total_dividend": "6.52",
-      "records": [
-        {"ex_date": "2025-12-20", "amount": "1.68"}
-      ]
+      "fiscal_year": "2025",
+      "fiscal_year_range": "2025-01-01 ~ 2025-12-31",
+      "dividend": "6.52",
+      "dividend_yield": "0.0134",
+      "currency": "USD"
     }
   ]
 }

@@ -170,8 +170,20 @@ func main() {
 ```json
 {
   "files": [
-    {"name": "iShares Core S&P 500 ETF Prospectus"},
-    {"name": "iShares Core S&P 500 ETF Annual Report"}
+    {
+      "file_name": "iShares Core S&P 500 ETF Prospectus",
+      "file_path": "https://www.iShares.com/content/dam/iShares/prospectus/en/IVV.pdf",
+      "update_date": "2024-01-15",
+      "code": "IVV_PROSPECTUS",
+      "format": "pdf"
+    },
+    {
+      "file_name": "iShares Core S&P 500 ETF Annual Report",
+      "file_path": "https://www.iShares.com/content/dam/iShares/reports/en/IVV_AR.pdf",
+      "update_date": "2024-02-01",
+      "code": "IVV_ANNUAL",
+      "format": "pdf"
+    }
   ]
 }
 ```
