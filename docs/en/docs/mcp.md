@@ -43,7 +43,7 @@ Actual tool availability depends on your region, account level, and granted OAut
 
 ## Client setup
 
-ChatGPT is the recommended starting point because Longbridge is available directly in ChatGPT Apps. For other MCP clients, configuration format may vary across client versions; treat your client's official MCP documentation as the source of truth.
+ChatGPT is the recommended starting point because Longbridge is available directly in ChatGPT Plugins. For other MCP clients, configuration format may vary across client versions; treat your client's official MCP documentation as the source of truth.
 
 ### ChatGPT
 
@@ -51,11 +51,11 @@ Longbridge is available as an official ChatGPT App.
 
 On ChatGPT web, desktop, or mobile:
 
-1. Open **Apps**
+1. Open **Plugins**
 2. Search for `longbridge`, or open the [Longbridge ChatGPT App](https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef) directly
 3. Select **Longbridge** and complete the authorization login
 
-![Search for Longbridge in ChatGPT Apps](https://assets.lbkrs.com/uploads/aeb84040-b2c7-442d-af46-adfab66297a1/scr-20260707-nbjr.png)
+![Search for Longbridge in ChatGPT Plugins](https://assets.lbkrs.com/uploads/aeb84040-b2c7-442d-af46-adfab66297a1/scr-20260707-nbjr.png)
 
 ![Authorize the Longbridge ChatGPT App](https://assets.lbkrs.com/uploads/a66bcd75-d747-4259-b684-a689d324716c/scr-20260707-nbno.png)
 
@@ -138,7 +138,7 @@ In Manus, open the **Plugins** window, click the **Create** button on the right 
 
 Longbridge MCP uses standard OAuth 2.1. You never need to paste API keys or tokens into the client.
 
-In ChatGPT, the authorization happens when you add Longbridge from Apps. In other MCP clients, the first tool call usually starts the browser authorization flow.
+In ChatGPT, the authorization happens when you add Longbridge from Plugins. In other MCP clients, the first tool call usually starts the browser authorization flow.
 
 ```
 AI client                  Browser                   Longbridge
