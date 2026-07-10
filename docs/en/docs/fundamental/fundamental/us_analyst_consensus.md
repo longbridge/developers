@@ -194,6 +194,7 @@ func main() {
 | 200    | Success     | [UsAnalystConsensus](#UsAnalystConsensus) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### UsAnalystConsensus
@@ -206,19 +207,40 @@ func main() {
 | aichat_data | USAIChatData | true | AI chat context data |
 | currency | string | true | Currency code (e.g. `USD`) |
 | report | string | true | Report period type |
-| list | any | false | Consensus detail list (structure varies) |
-| opt_reports | any | false | Optional report data |
+| list | USConsensusItem[] | true | Consensus estimates by fiscal year |
+| opt_reports | string[] | false | Optional available report periods |
 | h5_data | any | false | H5 display data |
+
+### USConsensusItem
+
+<a id="USConsensusItem"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| fiscal_year | int | Fiscal year |
+| report_txt | string | Period label (e.g. `FY2024`) |
+| revenue | USConsensusEstimate | Revenue consensus |
+| eps | USConsensusEstimate | EPS consensus |
+| ebit | USConsensusEstimate | EBIT consensus |
+
+### USConsensusEstimate
+
+<a id="USConsensusEstimate"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| actual | string | Actual reported value |
+| estimate | string | Analyst consensus estimate |
 
 ### USAIChatData
 
 <a id="USAIChatData"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| agent_id | string | true | AI agent identifier |
-| handoff_agent_id | string | false | Handoff agent identifier |
-| symbol | string | true | Stock symbol |
-| text | string | true | Chat context text |
-| chat_type | string | true | Chat type |
-| workflow_type | string | true | Workflow type |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| agent_id | string | AI agent identifier |
+| handoff_agent_id | string | Handoff agent identifier |
+| symbol | string | Stock symbol |
+| text | string | Chat context text |
+| chat_type | string | Chat type |
+| workflow_type | string | Workflow type |

@@ -176,6 +176,7 @@ func main() {
 | all_time_low_date | string | 歷史最低價日期 |
 
 
+
 ## Response
 
 ### Response Example
@@ -190,13 +191,16 @@ func main() {
   "all_time_high": "0.7376",
   "all_time_high_date": "2021-05-08",
   "all_time_low": "0.0000869",
-  "all_time_low_date": "2015-05-06"
+  "all_time_low_date": "2015-05-06",
+  "ipo_date": "2013-12-06",
+  "shares": "147000000000",
+  "official_web_address": "https://dogecoin.com"
 }
 ```
 
 ### Response Status
 
-| 狀態碼 | 描述 | 結構 |
+| 狀態碼 | 描述 | 结构 |
 | ------ | ---- | ---- |
 | 200    | 成功 | [CryptoOverview](#CryptoOverview) |
 | 400    | 請求錯誤 | None   |
@@ -218,3 +222,9 @@ func main() {
 | all_time_high_date | string | 是 | 歷史最高價日期 |
 | all_time_low | string | 是 | 歷史最低價 |
 | all_time_low_date | string | 是 | 歷史最低價日期 |
+| ipo_date | string | 否 | 初始上市日期 |
+| issue_price | string | 否 | 初始發行價格 |
+| shares | string | 否 | 流通總量 |
+| official_web_address | string | 否 | 官方網站 URL |
+| wiki_url | string | 否 | Wikipedia URL |
+| profile | string | 否 | 資產簡介（JSON 字符串） |

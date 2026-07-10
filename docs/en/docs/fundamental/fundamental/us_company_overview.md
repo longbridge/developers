@@ -209,6 +209,7 @@ func main() {
 | title | string | Tag title |
 | text | string | Tag display text |
 | rank_type | int | Ranking type |
+| highlight_text | string | Highlight display text |
 
 ### USSharelistItem
 

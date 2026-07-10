@@ -203,6 +203,7 @@ func main() {
 | 200    | 成功 | [QueryUSOrdersResponse](#QueryUSOrdersResponse) |
 | 400    | 请求错误 | None   |
 
+
 ## Schemas
 
 ### QueryUSOrdersResponse
@@ -218,14 +219,14 @@ func main() {
 
 <a id="USOrder"></a>
 
-| 名称 | 类型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| order_id | string | 是 | 委托唯一 ID |
-| symbol | string | 是 | 交易标的，如 `AAPL.US` |
-| side | string | 是 | `Buy`（买入）或 `Sell`（卖出） |
-| status | string | 是 | 委托状态（如 `Filled`、`New`、`PartialFilled`） |
-| qty | string | 是 | 委托数量 |
-| price | string | 是 | 委托价格 |
-| executed_qty | string | 是 | 已成交数量 |
-| executed_price | string | 是 | 平均成交价格 |
-| created_at | int64 | 是 | 创建时间（Unix 秒） |
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| id | string | 委托 ID |
+| symbol | string | 交易标的，如 `AAPL.US` |
+| action | string | 方向：`Buy` 或 `Sell` |
+| order_type | string | 委托类型 |
+| status | string | 委托状态 |
+| price | string | 委托价格 |
+| quantity | string | 委托数量 |
+| submitted_at | int64 | 提交时间（Unix 秒） |
+| updated_at | int64 | 最后更新时间（Unix 秒） |

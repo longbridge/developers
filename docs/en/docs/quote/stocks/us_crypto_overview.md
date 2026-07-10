@@ -162,6 +162,7 @@ func main() {
 </Tabs>
 
 
+
 ## Response
 
 ### Response Example
@@ -176,7 +177,13 @@ func main() {
   "all_time_high": "0.7376",
   "all_time_high_date": "2021-05-08",
   "all_time_low": "0.0000869",
-  "all_time_low_date": "2015-05-06"
+  "all_time_low_date": "2015-05-06",
+  "ipo_date": "2013-12-06",
+  "issue_price": "0.00026",
+  "shares": "147000000000",
+  "official_web_address": "https://dogecoin.com",
+  "wiki_url": "https://en.wikipedia.org/wiki/Dogecoin",
+  "profile": "{...}"
 }
 ```
 
@@ -204,3 +211,9 @@ func main() {
 | all_time_high_date | string | true | Date of all-time high |
 | all_time_low | string | true | All-time low price |
 | all_time_low_date | string | true | Date of all-time low |
+| ipo_date | string | false | Initial listing date |
+| issue_price | string | false | Initial issue price |
+| shares | string | false | Total circulating supply |
+| official_web_address | string | false | Official website URL |
+| wiki_url | string | false | Wikipedia URL |
+| profile | string | false | Asset profile description (JSON string) |

@@ -223,4 +223,4 @@ func main() {
 | fp_end | string | 是 | 报告期结束日期 |
 | report_txt | string | 是 | 报告期标签（如 `FY2024`） |
 | rpt_date | string | 是 | 财报发布日期 |
-| fields | object | 是 | 关键财务指标（结构因公司而异） |
+| fields | object[] | 是 | 关键财务指标（结构因公司而异） |

@@ -222,4 +222,4 @@ func main() {
 | fp_end | string | true | Period end date (YYYY-MM-DD) |
 | report_txt | string | true | Period label (e.g. `FY2024`) |
 | rpt_date | string | true | Report release date (YYYY-MM-DD) |
-| fields | object | true | Key financial metrics (structure varies by company) |
+| fields | object[] | true | Key financial metric values (structure varies by company) |

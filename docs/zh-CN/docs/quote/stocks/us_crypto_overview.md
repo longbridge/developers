@@ -176,6 +176,7 @@ func main() {
 | all_time_low_date | string | 历史最低价日期 |
 
 
+
 ## Response
 
 ### Response Example
@@ -190,7 +191,10 @@ func main() {
   "all_time_high": "0.7376",
   "all_time_high_date": "2021-05-08",
   "all_time_low": "0.0000869",
-  "all_time_low_date": "2015-05-06"
+  "all_time_low_date": "2015-05-06",
+  "ipo_date": "2013-12-06",
+  "shares": "147000000000",
+  "official_web_address": "https://dogecoin.com"
 }
 ```
 
@@ -218,3 +222,9 @@ func main() {
 | all_time_high_date | string | 是 | 历史最高价日期 |
 | all_time_low | string | 是 | 历史最低价 |
 | all_time_low_date | string | 是 | 历史最低价日期 |
+| ipo_date | string | 否 | 初始上市日期 |
+| issue_price | string | 否 | 初始发行价格 |
+| shares | string | 否 | 流通总量 |
+| official_web_address | string | 否 | 官方网站 URL |
+| wiki_url | string | 否 | Wikipedia URL |
+| profile | string | 否 | 资产简介（JSON 字符串） |

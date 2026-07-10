@@ -195,31 +195,53 @@ func main() {
 | 200    | 成功 | [UsAnalystConsensus](#UsAnalystConsensus) |
 | 400    | 請求錯誤 | None   |
 
+
 ## Schemas
 
 ### UsAnalystConsensus
 
 <a id="UsAnalystConsensus"></a>
 
-| 名称 | 類型 | 必填 | 描述 |
+| 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| ai_summary | string | 是 | AI 生成的分析师一致预期摘要 |
-| aichat_data | USAIChatData | 是 | AI 对话上下文數据 |
-| currency | string | 是 | 貨币代码，如 `USD` |
-| report | string | 是 | 報告周期類型 |
-| list | any | 否 | 一致预期明细列表（结構不固定） |
-| opt_reports | any | 否 | 可选報告數据 |
-| h5_data | any | 否 | H5 展示數据 |
+| ai_summary | string | 是 | AI 生成的分析師一致預期摘要 |
+| aichat_data | USAIChatData | 是 | AI 對話上下文數據 |
+| currency | string | 是 | 貨幣代碼，如 `USD` |
+| report | string | 是 | 報告週期類型 |
+| list | USConsensusItem[] | 是 | 按財年排列的一致預期數據 |
+| opt_reports | string[] | 否 | 可選的報告期列表 |
+| h5_data | any | 否 | H5 展示數據 |
+
+### USConsensusItem
+
+<a id="USConsensusItem"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| fiscal_year | int | 財年 |
+| report_txt | string | 報告期標籤（如 `FY2024`） |
+| revenue | USConsensusEstimate | 營收一致預期 |
+| eps | USConsensusEstimate | EPS 一致预期 |
+| ebit | USConsensusEstimate | EBIT 一致预期 |
+
+### USConsensusEstimate
+
+<a id="USConsensusEstimate"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| actual | string | 實際公布值 |
+| estimate | string | 分析師一致預期值 |
 
 ### USAIChatData
 
 <a id="USAIChatData"></a>
 
-| 名称 | 類型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| agent_id | string | 是 | AI Agent 標识 |
-| handoff_agent_id | string | 否 | 转交 Agent 標识 |
-| symbol | string | 是 | 股票代码 |
-| text | string | 是 | 对话上下文文本 |
-| chat_type | string | 是 | 对话類型 |
-| workflow_type | string | 是 | 工作流類型 |
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| agent_id | string | AI Agent 標識 |
+| handoff_agent_id | string | 轉交 Agent 標識 |
+| symbol | string | 股票代碼 |
+| text | string | 對話上下文文本 |
+| chat_type | string | 對話類型 |
+| workflow_type | string | 工作流類型 |

@@ -113,7 +113,7 @@ longbridge macrodata 61744 --format json
 | `--keyword` | 按指標名稱篩選（模糊匹配，僅列表模式） | — |
 | `--start` | 歷史開始日期 `YYYY-MM-DD` | — |
 | `--end` | 歷史結束日期 `YYYY-MM-DD` | — |
-| `--lang` | 名稱/描述語言：`zh-CN` \| `zh-HK` \| `en` | — |
+| `--lang` | 名稱/描述語言：`zh-CN` \| `en` | — |
 | `--limit` | 每頁最大條數（列表最大 1000，歷史最大 100） | 20 |
 | `--page` | 頁碼，從 1 開始 | 1 |
 | `--format` | `table` 或 `json` | `table` |

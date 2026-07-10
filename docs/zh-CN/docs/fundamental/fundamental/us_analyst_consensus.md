@@ -195,6 +195,7 @@ func main() {
 | 200    | 成功 | [UsAnalystConsensus](#UsAnalystConsensus) |
 | 400    | 请求错误 | None   |
 
+
 ## Schemas
 
 ### UsAnalystConsensus
@@ -207,19 +208,40 @@ func main() {
 | aichat_data | USAIChatData | 是 | AI 对话上下文数据 |
 | currency | string | 是 | 货币代码，如 `USD` |
 | report | string | 是 | 报告周期类型 |
-| list | any | 否 | 一致预期明细列表（结构不固定） |
-| opt_reports | any | 否 | 可选报告数据 |
+| list | USConsensusItem[] | 是 | 按财年排列的一致预期数据 |
+| opt_reports | string[] | 否 | 可选的报告期列表 |
 | h5_data | any | 否 | H5 展示数据 |
+
+### USConsensusItem
+
+<a id="USConsensusItem"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| fiscal_year | int | 财年 |
+| report_txt | string | 报告期标签（如 `FY2024`） |
+| revenue | USConsensusEstimate | 营收一致预期 |
+| eps | USConsensusEstimate | EPS 一致预期 |
+| ebit | USConsensusEstimate | EBIT 一致预期 |
+
+### USConsensusEstimate
+
+<a id="USConsensusEstimate"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| actual | string | 实际公布值 |
+| estimate | string | 分析师一致预期值 |
 
 ### USAIChatData
 
 <a id="USAIChatData"></a>
 
-| 名称 | 类型 | 必填 | 描述 |
-| ---- | ---- | ---- | ---- |
-| agent_id | string | 是 | AI Agent 标识 |
-| handoff_agent_id | string | 否 | 转交 Agent 标识 |
-| symbol | string | 是 | 股票代码 |
-| text | string | 是 | 对话上下文文本 |
-| chat_type | string | 是 | 对话类型 |
-| workflow_type | string | 是 | 工作流类型 |
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| agent_id | string | AI Agent 标识 |
+| handoff_agent_id | string | 转交 Agent 标识 |
+| symbol | string | 股票代码 |
+| text | string | 对话上下文文本 |
+| chat_type | string | 对话类型 |
+| workflow_type | string | 工作流类型 |

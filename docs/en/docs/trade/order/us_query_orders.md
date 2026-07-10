@@ -202,6 +202,7 @@ func main() {
 | 200    | Success     | [QueryUSOrdersResponse](#QueryUSOrdersResponse) |
 | 400    | Bad request | None   |
 
+
 ## Schemas
 
 ### QueryUSOrdersResponse
@@ -210,21 +211,21 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| orders | USOrder[] | true | List of matching orders |
+| orders | USOrder[] | true | List of orders matching the filter |
 | total_count | int | true | Total number of matching orders |
 
 ### USOrder
 
 <a id="USOrder"></a>
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| order_id | string | true | Unique order ID |
-| symbol | string | true | Trading symbol (e.g. `AAPL.US`) |
-| side | string | true | `Buy` or `Sell` |
-| status | string | true | Order status (e.g. `Filled`, `New`, `PartialFilled`) |
-| qty | string | true | Order quantity |
-| price | string | true | Order price |
-| executed_qty | string | true | Executed quantity |
-| executed_price | string | true | Average executed price |
-| created_at | int64 | true | Creation time (Unix seconds) |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| id | string | Order ID |
+| symbol | string | Trading symbol (e.g. `AAPL.US`) |
+| action | string | Direction: `Buy` or `Sell` |
+| order_type | string | Order type |
+| status | string | Order status |
+| price | string | Order price |
+| quantity | string | Order quantity |
+| submitted_at | int64 | Submission time (Unix seconds) |
+| updated_at | int64 | Last update time (Unix seconds) |
