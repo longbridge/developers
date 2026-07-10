@@ -241,19 +241,11 @@ func main() {
 | fiscal_year_range | string | Fiscal year date range |
 | dividend | string | Total dividend |
 | dividend_yield | string | Dividend yield |
-| dividend_growth_rate | string | Year-over-year dividend growth rate |
+| dividend_growth_rate | string | YoY dividend growth rate |
 | dividend_payout_ratio | string | Dividend payout ratio |
+| dividend_to_cashflow_ratio | string | Dividend-to-cashflow ratio |
 | total_shareholder_yield | string | Total shareholder yield |
-
-### USDividendPayoutRecord
-
-<a id="USDividendPayoutRecord"></a>
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| dividend | string | Dividend amount per share |
-| dividend_type | string | Dividend type (e.g. `Cash`) |
+| net_buyback | string | Net buyback amount |
+| net_buyback_yield | string | Net buyback yield |
 | currency | string | Currency code |
-| ex_date | string | Ex-dividend date |
-| payment_date | string | Payment date |
-| record_date | string | Record date |
+

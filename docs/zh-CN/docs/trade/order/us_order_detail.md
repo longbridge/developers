@@ -200,7 +200,6 @@ func main() {
 | 400    | 请求错误 | None   |
 
 
-## Schemas
 
 ### USOrderDetailResponse
 
@@ -209,12 +208,14 @@ func main() {
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | order | USOrderDetail \| null | 是 | 完整委托详情，未找到时为 null |
-| current_attached_order | USOrderDetail \| null | 否 | 关联子委托（括号单/OCO），无则为 null |
+| current_attached_order | USOrderDetail \| null | 否 | 关联子委托（括号单/OCO） |
 | current_millisecond | string | 否 | 服务器时间戳（毫秒） |
 
 ### USOrderDetail
 
 <a id="USOrderDetail"></a>
+
+核心字段（完整响应包含 50+ 个字段，涵盖费用、触发条件和结算详情）：
 
 | 名称 | 类型 | 描述 |
 | ---- | ---- | ---- |
@@ -232,4 +233,22 @@ func main() {
 | submitted_at | string | 提交时间 |
 | done_at | string | 完成时间 |
 | time_in_force | int | 有效期类型 |
+| trigger_price | string | 触发价格（止损/止盈单） |
 | msg | string | 状态消息 |
+| order_histories | USOrderHistory[] | 委托状态变更历史 |
+| attached_orders | USAttachedOrder[] | 关联子委托列表 |
+| button_control | USButtonControl | 可用操作按钮状态 |
+| charge_detail | USChargeDetail \| null | 费用明细 |
+
+### USOrderHistory
+
+<a id="USOrderHistory"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| exec_type | int | 执行类型 |
+| status | string | 当前节点委托状态 |
+| price | string | 价格 |
+| qty | string | 数量 |
+| time | string | 时间戳 |
+| msg | string | 消息 |

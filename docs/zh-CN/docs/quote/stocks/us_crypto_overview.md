@@ -226,5 +226,6 @@ func main() {
 | issue_price | string | 否 | 初始发行价格 |
 | shares | string | 否 | 流通总量 |
 | official_web_address | string | 否 | 官方网站 URL |
+| logo | string | 否 | 资产 Logo URL |
 | wiki_url | string | 否 | Wikipedia URL |
 | profile | string | 否 | 资产简介（JSON 字符串） |

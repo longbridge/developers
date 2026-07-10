@@ -218,6 +218,7 @@ func main() {
 | title | string | 標籤標題 |
 | text | string | 標籤顯示文本 |
 | rank_type | int | 排名類型 |
+| highlight_text | string | 高亮顯示文本 |
 
 ### USSharelistItem
 

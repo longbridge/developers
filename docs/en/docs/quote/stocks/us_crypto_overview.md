@@ -215,5 +215,6 @@ func main() {
 | issue_price | string | false | Initial issue price |
 | shares | string | false | Total circulating supply |
 | official_web_address | string | false | Official website URL |
+| logo | string | false | Asset logo URL |
 | wiki_url | string | false | Wikipedia URL |
 | profile | string | false | Asset profile description (JSON string) |

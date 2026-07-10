@@ -228,6 +228,7 @@ func main() {
 | currency | string | true | Base currency |
 | cash_list | USCashEntry[] | false | Cash balances by currency |
 | stock_list | USStockEntry[] | false | Stock positions |
+| option_list | object[] | false | Option positions |
 | crypto_list | USCryptoEntry[] | false | Crypto positions |
 
 ### USCashEntry
@@ -249,14 +250,21 @@ func main() {
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| symbol | string | Trading symbol (e.g. `AAPL.US`) |
+| symbol | string | Ticker symbol (e.g. `AAPL`) |
+| full_symbol | string | Qualified symbol (e.g. `AAPL.US`) |
+| asset_type | string | Asset type |
 | quantity | string | Quantity held |
 | currency | string | Currency code |
 | average_cost | string | Average cost price |
-| last_done | string | Current market price |
-| prev_close | string | Previous close price |
-| asset_type | string | Asset type |
+| market | string | Market identifier |
 | trade_status | string | Trading status |
+| prev_close | string | Previous close price |
+| last_done | string | Last traded price |
+| market_price | string | Current market price |
+| today_pl | string | Today's P&L |
+| name | string | Security name |
+| position_side | string | Position side (long/short) |
+| industry_name | string | Industry/sector name |
 
 ### USCryptoEntry
 

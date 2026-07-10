@@ -237,21 +237,13 @@ func main() {
 | ---- | ---- | ---- |
 | fiscal_year | string | 財年 |
 | fiscal_year_range | string | 財年日期範圍 |
-| dividend | string | 年度總股息 |
-| dividend_yield | string | 年度股息率 |
+| dividend | string | 總股息 |
+| dividend_yield | string | 股息率 |
 | dividend_growth_rate | string | 股息同比增長率 |
 | dividend_payout_ratio | string | 派息率 |
+| dividend_to_cashflow_ratio | string | 股息與現金流比率 |
 | total_shareholder_yield | string | 股東總回報率 |
-
-### USDividendPayoutRecord
-
-<a id="USDividendPayoutRecord"></a>
-
-| 名稱 | 類型 | 描述 |
-| ---- | ---- | ---- |
-| dividend | string | 每股分紅金額 |
-| dividend_type | string | 分紅類型（如 `Cash`） |
+| net_buyback | string | 淨回購金額 |
+| net_buyback_yield | string | 淨回購收益率 |
 | currency | string | 貨幣代碼 |
-| ex_date | string | 除權日 |
-| payment_date | string | 派息日 |
-| record_date | string | 登記日 |
+

@@ -199,7 +199,6 @@ func main() {
 | 400    | Bad request | None   |
 
 
-## Schemas
 
 ### USOrderDetailResponse
 
@@ -208,18 +207,20 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | order | USOrderDetail \| null | true | Full order detail, null if not found |
-| current_attached_order | USOrderDetail \| null | false | Attached child order (bracket/OCO), null if none |
+| current_attached_order | USOrderDetail \| null | false | Attached child order (bracket/OCO) |
 | current_millisecond | string | false | Server timestamp (milliseconds) |
 
 ### USOrderDetail
 
 <a id="USOrderDetail"></a>
 
+Core fields (the full response contains 50+ fields for fees, triggers, and settlement details):
+
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | id | string | Order ID |
 | symbol | string | Trading symbol (e.g. `AAPL.US`) |
-| action | int | Order action: 1=Buy, 2=Sell |
+| action | int | Direction: 1=Buy, 2=Sell |
 | order_type | string | Order type |
 | status | string | Order status |
 | price | string | Order price |
@@ -231,4 +232,22 @@ func main() {
 | submitted_at | string | Submission time |
 | done_at | string | Completion time |
 | time_in_force | int | Time-in-force type |
+| trigger_price | string | Trigger price (stop orders) |
 | msg | string | Status message |
+| order_histories | USOrderHistory[] | Order state-transition history |
+| attached_orders | USAttachedOrder[] | Attached child orders |
+| button_control | USButtonControl | Available action buttons |
+| charge_detail | USChargeDetail \| null | Fee breakdown |
+
+### USOrderHistory
+
+<a id="USOrderHistory"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| exec_type | int | Execution type |
+| status | string | Order status at this point |
+| price | string | Price |
+| qty | string | Quantity |
+| time | string | Timestamp |
+| msg | string | Message |

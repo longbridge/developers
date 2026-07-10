@@ -229,6 +229,7 @@ func main() {
 | currency | string | 是 | 基础货币 |
 | cash_list | USCashEntry[] | 否 | 按货币分列的现金余额 |
 | stock_list | USStockEntry[] | 否 | 股票持仓 |
+| option_list | object[] | 否 | 期权持仓 |
 | crypto_list | USCryptoEntry[] | 否 | 加密货币持仓 |
 
 ### USCashEntry
@@ -250,14 +251,21 @@ func main() {
 
 | 名称 | 类型 | 描述 |
 | ---- | ---- | ---- |
-| symbol | string | 交易标的，如 `AAPL.US` |
+| symbol | string | 股票代码（如 `AAPL`） |
+| full_symbol | string | 完整代码（如 `AAPL.US`） |
+| asset_type | string | 资产类型 |
 | quantity | string | 持有数量 |
 | currency | string | 货币代码 |
 | average_cost | string | 平均持仓成本价 |
-| last_done | string | 当前市场价格 |
-| prev_close | string | 上一收盘价 |
-| asset_type | string | 资产类型 |
+| market | string | 市场标识 |
 | trade_status | string | 交易状态 |
+| prev_close | string | 上一收盘价 |
+| last_done | string | 最新成交价 |
+| market_price | string | 当前市场价格 |
+| today_pl | string | 当日盈亏 |
+| name | string | 证券名称 |
+| position_side | string | 持仓方向（多/空） |
+| industry_name | string | 行业/板块名称 |
 
 ### USCryptoEntry
 
