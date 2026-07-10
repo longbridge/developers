@@ -183,7 +183,16 @@ func main() {
       "dividend_yield": "0.0053",
       "dividend_growth_rate": "0.0408",
       "dividend_payout_ratio": "0.1497",
-      "total_shareholder_yield": "0.0163"
+      "total_shareholder_yield": "0.0163",
+      "currency": "USD"
+    }
+  ],
+  "payout_ratios": [
+    {
+      "fiscal_year": "2024",
+      "fiscal_year_range": "2024-01-01 ~ 2024-12-31",
+      "dividend_payout_ratio": "0.1497",
+      "currency": "USD"
     }
   ],
   "dividend_payout_history": [
@@ -193,7 +202,9 @@ func main() {
       "currency": "USD",
       "ex_date": "2024-11-08",
       "payment_date": "2024-11-14",
-      "record_date": "2024-11-11"
+      "record_date": "2024-11-11",
+      "title": "Q4 FY2024 Dividend",
+      "start_time_unix": "1730000000"
     }
   ]
 }

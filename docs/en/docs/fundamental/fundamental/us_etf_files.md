@@ -96,7 +96,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsEtfFiles("IVV.US").get();
+            var resp = ctx.getUsEtfFiles("IVV.US", null).get();
             System.out.println(resp);
         }
     }

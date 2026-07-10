@@ -188,7 +188,7 @@ func main() {
     "handoff_agent_id": "",
     "symbol": "AAPL.US",
     "text": "Valuation overview for AAPL",
-    "chat_type": "valuation",
+    "type": "valuation",
     "workflow_type": "valuation"
   }
 }

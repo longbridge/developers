@@ -176,14 +176,22 @@ func main() {
       "circle": "35.2",
       "part": "72",
       "metric": "PE",
-      "desc": "市盈率",
+      "desc": "Price-to-Earnings ratio",
       "industry_median": "28.4"
     }
   },
   "range": 72,
   "date": "2026-07-01",
   "ccy_symbol": "USD",
-  "ai_summary": "苹果市盈率处于历史 72 百分位..."
+  "ai_summary": "Apple's PE ratio is in the 72nd percentile...",
+  "aichat_data": {
+    "agent_id": "valuation_aapl",
+    "handoff_agent_id": "",
+    "symbol": "AAPL.US",
+    "text": "Valuation overview for AAPL",
+    "type": "valuation",
+    "workflow_type": "valuation"
+  }
 }
 ```
 

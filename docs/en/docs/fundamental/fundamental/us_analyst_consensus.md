@@ -176,7 +176,7 @@ func main() {
     "handoff_agent_id": "",
     "symbol": "AAPL.US",
     "text": "Analyst consensus summary for AAPL",
-    "chat_type": "consensus",
+    "type": "consensus",
     "workflow_type": "analyst"
   },
   "currency": "USD",

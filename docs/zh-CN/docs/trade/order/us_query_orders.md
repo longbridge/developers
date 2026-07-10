@@ -102,7 +102,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              TradeContext ctx = TradeContext.create(config)) {
-            var resp = ctx.getUsQueryOrders().get();
+            var resp = ctx.getUsQueryOrders("", 0, 0L, 0L, 0, 1, 20).get();
             System.out.println(resp);
         }
     }
