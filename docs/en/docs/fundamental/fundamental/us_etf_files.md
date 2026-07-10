@@ -31,7 +31,7 @@ longbridge etf-docs SPY.US
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | symbol | string | YES | ETF symbol, e.g. `IVV.US` |
-| size | int | NO | Maximum number of files to return |
+| size | int | NO | Maximum number of files to return; omit to return all |
 
 ## Request Example
 

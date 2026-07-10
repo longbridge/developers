@@ -177,12 +177,11 @@ func main() {
       "key": "sp500",
       "title": "S&P 500",
       "text": "S&P 500",
-      "rank_type": 1,
-      "highlight_text": ""
+      "rank_type": 1
     }
   ],
   "detail_url": "https://longbridge.com/stocks/AAPL.US",
-  "share_list": []
+  "sharelist": []
 }
 ```
 
@@ -207,7 +206,7 @@ func main() {
 | ccy_symbol | string | 是 | 货币符号 |
 | top_rank_tags | USRankTag[] | 否 | 排名标签列表 |
 | detail_url | string | 否 | 公司详情页链接 |
-| share_list | USSharelistItem[] | 否 | 相关自选列表 |
+| sharelist | USSharelistItem[] | 否 | 相关自选列表 |
 
 ### USRankTag
 
@@ -219,7 +218,7 @@ func main() {
 | title | string | 标签标题 |
 | text | string | 标签显示文本 |
 | rank_type | int | 排名类型 |
-| highlight_text | string | 高亮显示文本 |
+
 
 ### USSharelistItem
 

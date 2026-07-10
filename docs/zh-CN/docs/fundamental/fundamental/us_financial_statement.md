@@ -80,7 +80,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.usFinancialStatementV3("AAPL.US", "IS", "annual")
+  const resp = await ctx.usFinancialStatement("AAPL.US", "IS", "af")
   console.log(resp)
 }
 main().catch(console.error)

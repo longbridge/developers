@@ -31,7 +31,7 @@ longbridge etf-docs SPY.US
 | 名称 | 类型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
 | symbol | string | 是 | ETF 代码，如 `IVV.US` |
-| size | int | 否 | 最大返回文件数 |
+| size | int | 否 | 最大返回文件数，不填则返回全部 |
 
 ## Request Example
 

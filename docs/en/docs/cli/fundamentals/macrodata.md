@@ -141,7 +141,7 @@ longbridge macrodata 61744 --format json
 | Option | Description | Default |
 | ------ | ----------- | ------- |
 | `--country` | Filter list: `HK` \| `CN` \| `US` \| `EU` \| `JP` \| `SG` | All |
-| `--keyword` | Filter list by indicator name (fuzzy, list mode only) | — |
+| `--keyword` | Server-side keyword search on indicator name (list mode only) | — |
 | `--start` | History start date `YYYY-MM-DD` | — |
 | `--end` | History end date `YYYY-MM-DD` | — |
 | `--lang` | Language for names/descriptions: `zh-CN` \| `en` | — |
