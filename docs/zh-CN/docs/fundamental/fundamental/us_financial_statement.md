@@ -98,7 +98,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getUsFinancialStatement("AAPL.US", "IS", "af").get();
+            var resp = ctx.getUsFinancialStatementV3("AAPL.US", "IS", "af").get();
             System.out.println(resp);
         }
     }

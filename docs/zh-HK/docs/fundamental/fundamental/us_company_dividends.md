@@ -237,7 +237,7 @@ func main() {
 | ---- | ---- | ---- |
 | fiscal_year | string | 財年 |
 | fiscal_year_range | string | 財年日期範圍 |
-| dividend | string | 總股息 |
+| dividend | string | 每股總股息 |
 | dividend_yield | string | 股息率 |
 | dividend_growth_rate | string | 股息同比增長率 |
 | dividend_payout_ratio | string | 派息率 |
@@ -245,5 +245,8 @@ func main() {
 | total_shareholder_yield | string | 股東總回報率 |
 | net_buyback | string | 淨回購金額 |
 | net_buyback_yield | string | 淨回購收益率 |
+| net_buyback_growth_rate | string | 淨回購增長率 |
+| net_buyback_payout_ratio | string | 淨回購派出率 |
+| net_buyback_to_cashflow_ratio | string | 淨回購與現金流比率 |
 | currency | string | 貨幣代碼 |
 

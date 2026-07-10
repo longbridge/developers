@@ -250,5 +250,5 @@ func main() {
 | handoff_agent_id | string | Handoff agent identifier |
 | symbol | string | Stock symbol |
 | text | string | Chat context text |
-| chat_type | string | Chat type |
+| type | string | Chat type |
 | workflow_type | string | Workflow type |

@@ -84,7 +84,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = TradeContext.new(config)
-  const resp = await ctx.usQueryOrders()
+  const resp = await ctx.usQueryOrders(null, 0, 0, 0, 0, 1, 20)
   console.log(resp)
 }
 main().catch(console.error)

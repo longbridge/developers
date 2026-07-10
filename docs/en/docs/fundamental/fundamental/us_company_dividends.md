@@ -239,7 +239,7 @@ func main() {
 | ---- | ---- | ----------- |
 | fiscal_year | string | Fiscal year |
 | fiscal_year_range | string | Fiscal year date range |
-| dividend | string | Total dividend |
+| dividend | string | Total dividend per share |
 | dividend_yield | string | Dividend yield |
 | dividend_growth_rate | string | YoY dividend growth rate |
 | dividend_payout_ratio | string | Dividend payout ratio |
@@ -247,5 +247,8 @@ func main() {
 | total_shareholder_yield | string | Total shareholder yield |
 | net_buyback | string | Net buyback amount |
 | net_buyback_yield | string | Net buyback yield |
+| net_buyback_growth_rate | string | Net buyback growth rate |
+| net_buyback_payout_ratio | string | Net buyback payout ratio |
+| net_buyback_to_cashflow_ratio | string | Net buyback-to-cashflow ratio |
 | currency | string | Currency code |
 

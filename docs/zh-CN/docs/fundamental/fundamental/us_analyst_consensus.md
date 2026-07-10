@@ -251,5 +251,5 @@ func main() {
 | handoff_agent_id | string | 转交 Agent 标识 |
 | symbol | string | 股票代码 |
 | text | string | 对话上下文文本 |
-| chat_type | string | 对话类型 |
+| type | string | 对话类型 |
 | workflow_type | string | 工作流类型 |

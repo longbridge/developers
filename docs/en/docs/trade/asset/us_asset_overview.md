@@ -222,7 +222,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | account_type | string | true | Account type identifier |
-| asset_timestamp | int64 | true | Snapshot time (Unix seconds) |
+| asset_timestamp | string | true | Snapshot time (Unix seconds) |
 | cash_buy_power | string | true | Available buying power (cash) |
 | overnight_buy_power | string | true | Overnight buying power |
 | currency | string | true | Base currency |
