@@ -157,9 +157,9 @@ export default defineConfig(
     /* prettier-ignore */
     head: [
     ['link', { rel: 'shortcut icon', type: 'image/x-icon', href: 'https://assets.wbrks.com/assets/logo/logo1.png' }],
-    ['link', { rel: 'apple-touch-icon', href: 'https://assets.lbkrs.com/uploads/2e476c46-8bb9-4689-a800-54877351520e/app-icon.svg' }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '192x192', href: 'https://assets.lbkrs.com/uploads/2e476c46-8bb9-4689-a800-54877351520e/app-icon.svg' }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '512x512', href: 'https://assets.lbkrs.com/uploads/2e476c46-8bb9-4689-a800-54877351520e/app-icon.svg' }],
+    ['link', { rel: 'apple-touch-icon', media: '(prefers-color-scheme: light)', href: 'https://assets.lbkrs.com/uploads/2e476c46-8bb9-4689-a800-54877351520e/app-icon.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', sizes: '192x192', media: '(prefers-color-scheme: light)', href: 'https://assets.lbkrs.com/uploads/2e476c46-8bb9-4689-a800-54877351520e/app-icon.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', sizes: '512x512', media: '(prefers-color-scheme: light)', href: 'https://assets.lbkrs.com/uploads/2e476c46-8bb9-4689-a800-54877351520e/app-icon.svg' }],
     ['link', { rel: 'icon', type: 'image/svg+xml', media: '(prefers-color-scheme: dark)', href: 'https://assets.lbkrs.com/uploads/716a4e35-c078-4fd5-9818-b859ad83b51b/app-icon-dark.svg' }],
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
