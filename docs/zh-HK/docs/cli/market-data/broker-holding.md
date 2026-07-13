@@ -5,7 +5,7 @@ sidebar_position: 15
 ---
 
 :::warning Longbridge US 賬戶不支援
-此命令需要 AP 數據中心賬戶（香港/SG）。美股數據中心賬戶不支援此命令。AP 賬戶可操作任意標的，包括美股。
+此命令需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶不支援此命令。AP 賬戶可操作任意標的，包括美股。
 :::
 
 # longbridge broker-holding

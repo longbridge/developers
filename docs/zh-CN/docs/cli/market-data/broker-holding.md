@@ -5,7 +5,7 @@ sidebar_position: 15
 ---
 
 :::warning Longbridge US 账户不支持
-此命令需要 AP 数据中心账户（香港/SG）。美股数据中心账户不支持此命令。AP 账户可操作任意标的，包括美股。
+此命令需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户不支持此命令。AP 账户可操作任意标的，包括美股。
 :::
 
 # longbridge broker-holding
