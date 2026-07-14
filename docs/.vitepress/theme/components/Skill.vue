@@ -859,6 +859,7 @@ const SKILL_AGENTS = [
   { name: 'ChatGPT', mark: 'G', color: '#10A37F' },
   { name: 'Claude', mark: 'C', color: '#D97757' },
   { name: 'Codex', mark: 'O', color: '#000000' },
+  { name: 'Grok', mark: 'G', color: '#000000' },
   { name: 'Claude Code', mark: 'C', color: '#D97757' },
   { name: 'Cursor', mark: '➤', color: '#000000' },
   { name: 'Gemini', mark: 'G', color: '#1A73E8' },

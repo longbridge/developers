@@ -96,6 +96,20 @@ codex mcp add longbridge --url https://mcp.longbridge.com
 3. 点击 **Save**
 4. 回到 MCP Servers 列表，点击 `longbridge` 条目上的 **Authenticate** 完成 OAuth 授权
 
+### Grok
+
+打开 [Grok Connectors](https://grok.com/connectors)，添加自定义 MCP Server：
+
+1. 在左侧边栏选择 **Skills and Connectors** → **Connectors** → **New Connector** → **Custom**
+2. 填写：
+   - Name：`Longbridge`
+   - Server URL：`https://mcp.longbridge.com`
+3. 点击 **Add Connector**，跟随 Longbridge OAuth 2 授权流程完成添加
+
+![](https://assets.lbkrs.com/uploads/08d07992-5463-4bfd-a4e4-97fab6e9cb41/grok-0.png)
+
+![](https://assets.lbkrs.com/uploads/56eee753-f3d4-4186-b024-ee0145f4eb54/grok-1.png)
+
 ### Cursor
 
 Settings → MCP Servers → 添加 Remote MCP Server，填入上方地址即可。
