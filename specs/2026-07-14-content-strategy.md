@@ -205,6 +205,18 @@ FAQ               ← as needed: common questions
 - Troubleshooting and FAQ go last — developers reach them when stuck
 - Sidebar order reflects the user journey above; use `sidebar_position` to enforce it
 
+**`sidebar_position` reference ranges:**
+
+| Content type | Typical `sidebar_position` |
+|---|---|
+| Overview | 0 |
+| Get Started | 1 |
+| Concepts | 10–19 |
+| How-to guides | 20–49 |
+| Implementation guides | 50–69 |
+| Reference | 70–89 |
+| Troubleshooting / FAQ | 90+ |
+
 ### 4.2 Mixed-concern pages
 
 A page with more than one content type must be split into separate pages. The only permitted exception is a designated entry-point page (e.g., top-level Get Started) that links out to reference material instead of embedding it.
@@ -249,6 +261,8 @@ Each resource is a top-level grouping of related endpoints.
 Use the root form of the verb in the title (not gerund — no "Getting", "Submitting").
 
 **Prohibited description patterns:** Do not use "The API is used to…", "This endpoint can be used to…", or "This endpoint is used to…". Use a direct active verb: "Returns…", "Submits…", "Lists…", "Creates…".
+
+**Description verb form:** Use the **third-person singular present** ("Filters…", "Returns…", "Lists…"), not the imperative ("Filter…", "Return…", "List…"). The imperative is correct for endpoint *titles*; descriptions use the declarative form.
 
 ### 5.4 Parameter and field descriptions
 
@@ -316,7 +330,9 @@ Attributes:
 - Code must be verifiable — do not include examples that cannot be tested (trade-execution examples are exempt)
 - Use real symbols: prefer US stocks (`AAPL.US`, `TSLA.US`, `NVDA.US`) and `700.HK` as examples
 
-**Multi-language tabs:** Use `<Tabs groupId="programming-language">` for SDK code examples. Language order: Python, JavaScript, Rust, Go, Java, C++. The `python-async` tab is optional — include it only when async usage meaningfully differs from the sync example.
+**Multi-language tabs:** Use `<Tabs groupId="programming-language">` for SDK code examples. Language order: Python, JavaScript, Rust, Go, Java, C++. The `python-async` tab is optional — include it only when async usage meaningfully differs from the sync example (for example, when the async version uses a different context class such as `AsyncTradeContext` vs `TradeContext`, or requires a different import pattern). Do not include it when the only difference is adding `await`.
+
+**Tab labels:** Use `JavaScript` as the label for the Node.js/JavaScript SDK tab. Do not use `Node.js` — inconsistent labels break cross-page tab sync. Existing pages that use `Node.js` as a label must be corrected when the page is edited.
 
 **Standard `groupId` values:**
 
@@ -362,7 +378,11 @@ Use sparingly. A callout that could be a sentence in the main text should be a s
 - External links: use descriptive text, not raw URLs
 - `openapi.yaml` path references: link to the rendered API Reference page, not the YAML file
 
-### 6.6 Language integrity
+### 6.6 Tables
+
+Prefer Markdown table syntax. Raw HTML `<table>` elements are acceptable only when the required structure — merged cells, `rowspan`, or `colspan` — cannot be expressed in standard Markdown. Do not use raw HTML tables purely for formatting preference.
+
+### 6.7 Language integrity
 
 English pages must contain no Chinese characters — including inside code blocks, code comments, and string literals. If a code block was copied from a Chinese locale page, remove all CJK text before committing.
 
