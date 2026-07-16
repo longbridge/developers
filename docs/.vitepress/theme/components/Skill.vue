@@ -22,7 +22,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
-      desc: 'For Claude Code, Codex, Gemini, and other agents, Longbridge Skill lets your AI <a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">screen stocks</a>, decode earnings, track insider moves, and place orders in plain conversation.',
+      desc: 'For Claude Code, Codex, Gemini, and other agents, Longbridge Skill lets your AI <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">screen stocks</a>, decode earnings, track insider moves, and place orders in plain conversation.',
       chatgptLine:
         '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> can install <a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge</a> directly and use it with <code>@longbridge</code>.',
       tabConnect: 'Connect AI',
@@ -142,7 +142,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
-      desc: 'Claude Code、Codex、Gemini 等 Agent 可通过 Longbridge Skill <a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">筛选股票</a>、解读财报、追踪机构动向，并直接下单。',
+      desc: 'Claude Code、Codex、Gemini 等 Agent 可通过 Longbridge Skill <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">筛选股票</a>、解读财报、追踪机构动向，并直接下单。',
       chatgptLine:
         '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 可以直接安装 <a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge</a>，并通过 <code>@longbridge</code> 来使用。',
       tabConnect: 'Connect AI',
@@ -321,7 +321,7 @@ const LOCALE = {
       {
         nav: '跨市场选股',
         title: 'HK · 美股 · A 股 · 新加坡——一次筛选，全市场覆盖',
-        desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。查看所有支持市场的<a href="https://longbridge.com/markets">实时行情</a>。',
+        desc: '跨市场追踪机会繁琐易错。告诉 AI 你的条件——市值、PE 区间、板块——再叠加 KDJ 金叉或 MACD 多头等技术信号，跨市场过滤，统一输出结果。查看所有支持市场的<a href="https://longbridge.com/en/markets">实时行情</a>。',
         prompt: '从美股和港股中，筛选市值超 500 亿、PE 低于 25 的科技股，且近期出现 MACD 金叉——按市值排序。',
         summary:
           '美股 + 港股科技板块筛选完成——共 8 只股票满足市值 ≥ 500 亿、PE < 25 条件。其中 3 只确认出现近期 MACD 金叉（DIF 上穿 DEA）。',
@@ -387,7 +387,7 @@ const LOCALE = {
       eyebrow: 'AI · Skill',
       title1: 'Longbridge Skill',
       title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
-      desc: 'Claude Code、Codex、Gemini 等 Agent 可透過 Longbridge Skill <a href="https://longbridge.com/screener" target="_blank" rel="noreferrer">篩選股票</a>、解讀財報、追蹤機構動向，並直接下單。',
+      desc: 'Claude Code、Codex、Gemini 等 Agent 可透過 Longbridge Skill <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">篩選股票</a>、解讀財報、追蹤機構動向，並直接下單。',
       chatgptLine:
         '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 可以直接安裝 <a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge</a>，並透過 <code>@longbridge</code> 來使用。',
       tabConnect: 'Connect AI',
@@ -566,7 +566,7 @@ const LOCALE = {
       {
         nav: '跨市場選股',
         title: 'HK · 美股 · A 股 · 新加坡——一次篩選，全市場覆蓋',
-        desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。查看所有支援市場的<a href="https://longbridge.com/markets">即時行情</a>。',
+        desc: '跨市場追蹤機會繁瑣易錯。告訴 AI 你的條件——市值、PE 區間、板塊——再疊加 KDJ 金叉或 MACD 多頭等技術信號，跨市場過濾，統一輸出結果。查看所有支援市場的<a href="https://longbridge.com/en/markets">即時行情</a>。',
         prompt: '從美股和港股中，篩選市值超 500 億、PE 低於 25 的科技股，且近期出現 MACD 金叉——按市值排序。',
         summary:
           '美股 + 港股科技板塊篩選完成——共 8 只股票滿足市值 ≥ 500 億、PE < 25 條件。其中 3 只確認出現近期 MACD 金叉（DIF 上穿 DEA）。',
@@ -904,7 +904,7 @@ const DEMO_SCENARIOS = [
     id: 'screen',
     nav: 'Cross-Market Screening',
     title: 'HK · US · A-share · Singapore — multi-market screening in one shot.',
-    desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results. See <a href="https://longbridge.com/markets">live market data</a> for all supported markets.',
+    desc: 'Tracking opportunities across markets is brittle. Tell the AI your criteria — market cap, PE range, sector — and layer in technical signals like KDJ golden cross or MACD bullish. Cross-market filter, unified results. See <a href="https://longbridge.com/en/markets">live market data</a> for all supported markets.',
     prompt:
       'From US + HK markets, screen for tech stocks with market cap above ¥50B, PE under 25, and recent MACD golden cross — sort by market cap.',
     summary:

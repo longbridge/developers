@@ -929,7 +929,7 @@ g++ -std=c++17 account_asset.cpp -o account_asset -llongbridge && ./account_asse
 
 訂閱行情數據請檢查 [開發者中心](https://open.longbridge.com/dashboard) - "行情權限"是否正確
 
-- 港股 - BMP 基礎報價，無實時行情推送，無法用 WebSocket 訂閱
+- [港股](https://longbridge.com/hk/) - BMP 基礎報價，無實時行情推送，無法用 WebSocket 訂閱
 - 美股 - 納斯達克 Basic 行情（只限 OpenAPI）
 
 運行前訪問 [開發者中心](https://open.longbridge.com/dashboard)，檢查確保賬戶有正確的行情權限。

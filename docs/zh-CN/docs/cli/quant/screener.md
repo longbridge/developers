@@ -11,7 +11,7 @@ slug: '/cli/quant/screener'
 
 <TipContainer type="tip">
 
-**在网页端体验** —— 下方展示的所有策略与筛选条件，也可在 [选股器](https://longbridge.com/screener) 中交互式使用。建议先在那里搭建筛选条件，再用 CLI 自动化执行。
+**在网页端体验** —— 下方展示的所有策略与筛选条件，也可在 [长桥选股器](https://longbridge.com/en/screener) 中交互式使用。建议先在那里搭建筛选条件，再用 CLI 自动化执行。
 
 </TipContainer>
 
