@@ -70,7 +70,10 @@ const LOCALE = {
       eyebrow: 'Longbridge CLI',
       title: 'AI-native command-line tool, covering every OpenAPI.',
       feats: [
-        ['130+ commands', '<a href="https://longbridge.com/markets">Market data</a>, trading, fundamentals — all in your shell.'],
+        [
+          '130+ commands',
+          '<a href="https://longbridge.com/markets">Market data</a>, trading, fundamentals — all in your shell.',
+        ],
         ['--format json output', "Pipe into jq, awk, or any AI agent's tool channel."],
         ['Multi-period candlesticks', 'Daily, hourly, 15-min, 5-min, 1-min — all from one flag.'],
         ['Portfolio P&L view', 'Position breakdown with allocation drill-down.'],
@@ -324,7 +327,10 @@ const LOCALE = {
           body: '无额外 API 费用。用真实市场数据进行模拟交易，无需证券账户。',
           strong: '零 API 费用',
         },
-        { h: '实时推送', body: 'WebSocket 推送<a href="https://longbridge.com/markets">报价</a>、买卖盘深度、成交及订单状态，延迟 &lt; 60 ms。' },
+        {
+          h: '实时推送',
+          body: 'WebSocket 推送<a href="https://longbridge.com/markets">报价</a>、买卖盘深度、成交及订单状态，延迟 &lt; 60 ms。',
+        },
         { h: 'OAuth 2.0 + 异步', body: '自动令牌管理，支持现代 async/await 模式及内置限速控制。' },
       ],
       cta: 'SDK 文档',
@@ -488,7 +494,10 @@ const LOCALE = {
           body: '無額外 API 費用。用真實市場數據進行模擬交易，無需證券帳戶。',
           strong: '零 API 費用',
         },
-        { h: '即時推送', body: 'WebSocket 推送<a href="https://longbridge.com/markets">報價</a>、買賣盤深度、成交及訂單狀態，延遲 &lt; 60 ms。' },
+        {
+          h: '即時推送',
+          body: 'WebSocket 推送<a href="https://longbridge.com/markets">報價</a>、買賣盤深度、成交及訂單狀態，延遲 &lt; 60 ms。',
+        },
         { h: 'OAuth 2.0 + 非同步', body: '自動令牌管理，支援現代 async/await 模式及內建限速控制。' },
       ],
       cta: 'SDK 文件',
@@ -1205,6 +1214,7 @@ const API_CAPS = [
   {
     icon: 'chart',
     color: 'var(--lb-status-neutral)',
+    link: '/docs/quote/overview',
     title: 'Market Data',
     count: '30+',
     desc: 'Real-time quotes, order depth, candlestick, intraday, capital flow, and push subscriptions',
@@ -1220,6 +1230,7 @@ const API_CAPS = [
   {
     icon: 'shield',
     color: 'var(--lb-brand)',
+    link: '/docs/trade/trade-overview',
     title: 'Trading & Orders',
     count: '14+',
     desc: 'Submit, replace, and withdraw orders. Track positions, balance, and execution history',
@@ -1228,6 +1239,7 @@ const API_CAPS = [
   {
     icon: 'bolt',
     color: 'var(--lb-ai-mention)',
+    link: '/docs/cli/derivatives/option',
     title: 'Derivatives',
     count: '8+',
     desc: 'Full option chains with Greeks, warrants listing, and real-time derivative quotes',
@@ -1236,6 +1248,7 @@ const API_CAPS = [
   {
     icon: 'book',
     color: 'var(--lb-chart-purple)',
+    link: '/docs/cli/fundamentals/financial-report',
     title: 'Financial Research',
     count: '7+',
     desc: 'Financial statements, valuation metrics, dividend history, EPS forecasts, analyst ratings',
@@ -1244,6 +1257,7 @@ const API_CAPS = [
   {
     icon: 'globe',
     color: 'var(--lb-status-alert)',
+    link: '/docs/content/overview',
     title: 'Content & News',
     count: '8+',
     desc: 'Real-time news feeds, community discussions, topics, and engagement metrics',
@@ -1773,9 +1787,7 @@ const GETSTARTED = [
             <span style="margin-left: 8px; font-size: 11.5px; color: var(--lb-fg-3)">~/projects/quant — claude</span>
             <button
               class="code-copy"
-              @click="
-                copyToClipboard('claude mcp add --transport http longbridge \\\n  https://mcp.longbridge.com')
-              ">
+              @click="copyToClipboard('claude mcp add --transport http longbridge \\\n  https://mcp.longbridge.com')">
               <svg
                 width="13"
                 height="13"
@@ -1846,7 +1858,7 @@ const GETSTARTED = [
           <h2 class="h-section" style="margin-top: 16px">{{ content.apiCaps.title }}</h2>
         </div>
         <div class="api-caps-grid">
-          <a v-for="c in apiCaps" :key="c.title" :href="localePath('/api')" class="api-cap-card">
+          <a v-for="c in apiCaps" :key="c.title" :href="localePath(c.link)" class="api-cap-card">
             <div class="api-cap-head">
               <div
                 class="api-cap-icon"
