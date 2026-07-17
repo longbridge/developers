@@ -133,3 +133,21 @@ plot(ta.rsi(close, period), "RSI")
 ```
 
 参数按位置匹配：`[21]` 覆盖第一个 `input.*()` 调用。
+
+## Navi — 脚本语言
+
+OpenPine 脚本由 [Navi](https://navi-lang.org) 驱动——这是一门专为量化分析设计的脚本语言，兼容大多数 PineScript V6 语法。
+
+安装 Navi CLI，在将脚本提交至 Longbridge 服务器前先在本地验证：
+
+```bash
+curl -sSL https://navi-lang.org/install | sh -s -- nightly
+```
+
+安装完成后，可直接运行脚本文件：
+
+```bash
+navi run my_indicator.pine
+```
+
+这样可以在本地捕获语法错误，避免每次都需要通过 `longbridge quant run` 远程执行。
