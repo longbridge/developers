@@ -136,7 +136,7 @@ plot(ta.rsi(close, period), "RSI")
 
 ## Navi — 脚本语言
 
-OpenPine 脚本由 [Navi](https://navi-lang.org) 驱动——这是一门专为量化分析设计的脚本语言，兼容大多数 PineScript V6 语法。
+脚本运行于 [Navi](https://navi-lang.org)——这是一门专为量化分析设计的脚本语言，兼容大多数 PineScript V6 语法。
 
 安装 Navi CLI，在将脚本提交至 Longbridge 服务器前先在本地验证：
 

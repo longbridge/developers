@@ -27,13 +27,13 @@ Pipe a file instead of using `--script`:
 cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-12-31
 ```
 
-## Script Language — OpenPine
+## Script Language — Navi
 
-Scripts are written in **OpenPine** — an independent indicator scripting language compatible with most **PineScript V6** syntax. Existing Pine scripts work with little to no modification.
+Scripts are written in **Navi** — an independent indicator scripting language compatible with most **PineScript V6** syntax. Existing Pine scripts work with little to no modification.
 
 ### Script Types
 
-Every OpenPine script must begin with one of these declarations — it determines the execution mode:
+Every Navi script must begin with one of these declarations — it determines the execution mode:
 
 | Declaration | Purpose |
 | ----------- | ------- |

@@ -136,7 +136,7 @@ Parameters are matched positionally: `[21]` replaces the first `input.*()` call.
 
 ## Navi — The Script Language
 
-OpenPine scripts are powered by [Navi](https://navi-lang.org) — a scripting language
+Scripts run on [Navi](https://navi-lang.org) — a scripting language
 designed for quantitative analysis, compatible with most PineScript V6 syntax.
 
 Install the Navi CLI to validate scripts locally before running them on Longbridge servers:
