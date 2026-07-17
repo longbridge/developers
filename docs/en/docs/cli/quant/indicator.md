@@ -142,7 +142,7 @@ designed for quantitative analysis.
 Install the Navi CLI to validate scripts locally before running them on Longbridge servers:
 
 ```bash
-curl -sSL https://navi-lang.org/install | sh -s -- nightly
+curl -fsSL https://navi-lang.org/install.sh | sh
 ```
 
 Once installed, run a script file directly:

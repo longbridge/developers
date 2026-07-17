@@ -141,7 +141,7 @@ plot(ta.rsi(close, period), "RSI")
 安裝 Navi CLI，在將腳本提交至 Longbridge 伺服器前先在本地驗證：
 
 ```bash
-curl -sSL https://navi-lang.org/install | sh -s -- nightly
+curl -fsSL https://navi-lang.org/install.sh | sh
 ```
 
 安裝完成後，可直接執行腳本檔案：
