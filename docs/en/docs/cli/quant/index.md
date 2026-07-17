@@ -29,7 +29,7 @@ cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-1
 
 ## Script Language — Navi
 
-Scripts are written in **Navi** — an independent indicator scripting language compatible with most **PineScript V6** syntax. Existing Pine scripts work with little to no modification.
+Scripts are written in **Navi** — an independent indicator scripting language for quantitative analysis.
 
 ### Script Types
 

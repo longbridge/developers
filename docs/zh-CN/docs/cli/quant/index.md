@@ -29,7 +29,7 @@ cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-1
 
 ## 脚本语言 — Navi
 
-脚本使用 **Navi** 编写 — 一种独立的指标脚本语言，兼容大部分 **PineScript V6** 语法，现有 Pine 脚本无需或只需少量修改即可直接运行。
+脚本使用 **Navi** 编写 — 一种面向量化分析的独立指标脚本语言。
 
 ### 脚本类型
 

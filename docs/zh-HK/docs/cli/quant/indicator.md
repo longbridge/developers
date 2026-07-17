@@ -136,7 +136,7 @@ plot(ta.rsi(close, period), "RSI")
 
 ## Navi — 腳本語言
 
-腳本運行於 [Navi](https://navi-lang.org)——這是一門專為量化分析設計的腳本語言，相容大多數 PineScript V6 語法。
+腳本運行於 [Navi](https://navi-lang.org)——這是一門專為量化分析設計的腳本語言。
 
 安裝 Navi CLI，在將腳本提交至 Longbridge 伺服器前先在本地驗證：
 

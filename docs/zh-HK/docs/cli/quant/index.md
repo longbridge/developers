@@ -29,7 +29,7 @@ cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-1
 
 ## 腳本語言 — Navi
 
-腳本使用 **Navi** 編寫 — 一種獨立的指標腳本語言，兼容大部分 **PineScript V6** 語法，現有 Pine 腳本無需或只需少量修改即可直接運行。
+腳本使用 **Navi** 編寫 — 一種面向量化分析的獨立指標腳本語言。
 
 ### 腳本類型
 
