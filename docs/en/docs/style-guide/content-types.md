@@ -165,7 +165,7 @@ Examples: "Build a real-time quote dashboard", "Automate a DCA strategy with the
 1. One-sentence description in active voice (third-person present: "Returns…", "Filters…", "Lists…")
 2. `<CliCommand>` block — if a CLI command maps to this endpoint
 3. `<SDKLinks>` component — required on all API endpoint pages (see [API Reference Standards](./api-reference#sdklinks-component))
-4. `## Request` — HTTP method + URL table; then `### Parameters` table (name / type / required / description); then `### Request Example` using `<Tabs groupId="programming-language">` with all supported SDK languages
+4. `## Request` — HTTP method + URL table; then `### Parameters` table (name / type / required / description); then `### Request Example` using `<Tabs groupId="programming-language">` (see [Writing Guidelines](./writing-guidelines#multi-language-tabs)) with all supported SDK languages
 5. `## Response` — response headers, `### Response Example` (JSON), `### Response Status` (status code table)
 6. `## Schemas` — field definition tables for complex nested types
 
