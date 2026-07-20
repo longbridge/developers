@@ -30,6 +30,19 @@ function buildDocsSidebar(): DefaultTheme.SidebarItem[] {
     const link = typeof item.link === 'string' ? item.link : ''
     return !link.endsWith('/mcp') && !link.endsWith('/docs/api')
   })
+
+  // Move AI Agent item to the end and set collapsed: true
+  const aiAgentIndex = items.findIndex((item) => {
+    const link = typeof item.link === 'string' ? item.link : ''
+    return link.includes('/ai')
+  })
+
+  if (aiAgentIndex !== -1) {
+    const aiAgentItem = items.splice(aiAgentIndex, 1)[0]
+    aiAgentItem.collapsed = true
+    items.push(aiAgentItem)
+  }
+
   items.push(apiRefItem)
   return items
 }
