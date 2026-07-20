@@ -6,6 +6,16 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-07-20
+
+- **US accounts can sign in to Longbridge Developers** — US accounts are now supported for login and API access. Note that the mainland-China `.cn` domains (`openapi.longbridge.cn`, `openapi-quote.longbridge.cn`, `openapi-trade.longbridge.cn`) do not serve US accounts; use the default domains instead
+
+### CLI v0.25.0
+
+- **US data center is live** — US accounts can log in through `auth login` (device flow or `--auth-code`), and requests route to the data center matching the token; `auth status` reports the active DC region
+- **US market coverage** — 14 account and fundamentals commands (`positions`, `order`, `company`, `valuation`, `financial-report`, `consensus`, `dividend`, etc.) transparently route to US-specific endpoints for US tokens, with new `profit-analysis realized` and `financial-report key-metrics` subcommands
+- **Navi scripting on the quant platform** — `quant run` now targets the v2 API and supports Navi alongside PineScript via `--language navi|pine` (Navi is the default)
+
 ## 2026-07-07
 
 ### SDK v4.4.0
@@ -20,7 +30,6 @@ sidebar_icon: newspaper
 - **New `profit-analysis realized` subcommand** — realized P&L breakdown by asset category for US accounts (stock/option/crypto)
 - **New `order --status` / `--action` flags** — filter US order history by status and side
 - **New `order detail --attached` flag** — show attached child order for US accounts
-
 ## 2026-06-25
 
 ### SDK v4.3.3

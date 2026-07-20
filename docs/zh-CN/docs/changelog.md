@@ -6,6 +6,16 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-07-20
+
+- **Developers 平台支持美国账户登录** — 美国账户现已支持登录与接口调用。注意国内 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美国账户，请使用默认域名
+
+### CLI v0.25.0
+
+- **美国数据中心上线** — 美国账户可通过 `auth login`（设备码或 `--auth-code`）登录，请求按 token 自动路由到对应数据中心；`auth status` 展示当前 DC 区域
+- **美股市场接口覆盖** — 美股 token 下 14 个账户与基本面命令（`positions`、`order`、`company`、`valuation`、`financial-report`、`consensus`、`dividend` 等）自动路由到美股专属接口，并新增 `profit-analysis realized`、`financial-report key-metrics` 子命令
+- **量化平台支持 Navi 脚本** — `quant run` 迁移至 v2 接口，通过 `--language navi|pine` 同时支持 Navi 与 PineScript（默认 Navi）
+
 ## 2026-07-07
 
 ### SDK v4.4.0
@@ -20,7 +30,6 @@ sidebar_icon: newspaper
 - **新增 `profit-analysis realized` 子命令** — 美股账户按资产类别（股票/期权/加密货币）统计已实现盈亏
 - **新增 `order --status` / `--action` 选项** — 筛选美股历史委托状态和方向
 - **新增 `order detail --attached` 选项** — 获取美股账户关联子委托
-
 ## 2026-06-25
 
 ### SDK v4.3.3

@@ -9,12 +9,15 @@ sidebar_icon: newspaper
 
 ### [v0.25.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.25.0)
 
+- **支持美国数据中心** — `auth login`（设备码流程与 `--auth-code`）支持美国账户授权，所有请求会按 token 自动路由到对应数据中心；`auth status` 展示当前 DC 区域
+- **美股账户与基本面接口覆盖** — 美股 token 下 14 个命令（`positions`、`order`、`company`、`valuation`、`financial-report`、`financial-statement`、`consensus`、`dividend` 等）自动路由到美股专属接口，并新增 `profit-analysis realized`、`financial-report key-metrics` 子命令
+- **`quant run` 迁移至 v2 接口并支持 Navi** — 新增 `--language navi|pine` 参数（默认 Navi）；图表渲染同时兼容 v1 与 v2 两种数据结构
+
 - **美股账户路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股数据中心账户下自动路由至美股 API
 - **新增 `etf-docs` 命令** — 列出美股 ETF 监管文件（招股书、事实说明书、年报），`--limit` 控制返回数量
 - **新增 `financial-report key-metrics` 子命令** — 美股关键财务指标，支持 `--report annual|quarterly`
 - **新增 `profit-analysis realized` 子命令** — 美股账户已实现盈亏，支持 `--category stock|option|crypto` 筛选
 - **新增订单选项** — `--status pending|history|all` 和 `--action buy|sell` 筛选美股历史委托；`order detail --attached` 获取关联子委托
-
 ### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
 - **新增 `macrodata` 命令** — 浏览 400+ 宏观数据指标，覆盖美/港/中/欧/日/新六大市场；列表模式支持 `--country` 筛选，历史模式支持 `--start`/`--end` 日期区间；`--format json` 满足 AI / 脚本需求

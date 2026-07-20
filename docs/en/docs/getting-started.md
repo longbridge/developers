@@ -25,6 +25,22 @@ For access in mainland China, you can use `.cn` domains for better connectivity:
 The SDK automatically selects the access point by network. If the SDK selects incorrectly, set the environment variable `LONGBRIDGE_REGION` (e.g. `cn` or `hk`).
 :::
 
+### Access Points and Data Centers
+
+Two concepts that are easy to confuse:
+
+- **Access point** (`.com` / `.cn`) — network routing only. Both serve identical data and identical auth: a token issued through one is accepted by the other.
+- **Data center** (`ap` / `us`) — where the account itself lives. It determines which US-only APIs are available.
+
+The two cannot be combined freely:
+
+| Data center               | `.com`                             | `.cn`         |
+| ------------------------- | ---------------------------------- | ------------- |
+| `us` (US accounts)        | Yes — the only usable access point | Not supported |
+| `ap` (Longbridge SG / HK) | Yes                                | Yes           |
+
+`.cn` has no route to the US data center, so US accounts must always use the `.com` domains — including for login, since the `.cn` login page does not offer US accounts.
+
 ## Time Format
 
 All API response are used [Unix Timestamp](https://en.wikipedia.org/wiki/Unix_time), timezone is UTC.
@@ -417,17 +433,17 @@ Please pay attention to protect your **Access Token** information, anyone who ge
 
 **Other environment variables:**
 
-| Name                               | Description                                                                                                                                                              |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `LONGBRIDGE_LANGUAGE`              | Language identifier, `zh-CN`, `zh-HK` or `en` (Default: `en`)                                                                                                            |
-| `LONGBRIDGE_HTTP_URL`              | HTTP endpoint url (Default: `https://openapi.longbridge.com`)                                                                                                            |
-| `LONGBRIDGE_QUOTE_WS_URL`          | Quote websocket endpoint url (Default: `wss://openapi-quote.longbridge.com/v2`)                                                                                          |
-| `LONGBRIDGE_TRADE_WS_URL`          | Trade websocket endpoint url (Default: `wss://openapi-trade.longbridge.com/v2`)                                                                                          |
-| `LONGBRIDGE_REGION`                | Override API region; SDK auto-selects by network. Set to `cn` or `hk` if incorrect.                                                                                      |
+| Name                               | Description                                                                                                                 |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `LONGBRIDGE_LANGUAGE`              | Language identifier, `zh-CN`, `zh-HK` or `en` (Default: `en`)                                                               |
+| `LONGBRIDGE_HTTP_URL`              | HTTP endpoint url (Default: `https://openapi.longbridge.com`)                                                               |
+| `LONGBRIDGE_QUOTE_WS_URL`          | Quote websocket endpoint url (Default: `wss://openapi-quote.longbridge.com/v2`)                                             |
+| `LONGBRIDGE_TRADE_WS_URL`          | Trade websocket endpoint url (Default: `wss://openapi-trade.longbridge.com/v2`)                                             |
+| `LONGBRIDGE_REGION`                | Override API region; SDK auto-selects by network. Set to `cn` or `hk` if incorrect.                                         |
 | `LONGBRIDGE_ENABLE_OVERNIGHT`      | Enable overnight quote, `true` or `false` (Default: `false`). Overnight quotes are included free in US LV1. US stocks only. |
-| `LONGBRIDGE_PUSH_CANDLESTICK_MODE` | `realtime` or `confirmed` (Default: `realtime`)                                                                                                                          |
-| `LONGBRIDGE_PRINT_QUOTE_PACKAGES`  | Print quote packages when connected, `true` or `false` (Default: `true`)                                                                                                 |
-| `LONGBRIDGE_LOG_PATH`              | Set the path of the log files (Default: no logs)                                                                                                                         |
+| `LONGBRIDGE_PUSH_CANDLESTICK_MODE` | `realtime` or `confirmed` (Default: `realtime`)                                                                             |
+| `LONGBRIDGE_PRINT_QUOTE_PACKAGES`  | Print quote packages when connected, `true` or `false` (Default: `true`)                                                    |
+| `LONGBRIDGE_LOG_PATH`              | Set the path of the log files (Default: no logs)                                                                            |
 
 :::info
 The SDK also accepts the legacy `LONGPORT_*` variable names for backward compatibility.
