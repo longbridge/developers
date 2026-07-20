@@ -12,7 +12,7 @@ const LOCALE = {
       eyebrow: 'PRICING',
       title1: 'Build for free.',
       title2: 'Pay only for real-time market data.',
-      desc: 'Core API features — trading, accounts, fundamentals, <a href="https://longbridge.com/news">news</a> — are completely free. Subscribe to real-time <a href="https://longbridge.com/markets">market data</a> only when you need it.',
+      desc: 'Core API features — trading, accounts, fundamentals, <a href="https://longbridge.com/en/news">news</a> — are completely free. Subscribe to real-time <a href="https://longbridge.com/markets">market data</a> only when you need it.',
     },
     free: {
       price: 'Free',
@@ -23,7 +23,7 @@ const LOCALE = {
         },
         {
           title: 'Basic Market Data',
-          desc: 'US LV1, HK LV1, CN LV1 — bundled with your account. <a href="https://longbridge.com/markets">View live market data</a> to see what\'s included.',
+          desc: 'US LV1, HK LV1, CN LV1 — bundled with your account. <a href="https://longbridge.com/en/markets">View live market data</a> to see what\'s included.',
         },
         { title: 'Push & Pull Data', desc: 'WebSocket real-time push and REST API pull — unlimited.' },
       ],
@@ -31,7 +31,7 @@ const LOCALE = {
     realtime: {
       eyebrow: 'REAL-TIME MARKET DATA',
       title: 'Subscribe only to what you need.',
-      desc: 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate via <a href="https://longbridge.com/hk/download">Longbridge App</a> → Me → Quote Store.',
+      desc: 'OpenAPI quote permissions are independent from App / PC / Web and must be purchased separately. Activate via <a href="https://longbridge.com/hk/en/download">Longbridge App</a> → Me → Quote Store.',
     },
     billing: { label: 'Billing' },
     cycle: {
@@ -108,7 +108,7 @@ const LOCALE = {
         },
         {
           q: 'What about paper trading?',
-          a: 'Paper trading runs against the canary environment with simulated matching on live bid-ask spreads. Free for all <a href="https://longbridge.com/hk/download">integrated accounts</a> — no quote subscription required.',
+          a: 'Paper trading runs against the canary environment with simulated matching on live bid-ask spreads. Free for all <a href="https://longbridge.com/hk/en/download">integrated accounts</a> — no quote subscription required.',
         },
         {
           q: 'Are there usage limits on REST or WebSocket?',
@@ -126,7 +126,7 @@ const LOCALE = {
       eyebrow: '定价',
       title1: '免费开始构建',
       title2: '仅为实时行情数据付费',
-      desc: '交易、账户、基本面、<a href="https://longbridge.com/news">资讯</a>等核心 API 功能完全免费。仅在需要时订阅实时<a href="https://longbridge.com/markets">行情数据</a>。',
+      desc: '交易、账户、基本面、<a href="https://longbridge.com/en/news">资讯</a>等核心 API 功能完全免费。仅在需要时订阅实时<a href="https://longbridge.com/markets">行情数据</a>。',
     },
     free: {
       price: '免费',
@@ -134,7 +134,7 @@ const LOCALE = {
         { title: '交易与账户 API', desc: '基本面、分析、资讯、资产、订单——所有核心 API 均免费。' },
         {
           title: '基础行情数据',
-          desc: '美股 LV1、港股一档、A 股一档——随账户附赠。<a href="https://longbridge.com/markets">查看实时行情</a>了解包含内容。',
+          desc: '美股 LV1、港股一档、A 股一档——随账户附赠。<a href="https://longbridge.com/en/markets">查看实时行情</a>了解包含内容。',
         },
         { title: '推送与拉取数据', desc: 'WebSocket 实时推送与 REST API 拉取——无限制。' },
       ],
@@ -142,7 +142,7 @@ const LOCALE = {
     realtime: {
       eyebrow: '实时行情数据',
       title: '只订阅您需要的数据',
-      desc: 'OpenAPI 行情权限与 App / PC / Web 独立，需单独购买。通过<a href="https://longbridge.com/hk/download">长桥 App</a> → 我的 → 行情商店开通。',
+      desc: 'OpenAPI 行情权限与 App / PC / Web 独立，需单独购买。通过<a href="https://longbridge.com/hk/en/download">长桥 App</a> → 我的 → 行情商店开通。',
     },
     billing: { label: '计费周期' },
     cycle: {
@@ -216,7 +216,7 @@ const LOCALE = {
         { q: '可以随时取消吗？', a: '可以。在下一个计费周期前随时取消。行情权限在已付费周期结束前持续有效。' },
         {
           q: '模拟交易如何使用？',
-          a: '模拟交易基于 canary 环境运行，以实时买卖价差进行模拟撮合。所有<a href="https://longbridge.com/hk/download">综合账户</a>均免费，无需行情订阅。',
+          a: '模拟交易基于 canary 环境运行，以实时买卖价差进行模拟撮合。所有<a href="https://longbridge.com/hk/en/download">综合账户</a>均免费，无需行情订阅。',
         },
         {
           q: 'REST 或 WebSocket 有使用限制吗？',
@@ -231,7 +231,7 @@ const LOCALE = {
       eyebrow: '定價',
       title1: '免費開始構建。',
       title2: '僅為即時行情數據付費。',
-      desc: '交易、帳戶、基本面、<a href="https://longbridge.com/news">資訊</a>等核心 API 功能完全免費。僅在需要時訂閱即時<a href="https://longbridge.com/markets">行情數據</a>。',
+      desc: '交易、帳戶、基本面、<a href="https://longbridge.com/en/news">資訊</a>等核心 API 功能完全免費。僅在需要時訂閱即時<a href="https://longbridge.com/markets">行情數據</a>。',
     },
     free: {
       price: '免費',
@@ -239,7 +239,7 @@ const LOCALE = {
         { title: '交易與帳戶 API', desc: '基本面、分析、資訊、資產、訂單——所有核心 API 均免費。' },
         {
           title: '基礎行情數據',
-          desc: '美股 LV1、港股一檔、A 股一檔——隨帳戶附贈。<a href="https://longbridge.com/markets">查看即時行情</a>了解包含內容。',
+          desc: '美股 LV1、港股一檔、A 股一檔——隨帳戶附贈。<a href="https://longbridge.com/en/markets">查看即時行情</a>了解包含內容。',
         },
         { title: '推送與拉取數據', desc: 'WebSocket 即時推送與 REST API 拉取——無限制。' },
       ],
@@ -247,7 +247,7 @@ const LOCALE = {
     realtime: {
       eyebrow: '即時行情數據',
       title: '只訂閱您需要的數據。',
-      desc: 'OpenAPI 行情權限與 App / PC / Web 獨立，需單獨購買。透過<a href="https://longbridge.com/hk/download">長橋 App</a> → 我的 → 行情商店開通。',
+      desc: 'OpenAPI 行情權限與 App / PC / Web 獨立，需單獨購買。透過<a href="https://longbridge.com/hk/en/download">長橋 App</a> → 我的 → 行情商店開通。',
     },
     billing: { label: '計費週期' },
     cycle: {
@@ -321,7 +321,7 @@ const LOCALE = {
         { q: '可以隨時取消嗎？', a: '可以。在下一個計費週期前隨時取消。行情權限在已付費週期結束前持續有效。' },
         {
           q: '模擬交易如何使用？',
-          a: '模擬交易基於 canary 環境運行，以即時買賣價差進行模擬撮合。所有<a href="https://longbridge.com/hk/download">綜合帳戶</a>均免費，無需行情訂閱。',
+          a: '模擬交易基於 canary 環境運行，以即時買賣價差進行模擬撮合。所有<a href="https://longbridge.com/hk/en/download">綜合帳戶</a>均免費，無需行情訂閱。',
         },
         {
           q: 'REST 或 WebSocket 有使用限制嗎？',

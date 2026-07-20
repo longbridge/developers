@@ -44,7 +44,7 @@ longbridge kline history NVDA.US --start 2025-01-01 --end 2025-12-31
 | ∟ date         | string | No       | Query date, in `YYYYMMDD` format, for example: 20231016. Default value: latest trading day of the underlying market.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ∟ minute       | string | No       | Query time, in `HHMM` format, for example: 09:35, only valid when querying minute-level data                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ∟ count        | int32  | No       | Count of cancdlestick, valid range:`[1,1000]`. Default value: `10`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| trade_session  | int32  | No       | Trading session, 0: intraday, 100: All (pre, intraday, post, overnight)<br/><br/>Note: Overnight data is included free in US LV1, US stocks only; enable the `enable_overnight` parameter to receive it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| trade_session  | int32  | No       | Trading session, 0: intraday, 100: All (pre, intraday, post, overnight)<br/><br/>Note: Overnight data is included free in US LV1, US stocks only; enable the `enable_overnight` parameter to receive it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 ### Protobuf
 
@@ -429,12 +429,41 @@ According to the user’s assets and transactions, the number of targets that di
 
 ## Description of historical candlesticks range
 
-| Market             | Daily/Weekly/Monthly/Year period candlesticks | Minute candlesticks   | Description                                                                                                       |
-| ------------------ | --------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Hong Kong stocks   | 2004-6-1 to present                           | 2022-09-28 to present |                                                                                                                   |
-| U.S. stocks        | 2010-6-1 to present                           | 2023-12-4 to present  |                                                                                                                   |
-| U.S. stock options | -                                             | -                     | U.S. stock options historical data is currently not supported, and data for longer periods will be released later |
-| A shares           | 1999-11-1 to present                          | 2022-08-25 to present |                                                                                                                   |
+<table>
+  <tr>
+    <th>Market</th>
+    <th>Daily/Weekly/Monthly/Year period candlesticks</th>
+    <th>Minute candlesticks</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Hong Kong stocks</td>
+    <td>2004-06 to present</td>
+    <td>2008-11 to present</td>
+    <td rowspan="3">
+      <strong>The available history length for minute candlesticks varies based on the user's total assets:</strong><br />
+      (1) Total assets &lt; HKD 80,000: Up to 3 years of historical minute candlestick data is available. Calculated by calendar month — for example, if the current month is May 2026, data from May 2023 to present is accessible.<br />
+      (2) Total assets &ge; HKD 80,000: Up to 8 years of historical minute candlestick data is available. Calculated by calendar month — for example, if the current month is May 2026, data from May 2018 to present is accessible. If less than 8 years of data exists, all available records from the earliest date will be returned.<br />
+      For longer historical data coverage, please contact customer support. 
+    </td>
+  </tr>
+  <tr>
+    <td>U.S. stocks</td>
+    <td>2010-06 to present</td>
+    <td>2003-09 to present</td>
+  </tr>
+  <tr>
+    <td>A shares</td>
+    <td>1999-11 to present</td>
+    <td>2022-08 to present</td>
+  </tr>
+  <tr>
+    <td>U.S. stock options</td>
+    <td>-</td>
+    <td>-</td>
+    <td>U.S. stock options historical data is currently not supported, and data for longer periods will be released later</td>
+  </tr>
+</table>
 
 ## Rate limite
 

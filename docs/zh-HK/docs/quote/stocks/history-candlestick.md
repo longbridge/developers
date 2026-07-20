@@ -44,7 +44,7 @@ longbridge kline history NVDA.US --start 2025-01-01 --end 2025-12-31
 | ∟ date         | string | 否       | 查詢日期，格式為 `YYYYMMDD`，例如：20231016，為空時使用標的所在市場的最新交易日                                                                                                                                                                                                                                                                                                                                                                                                        |
 | ∟ minute       | string | 否       | 查詢時間，格式為 `HHMM`，例如：09:35，僅在查詢分鍾級別 k 線時有效                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ∟ count        | int32  | 否       | 查詢數量，填寫範圍 `[1,1000]`，為空時默認查詢 `10` 條                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| trade_session  | int32  | 否       | 交易時段，0: 盤中，100: 所有延長時段（盤前，盤中，盤後，夜盤）<br/><br/>注意：夜盤數據已包含在 US LV1 中免費提供，僅支援美股；開啟 `enable_overnight` 參數即可獲取                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| trade_session  | int32  | 否       | 交易時段，0: 盤中，100: 所有延長時段（盤前，盤中，盤後，夜盤）<br/><br/>注意：夜盤數據已包含在 US LV1 中免費提供，僅支援美股；開啟 `enable_overnight` 參數即可獲取                                                                                                                                                                                                                                                                                                                     |
 
 ### Protobuf
 
@@ -131,14 +131,34 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, QuoteContext, OAuth, Period, AdjustType, TradeSessions, NaiveDatetime, NaiveDate, Time } = require('longbridge')
+const {
+  Config,
+  QuoteContext,
+  OAuth,
+  Period,
+  AdjustType,
+  TradeSessions,
+  NaiveDatetime,
+  NaiveDate,
+  Time,
+} = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
   const config = Config.fromOAuth(oauth)
   const ctx = QuoteContext.new(config)
   const datetime = new NaiveDatetime(new NaiveDate(2023, 1, 1), new Time(0, 0, 0))
-  const resp = await ctx.historyCandlesticksByOffset("700.HK", Period.Day, AdjustType.NoAdjust, true, datetime, 10, TradeSessions.Intraday)
+  const resp = await ctx.historyCandlesticksByOffset(
+    '700.HK',
+    Period.Day,
+    AdjustType.NoAdjust,
+    true,
+    datetime,
+    10,
+    TradeSessions.Intraday
+  )
   console.log(resp)
 }
 main().catch(console.error)
@@ -276,7 +296,6 @@ func main() {
   </TabItem>
 </Tabs>
 
-
 ## Response
 
 ### Response Properties
@@ -410,12 +429,41 @@ message Candlestick {
 
 ## 曆史 K 線區間說明
 
-| 市場     | 日/周/月/年 K 線 | 分鍾 K 線       | 說明                                                   |
-| -------- | ---------------- | --------------- | ------------------------------------------------------ |
-| 港股     | 2004-6-1 至今    | 2022-09-28 至今 |                                                        |
-| 美股     | 2010-6-1 至今    | 2023-12-4 至今  |                                                        |
-| 美股期權 | -                | -               | 美股期權曆史數據目前暫不支持，待後續開放更長時段的數據 |
-| A 股     | 1999-11-1 至今   | 2022-08-25 至今 |                                                        |
+<table>
+  <tr>
+    <th>市場</th>
+    <th>日/周/月/年 K 線</th>
+    <th>分鍾 K 線</th>
+    <th>說明</th>
+  </tr>
+  <tr>
+    <td>港股</td>
+    <td>2004-06 至今</td>
+    <td>2008-11 至今</td>
+    <td rowspan="3">
+      <strong>依據用戶總資產，可查詢的歷史分鐘 K 線時長如下：</strong><br />
+      （1）用戶總資產 ＜ 8 萬港幣：可查詢近 3 年的歷史分鐘 K 線數據（按自然月計算，如當前為 2026 年 5 月，則可查 2023 年 5 月至今）。<br />
+      （2）用戶總資產 ≥ 8 萬港幣：可查詢近 8 年的歷史分鐘 K 線數據（按自然月計算，如當前為 2026 年 5 月，則可查 2018 年 5 月至今）。若實際數據不足 8 年，則支援查詢自最早可用數據起的所有記錄。<br />
+      如需查詢更長周期的歷史數據，可聯繫客服諮詢。
+    </td>
+  </tr>
+  <tr>
+    <td>美股</td>
+    <td>2010-06 至今</td>
+    <td>2003-09 至今</td>
+  </tr>
+  <tr>
+    <td>A 股</td>
+    <td>1999-11 至今</td>
+    <td>2022-08 至今</td>
+  </tr>
+  <tr>
+    <td>美股期權</td>
+    <td>-</td>
+    <td>-</td>
+    <td>美股期權曆史數據目前暫不支持，待後續開放更長時段的數據</td>
+  </tr>
+</table>
 
 ## 頻次限製
 

@@ -20,7 +20,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   ],
   title: 'Longbridge Developers',
   description:
-    'Explore the Longbridge Developers — open APIs, LLM integrations, MCP support, CLI tools, and more to power your financial applications.',
+    'Real-time market data, quantitative research, and AI-powered analysis — delivered through OpenAPI, LLM integrations, MCP, and CLI tools for developers worldwide.',
   themeConfig: {
     logoLink: logoLink(),
     nav: nav(),

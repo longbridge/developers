@@ -7,7 +7,7 @@ sidebar_icon: book_open
 
 # Longbridge CLI
 
-Longbridge CLI（`longbridge`）是面向 Longbridge OpenAPI 全端点的 AI 原生命令行工具，提供 130+ 条命令，覆盖[实时行情](https://longbridge.com/markets)、基本面数据、账户管理与交易。适用于脚本自动化、AI Agent 工具调用及日常终端工作流。
+Longbridge CLI（`longbridge`）是面向 Longbridge OpenAPI 全端点的 AI 原生命令行工具，提供 130+ 条命令，覆盖[实时行情](https://longbridge.com/markets)、基本面数据、账户管理与交易。适用于脚本自动化、[AI Agent 工具](https://longbridge.com/hk/longbridge-ai)调用及日常终端工作流。
 
 **GitHub：** [longbridge/longbridge-terminal](https://github.com/longbridge/longbridge-terminal)
 

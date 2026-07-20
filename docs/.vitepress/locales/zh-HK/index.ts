@@ -19,7 +19,7 @@ export const zhHKConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     ['meta', { property: 'og:site_name', content: 'Longbridge Developers' }],
   ],
   title: 'Longbridge Developers',
-  description: '探索 Longbridge Developers，提供 API、LLM、MCP、CLI 等全方位開發資源，助力構建您的金融應用。',
+  description: '即時行情、量化研究與 AI 驅動分析 —— 透過 OpenAPI、LLM 整合、MCP 與 CLI 工具，服務全球開發者。',
 
   themeConfig: {
     logoLink: logoLink(),

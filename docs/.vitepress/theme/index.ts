@@ -43,6 +43,8 @@ export default {
       await import('floating-vue/dist/style.css')
       app.use(FloatingVue.default)
       saveInviteCodeFromUrl()
+      const { sensors } = await import('./utils/sensors')
+      sensors.init()
       router.onBeforeRouteChange = () => startProgress()
       router.onAfterRouteChange = () => {
         finishProgress()

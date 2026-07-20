@@ -96,6 +96,20 @@ Then follow the OAuth authorization flow in Codex when prompted.
 3. Click **Save**
 4. Back in the MCP Servers list, click **Authenticate** on the `longbridge` entry to complete OAuth authorization
 
+### Grok
+
+Open [Grok Connectors](https://grok.com/connectors) and add a custom MCP server:
+
+1. In the left sidebar, go to **Skills and Connectors** → **Connectors** → **New Connector** → **Custom**
+2. Fill in:
+   - Name: `Longbridge`
+   - Server URL: `https://mcp.longbridge.com`
+3. Click **Add Connector** and follow the Longbridge OAuth 2 authorization flow to complete the setup
+
+![](https://assets.lbkrs.com/uploads/08d07992-5463-4bfd-a4e4-97fab6e9cb41/grok-0.png)
+
+![](https://assets.lbkrs.com/uploads/56eee753-f3d4-4186-b024-ee0145f4eb54/grok-1.png)
+
 ### Cursor
 
 Settings → MCP Servers → Add Remote MCP Server, then enter the URL above.

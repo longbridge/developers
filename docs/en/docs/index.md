@@ -7,9 +7,9 @@ sidebar_icon: book_open
 
 Longbridge Developers provides programmatic interfaces for investors with research and development capabilities, enabling them to build trading or market analysis tools based on their own investment strategies. The platform covers the following categories:
 
-- **Quote** — Real-time and historical quotes, market depth, candlesticks, options/warrants data, subscriptions
+- **Quote** — [Real-time and historical quotes](https://longbridge.com/markets), market depth, candlesticks, options/warrants data, subscriptions
 - **Fundamental** — Company profiles, financials, valuations, analyst ratings, market data, calendars
-- **News & Contents** — Market news, community topics, sharelist management
+- **News & Contents** — [Market news](https://longbridge.com/en/news), community topics, sharelist management
 - **Trade** — Create, amend, and cancel orders; query orders, executions, and assets
 - **Account** — Portfolio analysis, price alerts, DCA plans, watchlist
 - **CLI** — Command-line tool covering all of the above, plus quant backtesting and research

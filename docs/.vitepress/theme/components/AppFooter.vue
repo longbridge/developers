@@ -64,6 +64,7 @@ const year = new Date().getFullYear()
           <li><a :href="localePath('/docs/cli')">CLI</a></li>
           <li><a :href="localePath('/docs/mcp')">MCP</a></li>
           <li><a :href="localePath('/docs/llm')">LLMs</a></li>
+          <li><a href="https://navi-lang.org" target="_blank">Navi</a></li>
         </ul>
       </div>
 

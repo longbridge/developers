@@ -934,7 +934,7 @@ After running, the output is as follows:
 
 To subscribe to market data, please check the [Developer Center](https://open.longbridge.com/account) - "Quote authority" is correct
 
-- HK Market - BMP basic quotation is unable to subscribe with WebSocket as it has no real-time quote push.
+- [HK Market](https://longbridge.com/hk/) - BMP basic quotation is unable to subscribe with WebSocket as it has no real-time quote push.
 - US Market - US LV1 (Only OpenAPI).
 
 Before running, visit the [Developer Center](https://open.longbridge.com/dashboard) and ensure that the account has the correct quote level.

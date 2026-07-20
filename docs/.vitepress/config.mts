@@ -173,7 +173,8 @@ export default defineConfig(
     }
     gtag('js', new Date());
     gtag('config', 'G-P81Y8BDYYS');`],
-    ['script', { defer: '', src: 'https://assets.lbkrs.com/pkg/sensorsdata/1.21.13.min.js' }],
+    ['script', {}, `window.__LB_PROXY__ = ${JSON.stringify(oneTapProxy)};`],
+    ['script', { defer: '', src: 'https://assets.lbkrs.com/pkg/sensorsdata/1.27.11.min.js' }],
     ['script', { async: '', src: 'https://at.alicdn.com/t/c/font_2621450_y740y72ffjq.js' }],
     ['script', { src: 'https://assets.wbrks.com/plugin/session/google-one-tap.es.js', 'data-proxy': oneTapProxy }],
     ['script', { async: '', src: heloraScriptSrc, 'data-helora-proxy': isReleaseBuild ? 'prod' : 'staging' }],

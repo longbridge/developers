@@ -133,3 +133,22 @@ plot(ta.rsi(close, period), "RSI")
 ```
 
 Parameters are matched positionally: `[21]` replaces the first `input.*()` call.
+
+## Navi — The Script Language
+
+Scripts run on [Navi](https://navi-lang.org) — a scripting language
+designed for quantitative analysis.
+
+Install the Navi CLI to validate scripts locally before running them on Longbridge servers:
+
+```bash
+curl -fsSL https://navi-lang.org/install.sh | sh
+```
+
+Once installed, run a script file directly:
+
+```bash
+navi run my_indicator.pine
+```
+
+This lets you catch syntax errors locally without a network round-trip to `longbridge quant run`.

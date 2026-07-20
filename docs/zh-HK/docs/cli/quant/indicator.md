@@ -133,3 +133,21 @@ plot(ta.rsi(close, period), "RSI")
 ```
 
 參數按位置匹配：`[21]` 覆蓋第一個 `input.*()` 調用。
+
+## Navi — 腳本語言
+
+腳本運行於 [Navi](https://navi-lang.org)——這是一門專為量化分析設計的腳本語言。
+
+安裝 Navi CLI，在將腳本提交至 Longbridge 伺服器前先在本地驗證：
+
+```bash
+curl -fsSL https://navi-lang.org/install.sh | sh
+```
+
+安裝完成後，可直接執行腳本檔案：
+
+```bash
+navi run my_indicator.pine
+```
+
+這樣可以在本地捕獲語法錯誤，避免每次都需要透過 `longbridge quant run` 遠端執行。
