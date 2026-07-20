@@ -9,6 +9,7 @@ sidebar_icon: newspaper
 ## 2026-07-20
 
 - **Developers 平台支援美國賬戶登入** — 美國賬戶現已支援登入與接口調用。注意國內 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支援美國賬戶，請使用預設域名
+- **Longbridge MCP 支援美國賬戶** — 美國賬戶可在 `https://mcp.longbridge.com` 完成 OAuth 授權，請求會路由到美國數據中心；`https://mcp.longbridge.cn` 端點僅服務 AP 賬戶
 
 ### CLI v0.25.0
 

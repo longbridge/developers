@@ -15,7 +15,9 @@ Longbridge provides a hosted MCP (Model Context Protocol) service that lets you 
 
 - Global: `https://mcp.longbridge.com`
 - Mainland China: `https://mcp.longbridge.cn` (faster access)
-  :::
+
+US accounts must use the global endpoint — `.cn` has no route to the US data center and serves AP accounts (Longbridge SG / HK) only. See [Access Points and Data Centers](/docs/getting-started#access-points-and-data-centers).
+:::
 
 ## Available capabilities
 

@@ -15,7 +15,9 @@ Longbridge 提供托管的 MCP（Model Context Protocol）服务，让你在 Cha
 
 - 全球：`https://mcp.longbridge.com`
 - 中国大陆：`https://mcp.longbridge.cn`（访问更快）
-  :::
+
+美国账户请使用全球地址 —— `.cn` 没有通往美国数据中心的链路，仅服务 AP 账户（新加坡 / 香港）。详见[接入点与数据中心](/zh-CN/docs/getting-started#接入点与数据中心)。
+:::
 
 ## 可用能力
 

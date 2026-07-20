@@ -9,6 +9,7 @@ sidebar_icon: newspaper
 ## 2026-07-20
 
 - **US accounts can sign in to Longbridge Developers** — US accounts are now supported for login and API access. Note that the mainland-China `.cn` domains (`openapi.longbridge.cn`, `openapi-quote.longbridge.cn`, `openapi-trade.longbridge.cn`) do not serve US accounts; use the default domains instead
+- **Longbridge MCP supports US accounts** — US accounts can complete OAuth authorization on `https://mcp.longbridge.com` and requests route to the US data center; the `https://mcp.longbridge.cn` endpoint serves AP accounts only
 
 ### CLI v0.25.0
 

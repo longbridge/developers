@@ -9,6 +9,7 @@ sidebar_icon: newspaper
 ## 2026-07-20
 
 - **Developers 平台支持美国账户登录** — 美国账户现已支持登录与接口调用。注意国内 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美国账户，请使用默认域名
+- **Longbridge MCP 支持美国账户** — 美国账户可在 `https://mcp.longbridge.com` 完成 OAuth 授权，请求会路由到美国数据中心；`https://mcp.longbridge.cn` 端点仅服务 AP 账户
 
 ### CLI v0.25.0
 
