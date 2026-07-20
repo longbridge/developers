@@ -18,84 +18,112 @@ longbridge quant run <SYMBOL> \
   [--period day|week|1h|30m|15m|5m|1m|month|year]
   [--script "..."]       # inline script text
   [--input '[14,2.0]']   # override input.*() defaults
+  [--language navi|pine] # `navi` (default), or `pine` for PineScript compatibility
   [--format table|json]  # table = human chart (default); json = machine
 ```
 
 Pipe a file instead of using `--script`:
 
 ```bash
-cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-12-31
+cat strategy.nv | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-12-31
 ```
 
-## Script Language — OpenPine
+## Script Language — Navi
 
-Scripts are written in **OpenPine** — an independent indicator scripting language compatible with most **PineScript V6** syntax. Existing Pine scripts work with little to no modification.
+Scripts are written in **Navi**, the default language for `quant run`. PineScript is also supported for compatibility via `--language pine`.
+
+[navi-lang.org](https://navi-lang.org) is the authoritative reference for Navi's syntax and standard library — look up exact names and signatures there, since the API evolves. Machine-readable versions: [`llms-full.txt`](https://navi-lang.org/llms-full.txt) (everything in one file) and [`llms.txt`](https://navi-lang.org/llms.txt) (per-page index).
 
 ### Script Types
 
-Every OpenPine script must begin with one of these declarations — it determines the execution mode:
+Every Navi script must begin with one of these declarations — it determines the execution mode:
 
 | Declaration | Purpose |
 | ----------- | ------- |
 | `indicator()` | Plot indicators, compute screener signals |
 | `strategy()` | Backtest with entry / exit orders |
+| `library()` | Export reusable helper functions |
 
 ### Core Concepts
 
 **Time series** — every variable is a bar-by-bar stream. `close[1]` is the previous bar's close; `close[N]` goes N bars back. Most `ta.*` outputs are also series.
 
-**Persistent state** — use `var` to initialize once and carry the value across bars:
+**Per-bar values and state** — `let` recomputes each bar; `var` initializes once and carries the value across bars:
 
-```pine
-var float peak = na
-peak := na(peak) ? high : math.max(peak, high)
+```nv
+var peak: series float = na;
+peak = na(peak) ? high : math.max(peak, high);
 ```
 
-**Inputs** — expose tunable parameters:
+**Inputs** — expose tunable parameters. Named arguments use `:`:
 
-```pine
-len  = input.int(14, "Length", minval=1)
-src  = input.source(close, "Source")
-mult = input.float(2.0, "Multiplier")
+```nv
+let len = input.int(14, "Length", minval: 1);
+let src = input.source(close, "Source");
+let mult = input.float(2.0, "Multiplier");
 ```
 
-**Collections** — `array<T>`, `map<K,V>`, and `matrix<T>` are available for advanced per-bar computation.
+**Collections** — `Array<T>`, `Map<K, V>`, and `Matrix<T>` are available for advanced per-bar computation.
 
 ### Built-in Libraries
 
-| Namespace | Key functions |
-| --------- | ------------- |
-| `ta.*` | `sma`, `ema`, `rma`, `wma`, `rsi`, `macd`, `bb`, `kc`, `atr`, `tr`, `stoch`, `sar`, `supertrend`, `vwap`, `crossover`, `crossunder`, `highest`, `lowest`, `stdev`, `barssince`, `valuewhen` |
-| `math.*` | `abs`, `ceil`, `floor`, `round`, `sqrt`, `pow`, `exp`, `log`, `max`, `min`, `avg` |
-| `str.*` | `tostring`, `format`, `length`, `contains`, `replace`, `split` |
-| `array.*` | `new`, `push`, `pop`, `avg`, `sum`, `min`, `max`, `sort`, `includes` |
-| `map.*` | `new`, `get`, `put`, `keys`, `values`, `contains` |
+Functions are `snake_case`; types and enums are `PascalCase`.
+
+| Namespace | Purpose |
+| --------- | ------- |
+| `ta.*` | Technical analysis — moving averages, oscillators, bands, crosses |
+| `math.*` | Arithmetic and numeric helpers |
+| `String` / `Array` / `Map` / `Matrix` | Text and collection types |
+| `strategy.*` | Backtest orders and position management |
+
+See the [standard library reference](https://navi-lang.org/api/stdlib/) for the full list of functions and their signatures.
 
 ### Outputs
 
 | Expression | Effect |
 | ---------- | ------ |
 | `plot(series, "name")` | Named series — shown in the results table / sparkline |
-| `plotshape(cond, ...)` | Mark a signal shape on a specific bar |
-| `bgcolor(cond ? color.green : na)` | Highlight bar background |
-| `strategy.entry("L", strategy.long)` | Place a backtest long entry |
-| `strategy.exit("L", stop=..., limit=...)` | Close with stop / take-profit |
+| `plot_shape(cond, ...)` | Mark a signal shape on a specific bar |
+| `bg_color(cond ? Color.GREEN : na)` | Highlight bar background |
+| `strategy.entry("L", Direction.Long)` | Place a backtest long entry |
+| `strategy.exit("L", stop: ..., limit: ...)` | Close with stop / take-profit |
 
 ### Quick Example
 
-```pine
-indicator("MA Cross", overlay=true)
+```nv
+indicator("MA Cross", overlay: true);
 
-fastLen = input.int(10, "Fast", minval=1)
-slowLen = input.int(20, "Slow", minval=1)
+let fast_len = input.int(10, "Fast", minval: 1);
+let slow_len = input.int(20, "Slow", minval: 1);
 
-fast = ta.ema(close, fastLen)
-slow = ta.ema(close, slowLen)
+let fast = ta.ema(close, fast_len);
+let slow = ta.ema(close, slow_len);
 
-plot(fast, "Fast", color=color.orange)
-plot(slow, "Slow", color=color.blue)
-plotshape(ta.crossover(fast, slow),  title="Buy",  style=shape.triangleup,   location=location.belowbar, color=color.green)
-plotshape(ta.crossunder(fast, slow), title="Sell", style=shape.triangledown, location=location.abovebar, color=color.red)
+plot(fast, "Fast", color: Color.ORANGE);
+plot(slow, "Slow", color: Color.BLUE);
+
+plot_shape(
+    ta.cross_over(fast, slow),
+    title: "Buy",
+    style: Shape.TriangleUp,
+    location: Location.BelowBar,
+    color: Color.GREEN
+);
+plot_shape(
+    ta.cross_under(fast, slow),
+    title: "Sell",
+    style: Shape.TriangleDown,
+    location: Location.AboveBar,
+    color: Color.RED
+);
+```
+
+### Validating scripts locally
+
+Install the [Navi CLI](https://navi-lang.org/docs/install.md) and lint before sending a script to the server — the API reports script errors only as an opaque error code:
+
+```bash
+navi lint my_indicator.nv
 ```
 
 ## Output
@@ -106,19 +134,19 @@ plotshape(ta.crossunder(fast, slow), title="Sell", style=shape.triangledown, loc
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-MACD                  │    79│     +0.00│     +7.56│     -4.07│     +7.56 ⣤⣤⣤⣤⣤⣤⣠⣤⣤⣤⣤⣤⣤⣤⣀⣀⣠⣴⣶⣿
-Signal                │    79│     +0.00│     +5.16│     -2.99│     +5.16 ⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣀⣠⣴⣾
-Histogram             │    79│     +0.00│     +2.40│     -1.41│     +3.02 ⣤⣤⣤⣤⣤⣦⣠⣤⣤⣦⣄⣠⣤⣄⣀⣠⣴⣾⣿⣷
+MACD                  │    80│     +0.00│     +7.55│     -4.04│     +7.55 ⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣠⣴⣶⣿
+Signal                │    80│     +0.00│     +5.16│     -2.96│     +5.16 ⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣀⣠⣴⣾
+Histogram             │    80│     +0.00│     +2.39│     -1.50│     +3.01 ⣤⣤⣤⣤⣤⣦⣠⣤⣤⣦⣄⣠⣤⣄⣀⣠⣴⣾⣿⣷
 ────────────────────────────────────────────────────────────────────────────────
-  3 series  ·  79 bars
+  3 series  ·  80 bars
 ```
 
 **JSON format** — for scripting and backtests:
 
 ```bash
-longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 \
-  --format json --script '...' | \
-  jq '.data.report_json | fromjson | .performanceAll'
+cat strategy.nv | longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 \
+  --format json | \
+  jq '.report_json | fromjson | .performanceAll'
 ```
 
 ## Supported Periods

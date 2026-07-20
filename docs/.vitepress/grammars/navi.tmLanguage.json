@@ -1,0 +1,209 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Navi",
+  "scopeName": "source.navi",
+  "patterns": [
+    { "include": "#use-line" },
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#colors" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#constants" },
+    { "include": "#type-qualifiers" },
+    { "include": "#types" },
+    { "include": "#function-call" },
+    { "include": "#method-call" },
+    { "include": "#operators" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "use-line": {
+      "match": "(?m)^(\\s*use\\s+)([^;]+)",
+      "captures": {
+        "1": { "name": "keyword.control.import.navi" },
+        "2": { "name": "constant.other.reference.link.navi" }
+      }
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.navi",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.navi",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.navi",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.navi",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.navi",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "colors": {
+      "patterns": [
+        {
+          "name": "constant.other.color.navi",
+          "match": "#[0-9A-Fa-f]{6,8}\\b"
+        },
+        {
+          "name": "support.constant.color.navi",
+          "match": "\\bcolor\\.(aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.navi",
+          "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.navi",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.navi",
+          "match": "\\b(if|else|for|while|switch|break|continue)\\b"
+        },
+        {
+          "name": "keyword.control.import.navi",
+          "match": "\\b(use|export|as)\\b"
+        },
+        {
+          "name": "keyword.control.loop.navi",
+          "match": "\\b(in|to|by)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.navi",
+          "match": "\\b(and|or|not)\\b"
+        },
+        {
+          "name": "storage.type.function.navi",
+          "match": "\\b(fn)\\b"
+        },
+        {
+          "name": "storage.type.navi",
+          "match": "\\b(let|var|varip)\\b"
+        },
+        {
+          "name": "storage.modifier.navi",
+          "match": "\\b(export|method|property|staticmethod|staticproperty|operator)\\b"
+        },
+        {
+          "name": "keyword.other.navi",
+          "match": "\\b(struct|type|enum)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.navi",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.na.navi",
+          "match": "\\bna\\b"
+        }
+      ]
+    },
+    "type-qualifiers": {
+      "patterns": [
+        {
+          "name": "storage.modifier.type-qualifier.navi",
+          "match": "\\b(series|simple|input|const)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "support.type.primitive.navi",
+          "match": "\\b(int|float|bool|string|color|void)\\b"
+        },
+        {
+          "name": "support.type.builtin.navi",
+          "match": "\\b(array|matrix|map|line|label|box|table|linefill|polyline)\\b"
+        }
+      ]
+    },
+    "function-call": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+          "captures": {
+            "1": { "name": "entity.name.function.navi" },
+            "2": { "name": "punctuation.definition.arguments.begin.navi" }
+          }
+        }
+      ]
+    },
+    "method-call": {
+      "patterns": [
+        {
+          "match": "\\.([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+          "captures": {
+            "1": { "name": "entity.name.function.method.navi" },
+            "2": { "name": "punctuation.definition.arguments.begin.navi" }
+          }
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.navi",
+          "match": "(\\+=|-=|\\*=|/=|%=|=)"
+        },
+        {
+          "name": "keyword.operator.comparison.navi",
+          "match": "(==|!=|>=|<=|>|<)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.navi",
+          "match": "(\\+|-|\\*|/|%)"
+        },
+        {
+          "name": "keyword.operator.arrow.navi",
+          "match": "=>"
+        },
+        {
+          "name": "keyword.operator.ternary.navi",
+          "match": "(\\?|:)"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.navi",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

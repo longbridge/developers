@@ -14,7 +14,7 @@ Use `strategy()` mode to simulate a trading strategy over historical data. The s
 - Declare your script with `strategy()` instead of `indicator()`
 - Use `strategy.entry()` and `strategy.close()` (or `strategy.exit()`) to simulate trades
 - Use `--format json` to get the full performance report
-- Parse the report with `jq`: `.data.report_json | fromjson`
+- Parse the report with `jq`: `.report_json | fromjson`
 
 ## Strategy Settings
 
@@ -23,23 +23,25 @@ Common parameters for the `strategy()` declaration and their defaults:
 | Parameter | Default | Description |
 | --------- | ------- | ----------- |
 | `initial_capital` | `1000000` | Starting capital |
-| `commission_type` | `strategy.commission.percent` | Commission calculation method |
+| `commission_type` | `CommissionType.Percent` | Commission calculation method |
 | `commission_value` | `0` | Commission rate / amount (0 = no commission) |
 | `slippage` | `0` | Slippage in ticks per fill |
-| `default_qty_type` | `strategy.fixed` | How position size is specified: `strategy.fixed` (contracts), `strategy.percent_of_equity`, `strategy.cash` |
+| `default_qty_type` | `DefaultQtyType.Fixed` | How position size is specified: `DefaultQtyType.Fixed` (contracts), `DefaultQtyType.PercentOfEquity`, `DefaultQtyType.Cash` |
 | `default_qty_value` | `1` | Default position size |
 | `pyramiding` | `0` | Max simultaneous entries in the same direction (0 = one at a time) |
 | `risk_free_rate` | `2` | Annual risk-free rate (%) for Sharpe / Sortino |
 
 Example with custom settings:
 
-```pine
-strategy("My Strategy",
-    initial_capital    = 50000,
-    commission_type    = strategy.commission.percent,
-    commission_value   = 0.1,
-    default_qty_type   = strategy.percent_of_equity,
-    default_qty_value  = 10)
+```nv
+strategy(
+    "My Strategy",
+    initial_capital: 50000,
+    commission_type: CommissionType.Percent,
+    commission_value: 0.1,
+    default_qty_type: DefaultQtyType.PercentOfEquity,
+    default_qty_value: 10
+);
 ```
 
 ## EMA Crossover Strategy
@@ -51,14 +53,16 @@ longbridge quant run NVDA.US \
   --start 2025-01-01 --end 2026-04-28 \
   --format json \
   --script '
-strategy("EMA Cross", overlay=true)
-fast = ta.ema(close, 8)
-slow = ta.ema(close, 21)
-if ta.crossover(fast, slow)
-    strategy.entry("Long", strategy.long)
-if ta.crossunder(fast, slow)
-    strategy.close("Long")
-' | jq '.data.report_json | fromjson | .performanceAll'
+strategy("EMA Cross", overlay: true);
+let fast = ta.ema(close, 8);
+let slow = ta.ema(close, 21);
+if ta.cross_over(fast, slow) {
+    strategy.entry("Long", Direction.Long);
+}
+if ta.cross_under(fast, slow) {
+    strategy.close("Long");
+}
+' | jq '.report_json | fromjson | .performanceAll'
 ```
 
 ```json
@@ -89,13 +93,15 @@ longbridge quant run AAPL.US \
   --start 2025-01-01 --end 2026-04-28 \
   --format json \
   --script '
-strategy("RSI Reversion", overlay=false)
-r = ta.rsi(close, 14)
-if ta.crossunder(r, 30)
-    strategy.entry("Long", strategy.long)
-if ta.crossover(r, 55)
-    strategy.close("Long")
-' | jq '.data.report_json | fromjson | .performanceAll'
+strategy("RSI Reversion", overlay: false);
+let r = ta.rsi(close, 14);
+if ta.cross_under(r, 30.0) {
+    strategy.entry("Long", Direction.Long);
+}
+if ta.cross_over(r, 55.0) {
+    strategy.close("Long");
+}
+' | jq '.report_json | fromjson | .performanceAll'
 ```
 
 ## Report Reference
@@ -104,7 +110,7 @@ Parse the full report object:
 
 ```bash
 longbridge quant run NVDA.US ... --format json --script '...' \
-  | jq '.data.report_json | fromjson'
+  | jq '.report_json | fromjson'
 ```
 
 ### Top-Level Structure
@@ -225,7 +231,7 @@ Each entry in `closedTrades` is a completed round-trip:
 # Print a trade-by-trade summary
 longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 \
   --format json --script '...' \
-  | jq -r '.data.report_json | fromjson | .closedTrades[]
+  | jq -r '.report_json | fromjson | .closedTrades[]
     | "#\(.tradeNum) \(.entrySide)  entry=\(.entryPrice)  exit=\(.exitPrice)  P&L=\(.profitPercent)%"'
 ```
 
@@ -243,10 +249,10 @@ Three parallel arrays, one value per bar (index 0 = first bar):
 
 ```bash
 # Final equity
-jq '.data.report_json | fromjson | .equityCurve[-1]'
+jq '.report_json | fromjson | .equityCurve[-1]'
 
 # Worst drawdown value
-jq '.data.report_json | fromjson | .drawdownCurve | max'
+jq '.report_json | fromjson | .drawdownCurve | max'
 ```
 
 ### Strategy Config
@@ -270,14 +276,16 @@ Without `--format json`, the table shows each plotted series — useful for visu
 longbridge quant run NVDA.US \
   --start 2025-01-01 --end 2026-04-28 \
   --script '
-strategy("EMA Cross", overlay=true)
-fast = ta.ema(close, 8)
-slow = ta.ema(close, 21)
-plot(fast, "EMA8")
-plot(slow, "EMA21")
-if ta.crossover(fast, slow)
-    strategy.entry("Long", strategy.long)
-if ta.crossunder(fast, slow)
-    strategy.close("Long")
+strategy("EMA Cross", overlay: true);
+let fast = ta.ema(close, 8);
+let slow = ta.ema(close, 21);
+plot(fast, "EMA8");
+plot(slow, "EMA21");
+if ta.cross_over(fast, slow) {
+    strategy.entry("Long", Direction.Long);
+}
+if ta.cross_under(fast, slow) {
+    strategy.close("Long");
+}
 '
 ```

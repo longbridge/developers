@@ -11,23 +11,31 @@ longbridge quant run <SYMBOL> \
   [--period day|week|1h|30m|15m|5m|1m|month|year]
   [--script "..."]          # inline; or pipe via stdin
   [--input '[14,2.0]']      # override input.*() defaults, in declaration order
+  [--language navi|pine]    # `navi` (default), or `pine` for PineScript compatibility
   [--format table|json]     # table = human chart (default); json = machine
 ```
 
 ```bash
 # Pipe from a file
-cat strategy.pine | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-12-31
+cat strategy.nv | longbridge quant run TSLA.US --start 2024-01-01 --end 2024-12-31
 ```
 
-## Script Language (OpenPine)
+## Script Language (Navi)
 
-Scripts are written in **OpenPine** — an independent indicator scripting language for quantitative analysis, with syntax familiar to anyone who has written indicator scripts before.
+Scripts are written in **Navi**, a bar-by-bar series language: every value is a time-series, `close[1]` is the previous bar, and a script starts with `indicator()`, `strategy()`, or `library()`.
 
-- **Series-aware**: every variable is a time-series; `close[1]` = yesterday's close
-- **Built-in `ta.*`**: `ta.ema`, `ta.sma`, `ta.rsi`, `ta.macd`, `ta.sar`, `ta.stoch`, `ta.atr`, `ta.stdev`, and more
-- **Two modes**: `indicator()` for analysis / screening; `strategy()` for backtesting
-- **`input.*()` functions**: expose tunable parameters (`input.int`, `input.float`)
-- **`plot(value, "name")`**: outputs a named series visible in the results table
+**<https://navi-lang.org> is the authoritative reference** for syntax and the standard library (`ta.*`, `input.*`, `plot`, `strategy.*`, …). Its API evolves — look names and signatures up there rather than relying on the examples below. Machine-readable: `https://navi-lang.org/llms-full.txt`; per-page index: `https://navi-lang.org/llms.txt`.
+
+### Validating scripts locally
+
+Install the Navi CLI (<https://navi-lang.org/docs/install.md>) and lint before sending a script to the server — the API reports script errors only as an opaque error code, so local linting is much faster to iterate on:
+
+```bash
+navi lint my_indicator.nv    # syntax, types, imports, formatting
+navi fmt  my_indicator.nv    # canonical formatting, one file per call
+```
+
+PineScript is also supported via `--language pine`; any unrecognised value falls back to Navi.
 
 ---
 
@@ -37,19 +45,18 @@ Each example runs against NVDA.US. The output table shows First/Last/Min/Max and
 
 ### 1. MACD
 
-```
-indicator("MACD")
-[macdLine, signalLine, hist] = ta.macd(close, 12, 26, 9)
-plot(macdLine,   "MACD")
-plot(signalLine, "Signal")
-plot(hist,       "Histogram")
+```nv
+indicator("MACD");
+
+let (macd_line, signal_line, hist) = ta.macd(close, 12, 26, 9);
+
+plot(macd_line, "MACD");
+plot(signal_line, "Signal");
+plot(hist, "Histogram");
 ```
 
 ```bash
-longbridge quant run NVDA.US --start 2026-01-01 --end 2026-04-28 \
-  --script 'indicator("MACD")
-[m,s,h]=ta.macd(close,12,26,9)
-plot(m,"MACD") plot(s,"Signal") plot(h,"Histogram")'
+cat macd.nv | longbridge quant run NVDA.US --start 2026-01-01 --end 2026-04-28
 ```
 
 **Output:**
@@ -58,29 +65,28 @@ plot(m,"MACD") plot(s,"Signal") plot(h,"Histogram")'
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-MACD                  │    79│     +0.00│     +7.56│     -4.07│     +7.56 ⣤⣤⣤⣤⣤⣤⣠⣤⣤⣤⣤⣤⣤⣤⣀⣀⣠⣴⣶⣿
-Signal                │    79│     +0.00│     +5.16│     -2.99│     +5.16 ⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣀⣠⣴⣾
-Histogram             │    79│     +0.00│     +2.40│     -1.41│     +3.02 ⣤⣤⣤⣤⣤⣦⣠⣤⣤⣦⣄⣠⣤⣄⣀⣠⣴⣾⣿⣷
+MACD                  │    80│     +0.00│     +7.55│     -4.04│     +7.55 ⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣠⣴⣶⣿
+Signal                │    80│     +0.00│     +5.16│     -2.96│     +5.16 ⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣀⣠⣴⣾
+Histogram             │    80│     +0.00│     +2.39│     -1.50│     +3.01 ⣤⣤⣤⣤⣤⣦⣠⣤⣤⣦⣄⣠⣤⣄⣀⣠⣴⣾⣿⣷
 ────────────────────────────────────────────────────────────────────────────────
-  3 series  ·  79 bars
+  3 series  ·  80 bars
 ```
 
 ### 2. RSI with Overbought / Oversold Bands
 
-```
-indicator("RSI")
-length = input.int(14, "Length")
-rsi = ta.rsi(close, length)
-plot(rsi,  "RSI")
-plot(70.0, "OB")
-plot(30.0, "OS")
+```nv
+indicator("RSI");
+
+let length = input.int(14, "Length", minval: 1);
+let rsi = ta.rsi(close, length);
+
+plot(rsi, "RSI");
+plot(70.0, "OB");
+plot(30.0, "OS");
 ```
 
 ```bash
-longbridge quant run AAPL.US --start 2025-01-01 --end 2026-01-31 \
-  --script 'indicator("RSI")
-rsi=ta.rsi(close,14)
-plot(rsi,"RSI") plot(70.0,"OB") plot(30.0,"OS")'
+cat rsi.nv | longbridge quant run AAPL.US --start 2025-01-01 --end 2026-01-31
 ```
 
 **Output:**
@@ -89,33 +95,32 @@ plot(rsi,"RSI") plot(70.0,"OB") plot(30.0,"OS")'
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-RSI                   │   269│     +0.00│    +48.44│     +0.00│    +78.26 ⢠⣴⣶⣦⣶⣴⣶⣶⣶⣶⣶⣿⣾⣾⣷⣾⣷⣷⣶⣤
-OB                    │   270│    +70.00│    +70.00│    +70.00│    +70.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
-OS                    │   270│    +30.00│    +30.00│    +30.00│    +30.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
+RSI                   │   270│     +0.00│    +48.44│     +0.00│    +75.25 ⢀⣴⣶⣦⣶⣶⣶⣶⣶⣶⣶⣿⣿⣾⣷⣾⣷⣷⣶⣤
+OB                    │   271│    +70.00│    +70.00│    +70.00│    +70.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
+OS                    │   271│    +30.00│    +30.00│    +30.00│    +30.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
 ────────────────────────────────────────────────────────────────────────────────
-  3 series  ·  270 bars
+  3 series  ·  271 bars
 ```
 
 ### 3. Bollinger Bands
 
-Built using `ta.sma` and `ta.stdev` — `ta.bbands` is not available.
+`ta.bb` returns basis, upper, and lower as a tuple — no need to build the bands from `ta.sma` and `ta.stdev` by hand.
 
-```
-indicator("Bollinger Bands")
-length = input.int(20, "Length")
-mult   = input.float(2.0, "Mult")
-basis  = ta.sma(close, length)
-dev    = mult * ta.stdev(close, length)
-plot(basis + dev, "Upper")
-plot(basis,       "Mid")
-plot(basis - dev, "Lower")
+```nv
+indicator("Bollinger Bands", overlay: true);
+
+let length = input.int(20, "Length", minval: 1);
+let mult = input.float(2.0, "Mult");
+
+let (basis, upper, lower) = ta.bb(close, length, mult);
+
+plot(upper, "Upper");
+plot(basis, "Mid");
+plot(lower, "Lower");
 ```
 
 ```bash
-longbridge quant run NVDA.US --start 2025-01-01 --end 2026-01-01 \
-  --script 'indicator("BB")
-basis=ta.sma(close,20) dev=2.0*ta.stdev(close,20)
-plot(basis+dev,"Upper") plot(basis,"Mid") plot(basis-dev,"Lower")'
+cat bb.nv | longbridge quant run NVDA.US --start 2025-01-01 --end 2026-01-01
 ```
 
 **Output:**
@@ -124,30 +129,27 @@ plot(basis+dev,"Upper") plot(basis,"Mid") plot(basis-dev,"Lower")'
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-Upper                 │   231│   +153.18│   +193.21│   +117.05│   +209.95 ⠀⠀⣤⣤⣄⣀⣀⣠⣤⣤⣴⣶⣶⣶⣶⣶⣾⣿⣿⣶
-Mid                   │   231│   +135.68│   +182.49│   +105.22│   +193.37 ⠀⠀⣤⣤⣄⣀⣀⣀⣤⣤⣴⣶⣶⣷⣶⣾⣿⣿⣿⣿
-Lower                 │   231│   +118.18│   +171.77│    +92.55│   +177.94 ⠀⠀⣤⣤⣠⣀⣀⣀⣤⣤⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿
+Upper                 │   232│   +152.20│   +192.98│   +116.91│   +209.70 ⠀⠀⣤⣤⣄⣀⣀⣠⣤⣤⣴⣶⣶⣶⣶⣶⣾⣿⣿⣶
+Mid                   │   232│   +136.23│   +182.28│   +105.09│   +193.15 ⠀⠀⣤⣤⣄⣀⣀⣀⣤⣤⣴⣶⣶⣷⣶⣾⣿⣿⣿⣿
+Lower                 │   232│   +120.26│   +171.57│    +92.44│   +177.74 ⠀⠀⣤⣤⣀⣀⣀⣀⣠⣤⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿
 ────────────────────────────────────────────────────────────────────────────────
-  3 series  ·  250 bars
+  3 series  ·  251 bars
 ```
 
 ### 4. EMA Ribbon
 
 Three EMAs that visually show trend phase and momentum alignment.
 
-```
-indicator("EMA Ribbon")
-plot(ta.ema(close,  8), "EMA8")
-plot(ta.ema(close, 21), "EMA21")
-plot(ta.ema(close, 55), "EMA55")
+```nv
+indicator("EMA Ribbon", overlay: true);
+
+plot(ta.ema(close, 8), "EMA8");
+plot(ta.ema(close, 21), "EMA21");
+plot(ta.ema(close, 55), "EMA55");
 ```
 
 ```bash
-longbridge quant run NVDA.US --start 2026-01-01 --end 2026-04-28 \
-  --script 'indicator("EMA Ribbon")
-plot(ta.ema(close,8),"EMA8")
-plot(ta.ema(close,21),"EMA21")
-plot(ta.ema(close,55),"EMA55")'
+cat ema_ribbon.nv | longbridge quant run NVDA.US --start 2026-01-01 --end 2026-04-28
 ```
 
 **Output:**
@@ -156,32 +158,31 @@ plot(ta.ema(close,55),"EMA55")'
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-EMA8                  │    79│   +188.84│   +203.96│   +172.45│   +203.96 ⣶⣦⣤⣤⣤⣦⣤⣤⣤⣶⣤⣤⣤⣤⣄⣀⣀⣤⣶⣾
-EMA21                 │    79│   +188.84│   +194.61│   +177.12│   +194.61 ⣶⣶⣶⣶⣶⣶⣤⣤⣴⣶⣦⣤⣤⣤⣄⣀⣀⣠⣴⣾
-EMA55                 │    79│   +188.84│   +188.27│   +181.18│   +188.84 ⣿⣿⣿⣷⣶⣷⣶⣶⣶⣶⣶⣶⣶⣦⣤⣀⣀⣀⣤⣶
+EMA8                  │    80│   +186.27│   +203.72│   +172.25│   +203.72 ⣤⣤⣤⣤⣤⣦⣤⣤⣤⣶⣤⣤⣤⣤⣄⣀⣀⣤⣶⣾
+EMA21                 │    80│   +186.27│   +194.38│   +176.91│   +194.38 ⣶⣶⣶⣤⣴⣶⣤⣤⣴⣶⣦⣤⣤⣤⣄⣀⣀⣠⣴⣾
+EMA55                 │    80│   +186.27│   +187.92│   +180.75│   +187.92 ⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣦⣤⣀⣀⣠⣴⣾
 ────────────────────────────────────────────────────────────────────────────────
-  3 series  ·  79 bars
+  3 series  ·  80 bars
 ```
 
 ### 5. Parabolic SAR + ATR Volatility
 
 SAR tracks trend direction; ATR quantifies current volatility. `Trend` is `+1.0` (bullish) or `-1.0` (bearish).
 
-```
-indicator("SAR + ATR")
-sar   = ta.sar(0.02, 0.02, 0.2)
-atr   = ta.atr(14)
-trend = close > sar ? 1.0 : -1.0
-plot(sar,   "SAR")
-plot(atr,   "ATR")
-plot(trend, "Trend")
+```nv
+indicator("SAR + ATR");
+
+let sar = ta.sar(0.02, 0.02, 0.2);
+let atr = ta.atr(14);
+let trend = close > sar ? 1.0 : -1.0;
+
+plot(sar, "SAR");
+plot(atr, "ATR");
+plot(trend, "Trend");
 ```
 
 ```bash
-longbridge quant run NVDA.US --start 2025-01-01 --end 2026-01-01 \
-  --script 'indicator("SAR+ATR")
-sar=ta.sar(0.02,0.02,0.2)
-plot(sar,"SAR") plot(ta.atr(14),"ATR") plot(close>sar?1.0:-1.0,"Trend")'
+cat sar_atr.nv | longbridge quant run NVDA.US --start 2025-01-01 --end 2026-01-01
 ```
 
 **Output:**
@@ -190,32 +191,31 @@ plot(sar,"SAR") plot(ta.atr(14),"ATR") plot(close>sar?1.0:-1.0,"Trend")'
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-SAR                   │   249│   +134.59│   +173.55│    +86.60│   +212.17 ⢰⣤⣤⣤⣠⣄⣀⣠⣤⣤⣶⣶⣶⣶⣶⣶⣷⣿⣷⣶
-ATR                   │   250│     +4.25│     +5.29│     +3.73│     +8.59 ⣠⣴⣦⣶⣦⣼⣶⣤⣤⣀⣀⣀⣀⣠⣤⣤⣴⣶⣷⣦
-Trend                 │   250│     -1.00│     +1.00│     -1.00│     +1.00 ⣀⣇⣸⣀⣿⣸⣿⣿⣿⣿⣿⣸⣇⣇⣸⣿⣸⣀⣀⣇
+SAR                   │   250│   +133.63│   +173.34│    +86.50│   +211.92 ⢰⣤⣤⣤⣠⣄⣀⣠⣤⣤⣶⣶⣶⣶⣶⣶⣷⣿⣷⣶
+ATR                   │   251│     +4.23│     +5.28│     +3.73│     +8.58 ⣠⣴⣦⣴⣦⣼⣶⣤⣤⣀⣀⣀⣀⣠⣤⣤⣴⣶⣷⣦
+Trend                 │   251│     -1.00│     +1.00│     -1.00│     +1.00 ⣀⣀⣸⣀⣿⣸⣿⣿⣿⣿⣿⣸⣇⣇⣸⣿⣸⣀⣀⣇
 ────────────────────────────────────────────────────────────────────────────────
-  3 series  ·  250 bars
+  3 series  ·  251 bars
 ```
 
 ### 6. Stochastic Oscillator
 
 `ta.stoch` returns the `%K` line directly; smooth it with `ta.ema` to get `%D`.
 
-```
-indicator("Stochastic")
-k = ta.stoch(close, high, low, 14)
-d = ta.ema(k, 3)
-plot(k,    "K")
-plot(d,    "D")
-plot(80.0, "OB")
-plot(20.0, "OS")
+```nv
+indicator("Stochastic");
+
+let k = ta.stoch(close, high, low, 14);
+let d = ta.ema(k, 3);
+
+plot(k, "K");
+plot(d, "D");
+plot(80.0, "OB");
+plot(20.0, "OS");
 ```
 
 ```bash
-longbridge quant run NVDA.US --start 2025-01-01 --end 2026-01-01 \
-  --script 'indicator("Stoch")
-k=ta.stoch(close,high,low,14) d=ta.ema(k,3)
-plot(k,"K") plot(d,"D") plot(80.0,"OB") plot(20.0,"OS")'
+cat stoch.nv | longbridge quant run NVDA.US --start 2025-01-01 --end 2026-01-01
 ```
 
 **Output:**
@@ -224,12 +224,12 @@ plot(k,"K") plot(d,"D") plot(80.0,"OB") plot(20.0,"OS")'
 ────────────────────────────────────────────────────────────────────────────────
 Series                │  Bars│     First│      Last│       Min│       Max Sparkline
 ────────────────────────────────────────────────────────────────────────────────
-K                     │   237│    +74.98│    +72.34│     +0.60│   +100.00 ⠀⢠⣾⣀⣤⣰⣶⣿⣿⣿⣿⣶⣧⣆⣶⣧⣼⣤⣴⣴
-D                     │   237│    +74.98│    +76.53│     +8.25│    +97.74 ⠀⢠⣼⣀⣴⣰⣴⣿⣷⣿⣿⣾⣷⣆⣶⣷⣴⣤⣤⣴
-OB                    │   250│    +80.00│    +80.00│    +80.00│    +80.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
-OS                    │   250│    +20.00│    +20.00│    +20.00│    +20.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
+K                     │   238│    +74.34│    +72.34│     +0.60│   +100.00 ⠀⢠⣼⣄⣼⣴⣴⣿⣷⣾⣷⣶⣷⣆⣶⣧⣼⣤⣴⣴
+D                     │   238│    +74.34│    +76.53│     +8.25│    +97.74 ⠀⢠⣼⣄⣼⣴⣴⣿⣷⣿⣿⣾⣷⣆⣶⣷⣴⣤⣤⣴
+OB                    │   251│    +80.00│    +80.00│    +80.00│    +80.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
+OS                    │   251│    +20.00│    +20.00│    +20.00│    +20.00 ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
 ────────────────────────────────────────────────────────────────────────────────
-  4 series  ·  250 bars
+  4 series  ·  251 bars
 ```
 
 ---
@@ -244,27 +244,30 @@ Key report fields (`report_json → .performanceAll`): `netProfitPercent`, `buyH
 
 Enter long when MACD crosses above signal **and** price is above SAR. Exit on MACD cross-under.
 
-```
-strategy("MACD+SAR Trend", initial_capital=10000,
-         default_qty_type=strategy.percent_of_equity,
-         default_qty_value=100)
-[macd, sig, _] = ta.macd(close, 12, 26, 9)
-sar = ta.sar(0.02, 0.02, 0.2)
-if ta.crossover(macd, sig) and close > sar
-    strategy.entry("Long", strategy.long)
-if ta.crossunder(macd, sig)
-    strategy.close("Long")
+```nv
+strategy(
+    "MACD+SAR Trend",
+    overlay: true,
+    initial_capital: 10000,
+    default_qty_type: DefaultQtyType.PercentOfEquity,
+    default_qty_value: 100
+);
+
+let (macd_line, signal_line, _) = ta.macd(close, 12, 26, 9);
+let sar = ta.sar(0.02, 0.02, 0.2);
+
+if ta.cross_over(macd_line, signal_line) and close > sar {
+    strategy.entry("Long", Direction.Long);
+}
+if ta.cross_under(macd_line, signal_line) {
+    strategy.close("Long");
+}
 ```
 
 ```bash
-longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 --format json \
-  --script 'strategy("MACD+SAR",initial_capital=10000,default_qty_type=strategy.percent_of_equity,default_qty_value=100)
-[m,s,_]=ta.macd(close,12,26,9)
-sar=ta.sar(0.02,0.02,0.2)
-if ta.crossover(m,s) and close>sar
-    strategy.entry("Long",strategy.long)
-if ta.crossunder(m,s)
-    strategy.close("Long")' | jq '.data.report_json | fromjson | .performanceAll |
+cat macd_sar_strategy.nv | \
+  longbridge quant run NVDA.US --start 2025-01-01 --end 2026-04-28 --format json | \
+  jq '.report_json | fromjson | .performanceAll |
   {netProfitPercent, buyHoldReturnPercent, sharpeRatio, profitFactor,
    totalClosedTrades, percentProfitable, maxDrawdownPercent}'
 ```
@@ -273,13 +276,13 @@ if ta.crossunder(m,s)
 
 ```json
 {
-  "netProfitPercent": -24.178,
-  "buyHoldReturnPercent": 51.626,
-  "sharpeRatio": -0.194,
-  "profitFactor": 0.563,
+  "netProfitPercent": -15.6374,
+  "buyHoldReturnPercent": 56.1645,
+  "sharpeRatio": -0.1586,
+  "profitFactor": 0.6887,
   "totalClosedTrades": 10,
-  "percentProfitable": 30,
-  "maxDrawdownPercent": 42.588
+  "percentProfitable": 30.0,
+  "maxDrawdownPercent": 36.04
 }
 ```
 
@@ -287,25 +290,29 @@ if ta.crossunder(m,s)
 
 Buy when RSI dips below 30 (oversold); close when RSI recovers above 55. Works well on broad index ETFs.
 
-```
-strategy("RSI Mean Reversion", initial_capital=10000,
-         default_qty_type=strategy.percent_of_equity,
-         default_qty_value=100)
-rsi = ta.rsi(close, 14)
-if rsi < 30
-    strategy.entry("Long", strategy.long)
-if rsi > 55
-    strategy.close("Long")
+```nv
+strategy(
+    "RSI Mean Reversion",
+    overlay: true,
+    initial_capital: 10000,
+    default_qty_type: DefaultQtyType.PercentOfEquity,
+    default_qty_value: 100
+);
+
+let rsi = ta.rsi(close, 14);
+
+if rsi < 30.0 {
+    strategy.entry("Long", Direction.Long);
+}
+if rsi > 55.0 {
+    strategy.close("Long");
+}
 ```
 
 ```bash
-longbridge quant run QQQ.US --start 2022-01-01 --end 2024-12-31 --format json \
-  --script 'strategy("RSI MR",initial_capital=10000,default_qty_type=strategy.percent_of_equity,default_qty_value=100)
-rsi=ta.rsi(close,14)
-if rsi<30
-    strategy.entry("Long",strategy.long)
-if rsi>55
-    strategy.close("Long")' | jq '.data.report_json | fromjson | .performanceAll |
+cat rsi_mr_strategy.nv | \
+  longbridge quant run QQQ.US --start 2022-01-01 --end 2024-12-31 --format json | \
+  jq '.report_json | fromjson | .performanceAll |
   {netProfitPercent, buyHoldReturnPercent, totalClosedTrades, percentProfitable, maxDrawdownPercent}'
 ```
 
@@ -313,11 +320,11 @@ if rsi>55
 
 ```json
 {
-  "netProfitPercent": -5.669,
-  "buyHoldReturnPercent": 30.953,
+  "netProfitPercent": -2.7374,
+  "buyHoldReturnPercent": 32.2138,
   "totalClosedTrades": 3,
-  "percentProfitable": 66.667,
-  "maxDrawdownPercent": 18.818
+  "percentProfitable": 66.6667,
+  "maxDrawdownPercent": 16.432
 }
 ```
 
@@ -327,11 +334,12 @@ if rsi>55
 
 Run the same `indicator()` script across multiple symbols and check the `Last` value — `1.0` means the condition fired on the most recent bar.
 
+Note that `--format json` sets `exclude_chart`, so the JSON response carries no series values — screening has to read the `Last` column out of the default table output.
+
 ```bash
-SCRIPT='...'
 for sym in NVDA.US TSLA.US AAPL.US; do
-  val=$(longbridge quant run $sym --start 2024-10-01 --end 2024-12-31 \
-    --script "$SCRIPT" 2>&1 | \
+  val=$(cat screen.nv | longbridge quant run $sym \
+    --start 2024-10-01 --end 2024-12-31 2>&1 | \
     python3 -c "import sys,re; c=re.sub(r'\x1b\[[0-9;]*m','',sys.stdin.read()); \
     m=re.search(r'Signal\s.*?([01]\.00)',c); print(m.group(1) if m else '?')")
   echo "$sym: $val"
@@ -342,21 +350,19 @@ done
 
 Both momentum (MACD > signal) and trend (price above SAR) agree.
 
-```
-indicator("MACD+SAR Bullish")
-[macd, sig, _] = ta.macd(close, 12, 26, 9)
-sar = ta.sar(0.02, 0.02, 0.2)
-plot(macd > sig and close > sar ? 1.0 : 0.0, "Signal")
+```nv
+indicator("MACD+SAR Bullish");
+
+let (macd_line, signal_line, _) = ta.macd(close, 12, 26, 9);
+let sar = ta.sar(0.02, 0.02, 0.2);
+
+plot(macd_line > signal_line and close > sar ? 1.0 : 0.0, "Signal");
 ```
 
 ```bash
-SCRIPT='indicator("Screen")
-[m,s,_]=ta.macd(close,12,26,9) sar=ta.sar(0.02,0.02,0.2)
-plot(m>s and close>sar ? 1.0:0.0,"Signal")'
-
 for sym in NVDA.US QCOM.US AAPL.US TSLA.US AMZN.US META.US MSFT.US AMD.US; do
-  val=$(longbridge quant run $sym --start 2024-10-01 --end 2024-12-31 \
-    --script "$SCRIPT" 2>&1 | \
+  val=$(cat macd_sar_screen.nv | longbridge quant run $sym \
+    --start 2024-10-01 --end 2024-12-31 2>&1 | \
     python3 -c "import sys,re; c=re.sub(r'\x1b\[[0-9;]*m','',sys.stdin.read()); \
     m=re.search(r'Signal\s.*?([01]\.00)',c); print(m.group(1) if m else '?')")
   echo "$sym: $([ "$val" = "1.00" ] && echo BULLISH || echo bearish)"
@@ -367,20 +373,18 @@ done
 
 RSI recovering from below 35 — momentum returning after a pullback.
 
-```
-indicator("RSI Oversold")
-rsi = ta.rsi(close, 14)
-plot(ta.lowest(rsi, 5) < 35 and rsi > rsi[1] and rsi > 35 ? 1.0 : 0.0, "Signal")
+```nv
+indicator("RSI Oversold");
+
+let rsi = ta.rsi(close, 14);
+
+plot(ta.lowest(rsi, 5) < 35.0 and rsi > rsi[1] and rsi > 35.0 ? 1.0 : 0.0, "Signal");
 ```
 
 ```bash
-SCRIPT='indicator("RSI OS")
-rsi=ta.rsi(close,14)
-plot(ta.lowest(rsi,5)<35 and rsi>rsi[1] and rsi>35 ? 1.0:0.0,"Signal")'
-
 for sym in NVDA.US QCOM.US AAPL.US TSLA.US 700.HK 9988.HK; do
-  val=$(longbridge quant run $sym --start 2024-10-01 --end 2024-12-31 \
-    --script "$SCRIPT" 2>&1 | \
+  val=$(cat rsi_oversold_screen.nv | longbridge quant run $sym \
+    --start 2024-10-01 --end 2024-12-31 2>&1 | \
     python3 -c "import sys,re; c=re.sub(r'\x1b\[[0-9;]*m','',sys.stdin.read()); \
     m=re.search(r'Signal\s.*?([01]\.00)',c); print(m.group(1) if m else '?')")
   echo "$sym: $val"
@@ -391,18 +395,19 @@ done
 
 The 50-day SMA crossing above the 200-day SMA — a widely-watched long-term trend signal.
 
-```
-indicator("Golden Cross")
-plot(ta.crossover(ta.sma(close, 50), ta.sma(close, 200)) ? 1.0 : 0.0, "GoldenCross")
+```nv
+indicator("Golden Cross");
+
+plot(
+    ta.cross_over(ta.sma(close, 50), ta.sma(close, 200)) ? 1.0 : 0.0,
+    "GoldenCross"
+);
 ```
 
 ```bash
-SCRIPT='indicator("GoldenCross")
-plot(ta.crossover(ta.sma(close,50),ta.sma(close,200))?1.0:0.0,"GoldenCross")'
-
 for sym in NVDA.US MSFT.US AAPL.US AMZN.US GOOGL.US META.US TSLA.US; do
-  val=$(longbridge quant run $sym --start 2023-01-01 --end 2024-12-31 \
-    --script "$SCRIPT" 2>&1 | \
+  val=$(cat golden_cross.nv | longbridge quant run $sym \
+    --start 2023-01-01 --end 2024-12-31 2>&1 | \
     python3 -c "import sys,re; c=re.sub(r'\x1b\[[0-9;]*m','',sys.stdin.read()); \
     m=re.search(r'GoldenCross\s.*?([01]\.00)',c); print(m.group(1) if m else '?')")
   echo "$sym: $([ "$val" = "1.00" ] && echo 'GOLDEN CROSS' || echo '-')"
@@ -421,9 +426,9 @@ done
 For backtests, extract results from `report_json`:
 
 ```bash
-longbridge quant run TSLA.US --start 2023-01-01 --end 2024-12-31 \
-  --format json --script '...' | \
-  jq '.data.report_json | fromjson | .performanceAll'
+cat strategy.nv | longbridge quant run TSLA.US --start 2023-01-01 --end 2024-12-31 \
+  --format json | \
+  jq '.report_json | fromjson | .performanceAll'
 ```
 
 ## Supported Periods

@@ -5,7 +5,7 @@ import { GenTryItPlugin } from '../md-plugins/gen-try-it.ts'
 import { NormalizeMdPlugin } from '../md-plugins/normalize-md'
 import { CliCommandPlugin } from '../md-plugins/cli-command'
 import { RegionFilterPlugin } from '../md-plugins/region-filter'
-import openPineGrammar from '../grammars/openpine.tmLanguage.json'
+import naviGrammar from '../grammars/navi.tmLanguage.json'
 
 export const markdownConfig: MarkdownOptions = {
   image: {
@@ -14,9 +14,9 @@ export const markdownConfig: MarkdownOptions = {
   math: true,
   languages: [
     {
-      ...openPineGrammar,
-      name: 'openpine',
-      aliases: ['pine'],
+      ...naviGrammar,
+      name: 'navi',
+      aliases: ['nv'],
     },
   ],
   codeTransformers: [
