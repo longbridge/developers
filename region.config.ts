@@ -29,7 +29,7 @@ export interface RegionConfig {
 export const regionConfig: Record<string, RegionConfig> = {
   cn: {
     apiBaseUrl: 'https://openapi.longbridge.cn',
-    portalGatewayBaseUrl: 'https://m.lbkrs.com',
+    portalGatewayBaseUrl: 'https://mr.lbkrs.com',
     siteHostname: 'https://open.longbridge.cn',
     mcpHostname: 'https://mcp.longbridge.cn',
 

@@ -36,7 +36,7 @@ jobs:
       - name: Build canary
         run: bun run build:canary
         env:
-          VITE_PORTAL_GATEWAY_BASE_URL: 'https://m.longbridge.xyz'
+          VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
           NODE_OPTIONS: --max-old-space-size=12288 --expose-gc
 
       - name: Upload to Aliyun OSS

@@ -40,7 +40,7 @@ jobs:
       - name: Build release
         run: bun run build:release
         env:
-          VITE_PORTAL_GATEWAY_BASE_URL: 'https://m.lbkrs.com'
+          VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.lbkrs.com'
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

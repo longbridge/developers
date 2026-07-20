@@ -28,11 +28,17 @@ const oneTapProxy = process.env.PROXY === 'canary' ? 'canary' : 'production'
 const isReleaseBuild = process.env.PROXY !== 'canary' && process.env.NODE_ENV === 'production'
 const heloraScriptSrc = 'https://assets.lbkrs.com/h5hub/helora-embed/helora-embed-1.0.1.iife.js'
 
+// Resolve `window.__API_PROXY_URL__` at runtime based on cookie `app_id` (US tenants),
+// falling back to the build-time env value. Must run before longport-internal.iife.js loads.
+// Aligns with docs/.vitepress/theme/utils/app-id.ts (US_APPID_API_HOST).
+const apiProxyDefault = JSON.stringify(process.env.VITE_PORTAL_GATEWAY_BASE_URL)
+const apiProxyBootstrap = `(function(){var d=document;function c(n){var m=('; '+d.cookie).split('; '+n+'=');return m.length===2?decodeURIComponent(m.pop().split(';').shift()):undefined;}var a=c('app_id')||c('x-original-app-id');var US={longbridge_us:'https://mr.longbridge.com',longbridge_us_uat:'https://mr.longbridge-staging.com'};window.__API_PROXY_URL__=(a&&US[a])||${apiProxyDefault};})();`
+
 const insertScript = (html: string) => {
   const $ = cheerio.load(html)
   $('head').prepend(
-    `<script>window.__API_PROXY_URL__ = ${JSON.stringify(process.env.VITE_PORTAL_GATEWAY_BASE_URL)}</script>`,
-    `<script defer˝ src="https://assets.lbctrl.com/uploads/b63bb77e-74b5-43d3-8bf4-d610be91c838/longport-internal.iife.js"></script>`
+    `<script>${apiProxyBootstrap}</script>`,
+    `<script defer˝ src="https://assets.lbctrl.com/openapi-sdk/release/longport-internal-202607201728.iife.js"></script>`
   )
   return $.html()
 }
@@ -211,7 +217,7 @@ export default defineConfig(
             rewrite: (path) => path.replace(/^\/api/, ''),
           },
           '/lb-api': {
-            target: process.env.VITE_PORTAL_API_BASE_URL || 'https://m.longbridge.xyz',
+            target: process.env.VITE_PORTAL_API_BASE_URL || 'https://mr.longbridge.xyz',
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/lb-api/, '/api'),
           },

@@ -15,5 +15,6 @@ export function createLoginRedirectPath(ssoParams?: Record<string, string | numb
   return withQuery(localePath(`/login`), {
     redirect_to,
     logout: '1',
+    'with-us': '1',
   })
 }
