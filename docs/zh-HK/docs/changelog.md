@@ -8,16 +8,8 @@ sidebar_icon: newspaper
 
 ## 2026-07-20
 
-- **Developers 平台支援美國賬戶登入** — 美國賬戶現已支援登入與接口調用。注意國內 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支援美國賬戶，請使用預設域名
-- **Longbridge MCP 支援美國賬戶** — 美國賬戶可在 `https://mcp.longbridge.com` 完成 OAuth 授權，請求會路由到美國數據中心；`https://mcp.longbridge.cn` 端點僅服務 AP 賬戶
-
-### CLI v0.25.0
-
-- **美國數據中心上線** — 美國賬戶可透過 `auth login`（裝置碼或 `--auth-code`）登入，請求按 token 自動路由到對應數據中心；`auth status` 展示當前 DC 區域
-- **美股市場接口覆蓋** — 美股 token 下 14 個賬戶與基本面命令（`positions`、`order`、`company`、`valuation`、`financial-report`、`consensus`、`dividend` 等）自動路由到美股專屬接口，並新增 `profit-analysis realized`、`financial-report key-metrics` 子命令
-- **量化平台支援 Navi 腳本** — `quant run` 遷移至 v2 接口，透過 `--language navi|pine` 同時支援 Navi 與 PineScript（預設 Navi）
-
-## 2026-07-07
+- **Developers 平台支持美國賬戶登入** — 美國賬戶現已支持登入與接口調用。注意國內 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美國賬戶，請使用默認域名
+- **Longbridge MCP 支持美國賬戶** — 美國賬戶可在 `https://mcp.longbridge.com` 完成 OAuth 授權，請求會路由到美國數據中心；`https://mcp.longbridge.cn` 端點僅服務 AP 賬戶
 
 ### SDK v4.4.0
 
@@ -25,12 +17,15 @@ sidebar_icon: newspaper
 
 ### CLI v0.25.0
 
+- **美國數據中心上線** — 美國賬戶可通過 `auth login`（設備碼或 `--auth-code`）登入，請求按 token 自動路由到對應數據中心；`auth status` 展示當前 DC 區域
 - **美股賬戶路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股數據中心賬戶下自動路由至美股 API
 - **新增 `etf-docs` 命令** — 列出美股 ETF 的監管文件（招股書、事實說明書等）
 - **新增 `financial-report key-metrics` 子命令** — 美股關鍵財務指標（支持年報/季報）
 - **新增 `profit-analysis realized` 子命令** — 美股賬戶按資產類別（股票/期權/加密貨幣）統計已實現盈虧
-- **新增 `order --status` / `--action` 選項** — 篩選美股歷史委託狀態和方向
+- **新增 `order --action` 選項** — 篩選美股歷史委託方向（買入/賣出）
 - **新增 `order detail --attached` 選項** — 獲取美股賬戶關聯子委託
+- **量化平台支持 Navi 腳本** — `quant run` 遷移至 v2 接口，通過 `--language navi|pine` 同時支持 Navi 與 PineScript（默認 Navi）
+
 ## 2026-06-25
 
 ### SDK v4.3.3

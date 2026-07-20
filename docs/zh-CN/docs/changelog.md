@@ -11,26 +11,21 @@ sidebar_icon: newspaper
 - **Developers 平台支持美国账户登录** — 美国账户现已支持登录与接口调用。注意国内 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美国账户，请使用默认域名
 - **Longbridge MCP 支持美国账户** — 美国账户可在 `https://mcp.longbridge.com` 完成 OAuth 授权，请求会路由到美国数据中心；`https://mcp.longbridge.cn` 端点仅服务 AP 账户
 
-### CLI v0.25.0
-
-- **美国数据中心上线** — 美国账户可通过 `auth login`（设备码或 `--auth-code`）登录，请求按 token 自动路由到对应数据中心；`auth status` 展示当前 DC 区域
-- **美股市场接口覆盖** — 美股 token 下 14 个账户与基本面命令（`positions`、`order`、`company`、`valuation`、`financial-report`、`consensus`、`dividend` 等）自动路由到美股专属接口，并新增 `profit-analysis realized`、`financial-report key-metrics` 子命令
-- **量化平台支持 Navi 脚本** — `quant run` 迁移至 v2 接口，通过 `--language navi|pine` 同时支持 Navi 与 PineScript（默认 Navi）
-
-## 2026-07-07
-
 ### SDK v4.4.0
 
 - **美股市场 API** — 新增 14 个方法，覆盖 `FundamentalContext`（9 个）、`QuoteContext`（1 个）、`TradeContext`（4 个），全部仅限美股数据中心账户
 
 ### CLI v0.25.0
 
+- **美国数据中心上线** — 美国账户可通过 `auth login`（设备码或 `--auth-code`）登录，请求按 token 自动路由到对应数据中心；`auth status` 展示当前 DC 区域
 - **美股账户路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股数据中心账户下自动路由至美股 API
 - **新增 `etf-docs` 命令** — 列出美股 ETF 的监管文件（招股书、事实说明书等）
 - **新增 `financial-report key-metrics` 子命令** — 美股关键财务指标（支持年报/季报）
 - **新增 `profit-analysis realized` 子命令** — 美股账户按资产类别（股票/期权/加密货币）统计已实现盈亏
-- **新增 `order --status` / `--action` 选项** — 筛选美股历史委托状态和方向
+- **新增 `order --action` 选项** — 筛选美股历史委托方向（买入/卖出）
 - **新增 `order detail --attached` 选项** — 获取美股账户关联子委托
+- **量化平台支持 Navi 脚本** — `quant run` 迁移至 v2 接口，通过 `--language navi|pine` 同时支持 Navi 与 PineScript（默认 Navi）
+
 ## 2026-06-25
 
 ### SDK v4.3.3
