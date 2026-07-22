@@ -142,14 +142,16 @@ curl -N -X POST "https://openapi.longbridge.com/v1/ai/agents/123/conversations" 
 
 ```
 event: message
-data: {"event":"chat_started","workflow_run_id":"wr_...","data":{"chat_uid":"ct_9f2c1a5b","message_id":42}}
+data: {"event":"chat_started","workflow_run_id":"745910371102313","data":{"chat_uid":"ct_9f2c1a5b","message_id":42}}
 
 event: message
-data: {"event":"message","workflow_run_id":"wr_...","data":{"text":"特斯拉"}}
+data: {"event":"message","workflow_run_id":"745910371102313","data":{"text":"特斯拉"}}
 
 event: message
-data: {"event":"workflow_finished","workflow_run_id":"wr_...","data":{"status":"succeeded","elapsed_time":3.21,"outputs":{"answer":"..."}}}
+data: {"event":"workflow_finished","workflow_run_id":"745910371102313","data":{"status":"succeeded","elapsed_time":3.21,"outputs":{"answer":"..."}}}
 ```
+
+完整的事件類型列表、負載結構與解析方式見 [SSE 事件](/zh-HK/docs/ai/chat/events)。
 
 ### Response Status
 

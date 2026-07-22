@@ -142,14 +142,16 @@ In streaming mode, the server keeps pushing run progress as `event: message` eve
 
 ```
 event: message
-data: {"event":"chat_started","workflow_run_id":"wr_...","data":{"chat_uid":"ct_9f2c1a5b","message_id":42}}
+data: {"event":"chat_started","workflow_run_id":"745910371102313","data":{"chat_uid":"ct_9f2c1a5b","message_id":42}}
 
 event: message
-data: {"event":"message","workflow_run_id":"wr_...","data":{"text":"Tesla"}}
+data: {"event":"message","workflow_run_id":"745910371102313","data":{"text":"Tesla"}}
 
 event: message
-data: {"event":"workflow_finished","workflow_run_id":"wr_...","data":{"status":"succeeded","elapsed_time":3.21,"outputs":{"answer":"..."}}}
+data: {"event":"workflow_finished","workflow_run_id":"745910371102313","data":{"status":"succeeded","elapsed_time":3.21,"outputs":{"answer":"..."}}}
 ```
+
+See [SSE Events](/docs/ai/chat/events) for the full list of event types, their payload structures, and parsing guidance.
 
 ### Response Status
 
