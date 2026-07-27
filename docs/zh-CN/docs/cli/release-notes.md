@@ -7,6 +7,16 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
+
+- **新增 TUI 设置弹窗（`Ctrl+,`）** — 首个设置项为涨跌颜色（红涨 / 绿涨），即时生效并写入 `~/.longbridge/terminal.json`，重启后保留
+- **TUI 快捷键提示随页面变化，支持鼠标滚轮** — 顶栏只列出当前页面可用的快捷键；滚轮可在自选 / 订单 / 新闻 / 持仓列表中移动选中项
+- **TUI 视觉升级** — 面板与弹窗改为圆角边框，标题与表头加粗，持仓页新增堆叠式资产分布条；全部沿用终端自身配色
+- **接入点不再卡在中国大陆** — 区域判定改为读取 geotest 返回的国家，而非仅判断其是否可达，并每 6 小时重新检测，离开中国大陆后不会继续被路由到 `longbridge.cn`。`check` 每次运行都会重新检测，实测两个接入点并切换到明显更优的一侧；`.cn` 连接失败时会提示如何手动指定区域
+- **修复：`ipo calendar` 无数据** — 上游聚合接口开始对所有账户返回空摘要，该命令已改用仍然可用的数据源重建
+- **修复：美股期权行情报错更清晰** — `option quote` 现会说明需要「OPRA US Options」OpenAPI 行情权限并附上订阅页链接，不再只抛出 `301604`
+- **修复：`ipo detail` 局部降级** — 时间轴、申购资格与持股数据视为可选补充信息，辅助接口不可用时仍会输出核心资料（JSON 中为 `null`，`-v` 下给出告警）
+
 ### [v0.25.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.25.0)
 
 - **支持美国数据中心** — `auth login`（设备码流程与 `--auth-code`）支持美国账户授权，所有请求会按 token 自动路由到对应数据中心；`auth status` 展示当前 DC 区域
