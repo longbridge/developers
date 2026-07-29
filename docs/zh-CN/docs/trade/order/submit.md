@@ -47,6 +47,16 @@ longbridge order sell TSLA.US 100 --price 260.00
 | monitor_price      | string |  NO      | 监控价格，需要达到该价格才会开始监控，更新参考价<br/>`TSLPAMT` / `TSLPPCT` 订单有效 |
 | trigger_count      | int32  |  NO      | 触发次数，取值范围 0 ~ 3, 表示在 1 分钟内触发多次才会触发订单<br/>`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 订单有效 |
 | client_request_id  | string | NO       | 幂等性请求 ID，用于防止重复下单。服务器会缓存该请求 ID 10 分钟。在此期间内如果收到相同 ID 的请求，将返回原始响应而不创建重复订单。必须是唯一标识符（如 UUID）。 |
+| attached_params    | object |  NO      | 附加单参数（止盈止损） |
+| attached_params.attached_order_type | string | NO | 附加单订单类型<br/><br/>**可选值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止损<br/>`BRACKET` - 括号单 |
+| attached_params.profit_taker_price | string | NO | 止盈触发价格 |
+| attached_params.stop_loss_price | string | NO | 止损触发价格 |
+| attached_params.time_in_force | string | NO | 附加单有效期类型<br/><br/>**可选值：**<br/>`Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效（此时继承主单 expire_date） |
+| attached_params.expire_time | int64 | NO | 到期时间（Unix 时间戳，单位秒） |
+| attached_params.activate_order_type | string | NO | 触发后提交的订单类型，例如 `LIT`（限价单）或 `MIT`（市价单） |
+| attached_params.profit_taker_submit_price | string | NO | 止盈限价委托价格，`activate_order_type` 为 `LIT` 时必填 |
+| attached_params.stop_loss_submit_price | string | NO | 止损限价委托价格，`activate_order_type` 为 `LIT` 时必填 |
+| attached_params.activate_rth | string | NO | 触发后提交的订单是否允许盘前盘后 <br/><br/>**可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后 |
 
 ## 幂等性
 
