@@ -61,6 +61,8 @@ longbridge order sell TSLA.US 100 --price 260.00
 | attached_params.profit_taker_submit_price | string | NO | Take-profit limit order submitted price, required when `activate_order_type` is `LIT` |
 | attached_params.stop_loss_submit_price | string | NO | Stop-loss limit order submitted price, required when `activate_order_type` is `LIT` |
 | attached_params.activate_rth | string | NO | Whether the order submitted after triggering allows pre/post market trading <br/><br/>**Enum Value:**<br/> `RTH_ONLY` - Regular trading hours only<br/> `ANY_TIME` - Any time |
+| attached_params.profit_taker_depth_level | int32 | NO | Specifies the bid/ask depth level for the take-profit limit order submitted price, valid when `activate_order_type` is `LIT` |
+| attached_params.stop_loss_depth_level | int32 | NO | Specifies the bid/ask depth level for the stop-loss limit order submitted price, valid when `activate_order_type` is `LIT` |
 
 ### Idempotency
 

@@ -298,7 +298,8 @@ func main() {
             "reviewed": false,
             "activate_order_type": "MIT",
             "activate_rth": "RTH_ONLY",
-            "submit_price": ""
+            "submit_price": "",
+            "limit_depth_level": 0
           }
         ]
       }
@@ -378,3 +379,4 @@ func main() {
 | ∟∟ activate_order_type      | string   | true     | 觸發後提交的訂單類型，例如 `LIT`（限價單）或 `MIT`（市價單） |
 | ∟∟ activate_rth             | string   | true     | 觸發後提交訂單是否允許盤前盤後。|
 | ∟∟ submit_price             | string   | true     | 委託價格 |
+| ∟∟ limit_depth_level        | int32    | true     | 指定買賣檔位 |
