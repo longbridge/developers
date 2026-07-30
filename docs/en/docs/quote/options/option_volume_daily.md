@@ -205,15 +205,18 @@ func main() {
   "message": "success",
   "data": {
     "symbol": "AAPL.US",
-    "list": [
+    "stats": [
       {
+        "symbol": "AAPL.US",
         "date": "2026-05-07",
         "call_volume": 284512,
         "put_volume": 195830,
         "call_open_interest": 1824500,
         "put_open_interest": 1532100,
-        "pc_vol": "0.6886",
-        "pc_oi": "0.8398"
+        "total_volume": 480342,
+        "total_open_interest": 3356600,
+        "pc_vol": 0.6886,
+        "pc_oi": 0.8398
       }
     ]
   }
@@ -233,14 +236,17 @@ func main() {
 
 <a id="option_volume_daily_rsp"></a>
 
-| Name               | Type     | Required | Description                              |
-| ------------------ | -------- | -------- | ---------------------------------------- |
-| symbol             | string   | true     | Security symbol                          |
-| list               | object[] | true     | Daily volume records                     |
-| ∟ date             | string   | true     | Date in `YYYY-MM-DD` format              |
-| ∟ call_volume      | int64    | true     | Call volume on that day                  |
-| ∟ put_volume       | int64    | true     | Put volume on that day                   |
-| ∟ call_open_interest | int64  | true     | Call open interest                       |
-| ∟ put_open_interest  | int64  | true     | Put open interest                        |
-| ∟ pc_vol           | string   | true     | Put/call volume ratio                    |
-| ∟ pc_oi            | string   | true     | Put/call open interest ratio             |
+| Name                   | Type     | Required | Description                    |
+| ---------------------- | -------- | -------- | ------------------------------ |
+| symbol                 | string   | true     | Security symbol                |
+| stats                  | object[] | true     | Daily volume records           |
+| ∟ symbol               | string   | true     | Security symbol                |
+| ∟ date                 | string   | true     | Date in `YYYY-MM-DD` format    |
+| ∟ call_volume          | int64    | true     | Call volume on that day        |
+| ∟ put_volume           | int64    | true     | Put volume on that day         |
+| ∟ call_open_interest   | int64    | true     | Call open interest             |
+| ∟ put_open_interest    | int64    | true     | Put open interest              |
+| ∟ total_volume         | int64    | true     | Total options volume           |
+| ∟ total_open_interest  | int64    | true     | Total options open interest    |
+| ∟ pc_vol               | float    | true     | Put/call volume ratio          |
+| ∟ pc_oi                | float    | true     | Put/call open interest ratio   |
