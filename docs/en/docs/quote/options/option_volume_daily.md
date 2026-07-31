@@ -24,10 +24,13 @@ longbridge option volume daily TSLA.US --count 60
 
 > **SDK method parameters.**
 
-| Name   | Type    | Required | Description                                        |
-| ------ | ------- | -------- | -------------------------------------------------- |
-| symbol | string  | YES      | US stock symbol, e.g. `AAPL.US`, `TSLA.US`        |
-| count  | integer | NO       | Number of trading days to return (default: 20)     |
+| Name      | Type    | Required | Description                                                               |
+| --------- | ------- | -------- | ------------------------------------------------------------------------- |
+| symbol    | string  | YES      | Underlying US stock symbol, e.g. `AAPL.US`, `TSLA.US`                     |
+| timestamp | integer | NO       | Start Unix timestamp (seconds); `0` returns the most recent (default `0`) |
+| count     | integer | NO       | Number of trading days to return (default `30`)                           |
+
+> The Go SDK takes a `start` / `end` date range (`time.Time`) instead of `timestamp` / `count`.
 
 ## Request Example
 
@@ -49,7 +52,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = QuoteContext(config)
 
-resp = ctx.option_volume_daily("AAPL.US")
+resp = ctx.option_volume_daily("AAPL.US", count=30)
 print(resp)
 ```
 
@@ -65,7 +68,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncQuoteContext.create(config)
 
-    resp = await ctx.option_volume_daily("AAPL.US")
+    resp = await ctx.option_volume_daily("AAPL.US", count=30)
     print(resp)
 
 if __name__ == "__main__":
@@ -84,7 +87,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = QuoteContext.new(config)
-  const resp = await ctx.optionVolumeDaily('AAPL.US')
+  const resp = await ctx.optionVolumeDaily('AAPL.US', 0, 30)
   console.log(resp)
 }
 main().catch(console.error)
@@ -102,7 +105,10 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              QuoteContext ctx = QuoteContext.create(config)) {
-            var resp = ctx.getOptionVolumeDaily("AAPL.US").get();
+            OptionVolumeDailyOptions opts = new OptionVolumeDailyOptions();
+            opts.symbol = "AAPL.US";
+            opts.count = 30;
+            var resp = ctx.getOptionVolumeDaily(opts).get();
             System.out.println(resp);
         }
     }
@@ -121,7 +127,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let (ctx, _) = QuoteContext::new(config);
-    let resp = ctx.option_volume_daily("AAPL.US").await?;
+    let resp = ctx.option_volume_daily("AAPL.US", 0, 30).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -144,7 +150,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             QuoteContext ctx = QuoteContext::create(config);
-            ctx.option_volume_daily("AAPL.US", [](auto resp) {
+            ctx.option_volume_daily("AAPL.US", 0, 30, [](auto resp) {
                 if (resp) std::cout << resp->size() << std::endl;
             });
         });
@@ -162,6 +168,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
@@ -183,7 +190,9 @@ func main() {
 		log.Fatal(err)
 	}
 	defer qctx.Close()
-	resp, err := qctx.OptionVolumeDaily(context.Background(), "AAPL.US")
+	end := time.Now()
+	start := end.AddDate(0, 0, -30)
+	resp, err := qctx.OptionVolumeDaily(context.Background(), "AAPL.US", start, end)
 	if err != nil {
 		log.Fatal(err)
 	}
