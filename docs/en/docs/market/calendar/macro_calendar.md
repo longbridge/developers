@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get upcoming macroeconomic data release events such as CPI, GDP, and Fed meetings.
+Get upcoming [macroeconomic data](https://longbridge.com/calendar/macrodata) release events such as CPI, GDP, and Fed meetings.
 
 <CliCommand>
 longbridge finance-calendar macrodata

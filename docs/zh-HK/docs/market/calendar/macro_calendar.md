@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取即將發布的宏觀經濟數據，如 CPI、GDP 和美聯儲會議等。
+獲取即將發布的[宏觀經濟數據](https://longbridge.com/calendar/macrodata)，如 CPI、GDP 和美聯儲會議等。
 
 <CliCommand>
 longbridge finance-calendar macrodata

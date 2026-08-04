@@ -40,7 +40,7 @@ Market-level data including index components, broker positions, and anomaly scan
 
 ## CalendarContext
 
-Financial event calendars for planning around earnings, dividends, and macro releases.
+[Financial event calendars](https://longbridge.com/calendar/macrodata) for planning around earnings, dividends, and macro releases.
 
 | Method | Description |
 |---|---|
