@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取选股器支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
+获取[选股器](https://longbridge.com/screener)支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
 
 接口：`GET /v1/quote/ai/screener/indicators`
 

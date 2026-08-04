@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-獲取選股器支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
+獲取[選股器](https://longbridge.com/screener)支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
 
 接口：`GET /v1/quote/ai/screener/indicators`
 

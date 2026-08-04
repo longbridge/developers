@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-获取即将发布的宏观经济数据，如 CPI、GDP 和美联储会议等。
+获取即将发布的[宏观经济数据](https://longbridge.com/calendar/macrodata)，如 CPI、GDP 和美联储会议等。
 
 <CliCommand>
 longbridge finance-calendar macrodata

@@ -9,9 +9,9 @@ Longbridge Developers provides programmatic interfaces for investors with resear
 
 - **Quote** — [Real-time and historical quotes](https://longbridge.com/markets), market depth, candlesticks, options/warrants data, subscriptions
 - **Fundamental** — Company profiles, financials, valuations, analyst ratings, market data, calendars
-- **News & Contents** — [Market news](https://longbridge.com/en/news), community topics, sharelist management
+- **News & Contents** — [Market news](https://longbridge.com/en/news), [community topics](https://longbridge.com/topics), sharelist management
 - **Trade** — Create, amend, and cancel orders; query orders, executions, and assets
-- **Account** — Portfolio analysis, price alerts, DCA plans, watchlist
+- **Account** — Portfolio analysis, price alerts, DCA plans, [watchlist](https://longbridge.com/watchlist)
 - **CLI** — Command-line tool covering all of the above, plus quant backtesting and research
 - **MCP** — Model Context Protocol integration for AI assistant workflows
 
