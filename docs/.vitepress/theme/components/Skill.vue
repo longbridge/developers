@@ -15,6 +15,7 @@ const zhHKLocale = augmentLocale(_zhHKLocale)
 
 const { lang } = useData()
 const CHATGPT_APP_URL = 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef'
+const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge-mcp'
 
 const LOCALE = {
   en: {
@@ -24,10 +25,11 @@ const LOCALE = {
       title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
       desc: 'For Claude Code, Codex, Gemini, and other agents, Longbridge Skill lets your AI <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">screen stocks</a>, decode earnings, track insider moves, and place orders in plain conversation.',
       chatgptLine:
-        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> can install <a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge</a> directly and use it with <code>@longbridge</code>.',
+        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> and <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge-mcp">Claude</a> can install Longbridge directly — use <code>@longbridge</code> in ChatGPT, or the connector in Claude.',
       tabConnect: 'Connect AI',
       tabPrompt: 'Copy command',
       tabChatGPT: 'ChatGPT',
+      tabClaude: 'Claude',
       connectLabel: 'Authorization happens upfront — grab a code on the Connect page, hand it to your AI, and it takes care of the rest:',
       connectSteps: [
         'Sign in on the Connect page to get a one-time auth code',
@@ -42,6 +44,13 @@ const LOCALE = {
         'Type @longbridge in the message box to query market data',
       ],
       chatgptCta: 'Open Longbridge in ChatGPT',
+      claudeLabel: 'Enable Longbridge in Claude Desktop or claude.ai in under a minute:',
+      claudeSteps: [
+        'Open the Longbridge connector in the Claude directory',
+        'Click Connect and authorize your Longbridge account',
+        'Ask Claude for live market data in plain conversation',
+      ],
+      claudeCta: 'Open Longbridge in Claude',
       installLabel: 'Copy and send to any AI — it will walk you through install:',
       installLink: 'View installation guide for each client',
       agentsLabel: 'Supported AI tools',
@@ -144,10 +153,11 @@ const LOCALE = {
       title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
       desc: 'Claude Code、Codex、Gemini 等 Agent 可通过 Longbridge Skill <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">筛选股票</a>、解读财报、追踪机构动向，并直接下单。',
       chatgptLine:
-        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 可以直接安装 <a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge</a>，并通过 <code>@longbridge</code> 来使用。',
+        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 与 <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge-mcp">Claude</a> 都能直接安装 Longbridge——在 ChatGPT 中用 <code>@longbridge</code> 调用，在 Claude 中启用连接器即可。',
       tabConnect: 'Connect AI',
       tabPrompt: '复制命令',
       tabChatGPT: 'ChatGPT',
+      tabClaude: 'Claude',
       connectLabel: '授权一步前置——在 Connect 页面拿到授权码，交给 AI，剩下的它来完成：',
       connectSteps: [
         '登录 Connect 页面，获取一次性授权码',
@@ -162,6 +172,13 @@ const LOCALE = {
         '在输入框中输入 @longbridge 开始查询数据',
       ],
       chatgptCta: '在 ChatGPT 中打开 Longbridge',
+      claudeLabel: '在 Claude Desktop 或 claude.ai 中快速启用 Longbridge：',
+      claudeSteps: [
+        '在 Claude 应用目录中打开 Longbridge 连接器',
+        '点击 Connect，并按提示完成 Longbridge 账户授权',
+        '直接向 Claude 提问，即可查询实时市场数据',
+      ],
+      claudeCta: '在 Claude 中打开 Longbridge',
       installLabel: '复制发送给任意 AI——它将引导您完成安装：',
       installLink: '查看各客户端安装指南',
       agentsLabel: '支持的 AI 工具',
@@ -389,10 +406,11 @@ const LOCALE = {
       title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
       desc: 'Claude Code、Codex、Gemini 等 Agent 可透過 Longbridge Skill <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">篩選股票</a>、解讀財報、追蹤機構動向，並直接下單。',
       chatgptLine:
-        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 可以直接安裝 <a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">Longbridge</a>，並透過 <code>@longbridge</code> 來使用。',
+        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 與 <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge-mcp">Claude</a> 都能直接安裝 Longbridge——在 ChatGPT 中用 <code>@longbridge</code> 調用，在 Claude 中啟用連接器即可。',
       tabConnect: 'Connect AI',
       tabPrompt: '複製命令',
       tabChatGPT: 'ChatGPT',
+      tabClaude: 'Claude',
       connectLabel: '授權一步前置——在 Connect 頁面拿到授權碼，交給 AI，剩下的它來完成：',
       connectSteps: [
         '登入 Connect 頁面，獲取一次性授權碼',
@@ -407,6 +425,13 @@ const LOCALE = {
         '在輸入框中輸入 @longbridge 開始查詢數據',
       ],
       chatgptCta: '在 ChatGPT 中打開 Longbridge',
+      claudeLabel: '在 Claude Desktop 或 claude.ai 中快速啟用 Longbridge：',
+      claudeSteps: [
+        '在 Claude 應用目錄中打開 Longbridge 連接器',
+        '點擊 Connect，並按提示完成 Longbridge 賬戶授權',
+        '直接向 Claude 提問，即可查詢即時市場數據',
+      ],
+      claudeCta: '在 Claude 中打開 Longbridge',
       installLabel: '複製發送給任意 AI——它將引導您完成安裝：',
       installLink: '查看各客戶端安裝指南',
       agentsLabel: '支援的 AI 工具',
@@ -1090,7 +1115,7 @@ const CAP_REFERENCE = [
 const activeCat = ref('All')
 const scenarioIdx = ref(0)
 const activeAgent = ref('OpenClaw')
-const installMode = ref<'connect' | 'prompt' | 'chatgpt'>('connect')
+const installMode = ref<'connect' | 'prompt' | 'chatgpt' | 'claude'>('connect')
 const copied = ref(false)
 const copiedGetStarted = ref(false)
 
@@ -1377,6 +1402,11 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                 @click="installMode = 'chatgpt'">
                 {{ content.hero.tabChatGPT }}
               </button>
+              <button
+                :class="['skill-hero-seg-btn', installMode === 'claude' && 'is-active']"
+                @click="installMode = 'claude'">
+                {{ content.hero.tabClaude }}
+              </button>
             </div>
 
             <template v-if="installMode === 'connect'">
@@ -1457,7 +1487,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
               </a>
             </template>
 
-            <template v-else>
+            <template v-else-if="installMode === 'chatgpt'">
               <div class="skill-hero-install-label">{{ content.hero.chatgptLabel }}</div>
               <div class="skill-hero-connect-card">
                 <div v-for="(step, i) in content.hero.chatgptSteps" :key="i" class="skill-hero-connect-step">
@@ -1479,6 +1509,32 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                   </svg>
                   {{ content.hero.chatgptCta }}
+                </a>
+              </div>
+            </template>
+
+            <template v-else>
+              <div class="skill-hero-install-label">{{ content.hero.claudeLabel }}</div>
+              <div class="skill-hero-connect-card">
+                <div v-for="(step, i) in content.hero.claudeSteps" :key="i" class="skill-hero-connect-step">
+                  <span class="skill-hero-connect-step-num">{{ i + 1 }}</span>
+                  <span>{{ step }}</span>
+                </div>
+                <a class="btn btn-dark" :href="CLAUDE_CONNECTOR_URL" target="_blank" rel="noreferrer">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M15 3h6v6" />
+                    <path d="M10 14 21 3" />
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  </svg>
+                  {{ content.hero.claudeCta }}
                 </a>
               </div>
             </template>
@@ -2332,12 +2388,11 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 .skill-chatgpt-feature {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 8px;
   width: fit-content;
-  max-width: min(640px, 100%);
+  max-width: min(680px, 100%);
   margin: 14px auto 0;
   padding: 10px 14px;
   border: 1px solid #e5e5e5;
@@ -2346,6 +2401,7 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   color: var(--lb-fg-1);
   font-size: 15px;
   line-height: 1.55;
+  text-align: left;
   overflow: hidden;
 }
 .skill-chatgpt-feature::before {
@@ -2373,9 +2429,11 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 .skill-chatgpt-feature > * {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 .skill-chatgpt-sparkles {
   flex: 0 0 auto;
+  margin-top: 3px;
   color: #f59e0b;
 }
 .skill-chatgpt-feature :deep(.skill-chatgpt-link) {
@@ -2508,9 +2566,10 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
   border-radius: 999px;
   background: var(--lb-bg-2);
   border: 1px solid var(--app-card-stroke);
+  max-width: 100%;
 }
 .skill-hero-seg-btn {
-  padding: 6px 18px;
+  padding: 6px 16px;
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
@@ -4101,6 +4160,20 @@ function triggerRipple(event: MouseEvent, el: HTMLElement) {
 @media (max-width: 640px) {
   .skill-hero-install-cmd {
     max-width: 100%;
+  }
+  .skill-hero-seg {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .skill-hero-seg::-webkit-scrollbar {
+    display: none;
+  }
+  .skill-hero-seg-btn {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    white-space: nowrap;
   }
   .skill-demo-chat-body {
     overflow-x: auto;
