@@ -24,10 +24,13 @@ longbridge option volume daily TSLA.US --count 60
 
 > **SDK 方法參數。**
 
-| Name   | Type    | Required | Description                                        |
-| ------ | ------- | -------- | -------------------------------------------------- |
-| symbol | string  | YES      | US stock symbol, e.g. `AAPL.US`, `TSLA.US`        |
-| count  | integer | NO       | Number of trading days to return (default: 20)     |
+| Name      | Type    | Required | Description                                                               |
+| --------- | ------- | -------- | ------------------------------------------------------------------------- |
+| symbol    | string  | YES      | Underlying US stock symbol, e.g. `AAPL.US`, `TSLA.US`                     |
+| timestamp | integer | NO       | Start Unix timestamp (seconds); `0` returns the most recent (default `0`) |
+| count     | integer | NO       | Number of trading days to return (default `30`)                           |
+
+> Go SDK 使用 `start` / `end` 日期區間（`time.Time`）而非 `timestamp` / `count`。
 
 ## Request Example
 
@@ -49,7 +52,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = QuoteContext(config)
 
-resp = ctx.option_volume_daily("AAPL.US")
+resp = ctx.option_volume_daily("AAPL.US", count=30)
 print(resp)
 ```
 
@@ -65,7 +68,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncQuoteContext.create(config)
 
-    resp = await ctx.option_volume_daily("AAPL.US")
+    resp = await ctx.option_volume_daily("AAPL.US", count=30)
     print(resp)
 
 if __name__ == "__main__":
@@ -84,7 +87,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = QuoteContext.new(config)
-  const resp = await ctx.optionVolumeDaily('AAPL.US')
+  const resp = await ctx.optionVolumeDaily('AAPL.US', 0, 30)
   console.log(resp)
 }
 main().catch(console.error)
@@ -102,7 +105,10 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              QuoteContext ctx = QuoteContext.create(config)) {
-            var resp = ctx.getOptionVolumeDaily("AAPL.US").get();
+            OptionVolumeDailyOptions opts = new OptionVolumeDailyOptions();
+            opts.symbol = "AAPL.US";
+            opts.count = 30;
+            var resp = ctx.getOptionVolumeDaily(opts).get();
             System.out.println(resp);
         }
     }
@@ -121,7 +127,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let (ctx, _) = QuoteContext::new(config);
-    let resp = ctx.option_volume_daily("AAPL.US").await?;
+    let resp = ctx.option_volume_daily("AAPL.US", 0, 30).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -144,7 +150,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             QuoteContext ctx = QuoteContext::create(config);
-            ctx.option_volume_daily("AAPL.US", [](auto resp) {
+            ctx.option_volume_daily("AAPL.US", 0, 30, [](auto resp) {
                 if (resp) std::cout << resp->size() << std::endl;
             });
         });
@@ -162,6 +168,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/longbridge/openapi-go/config"
 	"github.com/longbridge/openapi-go/oauth"
@@ -183,7 +190,9 @@ func main() {
 		log.Fatal(err)
 	}
 	defer qctx.Close()
-	resp, err := qctx.OptionVolumeDaily(context.Background(), "AAPL.US")
+	end := time.Now()
+	start := end.AddDate(0, 0, -30)
+	resp, err := qctx.OptionVolumeDaily(context.Background(), "AAPL.US", start, end)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -205,15 +214,18 @@ func main() {
   "message": "success",
   "data": {
     "symbol": "AAPL.US",
-    "list": [
+    "stats": [
       {
+        "symbol": "AAPL.US",
         "date": "2026-05-07",
         "call_volume": 284512,
         "put_volume": 195830,
         "call_open_interest": 1824500,
         "put_open_interest": 1532100,
-        "pc_vol": "0.6886",
-        "pc_oi": "0.8398"
+        "total_volume": 480342,
+        "total_open_interest": 3356600,
+        "pc_vol": 0.6886,
+        "pc_oi": 0.8398
       }
     ]
   }
@@ -233,14 +245,17 @@ func main() {
 
 <a id="option_volume_daily_rsp"></a>
 
-| Name               | Type     | Required | Description                              |
-| ------------------ | -------- | -------- | ---------------------------------------- |
-| symbol             | string   | true     | Security symbol                          |
-| list               | object[] | true     | Daily volume records                     |
-| ∟ date             | string   | true     | Date in `YYYY-MM-DD` format              |
-| ∟ call_volume      | int64    | true     | Call volume on that day                  |
-| ∟ put_volume       | int64    | true     | Put volume on that day                   |
-| ∟ call_open_interest | int64  | true     | Call open interest                       |
-| ∟ put_open_interest  | int64  | true     | Put open interest                        |
-| ∟ pc_vol           | string   | true     | Put/call volume ratio                    |
-| ∟ pc_oi            | string   | true     | Put/call open interest ratio             |
+| Name                   | Type     | Required | Description                    |
+| ---------------------- | -------- | -------- | ------------------------------ |
+| symbol                 | string   | true     | Security symbol                |
+| stats                  | object[] | true     | Daily volume records           |
+| ∟ symbol               | string   | true     | Security symbol                |
+| ∟ date                 | string   | true     | Date in `YYYY-MM-DD` format    |
+| ∟ call_volume          | int64    | true     | Call volume on that day        |
+| ∟ put_volume           | int64    | true     | Put volume on that day         |
+| ∟ call_open_interest   | int64    | true     | Call open interest             |
+| ∟ put_open_interest    | int64    | true     | Put open interest              |
+| ∟ total_volume         | int64    | true     | Total options volume           |
+| ∟ total_open_interest  | int64    | true     | Total options open interest    |
+| ∟ pc_vol               | float    | true     | Put/call volume ratio          |
+| ∟ pc_oi                | float    | true     | Put/call open interest ratio   |

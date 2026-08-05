@@ -7,7 +7,7 @@ slug: overview
 
 # Content API Overview
 
-Content APIs provide security news, community topic discussions, and sharelist management. All APIs are accessed via HTTP requests, or through the [SDK](https://open.longbridge.com/sdk).
+Content APIs provide [security news](https://longbridge.com/news), community topic discussions, and sharelist management. All APIs are accessed via HTTP requests, or through the [SDK](https://open.longbridge.com/sdk).
 
 <table>
     <thead>

@@ -8,7 +8,7 @@ slug: overview
 
 # 資訊與社區接口概覽
 
-資訊與社區接口提供個股資訊、社區討論和股單管理能力。所有接口均通過 HTTP 請求訪問，也可以使用 [SDK](https://open.longbridge.com/sdk) 調用。
+資訊與社區接口提供[個股資訊](https://longbridge.com/news)、社區討論和股單管理能力。所有接口均通過 HTTP 請求訪問，也可以使用 [SDK](https://open.longbridge.com/sdk) 調用。
 
 <table>
     <thead>

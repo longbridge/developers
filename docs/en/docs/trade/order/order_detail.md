@@ -32,9 +32,10 @@ longbridge order detail 693664675163312128
 
 > Content-Type: application/json; charset=utf-8
 
-| Name     | Type   | Required | Description                                                               |
-| -------- | ------ | -------- | ------------------------------------------------------------------------- |
-| order_id | string | YES      | Order ID for specifying order ID query, for example: `701276261045858304` |
+| Name        | Type   | Required | Description                                                               |
+| ----------- | ------ | -------- | ------------------------------------------------------------------------- |
+| order_id    | string | YES      | Order ID for specifying order ID query, for example: `701276261045858304` |
+| is_attached | bool   | NO       | Whether `order_id` refers to an attached order                           |
 
 ### Request Example
 
@@ -50,6 +51,7 @@ ctx = TradeContext(config)
 
 resp = ctx.order_detail(
     order_id = "701276261045858304",
+    is_attached = False,
 )
 print(resp)
 ```
@@ -68,6 +70,7 @@ async def main() -> None:
 
     resp = await ctx.order_detail(
         order_id = "701276261045858304",
+        is_attached = False,
     )
     print(resp)
 
@@ -303,7 +306,32 @@ func main() {
       ],
       "total_amount": "0",
       "currency": "USD"
-    }
+    },
+    "attached_orders": [
+      {
+        "order_id": "706388312699592705",
+        "attached_type_display": 2,
+        "trigger_price": "10.500",
+        "quantity": "200",
+        "executed_qty": "0",
+        "status": "NewStatus",
+        "updated_at": "1651644898",
+        "withdrawn": false,
+        "gtd": "",
+        "time_in_force": "Day",
+        "counter_id": "",
+        "trigger_status": 0,
+        "executed_amount": "0",
+        "tag": 0,
+        "submitted_at": "1651644897",
+        "executed_price": "0.000",
+        "force_only_rth": "RTH_ONLY",
+        "reviewed": false,
+        "activate_order_type": "MIT",
+        "activate_rth": "RTH_ONLY",
+        "submit_price": ""
+      }
+    ]
   }
 }
 ```
@@ -381,6 +409,28 @@ Order Information
 | ∟∟∟ name                   | string   | true     | Charge name                                                                                                                                                                                                                                                    |
 | ∟∟∟ amount                 | string   | true     | Charge amount                                                                                                                                                                                                                                                  |
 | ∟∟∟ currency               | string   | true     | Charge currency                                                                                                                                                                                                                                                |
-| ∟∟∟ limit_depth_level      | int32    | true     | Specifies the bid/ask depth level                                                                                                                                                                                                                              |
-| ∟∟∟ monitor_price          | string   | true     | Monitoring price                                                                                                                                                                                                                                               |
-| ∟∟∟ trigger_count          | int32    | true     | Number of triggers                                                                                                                                                                                                                                             |
+| ∟ limit_depth_level      | int32    | true     | Specifies the bid/ask depth level |
+| ∟ monitor_price          | string   | true     | Monitoring price |
+| ∟ trigger_count          | int32    | true     | Number of triggers |
+| ∟ attached_orders          | object[] | false    | List of attached order details |
+| ∟∟ order_id                | string   | true     | Attached order ID |
+| ∟∟ attached_type_display   | int32    | true     | Attached order type.<br/><br/> **Enum Value:**<br/> `1` - Take Profit<br/> `2` - Stop Loss |
+| ∟∟ trigger_price           | string   | true     | Trigger price |
+| ∟∟ quantity                | string   | true     | Order quantity |
+| ∟∟ executed_qty            | string   | true     | Executed quantity |
+| ∟∟ status                  | string   | true     | Order status |
+| ∟∟ updated_at              | string   | true     | Last updated time, formatted as a timestamp (second) |
+| ∟∟ withdrawn               | boolean  | true     | Whether the order has been withdrawn |
+| ∟∟ gtd                     | string   | true     | GTD expiration date, format: `YYYY-MM-DD` |
+| ∟∟ time_in_force           | string   | true     | Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order |
+| ∟∟ counter_id              | string   | true     | Counter order ID |
+| ∟∟ trigger_status          | int32    | true     | Conditional order trigger status after the attached order is activated.<br/> `0` - Not activated<br/> `1` - Monitoring<br/> `2` - Cancelled<br/> `4` - Triggered |
+| ∟∟ executed_amount         | string   | true     | Executed amount |
+| ∟∟ tag                     | int32    | true     | Order tag |
+| ∟∟ submitted_at            | string   | true     | Submitted time, formatted as a timestamp (second) |
+| ∟∟ executed_price          | string   | true     | Executed price |
+| ∟∟ force_only_rth          | string   | true     | Whether execution is restricted to regular trading hours only |
+| ∟∟ reviewed                | boolean  | true     | Whether the order has been reviewed |
+| ∟∟ activate_order_type     | string   | true     | Order type submitted after triggering, e.g. `LIT` (limit-if-touched) or `MIT` (market-if-touched) |
+| ∟∟ activate_rth            | string   | true     | Whether the order submitted after triggering allows pre/post market trading |
+| ∟∟ submit_price            | string   | true     | Submitted price |

@@ -45,6 +45,22 @@ longbridge order replace 693664675163312128 --qty 200 --price 255.00
 | limit_depth_level | int32  | NO       | Specifies the bid/ask depth level. `TSLPAMT` / `TSLPPCT` Order Required                                |
 | monitor_price     | string | NO       | Monitoring price. `TSLPAMT` / `TSLPPCT` Order Required                                                 |
 | trigger_count     | int32  | NO       | Number of triggers. `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` Order Required                               |
+| attached_params   | object | NO       | Attached order parameters (take-profit / stop-loss)                                                    |
+| attached_params.attached_order_type | string | NO | Attached order type<br/><br/>**Enum Value:**<br/>`PROFIT_TAKER` - Take Profit<br/>`STOP_LOSS` - Stop Loss<br/>`BRACKET` - Bracket Order |
+| attached_params.profit_taker_price | string | NO | Take-profit trigger price |
+| attached_params.stop_loss_price | string | NO | Stop-loss trigger price |
+| attached_params.time_in_force | string | NO | Attached order time in force type<br/><br/>**Enum Value:**<br/>`Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order (inherits the main order's `expire_date` in this case) |
+| attached_params.expire_time | int64 | NO | Expire time (Unix timestamp, in seconds) |
+| attached_params.profit_taker_id | int64 | NO | Take-profit order ID, fill in when modifying an existing take-profit order |
+| attached_params.stop_loss_id | int64 | NO | Stop-loss order ID, fill in when modifying an existing stop-loss order |
+| attached_params.cancel_all_attached | bool | NO | Whether to cancel all attached orders |
+| attached_params.main_id | int64 | NO | Main order ID |
+| attached_params.quantity | string | NO | Attached order quantity |
+| attached_params.market_price | string | NO | Market price |
+| attached_params.activate_order_type | string | NO | Order type submitted after triggering, e.g. `LIT` (limit-if-touched) or `MIT` (market-if-touched) |
+| attached_params.profit_taker_submit_price | string | NO | Take-profit limit order submitted price, required when `activate_order_type` is `LIT` |
+| attached_params.stop_loss_submit_price | string | NO | Stop-loss limit order submitted price, required when `activate_order_type` is `LIT` |
+| attached_params.activate_rth | string | NO | Whether the order submitted after triggering allows pre/post market trading<br/><br/>**Enum Value:**<br/> `RTH_ONLY` - Regular trading hours only<br/> `ANY_TIME` - Any time |
 
 ### Request Example
 

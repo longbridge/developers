@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get real-time call/put volume snapshot for today, including total volume, open interest, and put/call ratios.
+Get real-time call/put volume snapshot for today.
 
 <CliCommand>
 longbridge option volume AAPL.US
@@ -205,11 +205,7 @@ func main() {
   "data": {
     "symbol": "AAPL.US",
     "call_volume": 284512,
-    "put_volume": 195830,
-    "call_open_interest": 1824500,
-    "put_open_interest": 1532100,
-    "pc_vol": "0.6886",
-    "pc_oi": "0.8398"
+    "put_volume": 195830
   }
 }
 ```
@@ -227,12 +223,8 @@ func main() {
 
 <a id="option_volume_rsp"></a>
 
-| Name               | Type   | Required | Description                              |
-| ------------------ | ------ | -------- | ---------------------------------------- |
-| symbol             | string | true     | Security symbol                          |
-| call_volume        | int64  | true     | Total call volume for today              |
-| put_volume         | int64  | true     | Total put volume for today               |
-| call_open_interest | int64  | true     | Total call open interest                 |
-| put_open_interest  | int64  | true     | Total put open interest                  |
-| pc_vol             | string | true     | Put/call volume ratio                    |
-| pc_oi              | string | true     | Put/call open interest ratio             |
+| Name        | Type   | Required | Description                 |
+| ----------- | ------ | -------- | --------------------------- |
+| symbol      | string | true     | Security symbol             |
+| call_volume | int64  | true     | Total call volume for today |
+| put_volume  | int64  | true     | Total put volume for today  |

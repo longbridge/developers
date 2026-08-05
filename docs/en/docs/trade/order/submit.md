@@ -51,6 +51,16 @@ longbridge order sell TSLA.US 100 --price 260.00
 | monitor_price      | string | NO       | Monitoring price. <br/>Monitoring starts only after reaching this price, updating the reference price.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders.                                                                                                                                                                              |
 | trigger_count      | int32  | NO       | Number of triggers. Value range is 0 ~ 3.<br/>Specifies that within 1 minute, the order will only be placed after being triggered multiple times.<br/>Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders.                                                                                                                   |
 | client_request_id  | string | NO       | Idempotent request ID for preventing duplicate order submissions. The server caches this request ID for 10 minutes. If a request with the same ID is received within this period, it returns the same response without creating a duplicate order. Must be a unique identifier (e.g., UUID). |
+| attached_params    | object | NO       | Attached order parameters (take-profit / stop-loss) |
+| attached_params.attached_order_type | string | NO | Attached order type<br/><br/>**Enum Value:**<br/>`PROFIT_TAKER` - Take Profit<br/>`STOP_LOSS` - Stop Loss<br/>`BRACKET` - Bracket Order |
+| attached_params.profit_taker_price | string | NO | Take-profit trigger price |
+| attached_params.stop_loss_price | string | NO | Stop-loss trigger price |
+| attached_params.time_in_force | string | NO | Attached order time in force type<br/><br/>**Enum Value:**<br/>`Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order (inherits the main order's `expire_date` in this case) |
+| attached_params.expire_time | int64 | NO | Expire time (Unix timestamp, in seconds) |
+| attached_params.activate_order_type | string | NO | Order type submitted after triggering, e.g. `LIT` (limit-if-touched) or `MIT` (market-if-touched) |
+| attached_params.profit_taker_submit_price | string | NO | Take-profit limit order submitted price, required when `activate_order_type` is `LIT` |
+| attached_params.stop_loss_submit_price | string | NO | Stop-loss limit order submitted price, required when `activate_order_type` is `LIT` |
+| attached_params.activate_rth | string | NO | Whether the order submitted after triggering allows pre/post market trading <br/><br/>**Enum Value:**<br/> `RTH_ONLY` - Regular trading hours only<br/> `ANY_TIME` - Any time |
 
 ### Idempotency
 

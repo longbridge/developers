@@ -45,6 +45,22 @@ longbridge order replace 693664675163312128 --qty 200 --price 255.00
 | limit_depth_level | int32 | NO       | 指定买卖档位，`TSLPAMT` / `TSLPPCT` 订单必填                                      |
 | monitor_price     | string| NO       | 监控价格，`TSLPAMT` / `TSLPPCT` 订单必填                                         |
 | trigger_count     | int32 | NO       | 触发次数，`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 订单必填                         |
+| attached_params   | object | NO      | 附加单参数（止盈止损） |
+| attached_params.attached_order_type | string | NO | 附加单订单类型<br/><br/>**可选值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止损<br/>`BRACKET` - 括号单 |
+| attached_params.profit_taker_price | string | NO | 止盈触发价格 |
+| attached_params.stop_loss_price | string | NO | 止损触发价格 |
+| attached_params.time_in_force | string | NO | 附加单有效期类型<br/><br/>**可选值：**<br/>`Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效（此时继承主单 expire_date） |
+| attached_params.expire_time | int64 | NO | 到期时间（Unix 时间戳，单位秒） |
+| attached_params.profit_taker_id | int64 | NO | 止盈单 ID，修改现有止盈单时填写 |
+| attached_params.stop_loss_id | int64 | NO | 止损单 ID，修改现有止损单时填写 |
+| attached_params.cancel_all_attached | bool | NO | 是否取消所有附加单 |
+| attached_params.main_id | int64 | NO | 主单 ID |
+| attached_params.quantity | string | NO | 附加单数量 |
+| attached_params.market_price | string | NO | 市价 |
+| attached_params.activate_order_type | string | NO | 触发后提交的订单类型，例如 `LIT`（限价单）或 `MIT`（市价单） |
+| attached_params.profit_taker_submit_price | string | NO | 止盈限价委托价格，`activate_order_type` 为 `LIT` 时必填 |
+| attached_params.stop_loss_submit_price | string | NO | 止损限价委托价格，`activate_order_type` 为 `LIT` 时必填 |
+| attached_params.activate_rth | string | NO | 触发后提交的订单是否允许盘前盘后<br/><br/>**可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后 |
 
 
 ### Request Example

@@ -35,6 +35,7 @@ longbridge order detail 693664675163312128
 | Name     | Type   | Required | Description                                               |
 | -------- | ------ | -------- | --------------------------------------------------------- |
 | order_id | string | YES      | 订单 ID，用于指定订单 ID 查询，例如：`701276261045858304` |
+| is_attached | bool   | NO       | order_id 是否为附加单  |
 
 ### Request Example
 
@@ -50,6 +51,7 @@ ctx = TradeContext(config)
 
 resp = ctx.order_detail(
     order_id = "701276261045858304",
+    is_attached = False,
 )
 print(resp)
 ```
@@ -68,6 +70,7 @@ async def main() -> None:
 
     resp = await ctx.order_detail(
         order_id = "701276261045858304",
+        is_attached = False,
     )
     print(resp)
 
@@ -302,7 +305,32 @@ func main() {
       ],
       "total_amount": "0",
       "currency": "USD"
-    }
+    },
+    "attached_orders": [
+      {
+        "order_id": "706388312699592705",
+        "attached_type_display": 2,
+        "trigger_price": "10.500",
+        "quantity": "200",
+        "executed_qty": "0",
+        "status": "NewStatus",
+        "updated_at": "1651644898",
+        "withdrawn": false,
+        "gtd": "",
+        "time_in_force": "Day",
+        "counter_id": "",
+        "trigger_status": 0,
+        "executed_amount": "0",
+        "tag": 0,
+        "submitted_at": "1651644897",
+        "executed_price": "0.000",
+        "force_only_rth": "RTH_ONLY",
+        "reviewed": false,
+        "activate_order_type": "MIT",
+        "activate_rth": "RTH_ONLY",
+        "submit_price": ""
+      }
+    ]
   }
 }
 ```
@@ -380,6 +408,28 @@ func main() {
 | ∟∟∟ name                   | string   | true     | 收费名称                                                                                                                                                                                           |
 | ∟∟∟ amount                 | string   | true     | 单项收费金额                                                                                                                                                                                       |
 | ∟∟∟ currency               | string   | true     | 收费货币                                                                                                                                                                                           |
-| ∟∟∟ limit_depth_level      | int32    | true     | 指定买卖档位         |
-| ∟∟∟ monitor_price          | string   | true     | 监控价格            |
-| ∟∟∟ trigger_count          | int32    | true     | 触发次数            |
+| ∟ limit_depth_level        | int32    | true     | 指定买卖档位 |
+| ∟ monitor_price            | string   | true     | 监控价格 |
+| ∟ trigger_count            | int32    | true     | 触发次数 |
+| ∟ attached_orders          | object[] | false    | 附加订单详情列表 |
+| ∟∟ order_id                | string   | true     | 附加订单 ID |
+| ∟∟ attached_type_display   | int32    | true     | 附加订单类型。**可选值：** `1` - 止盈 `2` - 止损 |
+| ∟∟ trigger_price           | string   | true     | 触发价格 |
+| ∟∟ quantity                | string   | true     | 下单数量 |
+| ∟∟ executed_qty            | string   | true     | 成交数量 |
+| ∟∟ status                  | string   | true     | 订单状态 |
+| ∟∟ updated_at              | string   | true     | 最近更新时间，格式为时间戳 (秒) |
+| ∟∟ withdrawn               | boolean  | true     | 是否已撤销 |
+| ∟∟ gtd                     | string   | true     | GTD 到期日期，格式为 `YYYY-MM-DD` |
+| ∟∟ time_in_force           | string   | true     | 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效 |
+| ∟∟ counter_id              | string   | true     | 对应单 ID |
+| ∟∟ trigger_status          | int32    | true     | 附加单激活后的条件单触发状态。<br/>`0` - 未激活 <br/>`1` - 监控中 <br/>`2` - 已撤单 <br/>`4` - 已触发 |
+| ∟∟ executed_amount         | string   | true     | 成交金额 |
+| ∟∟ tag                     | int32    | true     | 订单标记 |
+| ∟∟ submitted_at            | string   | true     | 下单时间，格式为时间戳 (秒) |
+| ∟∟ executed_price          | string   | true     | 成交价格 |
+| ∟∟ force_only_rth          | string   | true     | 是否仅正常交易时段执行。 |
+| ∟∟ reviewed                | boolean  | true     | 是否已审核 |
+| ∟∟ activate_order_type     | string   | true     | 触发后提交的订单类型，例如 `LIT`（限价单）或 `MIT`（市价单） |
+| ∟∟ activate_rth            | string   | true     | 触发后提交订单是否允许盘前盘后。 |
+| ∟∟ submit_price            | string   | true     | 委托价格 |

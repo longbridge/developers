@@ -9,9 +9,9 @@ Longbridge Developers 为有研发能力的投资者提供程序化接口，助�
 
 - **行情**（Quote）— [实时与历史行情](https://longbridge.com/markets)、盘口、K 线、期权/轮证数据、订阅推送
 - **基本面**（Fundamental）— 公司概况、财务数据、估值、分析师评级、市场数据、日历
-- **资讯与社区**（News & Contents）— [市场资讯](https://longbridge.com/en/news)、社区话题、自选股管理
+- **资讯与社区**（News & Contents）— [市场资讯](https://longbridge.com/en/news)、[社区话题](https://longbridge.com/topics)、自选股管理
 - **交易**（Trade）— 创建/修改/撤销订单，查询订单、成交、资产等
-- **账户**（Account）— 盈亏分析、股价提醒、定投计划、自选股
+- **账户**(Account) — 盈亏分析、股价提醒、定投计划、[自选股](https://longbridge.com/watchlist)
 - **CLI** — 命令行工具，覆盖以上所有功能，并额外支持量化回测与研究
 - **MCP** — Model Context Protocol，用于 AI 助手工作流集成
 

@@ -27,7 +27,6 @@
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
-  "editor.formatOnSave": true,
   "autocorrect.enable": true,
   "autocorrect.formatOnSave": true,
   "[markdown]": {

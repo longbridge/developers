@@ -35,6 +35,7 @@ longbridge order cancel 693664675163312128
 | Name     | Type   | Required | Description |
 | -------- | ------ | -------- | ----------- |
 | order_id | string | YES      | Order ID    |
+| is_attached | bool   | NO       | Whether `order_id` refers to an attached order |
 
 ### Request Example
 

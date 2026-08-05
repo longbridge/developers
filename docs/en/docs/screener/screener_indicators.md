@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get all indicator definitions supported by the stock screener, including keys, names, units, and available ranges. Use these to build custom filter conditions.
+Get all indicator definitions supported by the [stock screener](https://longbridge.com/screener), including keys, names, units, and available ranges. Use these to build custom filter conditions.
 
 Endpoint: `GET /v1/quote/ai/screener/indicators`
 
