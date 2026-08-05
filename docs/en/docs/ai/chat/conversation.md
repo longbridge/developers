@@ -39,10 +39,11 @@ Besides querying the [Agents in Workspace](/docs/ai/workspace/agents) endpoint, 
 
 ### Request Body
 
-| Name     | Type   | Required | Description                                                                                      |
-| -------- | ------ | -------- | ------------------------------------------------------------------------------------------------ |
-| query    | string | YES      | The user question; must not be empty                                                             |
-| chat_uid | string | NO       | Identifier of an existing conversation. Pass it to continue that conversation; omit to start a new one |
+| Name              | Type   | Required | Description                                                                                      |
+| ----------------- | ------ | -------- | ------------------------------------------------------------------------------------------------ |
+| query             | string | YES      | The user question; must not be empty                                                             |
+| chat_uid          | string | NO       | Identifier of an existing conversation. Pass it to continue that conversation; omit to start a new one |
+| parent_message_id | string | NO       | Parent message ID, taken from the `message_id` in the previous response. Pass it when asking a follow-up in an existing conversation to attach the new message after the specified one, keeping the message stream in order. Only valid together with `chat_uid`, and the parent message must belong to that conversation; must not be set for a new conversation |
 
 ### Request Example
 
