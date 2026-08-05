@@ -28,7 +28,26 @@ const LOCALE = {
     },
     channels: {
       eyebrow: 'NOW AVAILABLE IN',
-      title: 'Use Longbridge natively inside ChatGPT and Claude.',
+      title: 'ChatGPT × Claude',
+      tagline: 'AI that reads the market.',
+      subtitle:
+        'Longbridge lives natively in ChatGPT and Claude. Ask a ticker, screen ideas, or drop into your positions — no keys, no context switch.',
+      partners: [
+        {
+          key: 'chatgpt',
+          brand: 'ChatGPT',
+          tag: 'Official App',
+          prompt: 'Call @longbridge in any ChatGPT conversation',
+          cta: 'Open in ChatGPT',
+        },
+        {
+          key: 'claude',
+          brand: 'Claude',
+          tag: 'Connector',
+          prompt: 'One-tap add from Claude’s Connector directory',
+          cta: 'Add Claude Connector',
+        },
+      ],
     },
     features: {
       eyebrow: 'FEATURES',
@@ -216,7 +235,26 @@ const LOCALE = {
     },
     channels: {
       eyebrow: '现已支持',
-      title: '在 ChatGPT 与 Claude 中畅用 Longbridge。',
+      title: 'ChatGPT × Claude',
+      tagline: '让 AI 读懂市场。',
+      subtitle:
+        'Longbridge 已原生集成到 ChatGPT 与 Claude。查行情、筛股票、看持仓，无需 API Key、无需切换上下文。',
+      partners: [
+        {
+          key: 'chatgpt',
+          brand: 'ChatGPT',
+          tag: '官方 App',
+          prompt: '在对话里 @longbridge 直接唤起',
+          cta: '在 ChatGPT 打开',
+        },
+        {
+          key: 'claude',
+          brand: 'Claude',
+          tag: 'Connector',
+          prompt: '从 Connector 目录一键添加',
+          cta: '添加 Claude Connector',
+        },
+      ],
     },
     features: {
       eyebrow: '功能特性',
@@ -387,7 +425,26 @@ const LOCALE = {
     },
     channels: {
       eyebrow: '現已支援',
-      title: '在 ChatGPT 與 Claude 中暢用 Longbridge。',
+      title: 'ChatGPT × Claude',
+      tagline: '讓 AI 讀懂市場。',
+      subtitle:
+        'Longbridge 已原生整合至 ChatGPT 與 Claude。查行情、篩股票、看持倉，無需 API Key、無需切換情境。',
+      partners: [
+        {
+          key: 'chatgpt',
+          brand: 'ChatGPT',
+          tag: '官方 App',
+          prompt: '在對話裡 @longbridge 直接喚起',
+          cta: '在 ChatGPT 開啟',
+        },
+        {
+          key: 'claude',
+          brand: 'Claude',
+          tag: 'Connector',
+          prompt: '從 Connector 目錄一鍵加入',
+          cta: '加入 Claude Connector',
+        },
+      ],
     },
     features: {
       eyebrow: '功能特性',
@@ -1381,32 +1438,91 @@ const GETSTARTED = [
 
     <!-- ===== Available in ChatGPT & Claude ===== -->
     <section class="home-channels">
-      <div class="section-inner">
+      <div class="home-channels-grid-bg" aria-hidden="true" />
+      <div class="home-channels-glow home-channels-glow--gpt" aria-hidden="true" />
+      <div class="home-channels-glow home-channels-glow--claude" aria-hidden="true" />
+      <div class="section-inner home-channels-inner">
         <div class="home-channels-head">
-          <div style="max-width: 620px">
-            <span class="eyebrow">{{ content.channels.eyebrow }}</span>
-            <h2 class="h-section" style="margin-top: 16px">{{ content.channels.title }}</h2>
-          </div>
-          <div class="home-channels-chips">
-            <a class="home-channel-chip" :href="CHATGPT_APP_URL" target="_blank" rel="noreferrer">
-              <span class="home-channel-logo" style="color: #10a37f">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <span class="eyebrow">{{ content.channels.eyebrow }}</span>
+          <h2 class="h-section home-channels-title">
+            <span class="home-channels-title-line">
+              <span class="home-channels-title-brand">
+                <span class="home-channels-title-logo home-channels-title-logo--gpt" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z" />
+                  </svg>
+                </span>
+                ChatGPT
+              </span>
+              <span class="home-channels-title-x" aria-hidden="true">×</span>
+              <span class="home-channels-title-brand">
+                <span class="home-channels-title-logo home-channels-title-logo--claude" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M4.709 15.955l4.72-2.647.079-.23-.079-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z" />
+                  </svg>
+                </span>
+                Claude
+              </span>
+            </span>
+            <span class="home-channels-tagline">{{ content.channels.tagline }}</span>
+          </h2>
+          <p class="home-channels-sub">{{ content.channels.subtitle }}</p>
+        </div>
+
+        <div class="home-channels-cards">
+          <a
+            v-for="p in content.channels.partners"
+            :key="p.key"
+            class="home-channel-card"
+            :class="`home-channel-card--${p.key}`"
+            :href="p.key === 'chatgpt' ? CHATGPT_APP_URL : CLAUDE_CONNECTOR_URL"
+            target="_blank"
+            rel="noreferrer">
+            <div class="home-channel-card-glow" aria-hidden="true" />
+            <div class="home-channel-card-head">
+              <span class="home-channel-card-logo" :class="`home-channel-card-logo--${p.key}`">
+                <svg v-if="p.key === 'chatgpt'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path
                     d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z" />
                 </svg>
-              </span>
-              <span>ChatGPT</span>
-            </a>
-            <a class="home-channel-chip" :href="CLAUDE_CONNECTOR_URL" target="_blank" rel="noreferrer">
-              <span class="home-channel-logo" style="color: #d97757">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg v-else viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path
-                    d="M13.827 3.52h3.603L24 20h-3.603l-6.57-16.48zm-7.258 0h3.767L16.906 20h-3.674l-1.343-3.461H5.017l-1.344 3.46H0L6.57 3.522zm4.132 9.959L8.453 7.687 6.205 13.48H10.7z" />
+                    d="M4.709 15.955l4.72-2.647.079-.23-.079-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z" />
                 </svg>
               </span>
-              <span>Claude</span>
-            </a>
-          </div>
+              <div class="home-channel-card-titles">
+                <div class="home-channel-card-brand">{{ p.brand }}</div>
+                <div class="home-channel-card-tag">
+                  <span class="home-channel-card-live" />
+                  {{ p.tag }}
+                </div>
+              </div>
+              <div class="home-channel-card-cta">
+                <span>{{ p.cta }}</span>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="home-channel-card-preview">
+              <div class="home-channel-card-row home-channel-card-row--prompt">
+                <span class="home-channel-card-bullet">›</span>
+                <span class="home-channel-card-text">{{ p.prompt }}</span>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>
@@ -2340,59 +2456,339 @@ const GETSTARTED = [
 
 /* ===== Available in ChatGPT & Claude ===== */
 .home-channels {
-  padding: 80px 24px 0;
+  position: relative;
+  padding: 120px 24px 80px;
+  overflow: hidden;
+  isolation: isolate;
 }
+.home-channels::before,
+.home-channels::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 180px;
+  pointer-events: none;
+  z-index: 1;
+}
+.home-channels::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--lb-bg-1), transparent);
+}
+.home-channels::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--lb-bg-1), transparent);
+}
+.home-channels-inner {
+  position: relative;
+  z-index: 2;
+}
+.home-channels-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--lb-fg-1) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--lb-fg-1) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, #000 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, #000 0%, transparent 75%);
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+}
+.home-channels-glow {
+  position: absolute;
+  width: 620px;
+  height: 620px;
+  border-radius: 999px;
+  filter: blur(120px);
+  opacity: 0.32;
+  z-index: 0;
+  pointer-events: none;
+}
+.home-channels-glow--gpt {
+  top: -180px;
+  left: -160px;
+  background: radial-gradient(circle, #10a37f 0%, transparent 65%);
+}
+.home-channels-glow--claude {
+  bottom: -220px;
+  right: -180px;
+  background: radial-gradient(circle, #d97757 0%, transparent 65%);
+}
+
 .home-channels-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 24px;
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 56px;
 }
-.home-channels-chips {
-  display: flex;
-  gap: 12px;
+@keyframes home-channels-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
-.home-channel-chip {
+.home-channels-title {
+  margin: 18px 0 20px;
+  font-size: clamp(26px, 3.2vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.home-channels-title-line {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px 18px;
-  border-radius: 999px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.32em;
+}
+.home-channels-title-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28em;
+}
+.home-channels-title-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+}
+.home-channels-title-logo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.home-channels-title-logo--gpt {
+  color: var(--lb-fg-1);
+}
+.home-channels-title-logo--claude {
+  color: #d97757;
+}
+.home-channels-title-x {
+  color: var(--lb-fg-3);
+  font-weight: 300;
+  margin: 0 0.05em;
+}
+.home-channels-tagline {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.5em;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--lb-fg-3);
+}
+.home-channels-sub {
+  margin: 0 auto;
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--lb-fg-3);
+}
+
+.home-channels-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.home-channel-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 20px;
   border: 1px solid var(--app-card-stroke);
   background: var(--lb-bg-1);
   color: var(--lb-fg-1);
-  font-size: 14px;
-  font-weight: 600;
   text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
   transition:
-    transform 0.15s,
-    border-color 0.15s,
-    box-shadow 0.15s;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
-.home-channel-chip:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--lb-brand) 40%, var(--app-card-stroke));
-  box-shadow: 0 8px 20px -10px rgba(15, 17, 21, 0.22);
+.home-channel-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--card-accent) 55%, transparent),
+    transparent 45%,
+    transparent 70%,
+    color-mix(in srgb, var(--card-accent) 25%, transparent)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 2;
 }
-.home-channel-logo {
+.home-channel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px -32px color-mix(in srgb, var(--card-accent) 60%, rgba(15, 17, 21, 0.28));
+}
+.home-channel-card:hover::before {
+  opacity: 1;
+}
+.home-channel-card--chatgpt {
+  --card-accent: #10a37f;
+}
+.home-channel-card--claude {
+  --card-accent: #d97757;
+}
+
+.home-channel-card-glow {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--card-accent) 0%, transparent 70%);
+  filter: blur(60px);
+  opacity: 0.35;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.home-channel-card:hover .home-channel-card-glow {
+  opacity: 0.55;
+}
+
+.home-channel-card-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+.home-channel-card-logo {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--card-accent) 12%, transparent);
+  color: var(--card-accent);
 }
-.home-channel-logo svg {
-  width: 18px;
-  height: 18px;
+.home-channel-card-logo svg {
+  width: 24px;
+  height: 24px;
   display: block;
 }
-@media (max-width: 640px) {
+.home-channel-card-logo--chatgpt {
+  color: var(--lb-fg-1);
+  background: color-mix(in srgb, var(--lb-fg-1) 8%, transparent);
+}
+.home-channel-card-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.home-channel-card-cta {
+  margin-left: auto;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 6px;
+}
+.home-channel-card-brand {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--lb-fg-1);
+}
+.home-channel-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--lb-fg-3);
+}
+.home-channel-card-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--card-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--card-accent) 22%, transparent);
+  animation: home-channels-pulse 2.4s ease-in-out infinite;
+}
+
+.home-channel-card-preview {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--lb-fg-1) 4%, transparent);
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.home-channel-card-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.home-channel-card-bullet {
+  flex: 0 0 auto;
+  color: color-mix(in srgb, var(--lb-fg-3) 80%, transparent);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.home-channel-card-bullet--reply {
+  color: var(--card-accent);
+  font-size: 11px;
+  transform: translateY(2px);
+}
+.home-channel-card-text {
+  color: var(--lb-fg-2, var(--lb-fg-1));
+  word-break: break-word;
+}
+.home-channel-card-text--reply {
+  color: var(--lb-fg-1);
+}
+
+.home-channel-card-cta {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--card-accent);
+  transition: transform 0.2s ease;
+}
+.home-channel-card:hover .home-channel-card-cta {
+  transform: translateX(4px);
+}
+
+@media (max-width: 860px) {
   .home-channels {
-    padding: 48px 16px 0;
+    padding: 72px 16px 24px;
   }
-  .home-channels-chips {
-    width: 100%;
+  .home-channels-cards {
+    grid-template-columns: 1fr;
   }
-  .home-channel-chip {
-    flex: 1 1 0;
-    justify-content: center;
+  .home-channels-head {
+    margin-bottom: 40px;
+  }
+  .home-channels-title {
+    font-size: clamp(24px, 6.8vw, 32px);
+  }
+  .home-channel-card {
+    padding: 24px;
   }
 }
 </style>
