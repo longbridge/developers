@@ -1,11 +1,49 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import AppNav from '../AppNav.vue'
 import AppFooter from '../AppFooter.vue'
 import { localePath } from '../../utils/i18n'
 import { useData } from 'vitepress'
 
 const { lang } = useData()
+
+const subtitleRef = ref<HTMLElement | null>(null)
+let channelsObserver: IntersectionObserver | null = null
+
+const handleSubtitleAnimationEnd = (e: AnimationEvent) => {
+  if (e.animationName === 'home-channels-reveal' && e.target === subtitleRef.value) {
+    subtitleRef.value?.classList.remove('is-visible')
+  }
+}
+
+onMounted(() => {
+  const el = subtitleRef.value
+  if (!el) return
+  if (typeof IntersectionObserver === 'undefined') {
+    el.classList.add('is-visible')
+    return
+  }
+  el.addEventListener('animationend', handleSubtitleAnimationEnd)
+  channelsObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // 重启动画：先摘掉 class + 强制 reflow，再挂回来
+          el.classList.remove('is-visible')
+          void el.offsetWidth
+          el.classList.add('is-visible')
+        }
+      })
+    },
+    { threshold: 0, rootMargin: '-40% 0px -40% 0px' }
+  )
+  channelsObserver.observe(el)
+})
+
+onBeforeUnmount(() => {
+  channelsObserver?.disconnect()
+  subtitleRef.value?.removeEventListener('animationend', handleSubtitleAnimationEnd)
+})
 
 const CHATGPT_APP_URL = 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef'
 const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge-mcp'
@@ -27,24 +65,20 @@ const LOCALE = {
       ],
     },
     channels: {
-      eyebrow: 'NOW AVAILABLE IN',
+      eyebrow: 'OFFICIAL INTEGRATION · NOW LIVE',
       title: 'ChatGPT × Claude',
       tagline: 'AI that reads the market.',
       subtitle:
-        'Longbridge lives natively in ChatGPT and Claude. Ask a ticker, screen ideas, or drop into your positions — no keys, no context switch.',
+        '<span class="k k-lb">Longbridge</span> is live on <span class="k k-gpt">ChatGPT Apps</span> and <span class="k k-claude">Claude Connectors</span> — check quotes, screen ideas, view positions. One-tap OAuth, no API keys.',
       partners: [
         {
           key: 'chatgpt',
           brand: 'ChatGPT',
-          tag: 'Official App',
-          prompt: 'Call @longbridge in any ChatGPT conversation',
           cta: 'Open in ChatGPT',
         },
         {
           key: 'claude',
           brand: 'Claude',
-          tag: 'Connector',
-          prompt: 'One-tap add from Claude’s Connector directory',
           cta: 'Add Claude Connector',
         },
       ],
@@ -234,24 +268,20 @@ const LOCALE = {
       ],
     },
     channels: {
-      eyebrow: '现已支持',
+      eyebrow: '官方集成 · 现已上线',
       title: 'ChatGPT × Claude',
       tagline: '让 AI 读懂市场。',
       subtitle:
-        'Longbridge 已原生集成到 ChatGPT 与 Claude。查行情、筛股票、看持仓，无需 API Key、无需切换上下文。',
+        '<span class="k k-lb">Longbridge</span> 已上架 <span class="k k-gpt">ChatGPT Apps</span> 与 <span class="k k-claude">Claude Connectors</span> —— 查行情、筛股票、看持仓，OAuth 授权即用，无需 API Key。',
       partners: [
         {
           key: 'chatgpt',
           brand: 'ChatGPT',
-          tag: '官方 App',
-          prompt: '在对话里 @longbridge 直接唤起',
           cta: '在 ChatGPT 打开',
         },
         {
           key: 'claude',
           brand: 'Claude',
-          tag: 'Connector',
-          prompt: '从 Connector 目录一键添加',
           cta: '添加 Claude Connector',
         },
       ],
@@ -424,24 +454,20 @@ const LOCALE = {
       ],
     },
     channels: {
-      eyebrow: '現已支援',
+      eyebrow: '官方整合 · 現已上線',
       title: 'ChatGPT × Claude',
       tagline: '讓 AI 讀懂市場。',
       subtitle:
-        'Longbridge 已原生整合至 ChatGPT 與 Claude。查行情、篩股票、看持倉，無需 API Key、無需切換情境。',
+        '<span class="k k-lb">Longbridge</span> 已上架 <span class="k k-gpt">ChatGPT Apps</span> 與 <span class="k k-claude">Claude Connectors</span> —— 查行情、篩股票、看持倉，OAuth 授權即用，無需 API Key。',
       partners: [
         {
           key: 'chatgpt',
           brand: 'ChatGPT',
-          tag: '官方 App',
-          prompt: '在對話裡 @longbridge 直接喚起',
           cta: '在 ChatGPT 開啟',
         },
         {
           key: 'claude',
           brand: 'Claude',
-          tag: 'Connector',
-          prompt: '從 Connector 目錄一鍵加入',
           cta: '加入 Claude Connector',
         },
       ],
@@ -1455,7 +1481,11 @@ const GETSTARTED = [
                 </span>
                 ChatGPT
               </span>
-              <span class="home-channels-title-x" aria-hidden="true">×</span>
+              <span class="home-channels-title-x" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </span>
               <span class="home-channels-title-brand">
                 <span class="home-channels-title-logo home-channels-title-logo--claude" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1468,7 +1498,7 @@ const GETSTARTED = [
             </span>
             <span class="home-channels-tagline">{{ content.channels.tagline }}</span>
           </h2>
-          <p class="home-channels-sub">{{ content.channels.subtitle }}</p>
+          <p ref="subtitleRef" class="home-channels-sub" v-html="content.channels.subtitle"></p>
         </div>
 
         <div class="home-channels-cards">
@@ -1494,10 +1524,6 @@ const GETSTARTED = [
               </span>
               <div class="home-channel-card-titles">
                 <div class="home-channel-card-brand">{{ p.brand }}</div>
-                <div class="home-channel-card-tag">
-                  <span class="home-channel-card-live" />
-                  {{ p.tag }}
-                </div>
               </div>
               <div class="home-channel-card-cta">
                 <span>{{ p.cta }}</span>
@@ -1516,12 +1542,6 @@ const GETSTARTED = [
               </div>
             </div>
 
-            <div class="home-channel-card-preview">
-              <div class="home-channel-card-row home-channel-card-row--prompt">
-                <span class="home-channel-card-bullet">›</span>
-                <span class="home-channel-card-text">{{ p.prompt }}</span>
-              </div>
-            </div>
           </a>
         </div>
       </div>
@@ -2498,22 +2518,22 @@ const GETSTARTED = [
 }
 .home-channels-glow {
   position: absolute;
-  width: 620px;
-  height: 620px;
+  width: 420px;
+  height: 420px;
   border-radius: 999px;
-  filter: blur(120px);
-  opacity: 0.32;
+  filter: blur(90px);
+  opacity: 0.28;
   z-index: 0;
   pointer-events: none;
 }
 .home-channels-glow--gpt {
-  top: -180px;
-  left: -160px;
+  top: -80px;
+  left: -60px;
   background: radial-gradient(circle, #10a37f 0%, transparent 65%);
 }
 .home-channels-glow--claude {
-  bottom: -220px;
-  right: -180px;
+  bottom: -120px;
+  right: -80px;
   background: radial-gradient(circle, #d97757 0%, transparent 65%);
 }
 
@@ -2563,9 +2583,19 @@ const GETSTARTED = [
   color: #d97757;
 }
 .home-channels-title-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.5em;
+  height: 0.5em;
   color: var(--lb-fg-3);
-  font-weight: 300;
-  margin: 0 0.05em;
+  opacity: 0.55;
+  margin: 0 0.1em;
+}
+.home-channels-title-x svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 .home-channels-tagline {
   display: block;
@@ -2577,16 +2607,99 @@ const GETSTARTED = [
 }
 .home-channels-sub {
   margin: 0 auto;
-  max-width: 640px;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--lb-fg-3);
+  max-width: 780px;
+  font-size: 17px;
+  line-height: 1.8;
+  font-weight: 500;
+  color: var(--lb-fg-2);
+}
+.home-channels-sub .k {
+  font-size: 1.3em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.home-channels-sub .k-lb {
+  color: var(--lb-fg-1);
+}
+.home-channels-sub .k-gpt {
+  color: var(--lb-brand);
+}
+.home-channels-sub .k-claude {
+  color: #d97757;
+}
+
+.home-channels-sub.is-visible,
+.home-channels-sub.is-visible .k {
+  background-size: 300% 100%;
+  background-position: 100% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: home-channels-reveal 5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.home-channels-sub.is-visible {
+  background-image: linear-gradient(
+    105deg,
+    var(--lb-fg-2) 0%,
+    var(--lb-fg-2) 42%,
+    #ffffff 50%,
+    var(--lb-fg-2) 58%,
+    var(--lb-fg-2) 100%
+  );
+}
+.home-channels-sub.is-visible .k-lb {
+  background-image: linear-gradient(
+    105deg,
+    var(--lb-fg-1) 0%,
+    var(--lb-fg-1) 42%,
+    #ffffff 50%,
+    var(--lb-fg-1) 58%,
+    var(--lb-fg-1) 100%
+  );
+}
+.home-channels-sub.is-visible .k-gpt {
+  background-image: linear-gradient(
+    105deg,
+    var(--lb-brand) 0%,
+    var(--lb-brand) 42%,
+    #ffffff 50%,
+    var(--lb-brand) 58%,
+    var(--lb-brand) 100%
+  );
+}
+.home-channels-sub.is-visible .k-claude {
+  background-image: linear-gradient(
+    105deg,
+    #d97757 0%,
+    #d97757 42%,
+    #ffffff 50%,
+    #d97757 58%,
+    #d97757 100%
+  );
+}
+@keyframes home-channels-reveal {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-channels-sub.is-visible,
+  .home-channels-sub.is-visible .k {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
 }
 
 .home-channels-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+  max-width: 760px;
+  margin: 0 auto;
 }
 .home-channel-card {
   position: relative;
@@ -2644,29 +2757,31 @@ const GETSTARTED = [
 
 .home-channel-card-glow {
   position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 260px;
-  height: 260px;
+  top: -50px;
+  right: -50px;
+  width: 160px;
+  height: 160px;
   border-radius: 999px;
   background: radial-gradient(circle, var(--card-accent) 0%, transparent 70%);
-  filter: blur(60px);
-  opacity: 0.35;
+  filter: blur(40px);
+  opacity: 0.28;
   z-index: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
 }
 .home-channel-card:hover .home-channel-card-glow {
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
 .home-channel-card-head {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   z-index: 1;
-  flex-wrap: wrap;
+}
+.home-channel-card-logo {
+  flex-shrink: 0;
 }
 .home-channel-card-logo {
   display: inline-flex;
@@ -2697,8 +2812,8 @@ const GETSTARTED = [
 .home-channel-card-cta {
   margin-left: auto;
   white-space: nowrap;
-  align-self: flex-start;
-  margin-top: 6px;
+  align-self: center;
+  flex-shrink: 0;
 }
 .home-channel-card-brand {
   font-size: 20px;
@@ -2772,6 +2887,9 @@ const GETSTARTED = [
 }
 .home-channel-card:hover .home-channel-card-cta {
   transform: translateX(4px);
+}
+.home-channel-card--chatgpt .home-channel-card-cta {
+  color: var(--lb-brand);
 }
 
 @media (max-width: 860px) {
