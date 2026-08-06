@@ -39,10 +39,11 @@ Agent 會結合行情、賬戶等能力生成回答。當 Agent 需要你補充�
 
 ### Request Body
 
-| Name     | Type   | Required | Description                                        |
-| -------- | ------ | -------- | -------------------------------------------------- |
-| query    | string | YES      | 用戶問題，不能為空                                 |
-| chat_uid | string | NO       | 已有會話標識。傳入則在該會話中繼續提問，不傳則新建會話 |
+| Name              | Type   | Required | Description                                        |
+| ----------------- | ------ | -------- | -------------------------------------------------- |
+| query             | string | YES      | 用戶問題，不能為空                                 |
+| chat_uid          | string | NO       | 已有會話標識。傳入則在該會話中繼續提問，不傳則新建會話 |
+| parent_message_id | string | NO       | 父消息 ID，取上一輪響應中的 `message_id`。在已有會話中追加提問時傳入，將本輪消息掛在指定消息之後，保證消息流順序。僅在傳入 `chat_uid` 時有效，且父消息必須屬於該會話；新會話不可傳 |
 
 ### Request Example
 
