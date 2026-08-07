@@ -46,7 +46,7 @@ onBeforeUnmount(() => {
 })
 
 const CHATGPT_APP_URL = 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef'
-const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge-mcp'
+const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge'
 
 const LOCALE = {
   en: {
