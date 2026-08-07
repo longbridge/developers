@@ -15,7 +15,7 @@ const zhHKLocale = augmentLocale(_zhHKLocale)
 
 const { lang } = useData()
 const CHATGPT_APP_URL = 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef'
-const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge-mcp'
+const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge'
 
 const LOCALE = {
   en: {
@@ -25,7 +25,7 @@ const LOCALE = {
       title2: 'Unlock market insights, deep research and intelligent trading for your AI.',
       desc: 'For Claude Code, Codex, Gemini, and other agents, Longbridge Skill lets your AI <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">screen stocks</a>, decode earnings, track insider moves, and place orders in plain conversation.',
       chatgptLine:
-        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> and <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge-mcp">Claude</a> can install Longbridge directly — use <code>@longbridge</code> in ChatGPT, or the connector in Claude.',
+        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> and <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge">Claude</a> can install Longbridge directly — use <code>@longbridge</code> in ChatGPT, or the connector in Claude.',
       tabConnect: 'Connect AI',
       tabPrompt: 'Copy command',
       tabChatGPT: 'ChatGPT',
@@ -153,7 +153,7 @@ const LOCALE = {
       title2: '为您的 AI 解锁市场洞察、深度研究与智能交易',
       desc: 'Claude Code、Codex、Gemini 等 Agent 可通过 Longbridge Skill <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">筛选股票</a>、解读财报、追踪机构动向，并直接下单。',
       chatgptLine:
-        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 与 <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge-mcp">Claude</a> 都能直接安装 Longbridge——在 ChatGPT 中用 <code>@longbridge</code> 调用，在 Claude 中启用连接器即可。',
+        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 与 <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge">Claude</a> 都能直接安装 Longbridge——在 ChatGPT 中用 <code>@longbridge</code> 调用，在 Claude 中启用连接器即可。',
       tabConnect: 'Connect AI',
       tabPrompt: '复制命令',
       tabChatGPT: 'ChatGPT',
@@ -406,7 +406,7 @@ const LOCALE = {
       title2: '為您的 AI 解鎖市場洞察、深度研究與智能交易',
       desc: 'Claude Code、Codex、Gemini 等 Agent 可透過 Longbridge Skill <a href="https://longbridge.com/en/screener" target="_blank" rel="noreferrer">篩選股票</a>、解讀財報、追蹤機構動向，並直接下單。',
       chatgptLine:
-        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 與 <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge-mcp">Claude</a> 都能直接安裝 Longbridge——在 ChatGPT 中用 <code>@longbridge</code> 調用，在 Claude 中啟用連接器即可。',
+        '<a class="skill-chatgpt-link" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef">ChatGPT</a> 與 <a class="skill-chatgpt-link" href="https://claude.ai/directory/connectors/longbridge">Claude</a> 都能直接安裝 Longbridge——在 ChatGPT 中用 <code>@longbridge</code> 調用，在 Claude 中啟用連接器即可。',
       tabConnect: 'Connect AI',
       tabPrompt: '複製命令',
       tabChatGPT: 'ChatGPT',
