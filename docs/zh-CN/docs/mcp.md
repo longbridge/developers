@@ -67,9 +67,9 @@ Longbridge 已经作为官方 ChatGPT App 提供。
 由于 ChatGPT 平台规则限制，Longbridge ChatGPT App 不含下单及其他交易相关工具。如需使用交易功能，请改用 Claude Code、Cursor 等其他 MCP 客户端。
 :::
 
-### claude.ai
+### Claude
 
-Longbridge 已作为官方连接器上架 Claude 应用目录。
+Longbridge 已作为官方连接器上架 [Claude](https://claude.ai/directory/connectors/longbridge) 应用目录。
 
 在 claude.ai 网页版或 Claude 桌面端中：
 
@@ -77,7 +77,7 @@ Longbridge 已作为官方连接器上架 Claude 应用目录。
 2. 在下拉菜单中选择 **Browser Connectors**，搜索 `longbridge`
 3. 选择 **Longbridge**，按提示完成授权登录
 
-也可直接打开 [Longbridge 连接器](https://claude.ai/directory/connectors/longbridge)。
+也可直接打开 Claude - [Longbridge Connector](https://claude.ai/directory/connectors/longbridge)
 
 ### Claude Code
 
