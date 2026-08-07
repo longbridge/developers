@@ -67,11 +67,11 @@ After authorization, prefix every message with `@longbridge` to send it to Longb
 Due to ChatGPT platform policies, the Longbridge ChatGPT App does not include order placement and other trading tools. To use trading features, switch to Claude Code, Cursor, or another MCP client.
 :::
 
-### claude.ai
+### Claude
 
 Longbridge is available as an official connector in Claude's directory.
 
-On claude.ai web or Claude Desktop:
+On [Claude](https://claude.ai) web or Claude Desktop:
 
 1. Click **Customize** → **Connectors**, then click the **Add** button
 2. Select **Browser Connectors** from the dropdown and search for `longbridge`
