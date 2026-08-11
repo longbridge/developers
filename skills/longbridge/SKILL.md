@@ -139,6 +139,7 @@ Add Longbridge API docs to IDE/RAG       LLMs.txt / Markdown API
 ### AI Integration
 
 - **MCP** — ChatGPT Apps, hosted service, self-hosted server, setup & auth: [references/mcp.md](references/mcp.md)
+- **A2A Agent Chat** — discover and chat with Longbridge AI agents from the CLI (`longbridge agent list` / `longbridge agent chat`); run `longbridge agent --skill` for the complete agent-to-agent workflow document.
 - **LLMs & Markdown** — llms.txt, `open.longbridge.com` doc Markdown, `longbridge.com` live news/quote pages (`.md` suffix + Accept header), Cursor/IDE integration: [references/llm.md](references/llm.md)
 
 Load specific reference files on demand — do not load all at once.

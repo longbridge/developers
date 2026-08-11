@@ -115,6 +115,28 @@ longbridge filing list TSLA.US
 longbridge filing detail TSLA.US 610186794100660481 --file-index 0
 ```
 
+### A2A agent chat
+
+Chat with Longbridge AI agents (research assistants, screeners, custom
+agents) directly from the CLI:
+
+```bash
+longbridge agent list --format json                 # discover chat agents (--all adds workflow agents)
+longbridge agent chat <UID> "<query>" --format json # returns answer + widgets + references
+longbridge agent chat <UID> <CHAT_UID> <MSG_ID> "<follow-up>"
+longbridge agent continue <UID> <CHAT_UID> <MSG_ID> --answer "…"  # resume interrupted runs
+```
+
+Responses aggregate a server-sent-event stream; runs can take 1–2 minutes.
+Serialize calls — bursts are rejected with rate-limit code 429002. Run
+`longbridge agent --skill` for the full A2A workflow document, and rely on
+`--help` for flag details.
+
+Listing is scoped to workspaces you own, but any published agent is chattable
+by uid, so you can talk to more agents than the command can enumerate. Public
+ones appear under workspace `Public: Longbridge` — currently `chatbot`
+(LongbridgeAI). A uid absent from the list is still worth trying.
+
 ## Extended Hours (Pre/Post Market)
 
 `quote`, `intraday`, `kline`, `kline history` all support extended-hours data. Use `longbridge <command> --help` for exact flags — key points:
