@@ -62,9 +62,29 @@ const year = new Date().getFullYear()
         <ul>
           <li><a :href="localePath('/skill')">AI Skill</a></li>
           <li><a :href="localePath('/docs/cli')">CLI</a></li>
-          <li><a :href="localePath('/docs/mcp')">MCP</a></li>
           <li><a :href="localePath('/docs/llm')">LLMs</a></li>
           <li><a href="https://navi-lang.org" target="_blank">Navi</a></li>
+        </ul>
+      </div>
+
+      <!-- AI Integrations -->
+      <div>
+        <h5>{{ t('footer.integrations') }}</h5>
+        <ul>
+          <li><a :href="localePath('/docs/mcp')">MCP</a></li>
+          <li>
+            <a
+              href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef"
+              target="_blank"
+              rel="noreferrer"
+              >ChatGPT App</a
+            >
+          </li>
+          <li>
+            <a href="https://claude.ai/directory/connectors/longbridge" target="_blank" rel="noreferrer"
+              >Claude Connector</a
+            >
+          </li>
         </ul>
       </div>
 
