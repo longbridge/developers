@@ -30,13 +30,14 @@
 import { computed } from 'vue'
 
 interface Props {
-  module?: 'quote' | 'trade'
-  klass?: 'QuoteContext' | 'TradeContext'
+  module?: 'quote' | 'trade' | 'grid'
+  klass?: 'QuoteContext' | 'TradeContext' | 'GridContext'
   method: string
   go?: string
   java?: string
   level?: number
   title?: string | boolean
+  hideGo?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -238,6 +239,7 @@ const links = computed(() => {
       url: cppClassUrl.value,
     },
   ]
-  return baseLinks
+  // The Go SDK has no grid-trading bindings yet; allow hiding the Go row.
+  return props.hideGo ? baseLinks.filter((l) => l.title !== 'Go') : baseLinks
 })
 </script>
