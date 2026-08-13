@@ -1,6 +1,6 @@
 ---
 slug: symbol_info
-sidebar_position: 11
+sidebar_position: 0.5
 title: 网格标的信息
 sidebar_label: '标的信息'
 search: true

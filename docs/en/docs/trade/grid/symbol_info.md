@@ -1,6 +1,6 @@
 ---
 slug: symbol_info
-sidebar_position: 11
+sidebar_position: 0.5
 title: Grid Symbol Info
 sidebar_label: 'Symbol Info'
 language_tabs: false
