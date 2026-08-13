@@ -5,7 +5,7 @@ sidebar_position: 2
 
 ## Q1: What types of orders are supported?
 
-Both paper and live accounts support regular Limit orders, Market orders, and Conditional orders (such as Buy if touched, Sell if touched, etc.), but do not currently support Attached orders and Grid orders.
+Both paper and live accounts support regular Limit orders, Market orders, and Conditional orders (such as Buy if touched, Sell if touched, etc.), but do not currently support Attached orders. Grid orders are supported via the [Grid Trading](/docs/trade/grid/overview) API.
 
 ## Q2: What are the trading hours for paper accounts?
 

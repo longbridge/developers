@@ -132,3 +132,29 @@ message Notification {
   bytes data = 4;
 }
 ```
+
+## 網格訂單推送
+
+網格主訂單的變更與普通訂單變更走**同一個 `private` 主題**。訂閱 private 主題後，當網格主訂單發生變更（建立、掛起、重啟、觸發、撤銷等）時，交易網關會推送 `gridtrading_order` 事件。設置網格訂單變更回調即可接收。
+
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="set_on_grid_order_changed" java="setOnGridOrderChange" hideGo />
+
+事件包含以下欄位：
+
+| 名稱 | 類型 | 說明 |
+| ---- | ---- | ---- |
+| order_id | string | 網格主訂單 ID |
+| status | string | 訂單狀態 |
+| symbol | string | 標的代碼（如 `700.HK`） |
+| suspend_reason | string | 掛起原因（如有） |
+| submitted_base_price | string | 提交時的基準價 |
+| current_base_price | string | 當前基準價 |
+| upper_limit_price | string | 價格上限 |
+| lower_limit_price | string | 價格下限 |
+| trigger_price_type | int32 | `1` = 價差，`2` = 百分比 |
+| trigger_quantity | string | 每次觸發數量 |
+| settlement_currency | string | 結算幣種 |
+| time_in_force | int32 | `0` = 當日，`1` = GTC，`6` = GTD |
+| rth | int32 | 盤中交易時段標記 |
+| grid_order_type_up | string | 深度為 0 時的賣出訂單類型 |
+| grid_order_type_down | string | 深度為 0 時的買入訂單類型 |
