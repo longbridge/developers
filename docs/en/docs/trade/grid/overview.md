@@ -40,22 +40,6 @@ Grid trading requires the **Trade** permission on your access token. You must al
 5. Review what the grid has triggered — [Trigger History](./trigger_history).
 6. Adjust or stop the grid — [Suspend](./suspend), [Restart](./restart), [Replace](./replace), or [Cancel](./cancel).
 
-## Grid endpoints
-
-| Method | Path | Page | Purpose |
-| ------ | ---- | ---- | ------- |
-| POST | `/v1/gridtrading/submit` | [Submit Grid Order](./submit) | Submit a grid strategy order |
-| POST | `/v1/gridtrading/replace` | [Replace Grid Order](./replace) | Modify an existing grid order's rule |
-| GET | `/v1/gridtrading/list` | [List Grid Orders](./list) | Paged list of grid orders (with filters) |
-| POST | `/v1/gridtrading/list` | [List Grid Orders by IDs](./list_by_ids) | Query specific grid orders by IDs |
-| GET | `/v1/gridtrading/detail` | [Grid Order Detail](./detail) | Grid order detail with sub-orders and history |
-| GET | `/v1/gridtrading/trigger_history_list` | [Trigger History](./trigger_history) | Paged trigger history for one grid order |
-| POST | `/v1/gridtrading/cancel` | [Cancel Grid Order](./cancel) | Cancel a grid order |
-| POST | `/v1/gridtrading/suspend` | [Suspend Grid Order](./suspend) | Suspend a running grid order |
-| POST | `/v1/gridtrading/restart` | [Restart Grid Order](./restart) | Restart a suspended grid order |
-| POST | `/v1/record/questionnaire` | [Submit Strategy Questionnaire](./questionnaire) | Record strategy risk-disclosure consent |
-| GET | `/v1/orders/info` | [Grid Symbol Info](./symbol_info) | Security info for building a grid order |
-
 ## Quickstart (CLI)
 
 <CliCommand>

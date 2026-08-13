@@ -36,22 +36,6 @@ headingLevel: 3
 5. 查看网格已触发的记录 —— [触发历史](./trigger_history)。
 6. 调整或停止网格 —— [挂起](./suspend)、[重启](./restart)、[修改](./replace) 或 [撤销](./cancel)。
 
-## 网格接口
-
-| Method | Path | 页面 | 用途 |
-| ------ | ---- | ---- | ---- |
-| POST | `/v1/gridtrading/submit` | [提交网格订单](./submit) | 提交网格策略订单 |
-| POST | `/v1/gridtrading/replace` | [修改网格订单](./replace) | 修改现有网格订单的规则 |
-| GET | `/v1/gridtrading/list` | [网格订单列表](./list) | 分页查询网格订单（支持筛选） |
-| POST | `/v1/gridtrading/list` | [按 ID 查询网格订单](./list_by_ids) | 按 ID 查询指定网格订单 |
-| GET | `/v1/gridtrading/detail` | [网格订单详情](./detail) | 网格订单详情，含子订单与历史 |
-| GET | `/v1/gridtrading/trigger_history_list` | [触发历史](./trigger_history) | 分页查询单个网格订单的触发历史 |
-| POST | `/v1/gridtrading/cancel` | [撤销网格订单](./cancel) | 撤销网格订单 |
-| POST | `/v1/gridtrading/suspend` | [挂起网格订单](./suspend) | 挂起运行中的网格订单 |
-| POST | `/v1/gridtrading/restart` | [重启网格订单](./restart) | 重启已挂起的网格订单 |
-| POST | `/v1/record/questionnaire` | [提交策略问卷](./questionnaire) | 记录策略风险披露同意 |
-| GET | `/v1/orders/info` | [网格标的信息](./symbol_info) | 用于构建网格订单的标的信息 |
-
 ## 快速开始（CLI）
 
 <CliCommand>

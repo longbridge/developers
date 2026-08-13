@@ -40,22 +40,6 @@ headingLevel: 2
 5. 查看網格已觸發的記錄 —— [觸發歷史](./trigger_history)。
 6. 調整或停止網格 —— [掛起](./suspend)、[重啟](./restart)、[修改](./replace) 或 [撤銷](./cancel)。
 
-## 網格接口
-
-| Method | Path | 頁面 | 用途 |
-| ------ | ---- | ---- | ---- |
-| POST | `/v1/gridtrading/submit` | [提交網格訂單](./submit) | 提交網格策略訂單 |
-| POST | `/v1/gridtrading/replace` | [修改網格訂單](./replace) | 修改現有網格訂單的規則 |
-| GET | `/v1/gridtrading/list` | [網格訂單列表](./list) | 分頁查詢網格訂單（支持篩選） |
-| POST | `/v1/gridtrading/list` | [按 ID 查詢網格訂單](./list_by_ids) | 按 ID 查詢指定網格訂單 |
-| GET | `/v1/gridtrading/detail` | [網格訂單詳情](./detail) | 網格訂單詳情，含子訂單與歷史 |
-| GET | `/v1/gridtrading/trigger_history_list` | [觸發歷史](./trigger_history) | 分頁查詢單個網格訂單的觸發歷史 |
-| POST | `/v1/gridtrading/cancel` | [撤銷網格訂單](./cancel) | 撤銷網格訂單 |
-| POST | `/v1/gridtrading/suspend` | [掛起網格訂單](./suspend) | 掛起運行中的網格訂單 |
-| POST | `/v1/gridtrading/restart` | [重啟網格訂單](./restart) | 重啟已掛起的網格訂單 |
-| POST | `/v1/record/questionnaire` | [提交策略問卷](./questionnaire) | 記錄策略風險披露同意 |
-| GET | `/v1/orders/info` | [網格標的信息](./symbol_info) | 用於構建網格訂單的標的信息 |
-
 ## 快速開始（CLI）
 
 <CliCommand>
