@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
+
+- **新增網格交易 `grid` 命令組** — `grid submit` 啟動網格策略（基準價 / 上限價 / 下限價、按百分比或價差觸發、每次觸發與邊界數量、`GMO` / `GLO` / `GTG` 訂單類型；`--dry-run` 只校驗不提交）；`grid` 列出網格，`grid --ids` 按 ID 查詢指定網格
+- **查看與管理運行中的網格** — `grid detail` 與 `grid triggers` 展示規則、子訂單與觸發歷史；`grid replace`、`grid suspend`、`grid restart`、`grid cancel` 修改或停止網格
+- **網格準備輔助命令** — `grid info` 查看標的的網格信息（每手股數、最新價、授權狀態、幣種），`grid questionnaire` 記錄網格交易前所需的一次性策略風險揭示確認
+
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
 - **新增 TUI 設定彈窗（`Ctrl+,`）** — 首個設定項為漲跌顏色（紅漲 / 綠漲），即時生效並寫入 `~/.longbridge/terminal.json`，重啟後保留

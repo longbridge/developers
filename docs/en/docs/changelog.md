@@ -6,6 +6,18 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-08-14
+
+- **Grid trading is now available** — automate a buy-low / sell-high grid strategy on Hong Kong and US stocks through the API, SDK, and CLI: submit a grid, modify its rule, suspend / restart / cancel it, and review its trigger history. See the [Grid Trading](/docs/trade/grid/overview) docs
+
+### SDK v4.5.0
+
+- **Grid trading APIs** — new `GridContext` (submit, replace, list, detail, trigger history, cancel, suspend, restart, questionnaire, symbol info) in Python, Node.js, Java, and C/C++, plus the `GridOrderChanged` push event on the trade channel
+
+### CLI v0.27.0
+
+- **New `grid` command group** — `grid submit` starts a grid strategy and `grid` lists them; `grid detail` / `grid triggers` inspect a grid; `grid replace` / `grid suspend` / `grid restart` / `grid cancel` manage it; `grid info` and `grid questionnaire` cover setup
+
 ## 2026-07-20
 
 - **US accounts can sign in to Longbridge Developers** — US accounts are now supported for login and API access. Note that the mainland-China `.cn` domains (`openapi.longbridge.cn`, `openapi-quote.longbridge.cn`, `openapi-trade.longbridge.cn`) do not serve US accounts; use the default domains instead

@@ -7,6 +7,12 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
+
+- **New `grid` command group for grid trading** — `grid submit` starts a grid strategy (base / upper / lower price, percent or spread triggers, per-trigger and boundary quantities, `GMO` / `GLO` / `GTG` order types; `--dry-run` validates without submitting); `grid` lists grids and `grid --ids` queries specific ones
+- **Inspect and manage a running grid** — `grid detail` and `grid triggers` show the rule, sub-orders, and trigger history; `grid replace`, `grid suspend`, `grid restart`, and `grid cancel` modify or stop a grid
+- **Grid setup helpers** — `grid info` shows a symbol's grid info (lot size, last price, authorization, currency), and `grid questionnaire` records the one-time strategy risk-disclosure consent required before grid trading
+
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
 - **New TUI settings modal (`Ctrl+,`)** — first setting is up/down colors (red-up vs green-up); applied instantly and remembered across restarts in `~/.longbridge/terminal.json`

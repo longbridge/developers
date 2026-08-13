@@ -6,6 +6,18 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-08-14
+
+- **網格交易正式上線** — 可通過 API、SDK、CLI 在港股與美股上自動運行低買高賣的網格策略：提交網格、修改規則、暫停 / 重啟 / 取消，並查看觸發歷史。詳見 [網格交易](/zh-HK/docs/trade/grid/overview) 文檔
+
+### SDK v4.5.0
+
+- **網格交易 API** — 新增 `GridContext`（submit、replace、list、detail、觸發歷史、cancel、suspend、restart、questionnaire、symbol info），覆蓋 Python、Node.js、Java 與 C/C++，並在交易通道新增 `GridOrderChanged` 推送事件
+
+### CLI v0.27.0
+
+- **新增 `grid` 命令組** — `grid submit` 啟動網格策略，`grid` 列出網格；`grid detail` / `grid triggers` 查看網格詳情；`grid replace` / `grid suspend` / `grid restart` / `grid cancel` 管理網格；`grid info` 與 `grid questionnaire` 用於準備工作
+
 ## 2026-07-20
 
 - **Developers 平台支持美國賬戶登入** — 美國賬戶現已支持登入與接口調用。注意國內 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美國賬戶，請使用默認域名
