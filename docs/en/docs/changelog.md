@@ -8,7 +8,7 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
-- **Grid trading is now available** — automate a buy-low / sell-high grid strategy on Hong Kong and US stocks through the API, SDK, and CLI: submit a grid, modify its rule, suspend / restart / cancel it, and review its trigger history. See the [Grid Trading](/docs/trade/grid/overview) docs
+- **Grid trading is now available** — automate a buy-low / sell-high grid strategy on Hong Kong and US stocks through the API, SDK, CLI, and MCP: submit a grid, modify its rule, suspend / restart / cancel it, and review its trigger history. See the [Grid Trading](/docs/trade/grid/overview) docs
 
 ### SDK v4.5.0
 
@@ -17,6 +17,10 @@ sidebar_icon: newspaper
 ### CLI v0.27.0
 
 - **New `grid` command group** — `grid submit` starts a grid strategy and `grid` lists them; `grid detail` / `grid triggers` inspect a grid; `grid replace` / `grid suspend` / `grid restart` / `grid cancel` manage it; `grid info` and `grid questionnaire` cover setup
+
+### MCP
+
+- **11 grid trading tools added** — the full grid endpoint set (submit, replace, list, query-by-IDs, detail, trigger history, cancel, suspend, restart, questionnaire, symbol info) is now available through Longbridge MCP
 
 ## 2026-07-20
 

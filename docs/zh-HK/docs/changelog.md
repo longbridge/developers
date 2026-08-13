@@ -8,7 +8,7 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
-- **網格交易正式上線** — 可通過 API、SDK、CLI 在港股與美股上自動運行低買高賣的網格策略：提交網格、修改規則、暫停 / 重啟 / 取消，並查看觸發歷史。詳見 [網格交易](/zh-HK/docs/trade/grid/overview) 文檔
+- **網格交易正式上線** — 可通過 API、SDK、CLI、MCP 在港股與美股上自動運行低買高賣的網格策略：提交網格、修改規則、暫停 / 重啟 / 取消，並查看觸發歷史。詳見 [網格交易](/zh-HK/docs/trade/grid/overview) 文檔
 
 ### SDK v4.5.0
 
@@ -17,6 +17,10 @@ sidebar_icon: newspaper
 ### CLI v0.27.0
 
 - **新增 `grid` 命令組** — `grid submit` 啟動網格策略，`grid` 列出網格；`grid detail` / `grid triggers` 查看網格詳情；`grid replace` / `grid suspend` / `grid restart` / `grid cancel` 管理網格；`grid info` 與 `grid questionnaire` 用於準備工作
+
+### MCP
+
+- **新增 11 個網格交易工具** — 網格全套接口（提交、修改、列表、按 ID 查詢、詳情、觸發歷史、取消、掛起、重啟、策略問卷、標的信息）現已在 Longbridge MCP 提供
 
 ## 2026-07-20
 

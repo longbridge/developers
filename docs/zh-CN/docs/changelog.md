@@ -8,7 +8,7 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
-- **网格交易正式上线** — 可通过 API、SDK、CLI 在港股与美股上自动运行低买高卖的网格策略：提交网格、修改规则、暂停 / 重启 / 取消，并查看触发历史。详见 [网格交易](/zh-CN/docs/trade/grid/overview) 文档
+- **网格交易正式上线** — 可通过 API、SDK、CLI、MCP 在港股与美股上自动运行低买高卖的网格策略：提交网格、修改规则、暂停 / 重启 / 取消，并查看触发历史。详见 [网格交易](/zh-CN/docs/trade/grid/overview) 文档
 
 ### SDK v4.5.0
 
@@ -17,6 +17,10 @@ sidebar_icon: newspaper
 ### CLI v0.27.0
 
 - **新增 `grid` 命令组** — `grid submit` 启动网格策略，`grid` 列出网格；`grid detail` / `grid triggers` 查看网格详情；`grid replace` / `grid suspend` / `grid restart` / `grid cancel` 管理网格；`grid info` 与 `grid questionnaire` 用于准备工作
+
+### MCP
+
+- **新增 11 个网格交易工具** — 网格全套接口（提交、修改、列表、按 ID 查询、详情、触发历史、取消、挂起、重启、策略问卷、标的信息）现已在 Longbridge MCP 提供
 
 ## 2026-07-20
 
