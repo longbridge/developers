@@ -16,7 +16,9 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
-- **新增 `grid` 命令組** — `grid submit` 啟動網格策略，`grid` 列出網格；`grid detail` / `grid triggers` 查看網格詳情；`grid replace` / `grid suspend` / `grid restart` / `grid cancel` 管理網格；`grid info` 與 `grid questionnaire` 用於準備工作
+- **新增 `grid` 命令組** — 提交與管理網格策略訂單：`grid submit` / `detail` / `triggers` / `replace` / `suspend` / `restart` / `cancel` / `info` / `questionnaire`
+- **新增 `agent` 命令（A2A）** — 在終端發現並驅動 Longbridge AI Agent：`workspace list`、`agent list`，以及流式 `agent chat` / `agent continue`
+- **新增 `acp` 運行時** — 通過 Agent Client Protocol 暴露 Longbridge AI Agent（`longbridge acp`），內置 Codex / Claude 適配器預設
 
 ### MCP
 

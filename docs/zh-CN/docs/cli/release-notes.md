@@ -12,6 +12,8 @@ sidebar_icon: newspaper
 - **新增网格交易 `grid` 命令组** — `grid submit` 启动网格策略（基准价 / 上限价 / 下限价、按百分比或价差触发、每次触发与边界数量、`GMO` / `GLO` / `GTG` 订单类型；`--dry-run` 只校验不提交）；`grid` 列出网格，`grid --ids` 按 ID 查询指定网格
 - **查看与管理运行中的网格** — `grid detail` 与 `grid triggers` 展示规则、子订单与触发历史；`grid replace`、`grid suspend`、`grid restart`、`grid cancel` 修改或停止网格
 - **网格准备辅助命令** — `grid info` 查看标的的网格信息（每手股数、最新价、授权状态、币种），`grid questionnaire` 记录网格交易前所需的一次性策略风险揭示确认
+- **新增 Longbridge AI Agent（A2A）`agent` 命令** — `workspace list`、`agent list` 发现 Agent；`agent chat` 发起对话（`--stream` 走 SSE 流式），`agent continue` 恢复被中断的运行；所有命令支持 `--format json`，`agent --skill` 输出面向 AI harness 的 A2A 文档
+- **新增 `acp` 运行时** — `longbridge acp` 通过 Agent Client Protocol 暴露 Longbridge AI Agent，基于新的 `longbridge-ai-acp` crate（内嵌与 stdio 会话），内置 Codex 与 Claude ACP 适配器预设
 
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
