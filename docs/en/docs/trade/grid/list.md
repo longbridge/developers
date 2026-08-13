@@ -33,6 +33,8 @@ longbridge grid --symbol 700.HK --status Performing
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name       | Type   | Required | Description                                                                              |
 | ---------- | ------ | -------- | ---------------------------------------------------------------------------------------- |
 | page       | int32  | NO       | Page number, starts at `1`                                                               |
@@ -246,8 +248,64 @@ int main(int argc, char const* argv[]) {
 
 | Status | Description                                                      | Schema |
 | ------ | ---------------------------------------------------------------- | ------ |
-| 200    | The grid order list was returned successfully.                   | None   |
+| 200    | The grid order list was returned successfully.                   | [list_grid_orders_rsp](#schemalist_grid_orders_rsp)   |
 | 400    | The request was rejected with an incorrect request parameter.    | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### list_grid_orders_rsp
+
+<a id="schemalist_grid_orders_rsp"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| grid_order | object[] | false | Grid orders |
+| ∟ order_id | string | true | Grid order ID |
+| ∟ symbol | string | true | Stock symbol, use `ticker.region` format, example: `AAPL.US` |
+| ∟ stock_name | string | true | Stock name |
+| ∟ market | string | true | Market |
+| ∟ status | string | true | Grid order status |
+| ∟ grid_status | string | true | Grid running status |
+| ∟ submitted_base_price | string | true | Base price submitted when the grid was created |
+| ∟ current_base_price | string | true | Current base price |
+| ∟ pre_trigger_base_price | string | true | Base price before the last trigger |
+| ∟ post_trigger_base_price | string | true | Base price after the last trigger |
+| ∟ upper_limit_price | string | true | Upper price bound |
+| ∟ lower_limit_price | string | true | Lower price bound |
+| ∟ trigger_price_type | int32 | true | Trigger price type<br/><br/>**Enum Value:**<br/>`1` - Spread<br/>`2` - Percent |
+| ∟ trigger_spread_up | string | true | Upward trigger spread |
+| ∟ trigger_spread_down | string | true | Downward trigger spread |
+| ∟ trigger_percent_up | string | true | Upward trigger percent |
+| ∟ trigger_percent_down | string | true | Downward trigger percent |
+| ∟ pullback_percent | string | true | Pullback percent |
+| ∟ pullback_spread | string | true | Pullback spread |
+| ∟ rebound_percent | string | true | Rebound percent |
+| ∟ rebound_spread | string | true | Rebound spread |
+| ∟ trigger_sell_order_type | string | true | Sell-side order type |
+| ∟ trigger_buy_order_type | string | true | Buy-side order type |
+| ∟ trigger_sell_depth | int32 | true | Sell-side order-book depth |
+| ∟ trigger_buy_depth | int32 | true | Buy-side order-book depth |
+| ∟ trigger_quantity | string | true | Quantity per trigger |
+| ∟ trigger_sell_quantity | string | true | Sell-side trigger quantity |
+| ∟ trigger_buy_quantity | string | true | Buy-side trigger quantity |
+| ∟ upper_limit_quantity | string | true | Quantity handled at the upper bound |
+| ∟ lower_limit_quantity | string | true | Quantity handled at the lower bound |
+| ∟ upper_limit_event | int32 | true | Action when the upper bound is reached<br/><br/>**Enum Value:**<br/>`1` - Ignore<br/>`2` - Close position at last price |
+| ∟ lower_limit_event | int32 | true | Action when the lower bound is reached<br/><br/>**Enum Value:**<br/>`1` - Ignore<br/>`2` - Close position at last price |
+| ∟ multiple_trigger | boolean | true | Whether a single grid level can trigger multiple times |
+| ∟ trigger_times | int32 | true | Number of times triggered |
+| ∟ total_buy_quantity | string | true | Total bought quantity |
+| ∟ total_sell_quantity | string | true | Total sold quantity |
+| ∟ total_profit_balance | string | true | Total realized profit |
+| ∟ settlement_currency | string | true | Settlement currency |
+| ∟ time_in_force | int32 | true | Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC (Good-Til-Canceled)<br/>`6` - GTD (Good-Til-Date) |
+| ∟ gtd | string | true | GTD expiration date, format: `YYYY-MM-DD` |
+| ∟ created_at | string | true | Creation time, in RFC3339 format |
+| ∟ rth | int32 | true | Regular trading hours flag |
+| ∟ support_shortsell | boolean | true | Whether short selling is allowed |
+| ∟ grid_order_type_up | string | true | Sell-side order type used when the depth is `0` |
+| ∟ grid_order_type_down | string | true | Buy-side order type used when the depth is `0` |
+| has_more | boolean | true | Whether there are more pages |

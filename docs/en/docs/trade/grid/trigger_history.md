@@ -31,6 +31,8 @@ longbridge grid triggers 764609681686573056
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name          | Type   | Required | Description                                            |
 | ------------- | ------ | -------- | ------------------------------------------------------ |
 | grid_order_id | string | YES      | Grid order ID, example: `764609681686573056`           |
@@ -173,42 +175,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### Response Fields
-
-The `data` object contains:
-
-| Name           | Type    | Description                                             |
-| -------------- | ------- | ------------------------------------------------------- |
-| trigger_orders | object[]| Trigger orders, see [TriggerOrder](#triggerorder)       |
-| has_more       | boolean | Whether more pages are available                        |
-
-#### TriggerOrder
-
-An order placed by the grid when a trigger fired.
-
-| Name           | Type   | Description                                                            |
-| -------------- | ------ | ---------------------------------------------------------------------- |
-| id             | string | Trigger order ID                                                       |
-| status         | string | Order status                                                           |
-| name           | string | Security name                                                          |
-| symbol         | string | Security symbol, `ticker.region` format                                |
-| price          | string | Order price                                                            |
-| quantity       | string | Order quantity                                                         |
-| executed_price | string | Executed price                                                         |
-| executed_qty   | string | Executed quantity                                                      |
-| submitted_at   | string | Submission time, RFC3339 format                                        |
-| action         | int32  | Buy/sell direction                                                     |
-| order_type     | string | Order type                                                             |
-| trigger_price  | string | Price that triggered this order                                        |
-| msg            | string | Additional message                                                     |
-| currency       | string | Order currency                                                         |
-| last_done      | string | Last traded price at trigger time                                      |
-| updated_at     | string | Last update time, RFC3339 format                                       |
-| time_in_force  | int32  | Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD |
-| gtd            | string | Good-Til-Date, `YYYY-MM-DD` format                                     |
-| trigger_at     | string | Trigger time, RFC3339 format                                           |
-| trigger_status | int32  | Trigger status                                                         |
-
 ### Response Example
 
 ```json
@@ -249,8 +215,39 @@ An order placed by the grid when a trigger fired.
 
 | Status | Description                                            | Schema |
 | ------ | ------------------------------------------------------ | ------ |
-| 200    | The trigger history was returned successfully.         | None   |
+| 200    | The trigger history was returned successfully.         | [grid_trigger_history_rsp](#schemagrid_trigger_history_rsp) |
 | 400    | The request was rejected with an incorrect parameter.  | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_trigger_history_rsp
+
+<a id="schemagrid_trigger_history_rsp"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| trigger_orders | object[] | false | Triggered orders |
+| ∟ id | string | true | Trigger order ID |
+| ∟ status | string | true | Order status |
+| ∟ name | string | true | Security name |
+| ∟ symbol | string | true | Security symbol, `ticker.region` format |
+| ∟ price | string | true | Order price |
+| ∟ quantity | string | true | Order quantity |
+| ∟ executed_price | string | true | Executed price |
+| ∟ executed_qty | string | true | Executed quantity |
+| ∟ submitted_at | string | true | Submission time, RFC3339 format |
+| ∟ action | int32 | true | Buy/sell direction |
+| ∟ order_type | string | true | Order type |
+| ∟ trigger_price | string | true | Price that triggered this order |
+| ∟ msg | string | true | Additional message |
+| ∟ currency | string | true | Order currency |
+| ∟ last_done | string | true | Last traded price at trigger time |
+| ∟ updated_at | string | true | Last update time, RFC3339 format |
+| ∟ time_in_force | int32 | true | Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD |
+| ∟ gtd | string | true | Good-Til-Date, `YYYY-MM-DD` format |
+| ∟ trigger_at | string | true | Trigger time, RFC3339 format |
+| ∟ trigger_status | int32 | true | Trigger status |
+| has_more | boolean | false | Whether more pages are available |

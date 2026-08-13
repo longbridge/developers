@@ -31,6 +31,8 @@ longbridge grid detail 764609681686573056
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name       | Type   | Required | Description                                                                          |
 | ---------- | ------ | -------- | ------------------------------------------------------------------------------------ |
 | order_id   | string | YES      | Grid order ID, example: `764609681686573056`                                         |
@@ -169,85 +171,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### Response Fields
-
-The `data` object is a `GridOrderDetail`:
-
-| Name                 | Type    | Description                                                                                                    |
-| -------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| order_id             | string  | Grid order ID                                                                                                  |
-| symbol               | string  | Security symbol, `ticker.region` format                                                                        |
-| stock_name           | string  | Security name                                                                                                  |
-| status               | string  | Grid order status, example: `Performing` / `Suspended`                                                        |
-| grid_status          | string  | Detailed grid running status                                                                                  |
-| suspend_reason       | string  | Reason the grid is suspended, empty when running                                                              |
-| sleeping_reason      | string  | Reason the grid is dormant, empty when active                                                                 |
-| submitted_base_price | string  | Base price the grid was anchored to at submission                                                             |
-| current_base_price   | string  | Current base price after triggers                                                                             |
-| upper_limit_price    | string  | Upper price bound                                                                                             |
-| lower_limit_price    | string  | Lower price bound                                                                                             |
-| trigger_price_type   | int32   | How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent |
-| trigger_spread_up    | string  | Upward trigger spread (when `trigger_price_type` is `1`)                                                      |
-| trigger_spread_down  | string  | Downward trigger spread (when `trigger_price_type` is `1`)                                                    |
-| trigger_percent_up   | string  | Upward trigger percent (when `trigger_price_type` is `2`)                                                     |
-| trigger_percent_down | string  | Downward trigger percent (when `trigger_price_type` is `2`)                                                   |
-| pullback_percent     | string  | Pullback percent                                                                                             |
-| pullback_spread      | string  | Pullback spread                                                                                             |
-| rebound_percent      | string  | Rebound percent                                                                                             |
-| rebound_spread       | string  | Rebound spread                                                                                             |
-| multiple_trigger     | boolean | Whether a single grid level may trigger multiple times                                                       |
-| time_in_force        | int32   | Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD                              |
-| trigger_quantity     | string  | Quantity per trigger                                                                                         |
-| trigger_sell_quantity| string  | Cumulative quantity triggered on the sell side                                                              |
-| trigger_buy_quantity | string  | Cumulative quantity triggered on the buy side                                                               |
-| upper_limit_quantity | string  | Quantity handled when the upper bound is reached                                                            |
-| lower_limit_quantity | string  | Quantity handled when the lower bound is reached                                                            |
-| upper_limit_event    | int32   | Action at the upper bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price   |
-| lower_limit_event    | int32   | Action at the lower bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price   |
-| trigger_sell_depth   | int32   | Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up`                                          |
-| trigger_buy_depth    | int32   | Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down`                                         |
-| created_at           | string  | Creation time, RFC3339 format                                                                               |
-| updated_at           | string  | Last update time, RFC3339 format                                                                            |
-| settlement_currency  | string  | Settlement currency, example: `HKD`                                                                         |
-| expire_time          | string  | Expiry time, RFC3339 format (when `time_in_force` is GTD)                                                   |
-| gtd                  | string  | Good-Til-Date, `YYYY-MM-DD` format                                                                          |
-| grid_sub_orders      | object[]| Executed sub-orders for this grid, see [GridOrderSubOrder](#gridordersuborder)                              |
-| sub_has_more         | boolean | Whether more sub-orders can be paged                                                                        |
-| grid_order_history   | object[]| Lifecycle history entries, see [GridOrderHistory](#gridorderhistory)                                        |
-| history_has_more     | boolean | Whether more history entries can be paged via `history_id`                                                  |
-| support_shortsell    | boolean | Whether short selling is allowed                                                                            |
-| rth                  | int32   | Regular-trading-hours flag (`0` / `1` / `2`)                                                                |
-| grid_order_type_up   | string  | Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`     |
-| grid_order_type_down | string  | Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`       |
-
-#### GridOrderSubOrder
-
-An executed order placed by the grid.
-
-| Name         | Type   | Description                                                       |
-| ------------ | ------ | ----------------------------------------------------------------- |
-| id           | string | Sub-order ID                                                      |
-| price        | string | Order price                                                       |
-| order_type   | string | Order type                                                        |
-| quantity     | string | Order quantity                                                    |
-| executed_qty | string | Executed quantity                                                 |
-| action       | int32  | Buy/sell direction                                                |
-| status       | string | Sub-order status                                                  |
-| submitted_at | string | Submission time, RFC3339 format                                   |
-| rth          | int32  | Regular-trading-hours flag (`0` / `1` / `2`)                      |
-
-#### GridOrderHistory
-
-A lifecycle event of the grid order.
-
-| Name           | Type   | Description                                      |
-| -------------- | ------ | ------------------------------------------------ |
-| history_id     | string | History entry ID, also used as the paging cursor |
-| created_at     | string | Event time, RFC3339 format                       |
-| status         | string | Grid status after the event                      |
-| suspend_reason | string | Suspend reason, when applicable                  |
-| reason         | string | Human-readable description of the event          |
-
 ### Response Example
 
 ```json
@@ -315,8 +238,75 @@ A lifecycle event of the grid order.
 
 | Status | Description                                          | Schema |
 | ------ | ---------------------------------------------------- | ------ |
-| 200    | The grid order detail was returned successfully.     | None   |
+| 200    | The grid order detail was returned successfully.     | [grid_order_detail_rsp](#schemagrid_order_detail_rsp) |
 | 400    | The request was rejected with an incorrect parameter.| None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_order_detail_rsp
+
+<a id="schemagrid_order_detail_rsp"></a>
+
+| Name                  | Type     | Required | Description                                                                                                    |
+| --------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| order_id              | string   | true     | Grid order ID                                                                                                  |
+| symbol                | string   | true     | Security symbol, `ticker.region` format                                                                        |
+| stock_name            | string   | true     | Security name                                                                                                  |
+| status                | string   | true     | Grid order status, example: `Performing` / `Suspended`                                                        |
+| grid_status           | string   | true     | Detailed grid running status                                                                                  |
+| suspend_reason        | string   | true     | Reason the grid is suspended, empty when running                                                              |
+| sleeping_reason       | string   | true     | Reason the grid is dormant, empty when active                                                                 |
+| submitted_base_price  | string   | true     | Base price the grid was anchored to at submission                                                             |
+| current_base_price    | string   | true     | Current base price after triggers                                                                             |
+| upper_limit_price     | string   | true     | Upper price bound                                                                                             |
+| lower_limit_price     | string   | true     | Lower price bound                                                                                             |
+| trigger_price_type    | int32    | true     | How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent |
+| trigger_spread_up     | string   | true     | Upward trigger spread (when `trigger_price_type` is `1`)                                                      |
+| trigger_spread_down   | string   | true     | Downward trigger spread (when `trigger_price_type` is `1`)                                                    |
+| trigger_percent_up    | string   | true     | Upward trigger percent (when `trigger_price_type` is `2`)                                                     |
+| trigger_percent_down  | string   | true     | Downward trigger percent (when `trigger_price_type` is `2`)                                                   |
+| pullback_percent      | string   | true     | Pullback percent                                                                                             |
+| pullback_spread       | string   | true     | Pullback spread                                                                                             |
+| rebound_percent       | string   | true     | Rebound percent                                                                                             |
+| rebound_spread        | string   | true     | Rebound spread                                                                                             |
+| multiple_trigger      | boolean  | true     | Whether a single grid level may trigger multiple times                                                       |
+| time_in_force         | int32    | true     | Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD                              |
+| trigger_quantity      | string   | true     | Quantity per trigger                                                                                         |
+| trigger_sell_quantity | string   | true     | Cumulative quantity triggered on the sell side                                                              |
+| trigger_buy_quantity  | string   | true     | Cumulative quantity triggered on the buy side                                                               |
+| upper_limit_quantity  | string   | true     | Quantity handled when the upper bound is reached                                                            |
+| lower_limit_quantity  | string   | true     | Quantity handled when the lower bound is reached                                                            |
+| upper_limit_event     | int32    | true     | Action at the upper bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price   |
+| lower_limit_event     | int32    | true     | Action at the lower bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price   |
+| trigger_sell_depth    | int32    | true     | Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up`                                          |
+| trigger_buy_depth     | int32    | true     | Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down`                                         |
+| created_at            | string   | true     | Creation time, RFC3339 format                                                                               |
+| updated_at            | string   | true     | Last update time, RFC3339 format                                                                            |
+| settlement_currency   | string   | true     | Settlement currency, example: `HKD`                                                                         |
+| expire_time           | string   | true     | Expiry time, RFC3339 format (when `time_in_force` is GTD)                                                   |
+| gtd                   | string   | true     | Good-Til-Date, `YYYY-MM-DD` format                                                                          |
+| grid_sub_orders       | object[] | false    | Executed sub-orders for this grid                                                                           |
+| ∟ id                  | string   | true     | Sub-order ID                                                                                                |
+| ∟ price               | string   | true     | Order price                                                                                                 |
+| ∟ order_type          | string   | true     | Order type                                                                                                  |
+| ∟ quantity            | string   | true     | Order quantity                                                                                              |
+| ∟ executed_qty        | string   | true     | Executed quantity                                                                                           |
+| ∟ action              | int32    | true     | Buy/sell direction                                                                                          |
+| ∟ status              | string   | true     | Sub-order status                                                                                            |
+| ∟ submitted_at        | string   | true     | Submission time, RFC3339 format                                                                             |
+| ∟ rth                 | int32    | true     | Regular-trading-hours flag (`0` / `1` / `2`)                                                                |
+| sub_has_more          | boolean  | true     | Whether more sub-orders can be paged                                                                        |
+| grid_order_history    | object[] | false    | Lifecycle history entries                                                                                   |
+| ∟ history_id          | string   | true     | History entry ID, also used as the paging cursor                                                            |
+| ∟ created_at          | string   | true     | Event time, RFC3339 format                                                                                  |
+| ∟ status              | string   | true     | Grid status after the event                                                                                 |
+| ∟ suspend_reason      | string   | true     | Suspend reason, when applicable                                                                             |
+| ∟ reason              | string   | true     | Human-readable description of the event                                                                     |
+| history_has_more      | boolean  | true     | Whether more history entries can be paged via `history_id`                                                  |
+| support_shortsell     | boolean  | true     | Whether short selling is allowed                                                                            |
+| rth                   | int32    | true     | Regular-trading-hours flag (`0` / `1` / `2`)                                                                |
+| grid_order_type_up    | string   | true     | Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`     |
+| grid_order_type_down  | string   | true     | Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`       |

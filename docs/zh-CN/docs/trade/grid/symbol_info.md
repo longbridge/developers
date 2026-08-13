@@ -27,6 +27,8 @@ longbridge grid info 700.HK
 
 ### 请求参数
 
+> Content-Type: application/json; charset=utf-8
+
 | 名称       | 类型   | 必填 | 说明                                                |
 | ---------- | ------ | ---- | --------------------------------------------------- |
 | counter_id | string | 是   | 标的代码，`ticker.region` 格式，例如：`700.HK`      |
@@ -162,35 +164,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### 响应字段
-
-| 名称          | 类型     | 说明                                     |
-| ------------- | -------- | ---------------------------------------- |
-| name          | string   | 标的名称                                 |
-| last_done     | string   | 最新成交价                               |
-| lot_size      | string   | 每手股数                                 |
-| buy_lot_size  | string   | 买入最小手数                             |
-| sell_lot_size | string   | 卖出最小手数                             |
-| bid_sizes     | object[] | 价格步长档位，见下表                     |
-| channel_info  | object   | 交易通道信息与授权状态，见下表           |
-
-#### bid_sizes
-
-| 名称         | 类型   | 说明                       |
-| ------------ | ------ | -------------------------- |
-| str_proceed  | string | 档位起始价格               |
-| end_proceed  | string | 档位结束价格               |
-| bid_size     | string | 档位内的最小价格步长       |
-
-#### channel_info
-
-| 名称                | 类型     | 说明                                     |
-| ------------------- | -------- | ---------------------------------------- |
-| strategy_granted    | boolean  | 是否已记录策略风险披露同意               |
-| support_rth         | boolean  | 标的是否支持盘中交易时段网格             |
-| currency            | string   | 交易货币                                 |
-| settlement_currency | string[] | 支持的结算货币                           |
-
 ### 响应示例
 
 ```json
@@ -224,8 +197,31 @@ int main(int argc, char const* argv[]) {
 
 | 状态 | 说明                             | Schema |
 | ---- | -------------------------------- | ------ |
-| 200  | 成功返回标的网格信息。           | None   |
+| 200  | 成功返回标的网格信息。           | [grid_symbol_info_rsp](#schemagrid_symbol_info_rsp) |
 | 400  | 请求被拒绝，请求参数不正确。     | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_symbol_info_rsp
+
+<a id="schemagrid_symbol_info_rsp"></a>
+
+| Name                    | Type     | Required | Description                                                              |
+| ----------------------- | -------- | -------- | ------------------------------------------------------------------------ |
+| name                    | string   | true     | 标的名称                                                                 |
+| last_done               | string   | true     | 最新成交价                                                               |
+| lot_size                | string   | true     | 每手股数                                                                 |
+| buy_lot_size            | string   | true     | 买入最小手数                                                             |
+| sell_lot_size           | string   | true     | 卖出最小手数                                                             |
+| bid_sizes               | object[] | true     | 价格步长档位                                                             |
+| ∟ str_proceed           | string   | true     | 档位起始价格                                                             |
+| ∟ end_proceed           | string   | true     | 档位结束价格                                                             |
+| ∟ bid_size              | string   | true     | 档位内的最小价格步长                                                     |
+| channel_info            | object   | true     | 交易通道信息与授权状态。`strategy_granted` 表示是否已记录一次性策略风险披露同意 |
+| ∟ strategy_granted      | boolean  | true     | 是否已记录一次性策略风险披露同意                                         |
+| ∟ support_rth           | boolean  | true     | 标的是否支持盘中交易时段网格                                             |
+| ∟ currency              | string   | true     | 交易货币                                                                 |
+| ∟ settlement_currency   | string[] | true     | 支持的结算货币                                                           |

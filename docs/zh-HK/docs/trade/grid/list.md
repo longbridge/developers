@@ -33,6 +33,8 @@ longbridge grid --symbol 700.HK --status Performing
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name       | Type   | Required | Description                                                              |
 | ---------- | ------ | -------- | ------------------------------------------------------------------------ |
 | page       | int32  | NO       | 頁碼，從 `1` 開始                                                         |
@@ -246,8 +248,64 @@ int main(int argc, char const* argv[]) {
 
 | Status | Description                | Schema |
 | ------ | -------------------------- | ------ |
-| 200    | 網格訂單列表返回成功。     | None   |
+| 200    | 網格訂單列表返回成功。     | [list_grid_orders_rsp](#schemalist_grid_orders_rsp)   |
 | 400    | 請求被拒絕，請求參數錯誤。 | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### list_grid_orders_rsp
+
+<a id="schemalist_grid_orders_rsp"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| grid_order | object[] | false | 網格訂單 |
+| ∟ order_id | string | true | 網格訂單 ID |
+| ∟ symbol | string | true | 標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US` |
+| ∟ stock_name | string | true | 標的名稱 |
+| ∟ market | string | true | 市場 |
+| ∟ status | string | true | 網格訂單狀態 |
+| ∟ grid_status | string | true | 網格運行狀態 |
+| ∟ submitted_base_price | string | true | 創建網格時提交的基準價 |
+| ∟ current_base_price | string | true | 當前基準價 |
+| ∟ pre_trigger_base_price | string | true | 上次觸發前的基準價 |
+| ∟ post_trigger_base_price | string | true | 上次觸發後的基準價 |
+| ∟ upper_limit_price | string | true | 價格上限 |
+| ∟ lower_limit_price | string | true | 價格下限 |
+| ∟ trigger_price_type | int32 | true | 觸發價類型<br/><br/>**可選值：**<br/>`1` - 價差<br/>`2` - 百分比 |
+| ∟ trigger_spread_up | string | true | 向上觸發價差 |
+| ∟ trigger_spread_down | string | true | 向下觸發價差 |
+| ∟ trigger_percent_up | string | true | 向上觸發百分比 |
+| ∟ trigger_percent_down | string | true | 向下觸發百分比 |
+| ∟ pullback_percent | string | true | 回撤百分比 |
+| ∟ pullback_spread | string | true | 回撤價差 |
+| ∟ rebound_percent | string | true | 反彈百分比 |
+| ∟ rebound_spread | string | true | 反彈價差 |
+| ∟ trigger_sell_order_type | string | true | 賣出方向訂單類型 |
+| ∟ trigger_buy_order_type | string | true | 買入方向訂單類型 |
+| ∟ trigger_sell_depth | int32 | true | 賣出方向盤口深度 |
+| ∟ trigger_buy_depth | int32 | true | 買入方向盤口深度 |
+| ∟ trigger_quantity | string | true | 每次觸發數量 |
+| ∟ trigger_sell_quantity | string | true | 賣出方向觸發數量 |
+| ∟ trigger_buy_quantity | string | true | 買入方向觸發數量 |
+| ∟ upper_limit_quantity | string | true | 觸及上限時處理的數量 |
+| ∟ lower_limit_quantity | string | true | 觸及下限時處理的數量 |
+| ∟ upper_limit_event | int32 | true | 觸及上限時的處理動作<br/><br/>**可選值：**<br/>`1` - 忽略<br/>`2` - 以最新價平倉 |
+| ∟ lower_limit_event | int32 | true | 觸及下限時的處理動作<br/><br/>**可選值：**<br/>`1` - 忽略<br/>`2` - 以最新價平倉 |
+| ∟ multiple_trigger | boolean | true | 單個網格檔位是否可多次觸發 |
+| ∟ trigger_times | int32 | true | 觸發次數 |
+| ∟ total_buy_quantity | string | true | 累計買入數量 |
+| ∟ total_sell_quantity | string | true | 累計賣出數量 |
+| ∟ total_profit_balance | string | true | 累計已實現收益 |
+| ∟ settlement_currency | string | true | 結算幣種 |
+| ∟ time_in_force | int32 | true | 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC（撤單前有效）<br/>`6` - GTD（指定日期前有效） |
+| ∟ gtd | string | true | GTD 到期日，格式：`YYYY-MM-DD` |
+| ∟ created_at | string | true | 創建時間，RFC3339 格式 |
+| ∟ rth | int32 | true | 盤中交易時段標誌 |
+| ∟ support_shortsell | boolean | true | 是否允許賣空 |
+| ∟ grid_order_type_up | string | true | 深度為 `0` 時使用的賣出方向訂單類型 |
+| ∟ grid_order_type_down | string | true | 深度為 `0` 時使用的買入方向訂單類型 |
+| has_more | boolean | true | 是否還有更多頁 |

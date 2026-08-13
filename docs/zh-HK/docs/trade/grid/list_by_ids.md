@@ -235,10 +235,65 @@ int main(int argc, char const* argv[]) {
 
 ### Response Status
 
-| Status | Description                | Schema |
-| ------ | -------------------------- | ------ |
-| 200    | 網格訂單返回成功。         | None   |
-| 400    | 請求被拒絕，請求參數錯誤。 | None   |
+| Status | Description                | Schema                                                            |
+| ------ | -------------------------- | ----------------------------------------------------------------- |
+| 200    | 網格訂單返回成功。         | [list_grid_orders_by_ids_rsp](#schemalist_grid_orders_by_ids_rsp) |
+| 400    | 請求被拒絕，請求參數錯誤。 | None                                                              |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### list_grid_orders_by_ids_rsp
+
+<a id="schemalist_grid_orders_by_ids_rsp"></a>
+
+| Name                       | Type     | Required | Description                                                                                                          |
+| -------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| grid_order                 | object[] | false    | 網格訂單                                                                                                            |
+| ∟ order_id                 | string   | true     | 網格訂單 ID                                                                                                         |
+| ∟ symbol                   | string   | true     | 標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US`                                                                |
+| ∟ stock_name               | string   | true     | 標的名稱                                                                                                            |
+| ∟ market                   | string   | true     | 市場                                                                                                                |
+| ∟ status                   | string   | true     | 網格訂單狀態                                                                                                        |
+| ∟ grid_status              | string   | true     | 網格運行狀態                                                                                                        |
+| ∟ submitted_base_price     | string   | true     | 網格錨定的提交基準價格                                                                                              |
+| ∟ current_base_price       | string   | true     | 當前基準價格                                                                                                        |
+| ∟ pre_trigger_base_price   | string   | true     | 上次觸發前的基準價格                                                                                                |
+| ∟ post_trigger_base_price  | string   | true     | 上次觸發後的基準價格                                                                                                |
+| ∟ upper_limit_price        | string   | true     | 價格上限                                                                                                            |
+| ∟ lower_limit_price        | string   | true     | 價格下限                                                                                                            |
+| ∟ trigger_price_type       | int32    | true     | 觸發價格類型<br/><br/> **Enum Value:**<br/> `1` - 價差<br/> `2` - 百分比                                            |
+| ∟ trigger_spread_up        | string   | true     | 向上觸發價差，`trigger_price_type` 為 `1` 時使用                                                                    |
+| ∟ trigger_spread_down      | string   | true     | 向下觸發價差，`trigger_price_type` 為 `1` 時使用                                                                    |
+| ∟ trigger_percent_up       | string   | true     | 向上觸發百分比，`trigger_price_type` 為 `2` 時使用                                                                  |
+| ∟ trigger_percent_down     | string   | true     | 向下觸發百分比，`trigger_price_type` 為 `2` 時使用                                                                  |
+| ∟ pullback_percent         | string   | true     | 回調百分比                                                                                                          |
+| ∟ pullback_spread          | string   | true     | 回調價差                                                                                                            |
+| ∟ rebound_percent          | string   | true     | 反彈百分比                                                                                                          |
+| ∟ rebound_spread           | string   | true     | 反彈價差                                                                                                            |
+| ∟ trigger_sell_order_type  | string   | true     | 賣出方網格訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單 |
+| ∟ trigger_buy_order_type   | string   | true     | 買入方網格訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單 |
+| ∟ trigger_sell_depth       | int32    | true     | 賣出方盤口深度，範圍 `-5..5`；`0` 表示使用 `trigger_sell_order_type`                                                |
+| ∟ trigger_buy_depth        | int32    | true     | 買入方盤口深度，範圍 `-5..5`；`0` 表示使用 `trigger_buy_order_type`                                                 |
+| ∟ trigger_quantity         | string   | true     | 每次觸發數量                                                                                                        |
+| ∟ trigger_sell_quantity    | string   | true     | 賣出方觸發數量                                                                                                      |
+| ∟ trigger_buy_quantity     | string   | true     | 買入方觸發數量                                                                                                      |
+| ∟ upper_limit_quantity     | string   | true     | 觸及上限時處理的數量                                                                                                |
+| ∟ lower_limit_quantity     | string   | true     | 觸及下限時處理的數量                                                                                                |
+| ∟ upper_limit_event        | int32    | true     | 觸及上限時的處理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持網格運行）<br/> `2` - 以最新價平倉             |
+| ∟ lower_limit_event        | int32    | true     | 觸及下限時的處理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持網格運行）<br/> `2` - 以最新價平倉             |
+| ∟ multiple_trigger         | boolean  | true     | 單個網格檔位是否可多次觸發                                                                                          |
+| ∟ trigger_times            | int32    | true     | 網格已觸發次數                                                                                                      |
+| ∟ total_buy_quantity       | string   | true     | 累計買入數量                                                                                                        |
+| ∟ total_sell_quantity      | string   | true     | 累計賣出數量                                                                                                        |
+| ∟ total_profit_balance     | string   | true     | 累計收益餘額                                                                                                        |
+| ∟ settlement_currency      | string   | true     | 結算貨幣                                                                                                            |
+| ∟ time_in_force            | int32    | true     | 訂單有效期類型<br/><br/> **Enum Value:**<br/> `0` - 當日有效<br/> `1` - 撤單前有效<br/> `6` - 指定日期前有效       |
+| ∟ gtd                      | string   | true     | 指定日期前有效的到期日期，格式：`YYYY-MM-DD`                                                                        |
+| ∟ created_at               | string   | true     | 創建時間，格式為 RFC3339                                                                                            |
+| ∟ rth                      | int32    | true     | 盤中交易時段標識<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`                                               |
+| ∟ support_shortsell        | boolean  | true     | 是否允許賣空                                                                                                        |
+| ∟ grid_order_type_up       | string   | true     | 深度為 `0` 時賣出方的訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單 |
+| ∟ grid_order_type_down     | string   | true     | 深度為 `0` 時買入方的訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單 |

@@ -27,6 +27,8 @@ longbridge grid triggers 764609681686573056
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name          | Type   | Required | Description                                  |
 | ------------- | ------ | -------- | -------------------------------------------- |
 | grid_order_id | string | YES      | 网格订单 ID，例如：`764609681686573056`      |
@@ -169,42 +171,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### Response Fields
-
-`data` 对象包含：
-
-| Name           | Type    | Description                                     |
-| -------------- | ------- | ----------------------------------------------- |
-| trigger_orders | object[]| 触发订单，见 [TriggerOrder](#triggerorder)      |
-| has_more       | boolean | 是否还有更多分页                                |
-
-#### TriggerOrder
-
-网格触发时发出的一笔订单。
-
-| Name           | Type   | Description                                                          |
-| -------------- | ------ | -------------------------------------------------------------------- |
-| id             | string | 触发订单 ID                                                          |
-| status         | string | 订单状态                                                             |
-| name           | string | 股票名称                                                             |
-| symbol         | string | 股票代码，`ticker.region` 格式                                       |
-| price          | string | 订单价格                                                             |
-| quantity       | string | 订单数量                                                             |
-| executed_price | string | 成交价格                                                             |
-| executed_qty   | string | 已成交数量                                                           |
-| submitted_at   | string | 提交时间，RFC3339 格式                                               |
-| action         | int32  | 买卖方向                                                             |
-| order_type     | string | 订单类型                                                             |
-| trigger_price  | string | 触发该订单的价格                                                     |
-| msg            | string | 附加消息                                                             |
-| currency       | string | 订单货币                                                             |
-| last_done      | string | 触发时的最新成交价                                                   |
-| updated_at     | string | 最后更新时间，RFC3339 格式                                           |
-| time_in_force  | int32  | 订单有效期<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC<br/>`6` - GTD |
-| gtd            | string | 到期日，`YYYY-MM-DD` 格式                                            |
-| trigger_at     | string | 触发时间，RFC3339 格式                                               |
-| trigger_status | int32  | 触发状态                                                             |
-
 ### Response Example
 
 ```json
@@ -245,8 +211,39 @@ int main(int argc, char const* argv[]) {
 
 | Status | Description                    | Schema |
 | ------ | ------------------------------ | ------ |
-| 200    | 触发历史返回成功。             | None   |
+| 200    | 触发历史返回成功。             | [grid_trigger_history_rsp](#schemagrid_trigger_history_rsp) |
 | 400    | 请求被拒绝，请求参数错误。     | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_trigger_history_rsp
+
+<a id="schemagrid_trigger_history_rsp"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| trigger_orders | object[] | false | 触发订单 |
+| ∟ id | string | true | 触发订单 ID |
+| ∟ status | string | true | 订单状态 |
+| ∟ name | string | true | 股票名称 |
+| ∟ symbol | string | true | 股票代码，`ticker.region` 格式 |
+| ∟ price | string | true | 订单价格 |
+| ∟ quantity | string | true | 订单数量 |
+| ∟ executed_price | string | true | 成交价格 |
+| ∟ executed_qty | string | true | 已成交数量 |
+| ∟ submitted_at | string | true | 提交时间，RFC3339 格式 |
+| ∟ action | int32 | true | 买卖方向 |
+| ∟ order_type | string | true | 订单类型 |
+| ∟ trigger_price | string | true | 触发该订单的价格 |
+| ∟ msg | string | true | 附加消息 |
+| ∟ currency | string | true | 订单货币 |
+| ∟ last_done | string | true | 触发时的最新成交价 |
+| ∟ updated_at | string | true | 最后更新时间，RFC3339 格式 |
+| ∟ time_in_force | int32 | true | 订单有效期<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC<br/>`6` - GTD |
+| ∟ gtd | string | true | 到期日，`YYYY-MM-DD` 格式 |
+| ∟ trigger_at | string | true | 触发时间，RFC3339 格式 |
+| ∟ trigger_status | int32 | true | 触发状态 |
+| has_more | boolean | false | 是否还有更多分页 |

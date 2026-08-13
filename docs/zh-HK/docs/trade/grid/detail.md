@@ -31,6 +31,8 @@ longbridge grid detail 764609681686573056
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name       | Type   | Required | Description                                                         |
 | ---------- | ------ | -------- | ------------------------------------------------------------------- |
 | order_id   | string | YES      | 網格訂單 ID，例如：`764609681686573056`                             |
@@ -169,85 +171,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### Response Fields
-
-`data` 為一個 `GridOrderDetail` 物件：
-
-| Name                 | Type    | Description                                                                                    |
-| -------------------- | ------- | ---------------------------------------------------------------------------------------------- |
-| order_id             | string  | 網格訂單 ID                                                                                    |
-| symbol               | string  | 股票代碼，`ticker.region` 格式                                                                 |
-| stock_name           | string  | 股票名稱                                                                                       |
-| status               | string  | 網格訂單狀態，例如：`Performing` / `Suspended`                                                 |
-| grid_status          | string  | 網格詳細運行狀態                                                                               |
-| suspend_reason       | string  | 網格暫停原因，運行中時為空                                                                      |
-| sleeping_reason      | string  | 網格休眠原因，活躍時為空                                                                        |
-| submitted_base_price | string  | 提交時錨定的基準價                                                                              |
-| current_base_price   | string  | 觸發後的當前基準價                                                                              |
-| upper_limit_price    | string  | 價格上限                                                                                       |
-| lower_limit_price    | string  | 價格下限                                                                                       |
-| trigger_price_type   | int32   | 觸發閾值的類型<br/><br/>**可選值：**<br/>`1` - 價差（絕對值）<br/>`2` - 百分比                  |
-| trigger_spread_up    | string  | 向上觸發價差（`trigger_price_type` 為 `1` 時）                                                 |
-| trigger_spread_down  | string  | 向下觸發價差（`trigger_price_type` 為 `1` 時）                                                 |
-| trigger_percent_up   | string  | 向上觸發百分比（`trigger_price_type` 為 `2` 時）                                               |
-| trigger_percent_down | string  | 向下觸發百分比（`trigger_price_type` 為 `2` 時）                                               |
-| pullback_percent     | string  | 回落百分比                                                                                     |
-| pullback_spread      | string  | 回落價差                                                                                       |
-| rebound_percent      | string  | 反彈百分比                                                                                     |
-| rebound_spread       | string  | 反彈價差                                                                                       |
-| multiple_trigger     | boolean | 同一網格檔位是否允許多次觸發                                                                    |
-| time_in_force        | int32   | 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD                |
-| trigger_quantity     | string  | 每次觸發的數量                                                                                 |
-| trigger_sell_quantity| string  | 賣出方向累計已觸發數量                                                                          |
-| trigger_buy_quantity | string  | 買入方向累計已觸發數量                                                                          |
-| upper_limit_quantity | string  | 到達價格上限時處理的數量                                                                        |
-| lower_limit_quantity | string  | 到達價格下限時處理的數量                                                                        |
-| upper_limit_event    | int32   | 到達上限時的動作<br/><br/>**可選值：**<br/>`1` - 忽略<br/>`2` - 以最新價平倉                    |
-| lower_limit_event    | int32   | 到達下限時的動作<br/><br/>**可選值：**<br/>`1` - 忽略<br/>`2` - 以最新價平倉                    |
-| trigger_sell_depth   | int32   | 賣出方向盤口檔位（-5 ~ 5），`0` 表示使用 `grid_order_type_up`                                   |
-| trigger_buy_depth    | int32   | 買入方向盤口檔位（-5 ~ 5），`0` 表示使用 `grid_order_type_down`                                 |
-| created_at           | string  | 建立時間，RFC3339 格式                                                                          |
-| updated_at           | string  | 最後更新時間，RFC3339 格式                                                                      |
-| settlement_currency  | string  | 結算貨幣，例如：`HKD`                                                                           |
-| expire_time          | string  | 過期時間，RFC3339 格式（`time_in_force` 為 GTD 時）                                             |
-| gtd                  | string  | 到期日，`YYYY-MM-DD` 格式                                                                       |
-| grid_sub_orders      | object[]| 該網格的成交子訂單，見 [GridOrderSubOrder](#gridordersuborder)                                 |
-| sub_has_more         | boolean | 是否還有更多子訂單可分頁                                                                        |
-| grid_order_history   | object[]| 生命週期歷史記錄，見 [GridOrderHistory](#gridorderhistory)                                     |
-| history_has_more     | boolean | 是否可通過 `history_id` 分頁獲取更多歷史記錄                                                    |
-| support_shortsell    | boolean | 是否允許賣空                                                                                    |
-| rth                  | int32   | 盤中交易時段標記（`0` / `1` / `2`）                                                             |
-| grid_order_type_up   | string  | `trigger_sell_depth` 為 `0` 時的賣出方向訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG` |
-| grid_order_type_down | string  | `trigger_buy_depth` 為 `0` 時的買入方向訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`  |
-
-#### GridOrderSubOrder
-
-網格發出的一筆成交訂單。
-
-| Name         | Type   | Description                              |
-| ------------ | ------ | ---------------------------------------- |
-| id           | string | 子訂單 ID                                |
-| price        | string | 訂單價格                                 |
-| order_type   | string | 訂單類型                                 |
-| quantity     | string | 訂單數量                                 |
-| executed_qty | string | 已成交數量                               |
-| action       | int32  | 買賣方向                                 |
-| status       | string | 子訂單狀態                               |
-| submitted_at | string | 提交時間，RFC3339 格式                   |
-| rth          | int32  | 盤中交易時段標記（`0` / `1` / `2`）      |
-
-#### GridOrderHistory
-
-網格訂單的一條生命週期事件。
-
-| Name           | Type   | Description                          |
-| -------------- | ------ | ------------------------------------ |
-| history_id     | string | 歷史記錄 ID，同時作為分頁游標        |
-| created_at     | string | 事件時間，RFC3339 格式               |
-| status         | string | 事件後的網格狀態                     |
-| suspend_reason | string | 暫停原因（如適用）                   |
-| reason         | string | 事件的可讀描述                       |
-
 ### Response Example
 
 ```json
@@ -315,8 +238,75 @@ int main(int argc, char const* argv[]) {
 
 | Status | Description                    | Schema |
 | ------ | ------------------------------ | ------ |
-| 200    | 網格訂單詳情返回成功。         | None   |
+| 200    | 網格訂單詳情返回成功。         | [grid_order_detail_rsp](#schemagrid_order_detail_rsp) |
 | 400    | 請求被拒絕，請求參數錯誤。     | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_order_detail_rsp
+
+<a id="schemagrid_order_detail_rsp"></a>
+
+| Name                  | Type     | Required | Description                                                                                 |
+| --------------------- | -------- | -------- | ------------------------------------------------------------------------------------------- |
+| order_id              | string   | true     | 網格訂單 ID                                                                                 |
+| symbol                | string   | true     | 標的代碼，`ticker.region` 格式                                                              |
+| stock_name            | string   | true     | 標的名稱                                                                                    |
+| status                | string   | true     | 網格訂單狀態，例如：`Performing` / `Suspended`                                              |
+| grid_status           | string   | true     | 網格詳細運行狀態                                                                            |
+| suspend_reason        | string   | true     | 網格被暫停的原因，運行中時為空                                                              |
+| sleeping_reason       | string   | true     | 網格休眠的原因，活躍時為空                                                                  |
+| submitted_base_price  | string   | true     | 提交時網格錨定的基準價                                                                      |
+| current_base_price    | string   | true     | 觸發後的當前基準價                                                                          |
+| upper_limit_price     | string   | true     | 價格上界                                                                                    |
+| lower_limit_price     | string   | true     | 價格下界                                                                                    |
+| trigger_price_type    | int32    | true     | 觸發閾值的計價方式<br/><br/>**枚舉值：**<br/>`1` - 價差（絕對值）<br/>`2` - 百分比           |
+| trigger_spread_up     | string   | true     | 向上觸發價差（當 `trigger_price_type` 為 `1` 時）                                           |
+| trigger_spread_down   | string   | true     | 向下觸發價差（當 `trigger_price_type` 為 `1` 時）                                           |
+| trigger_percent_up    | string   | true     | 向上觸發百分比（當 `trigger_price_type` 為 `2` 時）                                         |
+| trigger_percent_down  | string   | true     | 向下觸發百分比（當 `trigger_price_type` 為 `2` 時）                                         |
+| pullback_percent      | string   | true     | 回落百分比                                                                                  |
+| pullback_spread       | string   | true     | 回落價差                                                                                    |
+| rebound_percent       | string   | true     | 反彈百分比                                                                                  |
+| rebound_spread        | string   | true     | 反彈價差                                                                                    |
+| multiple_trigger      | boolean  | true     | 單個網格檔位是否可多次觸發                                                                  |
+| time_in_force         | int32    | true     | 訂單有效期<br/><br/>**枚舉值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD             |
+| trigger_quantity      | string   | true     | 每次觸發的數量                                                                              |
+| trigger_sell_quantity | string   | true     | 賣出方向累計觸發數量                                                                        |
+| trigger_buy_quantity  | string   | true     | 買入方向累計觸發數量                                                                        |
+| upper_limit_quantity  | string   | true     | 觸及上界時處理的數量                                                                        |
+| lower_limit_quantity  | string   | true     | 觸及下界時處理的數量                                                                        |
+| upper_limit_event     | int32    | true     | 觸及上界時的動作<br/><br/>**枚舉值：**<br/>`1` - 忽略<br/>`2` - 按最新價平倉                 |
+| lower_limit_event     | int32    | true     | 觸及下界時的動作<br/><br/>**枚舉值：**<br/>`1` - 忽略<br/>`2` - 按最新價平倉                 |
+| trigger_sell_depth    | int32    | true     | 賣出方向盤口深度（-5 ~ 5）。`0` = 使用 `grid_order_type_up`                                 |
+| trigger_buy_depth     | int32    | true     | 買入方向盤口深度（-5 ~ 5）。`0` = 使用 `grid_order_type_down`                               |
+| created_at            | string   | true     | 創建時間，RFC3339 格式                                                                      |
+| updated_at            | string   | true     | 最後更新時間，RFC3339 格式                                                                  |
+| settlement_currency   | string   | true     | 結算貨幣，例如：`HKD`                                                                       |
+| expire_time           | string   | true     | 過期時間，RFC3339 格式（當 `time_in_force` 為 GTD 時）                                      |
+| gtd                   | string   | true     | Good-Til-Date，`YYYY-MM-DD` 格式                                                            |
+| grid_sub_orders       | object[] | false    | 該網格已成交的子訂單                                                                        |
+| ∟ id                  | string   | true     | 子訂單 ID                                                                                   |
+| ∟ price               | string   | true     | 訂單價格                                                                                    |
+| ∟ order_type          | string   | true     | 訂單類型                                                                                    |
+| ∟ quantity            | string   | true     | 訂單數量                                                                                    |
+| ∟ executed_qty        | string   | true     | 已成交數量                                                                                  |
+| ∟ action              | int32    | true     | 買賣方向                                                                                    |
+| ∟ status              | string   | true     | 子訂單狀態                                                                                  |
+| ∟ submitted_at        | string   | true     | 提交時間，RFC3339 格式                                                                      |
+| ∟ rth                 | int32    | true     | 盤中交易時段標識（`0` / `1` / `2`）                                                         |
+| sub_has_more          | boolean  | true     | 是否還有更多子訂單可分頁                                                                    |
+| grid_order_history    | object[] | false    | 生命週期歷史記錄                                                                            |
+| ∟ history_id          | string   | true     | 歷史記錄 ID，同時用作分頁游標                                                               |
+| ∟ created_at          | string   | true     | 事件時間，RFC3339 格式                                                                      |
+| ∟ status              | string   | true     | 事件後的網格狀態                                                                            |
+| ∟ suspend_reason      | string   | true     | 暫停原因（如適用）                                                                          |
+| ∟ reason              | string   | true     | 事件的可讀描述                                                                              |
+| history_has_more      | boolean  | true     | 是否可通過 `history_id` 分頁獲取更多歷史記錄                                                |
+| support_shortsell     | boolean  | true     | 是否允許賣空                                                                                |
+| rth                   | int32    | true     | 盤中交易時段標識（`0` / `1` / `2`）                                                         |
+| grid_order_type_up    | string   | true     | `trigger_sell_depth` 為 `0` 時的賣出方向訂單類型<br/><br/>**枚舉值：**<br/>`GMO` / `GLO` / `GTG` |
+| grid_order_type_down  | string   | true     | `trigger_buy_depth` 為 `0` 時的買入方向訂單類型<br/><br/>**枚舉值：**<br/>`GMO` / `GLO` / `GTG`  |

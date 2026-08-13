@@ -31,6 +31,8 @@ longbridge grid triggers 764609681686573056
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name          | Type   | Required | Description                                  |
 | ------------- | ------ | -------- | -------------------------------------------- |
 | grid_order_id | string | YES      | 網格訂單 ID，例如：`764609681686573056`      |
@@ -173,42 +175,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### Response Fields
-
-`data` 物件包含：
-
-| Name           | Type    | Description                                     |
-| -------------- | ------- | ----------------------------------------------- |
-| trigger_orders | object[]| 觸發訂單，見 [TriggerOrder](#triggerorder)      |
-| has_more       | boolean | 是否還有更多分頁                                |
-
-#### TriggerOrder
-
-網格觸發時發出的一筆訂單。
-
-| Name           | Type   | Description                                                          |
-| -------------- | ------ | -------------------------------------------------------------------- |
-| id             | string | 觸發訂單 ID                                                          |
-| status         | string | 訂單狀態                                                             |
-| name           | string | 股票名稱                                                             |
-| symbol         | string | 股票代碼，`ticker.region` 格式                                       |
-| price          | string | 訂單價格                                                             |
-| quantity       | string | 訂單數量                                                             |
-| executed_price | string | 成交價格                                                             |
-| executed_qty   | string | 已成交數量                                                           |
-| submitted_at   | string | 提交時間，RFC3339 格式                                               |
-| action         | int32  | 買賣方向                                                             |
-| order_type     | string | 訂單類型                                                             |
-| trigger_price  | string | 觸發該訂單的價格                                                     |
-| msg            | string | 附加消息                                                             |
-| currency       | string | 訂單貨幣                                                             |
-| last_done      | string | 觸發時的最新成交價                                                   |
-| updated_at     | string | 最後更新時間，RFC3339 格式                                           |
-| time_in_force  | int32  | 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD |
-| gtd            | string | 到期日，`YYYY-MM-DD` 格式                                            |
-| trigger_at     | string | 觸發時間，RFC3339 格式                                               |
-| trigger_status | int32  | 觸發狀態                                                             |
-
 ### Response Example
 
 ```json
@@ -249,8 +215,39 @@ int main(int argc, char const* argv[]) {
 
 | Status | Description                    | Schema |
 | ------ | ------------------------------ | ------ |
-| 200    | 觸發歷史返回成功。             | None   |
+| 200    | 觸發歷史返回成功。             | [grid_trigger_history_rsp](#schemagrid_trigger_history_rsp) |
 | 400    | 請求被拒絕，請求參數錯誤。     | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_trigger_history_rsp
+
+<a id="schemagrid_trigger_history_rsp"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| trigger_orders | object[] | false | 觸發訂單 |
+| ∟ id | string | true | 觸發訂單 ID |
+| ∟ status | string | true | 訂單狀態 |
+| ∟ name | string | true | 股票名稱 |
+| ∟ symbol | string | true | 股票代碼，`ticker.region` 格式 |
+| ∟ price | string | true | 訂單價格 |
+| ∟ quantity | string | true | 訂單數量 |
+| ∟ executed_price | string | true | 成交價格 |
+| ∟ executed_qty | string | true | 已成交數量 |
+| ∟ submitted_at | string | true | 提交時間，RFC3339 格式 |
+| ∟ action | int32 | true | 買賣方向 |
+| ∟ order_type | string | true | 訂單類型 |
+| ∟ trigger_price | string | true | 觸發該訂單的價格 |
+| ∟ msg | string | true | 附加消息 |
+| ∟ currency | string | true | 訂單貨幣 |
+| ∟ last_done | string | true | 觸發時的最新成交價 |
+| ∟ updated_at | string | true | 最後更新時間，RFC3339 格式 |
+| ∟ time_in_force | int32 | true | 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD |
+| ∟ gtd | string | true | 到期日，`YYYY-MM-DD` 格式 |
+| ∟ trigger_at | string | true | 觸發時間，RFC3339 格式 |
+| ∟ trigger_status | int32 | true | 觸發狀態 |
+| has_more | boolean | false | 是否還有更多分頁 |

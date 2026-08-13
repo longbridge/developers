@@ -31,6 +31,8 @@ longbridge grid info 700.HK
 
 ### Parameters
 
+> Content-Type: application/json; charset=utf-8
+
 | Name       | Type   | Required | Description                                                |
 | ---------- | ------ | -------- | ---------------------------------------------------------- |
 | counter_id | string | YES      | Security symbol, `ticker.region` format, example: `700.HK` |
@@ -166,35 +168,6 @@ int main(int argc, char const* argv[]) {
 
 - Content-Type: application/json
 
-### Response Fields
-
-| Name          | Type   | Description                                                          |
-| ------------- | ------ | -------------------------------------------------------------------- |
-| name          | string | Security name                                                        |
-| last_done     | string | Latest traded price                                                  |
-| lot_size      | string | Board lot size                                                       |
-| buy_lot_size  | string | Minimum lot size for a buy order                                     |
-| sell_lot_size | string | Minimum lot size for a sell order                                    |
-| bid_sizes     | object[] | Price-step tiers, see below                                        |
-| channel_info  | object | Trading-channel info and authorization, see below                    |
-
-#### bid_sizes
-
-| Name         | Type   | Description                                     |
-| ------------ | ------ | ----------------------------------------------- |
-| str_proceed  | string | Start price of the tier                         |
-| end_proceed  | string | End price of the tier                           |
-| bid_size     | string | Minimum price step within the tier              |
-
-#### channel_info
-
-| Name                | Type     | Description                                                             |
-| ------------------- | -------- | ----------------------------------------------------------------------- |
-| strategy_granted    | boolean  | Whether the strategy risk-disclosure consent has been recorded          |
-| support_rth         | boolean  | Whether the security supports regular-trading-hours grids               |
-| currency            | string   | Trading currency                                                        |
-| settlement_currency | string[] | Supported settlement currencies                                         |
-
 ### Response Example
 
 ```json
@@ -228,8 +201,31 @@ int main(int argc, char const* argv[]) {
 
 | Status | Description                                                      | Schema |
 | ------ | ---------------------------------------------------------------- | ------ |
-| 200    | The security grid info was returned successfully.                | None   |
+| 200    | The security grid info was returned successfully.                | [grid_symbol_info_rsp](#schemagrid_symbol_info_rsp) |
 | 400    | The request was rejected with an incorrect request parameter.    | None   |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### grid_symbol_info_rsp
+
+<a id="schemagrid_symbol_info_rsp"></a>
+
+| Name                    | Type     | Required | Description                                                                                                                              |
+| ----------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| name                    | string   | true     | Security name                                                                                                                            |
+| last_done               | string   | true     | Latest traded price                                                                                                                      |
+| lot_size                | string   | true     | Board lot size                                                                                                                           |
+| buy_lot_size            | string   | true     | Minimum lot size for a buy order                                                                                                         |
+| sell_lot_size           | string   | true     | Minimum lot size for a sell order                                                                                                        |
+| bid_sizes               | object[] | true     | Price-step tiers                                                                                                                         |
+| ∟ str_proceed           | string   | true     | Start price of the tier                                                                                                                  |
+| ∟ end_proceed           | string   | true     | End price of the tier                                                                                                                    |
+| ∟ bid_size              | string   | true     | Minimum price step within the tier                                                                                                       |
+| channel_info            | object   | true     | Trading-channel info and authorization. `strategy_granted` indicates whether the one-time strategy risk-disclosure consent has been recorded |
+| ∟ strategy_granted      | boolean  | true     | Whether the one-time strategy risk-disclosure consent has been recorded                                                                  |
+| ∟ support_rth           | boolean  | true     | Whether the security supports regular-trading-hours grids                                                                                |
+| ∟ currency              | string   | true     | Trading currency                                                                                                                         |
+| ∟ settlement_currency   | string[] | true     | Supported settlement currencies                                                                                                          |

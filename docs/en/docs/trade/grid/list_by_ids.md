@@ -235,10 +235,65 @@ int main(int argc, char const* argv[]) {
 
 ### Response Status
 
-| Status | Description                                                      | Schema |
-| ------ | ---------------------------------------------------------------- | ------ |
-| 200    | The grid orders were returned successfully.                      | None   |
-| 400    | The request was rejected with an incorrect request parameter.    | None   |
+| Status | Description                                                      | Schema                                                                        |
+| ------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 200    | The grid orders were returned successfully.                      | [list_grid_orders_by_ids_rsp](#schemalist_grid_orders_by_ids_rsp)             |
+| 400    | The request was rejected with an incorrect request parameter.    | None                                                                          |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### list_grid_orders_by_ids_rsp
+
+<a id="schemalist_grid_orders_by_ids_rsp"></a>
+
+| Name                       | Type     | Required | Description                                                                                                                            |
+| -------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| grid_order                 | object[] | false    | Grid orders                                                                                                                            |
+| ∟ order_id                 | string   | true     | Grid order ID                                                                                                                          |
+| ∟ symbol                   | string   | true     | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                                          |
+| ∟ stock_name               | string   | true     | Stock name                                                                                                                             |
+| ∟ market                   | string   | true     | Market                                                                                                                                 |
+| ∟ status                   | string   | true     | Grid order status                                                                                                                      |
+| ∟ grid_status              | string   | true     | Grid running status                                                                                                                    |
+| ∟ submitted_base_price     | string   | true     | Submitted base price the grid is anchored to                                                                                          |
+| ∟ current_base_price       | string   | true     | Current base price                                                                                                                     |
+| ∟ pre_trigger_base_price   | string   | true     | Base price before the last trigger                                                                                                    |
+| ∟ post_trigger_base_price  | string   | true     | Base price after the last trigger                                                                                                     |
+| ∟ upper_limit_price        | string   | true     | Upper price bound                                                                                                                      |
+| ∟ lower_limit_price        | string   | true     | Lower price bound                                                                                                                      |
+| ∟ trigger_price_type       | int32    | true     | Trigger price type<br/><br/> **Enum Value:**<br/> `1` - Spread<br/> `2` - Percent                                                     |
+| ∟ trigger_spread_up        | string   | true     | Upward trigger spread, used when `trigger_price_type` is `1`                                                                          |
+| ∟ trigger_spread_down      | string   | true     | Downward trigger spread, used when `trigger_price_type` is `1`                                                                        |
+| ∟ trigger_percent_up       | string   | true     | Upward trigger percent, used when `trigger_price_type` is `2`                                                                         |
+| ∟ trigger_percent_down     | string   | true     | Downward trigger percent, used when `trigger_price_type` is `2`                                                                       |
+| ∟ pullback_percent         | string   | true     | Pullback percent                                                                                                                       |
+| ∟ pullback_spread          | string   | true     | Pullback spread                                                                                                                        |
+| ∟ rebound_percent          | string   | true     | Rebound percent                                                                                                                        |
+| ∟ rebound_spread           | string   | true     | Rebound spread                                                                                                                         |
+| ∟ trigger_sell_order_type  | string   | true     | Sell-side grid order type<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go |
+| ∟ trigger_buy_order_type   | string   | true     | Buy-side grid order type<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go  |
+| ∟ trigger_sell_depth       | int32    | true     | Sell-side order-book depth, range `-5..5`; `0` means use `trigger_sell_order_type`                                                    |
+| ∟ trigger_buy_depth        | int32    | true     | Buy-side order-book depth, range `-5..5`; `0` means use `trigger_buy_order_type`                                                      |
+| ∟ trigger_quantity         | string   | true     | Quantity per trigger                                                                                                                   |
+| ∟ trigger_sell_quantity    | string   | true     | Sell-side trigger quantity                                                                                                            |
+| ∟ trigger_buy_quantity     | string   | true     | Buy-side trigger quantity                                                                                                             |
+| ∟ upper_limit_quantity     | string   | true     | Quantity handled at the upper bound                                                                                                   |
+| ∟ lower_limit_quantity     | string   | true     | Quantity handled at the lower bound                                                                                                   |
+| ∟ upper_limit_event        | int32    | true     | Event when the upper bound is reached<br/><br/> **Enum Value:**<br/> `1` - Ignore (keep grid running)<br/> `2` - Close position at last price |
+| ∟ lower_limit_event        | int32    | true     | Event when the lower bound is reached<br/><br/> **Enum Value:**<br/> `1` - Ignore (keep grid running)<br/> `2` - Close position at last price |
+| ∟ multiple_trigger         | boolean  | true     | Whether a single grid level can trigger multiple times                                                                                |
+| ∟ trigger_times            | int32    | true     | Number of times the grid has triggered                                                                                                |
+| ∟ total_buy_quantity       | string   | true     | Total bought quantity                                                                                                                 |
+| ∟ total_sell_quantity      | string   | true     | Total sold quantity                                                                                                                   |
+| ∟ total_profit_balance     | string   | true     | Total profit balance                                                                                                                  |
+| ∟ settlement_currency      | string   | true     | Settlement currency                                                                                                                   |
+| ∟ time_in_force            | int32    | true     | Time in force type<br/><br/> **Enum Value:**<br/> `0` - Day<br/> `1` - Good-Til-Canceled<br/> `6` - Good-Til-Date                     |
+| ∟ gtd                      | string   | true     | Good-Til-Date expiry date, format: `YYYY-MM-DD`                                                                                       |
+| ∟ created_at               | string   | true     | Creation time, formatted as RFC3339                                                                                                   |
+| ∟ rth                      | int32    | true     | Regular trading hours flag<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`                                                       |
+| ∟ support_shortsell        | boolean  | true     | Whether short selling is allowed                                                                                                      |
+| ∟ grid_order_type_up       | string   | true     | Sell-side order type when depth is `0`<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go |
+| ∟ grid_order_type_down     | string   | true     | Buy-side order type when depth is `0`<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go  |

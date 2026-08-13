@@ -231,10 +231,65 @@ int main(int argc, char const* argv[]) {
 
 ### Response Status
 
-| Status | Description                | Schema |
-| ------ | -------------------------- | ------ |
-| 200    | 网格订单返回成功。         | None   |
-| 400    | 请求被拒绝，请求参数错误。 | None   |
+| Status | Description                | Schema                                                            |
+| ------ | -------------------------- | ----------------------------------------------------------------- |
+| 200    | 网格订单返回成功。         | [list_grid_orders_by_ids_rsp](#schemalist_grid_orders_by_ids_rsp) |
+| 400    | 请求被拒绝，请求参数错误。 | None                                                              |
 
 <aside className="success">
 </aside>
+
+## Schemas
+
+### list_grid_orders_by_ids_rsp
+
+<a id="schemalist_grid_orders_by_ids_rsp"></a>
+
+| Name                       | Type     | Required | Description                                                                                                          |
+| -------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| grid_order                 | object[] | false    | 网格订单                                                                                                            |
+| ∟ order_id                 | string   | true     | 网格订单 ID                                                                                                         |
+| ∟ symbol                   | string   | true     | 标的代码，使用 `ticker.region` 格式，例如：`AAPL.US`                                                                |
+| ∟ stock_name               | string   | true     | 标的名称                                                                                                            |
+| ∟ market                   | string   | true     | 市场                                                                                                                |
+| ∟ status                   | string   | true     | 网格订单状态                                                                                                        |
+| ∟ grid_status              | string   | true     | 网格运行状态                                                                                                        |
+| ∟ submitted_base_price     | string   | true     | 网格锚定的提交基准价格                                                                                              |
+| ∟ current_base_price       | string   | true     | 当前基准价格                                                                                                        |
+| ∟ pre_trigger_base_price   | string   | true     | 上次触发前的基准价格                                                                                                |
+| ∟ post_trigger_base_price  | string   | true     | 上次触发后的基准价格                                                                                                |
+| ∟ upper_limit_price        | string   | true     | 价格上限                                                                                                            |
+| ∟ lower_limit_price        | string   | true     | 价格下限                                                                                                            |
+| ∟ trigger_price_type       | int32    | true     | 触发价格类型<br/><br/> **Enum Value:**<br/> `1` - 价差<br/> `2` - 百分比                                            |
+| ∟ trigger_spread_up        | string   | true     | 向上触发价差，`trigger_price_type` 为 `1` 时使用                                                                    |
+| ∟ trigger_spread_down      | string   | true     | 向下触发价差，`trigger_price_type` 为 `1` 时使用                                                                    |
+| ∟ trigger_percent_up       | string   | true     | 向上触发百分比，`trigger_price_type` 为 `2` 时使用                                                                  |
+| ∟ trigger_percent_down     | string   | true     | 向下触发百分比，`trigger_price_type` 为 `2` 时使用                                                                  |
+| ∟ pullback_percent         | string   | true     | 回调百分比                                                                                                          |
+| ∟ pullback_spread          | string   | true     | 回调价差                                                                                                            |
+| ∟ rebound_percent          | string   | true     | 反弹百分比                                                                                                          |
+| ∟ rebound_spread           | string   | true     | 反弹价差                                                                                                            |
+| ∟ trigger_sell_order_type  | string   | true     | 卖出方网格订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单 |
+| ∟ trigger_buy_order_type   | string   | true     | 买入方网格订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单 |
+| ∟ trigger_sell_depth       | int32    | true     | 卖出方盘口深度，范围 `-5..5`；`0` 表示使用 `trigger_sell_order_type`                                                |
+| ∟ trigger_buy_depth        | int32    | true     | 买入方盘口深度，范围 `-5..5`；`0` 表示使用 `trigger_buy_order_type`                                                 |
+| ∟ trigger_quantity         | string   | true     | 每次触发数量                                                                                                        |
+| ∟ trigger_sell_quantity    | string   | true     | 卖出方触发数量                                                                                                      |
+| ∟ trigger_buy_quantity     | string   | true     | 买入方触发数量                                                                                                      |
+| ∟ upper_limit_quantity     | string   | true     | 触及上限时处理的数量                                                                                                |
+| ∟ lower_limit_quantity     | string   | true     | 触及下限时处理的数量                                                                                                |
+| ∟ upper_limit_event        | int32    | true     | 触及上限时的处理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持网格运行）<br/> `2` - 以最新价平仓             |
+| ∟ lower_limit_event        | int32    | true     | 触及下限时的处理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持网格运行）<br/> `2` - 以最新价平仓             |
+| ∟ multiple_trigger         | boolean  | true     | 单个网格档位是否可多次触发                                                                                          |
+| ∟ trigger_times            | int32    | true     | 网格已触发次数                                                                                                      |
+| ∟ total_buy_quantity       | string   | true     | 累计买入数量                                                                                                        |
+| ∟ total_sell_quantity      | string   | true     | 累计卖出数量                                                                                                        |
+| ∟ total_profit_balance     | string   | true     | 累计收益余额                                                                                                        |
+| ∟ settlement_currency      | string   | true     | 结算货币                                                                                                            |
+| ∟ time_in_force            | int32    | true     | 订单有效期类型<br/><br/> **Enum Value:**<br/> `0` - 当日有效<br/> `1` - 撤单前有效<br/> `6` - 指定日期前有效       |
+| ∟ gtd                      | string   | true     | 指定日期前有效的到期日期，格式：`YYYY-MM-DD`                                                                        |
+| ∟ created_at               | string   | true     | 创建时间，格式为 RFC3339                                                                                            |
+| ∟ rth                      | int32    | true     | 盘中交易时段标识<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`                                               |
+| ∟ support_shortsell        | boolean  | true     | 是否允许卖空                                                                                                        |
+| ∟ grid_order_type_up       | string   | true     | 深度为 `0` 时卖出方的订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单 |
+| ∟ grid_order_type_down     | string   | true     | 深度为 `0` 时买入方的订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单 |
