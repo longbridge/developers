@@ -2,6 +2,7 @@
 slug: symbol_info
 sidebar_position: 11
 title: Grid Symbol Info
+sidebar_label: 'Symbol Info'
 language_tabs: false
 toc_footers: []
 includes: []

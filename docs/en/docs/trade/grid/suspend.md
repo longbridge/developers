@@ -2,6 +2,7 @@
 slug: suspend
 sidebar_position: 8
 title: Suspend Grid Order
+sidebar_label: 'Suspend Order'
 language_tabs: false
 toc_footers: []
 includes: []

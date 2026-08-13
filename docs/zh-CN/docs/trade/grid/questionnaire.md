@@ -2,6 +2,7 @@
 slug: questionnaire
 sidebar_position: 10
 title: 提交策略问卷
+sidebar_label: '策略问卷'
 search: true
 headingLevel: 3
 ---

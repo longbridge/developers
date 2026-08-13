@@ -2,6 +2,7 @@
 slug: restart
 sidebar_position: 9
 title: Restart Grid Order
+sidebar_label: 'Restart Order'
 language_tabs: false
 toc_footers: []
 includes: []

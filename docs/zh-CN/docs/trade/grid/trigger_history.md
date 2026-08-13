@@ -2,6 +2,7 @@
 slug: trigger_history
 sidebar_position: 6
 title: 网格触发历史
+sidebar_label: '触发历史'
 search: true
 headingLevel: 3
 ---

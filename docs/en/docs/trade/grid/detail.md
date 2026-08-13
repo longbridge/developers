@@ -2,6 +2,7 @@
 slug: detail
 sidebar_position: 5
 title: Grid Order Detail
+sidebar_label: 'Order Detail'
 language_tabs: false
 toc_footers: []
 includes: []

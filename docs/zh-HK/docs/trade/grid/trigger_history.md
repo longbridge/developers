@@ -2,6 +2,7 @@
 slug: trigger_history
 sidebar_position: 6
 title: 網格觸發歷史
+sidebar_label: '觸發歷史'
 language_tabs: false
 toc_footers: []
 includes: []

@@ -2,6 +2,7 @@
 slug: list
 sidebar_position: 3
 title: List Grid Orders
+sidebar_label: 'List Orders'
 language_tabs: false
 toc_footers: []
 includes: []

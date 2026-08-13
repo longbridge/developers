@@ -2,6 +2,7 @@
 slug: submit
 sidebar_position: 1
 title: 提交网格订单
+sidebar_label: '提交订单'
 search: true
 headingLevel: 3
 ---

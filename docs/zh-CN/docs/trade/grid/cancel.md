@@ -2,6 +2,7 @@
 slug: cancel
 sidebar_position: 7
 title: 取消网格订单
+sidebar_label: '取消订单'
 search: true
 headingLevel: 3
 ---

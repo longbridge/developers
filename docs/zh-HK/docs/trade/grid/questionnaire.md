@@ -2,6 +2,7 @@
 slug: questionnaire
 sidebar_position: 10
 title: 提交策略問卷
+sidebar_label: '策略問卷'
 language_tabs: false
 toc_footers: []
 includes: []

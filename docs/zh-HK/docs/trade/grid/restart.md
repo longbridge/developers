@@ -2,6 +2,7 @@
 slug: restart
 sidebar_position: 9
 title: 重啟網格訂單
+sidebar_label: '重啟訂單'
 language_tabs: false
 toc_footers: []
 includes: []

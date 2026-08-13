@@ -2,11 +2,12 @@
 slug: list_by_ids
 sidebar_position: 4
 title: 按 ID 查询网格订单
+sidebar_label: '按 ID 查询订单'
 search: true
 headingLevel: 3
 ---
 
-按 ID 查询指定的网格订单。该接口复用 `/v1/gridtrading/list` 路径，使用 `POST` 方法并在请求体中传入订单 ID。
+按 ID 查询指定的网格订单。
 
 <CliCommand>
 # 按 ID 查询指定网格订单

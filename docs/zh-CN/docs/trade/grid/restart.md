@@ -2,6 +2,7 @@
 slug: restart
 sidebar_position: 9
 title: 重启网格订单
+sidebar_label: '重启订单'
 search: true
 headingLevel: 3
 ---

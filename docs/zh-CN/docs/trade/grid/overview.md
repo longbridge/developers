@@ -2,6 +2,7 @@
 slug: overview
 sidebar_position: 0
 title: 网格交易概览
+sidebar_label: '概览'
 search: true
 headingLevel: 3
 ---

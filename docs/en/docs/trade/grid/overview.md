@@ -2,6 +2,7 @@
 slug: overview
 sidebar_position: 0
 title: Grid Trading Overview
+sidebar_label: 'Overview'
 language_tabs: false
 toc_footers: []
 includes: []

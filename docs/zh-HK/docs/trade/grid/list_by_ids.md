@@ -2,6 +2,7 @@
 slug: list_by_ids
 sidebar_position: 4
 title: 按 ID 查詢網格訂單
+sidebar_label: '按 ID 查詢訂單'
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,7 +11,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-按 ID 查詢指定的網格訂單。該接口複用 `/v1/gridtrading/list` 路徑，使用 `POST` 方法並在請求體中傳入訂單 ID。
+按 ID 查詢指定的網格訂單。
 
 <CliCommand>
 # 按 ID 查詢指定網格訂單

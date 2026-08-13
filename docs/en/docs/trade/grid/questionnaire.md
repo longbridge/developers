@@ -2,6 +2,7 @@
 slug: questionnaire
 sidebar_position: 10
 title: Submit Strategy Questionnaire
+sidebar_label: 'Strategy Questionnaire'
 language_tabs: false
 toc_footers: []
 includes: []

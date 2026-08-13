@@ -2,6 +2,7 @@
 slug: trigger_history
 sidebar_position: 6
 title: Grid Trigger History
+sidebar_label: 'Trigger History'
 language_tabs: false
 toc_footers: []
 includes: []

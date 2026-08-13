@@ -2,6 +2,7 @@
 slug: suspend
 sidebar_position: 8
 title: 暫停網格訂單
+sidebar_label: '暫停訂單'
 language_tabs: false
 toc_footers: []
 includes: []

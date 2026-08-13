@@ -2,6 +2,7 @@
 slug: list
 sidebar_position: 3
 title: 网格订单列表
+sidebar_label: '订单列表'
 search: true
 headingLevel: 3
 ---

@@ -2,6 +2,7 @@
 slug: replace
 sidebar_position: 2
 title: Modify Grid Order
+sidebar_label: 'Modify Order'
 language_tabs: false
 toc_footers: []
 includes: []

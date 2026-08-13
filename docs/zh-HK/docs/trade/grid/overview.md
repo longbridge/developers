@@ -2,6 +2,7 @@
 slug: overview
 sidebar_position: 0
 title: 網格交易概覽
+sidebar_label: '概覽'
 language_tabs: false
 toc_footers: []
 includes: []

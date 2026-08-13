@@ -2,6 +2,7 @@
 slug: replace
 sidebar_position: 2
 title: 修改網格訂單
+sidebar_label: '修改訂單'
 language_tabs: false
 toc_footers: []
 includes: []

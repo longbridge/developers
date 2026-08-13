@@ -2,6 +2,7 @@
 slug: cancel
 sidebar_position: 7
 title: 取消網格訂單
+sidebar_label: '取消訂單'
 language_tabs: false
 toc_footers: []
 includes: []

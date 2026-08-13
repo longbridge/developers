@@ -2,6 +2,7 @@
 slug: suspend
 sidebar_position: 8
 title: 暂停网格订单
+sidebar_label: '暂停订单'
 search: true
 headingLevel: 3
 ---

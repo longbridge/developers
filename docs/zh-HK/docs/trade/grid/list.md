@@ -2,6 +2,7 @@
 slug: list
 sidebar_position: 3
 title: 網格訂單列表
+sidebar_label: '訂單列表'
 language_tabs: false
 toc_footers: []
 includes: []

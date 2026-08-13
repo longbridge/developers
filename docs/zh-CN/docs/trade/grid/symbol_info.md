@@ -2,6 +2,7 @@
 slug: symbol_info
 sidebar_position: 11
 title: 网格标的信息
+sidebar_label: '标的信息'
 search: true
 headingLevel: 3
 ---

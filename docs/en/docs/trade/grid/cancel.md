@@ -2,6 +2,7 @@
 slug: cancel
 sidebar_position: 7
 title: Cancel Grid Order
+sidebar_label: 'Cancel Order'
 language_tabs: false
 toc_footers: []
 includes: []

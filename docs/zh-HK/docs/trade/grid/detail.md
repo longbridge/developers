@@ -2,6 +2,7 @@
 slug: detail
 sidebar_position: 5
 title: 網格訂單詳情
+sidebar_label: '訂單詳情'
 language_tabs: false
 toc_footers: []
 includes: []

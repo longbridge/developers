@@ -2,6 +2,7 @@
 slug: list_by_ids
 sidebar_position: 4
 title: Query Grid Orders by IDs
+sidebar_label: 'Query Orders by IDs'
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,7 +11,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Query specific grid orders by their IDs. This reuses the `/v1/gridtrading/list` path with the `POST` method and a body of order IDs.
+Query specific grid orders by their IDs.
 
 <CliCommand>
 # Query specific grid orders by ID

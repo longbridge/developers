@@ -2,6 +2,7 @@
 slug: submit
 sidebar_position: 1
 title: Submit Grid Order
+sidebar_label: 'Submit Order'
 language_tabs: false
 toc_footers: []
 includes: []

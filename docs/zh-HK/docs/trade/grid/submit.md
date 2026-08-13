@@ -2,6 +2,7 @@
 slug: submit
 sidebar_position: 1
 title: 提交網格訂單
+sidebar_label: '提交訂單'
 language_tabs: false
 toc_footers: []
 includes: []

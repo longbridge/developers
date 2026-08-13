@@ -2,6 +2,7 @@
 slug: detail
 sidebar_position: 5
 title: 网格订单详情
+sidebar_label: '订单详情'
 search: true
 headingLevel: 3
 ---

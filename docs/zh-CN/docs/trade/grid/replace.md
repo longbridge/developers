@@ -2,6 +2,7 @@
 slug: replace
 sidebar_position: 2
 title: 修改网格订单
+sidebar_label: '修改订单'
 search: true
 headingLevel: 3
 ---
