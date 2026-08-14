@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-08-14
+
+### CLI v0.27.0
+
+- **新增 `agent` 命令（A2A）** — 在终端发现并驱动 Longbridge AI Agent：`workspace list`、`agent list`，以及流式 `agent chat` / `agent continue`
+- **新增 `acp` 运行时** — 通过 Agent Client Protocol 暴露 Longbridge AI Agent（`longbridge acp`），内置 Codex / Claude 适配器预设
+
 ## 2026-07-20
 
 - **Developers 平台支持美国账户登录** — 美国账户现已支持登录与接口调用。注意国内 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美国账户，请使用默认域名

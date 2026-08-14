@@ -6,6 +6,13 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-08-14
+
+### CLI v0.27.0
+
+- **New `agent` commands (A2A)** — discover and drive Longbridge AI agents from the terminal: `workspace list`, `agent list`, and streaming `agent chat` / `agent continue`
+- **New `acp` runtime** — expose the Longbridge AI agent over the Agent Client Protocol (`longbridge acp`), with Codex / Claude adapter presets
+
 ## 2026-07-20
 
 - **US accounts can sign in to Longbridge Developers** — US accounts are now supported for login and API access. Note that the mainland-China `.cn` domains (`openapi.longbridge.cn`, `openapi-quote.longbridge.cn`, `openapi-trade.longbridge.cn`) do not serve US accounts; use the default domains instead

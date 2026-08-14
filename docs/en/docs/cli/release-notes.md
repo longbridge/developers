@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
+
+- **New `agent` commands for Longbridge AI (A2A)** — `workspace list` and `agent list` discover agents; `agent chat` drives a conversation (`--stream` for SSE) and `agent continue` resumes an interrupted run; every command supports `--format json`, and `agent --skill` prints the A2A doc for AI harnesses
+- **New `acp` runtime** — `longbridge acp` exposes the Longbridge AI agent over the Agent Client Protocol via the new `longbridge-ai-acp` crate (embedded and stdio sessions), with Codex and Claude ACP adapter presets
+
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
 - **New TUI settings modal (`Ctrl+,`)** — first setting is up/down colors (red-up vs green-up); applied instantly and remembered across restarts in `~/.longbridge/terminal.json`
