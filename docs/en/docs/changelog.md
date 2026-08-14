@@ -8,6 +8,15 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
+### SDK v4.5.0
+
+- **New `AgentContext.public_agents`** — list every publicly shared AI agent on the platform (the Explore catalog), across all languages; takes the same optional `page` / `limit` / `name` params as `agents`
+- **AI Agent conversations gain `parent_message_id`** — attach a follow-up after a specific message to keep the stream in order (only valid together with `chat_uid`)
+- **Richer AI Agent responses** — `further_questions` suggestions, full `Reference` payloads (source type / id / nested content, previously dropped), `chat_id` + error fields on `ChatStartedPayload`, and `interactions` (`HumanInteraction`) on interrupts
+- **Shared HTTP client** — every context now shares one process-wide `reqwest::Client` (connection pool, DNS cache, TLS) instead of building its own, so high-churn processes stop spinning up thousands of pools
+- **Fix: reconnect-loop leak** — `TradeContext` / `QuoteContext` stop their background reconnect loop when the context is dropped, ending the zombie-task / memory leak under long-running, high-churn workloads
+- **Fix: Java SDK JVM crashes** — invalid JNI arguments, background callback failures, and concurrent `close()` / method calls now throw catchable Java exceptions instead of aborting the JVM (no more `panic!` / double-free / use-after-free)
+
 ### CLI v0.27.0
 
 - **New `agent` commands (A2A)** — discover and drive Longbridge AI agents from the terminal: `workspace list`, `agent list`, and streaming `agent chat` / `agent continue`

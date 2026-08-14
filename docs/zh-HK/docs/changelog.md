@@ -8,6 +8,15 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
+### SDK v4.5.0
+
+- **新增 `AgentContext.public_agents`** — 列出平台上所有公開分享的 AI Agent（Explore 目錄），全語言支持；參數與 `agents` 一致（可選 `page` / `limit` / `name`）
+- **AI Agent 對話新增 `parent_message_id`** — 在指定消息後追加追問，保持消息流順序（僅可與 `chat_uid` 配合使用）
+- **AI Agent 響應欄位完善** — `further_questions` 追問建議、完整的 `Reference`（來源類型 / id / 嵌套內容，此前會丟失）、`ChatStartedPayload` 的 `chat_id` 與錯誤欄位、中斷的 `interactions`（`HumanInteraction`）
+- **共享 HTTP 客戶端** — 所有 context 現共享單一進程級 `reqwest::Client`（連接池、DNS 緩存、TLS），高頻創建 context 的進程不再產生成千上萬個連接池
+- **修復：重連循環洩漏** — `TradeContext` / `QuoteContext` 在 context 被釋放後停止後台重連循環，消除長時間高頻場景下的殭屍任務與內存洩漏
+- **修復：Java SDK 崩潰 JVM** — JNI 非法參數、後台回調失敗、並發 `close()` / 方法調用現在拋出可捕獲的 Java 異常，而非 abort JVM（不再 `panic!` / 雙重釋放 / 釋放後使用）
+
 ### CLI v0.27.0
 
 - **新增 `agent` 命令（A2A）** — 在終端發現並驅動 Longbridge AI Agent：`workspace list`、`agent list`，以及流式 `agent chat` / `agent continue`
