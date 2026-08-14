@@ -9,7 +9,7 @@ sidebar_icon: newspaper
 
 ### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
 
-- **新增 `acp` 運行時——把 Longbridge AI 接入你的編輯器** — `longbridge acp` 通過新的 `longbridge-ai-acp` crate 將 Longbridge AI 暴露為 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服務：任何 ACP 客戶端（當下是 Zed，未來更多）都能零集成接入一個「懂市場」的 Agent——實時行情、基本面、組合洞察一應俱全；支持內嵌與 stdio 會話，內置 Codex 與 Claude 適配器預設，API / 鑑權始終由 CLI 掌管、密鑰不外洩
+- **[通過 ACP 使用 Longbridge AI](/zh-HK/docs/cli/acp)** — 新增 `longbridge acp` 命令，將 [Longbridge AI](https://longbridge.com/ai) 作為兼容 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）的 Agent 運行。現在可以在支持 ACP 的客戶端應用中查詢實時行情、分析公司基本面和解讀賬戶持倉；配置方法請參閱 ACP 使用指南
 - **新增 Longbridge AI `agent` 命令** — `agent workspaces` 列出 AI 工作區；`agent list` 發現可對話的 Agent（`--workspace`、`--name`；`--all` 含工作流 Agent）；`agent chat chatbot "…"` 通過 SSE 進行對話（`--stream` 實時輸出——公開的 `chatbot` Agent 任何賬戶可用），多輪追問用 `agent chat chatbot <CHAT_UID> <MSG_ID> "…"`；`agent continue chatbot <CHAT_UID> <MSG_ID>` 恢復被中斷的運行（`--answer` / `--answers-json`）；`agent --skill` 輸出面向 AI harness 的 agent skill 文檔
 
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
