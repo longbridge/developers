@@ -19,8 +19,8 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
-- **新增 `acp` 运行时——把 Longbridge AI Agent 接进任意编辑器** — `longbridge acp` 将「懂行情」的 Longbridge AI Agent（实时行情、基本面、组合洞察）变成 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服务，Zed 等 ACP 原生工具开箱即可与它对话，无需任何自建集成；支持内嵌 / stdio 会话，内置 Codex / Claude 适配器预设，同时 API / 鉴权仍由 CLI 掌管
-- **新增 `agent` 命令** — 在终端发现并与 Longbridge AI Agent 对话：`agent workspaces`、`agent list`、流式 `agent chat`、`agent continue` 与 `agent --skill`
+- **新增 `acp` 运行时——把 Longbridge AI 接进任意编辑器** — `longbridge acp` 将「懂行情」的 Longbridge AI（实时行情、基本面、组合洞察）变成 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服务，Zed 等 ACP 原生工具开箱即可与它对话，无需任何自建集成；支持内嵌 / stdio 会话，内置 Codex / Claude 适配器预设，同时 API / 鉴权仍由 CLI 掌管
+- **新增 `agent` 命令** — 在终端发现并与 Longbridge AI 对话：`agent workspaces`、`agent list`、流式 `agent chat`、`agent continue` 与 `agent --skill`
 
 ## 2026-07-20
 
