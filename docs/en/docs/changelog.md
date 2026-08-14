@@ -19,7 +19,7 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
-- **New `acp` runtime — bring the Longbridge AI into any editor** — `longbridge acp` turns the market-aware Longbridge AI (live quotes, fundamentals, portfolio insight) into a provider-neutral [Agent Client Protocol](https://agentclientprotocol.com/) (ACP) server, so ACP-native tools like Zed can chat with it out of the box — no custom integration. Ships embedded / stdio sessions and ready-made Codex / Claude adapter presets, while the CLI keeps API / auth ownership
+- **[Use Longbridge AI over ACP](/en/docs/cli/acp)** — The new `longbridge acp` command makes [Longbridge AI](https://longbridge.com/ai) available in compatible client applications for live market data, company analysis, and account position insights
 - **New `agent` commands** — discover and chat with agents on Longbridge AI from the terminal: `agent workspaces`, `agent list`, streaming `agent chat`, `agent continue`, and `agent --skill`
 
 ## 2026-07-20
