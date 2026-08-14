@@ -17,8 +17,6 @@ sidebar_icon: newspaper
 ### CLI v0.27.0
 
 - **新增 `grid` 命令组** — 提交与管理网格策略订单：`grid submit` / `detail` / `triggers` / `replace` / `suspend` / `restart` / `cancel` / `info` / `questionnaire`
-- **新增 `agent` 命令（A2A）** — 在终端发现并驱动 Longbridge AI Agent：`workspace list`、`agent list`，以及流式 `agent chat` / `agent continue`
-- **新增 `acp` 运行时** — 通过 Agent Client Protocol 暴露 Longbridge AI Agent（`longbridge acp`），内置 Codex / Claude 适配器预设
 
 ### MCP
 

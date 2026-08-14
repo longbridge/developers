@@ -17,8 +17,6 @@ sidebar_icon: newspaper
 ### CLI v0.27.0
 
 - **New `grid` command group** — submit and manage grid strategy orders: `grid submit` / `detail` / `triggers` / `replace` / `suspend` / `restart` / `cancel` / `info` / `questionnaire`
-- **New `agent` commands (A2A)** — discover and drive Longbridge AI agents from the terminal: `workspace list`, `agent list`, and streaming `agent chat` / `agent continue`
-- **New `acp` runtime** — expose the Longbridge AI agent over the Agent Client Protocol (`longbridge acp`), with Codex / Claude adapter presets
 
 ### MCP
 

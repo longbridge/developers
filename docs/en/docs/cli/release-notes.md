@@ -12,8 +12,6 @@ sidebar_icon: newspaper
 - **New `grid` command group for grid trading** — `grid submit` starts a grid strategy (base / upper / lower price, percent or spread triggers, per-trigger and boundary quantities, `GMO` / `GLO` / `GTG` order types; `--dry-run` validates without submitting); `grid` lists grids and `grid --ids` queries specific ones
 - **Inspect and manage a running grid** — `grid detail` and `grid triggers` show the rule, sub-orders, and trigger history; `grid replace`, `grid suspend`, `grid restart`, and `grid cancel` modify or stop a grid
 - **Grid setup helpers** — `grid info` shows a symbol's grid info (lot size, last price, authorization, currency), and `grid questionnaire` records the one-time strategy risk-disclosure consent required before grid trading
-- **New `agent` commands for Longbridge AI (A2A)** — `workspace list` and `agent list` discover agents; `agent chat` drives a conversation (`--stream` for SSE) and `agent continue` resumes an interrupted run; every command supports `--format json`, and `agent --skill` prints the A2A doc for AI harnesses
-- **New `acp` runtime** — `longbridge acp` exposes the Longbridge AI agent over the Agent Client Protocol via the new `longbridge-ai-acp` crate (embedded and stdio sessions), with Codex and Claude ACP adapter presets
 
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
