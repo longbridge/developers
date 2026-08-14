@@ -19,8 +19,8 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
-- **New `agent` commands (A2A)** — discover and drive Longbridge AI agents from the terminal: `workspace list`, `agent list`, and streaming `agent chat` / `agent continue`
-- **New `acp` runtime** — expose the Longbridge AI agent over the Agent Client Protocol (`longbridge acp`), with Codex / Claude adapter presets
+- **New `acp` runtime** — expose the Longbridge AI agent as a provider-neutral [Agent Client Protocol](https://agentclientprotocol.com/) (ACP) server via `longbridge acp` (embedded / stdio sessions), with ready-made Codex / Claude adapter presets so ACP clients like Zed can drive it
+- **New `agent` commands** — discover and chat with Longbridge AI agents from the terminal: `agent workspaces`, `agent list`, streaming `agent chat`, `agent continue`, and `agent --skill`
 
 ## 2026-07-20
 

@@ -19,8 +19,8 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
-- **新增 `agent` 命令（A2A）** — 在終端發現並驅動 Longbridge AI Agent：`workspace list`、`agent list`，以及流式 `agent chat` / `agent continue`
-- **新增 `acp` 運行時** — 通過 Agent Client Protocol 暴露 Longbridge AI Agent（`longbridge acp`），內置 Codex / Claude 適配器預設
+- **新增 `acp` 運行時** — 通過 `longbridge acp` 將 Longbridge AI Agent 暴露為 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服務（內嵌 / stdio 會話），內置 Codex / Claude 適配器預設，Zed 等 ACP 客戶端可直接驅動
+- **新增 `agent` 命令** — 在終端發現並與 Longbridge AI Agent 對話：`agent workspaces`、`agent list`、流式 `agent chat`、`agent continue` 與 `agent --skill`
 
 ## 2026-07-20
 

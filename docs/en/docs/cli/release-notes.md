@@ -9,8 +9,8 @@ sidebar_icon: newspaper
 
 ### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
 
-- **New `agent` commands for Longbridge AI (A2A)** — `workspace list` and `agent list` discover agents; `agent chat` drives a conversation (`--stream` for SSE) and `agent continue` resumes an interrupted run; every command supports `--format json`, and `agent --skill` prints the A2A doc for AI harnesses
-- **New `acp` runtime** — `longbridge acp` exposes the Longbridge AI agent over the Agent Client Protocol via the new `longbridge-ai-acp` crate (embedded and stdio sessions), with Codex and Claude ACP adapter presets
+- **New `acp` runtime** — `longbridge acp` exposes the Longbridge AI agent as a provider-neutral [Agent Client Protocol](https://agentclientprotocol.com/) (ACP) server via the new `longbridge-ai-acp` crate (embedded and stdio sessions), with ready-made Codex and Claude ACP adapter presets so ACP clients like Zed can drive it while the CLI keeps API / auth ownership
+- **New `agent` commands for Longbridge AI** — `agent workspaces` lists AI workspaces; `agent list` discovers chat-capable agents (`--workspace`, `--name`; `--all` includes workflow agents); `agent chat chatbot "…"` holds a conversation over SSE (`--stream` for live tokens — the public `chatbot` agent is usable by any account), with `agent chat chatbot <CHAT_UID> <MSG_ID> "…"` for multi-turn follow-ups; `agent continue chatbot <CHAT_UID> <MSG_ID>` resumes an interrupted run (`--answer` / `--answers-json`); and `agent --skill` prints the agent skill doc for AI harnesses
 
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 

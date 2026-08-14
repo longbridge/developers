@@ -9,8 +9,8 @@ sidebar_icon: newspaper
 
 ### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
 
-- **新增 Longbridge AI Agent（A2A）`agent` 命令** — `workspace list`、`agent list` 发现 Agent；`agent chat` 发起对话（`--stream` 走 SSE 流式），`agent continue` 恢复被中断的运行；所有命令支持 `--format json`，`agent --skill` 输出面向 AI harness 的 A2A 文档
-- **新增 `acp` 运行时** — `longbridge acp` 通过 Agent Client Protocol 暴露 Longbridge AI Agent，基于新的 `longbridge-ai-acp` crate（内嵌与 stdio 会话），内置 Codex 与 Claude ACP 适配器预设
+- **新增 `acp` 运行时** — `longbridge acp` 通过新的 `longbridge-ai-acp` crate 将 Longbridge AI Agent 暴露为 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服务（内嵌与 stdio 会话），内置 Codex 与 Claude ACP 适配器预设，Zed 等 ACP 客户端可直接驱动，同时 API / 鉴权仍由 CLI 掌管
+- **新增 Longbridge AI Agent `agent` 命令** — `agent workspaces` 列出 AI 工作区；`agent list` 发现可对话的 Agent（`--workspace`、`--name`；`--all` 含工作流 Agent）；`agent chat chatbot "…"` 通过 SSE 进行对话（`--stream` 实时输出——公开的 `chatbot` Agent 任何账户可用），多轮追问用 `agent chat chatbot <CHAT_UID> <MSG_ID> "…"`；`agent continue chatbot <CHAT_UID> <MSG_ID>` 恢复被中断的运行（`--answer` / `--answers-json`）；`agent --skill` 输出面向 AI harness 的 agent skill 文档
 
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
