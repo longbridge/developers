@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
+
+- **新增 `acp` 运行时——把 Longbridge AI 接入你的编辑器** — `longbridge acp` 通过新的 `longbridge-ai-acp` crate 将 Longbridge AI 暴露为 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服务：任何 ACP 客户端（当下是 Zed，未来更多）都能零集成接入一个「懂市场」的 Agent——实时行情、基本面、组合洞察一应俱全；支持内嵌与 stdio 会话，内置 Codex 与 Claude 适配器预设，API / 鉴权始终由 CLI 掌管、密钥不外泄
+- **新增 Longbridge AI `agent` 命令** — `agent workspaces` 列出 AI 工作区；`agent list` 发现可对话的 Agent（`--workspace`、`--name`；`--all` 含工作流 Agent）；`agent chat chatbot "…"` 通过 SSE 进行对话（`--stream` 实时输出——公开的 `chatbot` Agent 任何账户可用），多轮追问用 `agent chat chatbot <CHAT_UID> <MSG_ID> "…"`；`agent continue chatbot <CHAT_UID> <MSG_ID>` 恢复被中断的运行（`--answer` / `--answers-json`）；`agent --skill` 输出面向 AI harness 的 agent skill 文档
+
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 
 - **新增 TUI 设置弹窗（`Ctrl+,`）** — 首个设置项为涨跌颜色（红涨 / 绿涨），即时生效并写入 `~/.longbridge/terminal.json`，重启后保留

@@ -6,6 +6,22 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-08-14
+
+### SDK v4.5.0
+
+- **新增 `AgentContext.public_agents`** — 列出平台上所有公开分享的 AI Agent（Explore 目录），全语言支持；参数与 `agents` 一致（可选 `page` / `limit` / `name`）
+- **AI Agent 对话新增 `parent_message_id`** — 在指定消息后追加追问，保持消息流顺序（仅可与 `chat_uid` 配合使用）
+- **AI Agent 响应字段完善** — `further_questions` 追问建议、完整的 `Reference`（来源类型 / id / 嵌套内容，此前会丢失）、`ChatStartedPayload` 的 `chat_id` 与错误字段、中断的 `interactions`（`HumanInteraction`）
+- **共享 HTTP 客户端** — 所有 context 现共享单一进程级 `reqwest::Client`（连接池、DNS 缓存、TLS），高频创建 context 的进程不再产生成千上万个连接池
+- **修复：重连循环泄漏** — `TradeContext` / `QuoteContext` 在 context 被释放后停止后台重连循环，消除长时间高频场景下的僵尸任务与内存泄漏
+- **修复：Java SDK 崩溃 JVM** — JNI 非法参数、后台回调失败、并发 `close()` / 方法调用现在抛出可捕获的 Java 异常，而非 abort JVM（不再 `panic!` / 双重释放 / 释放后使用）
+
+### CLI v0.27.0
+
+- **新增 `acp` 运行时——把 Longbridge AI 接进任意编辑器** — `longbridge acp` 将「懂行情」的 Longbridge AI（实时行情、基本面、组合洞察）变成 provider-neutral 的 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）服务，Zed 等 ACP 原生工具开箱即可与它对话，无需任何自建集成；支持内嵌 / stdio 会话，内置 Codex / Claude 适配器预设，同时 API / 鉴权仍由 CLI 掌管
+- **新增 `agent` 命令** — 在终端发现并与 Longbridge AI 对话：`agent workspaces`、`agent list`、流式 `agent chat`、`agent continue` 与 `agent --skill`
+
 ## 2026-07-20
 
 - **Developers 平台支持美国账户登录** — 美国账户现已支持登录与接口调用。注意国内 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美国账户，请使用默认域名
