@@ -19,13 +19,25 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props
-const { Content } = await render(entry)
-
-const Layout =
-  entry.data.layout === 'api-reference' ? ApiReferenceLayout
-  : entry.data.layout === false ? PlainLayout
-  : DocsLayout
+const { Content, headings } = await render(entry)
+const titleStr = entry.data.title ?? '(untitled)'
+const layoutKind =
+  entry.data.layout === 'api-reference' ? 'api'
+  : entry.data.layout === false ? 'plain'
+  : 'docs'
 ---
-<Layout title={entry.data.title ?? '(untitled)'} locale="en">
-  <Content />
-</Layout>
+{layoutKind === 'docs' && (
+  <DocsLayout title={titleStr} locale="en" entry={entry} headings={headings}>
+    <Content />
+  </DocsLayout>
+)}
+{layoutKind === 'api' && (
+  <ApiReferenceLayout title={titleStr} locale="en">
+    <Content />
+  </ApiReferenceLayout>
+)}
+{layoutKind === 'plain' && (
+  <PlainLayout title={titleStr} locale="en">
+    <Content />
+  </PlainLayout>
+)}

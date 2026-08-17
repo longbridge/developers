@@ -1,11 +1,46 @@
 ---
 import BaseLayout from './BaseLayout.astro'
-import type { Props as BaseProps } from './BaseLayout.astro'
-export type Props = BaseProps
-const props = Astro.props
+import type { CollectionEntry } from 'astro:content'
+import type { Locale } from '@lib/i18n'
+import Breadcrumb from '@components/shell/Breadcrumb'
+import type { BreadcrumbItem } from '@components/shell/Breadcrumb'
+import LocalNav from '@components/shell/LocalNav'
+import Sidebar from '@components/shell/Sidebar'
+import TOC from '@components/shell/TOC'
+import type { TocHeading } from '@components/shell/TOC'
+import PrevNext from '@components/shell/PrevNext'
+import { buildSidebar, getPrevNext } from '@lib/navigation'
+
+interface Props {
+  title: string
+  locale: Locale
+  entry: CollectionEntry<'docs'>
+  headings: TocHeading[]
+}
+
+const { title, locale, entry, headings } = Astro.props
+const sidebar = buildSidebar(locale)
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
+const { prev, next } = getPrevNext(sidebar, pathname)
+
+function buildCrumbsFromPath(e: CollectionEntry<'docs'>): BreadcrumbItem[] {
+  return [{ text: e.data.title ?? '(untitled)' }]
+}
+
+const crumbs = buildCrumbsFromPath(entry)
 ---
-<BaseLayout {...props}>
-  <div class="mx-auto max-w-4xl px-4 py-8">
-    <slot />
+
+<BaseLayout title={title} locale={locale}>
+  <LocalNav locale={locale} pathname={pathname} nodes={sidebar} client:load />
+  <div class="docs-layout">
+    <Sidebar nodes={sidebar} pathname={pathname} client:load />
+    <article class="docs-content">
+      {!entry.data.hide_breadcrumb && (
+        <Breadcrumb locale={locale} items={crumbs} />
+      )}
+      <slot />
+      <PrevNext prev={prev} next={next} />
+    </article>
+    <TOC headings={headings} client:load />
   </div>
 </BaseLayout>

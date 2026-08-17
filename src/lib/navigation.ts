@@ -169,3 +169,28 @@ export function buildSidebar(locale: Locale | string): SidebarNode[] {
 
   return sortByPosition(nodes)
 }
+
+export function flatSidebar(sidebar: SidebarNode[]): SidebarNode[] {
+  const result: SidebarNode[] = []
+  function walk(nodes: SidebarNode[]) {
+    for (const node of nodes) {
+      if (node.link) result.push(node)
+      if (node.items) walk(node.items)
+    }
+  }
+  walk(sidebar)
+  return result
+}
+
+export function getPrevNext(
+  sidebar: SidebarNode[],
+  currentPath: string,
+): { prev: SidebarNode | null; next: SidebarNode | null } {
+  const flat = flatSidebar(sidebar)
+  const idx = flat.findIndex((n) => n.link === currentPath)
+  if (idx === -1) return { prev: null, next: null }
+  return {
+    prev: idx > 0 ? (flat[idx - 1] ?? null) : null,
+    next: idx < flat.length - 1 ? (flat[idx + 1] ?? null) : null,
+  }
+}
