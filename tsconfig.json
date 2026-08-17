@@ -1,29 +1,17 @@
 {
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", ".legacy"],
   "compilerOptions": {
-    // Environment setup & latest features
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "jsx": "preserve",
-
-    // Bundler mode
-    "moduleResolution": "bundler",
-
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": true
-  },
-  // "include": [],
-  "exclude": ["node_modules", "dist"],
-  "references": [{ "path": "./docs" }],
-  "vueCompilerOptions": {
-    "vitePressExtensions": [".md"]
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@lib/*": ["src/lib/*"],
+      "@components/*": ["src/components/*"],
+      "@styles/*": ["src/styles/*"],
+      "@data/*": ["src/data/*"]
+    }
   }
 }
