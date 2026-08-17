@@ -17,8 +17,11 @@ sidebar_position: 1
     </thead>
     <tbody>
     <tr>
-        <td rowspan="8">交易</td>
+        <td rowspan="9">交易</td>
         <td><a href="./order/submit">委托下单</a></td>
+    </tr>
+    <tr>
+        <td><a href="./order/submit_multileg">多腿期权下单</a></td>
     </tr>
     <tr>
         <td><a href="./order/replace">改单</a></td>
