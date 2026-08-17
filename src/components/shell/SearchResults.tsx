@@ -43,7 +43,7 @@ export default function SearchResults({
   if (!query.trim()) return null
 
   return (
-    <ul className="search-results" role="listbox" aria-label="Search results">
+    <ul className="search-results" role="listbox" aria-label="Search results" aria-live="polite">
       {results.map((item, idx) => (
         <li
           key={item.url}
