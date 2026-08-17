@@ -27,6 +27,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .cache
 *.tsbuildinfo
 **/.vitepress/cache
+.astro/
 
 # IntelliJ based IDEs
 .idea
