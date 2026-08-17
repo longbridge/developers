@@ -5,8 +5,8 @@ import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import tailwind from '@tailwindcss/vite'
 
-const REGION = process.env.VITE_REGION ?? 'global'
-const SITE = process.env.VITE_SITE_HOSTNAME ?? 'https://open.longportapp.com'
+const REGION = process.env['VITE_REGION'] ?? 'global'
+const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longportapp.com'
 
 export default defineConfig({
   site: SITE,
