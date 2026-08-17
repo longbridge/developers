@@ -7,6 +7,7 @@ import type { NavItem } from '../../data/nav.en'
 import UserAvatar from './UserAvatar'
 import ThemeToggle from './ThemeToggle'
 import LanguageSwitcher from './LanguageSwitcher'
+import SearchButton from './SearchButton'
 
 interface Props {
   locale: Locale
@@ -83,6 +84,7 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
 
         {/* Right controls */}
         <div className="top-nav-actions">
+          <SearchButton locale={locale} />
           <LanguageSwitcher currentLocale={locale} currentPath={currentPath} />
           <ThemeToggle locale={locale} />
 
