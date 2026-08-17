@@ -60,6 +60,32 @@ function safeReadJson<T>(path: string): T | undefined {
   }
 }
 
+type Bucket = "A" | "B" | "C";
+
+/**
+ * Classify a route into A / B / C severity per spec §9.7.
+ *
+ * A (blocking): URL gate failed, DOM score < 0.95, or any interaction assertion failed.
+ * B (discuss):  visual diff changed > 0, or DOM has issues but score >= 0.95.
+ * C (clean):    all signals pass.
+ */
+function classifyRoute(r: RouteReport, urlOk: boolean): Bucket {
+  if (
+    !urlOk ||
+    (r.domDiff && r.domDiff.score < 0.95) ||
+    (r.interactions && r.interactions.some((i) => !i.passed))
+  ) {
+    return "A";
+  }
+  if (
+    (r.visualDiff && r.visualDiff.changed > 0) ||
+    (r.domDiff && r.domDiff.issues.length > 0)
+  ) {
+    return "B";
+  }
+  return "C";
+}
+
 // ---- Core export ----
 
 /**
@@ -80,6 +106,11 @@ export function writeReport(
   const failed = routes.filter((r) => !r.pass);
   const urlGate = urlDiff ? urlDiff.same : true;
   const gatePass = urlGate && failed.length === 0;
+
+  // A/B/C classification per spec §9.7
+  const buckets = routes.map((r) => ({ r, bucket: classifyRoute(r, urlGate) }));
+  const bucketCounts: Record<Bucket, number> = { A: 0, B: 0, C: 0 };
+  for (const { bucket } of buckets) bucketCounts[bucket]++;
 
   const report: FullReport = {
     generatedAt: new Date().toISOString(),
@@ -102,6 +133,12 @@ export function writeReport(
     `| URL set A △ B = ∅ | ${badge(urlGate)} |`,
     `| DOM + Visual + Interaction | ${badge(failed.length === 0)} |`,
     `| **Overall** | **${badge(gatePass)}** |`,
+    "",
+    "## Bucket summary",
+    "",
+    `- **A (blocking):** ${bucketCounts.A}`,
+    `- **B (discuss):** ${bucketCounts.B}`,
+    `- **C (clean):** ${bucketCounts.C}`,
     "",
     "## URL Diff",
     "",
@@ -132,11 +169,11 @@ export function writeReport(
   } else {
     lines.push(`${passed.length}/${routes.length} routes passed.`, "");
     lines.push(
-      "| URL | DOM | Visual | Interactions | Pass |",
-      "|-----|-----|--------|--------------|------|",
+      "| Bucket | URL | DOM | Visual | Interactions | Pass |",
+      "|--------|-----|-----|--------|--------------|------|",
     );
 
-    for (const r of routes) {
+    for (const { r, bucket } of buckets) {
       const domCell = r.domDiff
         ? `${pct(r.domDiff.score * 100)} ${badge(r.domDiff.pass)}`
         : "_n/a_";
@@ -146,7 +183,7 @@ export function writeReport(
       const intCell = r.interactions
         ? `${r.interactions.filter((i) => i.passed).length}/${r.interactions.length} ${badge(r.interactions.every((i) => i.passed))}`
         : "_n/a_";
-      lines.push(`| \`${r.url}\` | ${domCell} | ${vizCell} | ${intCell} | ${badge(r.pass)} |`);
+      lines.push(`| [${bucket}] | \`${r.url}\` | ${domCell} | ${vizCell} | ${intCell} | ${badge(r.pass)} |`);
     }
 
     if (failed.length > 0) {

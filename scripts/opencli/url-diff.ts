@@ -38,18 +38,6 @@ Exit codes:
 `);
 }
 
-/** Normalize a URL for comparison: strip trailing slash, lowercase origin. */
-function normalizeUrl(url: string): string {
-  try {
-    const u = new URL(url);
-    // Normalize to no-trailing-slash path, lowercased origin
-    let path = u.pathname.replace(/\/$/, "") || "/";
-    return u.origin.toLowerCase() + path;
-  } catch {
-    return url.trim().replace(/\/$/, "");
-  }
-}
-
 /** Strip origin so we compare only paths — handles baseline/candidate origin mismatch. */
 function pathOnly(url: string): string {
   try {

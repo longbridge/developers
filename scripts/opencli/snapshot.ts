@@ -22,7 +22,7 @@
  *     manifest.json      — { url, slug, htmlPath, pngPath, capturedAt }[]
  */
 
-import { join, dirname } from "node:path";
+import { join } from "node:path";
 import { mkdirSync, writeFileSync } from "node:fs";
 
 export interface SnapshotManifestEntry {
@@ -88,7 +88,6 @@ export async function snapshotRoutes(
       : new URL(route.url, baseUrl).toString();
     const slug = urlToSlug(url);
     const htmlPath = join(outDir, `${slug}.html`);
-    const pngPath = join(outDir, `${slug}.png`);
 
     try {
       const html = await captureHtml(url);
@@ -98,7 +97,7 @@ export async function snapshotRoutes(
         url,
         slug,
         htmlPath,
-        pngPath: null, // populated by MCP agent; see README.md
+        pngPath: null, // MCP agent writes the actual path
         capturedAt: new Date().toISOString(),
       });
     } catch (err) {
