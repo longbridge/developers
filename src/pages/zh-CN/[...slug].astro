@@ -4,11 +4,14 @@ import DocsLayout from '@/layouts/DocsLayout.astro'
 import PlainLayout from '@/layouts/PlainLayout.astro'
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
 import { resolveUrl, resolveLocale } from '@lib/slug'
+import { currentRegion, includedInRegion } from '@lib/region'
 
 export async function getStaticPaths() {
+  const region = currentRegion()
   const all = await getCollection('docs')
   return all
     .filter((e) => resolveLocale(e) === 'zh-CN')
+    .filter((e) => includedInRegion(resolveUrl(e), region))
     .map((e) => {
       const url = resolveUrl(e)
       return {
