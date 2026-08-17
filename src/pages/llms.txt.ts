@@ -9,10 +9,10 @@ export const GET: APIRoute = async ({ site }) => {
   const lines = enEntries.map((entry) => {
     const url = resolveUrl(entry)
     const title = entry.data.title ?? url
-    const absUrl = `${site}${url.replace(/^\//, '')}`
-    return `- [${title}](${absUrl})`
+    return `- [${title}](${site}${url.replace(/^\//, '')})`
   })
 
-  const body = lines.join('\n') + '\n'
+  const header = '# Longbridge Developers\n\n## Docs\n\n'
+  const body = header + lines.join('\n') + '\n'
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
 }
