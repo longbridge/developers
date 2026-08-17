@@ -55,7 +55,7 @@ This API is used to submit a multi-leg option combination order (such as vertica
   "code": 0,
   "message": "success",
   "data": {
-    "order_id": 683615454870679600
+    "order_id": "683615454870679600"
   }
 }
 ```

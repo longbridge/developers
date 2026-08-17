@@ -55,7 +55,7 @@ headingLevel: 2
   "code": 0,
   "message": "success",
   "data": {
-    "order_id": 683615454870679600
+    "order_id": "683615454870679600"
   }
 }
 ```
