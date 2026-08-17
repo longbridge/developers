@@ -5,6 +5,8 @@ import { nav as navZhCN } from '../../data/nav.zh-CN'
 import { nav as navZhHK } from '../../data/nav.zh-HK'
 import type { NavItem } from '../../data/nav.en'
 import UserAvatar from './UserAvatar'
+import ThemeToggle from './ThemeToggle'
+import LanguageSwitcher from './LanguageSwitcher'
 
 interface Props {
   locale: Locale
@@ -31,7 +33,7 @@ function isActive(item: NavItem, pathname: string): boolean {
   }
 }
 
-export default function TopNav({ locale, pathname = '/' }: Props) {
+export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const navItems = navForLocale(locale)
 
@@ -66,8 +68,8 @@ export default function TopNav({ locale, pathname = '/' }: Props) {
                 {item.link ? (
                   <a
                     href={item.link}
-                    className={isActive(item, pathname) ? 'nav-link active' : 'nav-link'}
-                    aria-current={isActive(item, pathname) ? 'page' : undefined}
+                    className={isActive(item, currentPath) ? 'nav-link active' : 'nav-link'}
+                    aria-current={isActive(item, currentPath) ? 'page' : undefined}
                   >
                     {item.text}
                   </a>
@@ -81,7 +83,8 @@ export default function TopNav({ locale, pathname = '/' }: Props) {
 
         {/* Right controls */}
         <div className="top-nav-actions">
-          <div id="theme-toggle-slot" aria-hidden="true" />
+          <LanguageSwitcher currentLocale={locale} currentPath={currentPath} />
+          <ThemeToggle locale={locale} />
 
           <UserAvatar locale={locale} />
         </div>
@@ -107,7 +110,7 @@ export default function TopNav({ locale, pathname = '/' }: Props) {
                 {item.link ? (
                   <a
                     href={item.link}
-                    className={isActive(item, pathname) ? 'nav-link active' : 'nav-link'}
+                    className={isActive(item, currentPath) ? 'nav-link active' : 'nav-link'}
                     onClick={() => setMobileOpen(false)}
                   >
                     {item.text}

@@ -8,6 +8,9 @@ export const locale = {
   'nav.getStarted': '立即開始',
   'nav.dashboard': '控制台',
   'nav.home': '首頁',
+  'nav.theme.light': '淺色',
+  'nav.theme.dark': '深色',
+  'nav.theme.system': '跟隨系統',
   // Search
   'search.placeholder': '搜尋文件…',
   'search.empty': '無法找到相關結果',
