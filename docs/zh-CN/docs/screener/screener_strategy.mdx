@@ -1,6 +1,6 @@
 ---
 slug: screener-strategy
-title: Screener Strategy Detail
+title: 选股策略详情
 sidebar_position: 3
 language_tabs: false
 toc_footers: []
@@ -10,9 +10,9 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the full configuration of a single stock screener strategy by strategy ID, including all indicator groups and the filter range for each indicator.
+根据策略 ID 获取单个选股策略的完整配置，包含所有指标分组和各指标的筛选范围。
 
-Endpoint: `GET /v1/quote/ai/screener/strategy/{id}` (strategy ID as path parameter)
+接口：`GET /v1/quote/ai/screener/strategy/\{id\}`（策略 ID 为路径参数）
 
 <CliCommand>
 longbridge screener run 42
@@ -23,11 +23,11 @@ longbridge screener run 42
 
 ## Parameters
 
-> **SDK method parameters.**
+> **SDK 方法参数。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | integer | YES | Strategy ID from `screener_recommend_strategies` or `screener_user_strategies` |
+| id | integer | 是 | 策略 ID，来自 `screener_recommend_strategies` 或 `screener_user_strategies` |
 
 ## Request Example
 
@@ -213,8 +213,8 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | [ScreenerStrategyDetail](#ScreenerStrategyDetail) |
-| 400    | Bad request | None   |
+| 200    | 成功        | [ScreenerStrategyDetail](#ScreenerStrategyDetail) |
+| 400    | 请求错误    | None   |
 
 ## Schemas
 
@@ -224,13 +224,13 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| id | integer | false | Strategy ID |
-| name | string | false | Strategy name |
-| market | string | false | Target market |
-| type | string | false | Strategy type |
-| filter | object | false | Filter configuration |
-| ∟ filters | object[] | false | Filter conditions |
-| ∟ ∟ key | string | false | Indicator key (no `filter_` prefix) |
-| ∟ ∟ min | string | false | Lower bound |
-| ∟ ∟ max | string | false | Upper bound |
-| ∟ ∟ tech_values | object | false | Technical indicator params |
+| id | integer | false | 策略 ID |
+| name | string | false | 策略名称 |
+| market | string | false | 目标市场 |
+| type | string | false | 策略类型 |
+| filter | object | false | 筛选配置 |
+| ∟ filters | object[] | false | 筛选条件列表 |
+| ∟ ∟ key | string | false | 指标键值（不含 `filter_` 前缀） |
+| ∟ ∟ min | string | false | 下限 |
+| ∟ ∟ max | string | false | 上限 |
+| ∟ ∟ tech_values | object | false | 技术指标参数 |
