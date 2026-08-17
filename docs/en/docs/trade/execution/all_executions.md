@@ -1,7 +1,7 @@
-﻿---
-slug: history_executions
-sidebar_position: 1
-title: History Executions
+---
+slug: all_executions
+sidebar_position: 3
+title: All Executions
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,20 +10,16 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-This API is used to get history executions, including the sell and buy records, and does not support querying today's execution details.
+This API is used to query execution (fill) records, including both buy and sell records. It supports querying today's and historical executions at the same time.
 
-<CliCommand>
-longbridge order executions --history
-</CliCommand>
-
-<SDKLinks module="trade" klass="TradeContext" method="history_executions" />
+<SDKLinks module="trade" klass="TradeContext" method="all_executions" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/trade/execution/history </td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v3/trade/execution/all </td></tr>
 </tbody>
 </table>
 
@@ -32,10 +28,12 @@ longbridge order executions --history
 > Content-Type: application/json; charset=utf-8
 
 | Name     | Type   | Required | Description                                                                                                                                                                                         |
-| -------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| -------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | symbol   | string | NO       | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                                                                                                        |
+| order_id | string | NO       | Order ID, example: `701276261045858304`                                                                                                                                                             |
 | start_at | string | NO       | Start time, formatted as a timestamp (second), example: `1650410999`.<br/><br/> If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time. |
 | end_at   | string | NO       | End time, formatted as a timestamp (second), example: `1650410999`. <br/><br/> If the end time is null, the default is the current time or 90 days after of the start time.                         |
+| page     | int32  | NO       | Page number, starting from `1`. The maximum number of records per query is 1000. If the number of results exceeds 1000, `has_more` will be `true`, use `page` together with `has_more` to paginate. |
 
 ### Request Example
 
@@ -50,7 +48,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
 
-resp = ctx.history_executions(
+resp = ctx.all_executions(
     symbol = "700.HK",
     start_at = datetime(2022, 5, 9),
     end_at = datetime(2022, 5, 12),
@@ -71,7 +69,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncTradeContext.create(config)
 
-    resp = await ctx.history_executions(
+    resp = await ctx.all_executions(
         symbol = "700.HK",
         start_at = datetime(2022, 5, 9),
         end_at = datetime(2022, 5, 12),
@@ -94,7 +92,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = TradeContext.new(config)
-  const resp = await ctx.historyExecutions({})
+  const resp = await ctx.allExecutions({ symbol: '700.HK' })
   console.log(resp)
 }
 main().catch(console.error)
@@ -112,8 +110,8 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              TradeContext ctx = TradeContext.create(config)) {
-            Execution[] resp = ctx.getHistoryExecutions(null).get();
-            for (Execution e : resp) System.out.println(e);
+            AllExecutionsResponse resp = ctx.getAllExecutions(null).get();
+            for (Execution e : resp.getTrades()) System.out.println(e);
         }
     }
 }
@@ -131,7 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let (ctx, _) = TradeContext::new(config);
-    let resp = ctx.history_executions(None).await?;
+    let resp = ctx.all_executions(None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -157,9 +155,9 @@ run(const OAuth& oauth)
     Config config = Config::from_oauth(oauth);
     TradeContext ctx = TradeContext::create(config);
 
-    ctx.history_executions(std::nullopt, [](auto res) {
+    ctx.all_executions(std::nullopt, [](auto res) {
         if (!res) { std::cout << "failed" << std::endl; return; }
-        for (const auto& e : *res) std::cout << e.order_id << std::endl;
+        for (const auto& e : res->trades) std::cout << e.order_id << std::endl;
     });
 }
 
@@ -218,17 +216,17 @@ func main() {
 		log.Fatal(err)
 	}
 	defer tctx.Close()
-	start := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
-	end := time.Date(2024, 5, 10, 0, 0, 0, 0, time.UTC)
-	executions, err := tctx.HistoryExecutions(context.Background(), &trade.GetHistoryExecutions{
-		Symbol:  "AAPL.US",
+	start := time.Date(2022, 5, 9, 0, 0, 0, 0, time.UTC)
+	end := time.Date(2022, 5, 12, 0, 0, 0, 0, time.UTC)
+	resp, err := tctx.AllExecutions(context.Background(), &trade.GetAllExecutions{
+		Symbol:  "700.HK",
 		StartAt: start,
 		EndAt:   end,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, e := range executions {
+	for _, e := range resp.Trades {
 		fmt.Println(e.OrderId)
 	}
 }
@@ -256,10 +254,10 @@ func main() {
         "order_id": "693664675163312128",
         "price": "388",
         "quantity": "100",
-        "side": "Buy",
         "symbol": "700.HK",
         "trade_done_at": "1648611351",
-        "trade_id": "693664675163312128-1648611351433741210"
+        "trade_id": "693664675163312128-1648611351433741210",
+        "side": "Buy"
       }
     ]
   }
@@ -268,20 +266,20 @@ func main() {
 
 ### Response Status
 
-| Status | Description                                              | Schema                                                  |
-| ------ | -------------------------------------------------------- | ------------------------------------------------------- |
-| 200    | Get History Executions Success                           | [history_executions_rsp](#schemahistory_executions_rsp) |
-| 400    | The query failed with an error in the request parameter. | None                                                    |
+| Status | Description                                              | Schema                                          |
+| ------ | -------------------------------------------------------- | ----------------------------------------------- |
+| 200    | Get All Executions Success                               | [all_executions_rsp](#schemaall_executions_rsp) |
+| 400    | The query failed with an error in the request parameter. | None                                            |
 
 <aside className="success">
 </aside>
 
 ## Schemas
 
-### history_executions_rsp
+### all_executions_rsp
 
-<a id="schemahistory_executions_rsp"></a>
-<a id="schemahistory_executions_rsp"></a>
+<a id="schemaall_executions_rsp"></a>
+<a id="schemaall_executions_rsp"></a>
 
 | Name            | Type     | Required | Description                                                                                                                                        |
 | --------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |

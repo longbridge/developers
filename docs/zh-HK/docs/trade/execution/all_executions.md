@@ -1,7 +1,7 @@
-﻿---
-slug: history_executions
-sidebar_position: 1
-title: 历史成交明细
+---
+slug: all_executions
+sidebar_position: 3
+title: 全部成交明細
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,20 +10,16 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-该接口用于获取历史订单的成交明细，包括买入和卖出的成交记录，不支持当日成交明细查询。
+該接口用於獲取訂單的成交明細，包括買入和賣出的成交記錄，同時支持當日成交和歷史成交查詢。
 
-<CliCommand>
-longbridge order executions --history
-</CliCommand>
-
-<SDKLinks module="trade" klass="TradeContext" method="history_executions" />
+<SDKLinks module="trade" klass="TradeContext" method="all_executions" />
 
 ## Request
 
 <table className="http-basic">
 <tbody>
 <tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/trade/execution/history </td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v3/trade/execution/all </td></tr>
 </tbody>
 </table>
 
@@ -31,11 +27,13 @@ longbridge order executions --history
 
 > Content-Type: application/json; charset=utf-8
 
-| Name     | Type   | Required | Description                                                                                                   |
-| -------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------- |
-| symbol   | string | NO       | 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`                                                          |
-| start_at | string | NO       | 开始时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>开始时间为空时，默认为结束时间或当前时间前九十天。 |
-| end_at   | string | NO       | 结束时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>结束时间为空时，默认为开始时间后九十天或当前时间。 |
+| Name     | Type   | Required | Description                                                                                                        |
+| -------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| symbol   | string | NO       | 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`                                                              |
+| order_id | string | NO       | 訂單 ID，例如：`701276261045858304`                                                                                |
+| start_at | string | NO       | 開始時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>開始時間為空時，默認為結束時間或當前時間前九十天。      |
+| end_at   | string | NO       | 結束時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>結束時間為空時，默認為開始時間後九十天或當前時間。      |
+| page     | int32  | NO       | 頁碼，從 `1` 開始。單次查詢最多返回 1000 條記錄，若結果超過 1000 條，`has_more` 為 `true`，可結合 `has_more` 翻頁。 |
 
 ### Request Example
 
@@ -50,7 +48,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
 
-resp = ctx.history_executions(
+resp = ctx.all_executions(
     symbol = "700.HK",
     start_at = datetime(2022, 5, 9),
     end_at = datetime(2022, 5, 12),
@@ -71,7 +69,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncTradeContext.create(config)
 
-    resp = await ctx.history_executions(
+    resp = await ctx.all_executions(
         symbol = "700.HK",
         start_at = datetime(2022, 5, 9),
         end_at = datetime(2022, 5, 12),
@@ -89,10 +87,12 @@ if __name__ == "__main__":
 const { Config, TradeContext, OAuth } = require('longbridge')
 
 async function main() {
-  const oauth = await OAuth.build("your-client-id", (_, url) => { console.log("Open this URL to authorize: " + url) })
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
   const config = Config.fromOAuth(oauth)
   const ctx = TradeContext.new(config)
-  const resp = await ctx.historyExecutions({})
+  const resp = await ctx.allExecutions({ symbol: '700.HK' })
   console.log(resp)
 }
 main().catch(console.error)
@@ -110,8 +110,8 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              TradeContext ctx = TradeContext.create(config)) {
-            Execution[] resp = ctx.getHistoryExecutions(null).get();
-            for (Execution e : resp) System.out.println(e);
+            AllExecutionsResponse resp = ctx.getAllExecutions(null).get();
+            for (Execution e : resp.getTrades()) System.out.println(e);
         }
     }
 }
@@ -129,7 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let (ctx, _) = TradeContext::new(config);
-    let resp = ctx.history_executions(None).await?;
+    let resp = ctx.all_executions(None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -155,9 +155,9 @@ run(const OAuth& oauth)
     Config config = Config::from_oauth(oauth);
     TradeContext ctx = TradeContext::create(config);
 
-    ctx.history_executions(std::nullopt, [](auto res) {
+    ctx.all_executions(std::nullopt, [](auto res) {
         if (!res) { std::cout << "failed" << std::endl; return; }
-        for (const auto& e : *res) std::cout << e.order_id << std::endl;
+        for (const auto& e : res->trades) std::cout << e.order_id << std::endl;
     });
 }
 
@@ -216,17 +216,17 @@ func main() {
 		log.Fatal(err)
 	}
 	defer tctx.Close()
-	start := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
-	end := time.Date(2024, 5, 10, 0, 0, 0, 0, time.UTC)
-	executions, err := tctx.HistoryExecutions(context.Background(), &trade.GetHistoryExecutions{
-		Symbol:  "AAPL.US",
+	start := time.Date(2022, 5, 9, 0, 0, 0, 0, time.UTC)
+	end := time.Date(2022, 5, 12, 0, 0, 0, 0, time.UTC)
+	resp, err := tctx.AllExecutions(context.Background(), &trade.GetAllExecutions{
+		Symbol:  "700.HK",
 		StartAt: start,
 		EndAt:   end,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, e := range executions {
+	for _, e := range resp.Trades {
 		fmt.Println(e.OrderId)
 	}
 }
@@ -234,7 +234,6 @@ func main() {
 
   </TabItem>
 </Tabs>
-
 
 ## Response
 
@@ -255,10 +254,10 @@ func main() {
         "order_id": "693664675163312128",
         "price": "388",
         "quantity": "100",
-        "side": "Buy",
         "symbol": "700.HK",
         "trade_done_at": "1648611351",
-        "trade_id": "693664675163312128-1648611351433741210"
+        "trade_id": "693664675163312128-1648611351433741210",
+        "side": "Buy"
       }
     ]
   }
@@ -267,29 +266,29 @@ func main() {
 
 ### Response Status
 
-| Status | Description              | Schema                                                  |
-| ------ | ------------------------ | ------------------------------------------------------- |
-| 200    | 查询成功                 | [history_executions_rsp](#schemahistory_executions_rsp) |
-| 400    | 查询失败，请求参数错误。 | None                                                    |
+| Status | Description        | Schema                                          |
+| ------ | ------------------ | ----------------------------------------------- |
+| 200    | 獲取全部成交明細成功 | [all_executions_rsp](#schemaall_executions_rsp) |
+| 400    | 請求參數有誤，查詢失敗 | None                                            |
 
 <aside className="success">
 </aside>
 
 ## Schemas
 
-### history_executions_rsp
+### all_executions_rsp
 
-<a id="schemahistory_executions_rsp"></a>
-<a id="schemahistory_executions_rsp"></a>
+<a id="schemaall_executions_rsp"></a>
+<a id="schemaall_executions_rsp"></a>
 
-| Name            | Type     | Required | Description                                                                                                   |
-| --------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| has_more        | boolean  | true     | 是否还有更多数据。<br/><br/>每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true |
-| trades          | object[] | false    | 成交明细信息                                                                                                  |
-| ∟ order_id      | string   | true     | 订单 ID                                                                                                       |
-| ∟ trade_id      | string   | true     | 成交 ID                                                                                                       |
-| ∟ symbol        | string   | true     | 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`                                                          |
-| ∟ trade_done_at | string   | true     | 成交时间，格式为时间戳 (秒)                                                                                   |
-| ∟ quantity      | string   | true     | 成交数量                                                                                                      |
-| ∟ price         | string   | true     | 成交价格                                                                                                      |
-| ∟ side          | string   | true     | 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出                                          |
+| Name            | Type     | Required | Description                                                            |
+| --------------- | -------- | -------- | --------------------------------------------------------------------- |
+| has_more        | boolean  | true     | 是否有更多記錄。<br/><br/>單次查詢最多返回 1000 條記錄，若結果超過 1000 條，has_more 為 true |
+| trades          | object[] | false    | 成交明細                                                              |
+| ∟ order_id      | string   | true     | 訂單 ID                                                               |
+| ∟ trade_id      | string   | true     | 成交 ID                                                               |
+| ∟ symbol        | string   | true     | 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`                  |
+| ∟ trade_done_at | string   | true     | 成交時間，格式為時間戳 (秒)                                           |
+| ∟ quantity      | string   | true     | 成交數量                                                              |
+| ∟ price         | string   | true     | 成交價格                                                              |
+| ∟ side          | string   | true     | 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出   |

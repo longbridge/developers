@@ -16,7 +16,7 @@ sidebar_position: 1
     </thead>
     <tbody>
     <tr>
-        <td rowspan="7">Trade</td>
+        <td rowspan="8">Trade</td>
         <td><a href="./order/submit">Submit Order</a></td>
     </tr>
     <tr>
@@ -36,6 +36,9 @@ sidebar_position: 1
     </tr>
     <tr>
         <td><a href="./execution/history_executions">Get History Executions</a></td>
+    </tr>
+    <tr>
+        <td><a href="./execution/all_executions">Get All Executions</a></td>
     </tr>
 <tr>
         <td rowspan="4">Asset</td>
