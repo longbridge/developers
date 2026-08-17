@@ -8,10 +8,6 @@ export const locale = {
   'nav.getStarted': '立即开始',
   'nav.dashboard': '控制台',
   'nav.home': '首页',
-  // Theme (not in legacy JSON — using defaults)
-  'nav.theme.light': '浅色',
-  'nav.theme.dark': '深色',
-  'nav.theme.system': '系统',
   // Search
   'search.placeholder': '搜索文档…',
   'search.empty': '无法找到相关结果',

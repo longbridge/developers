@@ -8,10 +8,6 @@ export const locale = {
   'nav.getStarted': 'Get Started',
   'nav.dashboard': 'Dashboard',
   'nav.home': 'Home',
-  // Theme (not in legacy JSON — using defaults)
-  'nav.theme.light': 'Light',
-  'nav.theme.dark': 'Dark',
-  'nav.theme.system': 'System',
   // Search (not in legacy JSON — using defaults)
   'search.placeholder': 'Search docs…',
   'search.empty': 'No results found',

@@ -19,25 +19,6 @@ function sgBaseUrl(locale: Locale): string {
   return locale === 'en' ? 'https://longbridge.com/sg' : 'https://longbridge.com/sg/zh-CN'
 }
 
-function switchLocale(targetLocale: string) {
-  if (typeof window === 'undefined') return
-  const path = window.location.pathname
-  // Detect current locale prefix
-  const localeMatch = path.match(/^\/(zh-CN|zh-HK)/)
-  const cur = localeMatch ? localeMatch[1] : null
-  let newPath: string
-  if (cur) {
-    if (targetLocale === 'en') {
-      newPath = path.replace(`/${cur}`, '') || '/'
-    } else {
-      newPath = path.replace(`/${cur}`, `/${targetLocale}`)
-    }
-  } else {
-    newPath = targetLocale === 'en' ? path : `/${targetLocale}${path}`
-  }
-  window.location.href = newPath
-}
-
 export default function Footer({ locale }: Props) {
   const year = new Date().getFullYear()
   const base = sgBaseUrl(locale)
@@ -156,9 +137,9 @@ export default function Footer({ locale }: Props) {
         <div>{t(locale, 'footer.rights', { year })}</div>
         <div className="app-footer-bottom-links">
           <span style={{ color: 'var(--lb-fg-3)' }}>·</span>
-          <button type="button" onClick={() => switchLocale('en')}>English</button>
-          <button type="button" onClick={() => switchLocale('zh-CN')}>简体中文</button>
-          <button type="button" onClick={() => switchLocale('zh-HK')}>繁體中文</button>
+          <a href="/">English</a>
+          <a href="/zh-CN/">简体中文</a>
+          <a href="/zh-HK/">繁體中文</a>
         </div>
       </div>
     </footer>

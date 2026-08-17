@@ -1,13 +1,10 @@
-import { useState, useEffect } from 'react'
-import { t } from '../../lib/i18n'
+import { useState } from 'react'
 import type { Locale } from '../../lib/i18n'
 import { nav as navEn } from '../../data/nav.en'
 import { nav as navZhCN } from '../../data/nav.zh-CN'
 import { nav as navZhHK } from '../../data/nav.zh-HK'
 import type { NavItem } from '../../data/nav.en'
 import UserAvatar from './UserAvatar'
-
-type Theme = 'light' | 'dark' | 'system'
 
 interface Props {
   locale: Locale
@@ -34,50 +31,9 @@ function isActive(item: NavItem, pathname: string): boolean {
   }
 }
 
-function readTheme(): Theme {
-  if (typeof window === 'undefined') return 'system'
-  const stored = localStorage.getItem('ui-mode')
-  if (stored === 'light' || stored === 'dark') return stored
-  return 'system'
-}
-
-function applyTheme(theme: Theme) {
-  const root = document.documentElement
-  if (theme === 'system') {
-    root.removeAttribute('data-theme')
-  } else {
-    root.setAttribute('data-theme', theme)
-  }
-  localStorage.setItem('ui-mode', theme)
-}
-
-function cycleTheme(current: Theme): Theme {
-  if (current === 'light') return 'dark'
-  if (current === 'dark') return 'system'
-  return 'light'
-}
-
 export default function TopNav({ locale, pathname = '/' }: Props) {
-  const [theme, setTheme] = useState<Theme>('system')
   const [mobileOpen, setMobileOpen] = useState(false)
   const navItems = navForLocale(locale)
-
-  useEffect(() => {
-    setTheme(readTheme())
-  }, [])
-
-  function handleCycleTheme() {
-    const next = cycleTheme(theme)
-    setTheme(next)
-    applyTheme(next)
-  }
-
-  const themeLabel =
-    theme === 'light'
-      ? t(locale, 'nav.theme.light')
-      : theme === 'dark'
-        ? t(locale, 'nav.theme.dark')
-        : t(locale, 'nav.theme.system')
 
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 
@@ -125,17 +81,7 @@ export default function TopNav({ locale, pathname = '/' }: Props) {
 
         {/* Right controls */}
         <div className="top-nav-actions">
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={handleCycleTheme}
-            aria-label={themeLabel}
-            title={themeLabel}
-          >
-            <span className="theme-icon" aria-hidden="true">
-              {theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻'}
-            </span>
-          </button>
+          <div id="theme-toggle-slot" aria-hidden="true" />
 
           <UserAvatar locale={locale} />
         </div>
