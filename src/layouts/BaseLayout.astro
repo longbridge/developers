@@ -1,11 +1,17 @@
 ---
 import '@styles/global.css'
+import SkipLink from '../components/shell/SkipLink.astro'
+import TopNav from '../components/shell/TopNav'
+import Footer from '../components/shell/Footer'
+import type { Locale } from '../lib/i18n'
+
 export interface Props {
   title: string
   description?: string
-  locale?: 'en' | 'zh-CN' | 'zh-HK'
+  locale?: Locale
 }
 const { title, description = '', locale = 'en' } = Astro.props
+const pathname = new URL(Astro.request.url).pathname
 ---
 <!doctype html>
 <html lang={locale} data-mode="light" data-theme="default" data-nb-pref="system">
@@ -23,6 +29,11 @@ const { title, description = '', locale = 'en' } = Astro.props
     </script>
   </head>
   <body>
-    <slot />
+    <SkipLink />
+    <TopNav locale={locale} pathname={pathname} client:load />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer locale={locale} client:idle />
   </body>
 </html>
