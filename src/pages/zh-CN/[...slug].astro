@@ -5,6 +5,7 @@ import PlainLayout from '@/layouts/PlainLayout.astro'
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
 import { resolveUrl, resolveLocale } from '@lib/slug'
 import { currentRegion, includedInRegion } from '@lib/region'
+import { mdxComponents } from '@/mdx-components'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -31,16 +32,16 @@ const layoutKind =
 ---
 {layoutKind === 'docs' && (
   <DocsLayout title={titleStr} locale="zh-CN" entry={entry} headings={headings}>
-    <Content />
+    <Content components={mdxComponents} />
   </DocsLayout>
 )}
 {layoutKind === 'api' && (
   <ApiReferenceLayout title={titleStr} locale="zh-CN">
-    <Content />
+    <Content components={mdxComponents} />
   </ApiReferenceLayout>
 )}
 {layoutKind === 'plain' && (
   <PlainLayout title={titleStr} locale="zh-CN">
-    <Content />
+    <Content components={mdxComponents} />
   </PlainLayout>
 )}
