@@ -46,6 +46,9 @@ docs/superpowers/*
 
 # generated at build time by fetch-mcp-tools plugin
 docs/.vitepress/data/mcp-tools.json
+
+# prebuild data cache (mcp-tools.json, skills clone)
+.data/
 docs/.vitepress/.temp/
 
 # Stray submodule directories
