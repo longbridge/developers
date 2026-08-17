@@ -1,3 +1,4 @@
+import { type ChangeEvent } from 'react'
 import type { Locale } from '../../lib/i18n'
 
 interface Props {
@@ -37,7 +38,7 @@ function buildUrl(currentLocale: Locale, targetLocale: Locale, currentPath: stri
 }
 
 export default function LanguageSwitcher({ currentLocale, currentPath }: Props) {
-  function handleChange(e: React.ChangeEvent<HTMLSelectElement>): void {
+  function handleChange(e: ChangeEvent<HTMLSelectElement>): void {
     const target = e.target.value as Locale
     if (target === currentLocale) return
     window.location.href = buildUrl(currentLocale, target, currentPath)
