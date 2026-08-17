@@ -329,7 +329,8 @@ func main() {
         "reviewed": false,
         "activate_order_type": "MIT",
         "activate_rth": "RTH_ONLY",
-        "submit_price": ""
+        "submit_price": "",
+        "limit_depth_level": 0
       }
     ]
   }
@@ -434,3 +435,4 @@ Order Information
 | ∟∟ activate_order_type     | string   | true     | Order type submitted after triggering, e.g. `LIT` (limit-if-touched) or `MIT` (market-if-touched) |
 | ∟∟ activate_rth            | string   | true     | Whether the order submitted after triggering allows pre/post market trading |
 | ∟∟ submit_price            | string   | true     | Submitted price |
+| ∟∟ limit_depth_level       | int32    | true     | Specifies the bid/ask depth level |
