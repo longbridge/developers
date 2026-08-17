@@ -1,10 +1,14 @@
-import React from 'react'
-
-/** T12 placeholder — MCP tools discovery panel */
-export function McpTools(_props: { [k: string]: unknown }) {
+export interface McpToolsProps { [k: string]: unknown }
+export function McpTools(_props: McpToolsProps) {
   return (
-    <div data-lbus-component="mcp-tools" style={{ display: 'none' }} aria-hidden="true">
-      {/* McpTools — implemented in T12 */}
+    <div
+      data-lbus-component="mcptools-placeholder"
+      className="my-4 rounded border border-dashed border-[--lbus-c-border] p-4 text-sm opacity-60"
+    >
+      <strong>McpTools placeholder</strong>
+      <p className="mt-1">
+        McpTools placeholder — dynamic MCP tool catalog will be wired in stage 2 (spec §7).
+      </p>
     </div>
   )
 }
