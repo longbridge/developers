@@ -71,6 +71,13 @@
         "typescript": "^5",
       },
     },
+    "packages/ui": {
+      "name": "@longbridge/openapi-ui",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "react": "^19",
+      },
+    },
   },
   "packages": {
     "@alloc/quick-lru": ["@alloc/quick-lru@5.2.0", "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz", {}, "sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw=="],
@@ -393,6 +400,8 @@
 
     "@jsonforms/vue-vanilla": ["@jsonforms/vue-vanilla@3.6.0", "https://registry.yarnpkg.com/@jsonforms/vue-vanilla/-/vue-vanilla-3.6.0.tgz", { "dependencies": { "lodash": "^4.17.21" }, "peerDependencies": { "@jsonforms/core": "3.6.0", "@jsonforms/vue": "3.6.0", "vue": "^3.2.26" } }, "sha512-fdvCTUVSEstnj0WFsUZohflAWxBBrkcpxUvo+scBUg6q0rcqtvT27ZZHj12EHP2YWCQo0uXZMP+ZNlO/AuzGDA=="],
 
+    "@longbridge/openapi-ui": ["@longbridge/openapi-ui@workspace:packages/ui"],
+
     "@mdx-js/mdx": ["@mdx-js/mdx@3.1.1", "https://git.5th.im/api/v4/packages/npm/@mdx-js/mdx/-/mdx-3.1.1.tgz", { "dependencies": { "@types/estree": "^1.0.0", "@types/estree-jsx": "^1.0.0", "@types/hast": "^3.0.0", "@types/mdx": "^2.0.0", "acorn": "^8.0.0", "collapse-white-space": "^2.0.0", "devlop": "^1.0.0", "estree-util-is-identifier-name": "^3.0.0", "estree-util-scope": "^1.0.0", "estree-walker": "^3.0.0", "hast-util-to-jsx-runtime": "^2.0.0", "markdown-extensions": "^2.0.0", "recma-build-jsx": "^1.0.0", "recma-jsx": "^1.0.0", "recma-stringify": "^1.0.0", "rehype-recma": "^1.0.0", "remark-mdx": "^3.0.0", "remark-parse": "^11.0.0", "remark-rehype": "^11.0.0", "source-map": "^0.7.0", "unified": "^11.0.0", "unist-util-position-from-estree": "^2.0.0", "unist-util-stringify-position": "^4.0.0", "unist-util-visit": "^5.0.0", "vfile": "^6.0.0" } }, "sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ=="],
 
     "@mermaid-js/mermaid-mindmap": ["@mermaid-js/mermaid-mindmap@9.3.0", "https://registry.yarnpkg.com/@mermaid-js/mermaid-mindmap/-/mermaid-mindmap-9.3.0.tgz", { "dependencies": { "@braintree/sanitize-url": "^6.0.0", "cytoscape": "^3.23.0", "cytoscape-cose-bilkent": "^4.1.0", "cytoscape-fcose": "^2.1.0", "d3": "^7.0.0", "khroma": "^2.0.0", "non-layered-tidy-tree-layout": "^2.0.2" } }, "sha512-IhtYSVBBRYviH1Ehu8gk69pMDF8DSRqXBRDMWrEfHoaMruHeaP2DXA3PBnuwsMaCdPQhlUUcy/7DBLAEIXvCAw=="],
@@ -407,19 +416,19 @@
 
     "@oxc-project/types": ["@oxc-project/types@0.115.0", "https://registry.yarnpkg.com/@oxc-project/types/-/types-0.115.0.tgz", {}, "sha512-4n91DKnebUS4yjUHl2g3/b2T+IUdCfmoZGhmwsovZCDaJSs+QkVAM+0AqqTxHSsHfeiMuueT75cZaZcT/m0pSw=="],
 
-    "@pagefind/darwin-arm64": ["@pagefind/darwin-arm64@1.5.2", "", { "os": "darwin", "cpu": "arm64" }, "sha512-MXpI+7HsAdPkvJ0gk9xj9g541BCqBZOBbdwj9g6lB5LCj6kSV6nqDSjzcAJwvOsfu0fjwvC8hQU+ecfhp+MpiQ=="],
+    "@pagefind/darwin-arm64": ["@pagefind/darwin-arm64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/darwin-arm64/-/darwin-arm64-1.5.2.tgz", { "os": "darwin", "cpu": "arm64" }, "sha512-MXpI+7HsAdPkvJ0gk9xj9g541BCqBZOBbdwj9g6lB5LCj6kSV6nqDSjzcAJwvOsfu0fjwvC8hQU+ecfhp+MpiQ=="],
 
-    "@pagefind/darwin-x64": ["@pagefind/darwin-x64@1.5.2", "", { "os": "darwin", "cpu": "x64" }, "sha512-IojxFWMEJe0RQ7PQ3KXQsPIImNsbpPYpoZ+QUDrL8fAl/O27IX+LVLs74/UzEZy5uA2LD8Nz1AiwKr72vrkZQw=="],
+    "@pagefind/darwin-x64": ["@pagefind/darwin-x64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/darwin-x64/-/darwin-x64-1.5.2.tgz", { "os": "darwin", "cpu": "x64" }, "sha512-IojxFWMEJe0RQ7PQ3KXQsPIImNsbpPYpoZ+QUDrL8fAl/O27IX+LVLs74/UzEZy5uA2LD8Nz1AiwKr72vrkZQw=="],
 
-    "@pagefind/freebsd-x64": ["@pagefind/freebsd-x64@1.5.2", "", { "os": "freebsd", "cpu": "x64" }, "sha512-7EVzo9+0w+2cbe671BtMj10UlNo83I+HrLVLfRxO731svHRJKUfJ/mo05gU14pe9PCfpKNQT8FS3Xc/oDN6pOA=="],
+    "@pagefind/freebsd-x64": ["@pagefind/freebsd-x64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/freebsd-x64/-/freebsd-x64-1.5.2.tgz", { "os": "freebsd", "cpu": "x64" }, "sha512-7EVzo9+0w+2cbe671BtMj10UlNo83I+HrLVLfRxO731svHRJKUfJ/mo05gU14pe9PCfpKNQT8FS3Xc/oDN6pOA=="],
 
-    "@pagefind/linux-arm64": ["@pagefind/linux-arm64@1.5.2", "", { "os": "linux", "cpu": "arm64" }, "sha512-Ovt9+K35sqzn8H3ZMXGwls4TD/wMJuvRtShHIsmUQREmaxjrDEX7gHckRCrwYJ4XE1H1p6HkLz3wukrAnsfXQw=="],
+    "@pagefind/linux-arm64": ["@pagefind/linux-arm64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/linux-arm64/-/linux-arm64-1.5.2.tgz", { "os": "linux", "cpu": "arm64" }, "sha512-Ovt9+K35sqzn8H3ZMXGwls4TD/wMJuvRtShHIsmUQREmaxjrDEX7gHckRCrwYJ4XE1H1p6HkLz3wukrAnsfXQw=="],
 
-    "@pagefind/linux-x64": ["@pagefind/linux-x64@1.5.2", "", { "os": "linux", "cpu": "x64" }, "sha512-V+tFqHKXhQKq/WqPBD67AFy7scn1/aZID00ws4fSDd+1daSi5UHR9VVlRrOUYKxn3VuFQYRD7lYXdZK1WED1YA=="],
+    "@pagefind/linux-x64": ["@pagefind/linux-x64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/linux-x64/-/linux-x64-1.5.2.tgz", { "os": "linux", "cpu": "x64" }, "sha512-V+tFqHKXhQKq/WqPBD67AFy7scn1/aZID00ws4fSDd+1daSi5UHR9VVlRrOUYKxn3VuFQYRD7lYXdZK1WED1YA=="],
 
-    "@pagefind/windows-arm64": ["@pagefind/windows-arm64@1.5.2", "", { "os": "win32", "cpu": "arm64" }, "sha512-hN9Nh90fNW61nNRCW9ZyQrAj/mD0eRvmJ8NlTUzkbuW8kIzGJUi3cxjFkEcMZ5h/8FsKWD/VcouZl4yo1F7B6g=="],
+    "@pagefind/windows-arm64": ["@pagefind/windows-arm64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/windows-arm64/-/windows-arm64-1.5.2.tgz", { "os": "win32", "cpu": "arm64" }, "sha512-hN9Nh90fNW61nNRCW9ZyQrAj/mD0eRvmJ8NlTUzkbuW8kIzGJUi3cxjFkEcMZ5h/8FsKWD/VcouZl4yo1F7B6g=="],
 
-    "@pagefind/windows-x64": ["@pagefind/windows-x64@1.5.2", "", { "os": "win32", "cpu": "x64" }, "sha512-Fa2Iyw7kaDRzGMfNYNUXNW2zbL5FQVDgSOcbDHdzBrDEdpqOqg8TcZ68F22ol6NJ9IGzvUdmeyZypLW5dyhqsg=="],
+    "@pagefind/windows-x64": ["@pagefind/windows-x64@1.5.2", "https://git.5th.im/api/v4/packages/npm/@pagefind/windows-x64/-/windows-x64-1.5.2.tgz", { "os": "win32", "cpu": "x64" }, "sha512-Fa2Iyw7kaDRzGMfNYNUXNW2zbL5FQVDgSOcbDHdzBrDEdpqOqg8TcZ68F22ol6NJ9IGzvUdmeyZypLW5dyhqsg=="],
 
     "@polka/url": ["@polka/url@1.0.0-next.29", "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.29.tgz", {}, "sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww=="],
 
@@ -1555,7 +1564,7 @@
 
     "package-manager-detector": ["package-manager-detector@1.8.0", "https://git.5th.im/api/v4/packages/npm/package-manager-detector/-/package-manager-detector-1.8.0.tgz", {}, "sha512-yQA4H19AmPEoMUeavPMDIe1higySl/gH/yaQrkT/s07Qp+7pp2hYz30N3z2l5BkjVkF9Ow6o0wjJamm2y7Sn0A=="],
 
-    "pagefind": ["pagefind@1.5.2", "", { "optionalDependencies": { "@pagefind/darwin-arm64": "1.5.2", "@pagefind/darwin-x64": "1.5.2", "@pagefind/freebsd-x64": "1.5.2", "@pagefind/linux-arm64": "1.5.2", "@pagefind/linux-x64": "1.5.2", "@pagefind/windows-arm64": "1.5.2", "@pagefind/windows-x64": "1.5.2" }, "bin": { "pagefind": "lib/runner/bin.cjs" } }, "sha512-XTUaK0hXMCu2jszWE584JGQT7y284TmMV9l/HX3rnG5uo3rHI/uHU56XTyyyPFjeWEBxECbAi0CaFDJOONtG0Q=="],
+    "pagefind": ["pagefind@1.5.2", "https://git.5th.im/api/v4/packages/npm/pagefind/-/pagefind-1.5.2.tgz", { "optionalDependencies": { "@pagefind/darwin-arm64": "1.5.2", "@pagefind/darwin-x64": "1.5.2", "@pagefind/freebsd-x64": "1.5.2", "@pagefind/linux-arm64": "1.5.2", "@pagefind/linux-x64": "1.5.2", "@pagefind/windows-arm64": "1.5.2", "@pagefind/windows-x64": "1.5.2" }, "bin": { "pagefind": "lib/runner/bin.cjs" } }, "sha512-XTUaK0hXMCu2jszWE584JGQT7y284TmMV9l/HX3rnG5uo3rHI/uHU56XTyyyPFjeWEBxECbAi0CaFDJOONtG0Q=="],
 
     "parse-entities": ["parse-entities@4.0.2", "https://git.5th.im/api/v4/packages/npm/parse-entities/-/parse-entities-4.0.2.tgz", { "dependencies": { "@types/unist": "^2.0.0", "character-entities-legacy": "^3.0.0", "character-reference-invalid": "^2.0.0", "decode-named-character-reference": "^1.0.0", "is-alphanumerical": "^2.0.0", "is-decimal": "^2.0.0", "is-hexadecimal": "^2.0.0" } }, "sha512-GG2AQYWoLgL877gQIKeRPGO1xF9+eG1ujIb5soS5gPvLQ1y2o8FL90w2QWNdf9I361Mpp7726c+lj3U0qK1uGw=="],
 

@@ -6,6 +6,7 @@
   "description": "this is a website of longbridge developers",
   "license": "MIT",
   "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
     "dev": "astro dev",
     "dev:canary": "cross-env PROXY=canary VITE_API_BASE_URL=https://openapi.longbridge.xyz astro dev",

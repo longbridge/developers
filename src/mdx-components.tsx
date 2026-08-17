@@ -8,13 +8,7 @@
  * Task 11 exports: 7 primitives + 6 T12 placeholders.
  */
 
-import { Tabs } from '@/components/mdx/Tabs'
-import { TabItem } from '@/components/mdx/TabItem'
-import { TipContainer } from '@/components/mdx/TipContainer'
-import { CliCommand } from '@/components/mdx/CliCommand'
-import { SDK } from '@/components/mdx/SDK'
-import { SDKLinks } from '@/components/mdx/SDKLinks'
-import { Skill } from '@/components/mdx/Skill'
+import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks, Skill } from '@longbridge/openapi-ui'
 
 // T12 stubs — keep imports so mdx-components.tsx compiles even before T12 ships
 import { TryIt } from '@/components/mdx/placeholders/TryIt'
