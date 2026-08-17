@@ -36,7 +36,9 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 old_docs
 .superpowers
-docs/superpowers
+docs/superpowers/*
+!docs/superpowers/specs/
+!docs/superpowers/specs/**
 .claude/worktrees
 .worktrees
 
