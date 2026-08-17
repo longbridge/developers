@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocsLayout from '@/layouts/DocsLayout.astro'
+import PlainLayout from '@/layouts/PlainLayout.astro'
+import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
+import { resolveUrl, resolveLocale } from '@lib/slug'
+
+export async function getStaticPaths() {
+  const all = await getCollection('docs')
+  return all
+    .filter((e) => resolveLocale(e) === 'zh-CN')
+    .map((e) => {
+      const url = resolveUrl(e)
+      return {
+        params: { slug: url === '/zh-CN' ? undefined : url.slice('/zh-CN/'.length) },
+        props: { entry: e },
+      }
+    })
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+
+const Layout =
+  entry.data.layout === 'api-reference' ? ApiReferenceLayout
+  : entry.data.layout === false ? PlainLayout
+  : DocsLayout
+---
+<Layout title={entry.data.title ?? '(untitled)'} locale="zh-CN">
+  <Content />
+</Layout>

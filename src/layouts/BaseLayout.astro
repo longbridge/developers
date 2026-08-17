@@ -1,0 +1,28 @@
+---
+import '@styles/global.css'
+export interface Props {
+  title: string
+  description?: string
+  locale?: 'en' | 'zh-CN' | 'zh-HK'
+}
+const { title, description = '', locale = 'en' } = Astro.props
+---
+<!doctype html>
+<html lang={locale} data-mode="light" data-theme="default" data-nb-pref="system">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <script is:inline>
+      const pref = localStorage.getItem('ui-mode') ?? 'system'
+      const dark = pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+      const root = document.documentElement
+      root.dataset.mode = dark ? 'dark' : 'light'
+      root.dataset.nbPref = pref
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

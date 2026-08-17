@@ -1,0 +1,14 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import type { Props as BaseProps } from './BaseLayout.astro'
+export type Props = BaseProps
+const props = Astro.props
+---
+<BaseLayout {...props}>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <div class="rounded border border-[--lbus-c-border] p-4 text-sm opacity-60">
+      Placeholder: ApiReference will be ported in stage 2 (see spec §7.1)
+    </div>
+    <slot />
+  </div>
+</BaseLayout>
