@@ -16,7 +16,6 @@
  */
 import type { Root, Heading, PhrasingContent } from 'mdast'
 import type { Plugin } from 'unified'
-// @ts-ignore – picomatch ships no .d.ts; @types/picomatch is not installed
 import picomatch from 'picomatch'
 import { regionConfig } from '../../region.config'
 

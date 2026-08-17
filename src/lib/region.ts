@@ -1,4 +1,3 @@
-// @ts-ignore – picomatch ships no .d.ts; @types/picomatch is not installed
 import picomatch from 'picomatch'
 import { regionConfig } from '../../region.config'
 
