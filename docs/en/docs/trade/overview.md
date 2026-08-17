@@ -16,8 +16,11 @@ sidebar_position: 1
     </thead>
     <tbody>
     <tr>
-        <td rowspan="8">Trade</td>
+        <td rowspan="9">Trade</td>
         <td><a href="./order/submit">Submit Order</a></td>
+    </tr>
+    <tr>
+        <td><a href="./order/submit_multileg">Submit Multi-leg Order</a></td>
     </tr>
     <tr>
         <td><a href="./order/replace">Replace Order</a></td>
