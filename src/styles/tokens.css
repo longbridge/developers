@@ -1,0 +1,578 @@
+/* ============================================================
+   LBUS Design Tokens — consolidated from legacy VitePress sources.
+   Codemod applied: --vp-* → --lbus-*, .dark → [data-mode="dark"].
+   Sources:
+     - lbus-tokens.css (LBUS 5.0 design system)
+     - css-var.scss (color palette + semantic tokens)
+     - custom.scss (layout/nav token overrides)
+   ============================================================ */
+
+:root {
+  /* ── LBUS 5.0 Brand ─────────────────────────────────────── */
+  --lb-brand:             #00B8B8;
+  --lb-brand-2:           #E5F8F8;
+  --lb-brand-3:           #E5F8F8;
+
+  /* ── Backgrounds ─────────────────────────────────────────── */
+  --lb-bg-1:              #FFFFFF;
+  --lb-bg-2:              #F3F5F6;
+  --lb-bg-tab-active:     #0A0E19;
+  --lb-card:              #FFFFFF;
+  --lb-toast:             rgba(35,38,48,0.70);
+  --lb-mask:              rgba(10,14,25,0.60);
+  --lb-zebra:             #F7F8F9;
+  --lb-bg-btn-secondary:  #F3F5F6;
+  --lb-bg-chip:           #F3F5F6;
+  --lb-bg-ai-home:        #F9F9F9;
+
+  /* ── Strokes + dividers ──────────────────────────────────── */
+  --lb-stroke:            #E6E7E8;
+  --lb-line:              #DDDDDF;
+  --lb-avatar-ring:       rgba(204,204,204,0.60);
+  --lb-stroke-btn:        #E6E7E8;
+
+  /* ── Foreground ──────────────────────────────────────────── */
+  --lb-fg-1:              #0A0E19;
+  --lb-fg-2:              #6C6E75;
+  --lb-fg-3:              #A9ABAE;
+  --lb-fg-invert:         #FFFFFF;
+
+  /* ── Market + chart ──────────────────────────────────────── */
+  --lb-up:                #00ADA2;
+  --lb-down:              #FF3A75;
+  --lb-chart-bg:          #EDF0F4;
+  --lb-chart-blue:        #0CB6FF;
+  --lb-chart-purple:      #5A74FF;
+  --lb-chart-green:       #35C15C;
+  --lb-chart-pink:        #EC54B8;
+  --lb-chart-yellow:      #FFA61F;
+  --lb-chart-red:         #DE3150;
+  --lb-chart-grey:        #C1D0E6;
+  --lb-chart-orange:      #FF7128;
+
+  /* ── Status ──────────────────────────────────────────────── */
+  --lb-status-warn:       #F7415F;
+  --lb-status-alert:      #FF9728;
+  --lb-status-neutral:    #2A99FE;
+  --lb-status-safe:       #00CC92;
+
+  /* ── Gradient fade ───────────────────────────────────────── */
+  --lb-fade-100:          #FFFFFF;
+  --lb-fade-90:           rgba(255,255,255,0.90);
+  --lb-fade-0:            rgba(255,255,255,0.00);
+
+  /* ── AI chat ─────────────────────────────────────────────── */
+  --lb-ai-bubble:         #00A9A9;
+  --lb-ai-mention:        #CC8800;
+  --lb-ai-accent:         #CC8800;
+  --lb-ai-brand-bg:       #09252A;
+  --lb-ai-card-bg:        #203A3F;
+
+  /* ── Market identifiers ──────────────────────────────────── */
+  --lb-market-us:         #2A99FE;
+  --lb-market-hk:         #FF3A9D;
+  --lb-market-sh:         #FF3A3A;
+  --lb-market-sz:         #FF3A3A;
+  --lb-market-jp:         #FF3A89;
+  --lb-market-uk:         #D83AFF;
+  --lb-market-sg:         #3AD8FF;
+  --lb-market-au:         #893AFF;
+  --lb-market-ca:         #3ACEFF;
+  --lb-market-de:         #FFBD3A;
+  --lb-market-my:         #FFE13A;
+  --lb-market-osl:        #FF9D3A;
+  --lb-market-has:        #FF9D3A;
+
+  /* ── Base palette ────────────────────────────────────────── */
+  --lb-base-blue:         #2A99FE;
+  --lb-base-cyan:         #3ACEFF;
+  --lb-base-green:        #BAE158;
+  --lb-base-magenta:      #FD3CB5;
+  --lb-base-red:          #F7415F;
+  --lb-base-yellow:       #FFE03A;
+  --lb-base-pink:         #E3C4FF;
+
+  /* ── Heatmap ─────────────────────────────────────────────── */
+  --lb-heatmap-rise-1:    #E0698D;
+  --lb-heatmap-rise-2:    #F45585;
+  --lb-heatmap-rise-3:    #F2376F;
+  --lb-heatmap-rise-4:    #DB2B66;
+  --lb-heatmap-rise-5:    #C9225A;
+  --lb-heatmap-fall-1:    #31AFA6;
+  --lb-heatmap-fall-2:    #27B9B0;
+  --lb-heatmap-fall-3:    #00ADA2;
+  --lb-heatmap-fall-4:    #009089;
+  --lb-heatmap-fall-5:    #007570;
+  --lb-heatmap-neutral:   #9CA3AF;
+
+  /* ── Risk ────────────────────────────────────────────────── */
+  --lb-risk-danger:       #FF3A3A;
+  --lb-risk-warning:      #FF922D;
+  --lb-risk-medium:       #FFC700;
+  --lb-risk-safe:         #00C28B;
+
+  /* ── Radii ───────────────────────────────────────────────── */
+  --lb-radius-xs:         2px;
+  --lb-radius-2xs:        4px;
+  --lb-radius-sm:         6px;
+  --lb-radius-lg:         12px;
+  --lb-radius-xl:         18px;
+  --lb-radius-2xl:        20px;
+  --lb-radius-3xl:        28px;
+  --lb-radius-pill:       999px;
+
+  /* ── Spacing ─────────────────────────────────────────────── */
+  --lb-sp-1:  4px;
+  --lb-sp-2:  8px;
+  --lb-sp-3:  12px;
+  --lb-sp-4:  16px;
+  --lb-sp-5:  20px;
+  --lb-sp-6:  24px;
+  --lb-sp-8:  32px;
+  --lb-sp-10: 40px;
+
+  /* ── Shadows ─────────────────────────────────────────────── */
+  --lb-shadow-card:       0 3px 15px 3px rgba(43,62,92,0.12);
+  --lb-shadow-card-stack: 0 4px 15px 2px rgba(43,62,92,0.13);
+  --lb-shadow-menu:       0 2px 9px 0 rgba(43,62,92,0.14);
+  --lb-shadow-dark:       0 4px 12px 6px rgba(0,0,0,0.40);
+  --lb-shadow-dark-sm:    0 2px 9px 0 rgba(0,0,0,0.14);
+
+  /* ── Transitions ─────────────────────────────────────────── */
+  --lb-transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --lb-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --lb-transition-slow:   300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Z-index ─────────────────────────────────────────────── */
+  --lb-z-base:            0;
+  --lb-z-dropdown:        1000;
+  --lb-z-sticky:          1020;
+  --lb-z-fixed:           1030;
+  --lb-z-overlay:         1040;
+  --lb-z-modal:           1050;
+  --lb-z-popover:         1060;
+  --lb-z-toast:           1070;
+  --lb-z-tooltip:         1080;
+
+  /* ── Fonts ───────────────────────────────────────────────── */
+  --lb-font-sans:    "SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --lb-font-cn:      "PingFang SC","Noto Sans SC","Heiti SC","Source Han Sans CN",sans-serif;
+  --lb-font-display: "SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --lb-font-mono:    "SF Mono","JetBrains Mono",Menlo,monospace;
+
+  /* ── Type scale ──────────────────────────────────────────── */
+  --lb-s1-size: 32px;    --lb-s1-weight: 700;  --lb-s1-lh: 35px;
+  --lb-h1-size: 24px;    --lb-h1-weight: 700;  --lb-h1-lh: 26px;
+  --lb-h2-size: 20px;    --lb-h2-weight: 700;  --lb-h2-lh: 22px;
+  --lb-h3-size: 16px;    --lb-h3-weight: 700;  --lb-h3-lh: 20px;
+  --lb-s2-size: 15px;    --lb-s2-weight: 500;  --lb-s2-lh: 18px;
+  --lb-l1-size: 14px;    --lb-l1-weight: 400;  --lb-l1-lh: 18px;
+  --lb-body-size: 16px;  --lb-body-weight: 400; --lb-body-lh: 21px;
+  --lb-l2-size: 12px;    --lb-l2-weight: 400;  --lb-l2-lh: 16px;
+  --lb-display-size: 52px; --lb-display-weight: 500; --lb-display-lh: 100%;
+
+  /* ── Compatibility aliases (from lbus-tokens.css second :root) ── */
+  --lb-d-bg-1:    #0A0E19;
+  --lb-d-bg-2:    #232630;
+  --lb-d-card:    #232630;
+  --lb-d-stripe:  #1A1E28;
+  --lb-d-line:    #3B3E47;
+  --lb-d-stroke:  #2C3039;
+  --lb-d-fg-1:    #FFFFFF;
+  --lb-d-fg-2:    #9D9FA3;
+  --lb-d-fg-3:    #60626A;
+  --lb-d-toast:   #363A47;
+  --lb-warn:      #FF9728;
+  --lb-info:      #2A99FE;
+  --lb-fg-disabled:       #9D9FA3;
+  --lb-brand-dark:        #00ADA2;
+  --lb-up-dark:           #00ADA2;
+  --lb-down-dark:         #FF3A75;
+  --lb-chart-bg-light:    #EDF0F4;
+  --lb-chart-bg-dark:     #2C3039;
+  --lb-mask-light:        rgba(10,14,25,0.40);
+  --lb-warn-2:            #FFA61F;
+
+  /* ── Neutral palette (from css-var.scss) ────────────────── */
+  --neutral-10: #f5f6f6;
+  --neutral-20: #fafafa;
+  --neutral-30: #ffffff;
+  --neutral-40: #f5f6f6;
+  --neutral-50: #f5f6f6;
+  --neutral-60: #eaebec;
+  --neutral-70: #c7cacc;
+  --neutral-80: #afb3b6;
+  --neutral-90: #82888d;
+  --neutral-100: #464f56;
+  --neutral-11: #000000;
+  --neutral-12: #37a0ff;
+  --neutral-13: #ffffff;
+  --neutral-14: #f5f6f6;
+  --neutral-15: #1f2a32;
+  --neutral-16: #ffffff;
+  --neutral-17: #ffffff;
+  --neutral-18: #eaebec;
+
+  /* ── Cyan palette ────────────────────────────────────────── */
+  --cyan-5: #f2fbfa;
+  --cyan-10: #e5f8f4;
+  --cyan-11: #effaf8;
+  --cyan-20: #ccf1eb;
+  --cyan-30: #b2eae0;
+  --cyan-40: #99e3d7;
+  --cyan-50: #7fdccc;
+  --cyan-60: #66d5c2;
+  --cyan-70: #4cceb8;
+  --cyan-80: #33c7ae;
+  --cyan-90: #19c0a4;
+  --cyan-100: #00b99a;
+
+  /* ── Orange palette ──────────────────────────────────────── */
+  --orange-5: #fff8f5;
+  --orange-10: #ffede5;
+  --orange-11: #fff4ef;
+  --orange-20: #ffdccc;
+  --orange-30: #ffcab2;
+  --orange-40: #ffb999;
+  --orange-50: #ffa77f;
+  --orange-60: #ff9666;
+  --orange-70: #ff844c;
+  --orange-80: #ff7333;
+  --orange-90: #ff6119;
+  --orange-100: #ff5000;
+
+  /* ── Gold palette ────────────────────────────────────────── */
+  --gold-3: #fff6ea;
+  --gold-5: #fffaf3;
+  --gold-10: #fff6ea;
+  --gold-20: #fff1dd;
+  --gold-30: #ffeacb;
+  --gold-40: #ffe4ba;
+  --gold-50: #ffdda9;
+  --gold-60: #ffd698;
+  --gold-70: #ffcf86;
+  --gold-80: #ffc975;
+  --gold-90: #ffc164;
+  --gold-100: #ffbb53;
+
+  /* ── Blue palette ────────────────────────────────────────── */
+  --blue-5: #fbfdff;
+  --blue-10: #e2eefa;
+  --blue-11: #1890ff;
+  --blue-12: #e2eefa;
+  --blue-20: #cde5fb;
+  --blue-30: #b5d9fb;
+  --blue-35: #b5d9fb;
+  --blue-40: #a0d0fc;
+  --blue-50: #88c4fc;
+  --blue-60: #72bafd;
+  --blue-70: #5baffd;
+  --blue-80: #45a5fe;
+  --blue-90: #2e9afe;
+  --blue-100: #1890ff;
+
+  /* ── Brand palette ───────────────────────────────────────── */
+  --brand-5: #f2fcfc;
+  --brand-10: #e6f9f9;
+  --brand-20: #ccf3f3;
+  --brand-30: #b3eded;
+  --brand-40: #99e6e6;
+  --brand-50: #80e0e0;
+  --brand-60: #66dada;
+  --brand-70: #4dd4d4;
+  --brand-80: #33cdcd;
+  --brand-90: #1ac7c7;
+  --brand-100: #00b8b8;
+
+  /* ── Geek-blue palette ───────────────────────────────────── */
+  --geek-blue-5: #f6f8ff;
+  --geek-blue-10: #ecf2ff;
+  --geek-blue-20: #dae6ff;
+  --geek-blue-30: #c7d9ff;
+  --geek-blue-40: #b5cdff;
+  --geek-blue-50: #a3c0ff;
+  --geek-blue-60: #91b3ff;
+  --geek-blue-70: #7ea6ff;
+  --geek-blue-80: #6c9aff;
+  --geek-blue-90: #598dff;
+  --geek-blue-100: #4781ff;
+
+  /* ── Tip scale ───────────────────────────────────────────── */
+  --tip-5: #8ed59e;
+  --tip-10: #00cc92;
+  --tip-15: #c9df91;
+  --tip-20: #95c123;
+  --tip-25: #ffe37f;
+  --tip-30: #ff9728;
+  --tip-35: #ffc895;
+  --tip-40: #ff922d;
+  --tip-45: #ff9f9f;
+  --tip-50: #f7415f;
+  --tip-55: #ef8292;
+  --tip-60: #e00626;
+
+  /* ── Semantic tokens (from css-var.scss) ─────────────────── */
+  --bg-color: #f5f6f6;
+  --front-bg-color-3: #fcfcfc;
+  --front-bg-color-2: #fafafa;
+  --front-bg-color-1: #ffffff;
+  --front-bg-color: #f5f6f6;
+  --tag-bg-color: #f5f6f6;
+  --line-color: #eaebec;
+  --border-color: #eaebec;
+  --tag-border-color: #c7cacc;
+  --text-color-3: #afb3b6;
+  --text-color-2: #82888d;
+  --text-color-1-supplement: #464f56;
+  --text-color-1: #000000;
+  --link-text-color: #00b8b8;
+  --environment-text-color-3: #ffffff;
+  --environment-text-color-2: #f8f9fa;
+  --environment-text-color-1: #1f2a32;
+  --brand-color: #00b8b8;
+  --brand-color-2: #f7415f;
+  --brand-color-3: #ff9728;
+  --up-color: #00ada2;
+  --down-color: #ff3a75;
+  --list-bg-color: #ffffff;
+  --home-bg-color: #f8f9fa;
+  --home-text-color: #000000;
+  --home-bg-color-1: #ffffff;
+
+  /* ── LB design tokens (from css-var.scss) ────────────────── */
+  --lb-btn-primary-bg: #000000;
+  --lb-btn-primary-color: #ffffff;
+  --lb-btn-primary-radius: 9999px;
+  --lb-btn-primary-h: 36px;
+  --lb-btn-primary-fs: 14px;
+  --lb-btn-primary-fw: 500;
+  --lb-btn-secondary-bg: rgba(210, 210, 210, 0.6);
+  --lb-btn-secondary-color: #374151;
+  --lb-btn-secondary-radius: 30px;
+  --lb-card-border: #e5e7eb;
+  --lb-card-radius: 12px;
+  --lb-card-shadow-1: rgba(0, 0, 0, 0.04) 0px 2px 8px;
+  --lb-card-shadow-2: rgba(0, 0, 0, 0.09) 0px 8px 24px;
+  --lb-badge-fs: 12px;
+  --lb-badge-fw: 600;
+  --lb-badge-lh: 1;
+  --lb-badge-py: 4px;
+  --lb-badge-px: 8px;
+  --lb-badge-radius: 9999px;
+
+  /* ── Layout/nav tokens (codemod: --vp-* → --lbus-*) ─────── */
+  --lbus-c-divider: rgba(0, 0, 0, 0.06);
+  --lbus-c-gutter: var(--lbus-c-divider);
+  --lbus-navbar-bg: rgba(255, 255, 255, 0.7);
+  --lbus-navbar-border: rgba(0, 0, 0, 0.08);
+  --lbus-sidebar-bg-color: var(--lb-bg-1);
+
+  /* ── Semantic aliases for global.css ─────────────────────── */
+  --lbus-c-bg: #FFFFFF;
+  --lbus-c-text: #0A0E19;
+  --lbus-font-sans: "SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --lbus-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-mode="dark"] {
+  /* ── LBUS 5.0 dark overrides ─────────────────────────────── */
+  --lb-brand:             #00F0C4;
+  --lb-brand-2:           #09252A;
+  --lb-brand-3:           #203A3F;
+  --lb-bg-1:              #0A0E19;
+  --lb-bg-2:              #161A26;
+  --lb-bg-tab-active:     #FFFFFF;
+  --lb-card:              #0E1222;
+  --lb-toast:             rgba(54,58,71,0.90);
+  --lb-mask:              rgba(10,14,25,0.60);
+  --lb-zebra:             #1A1E28;
+  --lb-bg-btn-secondary:  #1A1E28;
+  --lb-bg-chip:           #181B26;
+  --lb-bg-ai-home:        #0A0E19;
+  --lb-stroke:            #2C3039;
+  --lb-line:              #3B3E47;
+  --lb-avatar-ring:       rgba(204,204,204,0.60);
+  --lb-stroke-btn:        #3B3E47;
+  --lb-fg-1:              #FFFFFF;
+  --lb-fg-2:              #9D9FA3;
+  --lb-fg-3:              #60626A;
+  --lb-fg-invert:         #0A0E19;
+  --lb-up:                #00ADA2;
+  --lb-down:              #FF3A75;
+  --lb-chart-bg:          #2C3039;
+  --lb-base-green:        #BBE158;
+  --lb-base-yellow:       #FFB13A;
+  --lb-base-pink:         #8257A8;
+  --lb-heatmap-rise-1:    #812B46;
+  --lb-heatmap-rise-2:    #8C2B4C;
+  --lb-heatmap-rise-3:    #A32E54;
+  --lb-heatmap-rise-4:    #C63361;
+  --lb-heatmap-rise-5:    #E8376D;
+  --lb-heatmap-fall-1:    #0E6F6B;
+  --lb-heatmap-fall-2:    #0A736F;
+  --lb-heatmap-fall-3:    #078982;
+  --lb-heatmap-fall-4:    #04978F;
+  --lb-heatmap-fall-5:    #00ADA2;
+  --lb-heatmap-neutral:   #4B5563;
+  --lb-risk-danger:       #F7415F;
+  --lb-risk-warning:      #CC7524;
+  --lb-risk-medium:       #BB9F11;
+  --lb-risk-safe:         #00CC92;
+  --lb-fade-100:          #0A0E19;
+  --lb-fade-90:           rgba(10,14,25,0.90);
+  --lb-fade-0:            rgba(10,14,25,0.00);
+  --lb-shadow-card:       0 4px 12px 6px rgba(0,0,0,0.40);
+  --lb-shadow-menu:       0 2px 9px 0 rgba(0,0,0,0.14);
+  --lb-ai-mention:        #00F0C4;
+  --lb-ai-accent:         #00F0C4;
+
+  /* ── Neutral palette dark ────────────────────────────────── */
+  --neutral-10: #07121c;
+  --neutral-20: #141f28;
+  --neutral-30: #1a252e;
+  --neutral-40: #2a343c;
+  --neutral-50: #2a343c;
+  --neutral-60: #384149;
+  --neutral-70: #424b53;
+  --neutral-80: #61686e;
+  --neutral-90: #82888d;
+  --neutral-100: #cfd1d3;
+  --neutral-11: #ffffff;
+  --neutral-16: #61686e;
+  --neutral-17: #2a343c;
+  --neutral-18: #2a343c;
+
+  /* ── Cyan palette dark ───────────────────────────────────── */
+  --cyan-5: #293838;
+  --cyan-10: #273f3c;
+  --cyan-11: #598583;
+  --cyan-20: #144243;
+  --cyan-30: #12514e;
+  --cyan-40: #0f6059;
+  --cyan-50: #0c6f63;
+  --cyan-60: #0a7d6e;
+  --cyan-70: #078d79;
+  --cyan-80: #059b84;
+  --cyan-90: #02aa8f;
+
+  /* ── Orange palette dark ─────────────────────────────────── */
+  --orange-5: #27272b;
+  --orange-10: #312929;
+  --orange-11: #7e6c66;
+  --orange-20: #472d24;
+  --orange-30: #5f3120;
+  --orange-40: #75361b;
+  --orange-50: #8c3a16;
+  --orange-60: #a33e12;
+  --orange-70: #ba430d;
+  --orange-80: #d14709;
+  --orange-90: #e84b04;
+
+  /* ── Gold palette dark ───────────────────────────────────── */
+  --gold-3: #272d30;
+  --gold-5: #272d30;
+  --gold-10: #313431;
+  --gold-20: #474235;
+  --gold-30: #5f5139;
+  --gold-40: #75613c;
+  --gold-50: #8c7040;
+  --gold-60: #a37e44;
+  --gold-70: #ba8e47;
+  --gold-80: #d19d4b;
+  --gold-90: #e8ab4f;
+
+  /* ── Blue palette dark ───────────────────────────────────── */
+  --blue-5: #192d3d;
+  --blue-10: #172733;
+  --blue-11: #e2eefa;
+  --blue-12: #153451;
+  --blue-20: #153451;
+  --blue-30: #143e64;
+  --blue-35: #154979;
+  --blue-40: #154979;
+  --blue-50: #15548d;
+  --blue-60: #165fa2;
+  --blue-70: #156ab5;
+  --blue-80: #1674ca;
+  --blue-90: #167fde;
+  --blue-100: #178af3;
+
+  /* ── Brand palette dark ──────────────────────────────────── */
+  --brand-5: #0f2f2a;
+  --brand-10: #123a34;
+  --brand-20: #165049;
+  --brand-30: #1a665e;
+  --brand-40: #1e7c73;
+  --brand-50: #229288;
+  --brand-60: #26a89d;
+  --brand-70: #2abeb2;
+  --brand-80: #2ed4c7;
+  --brand-90: #32eadc;
+  --brand-100: #00f0c4;
+
+  /* ── Geek-blue palette dark ──────────────────────────────── */
+  --geek-blue-5: #1c2938;
+  --geek-blue-10: #1e2e43;
+  --geek-blue-20: #223757;
+  --geek-blue-30: #27406d;
+  --geek-blue-40: #2b4a81;
+  --geek-blue-50: #305396;
+  --geek-blue-60: #355bab;
+  --geek-blue-70: #3965c0;
+  --geek-blue-80: #3e6ed5;
+  --geek-blue-90: #4277ea;
+
+  /* ── Tip scale dark ──────────────────────────────────────── */
+  --tip-5: #1b6835;
+  --tip-15: #567228;
+  --tip-25: #8c7517;
+  --tip-35: #8c5b2c;
+  --tip-45: #8c3237;
+  --tip-55: #7c1529;
+
+  /* ── Semantic tokens dark ────────────────────────────────── */
+  --front-bg-color-3: #0a1014;
+  --front-bg-color-2: #141f28;
+  --front-bg-color-1: #1a252e;
+  --front-bg-color: #2a343c;
+  --tag-bg-color: #2a343c;
+  --line-color: #384149;
+  --border-color: #384149;
+  --tag-border-color: #424b53;
+  --text-color-3: #656466;
+  --text-color-2: #82888d;
+  --text-color-1-supplement: #cfd1d3;
+  --text-color-1: #ffffff;
+  --link-text-color: #00f0c4;
+  --environment-text-color-3: #0a0e19;
+  --environment-text-color-2: #232630;
+  --environment-text-color-1: #1f2a32;
+  --brand-color: #00f0c4;
+  --brand-color-2: #f7415f;
+  --brand-color-3: #ff9728;
+  --up-color: #00ada2;
+  --down-color: #ff3a75;
+  --list-bg-color: #2a343c;
+  --home-bg-color: #161618;
+  --home-text-color: #ffffff;
+  --home-bg-color-1: #1b1b1f;
+
+  /* ── LB design tokens dark ───────────────────────────────── */
+  --lb-btn-primary-bg: #ffffff;
+  --lb-btn-primary-color: #000000;
+  --lb-btn-secondary-bg: rgba(80, 80, 80, 0.5);
+  --lb-btn-secondary-color: #d1d5db;
+  --lb-card-border: rgba(255, 255, 255, 0.1);
+
+  /* ── Layout/nav tokens dark (codemod: --vp-* → --lbus-*) ── */
+  --lbus-c-divider: rgba(255, 255, 255, 0.06);
+  --lbus-navbar-bg: rgba(27, 27, 31, 0.95);
+  --lbus-navbar-border: rgba(255, 255, 255, 0.08);
+  --lbus-sidebar-bg-color: var(--lb-bg-1);
+
+  /* ── Semantic aliases dark ───────────────────────────────── */
+  --lbus-c-bg: #0A0E19;
+  --lbus-c-text: #FFFFFF;
+
+  color-scheme: dark;
+}

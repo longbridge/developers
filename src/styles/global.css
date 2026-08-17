@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./shiki.css";
+
+/* reset */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--lbus-c-bg);
+  color: var(--lbus-c-text);
+  font-family: var(--lbus-font-sans);
+  transition: background var(--lbus-transition-base), color var(--lbus-transition-base);
+}
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }

@@ -1,0 +1,18 @@
+/* Astro's inline shiki mode uses --astro-code-* CSS vars.
+   Bridge to --shiki-* for compat with any legacy references. */
+:root {
+  --shiki-light: var(--astro-code-color-text);
+  --shiki-light-bg: var(--astro-code-color-background);
+}
+
+[data-mode="dark"] {
+  --shiki-dark: var(--astro-code-color-text);
+  --shiki-dark-bg: var(--astro-code-color-background);
+}
+
+/* Ensure code blocks in dark mode swap Astro's dual-theme vars. */
+[data-mode="dark"] .astro-code,
+[data-mode="dark"] .astro-code span {
+  color: var(--shiki-dark, inherit) !important;
+  background-color: var(--shiki-dark-bg, transparent) !important;
+}
