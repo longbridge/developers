@@ -55,3 +55,8 @@ docs/.vitepress/.temp/
 longbridge-terminal/
 openapi/
 openapi-go/
+
+# opencli artifacts
+dist-diff/
+.baseline-dist/
+.baseline-sitemap.xml
