@@ -1,0 +1,12 @@
+/* Page-scoped CSS extracted from vitepress-era `<style scoped>` blocks.
+   Selectors gated by `[data-lbus-page="…"]` on <main id="main-content">
+   in BaseLayout.astro so each rule only applies on its original page. */
+
+/* /sdk — from docs/{en,zh-CN,zh-HK}/sdk.mdx */
+[data-lbus-page="/sdk"] h2,
+[data-lbus-page="/zh-CN/sdk"] h2,
+[data-lbus-page="/zh-HK/sdk"] h2 {
+  border: 0;
+  margin-top: 0;
+  padding-top: 0;
+}

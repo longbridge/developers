@@ -69,9 +69,14 @@ export default defineConfig({
             (_, hashes, text, id) =>
               `<h${hashes.length} id="${id}">${text}<a href="#${id}" className="header-anchor" aria-hidden="true" tabIndex={-1}></a></h${hashes.length}>`,
           )
-          // 3) Strip vue-style `<style scoped>...</style>` blocks — mdx parses
-          //    the CSS `{ }` as JSX expressions and fails. stage-2 will move
-          //    these into a proper stylesheet.
+          // 3) Strip vitepress-era `<style scoped>...</style>` blocks. The
+          //    CSS inside has been migrated (§S4) to
+          //    src/styles/mdx-page-overrides.css, keyed by
+          //    [data-lbus-page="…"] on <main> in BaseLayout.astro — the mdx
+          //    source's `<style scoped>` block is now dead code but the docs
+          //    content is immutable (spec §-1), so we strip it at preflight.
+          //    Also required for correctness: mdx/acorn parses the CSS `{ }`
+          //    inside as a JSX expression and fails without this strip.
           out = out.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
           // 4) Autolinks `<https://...>` — mdx doesn't recognise them.
           out = out.replace(/<(https?:\/\/[^\s<>]+)>/g, '$1')

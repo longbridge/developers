@@ -31,7 +31,7 @@ const pathname = new URL(Astro.request.url).pathname
   <body>
     <SkipLink />
     <TopNav locale={locale} pathname={pathname} client:load />
-    <main id="main-content">
+    <main id="main-content" data-lbus-page={pathname}>
       <slot />
     </main>
     <Footer locale={locale} client:idle />

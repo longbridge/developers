@@ -10,6 +10,7 @@
 @import "./tokens.css";
 @import "./shiki.css";
 @import "./docs.css";
+@import "./mdx-page-overrides.css";
 
 /* reset */
 *, *::before, *::after { box-sizing: border-box; }
