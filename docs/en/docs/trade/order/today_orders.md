@@ -315,8 +315,7 @@ func main() {
               "ratio_quantity": "1",
               "strike_price": "764",
               "expire_date": "20260731",
-              "contract_direction": "C",
-              "contract_size": ""
+              "contract_direction": "C"
             },
             {
               "symbol": "QQQ260731C767000.US",
@@ -325,8 +324,7 @@ func main() {
               "ratio_quantity": "1",
               "strike_price": "767",
               "expire_date": "20260731",
-              "contract_direction": "C",
-              "contract_size": ""
+              "contract_direction": "C"
             }
           ]
         }
@@ -420,4 +418,3 @@ func main() {
 | ∟∟∟ strike_price            | string   | false    | Strike price |
 | ∟∟∟ expire_date             | string   | false    | Option expiry date, format: `YYYYMMDD` |
 | ∟∟∟ contract_direction      | string   | false    | Contract type<br/><br/> **Enum Value:**<br/> `C` - Call<br/> `P` - Put |
-| ∟∟∟ contract_size           | string   | false    | Contract size |
