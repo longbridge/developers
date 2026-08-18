@@ -314,8 +314,7 @@ func main() {
               "ratio_quantity": "1",
               "strike_price": "764",
               "expire_date": "20260731",
-              "contract_direction": "C",
-              "contract_size": ""
+              "contract_direction": "C"
             },
             {
               "symbol": "QQQ260731C767000.US",
@@ -324,8 +323,7 @@ func main() {
               "ratio_quantity": "1",
               "strike_price": "767",
               "expire_date": "20260731",
-              "contract_direction": "C",
-              "contract_size": ""
+              "contract_direction": "C"
             }
           ]
         }
@@ -419,4 +417,3 @@ func main() {
 | ∟∟∟ strike_price            | string   | false    | 行权价 |
 | ∟∟∟ expire_date             | string   | false    | 期权到期日，格式：`YYYYMMDD` |
 | ∟∟∟ contract_direction      | string   | false    | 合约类型<br/><br/> **可选值：**<br/> `C` - 看涨（Call）<br/> `P` - 看跌（Put） |
-| ∟∟∟ contract_size           | string   | false    | 合约乘数 |
