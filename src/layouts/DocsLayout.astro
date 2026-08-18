@@ -9,7 +9,7 @@ import Sidebar from '@components/shell/Sidebar'
 import TOC from '@components/shell/TOC'
 import type { TocHeading } from '@components/shell/TOC'
 import PrevNext from '@components/shell/PrevNext'
-import { buildSidebar, getPrevNext } from '@lib/navigation'
+import { buildSidebar, getPrevNext, resolveSidebarScope } from '@lib/navigation'
 
 interface Props {
   title: string
@@ -19,8 +19,8 @@ interface Props {
 }
 
 const { title, locale, entry, headings } = Astro.props
-const sidebar = buildSidebar(locale)
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
+const sidebar = buildSidebar(locale, resolveSidebarScope(pathname))
 const { prev, next } = getPrevNext(sidebar, pathname)
 
 function buildCrumbsFromPath(e: CollectionEntry<'docs'>): BreadcrumbItem[] {

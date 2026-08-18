@@ -123,10 +123,18 @@ function buildItems(absDir: string, locale: Locale, relFromDocs: string): Sideba
       const position: number = data.sidebar_position ?? 999
       const icon: string | undefined = data.sidebar_icon
 
-      // Build the URL
+      // Build the URL. Legacy vitepress absolute slug in a file under
+      // docs/{locale}/docs/** is `/docs`-relative (see @lib/slug), so
+      // apply the same convention here to keep sidebar links matching the
+      // rendered URLs.
       let link: string
       if (data.slug && typeof data.slug === 'string' && data.slug.startsWith('/')) {
-        link = locale === 'en' ? data.slug : `/${locale}${data.slug}`
+        // Match `${locale}/docs` (top-level docs dir) OR `${locale}/docs/…`.
+        const inDocs =
+          relFromDocs === `${locale}/docs` ||
+          relFromDocs.startsWith(`${locale}/docs/`)
+        const prefixed = inDocs ? `/docs${data.slug}` : data.slug
+        link = locale === 'en' ? prefixed : `/${locale}${prefixed}`
       } else {
         link = urlFromAbsPath(absEntry, locale)
       }
@@ -141,33 +149,51 @@ function buildItems(absDir: string, locale: Locale, relFromDocs: string): Sideba
 }
 
 /**
- * Build the full sidebar tree for a given locale by reading the filesystem.
+ * Sidebar scoping — legacy vitepress emits two distinct sidebars (see
+ * openapi-website/docs/.vitepress/locales/en/sidebar.ts):
+ *   `/docs/cli` → cli-only tree from docs/{locale}/docs/cli/**
+ *   `/docs`    → full tree from docs/{locale}/docs/** excluding cli/
+ *
+ * Astro layout callers pass a `scope` derived from pathname to
+ * `buildSidebar` so users navigating under /docs/cli see the CLI
+ * sub-tree instead of the whole docs tree.
+ */
+export type SidebarScope = 'docs' | 'cli'
+
+export function resolveSidebarScope(pathname: string): SidebarScope {
+  // Strip locale prefix if present so `/zh-CN/docs/cli/foo` still resolves.
+  const stripped = pathname.replace(/^\/(zh-CN|zh-HK)(?=\/|$)/, '')
+  return stripped.startsWith('/docs/cli') ? 'cli' : 'docs'
+}
+
+/**
+ * Build the sidebar tree for a given locale by reading the filesystem.
+ * When `scope` is 'cli', reads docs/{locale}/docs/cli/**. When 'docs'
+ * (default), reads docs/{locale}/docs/** with the `cli/` sub-directory
+ * excluded so it doesn't leak into the main docs sidebar.
  * Works in both Node.js (vitest) and Astro server contexts.
  */
-export function buildSidebar(locale: Locale | string): SidebarNode[] {
+export function buildSidebar(
+  locale: Locale | string,
+  scope: SidebarScope = 'docs',
+): SidebarNode[] {
   const loc = locale as Locale
-  const docsDir = path.join(process.cwd(), 'docs', loc, 'docs')
+  const rootDir = scope === 'cli'
+    ? path.join(process.cwd(), 'docs', loc, 'docs', 'cli')
+    : path.join(process.cwd(), 'docs', loc, 'docs')
+  const rootRel = scope === 'cli' ? `${loc}/docs/cli` : `${loc}/docs`
 
-  let topEntries: fs.Dirent[]
-  try {
-    topEntries = fs.readdirSync(docsDir, { withFileTypes: true })
-  } catch {
-    return []
-  }
+  // Delegate to buildItems so top-level mdx files (e.g. cli/install.mdx,
+  // cli/tui.mdx, cli/release-notes.mdx) become flat sidebar items alongside
+  // the nested category groups — matching legacy vitepress genMarkdowDocs.
+  const nodes = buildItems(rootDir, loc, rootRel)
 
-  const nodes: SidebarNode[] = []
+  // scope='docs' must exclude the cli/ subtree — cli has its own sidebar.
+  const filtered = scope === 'docs'
+    ? nodes.filter((n) => n.label !== 'CLI' && !(n.link ?? '').startsWith('/docs/cli'))
+    : nodes
 
-  for (const entry of topEntries) {
-    if (!entry.isDirectory()) continue
-    if (entry.name.startsWith('_') || entry.name.startsWith('.')) continue
-
-    const absDir = path.join(docsDir, entry.name)
-    const relFromDocs = `${loc}/docs/${entry.name}`
-    const node = processDir(absDir, loc, relFromDocs)
-    if (node) nodes.push(node)
-  }
-
-  return sortByPosition(nodes)
+  return sortByPosition(filtered)
 }
 
 export function flatSidebar(sidebar: SidebarNode[]): SidebarNode[] {
