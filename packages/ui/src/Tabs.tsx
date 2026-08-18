@@ -47,6 +47,27 @@ export interface TabsProps {
 }
 
 export function Tabs({ groupId, variant = 'line', children }: TabsProps) {
+  // NOTE: In Astro's MDX rendering model each React component is rendered in
+  // its own isolated React root. By the time Tabs() is called, children have
+  // already been serialised to HTML. This means:
+  //   • React.Children.forEach returns [] — no tab data is available here.
+  //   • TabsContext.Provider never wraps TabItem's render — !ctx always fires
+  //     there, so TabItem emits data-tab-value/label/default attrs instead.
+  //
+  // The SSR output therefore contains:
+  //   <div data-lbus-component="tabs" data-tabs-group-id="…" …>
+  //     <div data-tabs-bar />          ← empty; tabs-hydrate.ts fills it
+  //     <div class="relative">
+  //       <div data-lbus-component="tab-item" data-tab-value="…" …>…</div>
+  //     </div>
+  //   </div>
+  //
+  // The tabs-hydrate.ts client script (injected by BaseLayout.astro) reads
+  // the data-tab-* attrs and creates interactive buttons + manages visibility.
+  //
+  // registerTab / setActiveTab / useEffect are retained for potential future
+  // client:load hydration scenarios; they are no-ops in the current SSR path.
+
   const [tabs, setTabs] = useState<TabInfo[]>([])
   const [activeTab, setActiveTabState] = useState<string>('')
   const listenerRef = useRef<((v: string) => void) | null>(null)
@@ -95,7 +116,7 @@ export function Tabs({ groupId, variant = 'line', children }: TabsProps) {
     try {
       const saved = localStorage.getItem(`vitepress-tabs-${groupId}`)
       if (saved) {
-        setActiveTabState((cur) => saved)
+        setActiveTabState(saved)
         window.__LBTabsState[groupId] = saved
       }
     } catch {
@@ -113,106 +134,21 @@ export function Tabs({ groupId, variant = 'line', children }: TabsProps) {
 
   const ctx: TabsContextValue = { activeTab, registerTab, setActiveTab }
 
+  // Empty bar — client-side tabs-hydrate.ts populates with buttons
+  const barClassName =
+    variant === 'line'
+      ? 'flex border-b border-[var(--vp-c-divider)] mb-4 overflow-x-auto gap-1'
+      : 'inline-flex items-center rounded-md mb-4 overflow-x-auto gap-1'
+
   return (
     <TabsContext.Provider value={ctx}>
-      <div data-lbus-component="tabs" className="my-4">
-        {variant === 'line' ? (
-          <div className="flex border-b border-[var(--vp-c-divider)] mb-4 overflow-x-auto gap-1">
-            {tabs.map((tab) =>
-              tab.value === activeTab ? (
-                <button
-                  key={tab.value}
-                  style={{
-                    padding: '0.3rem 0.75rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    whiteSpace: 'nowrap',
-                    cursor: 'pointer',
-                    background: 'transparent',
-                    border: 'none',
-                    borderBottom: '2px solid var(--vp-c-text-1)',
-                    color: 'var(--vp-c-text-1)',
-                    transition: 'color 0.15s, border-color 0.15s',
-                  }}
-                  onClick={() => setActiveTab(tab.value)}>
-                  {tab.label}
-                </button>
-              ) : (
-                <button
-                  key={tab.value}
-                  style={{
-                    padding: '0.3rem 0.75rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    whiteSpace: 'nowrap',
-                    cursor: 'pointer',
-                    background: 'transparent',
-                    border: 'none',
-                    borderBottom: '2px solid transparent',
-                    color: 'var(--vp-c-text-2)',
-                    transition: 'color 0.15s, border-color 0.15s',
-                  }}
-                  onClick={() => setActiveTab(tab.value)}>
-                  {tab.label}
-                </button>
-              ),
-            )}
-          </div>
-        ) : (
-          <div
-            className="inline-flex items-center rounded-md mb-4 overflow-x-auto gap-1"
-            style={{
-              background: 'var(--vp-c-bg-soft)',
-              padding: '0.25rem',
-            }}>
-            {tabs.map((tab) =>
-              tab.value === activeTab ? (
-                <button
-                  key={tab.value}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    whiteSpace: 'nowrap',
-                    borderRadius: '0.125rem',
-                    padding: '0.375rem 0.75rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    transition: 'all 0.15s',
-                    cursor: 'pointer',
-                    border: 'none',
-                    background: 'var(--vp-c-bg)',
-                    color: 'var(--vp-c-text-1)',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  }}
-                  onClick={() => setActiveTab(tab.value)}>
-                  {tab.label}
-                </button>
-              ) : (
-                <button
-                  key={tab.value}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    whiteSpace: 'nowrap',
-                    borderRadius: '0.125rem',
-                    padding: '0.375rem 0.75rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    transition: 'all 0.15s',
-                    cursor: 'pointer',
-                    border: 'none',
-                    background: 'transparent',
-                    color: 'var(--vp-c-text-2)',
-                  }}
-                  onClick={() => setActiveTab(tab.value)}>
-                  {tab.label}
-                </button>
-              ),
-            )}
-          </div>
-        )}
+      <div
+        data-lbus-component="tabs"
+        data-tabs-group-id={groupId}
+        data-tabs-variant={variant}
+        className="my-4">
+        {/* SSR: empty placeholder — tabs-hydrate.ts populates this bar */}
+        <div data-tabs-bar className={barClassName} />
         <div className="relative">{children}</div>
       </div>
     </TabsContext.Provider>

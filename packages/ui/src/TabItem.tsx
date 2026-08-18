@@ -20,9 +20,17 @@ export function TabItem({ value, label, default: isDefault, children }: TabItemP
   }, [])
 
   if (!ctx) {
-    // Render outside a Tabs container — always show
+    // SSR path: Astro renders each React component in its own isolated React root,
+    // so TabsContext.Provider from <Tabs> is never in scope here.
+    // Emit data-* attrs so the tabs-hydrate client script can discover this item,
+    // build the tab bar, and manage visibility without React involvement.
     return (
-      <div data-lbus-component="tab-item" className="py-4">
+      <div
+        data-lbus-component="tab-item"
+        data-tab-value={value}
+        data-tab-label={label}
+        data-tab-default={isDefault ? 'true' : undefined}
+        className="py-4">
         {children}
       </div>
     )

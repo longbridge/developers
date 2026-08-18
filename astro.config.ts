@@ -9,6 +9,8 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { unified } from '@astrojs/markdown-remark'
 import { remarkRegionFilter } from './src/integrations/remark-region-filter'
+import remarkDirective from 'remark-directive'
+import { remarkCallout } from './src/integrations/remark-callout'
 import { regionHostnameRewrite } from './src/integrations/region-hostname-rewrite'
 import { prebuildMcpTools } from './src/integrations/prebuild-mcp-tools'
 import { prebuildSkills } from './src/integrations/prebuild-skills'
@@ -109,6 +111,23 @@ export default defineConfig({
           //    `{symbol}` as a JSX expression referencing an undefined
           //    identifier. Escape the braces so mdx emits literal `{`/`}`.
           out = out.replace(/\/\{([a-z_][a-z0-9_]*)\}/gi, '/\\{$1\\}')
+          // 10) Convert VitePress-style `:::name Title Text` to
+          //     remark-directive bracket notation `:::name[Title Text]`.
+          //     The micromark-extension-directive tokenizer (used by
+          //     remark-directive v4) returns nok when it encounters bare text
+          //     after the directive name/whitespace, so only bracket labels
+          //     (`[…]`) are accepted.  This transform runs before remark sees
+          //     the file.  Regex only matches lines where:
+          //       - 3+ colons start the line
+          //       - one of the known directive names follows immediately
+          //       - at least one space separates name from title text
+          //       - title text contains no newlines, brackets, or braces
+          //     (Lines with no title, `:::name[…]`, or `:::name{…}` are left
+          //     untouched.)
+          out = out.replace(
+            /^(:{3,})(success|warning|tip|info|danger|note|caution)([ \t]+)([^\n[\]{]+?)\s*$/gm,
+            (_match, colons, name, _ws, title) => `${colons}${name}[${title.trim()}]`,
+          )
           return out === code ? null : { code: out, map: null }
         },
       },
@@ -124,7 +143,7 @@ export default defineConfig({
     // and elsewhere). `unified()` forces the acorn-based remark/rehype
     // pipeline. Keeps Astro 7 latest.
     processor: unified({
-      remarkPlugins: [remarkHeadingId, remarkRegionFilter],
+      remarkPlugins: [remarkHeadingId, remarkRegionFilter, remarkDirective, remarkCallout],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rehypePlugins: [
         rehypeSlug as any,

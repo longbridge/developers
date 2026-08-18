@@ -35,5 +35,11 @@ const pathname = new URL(Astro.request.url).pathname
       <slot />
     </main>
     <Footer locale={locale} client:idle />
+    {/* tabs-hydrate: vanilla-JS progressive enhancement for <Tabs>/<TabItem>.
+        Astro renders MDX React components in isolated React roots, so
+        React.Children and React context don't propagate across the serialisation
+        boundary. TabItem !ctx branch emits data-tab-* attrs; this script reads
+        them to build the interactive tab bar and manage visibility. */}
+    <script>import '../scripts/tabs-hydrate'</script>
   </body>
 </html>

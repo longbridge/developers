@@ -1,0 +1,93 @@
+/**
+ * callout.css — Styled callout boxes for VitePress-style container directives.
+ *
+ * Maps the directive names to design token colours:
+ *   warning  → --lb-status-alert  (#FF9728, orange)
+ *   danger   → --lb-status-warn   (#F7415F, red)
+ *   tip      → --lb-brand         (#00B8B8, teal)
+ *   success  → --lb-status-safe   (#00CC92, green)
+ *   info     → --lb-status-neutral (#2A99FE, blue)
+ *   note     → same as info
+ *   caution  → same as info
+ */
+
+/* ── Base ─────────────────────────────────────────────── */
+.callout {
+  margin: 1.25rem 0;
+  padding: 0.875rem 1rem;
+  border-left: 4px solid var(--lb-fg-2);
+  border-radius: 0 0.375rem 0.375rem 0;
+  background: color-mix(in oklch, var(--lb-fg-2) 6%, transparent);
+  line-height: 1.6;
+}
+
+.callout > *:last-child {
+  margin-bottom: 0;
+}
+
+.callout > *:first-child {
+  margin-top: 0;
+}
+
+/* ── Title paragraph ──────────────────────────────────── */
+.callout-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ── Variants ─────────────────────────────────────────── */
+.callout-warning {
+  border-color: var(--lb-status-alert);
+  background: color-mix(in oklch, var(--lb-status-alert) 8%, transparent);
+}
+
+.callout-warning .callout-title {
+  color: var(--lb-status-alert);
+}
+
+.callout-danger {
+  border-color: var(--lb-status-warn);
+  background: color-mix(in oklch, var(--lb-status-warn) 8%, transparent);
+}
+
+.callout-danger .callout-title {
+  color: var(--lb-status-warn);
+}
+
+.callout-tip {
+  border-color: var(--lb-brand);
+  background: color-mix(in oklch, var(--lb-brand) 8%, transparent);
+}
+
+.callout-tip .callout-title {
+  color: var(--lb-brand);
+}
+
+.callout-success {
+  border-color: var(--lb-status-safe);
+  background: color-mix(in oklch, var(--lb-status-safe) 8%, transparent);
+}
+
+.callout-success .callout-title {
+  color: var(--lb-status-safe);
+}
+
+.callout-info,
+.callout-note,
+.callout-caution {
+  border-color: var(--lb-status-neutral);
+  background: color-mix(in oklch, var(--lb-status-neutral) 8%, transparent);
+}
+
+.callout-info .callout-title,
+.callout-note .callout-title,
+.callout-caution .callout-title {
+  color: var(--lb-status-neutral);
+}
+
+/* ── Nested code blocks keep readable bg ─────────────── */
+.callout pre {
+  background: color-mix(in oklch, currentcolor 4%, transparent);
+}
