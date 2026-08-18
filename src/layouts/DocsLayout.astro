@@ -9,7 +9,7 @@ import Sidebar from '@components/shell/Sidebar'
 import TOC from '@components/shell/TOC'
 import type { TocHeading } from '@components/shell/TOC'
 import PrevNext from '@components/shell/PrevNext'
-import { buildSidebar, getPrevNext, resolveSidebarScope } from '@lib/navigation'
+import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } from '@lib/navigation'
 
 interface Props {
   title: string
@@ -23,11 +23,17 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
 const sidebar = buildSidebar(locale, resolveSidebarScope(pathname))
 const { prev, next } = getPrevNext(sidebar, pathname)
 
-function buildCrumbsFromPath(e: CollectionEntry<'docs'>): BreadcrumbItem[] {
-  return [{ text: e.data.title ?? '(untitled)' }]
-}
-
-const crumbs = buildCrumbsFromPath(entry)
+// Build multi-layer breadcrumb by walking the sidebar tree; fall back
+// to just the current page title if the pathname isn't in the sidebar.
+const trail = findBreadcrumbTrail(sidebar, pathname)
+const crumbs: BreadcrumbItem[] =
+  trail.length > 0
+    ? trail.map((t, i) => ({
+        text: t.text,
+        // Last crumb is the current page — no href.
+        href: i < trail.length - 1 ? t.href : undefined,
+      }))
+    : [{ text: entry.data.title ?? '(untitled)' }]
 ---
 
 <BaseLayout title={title} locale={locale}>

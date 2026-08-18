@@ -208,6 +208,36 @@ export function flatSidebar(sidebar: SidebarNode[]): SidebarNode[] {
   return result
 }
 
+/**
+ * Walk the sidebar tree to find the ancestor chain of a pathname.
+ * Returns [{group}, ..., {current}] excluding the sitewide Home crumb
+ * (the Breadcrumb component prepends Home itself). Returns [] when the
+ * pathname is not reachable from the sidebar (e.g. marketing pages).
+ */
+export function findBreadcrumbTrail(
+  sidebar: SidebarNode[],
+  pathname: string,
+): { text: string; href?: string }[] {
+  const trail: { text: string; href?: string }[] = []
+  function walk(nodes: SidebarNode[]): boolean {
+    for (const node of nodes) {
+      const nodeLink = node.link ?? ''
+      if (nodeLink && nodeLink === pathname) {
+        trail.push({ text: node.label, href: nodeLink })
+        return true
+      }
+      if (node.items && node.items.length) {
+        trail.push({ text: node.label, href: nodeLink || undefined })
+        if (walk(node.items)) return true
+        trail.pop()
+      }
+    }
+    return false
+  }
+  walk(sidebar)
+  return trail
+}
+
 export function getPrevNext(
   sidebar: SidebarNode[],
   currentPath: string,
