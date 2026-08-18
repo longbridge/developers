@@ -27,6 +27,7 @@
   "type": "module",
   "dependencies": {
     "@longbridge/openapi-api-reference": "workspace:*",
+    "@longbridge/openapi-tryit": "workspace:*",
     "@longbridge/openapi-utils": "workspace:*",
     "@astrojs/mdx": "^7.0.5",
     "@astrojs/react": "^6.0.2",

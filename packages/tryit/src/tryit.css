@@ -1,0 +1,123 @@
+/**
+ * tryit.css — CSS variable bridge for TryIt package
+ * Maps VitePress design tokens to component-scoped class names
+ * Matches legacy TryIt CSS 1:1
+ */
+
+/* ── PlayButton color variants ───────────────────────────────────────────── */
+
+.tryit-btn-success {
+  background-color: var(--vp-c-success-1);
+  color: #fff;
+}
+
+.tryit-btn-brand {
+  background-color: var(--vp-c-brand-1);
+  color: #fff;
+}
+
+.tryit-btn-warning {
+  background-color: var(--vp-c-warning-1);
+  color: #fff;
+}
+
+.tryit-btn-danger {
+  background-color: var(--vp-c-danger-1);
+  color: #fff;
+}
+
+.tryit-btn-important {
+  background-color: var(--vp-c-important-1);
+  color: #fff;
+}
+
+.tryit-btn-default {
+  background-color: var(--vp-c-default-1, #888);
+  color: #fff;
+}
+
+/* ── Method badge text + bg colors ──────────────────────────────────────── */
+
+.method-get {
+  color: var(--vp-c-success-1);
+  background-color: var(--vp-c-success-soft);
+}
+
+.method-post {
+  color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-soft);
+}
+
+.method-put {
+  color: var(--vp-c-warning-1);
+  background-color: var(--vp-c-warning-soft);
+}
+
+.method-delete {
+  color: var(--vp-c-danger-1);
+  background-color: var(--vp-c-danger-soft);
+}
+
+.method-patch {
+  color: var(--vp-c-important-1);
+  background-color: var(--vp-c-important-soft);
+}
+
+/* ── Response status dot ─────────────────────────────────────────────────── */
+
+.tryit-status-success {
+  background-color: var(--vp-c-success-1);
+}
+
+.tryit-status-danger {
+  background-color: var(--vp-c-danger-1);
+}
+
+.tryit-status-warning {
+  background-color: var(--vp-c-warning-1);
+}
+
+.tryit-status-default {
+  background-color: var(--vp-c-text-3);
+}
+
+/* ── Form inputs ─────────────────────────────────────────────────────────── */
+
+.tryit-input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--vp-c-border);
+  background-color: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 13px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.tryit-input:focus {
+  border-color: var(--vp-c-brand-1);
+}
+
+/* ── Collapsible form content ────────────────────────────────────────────── */
+
+.tryit-form-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.tryit-form-content.tryit-collapsed {
+  max-height: 0;
+}
+
+.tryit-form-header:hover {
+  background-color: var(--vp-c-bg-soft);
+}
+
+/* ── Panel wrapper ───────────────────────────────────────────────────────── */
+
+.tryit-panel {
+  padding: 16px 0;
+}

@@ -10,8 +10,8 @@
 
 import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks, Skill } from '@longbridge/openapi-ui'
 
-// T12 stubs — keep imports so mdx-components.tsx compiles even before T12 ships
-import { TryIt } from '@/components/mdx/placeholders/TryIt'
+// TryIt — ported from legacy openapi-website (§S7)
+import { TryIt } from '@longbridge/openapi-tryit'
 import { McpTools } from '@/components/mdx/placeholders/McpTools'
 import { NewHomePage } from '@/components/mdx/placeholders/NewHomePage'
 import { Pricing } from '@/components/mdx/placeholders/Pricing'
