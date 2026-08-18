@@ -26,8 +26,8 @@ const { entry } = Astro.props
 const { Content, headings } = await render(entry)
 const titleStr = entry.data.title ?? '(untitled)'
 const layoutKind =
-  entry.data.layout === 'api-reference' ? 'api'
-  : entry.data.layout === false ? 'plain'
+  entry.data.docs_layout === 'api-reference' ? 'api'
+  : entry.data.docs_layout === false ? 'plain'
   : 'docs'
 ---
 {layoutKind === 'docs' && (

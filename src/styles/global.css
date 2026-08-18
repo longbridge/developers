@@ -1,6 +1,15 @@
 @import "tailwindcss";
+
+/* Tailwind v4 requires explicit source scanning — global.css lives in
+   src/styles/ so relative sources must climb to src/, packages/, and docs/
+   for the class extractor to find them. */
+@source "../**/*.{astro,tsx,ts,jsx,js}";
+@source "../../packages/ui/src/**/*.{tsx,ts}";
+@source "../../docs/**/*.{mdx,md}";
+
 @import "./tokens.css";
 @import "./shiki.css";
+@import "./shell.css";
 
 /* reset */
 *, *::before, *::after { box-sizing: border-box; }

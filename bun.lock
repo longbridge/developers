@@ -44,6 +44,7 @@
         "odiff-bin": "^4.5.0",
         "postcss-rtlcss": "^5.7.0",
         "prettier": "^3.5.3",
+        "remark-heading-id": "^1.0.1",
         "vitest": "^4.1.10",
       },
       "peerDependencies": {
@@ -1093,6 +1094,8 @@
 
     "locate-path": ["locate-path@5.0.0", "https://registry.yarnpkg.com/locate-path/-/locate-path-5.0.0.tgz", { "dependencies": { "p-locate": "^4.1.0" } }, "sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g=="],
 
+    "lodash": ["lodash@4.18.1", "", {}, "sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q=="],
+
     "lodash-es": ["lodash-es@4.17.21", "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz", {}, "sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw=="],
 
     "loglevel": ["loglevel@1.9.2", "https://git.5th.im/api/v4/packages/npm/loglevel/-/loglevel-1.9.2.tgz", {}, "sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg=="],
@@ -1371,6 +1374,8 @@
 
     "remark-gfm": ["remark-gfm@4.0.1", "https://git.5th.im/api/v4/packages/npm/remark-gfm/-/remark-gfm-4.0.1.tgz", { "dependencies": { "@types/mdast": "^4.0.0", "mdast-util-gfm": "^3.0.0", "micromark-extension-gfm": "^3.0.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "unified": "^11.0.0" } }, "sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg=="],
 
+    "remark-heading-id": ["remark-heading-id@1.0.1", "", { "dependencies": { "lodash": "^4.17.21", "unist-util-visit": "^1.4.0" } }, "sha512-GmJjuCeEkYvwFlvn/Skjc/1Qafj71412gbQnrwUmP/tKskmAf1cMRlZRNoovV+aIvsSRkTb2rCmGv2b9RdoJbQ=="],
+
     "remark-mdx": ["remark-mdx@3.1.1", "https://git.5th.im/api/v4/packages/npm/remark-mdx/-/remark-mdx-3.1.1.tgz", { "dependencies": { "mdast-util-mdx": "^3.0.0", "micromark-extension-mdxjs": "^3.0.0" } }, "sha512-Pjj2IYlUY3+D8x00UJsIOg5BEvfMyeI+2uLPn9VO9Wg4MEtN/VTIq2NEJQfde9PnX15KgtHyl9S0BcTnWrIuWg=="],
 
     "remark-parse": ["remark-parse@11.0.0", "https://git.5th.im/api/v4/packages/npm/remark-parse/-/remark-parse-11.0.0.tgz", { "dependencies": { "@types/mdast": "^4.0.0", "mdast-util-from-markdown": "^2.0.0", "micromark-util-types": "^2.0.0", "unified": "^11.0.0" } }, "sha512-FCxlKLNGknS5ba/1lmpYijMUzX2esxW5xQqjWxw2eHFfS2MSdaHVINFmhjo+qN1WhZhNimq0dZATN9pH0IDrpA=="],
@@ -1587,11 +1592,11 @@
 
     "unist-util-stringify-position": ["unist-util-stringify-position@4.0.0", "https://registry.yarnpkg.com/unist-util-stringify-position/-/unist-util-stringify-position-4.0.0.tgz", { "dependencies": { "@types/unist": "^3.0.0" } }, "sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ=="],
 
-    "unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+    "unist-util-visit": ["unist-util-visit@1.4.1", "", { "dependencies": { "unist-util-visit-parents": "^2.0.0" } }, "sha512-AvGNk7Bb//EmJZyhtRUnNMEpId/AZ5Ph/KUpTI09WHQuDZHKovQ1oEv3mfmKpWKtoMzyMC4GLBm1Zy5k12fjIw=="],
 
     "unist-util-visit-children": ["unist-util-visit-children@3.0.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit-children/-/unist-util-visit-children-3.0.0.tgz", { "dependencies": { "@types/unist": "^3.0.0" } }, "sha512-RgmdTfSBOg04sdPcpTSD1jzoNBjt9a80/ZCzp5cI9n1qPzLZWF9YdvWGN2zmTumP1HWhXKdUWexjy/Wy/lJ7tA=="],
 
-    "unist-util-visit-parents": ["unist-util-visit-parents@6.0.2", "https://git.5th.im/api/v4/packages/npm/unist-util-visit-parents/-/unist-util-visit-parents-6.0.2.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-goh1s1TBrqSqukSc8wrjwWhL0hiJxgA8m4kFxGlQ+8FYQ3C/m11FcTs4YYem7V664AhHVvgoQLk890Ssdsr2IQ=="],
+    "unist-util-visit-parents": ["unist-util-visit-parents@2.1.2", "", { "dependencies": { "unist-util-is": "^3.0.0" } }, "sha512-DyN5vD4NE3aSeB+PXYNKxzGsfocxp6asDc2XXE3b0ekO2BaRUpBicbbUygfSvYfUz1IkmjFR1YF7dPklraMZ2g=="],
 
     "universalify": ["universalify@2.0.1", "https://registry.yarnpkg.com/universalify/-/universalify-2.0.1.tgz", {}, "sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw=="],
 
@@ -1697,6 +1702,12 @@
 
     "@astrojs/internal-helpers/js-yaml": ["js-yaml@4.3.1", "https://git.5th.im/api/v4/packages/npm/js-yaml/-/js-yaml-4.3.1.tgz", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.js" } }, "sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ=="],
 
+    "@astrojs/markdown-remark/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
+    "@astrojs/markdown-remark/unist-util-visit-parents": ["unist-util-visit-parents@6.0.2", "https://git.5th.im/api/v4/packages/npm/unist-util-visit-parents/-/unist-util-visit-parents-6.0.2.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-goh1s1TBrqSqukSc8wrjwWhL0hiJxgA8m4kFxGlQ+8FYQ3C/m11FcTs4YYem7V664AhHVvgoQLk890Ssdsr2IQ=="],
+
+    "@astrojs/mdx/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
     "@astrojs/react/vite": ["vite@8.2.1", "https://git.5th.im/api/v4/packages/npm/vite/-/vite-8.2.1.tgz", { "dependencies": { "lightningcss": "^1.33.0", "picomatch": "^4.0.5", "postcss": "^8.5.25", "rolldown": "~1.2.1", "tinyglobby": "^0.2.17" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^20.19.0 || >=22.12.0", "@vitejs/devtools": "^0.4.0", "esbuild": "^0.27.0 || ^0.28.0", "jiti": ">=1.21.0", "less": "^4.0.0", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["@types/node", "@vitejs/devtools", "esbuild", "jiti", "less", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "yaml"], "bin": { "vite": "bin/vite.js" } }, "sha512-EU/eS7BH3XROHh2YnBefjM6DBKA6ZeMZEYQbj7NLWg5wHYlhB8B/Mayd5XsgWq+NFYccDOTemRpdETWR6Ka/lw=="],
 
     "@babel/core/semver": ["semver@6.3.1", "https://git.5th.im/api/v4/packages/npm/semver/-/semver-6.3.1.tgz", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
@@ -1724,6 +1735,8 @@
     "@jridgewell/gen-mapping/@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.4", "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.4.tgz", {}, "sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw=="],
 
     "@jridgewell/trace-mapping/@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.4", "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.4.tgz", {}, "sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw=="],
+
+    "@mdx-js/mdx/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
 
     "@napi-rs/wasm-runtime/@emnapi/core": ["@emnapi/core@1.9.0", "https://registry.yarnpkg.com/@emnapi/core/-/core-1.9.0.tgz", { "dependencies": { "@emnapi/wasi-threads": "1.2.0", "tslib": "^2.4.0" } }, "sha512-0DQ98G9ZQZOxfUcQn1waV2yS8aWdZ6kJMbYCJB3oUBecjWYO1fqJ+a1DRfPF3O5JEkwqwP1A9QEN/9mYm2Yd0w=="],
 
@@ -1805,6 +1818,8 @@
 
     "hast-util-raw/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
 
+    "hast-util-raw/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
     "hast-util-to-estree/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
 
     "hast-util-to-parse5/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
@@ -1817,6 +1832,10 @@
 
     "langium/vscode-uri": ["vscode-uri@3.0.8", "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-3.0.8.tgz", {}, "sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw=="],
 
+    "mdast-util-definitions/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
+    "mdast-util-find-and-replace/unist-util-visit-parents": ["unist-util-visit-parents@6.0.2", "https://git.5th.im/api/v4/packages/npm/unist-util-visit-parents/-/unist-util-visit-parents-6.0.2.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-goh1s1TBrqSqukSc8wrjwWhL0hiJxgA8m4kFxGlQ+8FYQ3C/m11FcTs4YYem7V664AhHVvgoQLk890Ssdsr2IQ=="],
+
     "mdast-util-mdx-expression/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
 
     "mdast-util-mdx-jsx/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
@@ -1824,6 +1843,8 @@
     "mdast-util-mdxjs-esm/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
 
     "mdast-util-to-hast/unist-util-visit": ["unist-util-visit@5.0.0", "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-5.0.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg=="],
+
+    "mdast-util-to-markdown/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
 
     "mlly/acorn": ["acorn@8.15.0", "https://registry.yarnpkg.com/acorn/-/acorn-8.15.0.tgz", { "bin": { "acorn": "bin/acorn" } }, "sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg=="],
 
@@ -1845,6 +1866,10 @@
 
     "rehype-stringify/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
 
+    "remark-smartypants/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
+    "retext-smartypants/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
     "rolldown/@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.9", "https://registry.yarnpkg.com/@rolldown/pluginutils/-/pluginutils-1.0.0-rc.9.tgz", {}, "sha512-w6oiRWgEBl04QkFZgmW+jnU1EC9b57Oihi2ot3HNWIQRqgHp5PnYDia5iZ5FF7rpa4EQdiqMDXjlqKGXBhsoXw=="],
 
     "satteri/@types/hast": ["@types/hast@3.0.5", "https://git.5th.im/api/v4/packages/npm/@types/hast/-/hast-3.0.5.tgz", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
@@ -1861,7 +1886,9 @@
 
     "unifont/undici": ["undici@8.10.0", "https://git.5th.im/api/v4/packages/npm/undici/-/undici-8.10.0.tgz", {}, "sha512-HvltHd7avK13QIw/oLe4qoOLyoVSoafqJ2jYOrtMRBkbYT31eiBQ8O0ehRKZiEZCMEyLFQNIADpgCWC5fALvYQ=="],
 
-    "unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+    "unist-util-remove-position/unist-util-visit": ["unist-util-visit@5.1.0", "https://git.5th.im/api/v4/packages/npm/unist-util-visit/-/unist-util-visit-5.1.0.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.0.0" } }, "sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg=="],
+
+    "unist-util-visit-parents/unist-util-is": ["unist-util-is@3.0.0", "", {}, "sha512-sVZZX3+kspVNmLWBPAB6r+7D9ZgAFPNWm66f7YNb420RlQSbn+n8rG8dGZSkrER7ZIXGQYNm5pqC3v3HopH24A=="],
 
     "unstorage/chokidar": ["chokidar@5.0.0", "https://git.5th.im/api/v4/packages/npm/chokidar/-/chokidar-5.0.0.tgz", { "dependencies": { "readdirp": "^5.0.0" } }, "sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw=="],
 
@@ -1891,6 +1918,10 @@
 
     "@astrojs/compiler-binding-wasm32-wasi/@napi-rs/wasm-runtime/@tybys/wasm-util": ["@tybys/wasm-util@0.10.3", "https://git.5th.im/api/v4/packages/npm/@tybys/wasm-util/-/wasm-util-0.10.3.tgz", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg=="],
 
+    "@astrojs/markdown-remark/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
+    "@astrojs/mdx/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
     "@astrojs/react/vite/lightningcss": ["lightningcss@1.33.0", "https://git.5th.im/api/v4/packages/npm/lightningcss/-/lightningcss-1.33.0.tgz", { "dependencies": { "detect-libc": "^2.0.3" }, "optionalDependencies": { "lightningcss-android-arm64": "1.33.0", "lightningcss-darwin-arm64": "1.33.0", "lightningcss-darwin-x64": "1.33.0", "lightningcss-freebsd-x64": "1.33.0", "lightningcss-linux-arm-gnueabihf": "1.33.0", "lightningcss-linux-arm64-gnu": "1.33.0", "lightningcss-linux-arm64-musl": "1.33.0", "lightningcss-linux-x64-gnu": "1.33.0", "lightningcss-linux-x64-musl": "1.33.0", "lightningcss-win32-arm64-msvc": "1.33.0", "lightningcss-win32-x64-msvc": "1.33.0" } }, "sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA=="],
 
     "@astrojs/react/vite/postcss": ["postcss@8.5.26", "https://git.5th.im/api/v4/packages/npm/postcss/-/postcss-8.5.26.tgz", { "dependencies": { "nanoid": "^3.3.17", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ=="],
@@ -1918,6 +1949,8 @@
     "@isaacs/cliui/strip-ansi/ansi-regex": ["ansi-regex@6.1.0", "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-6.1.0.tgz", {}, "sha512-7HSX4QQb4CspciLpVFwyRe79O3xsIZDDLER21kERQ71oaPodF8jL725AgJMFAYbooIqolJoRLuM81SpeUkpkvA=="],
 
     "@isaacs/cliui/wrap-ansi/ansi-styles": ["ansi-styles@6.2.1", "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.1.tgz", {}, "sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug=="],
+
+    "@mdx-js/mdx/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
 
     "@napi-rs/wasm-runtime/@emnapi/core/@emnapi/wasi-threads": ["@emnapi/wasi-threads@1.2.0", "https://registry.yarnpkg.com/@emnapi/wasi-threads/-/wasi-threads-1.2.0.tgz", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-N10dEJNSsUx41Z6pZsXU8FjPjpBEplgH24sfkmITrBED1/U2Esum9F3lfLrMjKHHjmi557zQn7kR9R+XWXu5Rg=="],
 
@@ -1973,7 +2006,13 @@
 
     "gray-matter/js-yaml/argparse": ["argparse@1.0.10", "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz", { "dependencies": { "sprintf-js": "~1.0.2" } }, "sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg=="],
 
+    "hast-util-raw/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
+    "mdast-util-definitions/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
     "mdast-util-to-hast/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
+    "mdast-util-to-markdown/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
 
     "mlly/pkg-types/confbox": ["confbox@0.1.8", "https://registry.yarnpkg.com/confbox/-/confbox-0.1.8.tgz", {}, "sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w=="],
 
@@ -1985,9 +2024,15 @@
 
     "qrcode/yargs/yargs-parser": ["yargs-parser@18.1.3", "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-18.1.3.tgz", { "dependencies": { "camelcase": "^5.0.0", "decamelize": "^1.2.0" } }, "sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ=="],
 
+    "remark-smartypants/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
+    "retext-smartypants/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
+
     "sitemap/@types/node/undici-types": ["undici-types@7.18.2", "https://git.5th.im/api/v4/packages/npm/undici-types/-/undici-types-7.18.2.tgz", {}, "sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w=="],
 
     "string-width-cjs/strip-ansi/ansi-regex": ["ansi-regex@5.0.1", "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz", {}, "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ=="],
+
+    "unist-util-remove-position/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.0.1", "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw=="],
 
     "unstorage/chokidar/readdirp": ["readdirp@5.1.1", "https://git.5th.im/api/v4/packages/npm/readdirp/-/readdirp-5.1.1.tgz", {}, "sha512-Kko+Y5XQ6fM+Ce3dq3m9YGxnacYZYl9cA1wZjaF3Vbry2L3i1qVg8+CAgNPsXRArPMUMCaOR7oa9Nqntc43JKA=="],
 

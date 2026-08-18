@@ -43,10 +43,16 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
   useEffect(() => {
     let cancelled = false
     ;(async () => {
+      // pagefind.js is generated at build time and only exists in dist/. In dev
+      // there is no such file, so we (a) build the URL from a runtime variable
+      // to hide it from Vite's static import analyzer, and (b) probe with a
+      // HEAD fetch before importing — otherwise Vite would fail with an
+      // unresolvable module error before our try/catch could run.
+      const pfUrl = '/pagefind/pagefind.js'
       try {
-        // Dynamic import — Vite will not bundle this; it's served from dist/pagefind/
-        // @ts-expect-error pagefind.js is generated at build time and not resolvable in dev
-        const pf = (await import(/* @vite-ignore */ '/pagefind/pagefind.js')) as PagefindAPI
+        const head = await fetch(pfUrl, { method: 'HEAD' })
+        if (!head.ok) throw new Error('pagefind not built')
+        const pf = (await import(/* @vite-ignore */ pfUrl)) as PagefindAPI
         if (!cancelled) {
           pfRef.current = pf
           setPfReady('ready')
