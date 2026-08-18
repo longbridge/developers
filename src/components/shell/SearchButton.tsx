@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { t, type Locale } from '../../lib/i18n'
+import { t, type Locale } from '@longbridge/openapi-utils'
 import SearchDialog from './SearchDialog'
 
 interface Props {

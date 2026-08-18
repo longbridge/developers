@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
-import { resolveUrl, resolveLocale } from '@/lib/slug'
+import { resolveUrl, resolveLocale } from '@longbridge/openapi-utils'
 
 export async function getStaticPaths() {
   const all = await getCollection('docs')

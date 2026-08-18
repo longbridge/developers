@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type { Locale } from '../../lib/i18n'
-import { t } from '../../lib/i18n'
+import type { Locale } from '@longbridge/openapi-utils'
+import { t } from '@longbridge/openapi-utils'
 import SearchResults, { type SearchResultItem } from './SearchResults'
 
 // Shape of a raw pagefind result fragment (url available before data() call)

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { t, type Locale } from '../../lib/i18n'
+import { t, type Locale } from '@longbridge/openapi-utils'
 import { nav as navEn } from '../../data/nav.en'
 import { nav as navZhCN } from '../../data/nav.zh-CN'
 import { nav as navZhHK } from '../../data/nav.zh-HK'

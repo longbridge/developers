@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { Locale } from '../../lib/i18n'
-import type { SidebarNode } from '../../lib/navigation'
+import type { Locale } from '@longbridge/openapi-utils'
+import type { SidebarNode } from '@longbridge/openapi-utils'
 import Sidebar from './Sidebar'
 import Backdrop from './Backdrop'
 

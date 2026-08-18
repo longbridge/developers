@@ -33,10 +33,16 @@ describe('resolveUrl (no explicit slug)', () => {
 })
 
 describe('resolveUrl (explicit slug)', () => {
-  it('absolute slug replaces full path', () =>
-    expect(resolveUrl(mock('en/docs/anything.mdx', '/quote/pull/static'))).toBe('/quote/pull/static'))
-  it('absolute slug in zh-CN preserves locale prefix', () =>
-    expect(resolveUrl(mock('zh-CN/docs/x.mdx', '/api'))).toBe('/zh-CN/api'))
+  // Legacy vitepress semantics (Sprint 1.5 T3): for files under `<locale>/docs/**`
+  // an absolute slug is `/docs`-relative, not site-absolute.
+  it('absolute slug under docs/ gets /docs prefix', () =>
+    expect(resolveUrl(mock('en/docs/anything.mdx', '/quote/pull/static'))).toBe('/docs/quote/pull/static'))
+  it('absolute slug in zh-CN docs/ preserves locale + /docs prefix', () =>
+    expect(resolveUrl(mock('zh-CN/docs/x.mdx', '/api'))).toBe('/zh-CN/docs/api'))
+  // Files directly under `<locale>/` (marketing pages sdk / pricing / skill)
+  // treat an absolute slug as site-absolute.
+  it('absolute slug in marketing (top-level) file stays site-absolute', () =>
+    expect(resolveUrl(mock('en/marketing.mdx', '/custom'))).toBe('/custom'))
   it('relative slug is dir-relative', () =>
     expect(resolveUrl(mock('en/docs/quote/index.mdx', 'pull/static'))).toBe('/docs/quote/pull/static'))
 })

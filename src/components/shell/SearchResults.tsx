@@ -1,5 +1,5 @@
-import type { Locale } from '../../lib/i18n'
-import { t } from '../../lib/i18n'
+import type { Locale } from '@longbridge/openapi-utils'
+import { t } from '@longbridge/openapi-utils'
 
 export interface SearchResultItem {
   url: string

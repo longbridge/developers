@@ -1,6 +1,6 @@
-import { locale as en } from '../data/locale.en'
-import { locale as zhCN } from '../data/locale.zh-CN'
-import { locale as zhHK } from '../data/locale.zh-HK'
+import { locale as en } from '../../../src/data/locale.en'
+import { locale as zhCN } from '../../../src/data/locale.zh-CN'
+import { locale as zhHK } from '../../../src/data/locale.zh-HK'
 
 export type Locale = 'en' | 'zh-CN' | 'zh-HK'
 export type LocaleKey = keyof typeof en

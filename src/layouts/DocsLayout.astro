@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro'
 import type { CollectionEntry } from 'astro:content'
-import type { Locale } from '@lib/i18n'
+import type { Locale } from '@longbridge/openapi-utils'
 import Breadcrumb from '@components/shell/Breadcrumb'
 import type { BreadcrumbItem } from '@components/shell/Breadcrumb'
 import LocalNav from '@components/shell/LocalNav'
@@ -9,7 +9,7 @@ import Sidebar from '@components/shell/Sidebar'
 import TOC from '@components/shell/TOC'
 import type { TocHeading } from '@components/shell/TOC'
 import PrevNext from '@components/shell/PrevNext'
-import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } from '@lib/navigation'
+import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } from '@longbridge/openapi-utils'
 
 interface Props {
   title: string

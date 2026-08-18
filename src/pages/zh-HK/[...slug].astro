@@ -3,8 +3,8 @@ import { getCollection, render } from 'astro:content'
 import DocsLayout from '@/layouts/DocsLayout.astro'
 import PlainLayout from '@/layouts/PlainLayout.astro'
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
-import { resolveUrl, resolveLocale, resolveLayoutKind } from '@lib/slug'
-import { currentRegion, includedInRegion } from '@lib/region'
+import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openapi-utils'
+import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
 import { mdxComponents } from '@/mdx-components'
 
 export async function getStaticPaths() {

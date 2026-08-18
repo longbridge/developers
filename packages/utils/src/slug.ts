@@ -1,6 +1,5 @@
 import type { CollectionEntry } from 'astro:content'
-
-export type Locale = 'en' | 'zh-CN' | 'zh-HK'
+import type { Locale } from './i18n'
 
 /** en/index.mdx → 'en'; zh-CN/docs/foo.mdx → 'zh-CN'; etc. */
 export function resolveLocale(entry: CollectionEntry<'docs'>): Locale {

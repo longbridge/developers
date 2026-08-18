@@ -1,5 +1,5 @@
 import picomatch from 'picomatch'
-import { regionConfig } from '../../region.config'
+import { regionConfig } from '../../../region.config'
 
 /**
  * The three possible build regions.

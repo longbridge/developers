@@ -1,4 +1,4 @@
-import type { SidebarNode } from '../../lib/navigation'
+import type { SidebarNode } from '@longbridge/openapi-utils'
 
 interface Props {
   prev: SidebarNode | null

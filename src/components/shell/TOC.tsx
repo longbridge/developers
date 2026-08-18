@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { t, type Locale } from '../../lib/i18n'
+import { t, type Locale } from '@longbridge/openapi-utils'
 
 export interface TocHeading {
   depth: number

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Locale } from '../../lib/i18n'
+import type { Locale } from '@longbridge/openapi-utils'
 
 type Pref = 'light' | 'dark' | 'system'
 
