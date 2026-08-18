@@ -34,6 +34,25 @@ function isActive(item: NavItem, pathname: string): boolean {
   }
 }
 
+function GitHubIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+    </svg>
+  )
+}
+
 export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const navItems = navForLocale(locale)
@@ -64,6 +83,17 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
         {/* Desktop nav */}
         <nav className="flex-1 min-w-0 text-sm hidden lg:block" aria-label="Main navigation">
           <ul className="flex items-center gap-5 list-none p-0 m-0" role="list">
+            {/* Features stub — dropdown content ports in stage-2 §S10 */}
+            <li>
+              <button
+                type="button"
+                aria-haspopup="true"
+                data-lbus-component="nav-features-stub"
+                className="text-[color:var(--lb-fg-2)] hover:text-[color:var(--lbus-c-text)] bg-transparent border-0 cursor-pointer py-1 text-sm inline-flex items-center gap-1"
+              >
+                Features <span aria-hidden="true">▾</span>
+              </button>
+            </li>
             {navItems.map((item) => (
               <li key={item.link ?? item.text}>
                 {item.link ? (
@@ -87,7 +117,25 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
           <SearchButton locale={locale} />
           <LanguageSwitcher currentLocale={locale} currentPath={currentPath} />
           <ThemeToggle locale={locale} />
-
+          {/* GitHub icon link */}
+          <a
+            href="https://github.com/longbridge/developers"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            data-lbus-component="nav-github"
+            className="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded text-[color:var(--lb-fg-2)] hover:text-[color:var(--lbus-c-text)] no-underline"
+          >
+            <GitHubIcon />
+          </a>
+          {/* Get Started CTA — static href for now; login-state awareness ports in stage-2 §S10 */}
+          <a
+            href="/user/register"
+            data-lbus-component="nav-get-started"
+            className="hidden lg:inline-flex items-center rounded-full bg-[var(--lb-fg-1)] text-[color:var(--lb-fg-invert)] px-4 py-1.5 text-sm font-medium no-underline hover:opacity-90 whitespace-nowrap"
+          >
+            Get Started →
+          </a>
           <UserAvatar locale={locale} />
         </div>
 

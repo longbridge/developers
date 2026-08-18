@@ -1,4 +1,4 @@
-import { type ChangeEvent } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Locale } from '../../lib/i18n'
 
 interface Props {
@@ -37,27 +37,82 @@ function buildUrl(currentLocale: Locale, targetLocale: Locale, currentPath: stri
   return `/${targetLocale}${barePath}`
 }
 
+function GlobeIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z" />
+    </svg>
+  )
+}
+
 export default function LanguageSwitcher({ currentLocale, currentPath }: Props) {
-  function handleChange(e: ChangeEvent<HTMLSelectElement>): void {
-    const target = e.target.value as Locale
-    if (target === currentLocale) return
-    window.location.href = buildUrl(currentLocale, target, currentPath)
-  }
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleMouseDown(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleMouseDown)
+    return () => document.removeEventListener('mousedown', handleMouseDown)
+  }, [open])
 
   return (
-    <div data-lbus-component="lang-switcher" className="relative inline-flex">
-      <select
-        value={currentLocale}
-        onChange={handleChange}
-        aria-label="Select language"
-        className="appearance-none bg-transparent border-0 text-sm text-[color:var(--lb-fg-2)] cursor-pointer outline-none py-1 pl-1 pr-5 hover:text-[color:var(--lbus-c-text)]"
+    <div
+      ref={containerRef}
+      data-lbus-component="lang-switcher"
+      className="relative"
+    >
+      <button
+        type="button"
+        aria-label="Language"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        data-lbus-component="lang-switcher-trigger"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center justify-center w-8 h-8 rounded text-[color:var(--lb-fg-2)] hover:text-[color:var(--lbus-c-text)] bg-transparent border-0 cursor-pointer"
       >
-        {LOCALES.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
+        <GlobeIcon />
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          aria-label="Select language"
+          className="absolute right-0 top-full mt-1 min-w-[9rem] bg-[var(--lbus-c-bg)] border border-[color:var(--lb-stroke)] rounded-lg shadow-lg list-none p-1 m-0 z-50"
+        >
+          {LOCALES.map(({ value, label }) => (
+            <li key={value} role="option" aria-selected={value === currentLocale}>
+              <a
+                href={buildUrl(currentLocale, value, currentPath)}
+                onClick={() => setOpen(false)}
+                className={
+                  value === currentLocale
+                    ? 'block px-3 py-2 text-sm rounded text-[color:var(--lb-brand)] no-underline'
+                    : 'block px-3 py-2 text-sm rounded text-[color:var(--lbus-c-text)] no-underline hover:bg-[var(--lb-bg-2)]'
+                }
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
