@@ -16,7 +16,8 @@ import { McpTools } from '@/components/mdx/placeholders/McpTools'
 import { NewHomePage } from '@/components/mdx/placeholders/NewHomePage'
 import { Pricing } from '@/components/mdx/placeholders/Pricing'
 import { QuotePermission } from '@/components/mdx/placeholders/QuotePermission'
-import { ApiReference } from '@/components/mdx/placeholders/ApiReference'
+// ApiReference is mounted directly by ApiReferenceLayout.astro from
+// `@longbridge/openapi-api-reference`; it's not needed here as an mdx tag.
 import { QuantChart } from '@/components/mdx/placeholders/QuantChart'
 import { Footer } from '@/components/mdx/placeholders/Footer'
 
@@ -36,7 +37,6 @@ export const mdxComponents = {
   NewHomePage,
   Pricing,
   QuotePermission,
-  ApiReference,
   QuantChart,
   Footer,
 } as const
