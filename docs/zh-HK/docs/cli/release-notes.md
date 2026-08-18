@@ -12,6 +12,8 @@ sidebar_icon: newspaper
 - **新增網格交易 `grid` 命令組** — `grid submit` 啟動網格策略（基準價 / 上限價 / 下限價、按百分比或價差觸發、每次觸發與邊界數量、`GMO` / `GLO` / `GTG` 訂單類型；`--dry-run` 只校驗不提交）；`grid` 列出網格，`grid --ids` 按 ID 查詢指定網格
 - **查看與管理運行中的網格** — `grid detail` 與 `grid triggers` 展示規則、子訂單與觸發歷史；`grid replace`、`grid suspend`、`grid restart`、`grid cancel` 修改或停止網格
 - **網格準備輔助命令** — `grid info` 查看標的的網格信息（每手股數、最新價、授權狀態、幣種），`grid questionnaire` 記錄網格交易前所需的一次性策略風險揭示確認
+- **[通過 ACP 使用 Longbridge AI](/zh-HK/docs/cli/acp)** — 新增 `longbridge acp` 命令，將 [Longbridge AI](https://longbridge.com/ai) 作為兼容 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）的 Agent 運行。現在可以在支持 ACP 的客戶端應用中查詢實時行情、分析公司基本面和解讀賬戶持倉；配置方法請參閱 ACP 使用指南
+- **新增 Longbridge AI `agent` 命令** — `agent workspaces` 列出 AI 工作區；`agent list` 發現可對話的 Agent（`--workspace`、`--name`；`--all` 含工作流 Agent）；`agent chat chatbot "…"` 通過 SSE 進行對話（`--stream` 實時輸出——公開的 `chatbot` Agent 任何賬戶可用），多輪追問用 `agent chat chatbot <CHAT_UID> <MSG_ID> "…"`；`agent continue chatbot <CHAT_UID> <MSG_ID>` 恢復被中斷的運行（`--answer` / `--answers-json`）；`agent --skill` 輸出面向 AI harness 的 agent skill 文檔
 
 ### [v0.26.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.26.0)
 

@@ -13,10 +13,18 @@ sidebar_icon: newspaper
 ### SDK v4.5.0
 
 - **网格交易 API** — 新增 `GridContext`（submit、replace、list、detail、触发历史、cancel、suspend、restart、questionnaire、symbol info），覆盖 Python、Node.js、Java 与 C/C++，并在交易通道新增 `GridOrderChanged` 推送事件
+- **新增 `AgentContext.public_agents`** — 列出平台上所有公开分享的 AI Agent（Explore 目录），全语言支持；参数与 `agents` 一致（可选 `page` / `limit` / `name`）
+- **AI Agent 对话新增 `parent_message_id`** — 在指定消息后追加追问，保持消息流顺序（仅可与 `chat_uid` 配合使用）
+- **AI Agent 响应字段完善** — `further_questions` 追问建议、完整的 `Reference`（来源类型 / id / 嵌套内容，此前会丢失）、`ChatStartedPayload` 的 `chat_id` 与错误字段、中断的 `interactions`（`HumanInteraction`）
+- **共享 HTTP 客户端** — 所有 context 现共享单一进程级 `reqwest::Client`（连接池、DNS 缓存、TLS），高频创建 context 的进程不再产生成千上万个连接池
+- **修复：重连循环泄漏** — `TradeContext` / `QuoteContext` 在 context 被释放后停止后台重连循环，消除长时间高频场景下的僵尸任务与内存泄漏
+- **修复：Java SDK 崩溃 JVM** — JNI 非法参数、后台回调失败、并发 `close()` / 方法调用现在抛出可捕获的 Java 异常，而非 abort JVM（不再 `panic!` / 双重释放 / 释放后使用）
 
 ### CLI v0.27.0
 
 - **新增 `grid` 命令组** — 提交与管理网格策略订单：`grid submit` / `detail` / `triggers` / `replace` / `suspend` / `restart` / `cancel` / `info` / `questionnaire`
+- **[通过 ACP 使用 Longbridge AI](/zh-CN/docs/cli/acp)** — 新增 `longbridge acp` 命令，现在可以在支持 ACP 的客户端应用中使用 [Longbridge AI](https://longbridge.com/ai) 查询实时行情、分析公司基本面和解读账户持仓
+- **新增 `agent` 命令** — 在终端发现并与 Longbridge AI 对话：`agent workspaces`、`agent list`、流式 `agent chat`、`agent continue` 与 `agent --skill`
 
 ### MCP
 

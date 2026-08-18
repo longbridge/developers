@@ -17,8 +17,11 @@ sidebar_position: 1
     </thead>
     <tbody>
     <tr>
-        <td rowspan="7">交易</td>
+        <td rowspan="9">交易</td>
         <td><a href="./order/submit">委托下单</a></td>
+    </tr>
+    <tr>
+        <td><a href="./order/submit_multileg">多腿期权下单</a></td>
     </tr>
     <tr>
         <td><a href="./order/replace">改单</a></td>
@@ -37,6 +40,9 @@ sidebar_position: 1
     </tr>
     <tr>
         <td><a href="./execution/history_executions">获取历史成交明细</a></td>
+    </tr>
+    <tr>
+        <td><a href="./execution/all_executions">获取全部成交明细</a></td>
     </tr>
     <tr>
         <td rowspan="4">资产</td>

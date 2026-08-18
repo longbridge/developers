@@ -16,8 +16,11 @@ sidebar_position: 1
     </thead>
     <tbody>
     <tr>
-        <td rowspan="7">Trade</td>
+        <td rowspan="9">Trade</td>
         <td><a href="./order/submit">Submit Order</a></td>
+    </tr>
+    <tr>
+        <td><a href="./order/submit_multileg">Submit Multi-leg Order</a></td>
     </tr>
     <tr>
         <td><a href="./order/replace">Replace Order</a></td>
@@ -36,6 +39,9 @@ sidebar_position: 1
     </tr>
     <tr>
         <td><a href="./execution/history_executions">Get History Executions</a></td>
+    </tr>
+    <tr>
+        <td><a href="./execution/all_executions">Get All Executions</a></td>
     </tr>
 <tr>
         <td rowspan="4">Asset</td>

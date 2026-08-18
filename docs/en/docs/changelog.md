@@ -13,10 +13,18 @@ sidebar_icon: newspaper
 ### SDK v4.5.0
 
 - **Grid trading APIs** — new `GridContext` (submit, replace, list, detail, trigger history, cancel, suspend, restart, questionnaire, symbol info) in Python, Node.js, Java, and C/C++, plus the `GridOrderChanged` push event on the trade channel
+- **New `AgentContext.public_agents`** — list every publicly shared AI agent on the platform (the Explore catalog), across all languages; takes the same optional `page` / `limit` / `name` params as `agents`
+- **AI Agent conversations gain `parent_message_id`** — attach a follow-up after a specific message to keep the stream in order (only valid together with `chat_uid`)
+- **Richer AI Agent responses** — `further_questions` suggestions, full `Reference` payloads (source type / id / nested content, previously dropped), `chat_id` + error fields on `ChatStartedPayload`, and `interactions` (`HumanInteraction`) on interrupts
+- **Shared HTTP client** — every context now shares one process-wide `reqwest::Client` (connection pool, DNS cache, TLS) instead of building its own, so high-churn processes stop spinning up thousands of pools
+- **Fix: reconnect-loop leak** — `TradeContext` / `QuoteContext` stop their background reconnect loop when the context is dropped, ending the zombie-task / memory leak under long-running, high-churn workloads
+- **Fix: Java SDK JVM crashes** — invalid JNI arguments, background callback failures, and concurrent `close()` / method calls now throw catchable Java exceptions instead of aborting the JVM (no more `panic!` / double-free / use-after-free)
 
 ### CLI v0.27.0
 
 - **New `grid` command group** — submit and manage grid strategy orders: `grid submit` / `detail` / `triggers` / `replace` / `suspend` / `restart` / `cancel` / `info` / `questionnaire`
+- **[Use Longbridge AI over ACP](/en/docs/cli/acp)** — The new `longbridge acp` command makes [Longbridge AI](https://longbridge.com/ai) available in compatible client applications for live market data, company analysis, and account position insights
+- **New `agent` commands** — discover and chat with agents on Longbridge AI from the terminal: `agent workspaces`, `agent list`, streaming `agent chat`, `agent continue`, and `agent --skill`
 
 ### MCP
 

@@ -307,7 +307,33 @@ func main() {
             "activate_rth": "RTH_ONLY",
             "submit_price": ""
           }
-        ]
+        ],
+        "multi_leg": {
+          "strategy": "2",
+          "strategy_name": "垂直策略",
+          "multileg_id": "Spread_QQQ20260731C764/767",
+          "code": "QQQ 260731 764/767 垂直策略",
+          "legs": [
+            {
+              "symbol": "QQQ260731C764000.US",
+              "side": "Buy",
+              "position": "LONG",
+              "ratio_quantity": "1",
+              "strike_price": "764",
+              "expire_date": "20260731",
+              "contract_direction": "C"
+            },
+            {
+              "symbol": "QQQ260731C767000.US",
+              "side": "Sell",
+              "position": "SHORT",
+              "ratio_quantity": "1",
+              "strike_price": "767",
+              "expire_date": "20260731",
+              "contract_direction": "C"
+            }
+          ]
+        }
       }
     ]
   }
@@ -386,3 +412,16 @@ func main() {
 | ∟∟ activate_order_type      | string   | true     | 触发后提交的订单类型，例如 `LIT`（限价单）或 `MIT`（市价单） |
 | ∟∟ activate_rth             | string   | true     | 触发后提交订单是否允许盘前盘后。|
 | ∟∟ submit_price             | string   | true     | 委托价格 |
+| ∟ multi_leg                 | object   | false    | 多腿策略信息，仅多腿期权组合订单返回，非组合订单不返回。 |
+| ∟∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可选值：**<br/> `0` - CoveredCall（股票担保）<br/> `1` - CoveredPut（股票担保）<br/> `2` - VerticalCallSpread（垂直策略）<br/> `3` - VerticalPutSpread（垂直策略）<br/> `4` - Collar（领式策略）<br/> `5` - Straddle（跨式策略）<br/> `6` - Strangle（宽跨式策略） |
+| ∟∟ strategy_name            | string   | false    | 策略名称 |
+| ∟∟ multileg_id              | string   | false    | 多腿组合 ID |
+| ∟∟ code                     | string   | false    | 多腿组合代码 |
+| ∟∟ legs                     | object[] | false    | 组合订单的各腿 |
+| ∟∟∟ symbol                  | string   | false    | 期权 symbol，使用 `ticker.region` 格式，例如：`QQQ260731C764000.US` |
+| ∟∟∟ side                    | string   | false    | 买卖方向<br/><br/> **可选值：**<br/> `Buy`<br/> `Sell` |
+| ∟∟∟ position                | string   | false    | 持仓方向<br/><br/> **可选值：**<br/> `LONG`<br/> `SHORT` |
+| ∟∟∟ ratio_quantity          | string   | false    | 该腿比例数量 |
+| ∟∟∟ strike_price            | string   | false    | 行权价 |
+| ∟∟∟ expire_date             | string   | false    | 期权到期日，格式：`YYYYMMDD` |
+| ∟∟∟ contract_direction      | string   | false    | 合约类型<br/><br/> **可选值：**<br/> `C` - 看涨（Call）<br/> `P` - 看跌（Put） |
