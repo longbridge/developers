@@ -41,6 +41,6 @@ const crumbs = buildCrumbsFromPath(entry)
       <slot />
       <PrevNext prev={prev} next={next} />
     </article>
-    <TOC headings={headings} client:load />
+    <TOC headings={headings} locale={locale} client:load />
   </div>
 </BaseLayout>

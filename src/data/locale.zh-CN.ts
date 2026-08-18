@@ -2,6 +2,7 @@ export const locale = {
   // Breadcrumb
   'breadcrumb.home': '主页',
   // Nav
+  'nav.features': '功能',
   'nav.pricing': '定价',
   'nav.docs': '文档',
   'nav.searchDocs': '搜索文档…',
@@ -13,9 +14,12 @@ export const locale = {
   'nav.theme.system': '跟随系统',
   // Search
   'search.placeholder': '搜索文档…',
+  'search.button': '搜索',
   'search.empty': '无法找到相关结果',
   // Sidebar (not in legacy JSON — using defaults)
   'sidebar.collapse': '收起侧边栏',
+  // TOC
+  'toc.title': '页面导航',
   // Footer
   'footer.tagline': '为全球开发者提供实时行情、交易与金融智能服务——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 全面赋能。',
   'footer.status': '所有服务正常运行',

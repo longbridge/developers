@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { t, type Locale } from '../../lib/i18n'
 
 export interface TocHeading {
   depth: number
@@ -8,9 +9,10 @@ export interface TocHeading {
 
 interface Props {
   headings: TocHeading[]
+  locale?: Locale
 }
 
-export default function TOC({ headings }: Props) {
+export default function TOC({ headings, locale = 'en' }: Props) {
   const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 3)
   const [activeId, setActiveId] = useState<string>('')
 
@@ -51,7 +53,7 @@ export default function TOC({ headings }: Props) {
   return (
     <aside className="text-[0.85rem]" data-lbus-component="toc" aria-label="Table of contents">
       <nav>
-        <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[color:var(--lbus-c-text)] mb-3 mt-0">On this page</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[color:var(--lbus-c-text)] mb-3 mt-0">{t(locale, 'toc.title')}</p>
         <ul className="list-none p-0 m-0 flex flex-col gap-1" role="list">
           {filtered.map((h) => (
             <li

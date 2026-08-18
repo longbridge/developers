@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Locale } from '../../lib/i18n'
+import { t, type Locale } from '../../lib/i18n'
 import { nav as navEn } from '../../data/nav.en'
 import { nav as navZhCN } from '../../data/nav.zh-CN'
 import { nav as navZhHK } from '../../data/nav.zh-HK'
@@ -91,7 +91,7 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
                 data-lbus-component="nav-features-stub"
                 className="text-[color:var(--lb-fg-2)] hover:text-[color:var(--lbus-c-text)] bg-transparent border-0 cursor-pointer py-1 text-sm inline-flex items-center gap-1"
               >
-                Features <span aria-hidden="true">▾</span>
+                {t(locale, 'nav.features')} <span aria-hidden="true">▾</span>
               </button>
             </li>
             {navItems.map((item) => (
@@ -134,7 +134,7 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
             data-lbus-component="nav-get-started"
             className="hidden lg:inline-flex items-center rounded-full bg-[var(--lb-fg-1)] text-[color:var(--lb-fg-invert)] px-4 py-1.5 text-sm font-medium no-underline hover:opacity-90 whitespace-nowrap"
           >
-            Get Started →
+            {t(locale, 'nav.getStarted')} →
           </a>
           <UserAvatar locale={locale} />
         </div>

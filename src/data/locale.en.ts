@@ -2,6 +2,7 @@ export const locale = {
   // Breadcrumb
   'breadcrumb.home': 'Home',
   // Nav
+  'nav.features': 'Features',
   'nav.pricing': 'Pricing',
   'nav.docs': 'Docs',
   'nav.searchDocs': 'Search docs…',
@@ -13,9 +14,12 @@ export const locale = {
   'nav.theme.system': 'System',
   // Search (not in legacy JSON — using defaults)
   'search.placeholder': 'Search docs…',
+  'search.button': 'Search',
   'search.empty': 'No results found',
   // Sidebar (not in legacy JSON — using defaults)
   'sidebar.collapse': 'Collapse sidebar',
+  // TOC
+  'toc.title': 'On this page',
   // Footer
   'footer.tagline':
     'Real-time market data, quantitative research, and AI-powered analysis — delivered through OpenAPI, LLM integrations, MCP, and CLI tools for developers worldwide.',

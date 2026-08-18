@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Locale } from '../../lib/i18n'
+import { t, type Locale } from '../../lib/i18n'
 import SearchDialog from './SearchDialog'
 
 interface Props {
@@ -69,7 +69,7 @@ export default function SearchButton({ locale }: Props) {
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
         </svg>
-        <span>Search</span>
+        <span>{t(locale, 'search.button')}</span>
         <kbd className="text-xs bg-[var(--lbus-c-bg)] border border-[color:var(--lb-stroke)] rounded px-1 py-0.5 leading-none" aria-label="Keyboard shortcut: Command K">
           <span aria-hidden="true">⌘K</span>
         </kbd>
