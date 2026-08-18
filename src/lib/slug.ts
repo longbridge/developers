@@ -57,3 +57,24 @@ function normalize(path: string): string {
   if (p.length > 1 && p.endsWith('/')) return p.slice(0, -1)
   return p || '/'
 }
+
+/**
+ * Decide which layout renders a doc entry.
+ *
+ * astro-mdx auto-resolves a frontmatter `layout:` value as a module path; the
+ * vite preflight (astro.config.ts Rule 1) renames it to `docs_layout:` for that
+ * reason. But the content-collection loader reads raw mdx and does NOT go
+ * through the preflight, so both keys can appear here — inspect them both.
+ *
+ * Values mapped:
+ * - `api-reference` → api  (Scalar API viewer layout)
+ * - `false` or `home` → plain  (marketing full-width, no sidebar)
+ * - anything else / absent → docs  (three-column shell with sidebar + TOC)
+ */
+export function resolveLayoutKind(entry: CollectionEntry<'docs'>): 'docs' | 'api' | 'plain' {
+  const meta = entry.data.docs_layout ?? entry.data.layout
+  if (meta === 'api-reference') return 'api'
+  if (meta === false) return 'plain'
+  if (meta === 'home') return 'plain'
+  return 'docs'
+}

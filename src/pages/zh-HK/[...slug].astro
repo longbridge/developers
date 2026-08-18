@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content'
 import DocsLayout from '@/layouts/DocsLayout.astro'
 import PlainLayout from '@/layouts/PlainLayout.astro'
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
-import { resolveUrl, resolveLocale } from '@lib/slug'
+import { resolveUrl, resolveLocale, resolveLayoutKind } from '@lib/slug'
 import { currentRegion, includedInRegion } from '@lib/region'
 import { mdxComponents } from '@/mdx-components'
 
@@ -25,10 +25,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
 const titleStr = entry.data.title ?? '(untitled)'
-const layoutKind =
-  entry.data.docs_layout === 'api-reference' ? 'api'
-  : entry.data.docs_layout === false ? 'plain'
-  : 'docs'
+const layoutKind = resolveLayoutKind(entry)
 ---
 {layoutKind === 'docs' && (
   <DocsLayout title={titleStr} locale="zh-HK" entry={entry} headings={headings}>
