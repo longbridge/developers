@@ -22,8 +22,7 @@ export function CliCommand({ children }: CliCommandProps) {
   return (
     <div
       data-lbus-component="cli-command"
-      className="language-bash vp-adaptive-theme cli-command-block"
-      style={{ position: 'relative' }}>
+      className="relative">
       <div ref={codeRef}>{children}</div>
       <button
         onClick={copyCommand}

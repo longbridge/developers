@@ -9,7 +9,7 @@
 
 @import "./tokens.css";
 @import "./shiki.css";
-@import "./shell.css";
+@import "./docs.css";
 
 /* reset */
 *, *::before, *::after { box-sizing: border-box; }

@@ -48,7 +48,7 @@ export default function SearchButton({ locale }: Props) {
     <>
       <button
         type="button"
-        className="search-btn"
+        className="hidden lg:flex items-center gap-2 text-sm text-[color:var(--lb-fg-2)] bg-[var(--lb-bg-2)] border border-[color:var(--lb-stroke)] rounded-lg px-3 py-1.5 cursor-pointer hover:border-[color:var(--lb-brand)] hover:text-[color:var(--lb-brand)]"
         data-lbus-component="search-button"
         aria-label="Search docs (Cmd+K)"
         onClick={() => setOpen(true)}
@@ -69,8 +69,8 @@ export default function SearchButton({ locale }: Props) {
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
         </svg>
-        <span className="search-btn-text">Search</span>
-        <kbd className="search-btn-kbd" aria-label="Keyboard shortcut: Command K">
+        <span>Search</span>
+        <kbd className="text-xs bg-[var(--lbus-c-bg)] border border-[color:var(--lb-stroke)] rounded px-1 py-0.5 leading-none" aria-label="Keyboard shortcut: Command K">
           <span aria-hidden="true">⌘K</span>
         </kbd>
       </button>

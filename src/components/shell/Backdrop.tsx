@@ -8,7 +8,7 @@ export default function Backdrop({ visible = false, onClick }: Props) {
 
   return (
     <div
-      className="backdrop"
+      className="fixed inset-0 bg-black/40 z-20 lg:hidden"
       data-lbus-component="backdrop"
       aria-hidden="true"
       onClick={onClick}

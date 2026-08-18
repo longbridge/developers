@@ -22,7 +22,7 @@ export function TabItem({ value, label, default: isDefault, children }: TabItemP
   if (!ctx) {
     // Render outside a Tabs container — always show
     return (
-      <div data-lbus-component="tab-item" className="tab-item">
+      <div data-lbus-component="tab-item" className="py-4">
         {children}
       </div>
     )

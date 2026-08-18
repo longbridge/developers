@@ -26,7 +26,7 @@ export default function SearchResults({
 }: Props) {
   if (loading) {
     return (
-      <div className="search-status" role="status" aria-live="polite">
+      <div className="p-4 text-[color:var(--lb-fg-2)] text-sm text-center" role="status" aria-live="polite">
         …
       </div>
     )
@@ -34,7 +34,7 @@ export default function SearchResults({
 
   if (query.trim() && results.length === 0) {
     return (
-      <p className="search-empty" role="status" aria-live="polite">
+      <p className="p-4 text-[color:var(--lb-fg-2)] text-sm text-center" role="status" aria-live="polite">
         {t(locale, 'search.empty')}
       </p>
     )
@@ -43,24 +43,24 @@ export default function SearchResults({
   if (!query.trim()) return null
 
   return (
-    <ul className="search-results" role="listbox" aria-label="Search results" aria-live="polite">
+    <ul className="list-none px-2 py-2 m-0" role="listbox" aria-label="Search results" aria-live="polite">
       {results.map((item, idx) => (
         <li
           key={item.url}
           role="option"
           aria-selected={idx === activeIndex}
-          className={`search-result${idx === activeIndex ? ' is-active' : ''}`}
+          className={idx === activeIndex ? 'rounded bg-[var(--lb-bg-2)]' : 'rounded'}
         >
           <button
             type="button"
-            className="search-result-btn"
+            className="w-full text-left bg-transparent border-0 cursor-pointer px-3 py-2 text-[color:var(--lbus-c-text)] rounded"
             onClick={() => onSelect(item.url)}
             tabIndex={-1}
           >
-            <span className="search-result-title">{item.meta?.title ?? item.url}</span>
+            <span className="block font-medium text-sm">{item.meta?.title ?? item.url}</span>
             {item.excerpt && (
               <span
-                className="search-result-excerpt"
+                className="block text-xs text-[color:var(--lb-fg-2)] mt-1 line-clamp-2"
                 // pagefind wraps matched text in <mark> — safe, no user-controlled HTML
                 dangerouslySetInnerHTML={{ __html: item.excerpt }}
               />

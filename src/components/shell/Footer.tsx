@@ -25,26 +25,24 @@ export default function Footer({ locale }: Props) {
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 
   return (
-    <footer className="app-footer" data-lbus-component="footer">
-      <div className="app-footer-inner-v2">
+    <footer className="border-t border-[color:var(--lb-stroke)] text-[color:var(--lb-fg-2)] text-sm py-8 px-4 mt-16" data-lbus-component="footer">
+      <div className="max-w-[80rem] mx-auto grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_repeat(4,1fr)]">
         {/* Brand column */}
-        <div className="app-footer-brand">
-          <a href={homeHref} className="app-brand" aria-label="Longbridge Developers">
+        <div className="flex flex-col gap-2 col-span-full lg:col-auto">
+          <a href={homeHref} className="inline-flex items-center gap-2 text-[color:var(--lbus-c-text)] no-underline" aria-label="Longbridge Developers">
             <img
-              className="brand-logo brand-logo-light"
+              className="h-6 w-auto block [[data-mode='dark']_&]:hidden"
               src={LOGO_LIGHT}
               alt="Longbridge Developers"
-              style={{ height: 24 }}
             />
             <img
-              className="brand-logo brand-logo-dark"
+              className="h-6 w-auto hidden [[data-mode='dark']_&]:inline-block"
               src={LOGO_DARK}
               alt="Longbridge Developers"
-              style={{ height: 24 }}
             />
           </a>
           <p>{t(locale, 'footer.tagline')}</p>
-          <div className="footer-status">
+          <div className="inline-flex items-center gap-[0.4rem] text-[color:var(--lb-fg-2)] text-[0.8rem]">
             <span
               style={{
                 width: 6,
@@ -62,28 +60,29 @@ export default function Footer({ locale }: Props) {
 
         {/* Products */}
         <div>
-          <h5>{t(locale, 'footer.products')}</h5>
-          <ul>
-            <li><a href={localePath(locale, '/skill')}>AI Skill</a></li>
-            <li><a href={localePath(locale, '/docs/cli')}>CLI</a></li>
-            <li><a href={localePath(locale, '/docs/mcp')}>MCP</a></li>
-            <li><a href={localePath(locale, '/docs/llm')}>LLMs</a></li>
-            <li><a href="https://navi-lang.org" target="_blank" rel="noreferrer">Navi</a></li>
+          <h5 className="text-[0.7rem] font-semibold uppercase tracking-[0.06em] mb-3 mt-0 text-[color:var(--lbus-c-text)]">{t(locale, 'footer.products')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[0.35rem]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/skill')}>AI Skill</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/cli')}>CLI</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/mcp')}>MCP</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/llm')}>LLMs</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href="https://navi-lang.org" target="_blank" rel="noreferrer">Navi</a></li>
           </ul>
         </div>
 
         {/* Resources */}
         <div>
-          <h5>{t(locale, 'footer.resources')}</h5>
-          <ul>
-            <li><a href={localePath(locale, '/docs/getting-started')}>{t(locale, 'footer.gettingStarted')}</a></li>
-            <li><a href={localePath(locale, '/docs')}>Documentation</a></li>
-            <li><a href={localePath(locale, '/docs/assets')}>{t(locale, 'footer.assets')}</a></li>
-            <li><a href={localePath(locale, '/docs/quote/pull/quote')}>Quote API</a></li>
-            <li><a href={localePath(locale, '/docs/trade/order/submit')}>Trade API</a></li>
-            <li><a href={localePath(locale, '/docs/changelog')}>{t(locale, 'footer.changelog')}</a></li>
+          <h5 className="text-[0.7rem] font-semibold uppercase tracking-[0.06em] mb-3 mt-0 text-[color:var(--lbus-c-text)]">{t(locale, 'footer.resources')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[0.35rem]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/getting-started')}>{t(locale, 'footer.gettingStarted')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs')}>Documentation</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/assets')}>{t(locale, 'footer.assets')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/quote/pull/quote')}>Quote API</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/trade/order/submit')}>Trade API</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/changelog')}>{t(locale, 'footer.changelog')}</a></li>
             <li>
               <a
+                className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]"
                 href="https://github.com/longbridge/developers/issues"
                 target="_blank"
                 rel="noreferrer"
@@ -96,22 +95,23 @@ export default function Footer({ locale }: Props) {
 
         {/* Company */}
         <div>
-          <h5>{t(locale, 'footer.company')}</h5>
-          <ul>
-            <li><a href="https://longbridge.com" target="_blank" rel="noreferrer">Longbridge</a></li>
-            <li><a href="https://longbridge.com/download" target="_blank" rel="noreferrer">{t(locale, 'footer.download')}</a></li>
-            <li><a href="https://status.longbridge.com" target="_blank" rel="noreferrer">{t(locale, 'footer.statusPage')}</a></li>
-            <li><a href="https://longbridge.com/about" target="_blank" rel="noreferrer">{t(locale, 'footer.about')}</a></li>
-            <li><a href="https://github.com/longbridge" target="_blank" rel="noreferrer">GitHub</a></li>
+          <h5 className="text-[0.7rem] font-semibold uppercase tracking-[0.06em] mb-3 mt-0 text-[color:var(--lbus-c-text)]">{t(locale, 'footer.company')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[0.35rem]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href="https://longbridge.com" target="_blank" rel="noreferrer">Longbridge</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href="https://longbridge.com/download" target="_blank" rel="noreferrer">{t(locale, 'footer.download')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href="https://status.longbridge.com" target="_blank" rel="noreferrer">{t(locale, 'footer.statusPage')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href="https://longbridge.com/about" target="_blank" rel="noreferrer">{t(locale, 'footer.about')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href="https://github.com/longbridge" target="_blank" rel="noreferrer">GitHub</a></li>
           </ul>
         </div>
 
         {/* Legal */}
         <div>
-          <h5>{t(locale, 'footer.legal')}</h5>
-          <ul>
+          <h5 className="text-[0.7rem] font-semibold uppercase tracking-[0.06em] mb-3 mt-0 text-[color:var(--lbus-c-text)]">{t(locale, 'footer.legal')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[0.35rem]">
             <li>
               <a
+                className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]"
                 href={`${base}/support/topics/us-trade/user-agreement`}
                 target="_blank"
                 rel="noreferrer"
@@ -121,6 +121,7 @@ export default function Footer({ locale }: Props) {
             </li>
             <li>
               <a
+                className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]"
                 href={`${base}/support/topics/Other/privacy-policy`}
                 target="_blank"
                 rel="noreferrer"
@@ -128,18 +129,18 @@ export default function Footer({ locale }: Props) {
                 {t(locale, 'footer.privacy')}
               </a>
             </li>
-            <li><a href={localePath(locale, '/docs/legal')}>{t(locale, 'footer.agreements')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/legal')}>{t(locale, 'footer.agreements')}</a></li>
           </ul>
         </div>
       </div>
 
-      <div className="app-footer-bottom">
+      <div className="border-t border-[color:var(--lb-stroke)] pt-4 flex flex-wrap gap-4 items-center justify-between">
         <div>{t(locale, 'footer.rights', { year })}</div>
-        <div className="app-footer-bottom-links">
+        <div className="flex flex-wrap gap-4">
           <span style={{ color: 'var(--lb-fg-3)' }}>·</span>
-          <a href="/">English</a>
-          <a href="/zh-CN/">简体中文</a>
-          <a href="/zh-HK/">繁體中文</a>
+          <a className="text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]" href="/">English</a>
+          <a className="text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-CN/">简体中文</a>
+          <a className="text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-HK/">繁體中文</a>
         </div>
       </div>
     </footer>

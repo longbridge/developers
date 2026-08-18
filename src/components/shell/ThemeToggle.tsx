@@ -50,7 +50,7 @@ export default function ThemeToggle({ locale = 'en' }: Props) {
   return (
     <div
       data-lbus-component="theme-toggle"
-      className="theme-toggle"
+      className="inline-flex rounded border border-[color:var(--lb-stroke)] overflow-hidden"
       role="group"
       aria-label="Theme"
     >
@@ -60,7 +60,11 @@ export default function ThemeToggle({ locale = 'en' }: Props) {
           type="button"
           aria-pressed={pref === p}
           onClick={() => select(p)}
-          className={`theme-toggle-btn${pref === p ? ' active' : ''}`}
+          className={
+            pref === p
+              ? 'px-2 py-1 text-xs bg-[var(--lb-bg-2)] text-[color:var(--lbus-c-text)] border-0 cursor-pointer'
+              : 'px-2 py-1 text-xs bg-transparent text-[color:var(--lb-fg-2)] border-0 cursor-pointer hover:text-[color:var(--lbus-c-text)]'
+          }
         >
           {labels[p]}
         </button>

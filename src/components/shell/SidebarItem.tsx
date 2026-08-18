@@ -1,58 +1,55 @@
-import { useState } from 'react'
 import type { SidebarNode } from '../../lib/navigation'
 
 interface Props {
   node: SidebarNode
-  pathname?: string
   depth?: number
+  pathname?: string
 }
 
-function isActive(node: SidebarNode, pathname: string): boolean {
-  if (node.link && pathname === node.link) return true
-  if (node.items) {
-    return node.items.some((child) => isActive(child, pathname))
-  }
+function isActiveNode(node: SidebarNode, pathname: string): boolean {
+  if (node.link) return pathname === node.link || pathname.startsWith(node.link + '/')
+  if (node.items) return node.items.some((c) => isActiveNode(c, pathname))
   return false
 }
 
-export default function SidebarItem({ node, pathname = '/', depth = 0 }: Props) {
-  const hasChildren = Boolean(node.items && node.items.length > 0)
-  const active = isActive(node, pathname)
-  const [collapsed, setCollapsed] = useState(node.collapsed && !active)
+export { isActiveNode }
 
-  if (!hasChildren) {
+export default function SidebarItem({ node, depth = 0, pathname = '/' }: Props) {
+  const active = isActiveNode(node, pathname)
+
+  if (!node.items?.length) {
+    // Leaf node
     return (
-      <li className={`sidebar-item depth-${depth}`}>
+      <li className="flex flex-col" data-lbus-component="sidebar-item">
         <a
           href={node.link}
-          className={`sidebar-link${active ? ' active' : ''}`}
+          className={active ? 'flex-1 block px-2 py-1 rounded text-sm bg-[var(--lb-bg-2)] text-[color:var(--lb-brand)] font-medium no-underline' : 'flex-1 block px-2 py-1 rounded text-sm text-[color:var(--lbus-c-text)] no-underline hover:bg-[var(--lb-bg-2)]'}
           aria-current={active ? 'page' : undefined}
         >
-          {node.icon && <span className="sidebar-icon" aria-hidden="true" data-icon={node.icon} />}
-          <span className="sidebar-label">{node.label}</span>
+          {node.icon && <span className="inline-flex w-4 h-4 items-center justify-center text-[color:var(--lb-fg-2)]" aria-hidden="true" data-icon={node.icon} />}
+          <span className="flex-1 text-sm">{node.label}</span>
         </a>
       </li>
     )
   }
 
+  // Group node
+  const open = active || !node.collapsed
   return (
-    <li className={`sidebar-item sidebar-group depth-${depth}${active ? ' active' : ''}`}>
+    <li className="flex flex-col" data-lbus-component="sidebar-group">
       <button
+        className="flex items-center gap-1 w-full bg-transparent border-0 cursor-pointer text-left"
+        aria-expanded={open}
         type="button"
-        className={`sidebar-group-toggle${active ? ' active' : ''}`}
-        aria-expanded={!collapsed}
-        onClick={() => setCollapsed((v) => !v)}
       >
-        {node.icon && <span className="sidebar-icon" aria-hidden="true" data-icon={node.icon} />}
-        <span className="sidebar-label">{node.label}</span>
-        <span className="sidebar-chevron" aria-hidden="true">
-          {collapsed ? '›' : '⌄'}
-        </span>
+        {node.icon && <span className="inline-flex w-4 h-4 items-center justify-center text-[color:var(--lb-fg-2)]" aria-hidden="true" data-icon={node.icon} />}
+        <span className="flex-1 font-medium text-[color:var(--lb-fg-2)] text-sm py-1">{node.label}</span>
+        <span className="ml-auto text-xs text-[color:var(--lb-fg-2)]" aria-hidden="true">›</span>
       </button>
-      {!collapsed && (
-        <ul className="sidebar-subitems" role="list">
-          {node.items!.map((child, i) => (
-            <SidebarItem key={child.link ?? `${child.label}-${i}`} node={child} pathname={pathname} depth={depth + 1} />
+      {open && (
+        <ul className="list-none pl-3 py-0 m-0 flex flex-col gap-[0.125rem]" role="list">
+          {node.items.map((child) => (
+            <SidebarItem key={child.link ?? child.label} node={child} depth={depth + 1} pathname={pathname} />
           ))}
         </ul>
       )}

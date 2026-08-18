@@ -45,12 +45,12 @@ export default function LanguageSwitcher({ currentLocale, currentPath }: Props) 
   }
 
   return (
-    <div data-lbus-component="lang-switcher" className="lang-switcher">
+    <div data-lbus-component="lang-switcher" className="relative inline-flex">
       <select
         value={currentLocale}
         onChange={handleChange}
         aria-label="Select language"
-        className="lang-switcher-select"
+        className="appearance-none bg-transparent border-0 text-sm text-[color:var(--lb-fg-2)] cursor-pointer outline-none py-1 pl-1 pr-5 hover:text-[color:var(--lbus-c-text)]"
       >
         {LOCALES.map(({ value, label }) => (
           <option key={value} value={value}>

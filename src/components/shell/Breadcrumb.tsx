@@ -20,16 +20,16 @@ export default function Breadcrumb({ locale, items = [] }: Props) {
 
   return (
     <nav aria-label="Breadcrumb" data-lbus-component="breadcrumb">
-      <ol className="breadcrumb" role="list">
+      <ol className="flex flex-wrap gap-1 p-0 m-0 list-none text-sm text-[color:var(--lb-fg-2)]" role="list">
         {allItems.map((item, index) => {
           const isLast = index === allItems.length - 1
           return (
             <li
               key={`${item.href ?? item.text}-${index}`}
-              className={isLast ? 'breadcrumb-item breadcrumb-current' : 'breadcrumb-item'}
+              className="inline-flex items-center gap-1"
             >
               {item.href && !isLast ? (
-                <a href={item.href}>{item.text}</a>
+                <a href={item.href} className="text-inherit no-underline hover:text-[color:var(--lbus-c-text)]">{item.text}</a>
               ) : (
                 <span aria-current={isLast ? 'page' : undefined}>{item.text}</span>
               )}

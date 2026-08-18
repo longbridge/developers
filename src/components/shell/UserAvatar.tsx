@@ -44,7 +44,7 @@ export default function UserAvatar({ locale }: Props) {
 
   if (!loginState.loggedIn) {
     return (
-      <a className="user-avatar-login" href="/login">
+      <a className="text-sm text-[color:var(--lb-brand)] no-underline hover:underline" href="/login">
         {t(locale, 'nav.getStarted')}
       </a>
     )
@@ -53,7 +53,7 @@ export default function UserAvatar({ locale }: Props) {
   const initials = (loginState.name ?? 'U').charAt(0).toUpperCase()
 
   return (
-    <div className="user-avatar" data-lbus-component="user-avatar">
+    <div className="inline-flex" data-lbus-component="user-avatar">
       <a href="/dashboard" aria-label={t(locale, 'nav.dashboard')}>
         {loginState.avatar ? (
           <img
@@ -61,10 +61,10 @@ export default function UserAvatar({ locale }: Props) {
             alt={loginState.name ?? 'User'}
             width={28}
             height={28}
-            className="user-avatar-img"
+            className="w-7 h-7 rounded-full object-cover"
           />
         ) : (
-          <span className="user-avatar-initials" aria-hidden="true">
+          <span className="w-7 h-7 rounded-full bg-[var(--lb-bg-2)] text-[color:var(--lbus-c-text)] text-xs inline-flex items-center justify-center font-medium" aria-hidden="true">
             {initials}
           </span>
         )}

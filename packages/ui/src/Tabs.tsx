@@ -122,7 +122,6 @@ export function Tabs({ groupId, variant = 'line', children }: TabsProps) {
               tab.value === activeTab ? (
                 <button
                   key={tab.value}
-                  className="tab-line-btn"
                   style={{
                     padding: '0.3rem 0.75rem',
                     fontSize: '0.875rem',

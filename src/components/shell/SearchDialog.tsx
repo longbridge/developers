@@ -163,12 +163,12 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
   return (
     // Backdrop — click outside to close
     <div
-      className="search-overlay"
+      className="fixed inset-0 bg-black/40 z-50 flex justify-center items-start pt-20"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="search-dialog"
+        className="w-[min(40rem,calc(100%-2rem))] bg-[var(--lbus-c-bg)] border border-[color:var(--lb-stroke)] rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
         data-lbus-component="search-dialog"
         role="dialog"
         aria-label="Search"
@@ -176,9 +176,9 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Input row */}
-        <div className="search-dialog-header">
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-[color:var(--lb-stroke)]">
           <svg
-            className="search-dialog-icon"
+            className="text-[color:var(--lb-fg-2)] shrink-0"
             xmlns="http://www.w3.org/2000/svg"
             width="16"
             height="16"
@@ -196,7 +196,7 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
           <input
             ref={inputRef}
             type="search"
-            className="search-dialog-input"
+            className="flex-1 border-0 bg-transparent outline-none text-[color:var(--lbus-c-text)] text-base px-1 py-2 placeholder:text-[color:var(--lb-fg-2)]"
             placeholder={t(locale, 'search.placeholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -206,7 +206,7 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
           />
           <button
             type="button"
-            className="search-dialog-esc"
+            className="bg-transparent border border-[color:var(--lb-stroke)] rounded px-[0.4rem] py-[0.1rem] text-xs text-[color:var(--lb-fg-2)] cursor-pointer shrink-0"
             onClick={onClose}
             aria-label="Close search"
           >
@@ -215,9 +215,9 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
         </div>
 
         {/* Results body */}
-        <div className="search-dialog-body">
+        <div className="max-h-[60vh] overflow-y-auto">
           {showUnavailable ? (
-            <p className="search-unavailable">
+            <p className="p-4 text-[color:var(--lb-fg-2)] text-sm text-center">
               Search is available after first production build.
             </p>
           ) : (

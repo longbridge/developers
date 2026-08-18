@@ -49,18 +49,18 @@ export default function TOC({ headings }: Props) {
   if (!filtered.length) return null
 
   return (
-    <aside className="toc" data-lbus-component="toc" aria-label="Table of contents">
+    <aside className="text-[0.85rem]" data-lbus-component="toc" aria-label="Table of contents">
       <nav>
-        <p className="toc-title">On this page</p>
-        <ul className="toc-list" role="list">
+        <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[color:var(--lbus-c-text)] mb-3 mt-0">On this page</p>
+        <ul className="list-none p-0 m-0 flex flex-col gap-1" role="list">
           {filtered.map((h) => (
             <li
               key={h.slug}
-              className={`toc-item toc-depth-${h.depth}${activeId === h.slug ? ' toc-active' : ''}`}
+              className={h.depth === 2 ? '' : 'pl-3'}
             >
               <a
                 href={`#${h.slug}`}
-                className="toc-link"
+                className={activeId === h.slug ? 'text-[color:var(--lb-brand)] no-underline block py-[0.15rem]' : 'text-[color:var(--lb-fg-2)] no-underline block py-[0.15rem] hover:text-[color:var(--lb-brand)]'}
                 aria-current={activeId === h.slug ? 'location' : undefined}
               >
                 {h.text}
