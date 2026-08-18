@@ -17,6 +17,8 @@ import { NewHomePage } from '@/components/mdx/placeholders/NewHomePage'
 import { Pricing } from '@/components/mdx/placeholders/Pricing'
 import { QuotePermission } from '@/components/mdx/placeholders/QuotePermission'
 import { ApiReference } from '@/components/mdx/placeholders/ApiReference'
+import { QuantChart } from '@/components/mdx/placeholders/QuantChart'
+import { Footer } from '@/components/mdx/placeholders/Footer'
 
 export const mdxComponents = {
   // ── primitives ──────────────────────────────
@@ -35,6 +37,8 @@ export const mdxComponents = {
   Pricing,
   QuotePermission,
   ApiReference,
+  QuantChart,
+  Footer,
 } as const
 
 export type MdxComponents = typeof mdxComponents

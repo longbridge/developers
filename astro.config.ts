@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import tailwind from '@tailwindcss/vite'
 import remarkHeadingId from 'remark-heading-id'
+import { unified } from '@astrojs/markdown-remark'
 import { remarkRegionFilter } from './src/integrations/remark-region-filter'
 import { regionHostnameRewrite } from './src/integrations/region-hostname-rewrite'
 import { prebuildMcpTools } from './src/integrations/prebuild-mcp-tools'
@@ -79,6 +80,19 @@ export default defineConfig({
           // 7) HTML comments `<!-- ... -->` — mdx expects `{/* ... */}`.
           //    Just strip them; the content is not user-visible.
           out = out.replace(/<!--[\s\S]*?-->/g, '')
+          // 8) Vitepress markdown-it-attrs `[text](url){attr="value"}` —
+          //    mdx parses the `{...}` as a JSX expression, e.g.
+          //    `{target="_blank"}` becomes a reference to a `target`
+          //    identifier that doesn't exist at runtime. Strip the
+          //    attribute block right after a markdown link. Semantic
+          //    restore (external links → target=_blank + rel=noopener)
+          //    will land via rehype-external-links in stage-2 §S3.
+          out = out.replace(/(\]\([^)\n]+\))\{[^}\n]*[=.#][^}\n]*\}/g, '$1')
+          // 9) REST path parameter placeholders `/{name}` (e.g. in JSX
+          //    tables `<td>/v1/content/{symbol}/news</td>`) — mdx parses
+          //    `{symbol}` as a JSX expression referencing an undefined
+          //    identifier. Escape the braces so mdx emits literal `{`/`}`.
+          out = out.replace(/\/\{([a-z_][a-z0-9_]*)\}/gi, '/\\{$1\\}')
           return out === code ? null : { code: out, map: null }
         },
       },
@@ -88,7 +102,14 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkHeadingId, remarkRegionFilter],
+    // Explicitly opt out of Sätteri (Rust markdown processor built on
+    // oxc) — its stricter expression parser fails on Go struct literals
+    // inside fenced code blocks (docs/en/docs/screener/screener_search.mdx
+    // and elsewhere). `unified()` forces the acorn-based remark/rehype
+    // pipeline. Keeps Astro 7 latest.
+    processor: unified({
+      remarkPlugins: [remarkHeadingId, remarkRegionFilter],
+    }),
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
     },
