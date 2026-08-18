@@ -576,3 +576,27 @@
 
   color-scheme: dark;
 }
+
+/* Header anchor link (rehype-autolink-headings §S3) */
+.header-anchor {
+  margin-left: 0.5em;
+  opacity: 0;
+  text-decoration: none;
+  color: var(--lb-fg-2);
+  transition: opacity 150ms ease;
+}
+.header-anchor::before {
+  content: '#';
+}
+h1:hover > .header-anchor,
+h2:hover > .header-anchor,
+h3:hover > .header-anchor,
+h4:hover > .header-anchor,
+h5:hover > .header-anchor,
+h6:hover > .header-anchor { opacity: 0.7; }
+h1 > .header-anchor:focus,
+h2 > .header-anchor:focus,
+h3 > .header-anchor:focus,
+h4 > .header-anchor:focus,
+h5 > .header-anchor:focus,
+h6 > .header-anchor:focus { opacity: 1; }

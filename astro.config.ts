@@ -5,6 +5,8 @@ import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import tailwind from '@tailwindcss/vite'
 import remarkHeadingId from 'remark-heading-id'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { unified } from '@astrojs/markdown-remark'
 import { remarkRegionFilter } from './src/integrations/remark-region-filter'
 import { regionHostnameRewrite } from './src/integrations/region-hostname-rewrite'
@@ -54,10 +56,19 @@ export default defineConfig({
               }
             }
           }
-          // 2) Strip vitepress heading anchor syntax `## Foo {#bar}` → `## Foo`.
-          //    mdx parses `{#bar}` as a JSX expression and fails.
-          //    stage-2 will restore anchors via rehype-slug.
-          out = out.replace(/^(#{1,6}\s+.+?)\s+\{#[^}\n]+\}\s*$/gm, '$1')
+          // 2) Convert vitepress heading anchor syntax `## Foo {#bar}` →
+          //    `<h2 id="bar">Foo<a …/></h2>`.
+          //    MDX parses `{#bar}` as a JSX expression (acorn) before remark plugins run,
+          //    causing "Could not parse expression with acorn". Converting to a JSX heading
+          //    element preserves the explicit id (critical for zh-CN/zh-HK where heading
+          //    text ≠ id, e.g. `## 频率限制 {#rate-limit}`). The header-anchor link is
+          //    inlined here because rehype-autolink-headings only processes rehype-tree
+          //    nodes, not JSX nodes.
+          out = out.replace(
+            /^(#{1,6})\s+(.+?)\s+\{#([^}\n]+)\}\s*$/gm,
+            (_, hashes, text, id) =>
+              `<h${hashes.length} id="${id}">${text}<a href="#${id}" className="header-anchor" aria-hidden="true" tabIndex={-1}></a></h${hashes.length}>`,
+          )
           // 3) Strip vue-style `<style scoped>...</style>` blocks — mdx parses
           //    the CSS `{ }` as JSX expressions and fails. stage-2 will move
           //    these into a proper stylesheet.
@@ -109,6 +120,14 @@ export default defineConfig({
     // pipeline. Keeps Astro 7 latest.
     processor: unified({
       remarkPlugins: [remarkHeadingId, remarkRegionFilter],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rehypePlugins: [
+        rehypeSlug as any,
+        [rehypeAutolinkHeadings, {
+          behavior: 'append',
+          properties: { className: ['header-anchor'], ariaHidden: 'true', tabIndex: -1 },
+        }] as any,
+      ],
     }),
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
