@@ -16,7 +16,7 @@ export default function LocalNav({ locale: _locale, pathname = '/', nodes }: Pro
   const close = () => setSidebarOpen(false)
 
   return (
-    <div className="sticky top-14 z-10 flex items-center gap-3 border-b border-[color:var(--lb-stroke)] px-4 h-11 bg-[var(--lbus-c-bg)] lg:hidden" data-lbus-component="local-nav">
+    <div className="sticky top-[60px] z-10 flex items-center gap-3 border-b border-[color:var(--lb-stroke)] px-4 h-11 bg-[var(--lbus-c-bg)] lg:hidden" data-lbus-component="local-nav">
       {/* Mobile toggle */}
       <button
         type="button"

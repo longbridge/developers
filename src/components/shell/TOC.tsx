@@ -51,7 +51,7 @@ export default function TOC({ headings, locale = 'en' }: Props) {
   if (!filtered.length) return null
 
   return (
-    <aside className="text-[0.85rem]" data-lbus-component="toc" aria-label="Table of contents">
+    <aside className="docs-toc text-[0.85rem]" data-lbus-component="toc" aria-label="Table of contents">
       <nav>
         <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[color:var(--lbus-c-text)] mb-3 mt-0">{t(locale, 'toc.title')}</p>
         <ul className="list-none p-0 m-0 flex flex-col gap-1" role="list">
