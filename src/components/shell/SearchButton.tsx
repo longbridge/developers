@@ -48,16 +48,15 @@ export default function SearchButton({ locale }: Props) {
     <>
       <button
         type="button"
-        className="hidden lg:flex items-center gap-2 text-sm text-[color:var(--lb-fg-2)] bg-[var(--lb-bg-2)] border border-[color:var(--lb-stroke)] rounded-lg pl-3 pr-2 py-1.5 cursor-pointer hover:border-[color:var(--lb-brand)] hover:text-[color:var(--lb-brand)] w-[240px]"
+        className="hidden lg:flex items-center gap-2 text-[13px] text-[color:var(--lb-fg-3)] bg-[var(--lb-bg-2)] border border-transparent rounded-lg cursor-pointer hover:border-[color:var(--lb-stroke)] w-[220px] h-[32px] px-[10px]"
         data-lbus-component="search-button"
         aria-label={t(locale, 'search.placeholder')}
         onClick={() => setOpen(true)}
       >
-        {/* Search icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
+          width="14"
+          height="14"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -71,7 +70,10 @@ export default function SearchButton({ locale }: Props) {
           <path d="m21 21-4.35-4.35" />
         </svg>
         <span className="flex-1 text-left">{t(locale, 'search.placeholder')}</span>
-        <kbd className="text-[0.7rem] font-normal text-[color:var(--lb-fg-3)] leading-none px-1" aria-label="Keyboard shortcut: Command K">
+        <kbd
+          className="ml-auto font-mono text-[11px] leading-[11px] px-[5px] py-[2px] bg-[var(--lb-bg-1)] border border-[color:var(--lb-stroke)] rounded text-[color:var(--lb-fg-3)]"
+          aria-label="Keyboard shortcut: Command K"
+        >
           <span aria-hidden="true">⌘K</span>
         </kbd>
       </button>

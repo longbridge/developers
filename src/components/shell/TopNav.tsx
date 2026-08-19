@@ -67,16 +67,16 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
           <img
             src={LOGO_LIGHT}
             alt="Longbridge Developers"
-            className="block h-7 w-auto [[data-mode='dark']_&]:hidden"
+            className="block h-[30px] w-auto [[data-mode='dark']_&]:hidden"
             width={180}
-            height={32}
+            height={30}
           />
           <img
             src={LOGO_DARK}
             alt="Longbridge Developers"
-            className="hidden h-7 w-auto [[data-mode='dark']_&]:inline-block"
+            className="hidden h-[30px] w-auto [[data-mode='dark']_&]:inline-block"
             width={180}
-            height={32}
+            height={30}
           />
         </a>
 
@@ -132,9 +132,12 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
           <a
             href="/user/register"
             data-lbus-component="nav-get-started"
-            className="hidden lg:inline-flex items-center rounded-full bg-[var(--lb-fg-1)] text-[color:var(--lb-fg-invert)] px-4 py-1.5 text-sm font-medium no-underline hover:opacity-90 whitespace-nowrap"
+            className="hidden lg:inline-flex items-center gap-1.5 rounded-full bg-[var(--lb-fg-1)] text-[color:var(--lb-fg-invert)] h-7 px-3 text-[12.5px] font-semibold no-underline hover:opacity-90 whitespace-nowrap"
           >
-            {t(locale, 'nav.getStarted')} →
+            {t(locale, 'nav.getStarted')}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
           </a>
           <UserAvatar locale={locale} />
         </div>
