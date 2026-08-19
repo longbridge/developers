@@ -9,10 +9,12 @@ sidebar_icon: newspaper
 
 ### [v0.28.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.28.0)
 
-- **[在終端裏與 Longbridge AI 對話](/zh-HK/docs/cli/ai)** — 新增 `longbridge ai` 命令，打開全屏對話界面：回答實時流式返回，以 Markdown 渲染，圖表、表格、語法高亮代碼和實時行情卡片都直接畫在終端裏。標題欄行情條跟隨對話提到的每一隻標的（點擊即展開完整行情卡片），斜槓命令覆蓋 `/new` `/retry` `/copy` `/export` `/quote` `/resume` `/settings` `/agent` `/login`；對話保存在你的賬戶上，在終端開始的對話可以在其他使用 Longbridge AI 的地方繼續
-- **[新增 `serve` 命令 —— 把 Longbridge API 嵌入你自己的應用](/zh-HK/docs/cli/serve)** — `longbridge serve` 保持一個已認證的進程常駐，通過 stdin/stdout 提供 JSON-RPC 2.0：全部 `quote.*` 與 `trade.*` 方法、可直達任意 REST 端點的 `api.get` / `api.post`，以及 `quote.subscribe` 的行情 / 盤口 / 經紀隊列 / 逐筆實時推送。桌面掛件、狀態欄插件和儀表盤不必在每次輪詢時重做區域探測、令牌載入和 WebSocket 連接，也能收到兩次輪詢之間的每一筆跳動。返回結構為 OpenAPI 原始字段，而非 CLI `--format json` 的展示結構
-- **新增 `grid` 命令組 —— 網格交易** — `longbridge grid` 列出網格訂單（`--ids`、`--symbol`、`--status`），另有 `submit`、`replace`、`detail`、`triggers`、`cancel`、`suspend`、`restart`、`info` 和 `questionnaire`。`submit` / `replace` 共用一套網格規則參數：價格區間與基準價、`--trigger-type percent|spread` 配合 `--trigger-up` / `--trigger-down`、上下方各自的數量與訂單類型、有效期，以及價格越界後的處理方式
-- **TUI 界面重做** — 主標籤改為膠囊樣式，快捷鍵提示不再溢出：按標籤佔用後的剩餘空間排布，空間不足時優先捨棄次要項，且提示本身可點擊（設定與幫助始終保留）。持倉與訂單頁新增右側詳情面板，隨選中行聯動；個股頁去掉行情 / 新聞標籤條，文章區因此可以換行、滾動並跳轉到 longbridge.com；設定彈窗改為真正的兩列網格，快捷鍵從在部分平台衝突的 `Ctrl+,` 改為 `,`
+- **[在終端裏與 Longbridge AI 對話](/zh-HK/docs/cli/ai)** — 新增 `longbridge ai` 命令，打開全屏對話界面：回答實時流式返回，以 Markdown 渲染，圖表、表格、語法高亮代碼和實時行情卡片都直接畫在終端裏。標題欄行情條跟隨對話提到的每一隻標的（點擊即展開完整行情卡片），斜槓命令覆蓋 `/new` `/retry` `/copy` `/export` `/quote` `/resume` `/settings` `/agent` `/login` `/logout`；對話保存在你的賬戶上，在終端開始的對話可以在其他使用 Longbridge AI 的地方繼續。未登錄也能打開：`/login` 會在界面內完成瀏覽器授權，而不是把你丟回 shell
+- **[新增 `serve` 命令 —— 把 Longbridge API 嵌入你自己的應用](/zh-HK/docs/cli/serve)** — `longbridge serve` 保持一個已認證的進程常駐，通過 stdin/stdout 提供 JSON-RPC 2.0：全部 `quote.*` 與 `trade.*` 方法、可直達任意 REST 端點的 `api.get` / `api.post`，以及 `quote.subscribe` 的行情 / 盤口 / 經紀隊列 / 逐筆實時推送。桌面掛件、狀態欄插件和儀表盤不必在每次輪詢時重做區域探測、令牌加載和 WebSocket 連接，也能收到兩次輪詢之間的每一筆跳動。返回結構為 OpenAPI 原始字段，而非 CLI `--format json` 的展示結構
+- **新增 `grid` 命令組 —— 網格交易** — `longbridge grid` 列出網格訂單（`--ids`、`--symbol`、`--status`），另有 `submit`、`replace`、`detail`、`triggers`、`cancel`、`suspend`、`restart`、`info` 和 `questionnaire`。`submit` / `replace` 共用一套網格規則參數：價格區間與基準價、`--trigger-type percent|spread` 配合 `--trigger-up` / `--trigger-down`、上下方各自的數量與訂單類型、有效期，以及價格越界後的處理方式 —— 並可用 `--dry-run` 只校驗並打印規則而不實際提交
+- **`--schema` 現在也描述請求，不只是響應** — 所有命令的 `--schema` 輸出新增 `request` 對象，直接由 CLI 自身反射得出：每個 flag 與位置參數的類型、是否必填、可選枚舉值和默認值。響應 schema 仍在頂層原位，現有使用方不受影響。AI Agent 從此可以自行發現一條命令該怎麼調用，而不必被告知
+- **`agent chat` 的回答渲染更完整** — `agent chat` 改用與 `longbridge ai` 相同的渲染引擎，圖表新增帶數值軸的 `column` 豎向柱狀圖、`pie` 的盲文環形圖、`radar` 的盲文多邊形、`scatter` 與 `histogram`，以及 `boxplot` 的五數概括；此前除折線 / 條形 / 餅圖之外的類型只能退化成表格
+- **TUI 界面重做** — 主標籤改為膠囊樣式，快捷鍵提示不再溢出：按標籤佔用後的剩餘空間排布，空間不足時優先捨棄次要項，且提示本身可點擊（設定與幫助始終保留）。持倉與訂單頁新增右側詳情面板，隨選中行聯動；個股頁去掉行情 / 新聞標籤條，文章區因此可以換行、滾動並跳轉到 longbridge.com，空間夠時新聞列表與行情面板並排停靠。點擊快捷鍵提示現在會執行它對應的操作，底部指數行情的點擊區域也跟隨文字而非固定三等分。設定彈窗改為真正的兩列網格，選項可點擊、`←`/`→` 可雙向切換取值，快捷鍵也從在部分平台衝突的 `Ctrl+,` 改為 `,`
 - **修復：分時圖渲染成點陣紋理** — 面積填充改用與線條同色的塊狀陰影字符、成交量改為實心柱，不再使用只能設定前景色的盲文字符。背後的兩個問題一併修復：ANSI 解析器只讀取 SGR 轉義序列的第一個參數，導致任何設定多個屬性的序列被整體丟棄；圖表信息欄硬編碼紅綠色而沒有跟隨漲跌顏色設定，其中一處在默認模式下顏色還是反的
 - **`news detail` 改用官方接口** — 由簽名的 `GET /v1/content/news/:id` 驅動，不再抓取網頁，標題、發佈時間、作者、相關標的與 Markdown 正文均為結構化字段；`--format json` 輸出完整內容
 

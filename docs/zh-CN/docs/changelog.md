@@ -13,6 +13,7 @@ sidebar_icon: newspaper
 - **[Longbridge AI 进入终端](/zh-CN/docs/cli/ai)** — 新增 `longbridge ai` 命令，打开与 [Longbridge AI](https://longbridge.com/ai) 的全屏对话：回答实时流式返回，以 Markdown 渲染，图表、表格与实时行情卡片直接画在终端里；对话保存在你的账户上，在终端开始的对话可以在其他使用 Longbridge AI 的地方继续
 - **[基于 CLI 构建自己的应用](/zh-CN/docs/cli/serve)** — `longbridge serve` 保持一个已认证的进程常驻，通过 stdin/stdout 提供 JSON-RPC 2.0，涵盖完整的行情与交易接口、REST 直通，以及行情 / 盘口 / 经纪队列 / 逐笔实时推送 —— 桌面挂件、状态栏插件和仪表盘不必再每次轮询都拉起一个进程
 - **命令行网格交易** — 新增 `grid` 命令组，可提交、修改、查询、暂停和取消网格策略，并查看触发记录
+- **每条 CLI 命令都能自述入参** — `--schema` 在响应 schema 之外返回 `request` 对象，AI Agent 可以自行发现命令的 flag、类型、枚举取值与默认值，而不必被逐一告知
 - **终端界面重做** — `longbridge tui` 采用胶囊标签，快捷键提示可点击且不再溢出；持仓与订单页新增详情面板；个股页空间更充裕；分时图改为实心填充，不再是点阵纹理
 
 ## 2026-08-14
