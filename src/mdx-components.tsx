@@ -12,10 +12,10 @@ import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks, Skill } from '@
 
 // TryIt — ported from legacy openapi-website (§S7)
 import { TryIt } from '@longbridge/openapi-tryit'
-import { McpTools } from '@/components/mdx/placeholders/McpTools'
+import { McpTools } from '@/components/mdx/McpTools'
 import { NewHomePage } from '@longbridge/openapi-homepage'
-import { Pricing } from '@/components/mdx/placeholders/Pricing'
-import { QuotePermission } from '@/components/mdx/placeholders/QuotePermission'
+import { Pricing } from '@/components/mdx/Pricing'
+import { QuotePermission } from '@/components/mdx/QuotePermission'
 // ApiReference is mounted directly by ApiReferenceLayout.astro from
 // `@longbridge/openapi-api-reference`; it's not needed here as an mdx tag.
 import { QuantChart } from '@/components/mdx/placeholders/QuantChart'
