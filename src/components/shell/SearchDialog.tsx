@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import type { Locale } from '@longbridge/openapi-utils'
 import { t } from '@longbridge/openapi-utils'
 import SearchResults, { type SearchResultItem } from './SearchResults'
@@ -156,11 +157,23 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
     }
   }, [query, locale])
 
-  if (!isOpen) return null
+  // Portal target must exist and we must be past SSR before we can attach.
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null)
+  useEffect(() => {
+    setPortalTarget(document.body)
+  }, [])
+
+  if (!isOpen || !portalTarget) return null
 
   const showUnavailable = pfReady === 'unavailable' && query.trim().length > 0
 
-  return (
+  // The header ancestor sets `backdrop-filter` (see TopNav.tsx), which — per
+  // CSS containing-block rules — turns any fixed-positioned descendant into
+  // "fixed relative to that filtered ancestor" instead of the viewport. That
+  // clipped this dialog to the 60px header strip. Portaling to document.body
+  // lifts us out of that containing block so `fixed inset-0` covers the full
+  // viewport again.
+  return createPortal(
     // Backdrop — click outside to close
     <div
       className="fixed inset-0 bg-black/40 z-50 flex justify-center items-start pt-20"
@@ -232,6 +245,7 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    portalTarget,
   )
 }
