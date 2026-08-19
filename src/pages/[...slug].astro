@@ -5,7 +5,7 @@ import PlainLayout from '@/layouts/PlainLayout.astro'
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
 import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openapi-utils'
 import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
-import { mdxComponents } from '@/mdx-components'
+import { buildMdxComponents } from '@/mdx-components'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -24,21 +24,27 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
-const titleStr = entry.data.title ?? '(untitled)'
+// Fallback: index / marketing pages (sdk, pricing, skill) may ship no
+// `title` frontmatter — use `titleTemplate` if present, otherwise the
+// site brand. Legacy vitepress used the same order.
+const titleStr =
+  entry.data.title ??
+  (entry.data as { titleTemplate?: string }).titleTemplate ??
+  'Longbridge Developers'
 const layoutKind = resolveLayoutKind(entry)
 ---
 {layoutKind === 'docs' && (
   <DocsLayout title={titleStr} locale="en" entry={entry} headings={headings}>
-    <Content components={mdxComponents} />
+    <Content components={buildMdxComponents('en')} />
   </DocsLayout>
 )}
 {layoutKind === 'api' && (
   <ApiReferenceLayout title={titleStr} locale="en">
-    <Content components={mdxComponents} />
+    <Content components={buildMdxComponents('en')} />
   </ApiReferenceLayout>
 )}
 {layoutKind === 'plain' && (
   <PlainLayout title={titleStr} locale="en">
-    <Content components={mdxComponents} />
+    <Content components={buildMdxComponents('en')} />
   </PlainLayout>
 )}

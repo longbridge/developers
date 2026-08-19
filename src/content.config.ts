@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 const docsSchema = z.object({
   title: z.string().optional(),
+  titleTemplate: z.string().optional(),
   id: z.string().optional(),
   slug: z.string().optional(),
   sidebar_position: z.number().optional(),

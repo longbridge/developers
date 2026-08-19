@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
 import { HeroSection } from './sections/HeroSection'
 import { ProductSkill } from './sections/ProductSkill'
@@ -15,10 +15,28 @@ import { HomepageFooter } from './sections/HomepageFooter'
 import './homepage.css'
 
 interface NewHomePageProps {
-  locale: Locale
+  locale?: Locale
 }
 
-export function NewHomePage({ locale }: NewHomePageProps) {
+function detectLocale(): Locale {
+  if (typeof window === 'undefined') return 'en'
+  // Prefer <html lang="…"> which BaseLayout stamps from the route locale;
+  // fall back to pathname prefix.
+  const htmlLang = document.documentElement.lang
+  if (htmlLang === 'zh-CN' || htmlLang === 'zh-HK') return htmlLang
+  const p = window.location.pathname
+  if (p.startsWith('/zh-CN')) return 'zh-CN'
+  if (p.startsWith('/zh-HK')) return 'zh-HK'
+  return 'en'
+}
+
+export function NewHomePage({ locale: propsLocale }: NewHomePageProps) {
+  const [locale, setLocale] = useState<Locale>(propsLocale ?? 'en')
+  // MDX cannot thread a locale prop through <Content components={...}>, so
+  // detect from window.location on client hydration if none passed.
+  useEffect(() => {
+    if (!propsLocale) setLocale(detectLocale())
+  }, [propsLocale])
   return (
     <div data-lbus-component="new-home-page" className="new-home-page">
       <HeroSection locale={locale} />

@@ -9,28 +9,19 @@ export function SDK({ description, children }: SDKProps) {
   return (
     <div
       data-lbus-component="sdk"
-      style={{
-        borderBottom: '1px solid var(--vp-c-divider)',
-        paddingBottom: '1.5rem',
-        marginBottom: '1.5rem',
-      }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>SDK</h2>
-      {description && (
-        <p style={{ color: 'var(--vp-c-text-2)', marginBottom: '1rem' }}>{description}</p>
-      )}
-      {children && <div>{children}</div>}
-      {/* SDK illustration placeholder — replaced with CDN image in production */}
-      <div
-        style={{
-          marginTop: '1rem',
-          padding: '2rem',
-          border: '1px dashed var(--vp-c-divider)',
-          borderRadius: '0.5rem',
-          textAlign: 'center',
-          color: 'var(--vp-c-text-3)',
-          fontSize: '0.875rem',
-        }}>
-        /assets/sdk.svg
+      className="border-b border-[color:var(--lb-stroke)] text-center mb-10"
+    >
+      <div className="flex flex-col md:flex-row max-w-4xl items-center gap-6 justify-between text-center md:text-left mx-auto px-6 md:px-0 py-10">
+        <div className="gap-4">
+          <p className="font-bold text-2xl text-[color:var(--lbus-c-text)]">SDK</p>
+          {description && (
+            <p className="text-lg text-[color:var(--lb-fg-2)]">{description}</p>
+          )}
+          {children && <div>{children}</div>}
+        </div>
+        <div>
+          <img className="h-[244px]" src="/assets/sdk.svg" alt="" />
+        </div>
       </div>
     </div>
   )
