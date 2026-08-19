@@ -8,6 +8,7 @@ import UserAvatar from './UserAvatar'
 import ThemeToggle from './ThemeToggle'
 import LanguageSwitcher from './LanguageSwitcher'
 import SearchButton from './SearchButton'
+import FeaturesMenu from './FeaturesMenu'
 
 interface Props {
   locale: Locale
@@ -83,19 +84,9 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
         {/* Desktop nav — legacy .app-nav-links: gap 4px */}
         <nav className="flex-1 min-w-0 hidden lg:block" aria-label="Main navigation">
           <ul className="flex items-center gap-1 list-none p-0 m-0" role="list">
-            {/* Features stub — legacy .app-nav-links a: 6/12 · 13.5px · 500 · fg-1@78% · radius 6 */}
+            {/* Features dropdown — ported from legacy FeaturesMenu.vue */}
             <li>
-              <button
-                type="button"
-                aria-haspopup="true"
-                data-lbus-component="nav-features-stub"
-                className="bg-transparent border-0 cursor-pointer text-[color:var(--lb-fg-1)] [font-size:13.5px] font-medium opacity-[0.78] rounded-md px-3 py-1.5 hover:bg-[var(--lb-bg-2)] hover:opacity-100 inline-flex items-center gap-1 whitespace-nowrap"
-              >
-                {t(locale, 'nav.features')}
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
+              <FeaturesMenu locale={locale} />
             </li>
             {navItems.map((item) => (
               <li key={item.link ?? item.text}>
