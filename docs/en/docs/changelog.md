@@ -13,7 +13,6 @@ sidebar_icon: newspaper
 - **[Longbridge AI comes to the terminal](/docs/cli/ai)** — the new `longbridge ai` command opens a full-screen chat with [Longbridge AI](https://longbridge.com/ai): answers stream in as Markdown with terminal-drawn charts, tables and live quote cards, and conversations live on your account, so a chat started in the terminal continues wherever else you use Longbridge AI
 - **[Build on top of the CLI](/docs/cli/serve)** — `longbridge serve` keeps one authenticated process alive and speaks JSON-RPC 2.0 over stdin/stdout, with the full quote and trade surface, REST passthrough, and live quote / depth / broker / trade pushes — so desktop widgets, bar plugins and dashboards no longer spawn a process per poll
 - **Grid trading from the command line** — the new `grid` command group submits, replaces, inspects, suspends and cancels grid strategies, and shows their trigger history
-- **Every CLI command now describes its own inputs** — `--schema` returns a `request` object alongside the response schema, so an AI agent can discover a command's flags, types, enum choices and defaults instead of having to be handed them
 - **A reworked terminal UI** — `longbridge tui` gains pill tabs with clickable, never-overflowing shortcut hints, detail panels on Portfolio and Orders, a roomier stock screen, and intraday charts that fill solid instead of stippled
 
 ## 2026-08-14

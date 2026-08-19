@@ -9,11 +9,9 @@ sidebar_icon: newspaper
 
 ### [v0.28.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.28.0)
 
-- **[在终端里与 Longbridge AI 对话](/zh-CN/docs/cli/ai)** — 新增 `longbridge ai` 命令，打开全屏对话界面：回答实时流式返回，以 Markdown 渲染，图表、表格、语法高亮代码和实时行情卡片都直接画在终端里。标题栏行情条跟随对话提到的每一只标的（点击即展开完整行情卡片），斜杠命令覆盖 `/new` `/retry` `/copy` `/export` `/quote` `/resume` `/settings` `/agent` `/login` `/logout`；对话保存在你的账户上，在终端开始的对话可以在其他使用 Longbridge AI 的地方继续。未登录也能打开：`/login` 会在界面内完成浏览器授权，而不是把你丢回 shell
+- **[在终端里与 Longbridge AI 对话](/zh-CN/docs/cli/ai)** — 新增 `longbridge ai` 命令，打开全屏对话界面：回答实时流式返回，以 Markdown 渲染，图表、表格、语法高亮代码和实时行情卡片都直接画在终端里。标题栏行情条跟随对话提到的每一只标的（点击即展开完整行情卡片），斜杠命令覆盖 `/new` `/retry` `/copy` `/export` `/quote` `/resume` `/settings` `/agent` `/login`；对话保存在你的账户上，在终端开始的对话可以在其他使用 Longbridge AI 的地方继续
 - **[新增 `serve` 命令 —— 把 Longbridge API 嵌入你自己的应用](/zh-CN/docs/cli/serve)** — `longbridge serve` 保持一个已认证的进程常驻，通过 stdin/stdout 提供 JSON-RPC 2.0：全部 `quote.*` 与 `trade.*` 方法、可直达任意 REST 端点的 `api.get` / `api.post`，以及 `quote.subscribe` 的行情 / 盘口 / 经纪队列 / 逐笔实时推送。桌面挂件、状态栏插件和仪表盘不必在每次轮询时重做区域探测、令牌加载和 WebSocket 连接，也能收到两次轮询之间的每一笔跳动。返回结构为 OpenAPI 原始字段，而非 CLI `--format json` 的展示结构
 - **新增 `grid` 命令组 —— 网格交易** — `longbridge grid` 列出网格订单（`--ids`、`--symbol`、`--status`），另有 `submit`、`replace`、`detail`、`triggers`、`cancel`、`suspend`、`restart`、`info` 和 `questionnaire`。`submit` / `replace` 共用一套网格规则参数：价格区间与基准价、`--trigger-type percent|spread` 配合 `--trigger-up` / `--trigger-down`、上下方各自的数量与订单类型、有效期，以及价格越界后的处理方式 —— 并可用 `--dry-run` 只校验并打印规则而不实际提交
-- **`--schema` 现在也描述请求，不只是响应** — 所有命令的 `--schema` 输出新增 `request` 对象，直接由 CLI 自身反射得出：每个 flag 与位置参数的类型、是否必填、可选枚举值和默认值。响应 schema 仍在顶层原位，现有使用方不受影响。AI Agent 从此可以自行发现一条命令该怎么调用，而不必被告知
-- **`agent chat` 的回答渲染更完整** — `agent chat` 改用与 `longbridge ai` 相同的渲染引擎，图表新增带数值轴的 `column` 竖向柱状图、`pie` 的盲文环形图、`radar` 的盲文多边形、`scatter` 与 `histogram`，以及 `boxplot` 的五数概括；此前除折线 / 条形 / 饼图之外的类型只能退化成表格
 - **TUI 界面重做** — 主标签改为胶囊样式，快捷键提示不再溢出：按标签占用后的剩余空间排布，空间不足时优先舍弃次要项，且提示本身可点击（设置与帮助始终保留）。持仓与订单页新增右侧详情面板，随选中行联动；个股页去掉行情 / 新闻标签条，文章区因此可以换行、滚动并跳转到 longbridge.com，空间够时新闻列表与行情面板并排停靠。点击快捷键提示现在会执行它对应的操作，底部指数行情的点击区域也跟随文字而非固定三等分。设置弹窗改为真正的两列网格，选项可点击、`←`/`→` 可双向切换取值，快捷键也从在部分平台冲突的 `Ctrl+,` 改为 `,`
 - **修复：分时图渲染成点阵纹理** — 面积填充改用与线条同色的块状阴影字符、成交量改为实心柱，不再使用只能设置前景色的盲文字符。背后的两个问题一并修复：ANSI 解析器只读取 SGR 转义序列的第一个参数，导致任何设置多个属性的序列被整体丢弃；图表信息栏硬编码红绿色而没有跟随涨跌颜色设置，其中一处在默认模式下颜色还是反的
 - **`news detail` 改用官方接口** — 由签名的 `GET /v1/content/news/:id` 驱动，不再抓取网页，标题、发布时间、作者、相关标的与 Markdown 正文均为结构化字段；`--format json` 输出完整内容
