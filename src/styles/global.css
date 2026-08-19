@@ -24,4 +24,7 @@ body {
   transition: background var(--lbus-transition-base), color var(--lbus-transition-base);
 }
 img, picture, video, canvas, svg { display: block; max-width: 100%; }
-input, button, textarea, select { font: inherit; }
+/* NOTE: tailwind v4 preflight already resets button/input font.
+   The old `input, button, textarea, select { font: inherit }` sat outside
+   @layer and overrode tailwind utility classes on <button>. Removed
+   deliberately — nav-link font-size / font-weight now cascade correctly. */

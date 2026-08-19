@@ -60,10 +60,10 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[color:var(--lb-stroke)] bg-[color-mix(in_oklch,var(--lbus-c-bg)_90%,transparent)] [backdrop-filter:blur(8px)] [-webkit-backdrop-filter:blur(8px)]" data-lbus-component="top-nav">
-      <div className="flex items-center gap-4 max-w-[80rem] h-14 px-4 mx-auto">
-        {/* Logo */}
-        <a href={homeHref} className="inline-flex items-center" aria-label="Longbridge Developers">
+    <header className="sticky top-0 z-30 border-b border-[color:var(--app-card-stroke)] bg-[color-mix(in_srgb,var(--lb-bg-1)_80%,transparent)] [backdrop-filter:saturate(180%)_blur(20px)] [-webkit-backdrop-filter:saturate(180%)_blur(20px)] font-[var(--lb-font-sans)]" data-lbus-component="top-nav">
+      <div className="flex items-center gap-8 max-w-[1240px] h-[60px] px-6 mx-auto">
+        {/* Logo — legacy .app-brand: gap 8 / weight 700 / color --lb-fg-1 */}
+        <a href={homeHref} className="inline-flex items-center gap-2 shrink-0 self-stretch text-[color:var(--lb-fg-1)] font-bold text-[15px] tracking-[-0.01em] whitespace-nowrap" aria-label="Longbridge Developers">
           <img
             src={LOGO_LIGHT}
             alt="Longbridge Developers"
@@ -80,18 +80,21 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
           />
         </a>
 
-        {/* Desktop nav */}
-        <nav className="flex-1 min-w-0 text-sm hidden lg:block" aria-label="Main navigation">
-          <ul className="flex items-center gap-5 list-none p-0 m-0" role="list">
-            {/* Features stub — dropdown content ports in stage-2 §S10 */}
+        {/* Desktop nav — legacy .app-nav-links: gap 4px */}
+        <nav className="flex-1 min-w-0 hidden lg:block" aria-label="Main navigation">
+          <ul className="flex items-center gap-1 list-none p-0 m-0" role="list">
+            {/* Features stub — legacy .app-nav-links a: 6/12 · 13.5px · 500 · fg-1@78% · radius 6 */}
             <li>
               <button
                 type="button"
                 aria-haspopup="true"
                 data-lbus-component="nav-features-stub"
-                className="text-[color:var(--lb-fg-2)] hover:text-[color:var(--lbus-c-text)] bg-transparent border-0 cursor-pointer py-1 text-sm inline-flex items-center gap-1"
+                className="bg-transparent border-0 cursor-pointer text-[color:var(--lb-fg-1)] [font-size:13.5px] font-medium opacity-[0.78] rounded-md px-3 py-1.5 hover:bg-[var(--lb-bg-2)] hover:opacity-100 inline-flex items-center gap-1 whitespace-nowrap"
               >
-                {t(locale, 'nav.features')} <span aria-hidden="true">▾</span>
+                {t(locale, 'nav.features')}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
               </button>
             </li>
             {navItems.map((item) => (
@@ -99,40 +102,44 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
                 {item.link ? (
                   <a
                     href={item.link}
-                    className={isActive(item, currentPath) ? 'text-[color:var(--lb-brand)] no-underline py-1 inline-block font-medium' : 'text-[color:var(--lb-fg-2)] no-underline py-1 inline-block hover:text-[color:var(--lbus-c-text)]'}
+                    className={
+                      isActive(item, currentPath)
+                        ? 'no-underline text-[color:var(--lb-fg-1)] [font-size:13.5px] font-semibold opacity-100 rounded-md px-3 py-1.5 hover:bg-[var(--lb-bg-2)] inline-block whitespace-nowrap'
+                        : 'no-underline text-[color:var(--lb-fg-1)] [font-size:13.5px] font-medium opacity-[0.78] rounded-md px-3 py-1.5 hover:bg-[var(--lb-bg-2)] hover:opacity-100 inline-block whitespace-nowrap'
+                    }
                     aria-current={isActive(item, currentPath) ? 'page' : undefined}
                   >
                     {item.text}
                   </a>
                 ) : (
-                  <span className="text-[color:var(--lb-fg-2)] py-1 inline-block">{item.text}</span>
+                  <span className="text-[color:var(--lb-fg-1)] [font-size:13.5px] font-medium opacity-[0.78] px-3 py-1.5 inline-block whitespace-nowrap">{item.text}</span>
                 )}
               </li>
             ))}
           </ul>
         </nav>
 
-        {/* Right controls */}
+        {/* Right controls — legacy .app-nav-tail: gap 8 */}
         <div className="flex items-center gap-2">
           <SearchButton locale={locale} />
           <LanguageSwitcher currentLocale={locale} currentPath={currentPath} />
           <ThemeToggle locale={locale} />
-          {/* GitHub icon link */}
+          {/* GitHub icon link — legacy .app-nav-icon-btn: 32×32 · rounded-8 · fg-2 · hover bg-2/fg-1 */}
           <a
             href="https://github.com/longbridge/developers"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
             data-lbus-component="nav-github"
-            className="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded text-[color:var(--lb-fg-2)] hover:text-[color:var(--lbus-c-text)] no-underline"
+            className="hidden lg:grid place-items-center w-8 h-8 rounded-lg border border-transparent text-[color:var(--lb-fg-2)] hover:bg-[var(--lb-bg-2)] hover:text-[color:var(--lb-fg-1)] no-underline"
           >
             <GitHubIcon />
           </a>
-          {/* Get Started CTA — static href for now; login-state awareness ports in stage-2 §S10 */}
+          {/* Get Started CTA — legacy .btn.btn-primary.btn-sm: 28h · 12px · 12.5px · 600 · pill · bg fg-1 / color fg-invert */}
           <a
             href="/user/register"
             data-lbus-component="nav-get-started"
-            className="hidden lg:inline-flex items-center gap-1.5 rounded-full bg-[var(--lb-fg-1)] text-[color:var(--lb-fg-invert)] h-7 px-3 text-[12.5px] font-semibold no-underline hover:opacity-90 whitespace-nowrap"
+            className="hidden lg:inline-flex items-center justify-center gap-1.5 rounded-full border border-transparent bg-[var(--lb-fg-1)] text-[color:var(--lb-fg-invert)] h-7 px-3 text-[12.5px] font-semibold no-underline hover:opacity-[0.88] whitespace-nowrap"
           >
             {t(locale, 'nav.getStarted')}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
