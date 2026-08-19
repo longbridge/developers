@@ -14,7 +14,7 @@ sidebar_icon: newspaper
 - **新增 `grid` 命令组 —— 网格交易** — `longbridge grid` 列出网格订单（`--ids`、`--symbol`、`--status`），另有 `submit`、`replace`、`detail`、`triggers`、`cancel`、`suspend`、`restart`、`info` 和 `questionnaire`。`submit` / `replace` 共用一套网格规则参数：价格区间与基准价、`--trigger-type percent|spread` 配合 `--trigger-up` / `--trigger-down`、上下方各自的数量与订单类型、有效期，以及价格越界后的处理方式 —— 并可用 `--dry-run` 只校验并打印规则而不实际提交
 - **TUI 界面重做** — 主标签改为胶囊样式，快捷键提示不再溢出：按标签占用后的剩余空间排布，空间不足时优先舍弃次要项，且提示本身可点击（设置与帮助始终保留）。持仓与订单页新增右侧详情面板，随选中行联动；个股页去掉行情 / 新闻标签条，文章区因此可以换行、滚动并跳转到 longbridge.com，空间够时新闻列表与行情面板并排停靠。点击快捷键提示现在会执行它对应的操作，底部指数行情的点击区域也跟随文字而非固定三等分。设置弹窗改为真正的两列网格，选项可点击、`←`/`→` 可双向切换取值，快捷键也从在部分平台冲突的 `Ctrl+,` 改为 `,`
 - **修复：分时图渲染成点阵纹理** — 面积填充改用与线条同色的块状阴影字符、成交量改为实心柱，不再使用只能设置前景色的盲文字符。背后的两个问题一并修复：ANSI 解析器只读取 SGR 转义序列的第一个参数，导致任何设置多个属性的序列被整体丢弃；图表信息栏硬编码红绿色而没有跟随涨跌颜色设置，其中一处在默认模式下颜色还是反的
-- **`news detail` 改用官方接口** — 由签名的 `GET /v1/content/news/:id` 驱动，不再抓取网页，标题、发布时间、作者、相关标的与 Markdown 正文均为结构化字段；`--format json` 输出完整内容
+- **`news detail` 返回结构化数据** — 文章改为从 Longbridge 自有的内容服务读取，不再从网页抓取；标题、发布时间、作者、相关标的都是独立字段，与 Markdown 正文一并返回，`--format json` 输出完整内容
 
 ### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
 
