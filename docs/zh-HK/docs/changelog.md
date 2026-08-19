@@ -6,6 +6,15 @@ sidebar_position: 7
 sidebar_icon: newspaper
 ---
 
+## 2026-08-19
+
+### CLI v0.28.0
+
+- **[Longbridge AI 進入終端](/zh-HK/docs/cli/ai)** — 新增 `longbridge ai` 命令，打開與 [Longbridge AI](https://longbridge.com/ai) 的全屏對話：回答實時流式返回，以 Markdown 渲染，圖表、表格與實時行情卡片直接畫在終端裏；對話保存在你的賬戶上，在終端開始的對話可以在其他使用 Longbridge AI 的地方繼續
+- **[基於 CLI 構建自己的應用](/zh-HK/docs/cli/serve)** — `longbridge serve` 保持一個已認證的進程常駐，通過 stdin/stdout 提供 JSON-RPC 2.0，涵蓋完整的行情與交易接口、REST 直通，以及行情 / 盤口 / 經紀隊列 / 逐筆實時推送 —— 桌面掛件、狀態欄插件和儀表盤不必再每次輪詢都拉起一個進程
+- **命令行網格交易** — 新增 `grid` 命令組，可提交、修改、查詢、暫停和取消網格策略，並查看觸發記錄
+- **終端界面重做** — `longbridge tui` 採用膠囊標籤，快捷鍵提示可點擊且不再溢出；持倉與訂單頁新增詳情面板；個股頁空間更充裕；分時圖改為實心填充，不再是點陣紋理
+
 ## 2026-08-14
 
 ### SDK v4.5.0
