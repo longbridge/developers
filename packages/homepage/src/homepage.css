@@ -1,0 +1,30 @@
+/* homepage.css — page-level layout and spacing coordination */
+
+.new-home-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--vp-c-bg);
+}
+
+/* Consistent section horizontal padding container */
+.new-home-page > section,
+.new-home-page > div[data-lbus-component] {
+  width: 100%;
+}
+
+/* Global section vertical rhythm */
+section[data-lbus-component] {
+  position: relative;
+}
+
+/* Shared section dividers via box-shadow — add to sections that need a subtle top border */
+.section-divider-top::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--vp-c-divider);
+  margin-bottom: 0;
+}

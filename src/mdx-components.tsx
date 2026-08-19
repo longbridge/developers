@@ -13,7 +13,7 @@ import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks, Skill } from '@
 // TryIt — ported from legacy openapi-website (§S7)
 import { TryIt } from '@longbridge/openapi-tryit'
 import { McpTools } from '@/components/mdx/placeholders/McpTools'
-import { NewHomePage } from '@/components/mdx/placeholders/NewHomePage'
+import { NewHomePage } from '@longbridge/openapi-homepage'
 import { Pricing } from '@/components/mdx/placeholders/Pricing'
 import { QuotePermission } from '@/components/mdx/placeholders/QuotePermission'
 // ApiReference is mounted directly by ApiReferenceLayout.astro from
