@@ -8,7 +8,8 @@
  * Task 11 exports: 7 primitives + 6 T12 placeholders.
  */
 
-import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks, Skill } from '@longbridge/openapi-ui'
+import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks } from '@longbridge/openapi-ui'
+import { SkillCatalog } from '@/components/mdx/SkillCatalog'
 
 // TryIt — ported from legacy openapi-website (§S7)
 import { TryIt } from '@longbridge/openapi-tryit'
@@ -29,7 +30,7 @@ export const mdxComponents = {
   CliCommand,
   SDK,
   SDKLinks,
-  Skill,
+  Skill: SkillCatalog,
 
   // ── T12 placeholders ────────────────────────
   TryIt,
