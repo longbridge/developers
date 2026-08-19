@@ -9,6 +9,14 @@
 
 @import "./tokens.css";
 @import "./shiki.css";
+
+/* Tailwind v4 custom dark variant — the site toggles theme via a
+   `data-mode="dark"` attribute on <html> (tokens.css line 388), not the
+   default `.dark` class. Without this declaration, tailwind's built-in
+   `dark:` prefix falls back to `prefers-color-scheme: dark` and the
+   attribute-scoped nested syntax `[[data-mode='dark']_&]:hidden` does
+   not resolve correctly, so both light+dark logos render simultaneously. */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 @import "./docs.css";
 @import "./mdx-page-overrides.css";
 @import "./callout.css";
@@ -23,8 +31,12 @@ body {
   font-family: var(--lbus-font-sans);
   transition: background var(--lbus-transition-base), color var(--lbus-transition-base);
 }
-img, picture, video, canvas, svg { display: block; max-width: 100%; }
-/* NOTE: tailwind v4 preflight already resets button/input font.
-   The old `input, button, textarea, select { font: inherit }` sat outside
-   @layer and overrode tailwind utility classes on <button>. Removed
-   deliberately — nav-link font-size / font-weight now cascade correctly. */
+/* NOTE: tailwind v4 preflight already resets:
+   - button/input font (was: `input, button, textarea, select { font: inherit }`)
+   - img/svg/video display:block + max-width:100%
+   Both original resets sat OUTSIDE @layer, so they cascaded after tailwind
+   utilities and blocked `.font-medium` on <button> AND `.hidden` on <img>.
+   The latter caused BOTH light+dark logos to render simultaneously — a
+   subtle logo bug that survived four rounds of pixel-parity review.
+   Removed. Rely on tailwind v4 preflight, which lives in @layer base and
+   is correctly overridden by utilities. */

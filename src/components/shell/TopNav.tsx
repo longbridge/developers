@@ -67,14 +67,14 @@ export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
           <img
             src={LOGO_LIGHT}
             alt="Longbridge Developers"
-            className="block h-[30px] w-auto [[data-mode='dark']_&]:hidden"
+            className="block h-[30px] w-auto dark:hidden"
             width={180}
             height={30}
           />
           <img
             src={LOGO_DARK}
             alt="Longbridge Developers"
-            className="hidden h-[30px] w-auto [[data-mode='dark']_&]:inline-block"
+            className="hidden h-[30px] w-auto dark:block"
             width={180}
             height={30}
           />
