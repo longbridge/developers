@@ -1,19 +1,22 @@
 import type { Locale } from '@longbridge/openapi-utils'
 import { t } from '@longbridge/openapi-utils'
 
-export interface SearchResultItem {
+export interface SearchHit {
+  id: string
   url: string
-  meta?: { title?: string }
-  excerpt?: string
+  title: string
+  headings: string[]
+  matchedTerms: string[]
 }
 
 interface Props {
-  results: SearchResultItem[]
+  results: SearchHit[]
   loading: boolean
   query: string
   locale: Locale
   onSelect: (url: string) => void
   activeIndex: number
+  onHover?: (idx: number) => void
 }
 
 export default function SearchResults({
@@ -23,6 +26,7 @@ export default function SearchResults({
   locale,
   onSelect,
   activeIndex,
+  onHover,
 }: Props) {
   if (loading) {
     return (
@@ -43,31 +47,85 @@ export default function SearchResults({
   if (!query.trim()) return null
 
   return (
-    <ul className="list-none px-2 py-2 m-0" role="listbox" aria-label="Search results" aria-live="polite">
-      {results.map((item, idx) => (
-        <li
-          key={item.url}
-          role="option"
-          aria-selected={idx === activeIndex}
-          className={idx === activeIndex ? 'rounded bg-[var(--lb-bg-2)]' : 'rounded'}
-        >
+    <ul className="list-none p-3 m-0 flex flex-col gap-2" role="listbox" aria-label="Search results">
+      {results.map((hit, idx) => (
+        <li key={hit.id} role="option" aria-selected={idx === activeIndex}>
           <button
             type="button"
-            className="w-full text-left bg-transparent border-0 cursor-pointer px-3 py-2 text-[color:var(--lbus-c-text)] rounded"
-            onClick={() => onSelect(item.url)}
+            className={
+              (idx === activeIndex
+                ? 'border-[color:var(--lb-brand)] shadow-[0_0_0_1px_var(--lb-brand)_inset]'
+                : 'border-[color:var(--app-card-stroke)]') +
+              ' w-full text-left bg-[var(--lb-bg-1)] border rounded-lg px-4 py-3 cursor-pointer flex items-center gap-2 [font-size:14px] transition-colors'
+            }
+            onClick={() => onSelect(hit.url)}
+            onMouseEnter={() => onHover?.(idx)}
             tabIndex={-1}
           >
-            <span className="block font-medium text-sm">{item.meta?.title ?? item.url}</span>
-            {item.excerpt && (
-              <span
-                className="block text-xs text-[color:var(--lb-fg-2)] mt-1 line-clamp-2"
-                // pagefind wraps matched text in <mark> — safe, no user-controlled HTML
-                dangerouslySetInnerHTML={{ __html: item.excerpt }}
-              />
-            )}
+            <span className="text-[color:var(--lb-brand)] font-semibold shrink-0">#</span>
+            <span className="flex items-center gap-1.5 flex-wrap min-w-0">
+              {hit.headings.map((h, i) => (
+                <span key={i} className="inline-flex items-center gap-1.5">
+                  <HighlightedText text={h} terms={hit.matchedTerms} bold={i === hit.headings.length - 1} />
+                  {i < hit.headings.length - 1 && (
+                    <span className="text-[color:var(--lb-fg-3)]" aria-hidden="true">›</span>
+                  )}
+                </span>
+              ))}
+            </span>
           </button>
         </li>
       ))}
     </ul>
   )
+}
+
+/** Wrap query-term matches in a teal <mark>. Term matching is
+ *  case-insensitive; overlapping/nested matches are collapsed by longest-first
+ *  sort. */
+function HighlightedText({
+  text,
+  terms,
+  bold = false,
+}: {
+  text: string
+  terms: string[]
+  bold?: boolean
+}) {
+  if (!terms.length) {
+    return (
+      <span className={bold ? 'font-semibold text-[color:var(--lb-fg-1)]' : 'text-[color:var(--lb-fg-1)]'}>
+        {text}
+      </span>
+    )
+  }
+
+  const sorted = [...terms].sort((a, b) => b.length - a.length)
+  const pattern = new RegExp(
+    `(${sorted.map((t) => escapeRe(t)).join('|')})`,
+    'gi',
+  )
+  const parts = text.split(pattern)
+  return (
+    <span className={bold ? 'font-semibold text-[color:var(--lb-fg-1)]' : 'text-[color:var(--lb-fg-1)]'}>
+      {parts.map((part, i) => {
+        if (!part) return null
+        const isMatch = sorted.some((t) => t.toLowerCase() === part.toLowerCase())
+        return isMatch ? (
+          <mark
+            key={i}
+            className="bg-[color:var(--lb-brand)] text-[color:var(--lb-fg-invert)] rounded-[3px] px-[3px] py-[1px]"
+          >
+            {part}
+          </mark>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      })}
+    </span>
+  )
+}
+
+function escapeRe(s: string) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }

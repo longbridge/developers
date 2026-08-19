@@ -1,18 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import MiniSearch from 'minisearch'
 import type { Locale } from '@longbridge/openapi-utils'
 import { t } from '@longbridge/openapi-utils'
-import SearchResults, { type SearchResultItem } from './SearchResults'
-
-// Shape of a raw pagefind result fragment (url available before data() call)
-interface PagefindRawResult {
-  url: string
-  data: () => Promise<SearchResultItem>
-}
-
-interface PagefindAPI {
-  search: (query: string) => Promise<{ results: PagefindRawResult[] }>
-}
+import SearchResults, { type SearchHit } from './SearchResults'
 
 interface Props {
   locale: Locale
@@ -20,55 +11,118 @@ interface Props {
   onClose: () => void
 }
 
-function passesLocale(url: string, locale: Locale): boolean {
-  if (locale === 'zh-CN') return url.startsWith('/zh-CN')
-  if (locale === 'zh-HK') return url.startsWith('/zh-HK')
-  // en: exclude zh-CN and zh-HK
-  return !url.startsWith('/zh-CN') && !url.startsWith('/zh-HK')
+interface Section {
+  id: string
+  url: string
+  title: string
+  headings: string[]
+  body: string
 }
 
-const DEBOUNCE_MS = 200
-const MAX_RESULTS = 10
+const DEBOUNCE_MS = 120
+const MAX_RESULTS = 12
+
+// Per-locale caches survive dialog close/reopen. First-open pays the fetch;
+// subsequent opens are instant.
+const indexCache = new Map<Locale, MiniSearch<Section>>()
+const inflight = new Map<Locale, Promise<MiniSearch<Section>>>()
+
+async function buildIndex(locale: Locale): Promise<MiniSearch<Section>> {
+  const res = await fetch(`/search-index.${locale}.json`)
+  if (!res.ok) throw new Error(`search-index ${locale} ${res.status}`)
+  const { sections } = (await res.json()) as { sections: Section[] }
+
+  const ms = new MiniSearch<Section>({
+    fields: ['title', 'headingsJoined', 'body'],
+    storeFields: ['url', 'title', 'headings'],
+    tokenize: (text) => {
+      const out: string[] = []
+      let buf = ''
+      for (const ch of text.toLowerCase()) {
+        if (/[一-鿿぀-ヿ가-힯]/.test(ch)) {
+          if (buf) { out.push(buf); buf = '' }
+          out.push(ch)
+        } else if (/[a-z0-9]/.test(ch)) {
+          buf += ch
+        } else {
+          if (buf) { out.push(buf); buf = '' }
+        }
+      }
+      if (buf) out.push(buf)
+      return out
+    },
+    extractField: (doc, field) => {
+      if (field === 'headingsJoined') return (doc as Section).headings.join(' ')
+      // For non-virtual fields, hand back the raw value. Returning a
+      // stringified array here corrupts storeFields — `headings` came back
+      // as "a,b,c" instead of ["a","b","c"] and the UI's .map() blew up.
+      return (doc as unknown as Record<string, unknown>)[field] as string
+    },
+    searchOptions: {
+      boost: { title: 3, headingsJoined: 2, body: 1 },
+      fuzzy: 0.15,
+      prefix: true,
+    },
+  })
+
+  // Dedup by id — the section builder occasionally emits duplicates for
+  // headings that share text within a doc, and MiniSearch throws on add.
+  const seen = new Set<string>()
+  const unique = sections.filter((s) => {
+    if (seen.has(s.id)) return false
+    seen.add(s.id)
+    return true
+  })
+  ms.addAll(unique)
+
+  indexCache.set(locale, ms)
+  return ms
+}
+
+async function loadIndex(locale: Locale): Promise<MiniSearch<Section>> {
+  const hit = indexCache.get(locale)
+  if (hit) return hit
+  const pending = inflight.get(locale)
+  if (pending) return pending
+
+  const promise = buildIndex(locale)
+
+  inflight.set(locale, promise)
+  return promise
+}
 
 export default function SearchDialog({ locale, isOpen, onClose }: Props) {
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<SearchResultItem[]>([])
+  const [results, setResults] = useState<SearchHit[]>([])
   const [loading, setLoading] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
-  const [pfReady, setPfReady] = useState<'loading' | 'ready' | 'unavailable'>('loading')
-  const pfRef = useRef<PagefindAPI | null>(null)
+  const [status, setStatus] = useState<'idle' | 'loading-index' | 'ready' | 'error'>('idle')
+  const msRef = useRef<MiniSearch<Section> | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Load pagefind once on component mount
+  // Kick index load once when dialog first opens for this locale.
   useEffect(() => {
+    if (!isOpen) return
+    if (msRef.current) return
     let cancelled = false
-    ;(async () => {
-      // pagefind.js is generated at build time and only exists in dist/. In dev
-      // there is no such file, so we (a) build the URL from a runtime variable
-      // to hide it from Vite's static import analyzer, and (b) probe with a
-      // HEAD fetch before importing — otherwise Vite would fail with an
-      // unresolvable module error before our try/catch could run.
-      const pfUrl = '/pagefind/pagefind.js'
-      try {
-        const head = await fetch(pfUrl, { method: 'HEAD' })
-        if (!head.ok) throw new Error('pagefind not built')
-        const pf = (await import(/* @vite-ignore */ pfUrl)) as PagefindAPI
-        if (!cancelled) {
-          pfRef.current = pf
-          setPfReady('ready')
-        }
-      } catch {
-        // Expected in dev: /pagefind/pagefind.js doesn't exist until after build
-        if (!cancelled) setPfReady('unavailable')
-      }
-    })()
+    setStatus('loading-index')
+    loadIndex(locale)
+      .then((ms) => {
+        if (cancelled) return
+        msRef.current = ms
+        setStatus('ready')
+      })
+      .catch(() => {
+        if (cancelled) return
+        setStatus('error')
+      })
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [isOpen, locale])
 
-  // Autofocus + reset state when dialog opens
+  // Autofocus + reset per-open
   useEffect(() => {
     if (isOpen) {
       setQuery('')
@@ -88,7 +142,15 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
     }
   }, [isOpen])
 
-  // Keyboard: Esc / ↑ ↓ / Enter (only when open)
+  const navigateTo = useCallback(
+    (url: string) => {
+      onClose()
+      window.location.href = url
+    },
+    [onClose],
+  )
+
+  // Keyboard nav
   useEffect(() => {
     if (!isOpen) return
 
@@ -101,50 +163,54 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
         setActiveIndex((i) => Math.min(i + 1, results.length - 1))
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
-        setActiveIndex((i) => Math.max(i - 1, -1))
-      } else if (e.key === 'Enter' && activeIndex >= 0) {
-        e.preventDefault()
-        const hit = results[activeIndex]
-        if (hit) navigateTo(hit.url)
+        setActiveIndex((i) => Math.max(i - 1, 0))
+      } else if (e.key === 'Enter') {
+        if (activeIndex >= 0) {
+          e.preventDefault()
+          const hit = results[activeIndex]
+          if (hit) navigateTo(hit.url)
+        } else if (results[0]) {
+          e.preventDefault()
+          navigateTo(results[0].url)
+        }
       }
     }
 
     document.addEventListener('keydown', handle)
     return () => document.removeEventListener('keydown', handle)
-  }, [isOpen, results, activeIndex]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isOpen, results, activeIndex, navigateTo, onClose])
 
-  const navigateTo = useCallback(
-    (url: string) => {
-      onClose()
-      window.location.href = url
-    },
-    [onClose],
-  )
-
-  // Debounced search
+  // Debounced search — re-triggers when either the query or the index
+  // readiness changes, so a query typed while the index is still loading
+  // gets served the moment it becomes available.
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
-
     const trimmed = query.trim()
     if (!trimmed) {
       setResults([])
       setActiveIndex(-1)
       return
     }
-
-    debounceRef.current = setTimeout(async () => {
-      if (!pfRef.current) {
+    debounceRef.current = setTimeout(() => {
+      const ms = msRef.current
+      if (!ms) {
+        // index not ready yet — leave loading spinner on, results will
+        // populate once status flips to 'ready' and this effect re-runs
         setResults([])
         return
       }
       setLoading(true)
       try {
-        const { results: raw } = await pfRef.current.search(trimmed)
-        // Filter by locale before loading data (pagefind exposes url on raw result)
-        const filtered = raw.filter((r) => passesLocale(r.url, locale)).slice(0, MAX_RESULTS)
-        const data = await Promise.all(filtered.map((r) => r.data()))
-        setResults(data)
-        setActiveIndex(-1)
+        const raw = ms.search(trimmed)
+        const hits: SearchHit[] = raw.slice(0, MAX_RESULTS).map((r) => ({
+          id: String(r.id),
+          url: r.url as string,
+          title: r.title as string,
+          headings: r.headings as string[],
+          matchedTerms: r.terms ?? [],
+        }))
+        setResults(hits)
+        setActiveIndex(hits.length > 0 ? 0 : -1)
       } catch {
         setResults([])
       } finally {
@@ -155,9 +221,9 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
     }
-  }, [query, locale])
+  }, [query, status])
 
-  // Portal target must exist and we must be past SSR before we can attach.
+  // Portal target
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null)
   useEffect(() => {
     setPortalTarget(document.body)
@@ -165,23 +231,16 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
 
   if (!isOpen || !portalTarget) return null
 
-  const showUnavailable = pfReady === 'unavailable' && query.trim().length > 0
+  const showIndexError = status === 'error' && query.trim().length > 0
 
-  // The header ancestor sets `backdrop-filter` (see TopNav.tsx), which — per
-  // CSS containing-block rules — turns any fixed-positioned descendant into
-  // "fixed relative to that filtered ancestor" instead of the viewport. That
-  // clipped this dialog to the 60px header strip. Portaling to document.body
-  // lifts us out of that containing block so `fixed inset-0` covers the full
-  // viewport again.
   return createPortal(
-    // Backdrop — click outside to close
     <div
-      className="fixed inset-0 bg-black/40 z-50 flex justify-center items-start pt-20"
+      className="fixed inset-0 bg-black/40 z-50 flex justify-center items-start pt-20 px-4"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="w-[min(40rem,calc(100%-2rem))] bg-[var(--lbus-c-bg)] border border-[color:var(--lb-stroke)] rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
+        className="w-[min(40rem,100%)] bg-[var(--lb-bg-1)] border border-[color:var(--app-card-stroke)] rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col"
         data-lbus-component="search-dialog"
         role="dialog"
         aria-label="Search"
@@ -189,12 +248,12 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Input row */}
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-[color:var(--lb-stroke)]">
+        <div className="flex items-center gap-3 px-4 h-12 border-b border-[color:var(--app-card-stroke)]">
           <svg
             className="text-[color:var(--lb-fg-2)] shrink-0"
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -209,7 +268,7 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
           <input
             ref={inputRef}
             type="search"
-            className="flex-1 border-0 bg-transparent outline-none text-[color:var(--lbus-c-text)] text-base px-1 py-2 placeholder:text-[color:var(--lb-fg-2)]"
+            className="flex-1 border-0 bg-transparent outline-none text-[color:var(--lb-fg-1)] text-[15px] py-2 placeholder:text-[color:var(--lb-fg-2)]"
             placeholder={t(locale, 'search.placeholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -217,35 +276,66 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
             autoComplete="off"
             spellCheck={false}
           />
-          <button
-            type="button"
-            className="bg-transparent border border-[color:var(--lb-stroke)] rounded px-[0.4rem] py-[0.1rem] text-xs text-[color:var(--lb-fg-2)] cursor-pointer shrink-0"
-            onClick={onClose}
-            aria-label="Close search"
-          >
-            <kbd>Esc</kbd>
-          </button>
+          {query && (
+            <button
+              type="button"
+              className="bg-transparent border-0 cursor-pointer p-1 text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-fg-1)] shrink-0"
+              onClick={() => setQuery('')}
+              aria-label="Clear search"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Results body */}
         <div className="max-h-[60vh] overflow-y-auto">
-          {showUnavailable ? (
+          {showIndexError ? (
             <p className="p-4 text-[color:var(--lb-fg-2)] text-sm text-center">
-              Search is available after first production build.
+              Search index failed to load.
             </p>
           ) : (
             <SearchResults
               results={results}
-              loading={loading}
+              loading={loading || status === 'loading-index'}
               query={query}
               locale={locale}
               onSelect={navigateTo}
               activeIndex={activeIndex}
+              onHover={setActiveIndex}
             />
           )}
+        </div>
+
+        {/* Footer hint bar (mirrors legacy: ↑↓ Switch  ↵ Select  esc Close) */}
+        <div className="flex items-center gap-4 px-4 h-10 border-t border-[color:var(--app-card-stroke)] bg-[var(--lb-bg-2)] text-[11px] text-[color:var(--lb-fg-2)]">
+          <span className="inline-flex items-center gap-1.5">
+            <Kbd>↑</Kbd>
+            <Kbd>↓</Kbd>
+            <span>Switch</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Kbd>↵</Kbd>
+            <span>Select</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Kbd>esc</Kbd>
+            <span>Close</span>
+          </span>
         </div>
       </div>
     </div>,
     portalTarget,
+  )
+}
+
+function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="[font-family:var(--app-mono)] [font-size:11px] leading-[11px] px-[5px] py-[2px] bg-[var(--lb-bg-1)] border border-[color:var(--app-card-stroke)] rounded text-[color:var(--lb-fg-2)]">
+      {children}
+    </kbd>
   )
 }

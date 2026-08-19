@@ -42,6 +42,7 @@
     "glob": "^11.0.3",
     "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.1",
+    "minisearch": "^7.2.0",
     "motion": "^13.1.0",
     "pagefind": "^1",
     "picomatch": "^4.0.5",
