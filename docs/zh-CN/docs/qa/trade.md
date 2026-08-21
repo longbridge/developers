@@ -45,3 +45,11 @@ sidebar_position: 2
 ## Q9: 美股期权交易是否支持盘前交易？
 
 盘前期权暂不支持，目前正在规划中。包括多腿期权也会一起推出，后续推出后我们会更新文档。
+
+## Q10: 美股专用接口是否支持模拟账户？
+
+不支持。Longbridge US 柜台（US DC）未提供模拟账户功能，因此整个 US region 在模拟环境下均不可用，**所有**美股专用接口都包含在内，例如[美股历史委托](/zh-CN/docs/trade/order/us_query_orders)和[美股委托详情](/zh-CN/docs/trade/order/us_order_detail)。
+
+用模拟账户调用这些接口会返回错误，而不是空结果——请勿将该失败理解为“此账户没有委托”。
+
+如果需要模拟环境，请改用 AP 账户。数据中心只决定账户归属，并不限制 API 连通性。AP 模拟账户同样可以交易美股，并通过通用交易接口（`today_orders`、`history_orders`、`account_balance`、`stock_positions` 等）读取数据。模拟账户支持的范围见 Q4。
