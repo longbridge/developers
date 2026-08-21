@@ -11,7 +11,11 @@ headingLevel: 2
 ---
 
 :::warning Longbridge US Accounts
-This method is only available for US data-center accounts.
+This method is only available for Longbridge US data-center accounts.
+
+It is **not** available to accounts in other data centers (such as HK or SG), even when those accounts can trade US symbols. It is also **not** available to paper accounts (`enable_papertrading = true`): **the Longbridge US desk (US DC) does not provide paper accounts at all**, so the entire US region — every US-specific API, not just this one — is unavailable in a paper environment.
+
+Calling it from an unsupported account returns an error rather than an empty result — do not treat the failure as "this order does not exist". For a paper environment, use an AP account with the generic trade APIs instead.
 :::
 
 Get detail for a specific US order — execution history, order status, and any attached child orders.
