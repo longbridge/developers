@@ -489,6 +489,9 @@ tags:
   - name: Trade Execution & Order Management
     x-name-zh: 交易与订单管理
     description: Full order lifecycle management including order detail queries, today's and historical order queries, today's and historical execution reports, order modification, order cancellation, and pre-order maximum purchasable quantity estimation.
+  - name: Grid Trading
+    x-name-zh: 网格交易
+    description: Automated grid strategy orders. Submit, modify, list, and inspect grid orders; query trigger history; suspend, restart, or cancel a running grid; read the per-symbol grid info (lot size, last price, authorization); and record the one-time strategy risk-disclosure consent.
   - name: Statement
     x-name-zh: 结单
     description: Query and download account statements (daily or monthly). Statements contain detailed breakdowns of assets, holdings, trades, fees, and corporate actions.
@@ -2670,6 +2673,677 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /v1/gridtrading/submit:
+    post:
+      operationId: submit_grid_order
+      summary: Submit Grid Order
+      x-summary-zh: 提交网格订单
+      description: |
+        Submit a grid strategy order. The grid places buy orders as the price falls and sell
+        orders as it rises, within the `[lower_limit_price, upper_limit_price]` band anchored to
+        `submitted_base_price`. Before using grid trading you must record the strategy
+        risk-disclosure consent once (see `POST /v1/record/questionnaire`).
+      x-description-zh: |
+        提交网格策略订单。网格在 `[lower_limit_price, upper_limit_price]` 区间内、以
+        `submitted_base_price` 为基准，价格下跌时挂买单、上涨时挂卖单。使用网格交易前需先记录一次策略风险揭示确认（见
+        `POST /v1/record/questionnaire`）。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - symbol
+                - settlement_currency
+                - grid_trading_rule
+              properties:
+                symbol:
+                  type: string
+                  description: 'Security symbol in `ticker.region` format (e.g. `700.HK`).'
+                settlement_currency:
+                  type: string
+                  description: Settlement currency (e.g. `HKD`, `USD`).
+                grid_trading_rule:
+                  $ref: '#/components/schemas/GridTradeRule'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  order_id: '764609681686573056'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/replace:
+    post:
+      operationId: replace_grid_order
+      summary: Modify Grid Order
+      x-summary-zh: 修改网格订单
+      description: |
+        Modify the rule of an existing grid order. Provide the `order_id` and a full
+        `grid_trading_rule` with the new parameters.
+      x-description-zh: 修改已存在网格订单的规则。需提供 `order_id` 以及包含新参数的完整 `grid_trading_rule`。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+                - grid_trading_rule
+              properties:
+                order_id:
+                  type: string
+                  description: ID of the grid order to modify.
+                grid_trading_rule:
+                  $ref: '#/components/schemas/GridTradeRule'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid replace 764609681686573056 --base-price 305 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/list:
+    get:
+      operationId: list_grid_orders
+      summary: List Grid Orders
+      x-summary-zh: 网格订单列表
+      description: |
+        Query grid orders with pagination and optional filtering by market, symbol, and status.
+      x-description-zh: 分页查询网格订单，支持按市场、标的和状态筛选。
+      tags:
+        - Grid Trading
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number (starts at 1).
+          schema:
+            type: integer
+            nullable: true
+        - name: limit
+          in: query
+          required: false
+          description: Page size.
+          schema:
+            type: integer
+            nullable: true
+        - name: market
+          in: query
+          required: false
+          description: Filter by market. One of `US`, `HK`, `CN`, `SG`.
+          schema:
+            type: string
+            nullable: true
+        - name: symbol
+          in: query
+          required: false
+          description: 'Filter by security symbol (e.g. `700.HK`).'
+          schema:
+            type: string
+            nullable: true
+        - name: status
+          in: query
+          required: false
+          description: 'Comma-joined status filter (e.g. `Performing,Suspended`).'
+          schema:
+            type: string
+            nullable: true
+        - name: sort_by
+          in: query
+          required: false
+          description: Sort field.
+          schema:
+            type: string
+            nullable: true
+        - name: sort_order
+          in: query
+          required: false
+          description: Sort order.
+          schema:
+            type: string
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid --symbol 700.HK --status Performing
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  grid_order:
+                    - order_id: '764609681686573056'
+                      symbol: 700.HK
+                      stock_name: 腾讯控股
+                      market: HK
+                      status: Performing
+                      grid_status: Running
+                      submitted_base_price: '300'
+                      current_base_price: '300'
+                      upper_limit_price: '360'
+                      lower_limit_price: '240'
+                      trigger_price_type: 2
+                      trigger_percent_up: '2'
+                      trigger_percent_down: '2'
+                      trigger_quantity: '100'
+                      upper_limit_quantity: '200'
+                      lower_limit_quantity: '100'
+                      upper_limit_event: 1
+                      lower_limit_event: 1
+                      multiple_trigger: false
+                      trigger_times: 0
+                      settlement_currency: HKD
+                      time_in_force: 1
+                      gtd: ''
+                      created_at: '2026-08-12T09:30:00+08:00'
+                      rth: 0
+                      support_shortsell: false
+                      grid_order_type_up: GMO
+                      grid_order_type_down: GMO
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: list_grid_orders_by_ids
+      summary: Query Grid Orders by IDs
+      x-summary-zh: 按 ID 查询网格订单
+      description: |
+        Query specific grid orders by their IDs (request body). Returns the matching grid orders.
+      x-description-zh: 通过订单 ID（请求体）查询指定的网格订单，返回匹配的网格订单列表。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_ids
+              properties:
+                order_ids:
+                  type: array
+                  description: Grid order IDs to query.
+                  items:
+                    type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid --ids 764609681686573056 764609681686573057
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  grid_order:
+                    - order_id: '764609681686573056'
+                      symbol: 700.HK
+                      stock_name: 腾讯控股
+                      market: HK
+                      status: Performing
+                      grid_status: Running
+                      submitted_base_price: '300'
+                      upper_limit_price: '360'
+                      lower_limit_price: '240'
+                      trigger_price_type: 2
+                      trigger_percent_up: '2'
+                      trigger_percent_down: '2'
+                      trigger_quantity: '100'
+                      settlement_currency: HKD
+                      time_in_force: 1
+                      grid_order_type_up: GMO
+                      grid_order_type_down: GMO
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/detail:
+    get:
+      operationId: grid_order_detail
+      summary: Grid Order Detail
+      x-summary-zh: 网格订单详情
+      description: |
+        Query the full detail of a single grid order, including its rule, triggered sub-orders,
+        and lifecycle history (both paged via `history_id` / `limit`).
+      x-description-zh: 查询单个网格订单的完整详情，包括规则、已触发的子订单以及生命周期历史（均可通过 `history_id` / `limit` 分页）。
+      tags:
+        - Grid Trading
+      parameters:
+        - name: order_id
+          in: query
+          required: true
+          description: Grid order ID to query.
+          schema:
+            type: string
+        - name: history_id
+          in: query
+          required: false
+          description: History cursor for paging through the lifecycle history.
+          schema:
+            type: string
+            nullable: true
+        - name: limit
+          in: query
+          required: false
+          description: Page size.
+          schema:
+            type: integer
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid detail 764609681686573056
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  order_id: '764609681686573056'
+                  symbol: 700.HK
+                  stock_name: 腾讯控股
+                  status: Performing
+                  grid_status: Running
+                  suspend_reason: ''
+                  sleeping_reason: ''
+                  submitted_base_price: '300'
+                  current_base_price: '300'
+                  upper_limit_price: '360'
+                  lower_limit_price: '240'
+                  trigger_price_type: 2
+                  trigger_percent_up: '2'
+                  trigger_percent_down: '2'
+                  multiple_trigger: false
+                  time_in_force: 1
+                  trigger_quantity: '100'
+                  upper_limit_quantity: '200'
+                  lower_limit_quantity: '100'
+                  upper_limit_event: 1
+                  lower_limit_event: 1
+                  trigger_sell_depth: 0
+                  trigger_buy_depth: 0
+                  created_at: '2026-08-12T09:30:00+08:00'
+                  updated_at: '2026-08-12T09:30:00+08:00'
+                  settlement_currency: HKD
+                  gtd: ''
+                  grid_sub_orders: []
+                  sub_has_more: false
+                  grid_order_history:
+                    - history_id: '1'
+                      created_at: '2026-08-12T09:30:00+08:00'
+                      status: Performing
+                      suspend_reason: ''
+                      reason: ''
+                  history_has_more: false
+                  support_shortsell: false
+                  rth: 0
+                  grid_order_type_up: GMO
+                  grid_order_type_down: GMO
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/trigger_history_list:
+    get:
+      operationId: grid_trigger_history
+      summary: Grid Trigger History
+      x-summary-zh: 网格触发历史
+      description: |
+        Query the trigger history of a grid order — the individual orders that the grid has
+        fired. The required parameter is `grid_order_id` (not `order_id`).
+      x-description-zh: 查询某个网格订单的触发历史，即网格已触发生成的各笔订单。必填参数为 `grid_order_id`（而非 `order_id`）。
+      tags:
+        - Grid Trading
+      parameters:
+        - name: grid_order_id
+          in: query
+          required: true
+          description: Grid order ID whose trigger history to query.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: Page number.
+          schema:
+            type: integer
+            nullable: true
+        - name: limit
+          in: query
+          required: false
+          description: Page size.
+          schema:
+            type: integer
+            nullable: true
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid triggers 764609681686573056
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  trigger_orders:
+                    - id: '764700000000000000'
+                      status: FilledStatus
+                      name: 腾讯控股
+                      symbol: 700.HK
+                      price: '294'
+                      quantity: '100'
+                      executed_price: '294'
+                      executed_qty: '100'
+                      submitted_at: '2026-08-12T10:15:00+08:00'
+                      action: 1
+                      order_type: MO
+                      trigger_price: '294'
+                      msg: ''
+                      currency: HKD
+                      last_done: '294'
+                      updated_at: '2026-08-12T10:15:03+08:00'
+                      time_in_force: 1
+                      gtd: ''
+                      trigger_at: '2026-08-12T10:15:00+08:00'
+                      trigger_status: 0
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/cancel:
+    post:
+      operationId: cancel_grid_order
+      summary: Cancel Grid Order
+      x-summary-zh: 取消网格订单
+      description: |
+        Cancel a grid order. The grid stops and no further triggers are placed.
+      x-description-zh: 取消网格订单。网格停止，不再触发新的挂单。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: ID of the grid order to cancel.
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid cancel 764609681686573056
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/suspend:
+    post:
+      operationId: suspend_grid_order
+      summary: Suspend Grid Order
+      x-summary-zh: 暂停网格订单
+      description: |
+        Suspend a running grid order. The grid stops triggering but is kept and can be restarted.
+      x-description-zh: 暂停运行中的网格订单。网格停止触发，但会保留并可重新启动。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: ID of the grid order to suspend.
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid suspend 764609681686573056
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/restart:
+    post:
+      operationId: restart_grid_order
+      summary: Restart Grid Order
+      x-summary-zh: 重启网格订单
+      description: |
+        Restart a suspended grid order. The grid resumes triggering.
+      x-description-zh: 重新启动已暂停的网格订单。网格恢复触发。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+              properties:
+                order_id:
+                  type: string
+                  description: ID of the grid order to restart.
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid restart 764609681686573056
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/record/questionnaire:
+    post:
+      operationId: submit_strategy_questionnaire
+      summary: Submit Strategy Questionnaire
+      x-summary-zh: 提交策略问卷
+      description: |
+        Record the user's consent to the strategy risk disclosure. This is required once before
+        using grid trading. The consent body is `{ "type": "strategy", "items": { "agree": "true" } }`.
+      x-description-zh: |
+        记录用户对策略风险揭示的确认。使用网格交易前需执行一次。请求体为
+        `{ "type": "strategy", "items": { "agree": "true" } }`。
+      tags:
+        - Grid Trading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - items
+              properties:
+                type:
+                  type: string
+                  description: Questionnaire type. Use `strategy` for grid trading.
+                items:
+                  type: object
+                  description: 'Consent items. For grid trading: `{ "agree": "true" }`.'
+                  additionalProperties:
+                    type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid questionnaire
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/orders/info:
+    get:
+      operationId: grid_symbol_info
+      summary: Grid Symbol Info
+      x-summary-zh: 网格标的信息
+      description: |
+        Query the security info used to build a grid order — name, latest price, board lot sizes,
+        price-step (bid-size) rules, and channel / authorization info (whether the strategy consent
+        was granted, RTH support, and supported currencies).
+      x-description-zh: 查询用于构建网格订单的证券信息——名称、最新价、每手股数、价位（报价步长）规则，以及渠道/授权信息（是否已完成策略确认、是否支持盘前盘后、支持的币种）。
+      tags:
+        - Grid Trading
+      parameters:
+        - name: counter_id
+          in: query
+          required: true
+          description: 'Security symbol in `ticker.region` format (e.g. `700.HK`).'
+          schema:
+            type: string
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge grid info 700.HK
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  name: 腾讯控股
+                  last_done: '300'
+                  lot_size: '100'
+                  buy_lot_size: '100'
+                  sell_lot_size: '100'
+                  bid_sizes:
+                    - str_proceed: '0'
+                      end_proceed: '500'
+                      bid_size: '0.2'
+                  channel_info:
+                    strategy_granted: true
+                    support_rth: true
+                    currency: HKD
+                    settlement_currency:
+                      - HKD
+                      - USD
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   securitySchemes:
     oauth2:
@@ -2681,6 +3355,105 @@ components:
           scopes:
             openapi: Full OpenAPI access
   schemas:
+    GridTradeRule:
+      type: object
+      description: |
+        Grid trading rule — the parameters that define a grid strategy. Prices and quantities are
+        decimals transmitted as strings. The gateway validates the minimum required set (base /
+        upper / lower price, a trigger spec, quantities, and time in force).
+      properties:
+        submitted_base_price:
+          type: string
+          description: Base price the grid is anchored to.
+        upper_limit_price:
+          type: string
+          description: Upper price bound.
+        lower_limit_price:
+          type: string
+          description: Lower price bound.
+        trigger_price_type:
+          type: integer
+          description: 'How trigger thresholds are interpreted: `1` = spread (absolute), `2` = percent.'
+          enum:
+            - 1
+            - 2
+        trigger_spread_up:
+          type: string
+          nullable: true
+          description: Upward trigger spread (absolute), when `trigger_price_type` is `1`.
+        trigger_spread_down:
+          type: string
+          nullable: true
+          description: Downward trigger spread (absolute), when `trigger_price_type` is `1`.
+        trigger_percent_up:
+          type: string
+          nullable: true
+          description: Upward trigger percent, when `trigger_price_type` is `2`.
+        trigger_percent_down:
+          type: string
+          nullable: true
+          description: Downward trigger percent, when `trigger_price_type` is `2`.
+        multiple_trigger:
+          type: boolean
+          nullable: true
+          description: Whether a single grid level may trigger multiple times.
+        time_in_force:
+          type: integer
+          description: 'Time in force: `0` = Day, `1` = GTC (Good-Til-Canceled), `6` = GTD (Good-Til-Date).'
+          enum:
+            - 0
+            - 1
+            - 6
+        upper_limit_quantity:
+          type: string
+          description: Quantity handled when the upper bound is reached.
+        lower_limit_quantity:
+          type: string
+          description: Quantity handled when the lower bound is reached.
+        expire_time:
+          type: integer
+          format: int64
+          nullable: true
+          description: Expiry time (Unix timestamp, in seconds). Used with a GTD time in force.
+        upper_limit_event:
+          type: integer
+          description: 'Action when the upper bound is reached: `1` = ignore (keep running), `2` = close position at last price.'
+          enum:
+            - 1
+            - 2
+        lower_limit_event:
+          type: integer
+          description: 'Action when the lower bound is reached: `1` = ignore (keep running), `2` = close position at last price.'
+          enum:
+            - 1
+            - 2
+        trigger_sell_depth:
+          type: integer
+          nullable: true
+          description: 'Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up` instead of a depth level.'
+        trigger_buy_depth:
+          type: integer
+          nullable: true
+          description: 'Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down` instead of a depth level.'
+        trigger_quantity:
+          type: string
+          description: Quantity per trigger.
+        support_shortsell:
+          type: boolean
+          nullable: true
+          description: Whether short selling is allowed.
+        rth:
+          type: integer
+          nullable: true
+          description: 'Regular-trading-hours flag (`0` / `1` / `2`).'
+        grid_order_type_up:
+          type: string
+          nullable: true
+          description: 'Sell-side order type when `trigger_sell_depth` is `0`. One of `GMO`, `GLO`, `GTG`.'
+        grid_order_type_down:
+          type: string
+          nullable: true
+          description: 'Buy-side order type when `trigger_buy_depth` is `0`. One of `GMO`, `GLO`, `GTG`.'
     Error:
       type: object
       properties:

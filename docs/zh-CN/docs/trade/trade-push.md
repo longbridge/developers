@@ -131,3 +131,29 @@ message Notification {
   bytes data = 4;
 }
 ```
+
+## 网格订单推送
+
+网格主订单的变更与普通订单变更走**同一个 `private` 主题**。订阅 private 主题后，当网格主订单发生变更（创建、挂起、重启、触发、撤销等）时，交易网关会推送 `gridtrading_order` 事件。设置网格订单变更回调即可接收。
+
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="set_on_grid_order_changed" java="setOnGridOrderChange" hideGo />
+
+事件包含以下字段：
+
+| 名称 | 类型 | 说明 |
+| ---- | ---- | ---- |
+| order_id | string | 网格主订单 ID |
+| status | string | 订单状态 |
+| symbol | string | 标的代码（如 `700.HK`） |
+| suspend_reason | string | 挂起原因（如有） |
+| submitted_base_price | string | 提交时的基准价 |
+| current_base_price | string | 当前基准价 |
+| upper_limit_price | string | 价格上限 |
+| lower_limit_price | string | 价格下限 |
+| trigger_price_type | int32 | `1` = 价差，`2` = 百分比 |
+| trigger_quantity | string | 每次触发数量 |
+| settlement_currency | string | 结算币种 |
+| time_in_force | int32 | `0` = 当日，`1` = GTC，`6` = GTD |
+| rth | int32 | 盘中交易时段标记 |
+| grid_order_type_up | string | 深度为 0 时的卖出订单类型 |
+| grid_order_type_down | string | 深度为 0 时的买入订单类型 |

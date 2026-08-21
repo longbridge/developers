@@ -17,8 +17,11 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
+- **Grid trading is now available** — automate a buy-low / sell-high grid strategy on Hong Kong and US stocks through the API, SDK, CLI, and MCP: submit a grid, modify its rule, suspend / restart / cancel it, and review its trigger history. See the [Grid Trading](/docs/trade/grid/overview) docs
+
 ### SDK v4.5.0
 
+- **Grid trading APIs** — new `GridContext` (submit, replace, list, detail, trigger history, cancel, suspend, restart, questionnaire, symbol info) in Python, Node.js, Java, and C/C++, plus the `GridOrderChanged` push event on the trade channel
 - **New `AgentContext.public_agents`** — list every publicly shared AI agent on the platform (the Explore catalog), across all languages; takes the same optional `page` / `limit` / `name` params as `agents`
 - **AI Agent conversations gain `parent_message_id`** — attach a follow-up after a specific message to keep the stream in order (only valid together with `chat_uid`)
 - **Richer AI Agent responses** — `further_questions` suggestions, full `Reference` payloads (source type / id / nested content, previously dropped), `chat_id` + error fields on `ChatStartedPayload`, and `interactions` (`HumanInteraction`) on interrupts
@@ -30,6 +33,10 @@ sidebar_icon: newspaper
 
 - **[Use Longbridge AI over ACP](/docs/cli/acp)** — The new `longbridge acp` command makes [Longbridge AI](https://longbridge.com/ai) available in compatible client applications for live market data, company analysis, and account position insights
 - **New `agent` commands** — discover and chat with agents on Longbridge AI from the terminal: `agent workspaces`, `agent list`, streaming `agent chat`, `agent continue`, and `agent --skill`
+
+### MCP
+
+- **11 grid trading tools added** — the full grid endpoint set (submit, replace, list, query-by-IDs, detail, trigger history, cancel, suspend, restart, questionnaire, symbol info) is now available through Longbridge MCP
 
 ## 2026-07-20
 
