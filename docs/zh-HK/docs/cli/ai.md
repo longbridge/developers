@@ -7,7 +7,7 @@ sidebar_icon: sparkles
 
 # longbridge ai
 
-`longbridge ai` 在終端裏打開一個全屏的 [Longbridge AI](https://longbridge.com/ai) 對話界面。
+`longbridge ai` 在終端裏打開一個全屏的 [LongbridgeAI](https://longbridge.com/ai) 對話界面。
 可以問行情、報價、財報，也可以問自己的持倉；回答實時流式返回，並以 Markdown 渲染，圖表、表格和
 實時行情卡片都直接畫在終端裏。
 
@@ -49,7 +49,7 @@ longbridge auth login
 每股淨資產。用 `←`/`→`（或 `[<]` / `[>]` 按鈕）在對話涉及的標的之間切換，**More ↗** 在
 longbridge.com 上打開該標的。
 
-![Longbridge AI 的回答，含表格與行情卡片](https://assets.lbkrs.com/uploads/c2835f7b-b1f3-4231-8db1-12e569a5e02f/screenshot-2026-08-19_13-30-02.png)
+![LongbridgeAI 的回答，含表格與行情卡片](https://assets.lbkrs.com/uploads/c2835f7b-b1f3-4231-8db1-12e569a5e02f/screenshot-2026-08-19_13-30-02.png)
 
 ## 提問
 
@@ -72,7 +72,7 @@ TQQQ 今年表現如何？
 
 ### 智能體反過來問你
 
-有些任務需要你先確認才能繼續。Longbridge AI 會在對話中出現三類交互：
+有些任務需要你先確認才能繼續。LongbridgeAI 會在對話中出現三類交互：
 
 - **帶選項的提問** —— 點擊選項作答；`X` 跳過；`Esc` 改為手動輸入答案。
 - **多選提問** —— 勾選多個選項後點擊**確認選擇**。
@@ -93,7 +93,7 @@ TQQQ 今年表現如何？
 | `/quote [SYMBOL]`                    | 查看實時行情 —— 指定標的，或最近提到的標的 |
 | `/resume`                            | 打開歷史對話並繼續                         |
 | `/settings`                          | 打開設定                                   |
-| `/agent <agent-id>` · `/agent reset` | 切換智能體，或切回 Longbridge AI           |
+| `/agent <agent-id>` · `/agent reset` | 切換智能體，或切回 LongbridgeAI           |
 | `/login`                             | 登入 Longbridge                            |
 | `/logout`                            | 登出                                       |
 | `/help`                              | 查看命令與快捷鍵說明                       |
@@ -138,7 +138,7 @@ TQQQ 今年表現如何？
 ## 對話歷史
 
 對話保存在你的 Longbridge 賬戶上，而不只是本機，因此在終端裏開始的對話，與你在其他地方使用
-Longbridge AI 看到的是同一批。標題由服務端在對話成形後自動生成。
+LongbridgeAI 看到的是同一批。標題由服務端在對話成形後自動生成。
 
 `/resume`（或 `Ctrl+R`）打開列表：帶編號的條目顯示標題和「智能體 · 時間」，輸入即搜尋，可逐條刪除，
 並提供**新建對話**入口。`Enter` 或點擊即可繼續該對話；`Esc` 先清空搜尋，再按則返回。
@@ -172,7 +172,7 @@ Longbridge AI 看到的是同一批。標題由服務端在對話成形後自動
 
 ## 選擇智能體
 
-默認對話對象是 Longbridge AI 助手。如果要使用工作空間裏的其他智能體：
+默認對話對象是 LongbridgeAI 助手。如果要使用工作空間裏的其他智能體：
 
 ```bash
 # 查看賬戶可用的智能體
@@ -182,19 +182,19 @@ longbridge agent list
 longbridge ai --agent <AGENT_UID>
 ```
 
-在對話中，`/agent <agent-id>` 切換智能體（會同時開始一段新對話），`/agent reset` 切回 Longbridge AI。
+在對話中，`/agent <agent-id>` 切換智能體（會同時開始一段新對話），`/agent reset` 切回 LongbridgeAI。
 
 ## 參數
 
 | 參數              | 說明                                                                       |
 | ----------------- | -------------------------------------------------------------------------- |
-| `--agent <AGENT>` | 對話使用的智能體 UID，默認使用 Longbridge AI 助手                          |
+| `--agent <AGENT>` | 對話使用的智能體 UID，默認使用 LongbridgeAI 助手                          |
 | `--lang <LANG>`   | 從 longbridge.com 獲取內容時使用的語言（`zh-CN` 或 `en`），默認跟隨 `LANG` |
 | `-v`, `--verbose` | 將請求信息（主機、耗時）輸出到 stderr                                      |
 
 ## 相關內容
 
-- [`longbridge acp`](/zh-HK/docs/cli/acp) —— 把 Longbridge AI 作為 ACP 智能體接入其他客戶端，
+- [`longbridge acp`](/zh-HK/docs/cli/acp) —— 把 LongbridgeAI 作為 ACP 智能體接入其他客戶端，
   而不是在終端裏對話。
 - [`longbridge tui`](/zh-HK/docs/cli/tui) —— 全屏的行情與持倉終端界面。
 - [Longbridge MCP](/zh-HK/docs/mcp) —— 把 Longbridge 數據作為工具提供給你自己的 AI 應用。

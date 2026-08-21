@@ -29,7 +29,7 @@ longbridge portfolio
 # JSON 输出（适用于脚本或 AI Agent）
 longbridge quote AAPL.US --format json
 
-# 打开全屏界面与 Longbridge AI 对话
+# 打开全屏界面与 LongbridgeAI 对话
 longbridge ai
 ```
 
