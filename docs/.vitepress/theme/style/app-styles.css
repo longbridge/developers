@@ -498,13 +498,13 @@ body {
   font-weight: 600;
 }
 
-/* Footer v2 — 5 columns */
+/* Footer v2 — 6 columns */
 .app-footer-inner-v2 {
   max-width: var(--app-max);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.6fr repeat(4, 1fr);
-  gap: 48px;
+  grid-template-columns: 1.6fr repeat(5, 1fr);
+  gap: 40px;
 }
 @media (max-width: 1024px) {
   .app-footer-inner-v2 {
