@@ -10,7 +10,7 @@ sidebar_icon: newspaper
 
 ### CLI v0.28.0
 
-- **[Longbridge AI comes to the terminal](/docs/cli/ai)** — the new `longbridge ai` command opens a full-screen chat with [Longbridge AI](https://longbridge.com/ai): answers stream in as Markdown with terminal-drawn charts, tables and live quote cards, and conversations live on your account, so a chat started in the terminal continues wherever else you use Longbridge AI
+- **[LongbridgeAI comes to the terminal](/docs/cli/ai)** — the new `longbridge ai` command opens a full-screen chat with [LongbridgeAI](https://longbridge.com/ai): answers stream in as Markdown with terminal-drawn charts, tables and live quote cards, and conversations live on your account, so a chat started in the terminal continues wherever else you use LongbridgeAI
 - **[Build on top of the CLI](/docs/cli/serve)** — `longbridge serve` keeps one authenticated process alive and speaks JSON-RPC 2.0 over stdin/stdout, with the full quote and trade surface, REST passthrough, and live quote / depth / broker / trade pushes — so desktop widgets, bar plugins and dashboards no longer spawn a process per poll
 - **Grid trading from the command line** — the new `grid` command group submits, replaces, inspects, suspends and cancels grid strategies, and shows their trigger history
 - **A reworked terminal UI** — `longbridge tui` gains pill tabs with clickable, never-overflowing shortcut hints, detail panels on Portfolio and Orders, a roomier stock screen, and intraday charts that fill solid instead of stippled
@@ -31,8 +31,8 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
-- **[Use Longbridge AI over ACP](/docs/cli/acp)** — The new `longbridge acp` command makes [Longbridge AI](https://longbridge.com/ai) available in compatible client applications for live market data, company analysis, and account position insights
-- **New `agent` commands** — discover and chat with agents on Longbridge AI from the terminal: `agent workspaces`, `agent list`, streaming `agent chat`, `agent continue`, and `agent --skill`
+- **[Use LongbridgeAI over ACP](/docs/cli/acp)** — The new `longbridge acp` command makes [LongbridgeAI](https://longbridge.com/ai) available in compatible client applications for live market data, company analysis, and account position insights
+- **New `agent` commands** — discover and chat with agents on LongbridgeAI from the terminal: `agent workspaces`, `agent list`, streaming `agent chat`, `agent continue`, and `agent --skill`
 
 ### MCP
 

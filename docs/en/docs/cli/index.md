@@ -31,7 +31,7 @@ longbridge portfolio
 # Get JSON output for scripting or AI agents
 longbridge quote AAPL.US --format json
 
-# Chat with Longbridge AI in a full-screen TUI
+# Chat with LongbridgeAI in a full-screen TUI
 longbridge ai
 ```
 
