@@ -7,11 +7,17 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.28.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.28.0)
+
+- **[在终端里与 Longbridge AI 对话](/zh-CN/docs/cli/ai)** — 新增 `longbridge ai` 命令，打开全屏对话界面：回答实时流式返回，以 Markdown 渲染，图表、表格、语法高亮代码和实时行情卡片都直接画在终端里。标题栏行情条跟随对话提到的每一只标的（点击即展开完整行情卡片），斜杠命令覆盖 `/new` `/retry` `/copy` `/export` `/quote` `/resume` `/settings` `/agent` `/login`；对话保存在你的账户上，在终端开始的对话可以在其他使用 Longbridge AI 的地方继续
+- **[新增 `serve` 命令 —— 把 Longbridge API 嵌入你自己的应用](/zh-CN/docs/cli/serve)** — `longbridge serve` 保持一个已认证的进程常驻，通过 stdin/stdout 提供 JSON-RPC 2.0：全部 `quote.*` 与 `trade.*` 方法、可直达任意 REST 端点的 `api.get` / `api.post`，以及 `quote.subscribe` 的行情 / 盘口 / 经纪队列 / 逐笔实时推送。桌面挂件、状态栏插件和仪表盘不必在每次轮询时重做区域探测、令牌加载和 WebSocket 连接，也能收到两次轮询之间的每一笔跳动。返回结构为 OpenAPI 原始字段，而非 CLI `--format json` 的展示结构
+- **新增 `grid` 命令组 —— 网格交易** — `longbridge grid` 列出网格订单（`--ids`、`--symbol`、`--status`），另有 `submit`、`replace`、`detail`、`triggers`、`cancel`、`suspend`、`restart`、`info` 和 `questionnaire`。`submit` / `replace` 共用一套网格规则参数：价格区间与基准价、`--trigger-type percent|spread` 配合 `--trigger-up` / `--trigger-down`、上下方各自的数量与订单类型、有效期，以及价格越界后的处理方式 —— 并可用 `--dry-run` 只校验并打印规则而不实际提交
+- **TUI 界面重做** — 主标签改为胶囊样式，快捷键提示不再溢出：按标签占用后的剩余空间排布，空间不足时优先舍弃次要项，且提示本身可点击（设置与帮助始终保留）。持仓与订单页新增右侧详情面板，随选中行联动；个股页去掉行情 / 新闻标签条，文章区因此可以换行、滚动并跳转到 longbridge.com，空间够时新闻列表与行情面板并排停靠。点击快捷键提示现在会执行它对应的操作，底部指数行情的点击区域也跟随文字而非固定三等分。设置弹窗改为真正的两列网格，选项可点击、`←`/`→` 可双向切换取值，快捷键也从在部分平台冲突的 `Ctrl+,` 改为 `,`
+- **修复：分时图渲染成点阵纹理** — 面积填充改用与线条同色的块状阴影字符、成交量改为实心柱，不再使用只能设置前景色的盲文字符。背后的两个问题一并修复：ANSI 解析器只读取 SGR 转义序列的第一个参数，导致任何设置多个属性的序列被整体丢弃；图表信息栏硬编码红绿色而没有跟随涨跌颜色设置，其中一处在默认模式下颜色还是反的
+- **`news detail` 返回结构化数据** — 文章改为从 Longbridge 自有的内容服务读取，不再从网页抓取；标题、发布时间、作者、相关标的都是独立字段，与 Markdown 正文一并返回，`--format json` 输出完整内容
+
 ### [v0.27.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.27.0)
 
-- **新增网格交易 `grid` 命令组** — `grid submit` 启动网格策略（基准价 / 上限价 / 下限价、按百分比或价差触发、每次触发与边界数量、`GMO` / `GLO` / `GTG` 订单类型；`--dry-run` 只校验不提交）；`grid` 列出网格，`grid --ids` 按 ID 查询指定网格
-- **查看与管理运行中的网格** — `grid detail` 与 `grid triggers` 展示规则、子订单与触发历史；`grid replace`、`grid suspend`、`grid restart`、`grid cancel` 修改或停止网格
-- **网格准备辅助命令** — `grid info` 查看标的的网格信息（每手股数、最新价、授权状态、币种），`grid questionnaire` 记录网格交易前所需的一次性策略风险揭示确认
 - **[通过 ACP 使用 Longbridge AI](/zh-CN/docs/cli/acp)** — 新增 `longbridge acp` 命令，将 [Longbridge AI](https://longbridge.com/ai) 作为兼容 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）的 Agent 运行。现在可以在支持 ACP 的客户端应用中查询实时行情、分析公司基本面和解读账户持仓；配置方法请参阅 ACP 使用指南
 - **新增 Longbridge AI `agent` 命令** — `agent workspaces` 列出 AI 工作区；`agent list` 发现可对话的 Agent（`--workspace`、`--name`；`--all` 含工作流 Agent）；`agent chat chatbot "…"` 通过 SSE 进行对话（`--stream` 实时输出——公开的 `chatbot` Agent 任何账户可用），多轮追问用 `agent chat chatbot <CHAT_UID> <MSG_ID> "…"`；`agent continue chatbot <CHAT_UID> <MSG_ID>` 恢复被中断的运行（`--answer` / `--answers-json`）；`agent --skill` 输出面向 AI harness 的 agent skill 文档
 
