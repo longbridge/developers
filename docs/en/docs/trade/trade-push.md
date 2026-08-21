@@ -127,3 +127,29 @@ message Notification {
   bytes data = 4;
 }
 ```
+
+## Grid Order Changes
+
+Grid trading master-order changes are delivered on the **same `private` topic** as regular order changes. After you `subscribe` to the private topic, the trade gateway pushes a `gridtrading_order` event whenever a grid master order changes (created, suspended, restarted, triggered, or canceled). Set the grid order changed callback to receive them.
+
+<SDKLinks :title="false" module="trade" klass="TradeContext" method="set_on_grid_order_changed" java="setOnGridOrderChange" hideGo />
+
+The event carries the following fields:
+
+| Name | Type | Description |
+| ---- | ---- | ---- |
+| order_id | string | Grid master order ID |
+| status | string | Order status |
+| symbol | string | Security symbol (e.g. `700.HK`) |
+| suspend_reason | string | Suspend reason, if any |
+| submitted_base_price | string | Submitted base price |
+| current_base_price | string | Current base price |
+| upper_limit_price | string | Upper price bound |
+| lower_limit_price | string | Lower price bound |
+| trigger_price_type | int32 | `1` = spread, `2` = percent |
+| trigger_quantity | string | Quantity per trigger |
+| settlement_currency | string | Settlement currency |
+| time_in_force | int32 | `0` = Day, `1` = GTC, `6` = GTD |
+| rth | int32 | Regular-trading-hours flag |
+| grid_order_type_up | string | Sell-side order type when depth is 0 |
+| grid_order_type_down | string | Buy-side order type when depth is 0 |

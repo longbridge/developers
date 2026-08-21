@@ -8,8 +8,11 @@ sidebar_icon: newspaper
 
 ## 2026-08-14
 
+- **网格交易正式上线** — 可通过 API、SDK、CLI、MCP 在港股与美股上自动运行低买高卖的网格策略：提交网格、修改规则、暂停 / 重启 / 取消，并查看触发历史。详见 [网格交易](/zh-CN/docs/trade/grid/overview) 文档
+
 ### SDK v4.5.0
 
+- **网格交易 API** — 新增 `GridContext`（submit、replace、list、detail、触发历史、cancel、suspend、restart、questionnaire、symbol info），覆盖 Python、Node.js、Java 与 C/C++，并在交易通道新增 `GridOrderChanged` 推送事件
 - **新增 `AgentContext.public_agents`** — 列出平台上所有公开分享的 AI Agent（Explore 目录），全语言支持；参数与 `agents` 一致（可选 `page` / `limit` / `name`）
 - **AI Agent 对话新增 `parent_message_id`** — 在指定消息后追加追问，保持消息流顺序（仅可与 `chat_uid` 配合使用）
 - **AI Agent 响应字段完善** — `further_questions` 追问建议、完整的 `Reference`（来源类型 / id / 嵌套内容，此前会丢失）、`ChatStartedPayload` 的 `chat_id` 与错误字段、中断的 `interactions`（`HumanInteraction`）
@@ -19,8 +22,13 @@ sidebar_icon: newspaper
 
 ### CLI v0.27.0
 
+- **新增 `grid` 命令组** — 提交与管理网格策略订单：`grid submit` / `detail` / `triggers` / `replace` / `suspend` / `restart` / `cancel` / `info` / `questionnaire`
 - **[通过 ACP 使用 Longbridge AI](/zh-CN/docs/cli/acp)** — 新增 `longbridge acp` 命令，现在可以在支持 ACP 的客户端应用中使用 [Longbridge AI](https://longbridge.com/ai) 查询实时行情、分析公司基本面和解读账户持仓
 - **新增 `agent` 命令** — 在终端发现并与 Longbridge AI 对话：`agent workspaces`、`agent list`、流式 `agent chat`、`agent continue` 与 `agent --skill`
+
+### MCP
+
+- **新增 11 个网格交易工具** — 网格全套接口（提交、修改、列表、按 ID 查询、详情、触发历史、取消、挂起、重启、策略问卷、标的信息）现已在 Longbridge MCP 提供
 
 ## 2026-07-20
 
