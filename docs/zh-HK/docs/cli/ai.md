@@ -18,6 +18,10 @@ sidebar_icon: sparkles
 longbridge ai
 ```
 
+<a href="https://asciinema.org/a/1263615" target="_blank">
+  <img src="https://asciinema.org/a/1263615.svg" alt="longbridge ai 演示" />
+</a>
+
 ![longbridge ai 歡迎界面](https://assets.lbkrs.com/uploads/f032a1a4-117a-4baf-bd35-dfe68e8d40e3/screenshot-2026-08-19_13-29-38.png)
 
 ## 開始之前

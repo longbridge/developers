@@ -18,6 +18,10 @@ no model configuration, and nothing to install beyond the CLI itself.
 longbridge ai
 ```
 
+<a href="https://asciinema.org/a/1263615" target="_blank">
+  <img src="https://asciinema.org/a/1263615.svg" alt="longbridge ai demo" />
+</a>
+
 ![longbridge ai welcome screen](https://assets.lbkrs.com/uploads/f032a1a4-117a-4baf-bd35-dfe68e8d40e3/screenshot-2026-08-19_13-29-38.png)
 
 ## Before you start
