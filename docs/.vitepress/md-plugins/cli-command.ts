@@ -196,9 +196,18 @@ function generateCliBlock(content: string, installTitle: string, installUrl: str
   )
 }
 
+// Matches a complete <CliCommand>...</CliCommand> block. A bare `<CliCommand>`
+// mention (e.g. inside inline code in the style guide) must not be treated as one.
+const CLI_COMMAND_RE = /<CliCommand>([\s\S]*?)<\/CliCommand>/g
+
+function hasCliCommand(src: string): boolean {
+  CLI_COMMAND_RE.lastIndex = 0
+  return CLI_COMMAND_RE.test(src)
+}
+
 function replaceCliCommand(src: string, installTitle: string, installUrl: string, usageTitle: string, localeIndex: string): string {
   return src.replace(
-    /<CliCommand>([\s\S]*?)<\/CliCommand>/g,
+    CLI_COMMAND_RE,
     (_, content: string) => {
       const trimmed = content.trim()
       const cmd = extractFirstCommand(trimmed)
@@ -220,7 +229,7 @@ export function CliCommandPlugin(md: MarkdownIt) {
       const token = state.tokens[i]
 
       // Case 1: already an html_block (e.g. multiline <CliCommand>)
-      if (token.type === 'html_block' && token.content.includes('<CliCommand>')) {
+      if (token.type === 'html_block' && hasCliCommand(token.content)) {
         token.content = replaceCliCommand(token.content, installTitle, installUrl, usageTitle, localeIndex)
         i++
         continue
@@ -230,7 +239,7 @@ export function CliCommandPlugin(md: MarkdownIt) {
       if (
         token.type === 'paragraph_open' &&
         state.tokens[i + 1]?.type === 'inline' &&
-        state.tokens[i + 1].content.includes('<CliCommand>') &&
+        hasCliCommand(state.tokens[i + 1].content) &&
         state.tokens[i + 2]?.type === 'paragraph_close'
       ) {
         const replaced = replaceCliCommand(state.tokens[i + 1].content, installTitle, installUrl, usageTitle, localeIndex)
