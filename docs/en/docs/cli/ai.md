@@ -18,11 +18,11 @@ no model configuration, and nothing to install beyond the CLI itself.
 longbridge ai
 ```
 
-<a href="https://asciinema.org/a/1263615" target="_blank">
-  <img src="https://asciinema.org/a/1263615.svg" alt="longbridge ai demo" />
-</a>
+## Demo
 
-![longbridge ai welcome screen](https://assets.lbkrs.com/uploads/f032a1a4-117a-4baf-bd35-dfe68e8d40e3/screenshot-2026-08-19_13-29-38.png)
+<a href="https://asciinema.org/a/1263615" target="_blank">
+  <img src="https://assets.lbkrs.com/uploads/f032a1a4-117a-4baf-bd35-dfe68e8d40e3/screenshot-2026-08-19_13-29-38.png" alt="longbridge ai demo" />
+</a>
 
 ## Before you start
 
@@ -38,11 +38,11 @@ does not open).
 
 ## The screen
 
-| Area | What it shows |
-| --- | --- |
-| Title bar | The brand badge, a **Sessions** button, the conversation title, and a **ticker** of every security this chat has mentioned with its live quote |
-| Transcript | Your questions and the streamed answers, plus tool activity and references |
-| Prompt | A multi-line editor; `/` opens the command palette, which hangs off the prompt box |
+| Area       | What it shows                                                                                                                                          |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Title bar  | The brand badge, a **Sessions** button, the conversation title, and a **ticker** of every security this chat has mentioned with its live quote         |
+| Transcript | Your questions and the streamed answers, plus tool activity and references                                                                             |
+| Prompt     | A multi-line editor; `/` opens the command palette, which hangs off the prompt box                                                                     |
 | Status row | Streaming spinner while a turn runs, `▲ Scrolled up` when you have scrolled back, and one-line confirmations (`Copied to clipboard.`, `Exported to …`) |
 
 Click a security — in the ticker, or where an answer mentions it — to open its **quote card**:
@@ -92,42 +92,42 @@ Cancelling the turn drops the pending question; starting a new conversation clea
 Press `/` for the command palette — `↑`/`↓` to move, `Enter`, `Tab`, or a click to run. Typing a
 prefix filters the list.
 
-| Command | What it does |
-| --- | --- |
-| `/new` (`/clear`) | Start a new chat |
-| `/retry` (`/regenerate`) | Regenerate the last answer |
-| `/copy` | Copy the last answer to the clipboard |
-| `/export` | Export the conversation to a Markdown file |
-| `/quote [SYMBOL]` | Open a live quote — for the given symbol, or the last one mentioned |
-| `/resume` | Open saved conversations and resume one |
-| `/settings` | Open Settings |
-| `/agent <agent-id>` · `/agent reset` | Switch agent, or return to Longbridge AI |
-| `/login` | Sign in to Longbridge |
-| `/logout` | Sign out |
-| `/help` | Show the command and key reference |
-| `/exit` (`/quit`) | Exit |
+| Command                              | What it does                                                        |
+| ------------------------------------ | ------------------------------------------------------------------- |
+| `/new` (`/clear`)                    | Start a new chat                                                    |
+| `/retry` (`/regenerate`)             | Regenerate the last answer                                          |
+| `/copy`                              | Copy the last answer to the clipboard                               |
+| `/export`                            | Export the conversation to a Markdown file                          |
+| `/quote [SYMBOL]`                    | Open a live quote — for the given symbol, or the last one mentioned |
+| `/resume`                            | Open saved conversations and resume one                             |
+| `/settings`                          | Open Settings                                                       |
+| `/agent <agent-id>` · `/agent reset` | Switch agent, or return to Longbridge AI                            |
+| `/login`                             | Sign in to Longbridge                                               |
+| `/logout`                            | Sign out                                                            |
+| `/help`                              | Show the command and key reference                                  |
+| `/exit` (`/quit`)                    | Exit                                                                |
 
 A bare `exit` or `quit` typed at the prompt also leaves, as does pressing `Ctrl+C` twice.
 
 ## Keyboard shortcuts
 
-| Keys | Action |
-| --- | --- |
-| `Enter` | Send |
-| `Shift+Enter` | New line |
-| `Tab` | Complete a command |
-| `↑` `↓` · `Ctrl+P` `Ctrl+N` | Previous / next prompt (history persists across sessions) |
-| `Ctrl+Z` `Ctrl+Y` | Undo / redo the last edit |
-| `Shift+↑` `Shift+↓` · `PgUp` `PgDn` | Scroll the transcript |
-| `Ctrl+Home` `Ctrl+End` | Jump to top / latest |
-| `Alt+←` `Alt+→` | Move by word |
-| `Ctrl+A` `Ctrl+E` `Ctrl+U` `Ctrl+K` `Ctrl+W` | Move / delete within the line |
-| `Alt+1` … `Alt+9` | Send a suggested follow-up |
-| `Ctrl+F` | Search the transcript |
-| `Ctrl+R` | Open saved conversations |
-| `Esc` | Cancel the answer, or clear the input |
-| Drag · double / triple click | Select and copy (word / line) |
-| `Ctrl+C` ×2 | Quit |
+| Keys                                         | Action                                                    |
+| -------------------------------------------- | --------------------------------------------------------- |
+| `Enter`                                      | Send                                                      |
+| `Shift+Enter`                                | New line                                                  |
+| `Tab`                                        | Complete a command                                        |
+| `↑` `↓` · `Ctrl+P` `Ctrl+N`                  | Previous / next prompt (history persists across sessions) |
+| `Ctrl+Z` `Ctrl+Y`                            | Undo / redo the last edit                                 |
+| `Shift+↑` `Shift+↓` · `PgUp` `PgDn`          | Scroll the transcript                                     |
+| `Ctrl+Home` `Ctrl+End`                       | Jump to top / latest                                      |
+| `Alt+←` `Alt+→`                              | Move by word                                              |
+| `Ctrl+A` `Ctrl+E` `Ctrl+U` `Ctrl+K` `Ctrl+W` | Move / delete within the line                             |
+| `Alt+1` … `Alt+9`                            | Send a suggested follow-up                                |
+| `Ctrl+F`                                     | Search the transcript                                     |
+| `Ctrl+R`                                     | Open saved conversations                                  |
+| `Esc`                                        | Cancel the answer, or clear the input                     |
+| Drag · double / triple click                 | Select and copy (word / line)                             |
+| `Ctrl+C` ×2                                  | Quit                                                      |
 
 ## How answers are rendered
 
@@ -170,13 +170,13 @@ answer.
 `/settings` opens the settings screen. Changes apply immediately and persist in
 `~/.longbridge/terminal.json`, shared with [`longbridge tui`](/docs/cli/tui).
 
-| Setting | Description |
-| --- | --- |
-| Up/Down colors | Which color means a rising price — red up or green up |
-| Tool calls | Which of a turn's tool calls stay in the transcript: all, failures only, or off |
-| Notify when done | Ring the terminal when an answer lands and the window is not focused |
-| Ticker in the title bar | Show the securities this chat has mentioned, with their quotes |
-| Live quote cards | Draw a security an answer references as a card with its current quote |
+| Setting                 | Description                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| Up/Down colors          | Which color means a rising price — red up or green up                           |
+| Tool calls              | Which of a turn's tool calls stay in the transcript: all, failures only, or off |
+| Notify when done        | Ring the terminal when an answer lands and the window is not focused            |
+| Ticker in the title bar | Show the securities this chat has mentioned, with their quotes                  |
+| Live quote cards        | Draw a security an answer references as a card with its current quote           |
 
 Turning off live quote cards also saves two quote requests per answer.
 
@@ -200,11 +200,11 @@ Inside the chat, `/agent <agent-id>` switches agent (which starts a new conversa
 
 ## Options
 
-| Option | Description |
-| --- | --- |
-| `--agent <AGENT>` | Agent UID to converse with; defaults to the Longbridge AI assistant |
-| `--lang <LANG>` | Language for content fetched from longbridge.com (`zh-CN` or `en`); defaults to your `LANG` |
-| `-v`, `--verbose` | Print request info (host, elapsed) to stderr |
+| Option            | Description                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `--agent <AGENT>` | Agent UID to converse with; defaults to the Longbridge AI assistant                         |
+| `--lang <LANG>`   | Language for content fetched from longbridge.com (`zh-CN` or `en`); defaults to your `LANG` |
+| `-v`, `--verbose` | Print request info (host, elapsed) to stderr                                                |
 
 ## Related
 
