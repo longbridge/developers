@@ -49,6 +49,17 @@
 .docs-content {
   min-width: 0;
   max-width: 48rem;
+  /* Horizontal insets restore the article's left/right gutters: combined
+     with the grid's 2rem gap this yields ~64px between the article text and
+     the sidebar / TOC, matching legacy. */
+  padding: 0 2rem;
+}
+
+/* Breadcrumb spans the full column width and sits at the column's left edge —
+   32px to the left of the indented article body, matching legacy where the
+   breadcrumb hangs left of the h1/paragraph text. */
+.docs-content [data-lbus-component="breadcrumb"] {
+  margin: 0 -2rem 0 -2rem;
 }
 
 .docs-content article {
@@ -114,13 +125,23 @@
   position: sticky;
   top: 60px;
   align-self: start;
-  /* Vertical divider between the article and the TOC — legacy
-     `.VPDocAsideOutline .content` uses border-left 1px rgba(0,0,0,.06),
-     which is exactly --lbus-c-divider. */
-  border-left: 1px solid var(--lbus-c-divider);
-  padding: 0.25rem 0 1.5rem 1.5rem;
+  /* Drop the TOC down so "On this page" starts level with the article body,
+     not the breadcrumb — matches legacy (aside sits ~48px below the nav at
+     rest). margin-top (not padding) so it still sticks near the top on
+     scroll. */
+  margin-top: 2.75rem;
+  padding: 0 0 1.5rem;
   max-height: calc(100vh - 60px);
   overflow-y: auto;
+}
+
+/* Vertical divider between the article and the TOC, starting at "On this
+   page" — legacy `.VPDocAsideOutline .content` uses border-left 1px
+   rgba(0,0,0,.06), which is exactly --lbus-c-divider. On the inner nav so
+   the line begins at the title, not in the margin-top gap above it. */
+.docs-toc nav {
+  border-left: 1px solid var(--lbus-c-divider);
+  padding-left: 1.5rem;
 }
 
 @media (max-width: 1023px) { .docs-toc { display: none; } }
