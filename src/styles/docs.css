@@ -113,6 +113,10 @@
 
 .docs-content p { margin: 1em 0; }
 
+/* Bold text — legacy `.vp-doc strong` is 600, not the browser-default 700. */
+.docs-content strong,
+.docs-content b { font-weight: 600; }
+
 /* Links — legacy `.vp-doc a`: body-colored, underlined, medium weight
    (NOT brand-tinted). */
 .docs-content a {
