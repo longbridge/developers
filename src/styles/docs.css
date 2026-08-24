@@ -89,27 +89,41 @@
   color: rgba(255, 255, 245, 0.86);
 }
 
+/* Headings — legacy `.vp-doc`: 600 weight; h1 32 / h2 24 (no border) / h3 20;
+   larger top margins for section rhythm. */
 .docs-content h1,
 .docs-content h2,
 .docs-content h3,
 .docs-content h4 {
   color: inherit;
-  margin-top: 1.5em;
+  font-weight: 600;
   margin-bottom: 0.5em;
   line-height: 1.3;
 }
-
-.docs-content h1 { font-size: 2rem; }
-
-.docs-content h2 { font-size: 1.5rem; border-bottom: 1px solid var(--lbus-c-border); padding-bottom: 0.25em; }
-
-.docs-content h3 { font-size: 1.25rem; }
+.docs-content h1 { font-size: 2rem; margin-top: 0; }
+.docs-content h2 { font-size: 1.5rem; margin-top: 3rem; }
+.docs-content h3 { font-size: 1.25rem; margin-top: 2rem; }
+.docs-content h4 { font-size: 1rem; margin-top: 1.5rem; }
 
 .docs-content p { margin: 1em 0; }
 
-.docs-content a { color: var(--lbus-c-brand); text-decoration: none; }
+/* Links — legacy `.vp-doc a`: body-colored, underlined, medium weight
+   (NOT brand-tinted). */
+.docs-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}
+.docs-content a:hover { color: var(--lb-brand); }
 
-.docs-content a:hover { text-decoration: underline; }
+/* Chrome links inside the article (breadcrumb, prev/next) are not prose links —
+   keep their component styling instead of the underlined body-link treatment. */
+.docs-content [data-lbus-component="breadcrumb"] a,
+.docs-content [data-lbus-component="prev-next"] a {
+  text-decoration: none;
+  font-weight: inherit;
+}
 
 /* ── Code blocks ─────────────────────────────────────────────────────────
    Shiki emits `pre.astro-code` with an inline background (github-light = white,
@@ -174,14 +188,34 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
   background: var(--lb-bg-2);
 }
 
+/* Lists — Tailwind Preflight strips list markers; legacy `.vp-doc` keeps
+   disc/decimal at 20px indent. */
 .docs-content ul,
-.docs-content ol { padding-left: 1.5em; margin: 1em 0; }
+.docs-content ol { padding-left: 20px; margin: 16px 0; }
+.docs-content ul { list-style: disc; }
+.docs-content ol { list-style: decimal; }
+.docs-content li { margin: 4px 0; }
+.docs-content li > ul,
+.docs-content li > ol { margin: 4px 0; }
 
+/* Blockquote — legacy: subtle 2px divider bar, muted italic text. */
 .docs-content blockquote {
-  border-left: 3px solid var(--lbus-c-brand);
-  padding-left: 1em;
-  color: var(--lbus-c-text-muted);
-  margin: 1em 0;
+  border-left: 2px solid var(--lbus-c-divider);
+  padding-left: 16px;
+  color: var(--lb-fg-2);
+  font-style: italic;
+  margin: 16px 0;
+}
+
+/* Horizontal rule + images. */
+.docs-content hr {
+  border: none;
+  border-top: 1px solid var(--lbus-c-divider);
+  margin: 24px 0;
+}
+.docs-content img {
+  max-width: 100%;
+  height: auto;
 }
 
 .docs-toc {
