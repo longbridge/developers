@@ -7,6 +7,10 @@
 @source "../../packages/ui/src/**/*.{tsx,ts}";
 @source "../../docs/**/*.{mdx,md}";
 
+/* Inter (variable) — self-hosted via @fontsource, matching legacy which
+   bundles Inter woff2 for its `.vp-doc` content font. */
+@import "@fontsource-variable/inter";
+
 @import "./tokens.css";
 @import "./shiki.css";
 

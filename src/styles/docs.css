@@ -82,7 +82,13 @@
    darker. Scope the softer tone to the doc content; headings and table cells
    inherit it. Site chrome (nav/sidebar) keeps the --lb-* tokens. */
 .docs-content {
-  line-height: 1.7;
+  /* Legacy `.vp-doc` renders its content in Inter (self-hosted) at 15px /
+     ~1.75 line-height — a different face from the SF Pro Display used by the
+     site chrome. Match it here (headings inherit Inter too; code/table keep
+     their own font/size). */
+  font-family: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
   color: #3c3c43;
 }
 [data-mode="dark"] .docs-content {

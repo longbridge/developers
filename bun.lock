@@ -8,6 +8,7 @@
         "@astrojs/mdx": "^7.0.5",
         "@astrojs/react": "^6.0.2",
         "@astrojs/sitemap": "^3.7.3",
+        "@fontsource-variable/inter": "^5.3.0",
         "@inspira-ui/plugins": "^0.0.2",
         "@longbridge/openapi-api-reference": "workspace:*",
         "@longbridge/openapi-tryit": "workspace:*",
@@ -303,6 +304,8 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.28.2", "https://git.5th.im/api/v4/packages/npm/@esbuild/win32-ia32/-/win32-ia32-0.28.2.tgz", { "os": "win32", "cpu": "ia32" }, "sha512-YmJbfTlvU7Sdn9BB+4PRES4oB6pxgS37MAONj+hBr/cpXS1aBPKXxNnDbu+QCWPj0o9dgyxeq79g6c5P8KeuYA=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.28.2", "https://git.5th.im/api/v4/packages/npm/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz", { "os": "win32", "cpu": "x64" }, "sha512-5ebpxr3nWMzrL/rnUI755Jkuee0bHL/Gq0WTF9lvcpv73wAp5eu8MfBUgWK9bhWvZjj7yX8etf/8tI8Ney695g=="],
+
+    "@fontsource-variable/inter": ["@fontsource-variable/inter@5.3.0", "", {}, "sha512-OupL48va4JNofb97w6NYeF9S7W/kHNKM0Er8Dem5nqi4jeOLrVJDoE8tZEpnMJmtkvNbB1EIPPwHcdkF6b1oUA=="],
 
     "@iconify/tools": ["@iconify/tools@4.2.0", "https://git.5th.im/api/v4/packages/npm/@iconify/tools/-/tools-4.2.0.tgz", { "dependencies": { "@iconify/types": "^2.0.0", "@iconify/utils": "^2.3.0", "cheerio": "^1.1.2", "domhandler": "^5.0.3", "extract-zip": "^2.0.1", "local-pkg": "^1.1.2", "pathe": "^2.0.3", "svgo": "^3.3.2", "tar": "^7.5.2" } }, "sha512-WRxPva/ipxYkqZd1+CkEAQmd86dQmrwH0vwK89gmp2Kh2WyyVw57XbPng0NehP3x4V1LzLsXUneP1uMfTMZmUA=="],
 
@@ -1304,7 +1307,7 @@
 
     "minipass": ["minipass@7.1.2", "https://registry.yarnpkg.com/minipass/-/minipass-7.1.2.tgz", {}, "sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw=="],
 
-    "minisearch": ["minisearch@7.2.0", "", {}, "sha512-dqT2XBYUOZOiC5t2HRnwADjhNS2cecp9u+TJRiJ1Qp/f5qjkeT5APcGPjHw+bz89Ms8Jp+cG4AlE+QZ/QnDglg=="],
+    "minisearch": ["minisearch@7.2.0", "https://git.5th.im/api/v4/packages/npm/minisearch/-/minisearch-7.2.0.tgz", {}, "sha512-dqT2XBYUOZOiC5t2HRnwADjhNS2cecp9u+TJRiJ1Qp/f5qjkeT5APcGPjHw+bz89Ms8Jp+cG4AlE+QZ/QnDglg=="],
 
     "minizlib": ["minizlib@3.1.0", "https://git.5th.im/api/v4/packages/npm/minizlib/-/minizlib-3.1.0.tgz", { "dependencies": { "minipass": "^7.1.2" } }, "sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw=="],
 
