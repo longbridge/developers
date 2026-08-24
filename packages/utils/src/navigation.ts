@@ -89,7 +89,12 @@ function processDir(absDir: string, locale: Locale, relFromDocs: string): Sideba
   return node
 }
 
-function buildItems(absDir: string, locale: Locale, relFromDocs: string): SidebarNode[] {
+function buildItems(
+  absDir: string,
+  locale: Locale,
+  relFromDocs: string,
+  includeIndex = false,
+): SidebarNode[] {
   let entries: fs.Dirent[]
   try {
     entries = fs.readdirSync(absDir, { withFileTypes: true })
@@ -109,8 +114,11 @@ function buildItems(absDir: string, locale: Locale, relFromDocs: string): Sideba
       const node = processDir(absEntry, locale, relEntry)
       if (node) nodes.push(node)
     } else if (entry.isFile() && entry.name.endsWith('.mdx')) {
-      // skip index.mdx — it becomes the directory link if needed
-      if (entry.name === 'index.mdx') continue
+      // Nested index.mdx becomes the directory link (via _category_.json), so
+      // skip it here. The ROOT index.mdx has no parent category to absorb it,
+      // so `includeIndex` (set only by buildSidebar's root call) keeps it as a
+      // top-level page — the legacy "Overview" (/docs) entry.
+      if (entry.name === 'index.mdx' && !includeIndex) continue
 
       let fileContent: string
       try {
@@ -186,7 +194,9 @@ export function buildSidebar(
   // Delegate to buildItems so top-level mdx files (e.g. cli/install.mdx,
   // cli/tui.mdx, cli/release-notes.mdx) become flat sidebar items alongside
   // the nested category groups — matching legacy vitepress genMarkdowDocs.
-  const nodes = buildItems(rootDir, loc, rootRel)
+  // includeIndex=true keeps the root index.mdx as the top-level "Overview"
+  // link (its sidebar_position -999 sorts it first).
+  const nodes = buildItems(rootDir, loc, rootRel, true)
 
   // scope='docs' must exclude the cli/ subtree — cli has its own sidebar.
   const filtered = scope === 'docs'
