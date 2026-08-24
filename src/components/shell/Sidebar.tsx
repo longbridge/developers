@@ -46,7 +46,7 @@ export default function Sidebar({ nodes, pathname = '/', open = false, onClose: 
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 w-64 bg-[var(--lbus-c-bg)] border-r border-[color:var(--lb-stroke)] transition-transform duration-200 overflow-y-auto py-6 px-4 lg:sticky lg:top-[60px] lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:z-auto lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+      className={`fixed inset-y-0 left-0 z-40 w-64 bg-[var(--lbus-c-bg)] border-r border-[color:var(--lb-stroke)] transition-transform duration-200 overflow-y-auto py-6 px-6 lg:sticky lg:top-[60px] lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:z-auto lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}
       data-lbus-component="sidebar"
       aria-label="Documentation navigation"
     >

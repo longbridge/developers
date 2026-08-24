@@ -14,6 +14,12 @@
 @media (min-width: 1024px) {
   .docs-layout {
     grid-template-columns: 16rem minmax(0, 1fr);
+    /* Left-align the sidebar column with the header's centered 1240px
+       container so the sidebar items line up under the logo. The header is
+       `max-w-[1240px] px-6 mx-auto`; this padding matches its left edge, and
+       the sidebar's own px-6 (Sidebar.tsx) then matches the logo's px-6
+       inset. The content region still extends to the right for wide text. */
+    padding-left: max(0px, calc((100vw - 1240px) / 2));
   }
 }
 
