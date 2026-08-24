@@ -98,9 +98,12 @@ function SidebarGroup({
   const [open, setOpen] = useState(active || !node.collapsed)
 
   const isTop = depth === 0
+  // Only the top-level section headers (Quote / Fundamental / …) are bold.
+  // Nested sub-section headers (Subscribe / Stocks / …) render at normal
+  // weight, matching their sibling leaf links.
   const labelCls = isTop
     ? 'flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)]'
-    : 'flex-1 min-w-0 truncate font-medium text-[color:var(--lb-fg-2)]'
+    : 'flex-1 min-w-0 truncate font-normal text-[color:var(--lb-fg-2)]'
 
   return (
     <li data-lbus-component="sidebar-group">
