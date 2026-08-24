@@ -20,6 +20,15 @@ interface Props {
 
 const { title, locale, entry, headings } = Astro.props
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
+
+// Legacy renders the page title as the article H1. When the MDX body already
+// starts with its own `#` heading (155 pages do), VitePress shows that; when
+// it doesn't (index, quote/objects, …), the frontmatter title becomes the
+// H1. Mirror that: inject the title H1 only when the body has no level-1
+// heading. (No body H1 uses the `{#id}` syntax, so the headings array — which
+// misses JSX-rewritten headings — is reliable for this check.)
+const hasBodyH1 = headings.some((h) => h.depth === 1)
+const injectedTitle = !hasBodyH1 ? entry.data.title : undefined
 const sidebar = buildSidebar(locale, resolveSidebarScope(pathname))
 const { prev, next } = getPrevNext(sidebar, pathname)
 
@@ -46,6 +55,7 @@ const crumbs: BreadcrumbItem[] =
           {!entry.data.hide_breadcrumb && (
             <Breadcrumb locale={locale} items={crumbs} />
           )}
+          {injectedTitle && <h1>{injectedTitle}</h1>}
           <slot />
           <PrevNext prev={prev} next={next} />
         </article>
