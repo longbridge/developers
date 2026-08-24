@@ -9,7 +9,11 @@ interface Props {
 }
 
 function isActiveNode(node: SidebarNode, pathname: string): boolean {
-  if (node.link) return pathname === node.link || pathname.startsWith(node.link + '/')
+  // A link is active only on its EXACT page. Prefix matching would light up
+  // ancestor-path links on every descendant — e.g. the root "Overview"
+  // (/docs) would stay highlighted on /docs/getting-started and every other
+  // /docs/* page. Group activeness is derived purely from descendants below.
+  if (node.link && pathname === node.link) return true
   if (node.items) return node.items.some((c) => isActiveNode(c, pathname))
   return false
 }
