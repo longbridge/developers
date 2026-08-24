@@ -77,16 +77,23 @@
   margin-left: -2rem;
 }
 
-.docs-content article {
+/* Body text — legacy `.vp-doc` uses --vp-c-text-1 = #3c3c43 (a soft near-black,
+   not pure black). Our --lb-fg-1 (#0A0E19) rendered the article noticeably
+   darker. Scope the softer tone to the doc content; headings and table cells
+   inherit it. Site chrome (nav/sidebar) keeps the --lb-* tokens. */
+.docs-content {
   line-height: 1.7;
-  color: var(--lbus-c-text);
+  color: #3c3c43;
+}
+[data-mode="dark"] .docs-content {
+  color: rgba(255, 255, 245, 0.86);
 }
 
 .docs-content h1,
 .docs-content h2,
 .docs-content h3,
 .docs-content h4 {
-  color: var(--lbus-c-text);
+  color: inherit;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   line-height: 1.3;
@@ -161,7 +168,7 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
   text-align: left;
 }
 .docs-content td {
-  color: var(--lb-fg-1);
+  color: inherit;
 }
 .docs-content tbody tr:nth-child(2n) {
   background: var(--lb-bg-2);
