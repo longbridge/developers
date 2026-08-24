@@ -1,4 +1,5 @@
 .docs-layout {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   max-width: 80rem;
@@ -9,6 +10,28 @@
      its own small top inset (sidebar py-6, TOC/content padding). */
   padding: 0 1rem 2rem;
   gap: 2rem;
+}
+
+/* Subtle brand-tinted wash at the top of the docs page (晕染). Absolute so it
+   stays out of the grid flow; grid children are lifted above it via z-index. */
+.docs-layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 420px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 90% 60% at 50% 0%,
+    color-mix(in srgb, var(--lb-brand) 12%, transparent) 0%,
+    transparent 72%
+  );
+}
+.docs-layout > * {
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 1024px) {
@@ -91,7 +114,11 @@
   position: sticky;
   top: 60px;
   align-self: start;
-  padding: 1.5rem 0;
+  /* Vertical divider between the article and the TOC — legacy
+     `.VPDocAsideOutline .content` uses border-left 1px rgba(0,0,0,.06),
+     which is exactly --lbus-c-divider. */
+  border-left: 1px solid var(--lbus-c-divider);
+  padding: 0.25rem 0 1.5rem 1.5rem;
   max-height: calc(100vh - 60px);
   overflow-y: auto;
 }
