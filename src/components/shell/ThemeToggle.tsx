@@ -60,8 +60,16 @@ function SunIcon() {
 // locale prop kept for API compatibility — icon toggle does not need locale labels
 export default function ThemeToggle({ locale: _locale = 'en' }: Props) {
   const [pref, setPref] = useState<Pref>('system')
+  // Gate the theme-dependent icon behind mount. The server (and React's
+  // first client render, which must byte-match the server HTML) has no
+  // access to localStorage or matchMedia — reading them during render made
+  // the icon depend on the user's OS theme and caused a hydration mismatch
+  // (server MoonIcon vs client SunIcon on a dark-preferring machine). We
+  // render a stable MoonIcon until mounted, then swap to the resolved icon.
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const stored = (localStorage.getItem('ui-mode') ?? 'system') as Pref
     setPref(stored)
     applyTheme(stored)
@@ -84,10 +92,9 @@ export default function ThemeToggle({ locale: _locale = 'en' }: Props) {
   }
 
   const isDark =
-    pref === 'dark' ||
-    (pref === 'system' &&
-      typeof window !== 'undefined' &&
-      matchMedia('(prefers-color-scheme: dark)').matches)
+    mounted &&
+    (pref === 'dark' ||
+      (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches))
 
   return (
     <button
