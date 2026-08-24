@@ -1,20 +1,29 @@
+/* Two-level docs layout, matching legacy:
+   (1) `.docs-layout` is a FULL-WIDTH grid — sidebar flush-left, content
+       region (`.docs-body`) fills the rest. It is NOT a centered 80rem block
+       (that squeezed the article to the middle with huge margins on wide
+       screens).
+   (2) inside the content region, `.docs-inner` caps the article + TOC at
+       ~1280px and centers them within the post-sidebar space (the legacy
+       `.VPDoc .container` model). */
 .docs-layout {
-  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  max-width: 80rem;
-  margin: 0 auto;
-  /* No top padding: the sidebar + content sit flush under the 60px header,
-     matching legacy (the old 2rem top left a full-width empty band between
-     the nav and the first sidebar item / breadcrumb). Each column supplies
-     its own small top inset (sidebar py-6, TOC/content padding). */
-  padding: 0 1rem 2rem;
-  gap: 2rem;
 }
 
-/* Subtle brand-tinted wash at the top of the docs page (晕染). Absolute so it
-   stays out of the grid flow; grid children are lifted above it via z-index. */
-.docs-layout::before {
+@media (min-width: 1024px) {
+  .docs-layout {
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+}
+
+/* Content region (everything right of the sidebar). The top wash (晕染) lives
+   here so it never bleeds under the sidebar/menu column. */
+.docs-body {
+  position: relative;
+  min-width: 0;
+}
+.docs-body::before {
   content: '';
   position: absolute;
   top: 0;
@@ -29,37 +38,37 @@
     transparent 72%
   );
 }
-.docs-layout > * {
+
+.docs-inner {
   position: relative;
   z-index: 1;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
 }
-
 @media (min-width: 1024px) {
-  .docs-layout {
-    grid-template-columns: 16rem minmax(0, 1fr) 14rem;
+  .docs-inner {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    gap: 4rem;
+    padding: 0 2rem 2rem;
   }
 }
 
-/* NOTE: `.docs-sidebar` positioning is now specified inline on
-   Sidebar.tsx (lg:sticky lg:top-[60px] lg:h-[calc(100vh-60px)]).
-   The old sticky ruleset here was unused because Sidebar.tsx never
-   applied `.docs-sidebar` as a className — the fixed inset-y-0 utility
-   won on cascade and covered the 60px sticky header. Removed. */
+/* NOTE: `.docs-sidebar` positioning is specified inline on Sidebar.tsx
+   (lg:sticky lg:top-[60px] lg:h-[calc(100vh-60px)]). */
 
 .docs-content {
   min-width: 0;
-  max-width: 48rem;
-  /* Horizontal insets restore the article's left/right gutters: combined
-     with the grid's 2rem gap this yields ~64px between the article text and
-     the sidebar / TOC, matching legacy. */
-  padding: 0 2rem;
+  /* Left inset for the article body; the breadcrumb is pulled back out so it
+     hangs at the column's left edge, 32px left of the body (matches legacy). */
+  padding-left: 2rem;
 }
 
-/* Breadcrumb spans the full column width and sits at the column's left edge —
-   32px to the left of the indented article body, matching legacy where the
-   breadcrumb hangs left of the h1/paragraph text. */
 .docs-content [data-lbus-component="breadcrumb"] {
-  margin: 0 -2rem 0 -2rem;
+  margin-left: -2rem;
 }
 
 .docs-content article {

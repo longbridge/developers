@@ -40,13 +40,17 @@ const crumbs: BreadcrumbItem[] =
   <LocalNav locale={locale} pathname={pathname} nodes={sidebar} client:load />
   <div class="docs-layout">
     <Sidebar nodes={sidebar} pathname={pathname} client:load />
-    <article class="docs-content">
-      {!entry.data.hide_breadcrumb && (
-        <Breadcrumb locale={locale} items={crumbs} />
-      )}
-      <slot />
-      <PrevNext prev={prev} next={next} />
-    </article>
-    <TOC headings={headings} locale={locale} client:load />
+    <div class="docs-body">
+      <div class="docs-inner">
+        <article class="docs-content">
+          {!entry.data.hide_breadcrumb && (
+            <Breadcrumb locale={locale} items={crumbs} />
+          )}
+          <slot />
+          <PrevNext prev={prev} next={next} />
+        </article>
+        <TOC headings={headings} locale={locale} client:load />
+      </div>
+    </div>
   </div>
 </BaseLayout>
