@@ -104,26 +104,67 @@
 
 .docs-content a:hover { text-decoration: underline; }
 
+/* ── Code blocks ─────────────────────────────────────────────────────────
+   Shiki emits `pre.astro-code` with an inline background (github-light = white,
+   github-dark = #24292e). Match legacy `.vp-doc`: radius 8, 20/24 padding,
+   13px mono. The light container bg overrides shiki's inline white to
+   --lb-bg-2 (≈ legacy #f6f6f7); the dark bg swap is handled in shiki.css. */
 .docs-content pre {
   overflow-x: auto;
-  background: var(--lbus-c-bg-soft);
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  border: 1px solid var(--lbus-c-border);
-  margin: 1em 0;
+  margin: 16px 0;
+  padding: 20px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.7;
 }
-
-.docs-content code {
-  background: var(--lbus-c-bg-soft);
-  padding: 0.1em 0.35em;
-  border-radius: 3px;
-  font-family: var(--lbus-font-mono);
-  font-size: 0.9em;
+html:not([data-mode="dark"]) .docs-content pre.astro-code {
+  background: var(--lb-bg-2) !important;
 }
-
 .docs-content pre code {
   background: transparent;
   padding: 0;
+  font-size: inherit;
+}
+
+/* Inline code (code not inside a pre) — legacy `.vp-doc :not(pre) > code`. */
+.docs-content :not(pre) > code {
+  background: var(--lb-bg-2);
+  color: var(--lb-fg-1);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: var(--app-mono);
+  font-size: 0.875em;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────────
+   Legacy `.vp-doc table`: block-level with horizontal scroll, collapsed 1px
+   dividers (--lbus-c-divider = rgba(0,0,0,.06)), header + even-row zebra in
+   --lb-bg-2, 8/16 cell padding, muted header text. */
+.docs-content table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  width: max-content;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+}
+.docs-content th,
+.docs-content td {
+  border: 1px solid var(--lbus-c-divider);
+  padding: 8px 16px;
+}
+.docs-content th {
+  background: var(--lb-bg-2);
+  color: var(--lb-fg-2);
+  font-weight: 600;
+  text-align: left;
+}
+.docs-content td {
+  color: var(--lb-fg-1);
+}
+.docs-content tbody tr:nth-child(2n) {
+  background: var(--lb-bg-2);
 }
 
 .docs-content ul,
