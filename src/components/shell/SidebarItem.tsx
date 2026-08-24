@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import type { SidebarNode } from '@longbridge/openapi-utils'
+import { SIDEBAR_ICONS } from './sidebar-icons'
 
 interface Props {
   node: SidebarNode
@@ -14,42 +16,109 @@ function isActiveNode(node: SidebarNode, pathname: string): boolean {
 
 export { isActiveNode }
 
+/** 16×16 lucide glyph. Color follows the parent's text color (currentColor). */
+function SidebarIcon({ name, active }: { name: string; active: boolean }) {
+  const svg = SIDEBAR_ICONS[name]
+  if (!svg) return null
+  return (
+    <span
+      className={`sidebar-item-icon inline-flex items-center shrink-0 mr-3 ${active ? 'text-[color:var(--lb-brand)]' : 'text-[color:var(--lb-fg-3)]'}`}
+      aria-hidden="true"
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  )
+}
+
+/** Chevron that points right when collapsed, rotates to point down when open.
+ *  Mirrors the legacy vitepress `.caret-icon` rotate transition. */
+function Caret({ open }: { open: boolean }) {
+  return (
+    <span className="ml-auto inline-flex items-center justify-center shrink-0 text-[color:var(--lb-fg-3)]" aria-hidden="true">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`transition-transform duration-200 ${open ? 'rotate-90' : ''}`}
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </span>
+  )
+}
+
 export default function SidebarItem({ node, depth = 0, pathname = '/' }: Props) {
   const active = isActiveNode(node, pathname)
 
+  // Leaf link
   if (!node.items?.length) {
-    // Leaf node
     return (
-      <li className="flex flex-col" data-lbus-component="sidebar-item">
+      <li data-lbus-component="sidebar-item">
         <a
           href={node.link}
-          className={active ? 'flex-1 block px-2 py-1 rounded text-sm bg-[var(--lb-bg-2)] text-[color:var(--lb-brand)] font-medium no-underline' : 'flex-1 block px-2 py-1 rounded text-sm text-[color:var(--lbus-c-text)] no-underline hover:bg-[var(--lb-bg-2)]'}
+          className={
+            active
+              ? 'flex items-center rounded-lg px-4 py-1 text-[14px] leading-6 no-underline bg-[color-mix(in_oklab,var(--lb-brand)_10%,transparent)] text-[color:var(--lb-brand)] font-medium'
+              : 'flex items-center rounded-lg px-4 py-1 text-[14px] leading-6 no-underline text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)] hover:bg-[var(--lb-bg-2)]'
+          }
           aria-current={active ? 'page' : undefined}
         >
-          {node.icon && <span className="inline-flex w-4 h-4 items-center justify-center text-[color:var(--lb-fg-2)]" aria-hidden="true" data-icon={node.icon} />}
-          <span className="flex-1 text-sm">{node.label}</span>
+          {node.icon && <SidebarIcon name={node.icon} active={active} />}
+          <span className="flex-1 min-w-0 truncate">{node.label}</span>
         </a>
       </li>
     )
   }
 
-  // Group node
-  const open = active || !node.collapsed
+  // Collapsible group (level-0 = bold section header with icon; deeper =
+  // medium sub-section header). Open state seeds from active/collapsed and is
+  // then user-toggled.
+  return <SidebarGroup node={node} depth={depth} pathname={pathname} active={active} />
+}
+
+function SidebarGroup({
+  node,
+  depth,
+  pathname,
+  active,
+}: {
+  node: SidebarNode
+  depth: number
+  pathname: string
+  active: boolean
+}) {
+  const [open, setOpen] = useState(active || !node.collapsed)
+
+  const isTop = depth === 0
+  const labelCls = isTop
+    ? 'flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)]'
+    : 'flex-1 min-w-0 truncate font-medium text-[color:var(--lb-fg-2)]'
+
   return (
-    <li className="flex flex-col" data-lbus-component="sidebar-group">
+    <li data-lbus-component="sidebar-group">
       <button
-        className="flex items-center gap-1 w-full bg-transparent border-0 cursor-pointer text-left"
-        aria-expanded={open}
         type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg px-2 py-1 text-[14px] leading-6 hover:bg-[var(--lb-bg-2)]"
       >
-        {node.icon && <span className="inline-flex w-4 h-4 items-center justify-center text-[color:var(--lb-fg-2)]" aria-hidden="true" data-icon={node.icon} />}
-        <span className="flex-1 font-medium text-[color:var(--lb-fg-2)] text-sm py-1">{node.label}</span>
-        <span className="ml-auto text-xs text-[color:var(--lb-fg-2)]" aria-hidden="true">›</span>
+        {node.icon && <SidebarIcon name={node.icon} active={false} />}
+        <span className={labelCls}>{node.label}</span>
+        <Caret open={open} />
       </button>
       {open && (
-        <ul className="list-none pl-3 py-0 m-0 flex flex-col gap-[0.125rem]" role="list">
-          {node.items.map((child) => (
-            <SidebarItem key={child.link ?? child.label} node={child} depth={depth + 1} pathname={pathname} />
+        <ul className="list-none pl-3 py-0 m-0 flex flex-col gap-[2px]" role="list">
+          {node.items!.map((child) => (
+            <SidebarItem
+              key={child.link ?? child.label}
+              node={child}
+              depth={depth + 1}
+              pathname={pathname}
+            />
           ))}
         </ul>
       )}
