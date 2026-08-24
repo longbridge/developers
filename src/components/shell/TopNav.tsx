@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { t, type Locale } from '@longbridge/openapi-utils'
 import { nav as navEn } from '../../data/nav.en'
 import { nav as navZhCN } from '../../data/nav.zh-CN'
@@ -54,8 +54,22 @@ function GitHubIcon() {
   )
 }
 
-export default function TopNav({ locale, pathname: currentPath = '/' }: Props) {
+export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  // This island is `transition:persist`ed, so it stays mounted across
+  // ClientRouter navigations and its `pathname` prop never updates. Track the
+  // live path in state and refresh it on `astro:page-load` (fires after each
+  // swap + on first load) so the active highlight and LanguageSwitcher stay
+  // correct. Also close the mobile menu after navigating.
+  const [currentPath, setCurrentPath] = useState(initialPath)
+  useEffect(() => {
+    const onPageLoad = () => {
+      setCurrentPath(window.location.pathname)
+      setMobileOpen(false)
+    }
+    document.addEventListener('astro:page-load', onPageLoad)
+    return () => document.removeEventListener('astro:page-load', onPageLoad)
+  }, [])
   const navItems = navForLocale(locale)
 
   const homeHref = locale === 'en' ? '/' : `/${locale}/`

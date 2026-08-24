@@ -84,6 +84,12 @@ function applyStyle(el: HTMLElement, styles: StyleMap) {
 }
 
 function hydrateTabs(wrapper: HTMLElement): void {
+  // Idempotency guard: astro:page-load fires on first load AND after every
+  // ClientRouter swap. Content wrappers are fresh per swap, but guard anyway
+  // so a double-fire never appends a second tab bar.
+  if (wrapper.dataset.tabsHydrated === 'true') return
+  wrapper.dataset.tabsHydrated = 'true'
+
   const groupId = wrapper.dataset.tabsGroupId
   const variant = wrapper.dataset.tabsVariant ?? 'line'
   const bar = wrapper.querySelector<HTMLElement>('[data-tabs-bar]')
@@ -213,9 +219,8 @@ function initTabsOnPage() {
   document.querySelectorAll<HTMLElement>('[data-lbus-component="tabs"]').forEach(hydrateTabs)
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initTabsOnPage)
-} else {
-  // DOMContentLoaded already fired (e.g., view transitions)
-  initTabsOnPage()
-}
+// astro:page-load fires on the initial load and after every ClientRouter
+// swap, so newly-swapped-in pages get their Tabs hydrated. (Falls back to a
+// direct call if the event already passed on first import.)
+document.addEventListener('astro:page-load', initTabsOnPage)
+if (document.readyState !== 'loading') initTabsOnPage()

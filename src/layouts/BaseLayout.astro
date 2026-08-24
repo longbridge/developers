@@ -1,5 +1,6 @@
 ---
 import '@styles/global.css'
+import { ClientRouter } from 'astro:transitions'
 import SkipLink from '../components/shell/SkipLink.astro'
 import TopNav from '../components/shell/TopNav'
 import Footer from '../components/shell/Footer'
@@ -20,21 +21,40 @@ const pathname = new URL(Astro.request.url).pathname
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <ClientRouter />
     <script is:inline>
-      const pref = localStorage.getItem('ui-mode') ?? 'system'
-      const dark = pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
-      const root = document.documentElement
-      root.dataset.mode = dark ? 'dark' : 'light'
-      root.dataset.nbPref = pref
+      // Applies the persisted theme to <html>. Runs synchronously on first
+      // load (no flash) AND on every ClientRouter swap — the swap replaces
+      // <html>'s attributes with the new document's SSR defaults (data-mode
+      // "light"), so without re-applying here a dark-mode user flashes light
+      // on each navigation. The listener is registered once on <document>
+      // (which survives swaps), so it is not duplicated per navigation.
+      ;(function () {
+        function applyTheme() {
+          var pref = localStorage.getItem('ui-mode') || 'system'
+          var dark =
+            pref === 'dark' ||
+            (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+          var root = document.documentElement
+          root.dataset.mode = dark ? 'dark' : 'light'
+          root.dataset.nbPref = pref
+        }
+        applyTheme()
+        document.addEventListener('astro:after-swap', applyTheme)
+      })()
     </script>
   </head>
   <body>
     <SkipLink />
-    <TopNav locale={locale} pathname={pathname} client:load />
+    {/* Locale-scoped persist name: the shell stays mounted (no re-hydrate
+        flicker, theme-toggle keeps state) while navigating within a locale,
+        but re-mounts when the locale changes so labels/links update. TopNav
+        re-syncs its active highlight from location.pathname on each swap. */}
+    <TopNav locale={locale} pathname={pathname} client:load transition:persist={`nav-${locale}`} />
     <main id="main-content" data-lbus-page={pathname}>
       <slot />
     </main>
-    <Footer locale={locale} client:idle />
+    <Footer locale={locale} client:idle transition:persist={`footer-${locale}`} />
     {/* tabs-hydrate: vanilla-JS progressive enhancement for <Tabs>/<TabItem>.
         Astro renders MDX React components in isolated React roots, so
         React.Children and React context don't propagate across the serialisation
