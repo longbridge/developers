@@ -3,7 +3,11 @@
   grid-template-columns: minmax(0, 1fr);
   max-width: 80rem;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  /* No top padding: the sidebar + content sit flush under the 60px header,
+     matching legacy (the old 2rem top left a full-width empty band between
+     the nav and the first sidebar item / breadcrumb). Each column supplies
+     its own small top inset (sidebar py-6, TOC/content padding). */
+  padding: 0 1rem 2rem;
   gap: 2rem;
 }
 
