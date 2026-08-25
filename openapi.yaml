@@ -2705,7 +2705,7 @@ paths:
               properties:
                 symbol:
                   type: string
-                  description: 'Security symbol in `ticker.region` format (e.g. `700.HK`).'
+                  description: 'Security symbol (e.g. `700.HK`).'
                 settlement_currency:
                   type: string
                   description: Settlement currency (e.g. `HKD`, `USD`).
@@ -3308,7 +3308,7 @@ paths:
         - name: counter_id
           in: query
           required: true
-          description: 'Security symbol in `ticker.region` format (e.g. `700.HK`).'
+          description: 'Security symbol (e.g. `700.HK`).'
           schema:
             type: string
       x-codeSamples:
@@ -3378,7 +3378,7 @@ paths:
         - name: symbol_name
           in: query
           required: false
-          description: 'Filter by stock symbol in `ticker.region` format (e.g. `AAPL.US`, `700.HK`). If omitted, returns signals for all symbols.'
+          description: 'Filter by security symbol (e.g. `AAPL.US`, `700.HK`). If omitted, returns signals for all symbols.'
           schema:
             type: string
         - name: strategy_id
@@ -3554,7 +3554,7 @@ paths:
         - name: symbol
           in: query
           required: true
-          description: 'The security symbol to query, formatted as `ticker.region` (e.g. `AAPL.US`, `700.HK`).'
+          description: 'Security symbol to query (e.g. `AAPL.US`, `700.HK`).'
           schema:
             type: string
         - name: begin_time
@@ -3584,7 +3584,39 @@ paths:
                 code: 0
                 message: success
                 data:
-                  facts: []
+                  facts:
+                    - fact_id: technical_macd_12_26_9_short_1787014800188612104
+                      fact_type: Technical
+                      direction: short
+                      occur_time: '2026-08-18T01:00:00Z'
+                      symbols_info:
+                        - symbol: 700.HK
+                          security_name: TENCENT
+                      factors:
+                        - name: macd_12_26_9
+                          factor_groups:
+                            - MOMENTUM
+                          long_short_direction: short
+                          trigger_condition: ''
+                          anomaly_detection:
+                            test_method: ''
+                            anomaly_result: ''
+                            significance_level: ''
+                            thresholds:
+                              low: ''
+                              medium: ''
+                              high: ''
+                      data_source:
+                        - source_name: SEHK
+                          type: Technical
+                          url: ''
+                          icon: ''
+                      nl_info:
+                        title: 'Tencent MACD Indicator Triggers Key Signal'
+                        sub_title: 'The MACD (12,26,9) indicator has issued a critical signal'
+                        summary: '[{"tag":"MACD","value":"…"}]'
+                        invest_anal: '[{"tag":"momentum","value":"…"}]'
+                        eli_explain: '[{"tag":"what_happened","value":"…"}]'
         default:
           description: Unexpected error
           content:

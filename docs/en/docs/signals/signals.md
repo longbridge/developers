@@ -29,7 +29,7 @@ The full strategy analysis is carried in `json_data` as a JSON document. It runs
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| symbol_name | string | NO | Filter by stock symbol in `ticker.region` format, e.g. `AAPL.US` or `700.HK`. If omitted, returns signals for all symbols. |
+| symbol_name | string | NO | Filter by security symbol, e.g. `AAPL.US` or `700.HK`. If omitted, returns signals for all symbols. |
 | strategy_id | string | NO | Filter by strategy id, e.g. `buffett-value`. Preferred over the deprecated `strategy_name`; takes precedence when both are provided. |
 | strategy_name | string | NO | **Deprecated.** Filter by strategy name. If omitted, returns signals from all strategies. |
 | catalyst_name | string | NO | Filter by the catalyst name that triggered the signal. If omitted, signals with any catalyst name are returned. |

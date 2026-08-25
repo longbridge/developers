@@ -29,7 +29,7 @@ headingLevel: 2
 
 | 名稱 | 類型 | 必填 | 說明 |
 | ---- | ---- | ---- | ---- |
-| symbol_name | string | NO | 按股票代碼篩選，格式為 `ticker.region`，例如 `AAPL.US` 或 `700.HK`；省略則回傳全部股票 |
+| symbol_name | string | NO | 按證券代碼篩選，例如 `AAPL.US` 或 `700.HK`；省略則回傳全部股票 |
 | strategy_id | string | NO | 按策略 id 篩選，例如 `buffett-value`。優先於已廢棄的 `strategy_name`，兩者同時傳入時以此為準 |
 | strategy_name | string | NO | **已廢棄。**按策略名稱篩選；省略則回傳全部策略的命中結果 |
 | catalyst_name | string | NO | 按觸發訊號的催化劑名稱篩選；省略則不限催化劑名稱 |
