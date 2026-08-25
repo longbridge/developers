@@ -3397,7 +3397,7 @@ paths:
         - name: catalyst_name
           in: query
           required: false
-          description: 'Filter by the catalyst name that triggered the signal. If omitted, signals with any catalyst name are returned.'
+          description: 'Filter by the name of the factor that triggered the signal (e.g. `EARNINGS_RELEASED`, `macd_12_26_9`) — not the display label returned in `key_catalyst`. If omitted, signals with any catalyst name are returned.'
           schema:
             type: string
         - name: catalyst_type
@@ -3458,9 +3458,7 @@ paths:
                       optimistic_price: 23.5
                       outlook: Bearish
                       outlook_desc: Bearish
-                      risk_level: R4
                       status: 1
-                      display_control: 0
                       json_data: '{"signal":{"core_conclusion":{...}},"strategy_fit_score":{...}}'
                       created_at: '1787131229154'
                       updated_at: '1787131229154'
@@ -3520,9 +3518,7 @@ paths:
                     optimistic_price: 23.5
                     outlook: Bearish
                     outlook_desc: Bearish
-                    risk_level: R4
                     status: 1
-                    display_control: 0
                     json_data: '{"signal":{"core_conclusion":{...}},"strategy_fit_score":{...}}'
                     created_at: '1787131229154'
                     updated_at: '1787131229154'

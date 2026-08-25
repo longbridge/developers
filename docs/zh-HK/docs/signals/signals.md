@@ -32,7 +32,7 @@ headingLevel: 2
 | symbol_name | string | NO | 按證券代碼篩選，例如 `AAPL.US` 或 `700.HK`；省略則回傳全部股票 |
 | strategy_id | string | NO | 按策略 id 篩選，例如 `buffett-value`。優先於已廢棄的 `strategy_name`，兩者同時傳入時以此為準 |
 | strategy_name | string | NO | **已廢棄。**按策略名稱篩選；省略則回傳全部策略的命中結果 |
-| catalyst_name | string | NO | 按觸發訊號的催化劑名稱篩選；省略則不限催化劑名稱 |
+| catalyst_name | string | NO | 按觸發訊號的因子名稱篩選，例如 `EARNINGS_RELEASED`、`macd_12_26_9`——不是回傳結果裡的 `key_catalyst` 展示文案；省略則不限 |
 | catalyst_type | string | NO | 按觸發訊號的催化劑類型篩選，例如 `News`、`Fundamental`、`Technical`；省略則不限類型 |
 | start_time | string | NO | 篩選此時間之後建立的命中記錄，ISO 8601 帶時區格式，例如 `2024-01-15T10:30:00Z`；省略則不限下限 |
 | end_time | string | NO | 篩選此時間之前建立的命中記錄，ISO 8601 帶時區格式；省略則不限上限 |
@@ -82,9 +82,7 @@ curl "https://openapi.longbridge.com/v1/signals?symbol_name=700.HK&limit=20" \
         "optimistic_price": 23.5,
         "outlook": "Bearish",
         "outlook_desc": "Bearish",
-        "risk_level": "R4",
         "status": 1,
-        "display_control": 0,
         "json_data": "{\"signal\":{\"core_conclusion\":{...}},\"strategy_fit_score\":{...}}",
         "created_at": "1787131229154",
         "updated_at": "1787131229154"
@@ -120,17 +118,15 @@ curl "https://openapi.longbridge.com/v1/signals?symbol_name=700.HK&limit=20" \
 | ∟ recommend_by | string | true | 推薦人；策略自動產生的訊號為空 |
 | ∟ expression | string | true | 策略表達式，例如 `992.HK:GROWTH:long` |
 | ∟ key_fact_id | string | true | 觸發該訊號的事實 ID，可用[查詢證券 Facts](/zh-HK/docs/signals/security-facts) 查詢 |
-| ∟ key_catalyst | string | true | 觸發該訊號的催化劑名稱 |
+| ∟ key_catalyst | string | true | 催化劑展示文案，例如 `Q1 Revenue Surge`。僅用於展示——`catalyst_name` 篩選匹配的是底層因子名 |
 | ∟ analysis_price | number | true | 分析時所依據的價格 |
 | ∟ conservative_price | number | true | 保守情景目標價 |
 | ∟ benchmark_price | number | true | 基準情景目標價 |
 | ∟ optimistic_price | number | true | 樂觀情景目標價 |
 | ∟ outlook | string | true | 取值為 `Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish` 之一 |
 | ∟ outlook_desc | string | true | 按呼叫方語言在地化後的看法文案 |
-| ∟ risk_level | string | true | 風險等級，例如 `R4`；策略未給出時為空 |
-| ∟ status | int32 | true | 訊號狀態 |
-| ∟ display_control | int32 | true | 展示控制標記 |
+| ∟ status | int32 | true | 生命週期狀態：`0` 待發布、`1` 生效、`2` 已刪除、`3` 分析生成失敗、`4` 人工過濾、`5` 分析提交失敗 |
 | ∟ json_data | string | true | 完整策略分析（JSON 文件）：契合度評分、估值情景、證據來源與相關事實 ID |
 | ∟ created_at | string | true | 建立時間，Unix 時間戳（**毫秒**） |
 | ∟ updated_at | string | true | 更新時間，Unix 時間戳（**毫秒**） |
-| total | int64 | true | 符合篩選條件的訊號總數，配合 `offset` 翻頁 |
+| total | int32 | true | 符合篩選條件的訊號總數，配合 `offset` 翻頁 |

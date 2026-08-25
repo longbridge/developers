@@ -69,9 +69,7 @@ curl "https://openapi.longbridge.com/v1/signals/sign_992_1a00c9425c3_48ab" \
       "optimistic_price": 23.5,
       "outlook": "Bearish",
       "outlook_desc": "Bearish",
-      "risk_level": "R4",
       "status": 1,
-      "display_control": 0,
       "json_data": "{\"signal\":{\"core_conclusion\":{...}},\"strategy_fit_score\":{...}}",
       "created_at": "1787131229154",
       "updated_at": "1787131229154"
@@ -105,16 +103,14 @@ curl "https://openapi.longbridge.com/v1/signals/sign_992_1a00c9425c3_48ab" \
 | ∟ recommend_by | string | true | 推荐人；策略自动产生的信号为空 |
 | ∟ expression | string | true | 策略表达式，例如 `992.HK:GROWTH:long` |
 | ∟ key_fact_id | string | true | 触发该信号的事实 ID，可用[查询证券 Facts](/zh-CN/docs/signals/security-facts) 查询 |
-| ∟ key_catalyst | string | true | 触发该信号的催化剂名称 |
+| ∟ key_catalyst | string | true | 催化剂展示文案，例如 `Q1 Revenue Surge`。仅用于展示——`catalyst_name` 筛选匹配的是底层因子名 |
 | ∟ analysis_price | number | true | 分析时所依据的价格 |
 | ∟ conservative_price | number | true | 保守情景目标价 |
 | ∟ benchmark_price | number | true | 基准情景目标价 |
 | ∟ optimistic_price | number | true | 乐观情景目标价 |
 | ∟ outlook | string | true | 取值为 `Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish` 之一 |
 | ∟ outlook_desc | string | true | 按调用方语言本地化后的看法文案 |
-| ∟ risk_level | string | true | 风险等级，例如 `R4`；策略未给出时为空 |
-| ∟ status | int32 | true | 信号状态 |
-| ∟ display_control | int32 | true | 展示控制标记 |
+| ∟ status | int32 | true | 生命周期状态：`0` 待发布、`1` 生效、`2` 已删除、`3` 分析生成失败、`4` 人工过滤、`5` 分析提交失败 |
 | ∟ json_data | string | true | 完整策略分析（JSON 文档）：契合度评分、估值情景、证据来源与相关事实 ID |
 | ∟ created_at | string | true | 创建时间，Unix 时间戳（**毫秒**） |
 | ∟ updated_at | string | true | 更新时间，Unix 时间戳（**毫秒**） |

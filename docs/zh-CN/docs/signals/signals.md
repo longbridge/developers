@@ -32,10 +32,10 @@ headingLevel: 2
 | symbol_name | string | NO | 按证券代码筛选，例如 `AAPL.US` 或 `700.HK`；省略则返回全部股票 |
 | strategy_id | string | NO | 按策略 id 筛选，例如 `buffett-value`。优先于已废弃的 `strategy_name`，两者同时传入时以此为准 |
 | strategy_name | string | NO | **已废弃。**按策略名称筛选；省略则返回全部策略的命中结果 |
-| catalyst_name | string | NO | 按触发信号的催化剂名称筛选；省略则不限催化剂名称 |
+| catalyst_name | string | NO | 按触发信号的因子名称筛选，例如 `EARNINGS_RELEASED`、`macd_12_26_9`——不是返回结果里的 `key_catalyst` 展示文案；省略则不限 |
 | catalyst_type | string | NO | 按触发信号的催化剂类型筛选，例如 `News`、`Fundamental`、`Technical`；省略则不限类型 |
-| start_time | string | NO | 筛选此时间之后创建的命中记录，ISO 8601 带时区格式，例如 `2024-01-15T10:30:00Z`；省略则不限下限 |
-| end_time | string | NO | 筛选此时间之前创建的命中记录，ISO 8601 带时区格式；省略则不限上限 |
+| start_time | string | NO | 筛选此时间之后创建的命中记录，ISO 8601 带时区格式（例如 `2024-01-15T10:30:00Z`）或 Unix 时间戳（≥ 10¹² 视为毫秒，否则为秒）；省略则不限下限 |
+| end_time | string | NO | 筛选此时间之前创建的命中记录，ISO 8601 带时区格式或 Unix 时间戳（≥ 10¹² 视为毫秒，否则为秒）；省略则不限上限 |
 | limit | int32 | NO | 返回结果数量上限，默认 20 |
 | offset | int32 | NO | 分页跳过的条数，默认 0 |
 
@@ -82,9 +82,7 @@ curl "https://openapi.longbridge.com/v1/signals?symbol_name=700.HK&limit=20" \
         "optimistic_price": 23.5,
         "outlook": "Bearish",
         "outlook_desc": "Bearish",
-        "risk_level": "R4",
         "status": 1,
-        "display_control": 0,
         "json_data": "{\"signal\":{\"core_conclusion\":{...}},\"strategy_fit_score\":{...}}",
         "created_at": "1787131229154",
         "updated_at": "1787131229154"
@@ -120,17 +118,15 @@ curl "https://openapi.longbridge.com/v1/signals?symbol_name=700.HK&limit=20" \
 | ∟ recommend_by | string | true | 推荐人；策略自动产生的信号为空 |
 | ∟ expression | string | true | 策略表达式，例如 `992.HK:GROWTH:long` |
 | ∟ key_fact_id | string | true | 触发该信号的事实 ID，可用[查询证券 Facts](/zh-CN/docs/signals/security-facts) 查询 |
-| ∟ key_catalyst | string | true | 触发该信号的催化剂名称 |
+| ∟ key_catalyst | string | true | 催化剂展示文案，例如 `Q1 Revenue Surge`。仅用于展示——`catalyst_name` 筛选匹配的是底层因子名 |
 | ∟ analysis_price | number | true | 分析时所依据的价格 |
 | ∟ conservative_price | number | true | 保守情景目标价 |
 | ∟ benchmark_price | number | true | 基准情景目标价 |
 | ∟ optimistic_price | number | true | 乐观情景目标价 |
 | ∟ outlook | string | true | 取值为 `Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish` 之一 |
 | ∟ outlook_desc | string | true | 按调用方语言本地化后的看法文案 |
-| ∟ risk_level | string | true | 风险等级，例如 `R4`；策略未给出时为空 |
-| ∟ status | int32 | true | 信号状态 |
-| ∟ display_control | int32 | true | 展示控制标记 |
+| ∟ status | int32 | true | 生命周期状态：`0` 待发布、`1` 生效、`2` 已删除、`3` 分析生成失败、`4` 人工过滤、`5` 分析提交失败 |
 | ∟ json_data | string | true | 完整策略分析（JSON 文档）：契合度评分、估值情景、证据来源与相关事实 ID |
 | ∟ created_at | string | true | 创建时间，Unix 时间戳（**毫秒**） |
 | ∟ updated_at | string | true | 更新时间，Unix 时间戳（**毫秒**） |
-| total | int64 | true | 符合筛选条件的信号总数，配合 `offset` 翻页 |
+| total | int32 | true | 符合筛选条件的信号总数，配合 `offset` 翻页 |

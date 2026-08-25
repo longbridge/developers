@@ -69,9 +69,7 @@ curl "https://openapi.longbridge.com/v1/signals/sign_992_1a00c9425c3_48ab" \
       "optimistic_price": 23.5,
       "outlook": "Bearish",
       "outlook_desc": "Bearish",
-      "risk_level": "R4",
       "status": 1,
-      "display_control": 0,
       "json_data": "{\"signal\":{\"core_conclusion\":{...}},\"strategy_fit_score\":{...}}",
       "created_at": "1787131229154",
       "updated_at": "1787131229154"
@@ -105,16 +103,14 @@ curl "https://openapi.longbridge.com/v1/signals/sign_992_1a00c9425c3_48ab" \
 | ∟ recommend_by | string | true | Who recommended the signal; empty for strategy-generated signals |
 | ∟ expression | string | true | Strategy expression, e.g. `992.HK:GROWTH:long` |
 | ∟ key_fact_id | string | true | ID of the fact that triggered the signal — look it up with [Get Security Facts](/docs/signals/security-facts) |
-| ∟ key_catalyst | string | true | Display name of the catalyst that triggered the signal |
+| ∟ key_catalyst | string | true | Display label of the catalyst, e.g. `Q1 Revenue Surge`. Prose for display — the `catalyst_name` filter matches the underlying factor name instead |
 | ∟ analysis_price | number | true | Price the analysis was based on |
 | ∟ conservative_price | number | true | Conservative-scenario target price |
 | ∟ benchmark_price | number | true | Benchmark-scenario target price |
 | ∟ optimistic_price | number | true | Optimistic-scenario target price |
 | ∟ outlook | string | true | One of `Strong bullish`, `Bullish`, `Neutral`, `Bearish`, `Strong bearish` |
 | ∟ outlook_desc | string | true | Outlook label in the caller's language |
-| ∟ risk_level | string | true | Risk level, e.g. `R4`; empty when the strategy did not assign one |
-| ∟ status | int32 | true | Signal status |
-| ∟ display_control | int32 | true | Display control flag |
+| ∟ status | int32 | true | Lifecycle status: `0` pending, `1` active, `2` deleted, `3` analysis failed, `4` filtered by a reviewer, `5` analysis submit failed |
 | ∟ json_data | string | true | Full strategy analysis as a JSON document: fit scores, valuation scenarios, evidence sources and related fact IDs |
 | ∟ created_at | string | true | Creation time, Unix timestamp in **milliseconds** |
 | ∟ updated_at | string | true | Last update time, Unix timestamp in **milliseconds** |

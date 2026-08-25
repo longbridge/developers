@@ -32,10 +32,10 @@ The full strategy analysis is carried in `json_data` as a JSON document. It runs
 | symbol_name | string | NO | Filter by security symbol, e.g. `AAPL.US` or `700.HK`. If omitted, returns signals for all symbols. |
 | strategy_id | string | NO | Filter by strategy id, e.g. `buffett-value`. Preferred over the deprecated `strategy_name`; takes precedence when both are provided. |
 | strategy_name | string | NO | **Deprecated.** Filter by strategy name. If omitted, returns signals from all strategies. |
-| catalyst_name | string | NO | Filter by the catalyst name that triggered the signal. If omitted, signals with any catalyst name are returned. |
+| catalyst_name | string | NO | Filter by the name of the factor that triggered the signal, e.g. `EARNINGS_RELEASED` or `macd_12_26_9` — not the display label returned in `key_catalyst`. If omitted, signals with any catalyst name are returned. |
 | catalyst_type | string | NO | Filter by the catalyst type that triggered the signal, e.g. `News`, `Fundamental`, `Technical`. If omitted, signals with any catalyst type are returned. |
-| start_time | string | NO | Only return signals created at or after this time. ISO 8601 datetime with timezone, e.g. `2024-01-15T10:30:00Z`. If omitted, no lower bound. |
-| end_time | string | NO | Only return signals created at or before this time. ISO 8601 datetime with timezone. If omitted, no upper bound. |
+| start_time | string | NO | Only return signals created at or after this time. ISO 8601 datetime with timezone (e.g. `2024-01-15T10:30:00Z`) or a Unix timestamp (≥ 10¹² is read as milliseconds, otherwise seconds). If omitted, no lower bound. |
+| end_time | string | NO | Only return signals created at or before this time. ISO 8601 datetime with timezone, or a Unix timestamp (≥ 10¹² is read as milliseconds, otherwise seconds). If omitted, no upper bound. |
 | limit | int32 | NO | Maximum number of results to return. Defaults to 20. |
 | offset | int32 | NO | Number of results to skip for pagination. Defaults to 0. |
 
@@ -82,9 +82,7 @@ curl "https://openapi.longbridge.com/v1/signals?symbol_name=700.HK&limit=20" \
         "optimistic_price": 23.5,
         "outlook": "Bearish",
         "outlook_desc": "Bearish",
-        "risk_level": "R4",
         "status": 1,
-        "display_control": 0,
         "json_data": "{\"signal\":{\"core_conclusion\":{...}},\"strategy_fit_score\":{...}}",
         "created_at": "1787131229154",
         "updated_at": "1787131229154"
@@ -120,17 +118,15 @@ curl "https://openapi.longbridge.com/v1/signals?symbol_name=700.HK&limit=20" \
 | ∟ recommend_by | string | true | Who recommended the signal; empty for strategy-generated signals |
 | ∟ expression | string | true | Strategy expression, e.g. `992.HK:GROWTH:long` |
 | ∟ key_fact_id | string | true | ID of the fact that triggered the signal — look it up with [Get Security Facts](/docs/signals/security-facts) |
-| ∟ key_catalyst | string | true | Display name of the catalyst that triggered the signal |
+| ∟ key_catalyst | string | true | Display label of the catalyst, e.g. `Q1 Revenue Surge`. Prose for display — the `catalyst_name` filter matches the underlying factor name instead |
 | ∟ analysis_price | number | true | Price the analysis was based on |
 | ∟ conservative_price | number | true | Conservative-scenario target price |
 | ∟ benchmark_price | number | true | Benchmark-scenario target price |
 | ∟ optimistic_price | number | true | Optimistic-scenario target price |
 | ∟ outlook | string | true | One of `Strong bullish`, `Bullish`, `Neutral`, `Bearish`, `Strong bearish` |
 | ∟ outlook_desc | string | true | Outlook label in the caller's language |
-| ∟ risk_level | string | true | Risk level, e.g. `R4`; empty when the strategy did not assign one |
-| ∟ status | int32 | true | Signal status |
-| ∟ display_control | int32 | true | Display control flag |
+| ∟ status | int32 | true | Lifecycle status: `0` pending, `1` active, `2` deleted, `3` analysis failed, `4` filtered by a reviewer, `5` analysis submit failed |
 | ∟ json_data | string | true | Full strategy analysis as a JSON document: fit scores, valuation scenarios, evidence sources and related fact IDs |
 | ∟ created_at | string | true | Creation time, Unix timestamp in **milliseconds** |
 | ∟ updated_at | string | true | Last update time, Unix timestamp in **milliseconds** |
-| total | int64 | true | Total number of signals matching the filters — page through the rest with `offset` |
+| total | int32 | true | Total number of signals matching the filters — page through the rest with `offset` |
