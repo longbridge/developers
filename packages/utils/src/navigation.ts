@@ -10,6 +10,11 @@ export interface SidebarNode {
   position: number
   collapsed: boolean
   items?: SidebarNode[]
+  /** True for nodes derived from a directory (a category), false/absent for
+   *  nodes derived from a single .mdx file. Lets the sidebar render a
+   *  childless category (e.g. cli/ipo/, which has only index.mdx) as a bold
+   *  top-level header link rather than a muted leaf. */
+  isSection?: boolean
 }
 
 interface CategoryConfig {
@@ -73,9 +78,19 @@ function processDir(absDir: string, locale: Locale, relFromDocs: string): Sideba
   const position = cat.position ?? 999
   const collapsed = cat.collapsed ?? true
   const icon = cat.icon
-  const link = cat.link ?? undefined
+  let link = cat.link ?? undefined
 
   const items = buildItems(absDir, locale, relFromDocs)
+
+  // A category folder whose only page is index.mdx (no child pages to expand,
+  // e.g. cli/ipo/) has no items — surface it as a clickable link to that
+  // index instead of a dead, unclickable node.
+  if (!link && items.length === 0) {
+    const indexPath = path.join(absDir, 'index.mdx')
+    if (fs.existsSync(indexPath)) {
+      link = urlFromAbsPath(indexPath, locale)
+    }
+  }
 
   const node: SidebarNode = {
     label,
@@ -83,6 +98,7 @@ function processDir(absDir: string, locale: Locale, relFromDocs: string): Sideba
     position,
     collapsed,
     items: items.length > 0 ? items : undefined,
+    isSection: true,
   }
   if (link) node.link = link
 

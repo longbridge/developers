@@ -90,6 +90,11 @@
   font-size: 15px;
   line-height: 1.75;
   color: #3c3c43;
+  /* Legacy `.vp-doc` renders on an antialiased (grayscale) body; without this
+     macOS falls back to subpixel smoothing, which makes the same #3c3c43 text
+     look noticeably heavier/darker. Match legacy so the body reads lighter. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 [data-mode="dark"] .docs-content {
   color: rgba(255, 255, 245, 0.86);
@@ -100,11 +105,19 @@
 .docs-content h1,
 .docs-content h2,
 .docs-content h3,
-.docs-content h4 {
+.docs-content h4,
+.docs-content h5,
+.docs-content h6 {
   color: inherit;
   font-weight: 600;
   margin-bottom: 0.5em;
   line-height: 1.3;
+  /* Anchor gutter: headings host the absolute `.header-anchor` (#) on their
+     left. */
+  position: relative;
+  /* Offset in-page anchor jumps (TOC + heading #) so the 61px sticky header
+     doesn't cover the target heading. */
+  scroll-margin-top: 80px;
 }
 .docs-content h1 { font-size: 2rem; margin-top: 0; }
 .docs-content h2 { font-size: 1.5rem; margin-top: 3rem; }
@@ -121,8 +134,14 @@
    (NOT brand-tinted). */
 .docs-content a {
   color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  /* Legacy underlines are a barely-there rgba(0,0,0,.06) at 4px offset — NOT
+     the text color. --lbus-c-divider is exactly that value in light, and flips
+     to a faint white in dark (legacy leaves it black, i.e. invisible in dark;
+     the token is a small improvement). Longhands so the shorthand doesn't
+     reset decoration-color back to currentColor. */
+  text-decoration-line: underline;
+  text-decoration-color: var(--lbus-c-divider);
+  text-underline-offset: 4px;
   font-weight: 500;
 }
 .docs-content a:hover { color: var(--lb-brand); }
@@ -130,9 +149,88 @@
 /* Chrome links inside the article (breadcrumb, prev/next) are not prose links —
    keep their component styling instead of the underlined body-link treatment. */
 .docs-content [data-lbus-component="breadcrumb"] a,
-.docs-content [data-lbus-component="prev-next"] a {
+.docs-content [data-lbus-component="prev-next"] a,
+.docs-content [data-lbus-component="doc-meta"] a {
   text-decoration: none;
   font-weight: inherit;
+}
+
+/* Doc meta row (Markdown / Edit / Last Updated) — legacy `.VPDocFooter`:
+   muted, small, icons inline, above the pager. */
+.doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: var(--lb-fg-2);
+}
+.doc-meta__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lb-fg-2);
+}
+.doc-meta__link:hover { color: var(--lb-brand); }
+.doc-meta svg { display: block; flex-shrink: 0; }
+.doc-meta__updated { color: var(--lb-fg-2); }
+
+/* Slim doc footer — legacy `.vp-doc .footer`: a full-width row split into two
+   groups pushed to opposite ends (space-between). Replaces the big 4-column
+   marketing footer, which legacy docs pages do not render. Lives as a
+   full-width child of `.docs-inner` (spans the article + TOC columns);
+   `padding-left` matches the article body's 2rem inset so its left edge lines
+   up under the content, not the breadcrumb. */
+.docs-doc-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* nowrap keeps the two groups on one line (space-between pushes them apart);
+     each group wraps its own links internally when space is tight. Matches
+     legacy `.vp-doc .footer`. */
+  flex-wrap: nowrap;
+  gap: 12px 24px;
+  margin-top: 24px;
+  padding: 16px 0 32px 2rem;
+  /* Legacy groups are `text-xs`: 12px / 16px line-height, Inter (the footer
+     sits outside `.docs-content`, so restate Inter — it won't inherit it). */
+  font-family: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+}
+.docs-doc-footer__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px; /* legacy gap-y-2 (row 8) + gap-x-5 (col 20) */
+}
+/* Below the sidebar breakpoint the content column is narrow — stack the two
+   groups instead of cramming them side by side. */
+@media (max-width: 1023px) {
+  .docs-doc-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+/* Legacy `.footer-link`: constant muted #929295 (same in light + dark),
+   weight 400, no underline. */
+.docs-doc-footer a {
+  color: #929295;
+  font-weight: 400;
+  text-decoration: none;
+}
+.docs-doc-footer a:hover {
+  color: var(--lb-brand);
+}
+.docs-doc-footer__github {
+  display: flex;
+  align-items: center;
+}
+.docs-doc-footer svg {
+  display: block;
 }
 
 /* ── Code blocks ─────────────────────────────────────────────────────────
@@ -230,7 +328,10 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
 
 .docs-toc {
   position: sticky;
-  top: 60px;
+  /* Pin at the SAME offset as the at-rest position (60px header + the 2.75rem
+     gap below it) so the TOC does NOT jump up to the header when the page
+     scrolls — it holds the level it has at the top of the page. */
+  top: calc(60px + 2.75rem);
   align-self: start;
   /* Drop the TOC down so "On this page" starts level with the article body,
      not the breadcrumb — matches legacy (aside sits ~48px below the nav at
@@ -238,7 +339,7 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
      scroll. */
   margin-top: 2.75rem;
   padding: 0 0 1.5rem;
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 60px - 2.75rem);
   overflow-y: auto;
 }
 

@@ -596,12 +596,18 @@
   color-scheme: dark;
 }
 
-/* Header anchor link (rehype-autolink-headings §S3) */
+/* Header anchor link (rehype-autolink-headings §S3). Legacy `.header-anchor`
+   sits in the LEFT gutter (absolute, ~-0.87em), not inline to the right — the
+   heading is position:relative (set in docs.css) so this anchors to it. Shown
+   on hover only. `left`-only (no `top`) keeps the "#" on the heading's text
+   line via its static vertical position. */
 .header-anchor {
-  margin-left: 0.5em;
+  position: absolute;
+  left: -0.87em;
   opacity: 0;
   text-decoration: none;
   color: var(--lb-fg-2);
+  font-weight: 500;
   transition: opacity 150ms ease;
 }
 .header-anchor::before {

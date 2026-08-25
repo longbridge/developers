@@ -1,0 +1,63 @@
+---
+/**
+ * Doc meta row — mirrors legacy VitePress `.VPDocFooter`: a "Markdown" link
+ * (raw markdown source), an "Edit" link (GitHub), and the file's git
+ * "Last Updated" time. Sits at the bottom of the article, above the pager.
+ */
+import { resolveUrl, type Locale } from '@longbridge/openapi-utils'
+import type { CollectionEntry } from 'astro:content'
+import { getLastUpdated } from '../../lib/last-updated'
+
+interface Props {
+  entry: CollectionEntry<'docs'>
+  locale: Locale
+}
+
+const { entry, locale } = Astro.props
+
+// entry.id is the source path without extension, e.g. "en/docs/getting-started".
+const id = entry.id
+// Edit → GitHub. Points at `main` (the default branch this migration lands on).
+const editUrl = `https://github.com/longbridge/developers/edit/main/docs/${id}.mdx`
+
+// Raw markdown endpoint (src/pages/[locale]/[...slug].md.ts). The route always
+// carries a locale segment, so en (whose pages omit /en) needs it added.
+const url = resolveUrl(entry)
+const mdUrl = locale === 'en' ? `/en${url}.md` : `${url}.md`
+
+// Real per-page date from git (see src/lib/last-updated.ts); may be null.
+const iso = getLastUpdated(id)
+const localeTag = locale === 'en' ? 'en-US' : locale
+let lastUpdated: string | null = null
+if (iso) {
+  const d = new Date(iso)
+  if (!Number.isNaN(d.getTime())) {
+    lastUpdated = new Intl.DateTimeFormat(localeTag, { dateStyle: 'long', timeStyle: 'medium' }).format(d)
+  }
+}
+
+const L = ({
+  en: { edit: 'Edit', updated: 'Last Updated:' },
+  'zh-CN': { edit: '编辑', updated: '最后更新:' },
+  'zh-HK': { edit: '編輯', updated: '最後更新:' },
+} as const)[locale] ?? { edit: 'Edit', updated: 'Last Updated:' }
+---
+
+<div class="doc-meta" data-lbus-component="doc-meta">
+  <a class="doc-meta__link" href={mdUrl} target="_blank" rel="noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+      <path d="M14 2v5h5" />
+      <path d="M16 13H8" /><path d="M16 17H8" /><path d="M10 9H8" />
+    </svg>
+    <span>Markdown</span>
+  </a>
+  <a class="doc-meta__link" href={editUrl} target="_blank" rel="noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+    <span>{L.edit}</span>
+  </a>
+  {lastUpdated && <span class="doc-meta__updated">{L.updated} {lastUpdated}</span>}
+</div>

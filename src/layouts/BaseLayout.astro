@@ -10,8 +10,12 @@ export interface Props {
   title: string
   description?: string
   locale?: Locale
+  /** Suppress the big 4-column marketing footer. Docs pages set this — legacy
+   *  docs render only a slim link-row footer (DocFooter) inside the article,
+   *  never the marketing footer. */
+  hideFooter?: boolean
 }
-const { title, description = '', locale = 'en' } = Astro.props
+const { title, description = '', locale = 'en', hideFooter = false } = Astro.props
 const pathname = new URL(Astro.request.url).pathname
 ---
 <!doctype html>
@@ -54,7 +58,7 @@ const pathname = new URL(Astro.request.url).pathname
     <main id="main-content" data-lbus-page={pathname}>
       <slot />
     </main>
-    <Footer locale={locale} client:idle transition:persist={`footer-${locale}`} />
+    {!hideFooter && <Footer locale={locale} client:idle transition:persist={`footer-${locale}`} />}
     {/* tabs-hydrate: vanilla-JS progressive enhancement for <Tabs>/<TabItem>.
         Astro renders MDX React components in isolated React roots, so
         React.Children and React context don't propagate across the serialisation

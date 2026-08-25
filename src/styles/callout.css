@@ -1,24 +1,24 @@
 /**
- * callout.css — Styled callout boxes for VitePress-style container directives.
+ * callout.css — VitePress-style `:::` container directives (remarkCallout emits
+ * `.callout.callout-<type>` with a `.callout-title` paragraph).
  *
- * Maps the directive names to design token colours:
- *   warning  → --lb-status-alert  (#FF9728, orange)
- *   danger   → --lb-status-warn   (#F7415F, red)
- *   tip      → --lb-brand         (#00B8B8, teal)
- *   success  → --lb-status-safe   (#00CC92, green)
- *   info     → --lb-status-neutral (#2A99FE, blue)
- *   note     → same as info
- *   caution  → same as info
+ * Styled to match the legacy site's `<TipContainer>` (packages/ui/src/
+ * TipContainer.tsx), which the old site renders for these blocks: a full 1px
+ * border + 8px radius + faint tinted bg, an icon before the title, and the
+ * whole block's text in the accent colour. Colours/icons are copied verbatim
+ * from that component so `:::` blocks and any direct <TipContainer> usage look
+ * identical. Palette is the Tailwind semantic set (fixed across light/dark, as
+ * in the component) — NOT the --lb-* tokens.
  */
 
 /* ── Base ─────────────────────────────────────────────── */
 .callout {
-  margin: 1.25rem 0;
-  padding: 0.875rem 1rem;
-  border-left: 4px solid var(--lb-fg-2);
-  border-radius: 0 0.375rem 0.375rem 0;
-  background: color-mix(in oklch, var(--lb-fg-2) 6%, transparent);
-  line-height: 1.6;
+  margin: 0.25rem 0;
+  padding: 1rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
 }
 
 .callout > *:last-child {
@@ -29,62 +29,69 @@
   margin-top: 0;
 }
 
-/* ── Title paragraph ──────────────────────────────────── */
+/* ── Title row (icon + label) ─────────────────────────── */
 .callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0 0 0.5rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.4;
 }
 
-/* ── Variants ─────────────────────────────────────────── */
-.callout-warning {
-  border-color: var(--lb-status-alert);
-  background: color-mix(in oklch, var(--lb-status-alert) 8%, transparent);
+.callout-title::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: var(--callout-icon) center / contain no-repeat;
 }
 
-.callout-warning .callout-title {
-  color: var(--lb-status-alert);
+/* ── Variants: border + bg + text colour, and the accent icon ─────────────
+   Text colour is set on the whole block so body copy inherits the accent
+   (matching legacy); inline code keeps its own neutral chip styling. */
+.callout-tip {
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5'/%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3C/svg%3E");
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.05);
+  color: #1d4ed8;
+}
+
+.callout-warning {
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23eab308' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z'/%3E%3Cpath d='M12 9v4'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E");
+  border-color: rgba(234, 179, 8, 0.3);
+  background: rgba(234, 179, 8, 0.05);
+  color: #a16207;
 }
 
 .callout-danger {
-  border-color: var(--lb-status-warn);
-  background: color-mix(in oklch, var(--lb-status-warn) 8%, transparent);
-}
-
-.callout-danger .callout-title {
-  color: var(--lb-status-warn);
-}
-
-.callout-tip {
-  border-color: var(--lb-brand);
-  background: color-mix(in oklch, var(--lb-brand) 8%, transparent);
-}
-
-.callout-tip .callout-title {
-  color: var(--lb-brand);
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m15 9-6 6'/%3E%3Cpath d='m9 9 6 6'/%3E%3C/svg%3E");
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+  color: #b91c1c;
 }
 
 .callout-success {
-  border-color: var(--lb-status-safe);
-  background: color-mix(in oklch, var(--lb-status-safe) 8%, transparent);
-}
-
-.callout-success .callout-title {
-  color: var(--lb-status-safe);
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.05);
+  color: #15803d;
 }
 
 .callout-info,
-.callout-note,
-.callout-caution {
-  border-color: var(--lb-status-neutral);
-  background: color-mix(in oklch, var(--lb-status-neutral) 8%, transparent);
+.callout-note {
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E");
+  border-color: rgba(6, 182, 212, 0.3);
+  background: rgba(6, 182, 212, 0.05);
+  color: #0e7490;
 }
 
-.callout-info .callout-title,
-.callout-note .callout-title,
-.callout-caution .callout-title {
-  color: var(--lb-status-neutral);
+.callout-caution {
+  --callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z'/%3E%3Cpath d='M12 9v4'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E");
+  border-color: rgba(249, 115, 22, 0.3);
+  background: rgba(249, 115, 22, 0.05);
+  color: #c2410c;
 }
 
 /* ── Nested code blocks keep readable bg ─────────────── */

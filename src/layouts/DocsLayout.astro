@@ -9,6 +9,8 @@ import Sidebar from '@components/shell/Sidebar'
 import TOC from '@components/shell/TOC'
 import type { TocHeading } from '@components/shell/TOC'
 import PrevNext from '@components/shell/PrevNext'
+import DocMeta from '@components/shell/DocMeta.astro'
+import DocFooter from '@components/shell/DocFooter.astro'
 import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } from '@longbridge/openapi-utils'
 
 interface Props {
@@ -45,7 +47,7 @@ const crumbs: BreadcrumbItem[] =
     : [{ text: entry.data.title ?? '(untitled)' }]
 ---
 
-<BaseLayout title={title} locale={locale}>
+<BaseLayout title={title} locale={locale} hideFooter>
   <LocalNav locale={locale} pathname={pathname} nodes={sidebar} client:load />
   <div class="docs-layout">
     <Sidebar nodes={sidebar} pathname={pathname} client:load />
@@ -57,9 +59,11 @@ const crumbs: BreadcrumbItem[] =
           )}
           {injectedTitle && <h1>{injectedTitle}</h1>}
           <slot />
+          <DocMeta entry={entry} locale={locale} />
           <PrevNext prev={prev} next={next} />
         </article>
         <TOC headings={headings} locale={locale} client:load />
+        <DocFooter locale={locale} />
       </div>
     </div>
   </div>

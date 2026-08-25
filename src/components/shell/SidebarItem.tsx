@@ -60,19 +60,22 @@ export default function SidebarItem({ node, depth = 0, pathname = '/' }: Props) 
 
   // Leaf link
   if (!node.items?.length) {
+    // A top-level category with no child pages (e.g. cli/ipo/) renders as a
+    // bold header-style link, matching its sibling section headers (Quant,
+    // Market Data, …) rather than a muted sub-page leaf.
+    const isCategoryLeaf = depth === 0 && node.isSection
+    const base = 'flex items-center rounded-lg py-1 text-[14px] leading-6 no-underline'
+    const pad = isCategoryLeaf ? 'px-2' : 'px-4'
+    const cls = active
+      ? `${base} ${pad} bg-[color-mix(in_oklab,var(--lb-brand)_10%,transparent)] text-[color:var(--lb-brand)] font-medium`
+      : isCategoryLeaf
+        ? `${base} ${pad} text-[color:var(--lb-fg-1)] font-bold hover:bg-[var(--lb-bg-2)]`
+        : `${base} ${pad} text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)] hover:bg-[var(--lb-bg-2)]`
     return (
       <li data-lbus-component="sidebar-item">
-        <a
-          href={node.link}
-          className={
-            active
-              ? 'flex items-center rounded-lg px-4 py-1 text-[14px] leading-6 no-underline bg-[color-mix(in_oklab,var(--lb-brand)_10%,transparent)] text-[color:var(--lb-brand)] font-medium'
-              : 'flex items-center rounded-lg px-4 py-1 text-[14px] leading-6 no-underline text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)] hover:bg-[var(--lb-bg-2)]'
-          }
-          aria-current={active ? 'page' : undefined}
-        >
+        <a href={node.link} className={cls} aria-current={active ? 'page' : undefined}>
           {node.icon && <SidebarIcon name={node.icon} active={active} />}
-          <span className="flex-1 min-w-0 truncate">{node.label}</span>
+          <span className={`flex-1 min-w-0 truncate${isCategoryLeaf ? ' font-bold' : ''}`}>{node.label}</span>
         </a>
       </li>
     )

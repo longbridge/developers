@@ -31,7 +31,12 @@ export default function Breadcrumb({ locale, items = [] }: Props) {
               {item.href && !isLast ? (
                 <a href={item.href} className="text-inherit no-underline hover:text-[color:var(--lbus-c-text)]">{item.text}</a>
               ) : (
-                <span aria-current={isLast ? 'page' : undefined}>{item.text}</span>
+                <span
+                  aria-current={isLast ? 'page' : undefined}
+                  className={isLast ? 'font-semibold text-[color:var(--lbus-c-text)]' : undefined}
+                >
+                  {item.text}
+                </span>
               )}
               {!isLast && (
                 <span aria-hidden="true" className="text-[color:var(--lb-fg-3)]">/</span>
