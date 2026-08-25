@@ -492,6 +492,9 @@ tags:
   - name: Grid Trading
     x-name-zh: 网格交易
     description: Automated grid strategy orders. Submit, modify, list, and inspect grid orders; query trigger history; suspend, restart, or cancel a running grid; read the per-symbol grid info (lot size, last price, authorization); and record the one-time strategy risk-disclosure consent.
+  - name: Signals & Catalysts
+    x-name-zh: 信号与催化剂
+    description: Strategy signals and the catalyst facts behind them. Query signals with symbol / strategy / catalyst / time filters, read one signal's full strategy analysis, and list a security's fact (catalyst) events.
   - name: Statement
     x-name-zh: 结单
     description: Query and download account statements (daily or monthly). Statements contain detailed breakdowns of assets, holdings, trades, fees, and corporate actions.
@@ -3338,6 +3341,250 @@ paths:
                     settlement_currency:
                       - HKD
                       - USD
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/signals:
+    get:
+      operationId: list_signals
+      summary: Get Signals
+      x-summary-zh: 获取 Signal 列表
+      description: |
+        Query signals with advanced filters. A signal is a strategy's take on a security,
+        triggered by a catalyst — it carries a headline, a Markdown summary, an outlook, a risk
+        level, and conservative / benchmark / optimistic target prices.
+
+        Supports filtering by symbol, strategy, catalyst, and creation time, with `limit` /
+        `offset` paging. `total` is the number of signals matching the filters.
+
+        The full strategy analysis (fit scores, valuation scenarios, evidence sources, related
+        fact IDs) is carried in `json_data` as a JSON document — fetch a single signal with
+        `GET /v1/signals/{signal_id}` when you need it.
+      x-description-zh: |
+        使用高级筛选查询信号。Signal 是策略在某个催化剂触发下对某只证券给出的判断，包含标题、
+        Markdown 摘要、看法、风险等级，以及保守 / 基准 / 乐观目标价。
+
+        支持按股票代码、策略、催化剂和创建时间筛选，并用 `limit` / `offset` 分页，`total` 为
+        符合筛选条件的信号总数。
+
+        完整策略分析（契合度评分、估值情景、证据来源、相关事实 ID）以 JSON 文档的形式放在
+        `json_data` 中；需要时请用 `GET /v1/signals/{signal_id}` 获取单条信号。
+      tags:
+        - Signals & Catalysts
+      parameters:
+        - name: symbol_name
+          in: query
+          required: false
+          description: 'Filter by stock symbol in `ticker.region` format (e.g. `AAPL.US`, `700.HK`). If omitted, returns signals for all symbols.'
+          schema:
+            type: string
+        - name: strategy_id
+          in: query
+          required: false
+          description: 'Filter by strategy id (e.g. `buffett-value`). Preferred over the deprecated `strategy_name`; takes precedence when both are provided.'
+          schema:
+            type: string
+        - name: strategy_name
+          in: query
+          required: false
+          deprecated: true
+          description: 'Filter by strategy name. If omitted, returns signals from all strategies. Use `strategy_id` instead.'
+          schema:
+            type: string
+        - name: catalyst_name
+          in: query
+          required: false
+          description: 'Filter by the catalyst name that triggered the signal. If omitted, signals with any catalyst name are returned.'
+          schema:
+            type: string
+        - name: catalyst_type
+          in: query
+          required: false
+          description: 'Filter by the catalyst type that triggered the signal (e.g. `News`, `Fundamental`, `Technical`). If omitted, signals with any catalyst type are returned.'
+          schema:
+            type: string
+        - name: start_time
+          in: query
+          required: false
+          description: 'Only return signals created at or after this time. ISO 8601 datetime with timezone, e.g. `2024-01-15T10:30:00Z`. If omitted, no lower bound.'
+          schema:
+            type: string
+        - name: end_time
+          in: query
+          required: false
+          description: 'Only return signals created at or before this time. ISO 8601 datetime with timezone. If omitted, no upper bound.'
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: 'Maximum number of results to return. Defaults to 20.'
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          description: 'Number of results to skip for pagination. Defaults to 0.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  signals:
+                    - id: sign_992_1a00c9425c3_48ab
+                      symbol: 992.HK
+                      company_name: LENOVO GROUP
+                      market: HK
+                      title: '992.HK: May price surge doubles the stock, overshooting the target range'
+                      summary: "Lenovo Group's shares nearly doubled in May 2026..."
+                      strategy_id: '86'
+                      strategy_name: Universal Quality Growth
+                      recommend_by: ''
+                      expression: 992.HK:GROWTH:long
+                      key_fact_id: news_earnings_released_1786917430537733972
+                      key_catalyst: May Price Doubling
+                      analysis_price: 23.678
+                      conservative_price: 15.5
+                      benchmark_price: 19
+                      optimistic_price: 23.5
+                      outlook: Bearish
+                      outlook_desc: Bearish
+                      risk_level: R4
+                      status: 1
+                      display_control: 0
+                      json_data: '{"signal":{"core_conclusion":{...}},"strategy_fit_score":{...}}'
+                      created_at: '1787131229154'
+                      updated_at: '1787131229154'
+                  total: 306
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/signals/{signal_id}:
+    get:
+      operationId: signal_detail
+      summary: Get Signal Detail
+      x-summary-zh: 获取 Signal 详情
+      description: |
+        Get one signal by ID. Returns the same fields as the list endpoint, including the full
+        strategy analysis in `json_data`: strategy fit scores, valuation scenarios, evidence
+        sources, and the IDs of the facts related to the signal.
+      x-description-zh: |
+        通过 ID 获取特定信号，字段与列表接口一致，并在 `json_data` 中返回完整策略分析：
+        契合度评分、估值情景、证据来源，以及与该信号相关的事实 ID。
+      tags:
+        - Signals & Catalysts
+      parameters:
+        - name: signal_id
+          in: path
+          required: true
+          description: 'Signal ID (e.g. `sign_992_1a00c9425c3_48ab`), from `GET /v1/signals`.'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  signal:
+                    id: sign_992_1a00c9425c3_48ab
+                    symbol: 992.HK
+                    company_name: LENOVO GROUP
+                    market: HK
+                    title: '992.HK: May price surge doubles the stock, overshooting the target range'
+                    summary: "Lenovo Group's shares nearly doubled in May 2026..."
+                    strategy_id: '86'
+                    strategy_name: Universal Quality Growth
+                    recommend_by: ''
+                    expression: 992.HK:GROWTH:long
+                    key_fact_id: news_earnings_released_1786917430537733972
+                    key_catalyst: May Price Doubling
+                    analysis_price: 23.678
+                    conservative_price: 15.5
+                    benchmark_price: 19
+                    optimistic_price: 23.5
+                    outlook: Bearish
+                    outlook_desc: Bearish
+                    risk_level: R4
+                    status: 1
+                    display_control: 0
+                    json_data: '{"signal":{"core_conclusion":{...}},"strategy_fit_score":{...}}'
+                    created_at: '1787131229154'
+                    updated_at: '1787131229154'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/facts/security_facts:
+    get:
+      operationId: get_security_facts
+      summary: Get Security Facts
+      x-summary-zh: 查询证券的 Facts / Catalyst 列表
+      description: |
+        Query the fact (catalyst) events for one security — anomaly detections, factor readings,
+        data sources, and natural-language summaries — filtered by time range and count.
+
+        Facts are what strategies react to: a signal names the fact that triggered it in
+        `key_fact_id`.
+      x-description-zh: |
+        查询指定证券的事实事件列表，包含异动检测、因子信息、数据来源及自然语言摘要，
+        支持按时间范围和数量上限进行筛选。
+
+        事实是策略的触发源：信号的 `key_fact_id` 即指向触发它的那条事实。
+      tags:
+        - Signals & Catalysts
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          description: 'The security symbol to query, formatted as `ticker.region` (e.g. `AAPL.US`, `700.HK`).'
+          schema:
+            type: string
+        - name: begin_time
+          in: query
+          required: false
+          description: 'The optional start time of the fact query, formatted as `2006-01-02T15:04:05Z` in UTC. If left empty, the query will include the earliest available data.'
+          schema:
+            type: string
+        - name: end_time
+          in: query
+          required: false
+          description: 'The end time of the fact to be queried, formatted as `2006-01-02T15:04:05Z` in UTC. If left empty, the query will default to retrieving the latest data.'
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: 'The maximum number of facts to return. If the number of facts in the time range exceeds this limit, only the latest `limit` facts will be returned. Defaults to 100.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  facts: []
         default:
           description: Unexpected error
           content:
