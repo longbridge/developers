@@ -21,7 +21,7 @@ US accounts must use the global endpoint — `.cn` has no route to the US data c
 
 ## Available capabilities
 
-Longbridge MCP exposes 100+ tools across six capability areas. Your client discovers them automatically on connect — no manual configuration.
+Longbridge MCP exposes 160+ tools across six capability areas. Your client discovers them automatically on connect — no manual configuration.
 
 | Capability                  | Coverage                                                                                           |
 | --------------------------- | -------------------------------------------------------------------------------------------------- |
