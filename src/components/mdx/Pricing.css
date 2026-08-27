@@ -226,7 +226,7 @@
   margin: 0 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   flex: 1;
 }
 .pricing-plan-feats li {
@@ -234,6 +234,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
+  line-height: 1.6;
   color: var(--lb-fg-2);
 }
 .pricing-plan-cta {
@@ -355,11 +356,26 @@
   padding: 0 24px;
 }
 .pricing-page-root .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--lb-brand);
+}
+/* Leading dot badge — a solid brand dot inside a faint brand ring, matching
+   legacy's eyebrow (e.g. "● PRICING"). */
+.pricing-page-root .eyebrow::before {
+  content: '';
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at center, var(--lb-brand) 0 3px, transparent 3.5px),
+    color-mix(in srgb, var(--lb-brand) 14%, transparent);
 }
 .pricing-page-root .h-display {
   font-size: clamp(32px, 5vw, 52px);

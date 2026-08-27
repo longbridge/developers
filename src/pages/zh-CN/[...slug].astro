@@ -6,6 +6,7 @@ import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
 import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openapi-utils'
 import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
 import { buildMdxComponents } from '@/mdx-components'
+import { Pricing } from '@/components/mdx/Pricing'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -42,6 +43,10 @@ const layoutKind = resolveLayoutKind(entry)
 )}
 {layoutKind === 'plain' && (
   <PlainLayout title={titleStr} locale="zh-CN">
-    <Content components={buildMdxComponents('zh-CN')} />
+    {entry.data.id === 'pricing' ? (
+      <Pricing client:load locale="zh-CN" />
+    ) : (
+      <Content components={buildMdxComponents('zh-CN')} />
+    )}
   </PlainLayout>
 )}

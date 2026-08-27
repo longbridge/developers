@@ -20,10 +20,13 @@ const id = entry.id
 // Edit → GitHub. Points at `main` (the default branch this migration lands on).
 const editUrl = `https://github.com/longbridge/developers/edit/main/docs/${id}.mdx`
 
-// Raw markdown endpoint (src/pages/[locale]/[...slug].md.ts). The route always
-// carries a locale segment, so en (whose pages omit /en) needs it added.
+// Raw markdown endpoint. EN is served prefixless at the root
+// (src/pages/[...slug].md.ts → /docs/<path>.md), matching legacy and the EN
+// page URL; zh-CN/zh-HK carry their locale prefix
+// (src/pages/[locale]/[...slug].md.ts). resolveUrl already yields the right
+// path per locale, so just append `.md`.
 const url = resolveUrl(entry)
-const mdUrl = locale === 'en' ? `/en${url}.md` : `${url}.md`
+const mdUrl = `${url}.md`
 
 // Real per-page date from git (see src/lib/last-updated.ts); may be null.
 const iso = getLastUpdated(id)

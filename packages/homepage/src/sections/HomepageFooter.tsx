@@ -45,6 +45,8 @@ export function HomepageFooter({ locale, isCN = false }: HomepageFooterProps) {
   const rightLinks = [
     { href: '/sdk', label: 'SDK' },
     { href: '/docs/mcp', label: 'MCP' },
+    { href: 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef', label: 'ChatGPT App' },
+    { href: 'https://claude.ai/directory/connectors/longbridge', label: 'Claude Connector' },
     { href: '/docs/cli', label: 'CLI' },
     { href: '/docs/llm', label: 'LLM' },
     { href: '/docs/assets', label: content.assets },

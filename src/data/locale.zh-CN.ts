@@ -24,6 +24,7 @@ export const locale = {
   'footer.tagline': '为全球开发者提供实时行情、交易与金融智能服务——通过 AI Skill、CLI、MCP、SDK 和 OpenAPI 全面赋能。',
   'footer.status': '所有服务正常运行',
   'footer.products': '产品',
+  'footer.integrations': 'AI 集成',
   'footer.resources': '资源',
   'footer.company': '公司',
   'footer.legal': '法律',

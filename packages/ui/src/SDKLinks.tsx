@@ -1,13 +1,14 @@
 import React from 'react'
 
 export interface SDKLinksProps {
-  module?: 'quote' | 'trade'
-  klass?: 'QuoteContext' | 'TradeContext'
+  module?: 'quote' | 'trade' | 'grid'
+  klass?: 'QuoteContext' | 'TradeContext' | 'GridContext'
   method: string
   go?: string
   java?: string
   level?: number
   title?: string | boolean
+  hideGo?: boolean
 }
 
 // ──────────────────────────────────────────────
@@ -163,8 +164,10 @@ export function SDKLinks({
   java,
   level = 2,
   title = 'SDK Links',
+  hideGo = false,
 }: SDKLinksProps) {
-  const effectiveKlass = klass ?? (module === 'quote' ? 'QuoteContext' : 'TradeContext')
+  const effectiveKlass =
+    klass ?? (module === 'quote' ? 'QuoteContext' : module === 'grid' ? 'GridContext' : 'TradeContext')
   const snakeMethod = snakeCase(method)
   const camelMethod = camelCase(method)
   const capitalizedMethod = capitalize(camelMethod)
@@ -182,7 +185,7 @@ export function SDKLinks({
   const javaAnchorStr = JAVA_ANCHOR_MAP[methodJava] ?? methodJava
   const javaAnchor = encodeURIComponent(javaAnchorStr)
 
-  const links = [
+  const baseLinks = [
     {
       title: 'Python',
       color: '#3572a5',
@@ -220,6 +223,9 @@ export function SDKLinks({
       url: cppUrl,
     },
   ]
+
+  // The Go SDK has no grid-trading bindings yet; allow hiding the Go row.
+  const links = hideGo ? baseLinks.filter((l) => l.title !== 'Go') : baseLinks
 
   const titleStr = title === true ? 'SDK Links' : title === false ? '' : (title as string)
 

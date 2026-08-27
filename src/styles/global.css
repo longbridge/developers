@@ -30,9 +30,19 @@
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   margin: 0;
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: 400;
   background: var(--lbus-c-bg);
   color: var(--lbus-c-text);
   font-family: var(--lbus-font-sans);
+  font-synthesis: style;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition: background var(--lbus-transition-base), color var(--lbus-transition-base);
 }
 /* NOTE: tailwind v4 preflight already resets:

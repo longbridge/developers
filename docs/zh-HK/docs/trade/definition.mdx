@@ -98,6 +98,19 @@ sidebar_position: 2
 | remark         | string | 備注																																													 |
 | last_share         | string | 最新成交數量																																													 |
 | last_price         | string | 最新成交價格																																													 |
+| multi_leg          | object | 多腿策略信息，僅多腿期權組合訂單推送                                                                                                     |
+| ∟ strategy         | string | 多腿策略<br/><br/>**可選值**<br/>`0` - CoveredCall（股票擔保）<br />`1` - CoveredPut（股票擔保）<br />`2` - VerticalCallSpread（跨價期權）<br />`3` - VerticalPutSpread（跨價期權）<br />`4` - Collar（領式策略）<br />`5` - Straddle（馬鞍式策略）<br />`6` - Strangle（勒束式策略） |
+| ∟ strategy_name    | string | 策略名稱                                                                                                                             |
+| ∟ multileg_id      | string | 多腿組合 ID                                                                                                                          |
+| ∟ code             | string | 多腿組合代碼                                                                                                                          |
+| ∟ legs             | object[] | 組合訂單的各腿                                                                                                                      |
+| ∟∟ symbol          | string | 期權 symbol，使用 `ticker.region` 格式                                                                                                |
+| ∟∟ side            | string | 買賣方向<br/><br/>**可選值**<br/>`Buy`<br />`Sell`                                                                                    |
+| ∟∟ position        | string | 持倉方向<br/><br/>**可選值**<br/>`LONG`<br />`SHORT`                                                                                  |
+| ∟∟ ratio_quantity  | string | 該腿比例數量                                                                                                                          |
+| ∟∟ strike_price    | string | 行權價                                                                                                                               |
+| ∟∟ expire_date     | string | 期權到期日，格式：`YYYYMMDD`                                                                                                          |
+| ∟∟ contract_direction | string | 合約類型<br/><br/>**可選值**<br/>`C` - 看漲（Call）<br />`P` - 看跌（Put）                                                          |
 	
 ### 示例
 
@@ -129,7 +142,33 @@ sidebar_position: 2
 		"account_no": "HK123445",
 		"last_share": "100",
 		"last_price": "234",
-		"remark": "abc"
+		"remark": "abc",
+		"multi_leg": {
+			"strategy": "2",
+			"strategy_name": "跨價期權",
+			"multileg_id": "Spread_QQQ20260731C764/767",
+			"code": "QQQ 260731 764/767 跨價期權",
+			"legs": [
+				{
+					"symbol": "QQQ260731C764000.US",
+					"side": "Buy",
+					"position": "LONG",
+					"ratio_quantity": "1",
+					"strike_price": "764",
+					"expire_date": "20260731",
+					"contract_direction": "C"
+				},
+				{
+					"symbol": "QQQ260731C767000.US",
+					"side": "Sell",
+					"position": "SHORT",
+					"ratio_quantity": "1",
+					"strike_price": "767",
+					"expire_date": "20260731",
+					"contract_direction": "C"
+				}
+			]
+		}
 	}
 }
 ```

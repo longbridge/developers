@@ -5,7 +5,7 @@ sidebar_position: 2
 
 ## Q1: What types of orders are supported?
 
-Both paper and live accounts support regular Limit orders, Market orders, and Conditional orders (such as Buy if touched, Sell if touched, etc.), but do not currently support Attached orders and Grid orders.
+Both paper and live accounts support regular Limit orders, Market orders, and Conditional orders (such as Buy if touched, Sell if touched, etc.), but do not currently support Attached orders. Grid orders are supported via the [Grid Trading](/docs/trade/grid/overview) API.
 
 ## Q2: What are the trading hours for paper accounts?
 
@@ -45,3 +45,11 @@ This error usually indicates that the user does not have permission for the corr
 ## Q9: Does U.S. options trading support pre-market trading?
 
 Pre-market options trading is not currently supported. We are planning to add this feature, including multi-leg options, which will be released together. We will update the documentation once it becomes available.
+
+## Q10: Are the US-specific trade APIs available to paper accounts?
+
+No. The Longbridge US desk (US DC) does not provide paper accounts, so the entire US region is unavailable in a paper environment. This covers **every** US-specific API, including [US Order History](/docs/trade/order/us_query_orders) and [US Order Detail](/docs/trade/order/us_order_detail).
+
+Calling one of them from a paper account returns an error rather than an empty result — do not treat that failure as "this account has no orders".
+
+If you need a paper environment, use an AP account instead. The data center only determines where your account is held — it does not restrict API connectivity. AP paper accounts can trade U.S. symbols and read them through the generic trade APIs (`today_orders`, `history_orders`, `account_balance`, `stock_positions`, and so on). See Q4 for what paper accounts support.

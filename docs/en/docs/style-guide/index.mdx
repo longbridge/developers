@@ -1,0 +1,35 @@
+---
+title: 'Documentation Style Guide'
+id: style-guide_overview
+slug: '/style-guide/'
+sidebar_position: 0
+sidebar_icon: book-open
+---
+
+# Documentation Style Guide
+
+Standards and guidelines for creating and maintaining documentation on the Longbridge Developers platform (`open.longbridge.com`).
+
+These guidelines apply to all documentation contributors: human writers, AI agents, and API engineers. Consistent, well-structured documentation reduces time-to-first-working-integration and builds developer confidence across the platform.
+
+## What's in this guide
+
+| Page | What it covers |
+|------|----------------|
+| [Content Types](./content-types) | The nine content types — when to use each, required sections, and title format |
+| [Information Architecture](./information-architecture) | Standard user journey, sidebar ordering, and mixed-content rules |
+| [API Reference Standards](./api-reference) | Endpoint titles, parameter descriptions, cURL examples, and deprecation handling |
+| [Writing Guidelines](./writing-guidelines) | Voice, headings, code examples, callout boxes, links, and tables |
+| [Multilingual and Frontmatter](./multilingual) | Three-language sync rules, frontmatter fields, and what not to write |
+
+## Content architecture
+
+The site has **one unified content directory** — there is no separate `api/` directory. All documentation lives under `docs/{lang}/docs/`.
+
+| Area | Path | Purpose |
+|------|------|---------|
+| **Docs** | `docs/{lang}/docs/` | Scenario-based guides, tutorials, and conceptual background |
+| **API endpoint docs** | `docs/{lang}/docs/{domain}/{endpoint}.md` | Per-endpoint reference: HTTP method, parameters, request/response examples |
+| **Interactive API reference** | `docs/en/docs/api.md` | Single special page with `layout: api-reference` that renders `openapi.yaml` interactively via `<TryIt>` |
+
+Docs explains *how to use* the platform. API endpoint docs explain *what* each endpoint does. These two areas share the same directory tree and must not be blended on a single page.

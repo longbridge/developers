@@ -1,17 +1,17 @@
 ---
 title: 'acp'
 sidebar_label: 'ACP Agent'
-sidebar_position: 98
+sidebar_position: 97
 sidebar_icon: bot
 ---
 
 # longbridge acp
 
-`longbridge acp` 将 [Longbridge AI](https://longbridge.com/ai) 作为兼容 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）的 Agent 运行。你可以从任何支持启动自定义 ACP Agent 的客户端应用中与 Longbridge AI 对话，查询实时行情、分析公司基本面、解读账户持仓。
+`longbridge acp` 将 [LongbridgeAI](https://longbridge.com/ai) 作为兼容 [Agent Client Protocol](https://agentclientprotocol.com/)（ACP）的 Agent 运行。你可以从任何支持启动自定义 ACP Agent 的客户端应用中与 LongbridgeAI 对话，查询实时行情、分析公司基本面、解读账户持仓。
 
 ## 使用场景
 
-- 在常用 AI 客户端中直接使用 Longbridge AI，无需切换应用
+- 在常用 AI 客户端中直接使用 LongbridgeAI，无需切换应用
 - 围绕市场、公司和持仓连续追问，无需自行调用和组合多个 API
 - 恢复之前的会话，继续已有的研究与分析
 
@@ -37,7 +37,7 @@ ACP Agent 与其他 CLI 命令共用登录状态，无需单独配置 API 密钥
 
 | 配置项 | 值 |
 | --- | --- |
-| 名称 | `Longbridge AI` |
+| 名称 | `LongbridgeAI` |
 | 命令 / Executable | `longbridge` |
 | 参数 / Arguments | `acp` |
 | 环境变量 | 留空 |
@@ -53,7 +53,7 @@ ACP Agent 与其他 CLI 命令共用登录状态，无需单独配置 API 密钥
 ```json
 {
   "agent_servers": {
-    "Longbridge AI": {
+    "LongbridgeAI": {
       "type": "custom",
       "command": "longbridge",
       "args": ["acp"],
@@ -63,7 +63,7 @@ ACP Agent 与其他 CLI 命令共用登录状态，无需单独配置 API 密钥
 }
 ```
 
-保存后新建 External Agent 对话并选择 **Longbridge AI**。详见 [Zed External Agents 文档](https://zed.dev/docs/ai/external-agents)。
+保存后新建 External Agent 对话并选择 **LongbridgeAI**。详见 [Zed External Agents 文档](https://zed.dev/docs/ai/external-agents)。
 
 ## 会话
 

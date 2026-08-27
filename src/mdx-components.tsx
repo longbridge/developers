@@ -16,6 +16,7 @@ import { McpTools } from '@/components/mdx/McpTools'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { Pricing } from '@/components/mdx/Pricing'
 import { QuotePermission } from '@/components/mdx/QuotePermission'
+import { getCliDocHref } from '@/lib/cli-doc-map'
 // ApiReference is mounted directly by ApiReferenceLayout.astro from
 // `@longbridge/openapi-api-reference`; it's not needed here as an mdx tag.
 import { QuantChart } from '@/components/mdx/placeholders/QuantChart'
@@ -36,9 +37,27 @@ export function buildMdxComponents(locale: Locale) {
     Tabs,
     TabItem,
     TipContainer,
-    CliCommand,
     SDK,
     SDKLinks,
+
+    // CliCommand needs locale for its "Install CLI" link, and a resolved
+    // command-specific "CLI Usage Docs" (book) deep-link — derived from the
+    // first command's subcommand (e.g. `longbridge financial-report …` →
+    // /docs/cli/fundamentals/financial-report), matching legacy.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    CliCommand: (props: any) => {
+      const code: string = typeof props.code === 'string' ? props.code : ''
+      const firstCmd = code
+        .split('\n')
+        .map((l) => l.trim())
+        .find((l) => l && !l.startsWith('#'))
+      const toks = firstCmd ? firstCmd.split(/\s+/) : []
+      const sub = toks[0] === 'longbridge' || toks[0] === 'lb' ? toks[1] : undefined
+      const docHref = sub ? getCliDocHref(sub, locale) : null
+      return (
+        <CliCommand {...props} locale={props.locale ?? locale} docHref={docHref ?? undefined} />
+      )
+    },
 
     // Locale-bound composites
     Skill: bindLocale(SkillCatalog),

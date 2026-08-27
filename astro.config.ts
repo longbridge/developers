@@ -58,6 +58,18 @@ export default defineConfig({
               }
             }
           }
+          // 1.5) CLI command blocks. `<CliCommand>\n# comment\ncmd\n…\n</CliCommand>`
+          //    — MDX parses the inner `#` lines as <h1> headings and each command
+          //    as a <p>, destroying the terminal card. Extract the raw inner text
+          //    and hand it to a SELF-CLOSING `<CliCommand code={"…"} />` (no
+          //    children → MDX never re-parses the block), which rebuilds the
+          //    terminal card + syntax highlighting. Mirrors the legacy markdown-it
+          //    cli-command plugin, which also operated on raw markdown. Run before
+          //    every other transform so the inner text is captured verbatim.
+          out = out.replace(
+            /<CliCommand>\r?\n([\s\S]*?)\r?\n[ \t]*<\/CliCommand>/g,
+            (_m, inner: string) => `<CliCommand code={${JSON.stringify(inner)}} />`,
+          )
           // 2) Convert vitepress heading anchor syntax `## Foo {#bar}` →
           //    `<h2 id="bar">Foo<a …/></h2>`.
           //    MDX parses `{#bar}` as a JSX expression (acorn) before remark plugins run,

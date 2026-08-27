@@ -265,6 +265,74 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
   font-size: 0.875em;
 }
 
+/* ── CLI command terminal card ─────────────────────────────────────────────
+   `<CliCommand>` blocks (mdx preflight → `code` prop → CliCommand.tsx).
+   Terminal card: header row (">_ CLI" + copy) over a body whose comment /
+   command-keyword / subcommand tokens use the site's github-light/dark shiki
+   palette, so it reads like the fenced code blocks. */
+.cli-command {
+  margin: 16px 0;
+  border: 1px solid var(--lbus-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--lb-bg-2);
+  font-family: var(--app-mono);
+}
+.cli-command__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--lbus-c-divider);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--lb-fg-2);
+}
+.cli-command__prompt {
+  color: var(--lb-fg-3);
+  margin-right: 4px;
+}
+/* Header actions: "CLI Usage Docs" (book) + "Install CLI" (download) links,
+   matching legacy. */
+.cli-command__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.cli-command__action {
+  display: inline-flex;
+  align-items: center;
+  color: var(--lb-fg-2);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.15s, color 0.15s;
+}
+.cli-command__action:hover {
+  opacity: 1;
+  color: var(--lb-brand);
+}
+.cli-command__action svg {
+  display: block;
+}
+.cli-command__body {
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--lb-fg-1);
+}
+.cli-line {
+  white-space: pre;
+}
+/* github-light token colours (match shiki github-light used by fenced code) */
+.cli-comment { color: #6e7781; }
+.cli-tok-kw { color: #8250df; }
+.cli-tok-sub { color: #0550ae; }
+/* github-dark equivalents */
+[data-mode="dark"] .cli-comment { color: #8b949e; }
+[data-mode="dark"] .cli-tok-kw { color: #d2a8ff; }
+[data-mode="dark"] .cli-tok-sub { color: #79c0ff; }
+
 /* ── Tables ──────────────────────────────────────────────────────────────
    Legacy `.vp-doc table`: block-level with horizontal scroll, collapsed 1px
    dividers (--lbus-c-divider = rgba(0,0,0,.06)), header + even-row zebra in
@@ -324,6 +392,46 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
 .docs-content img {
   max-width: 100%;
   height: auto;
+}
+
+/* ── Scrollbars ────────────────────────────────────────────────────────────
+   Thin, rounded, theme-aware scrollbars on the docs scroll regions (sidebar,
+   TOC, code blocks, tables), drawn from the design system: `--app-card-stroke-
+   strong` thumb over a transparent track, `999px` pill radius, darkening to
+   `--lb-fg-3` on hover. Firefox uses scrollbar-width/color; WebKit uses the
+   pseudo-elements. Scoped to docs so the rest of the site keeps native bars. */
+[data-lbus-component="sidebar"],
+.docs-toc,
+.docs-content pre,
+.docs-content table {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lb-fg-3) transparent;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar,
+.docs-toc::-webkit-scrollbar,
+.docs-content pre::-webkit-scrollbar,
+.docs-content table::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar-track,
+.docs-toc::-webkit-scrollbar-track,
+.docs-content pre::-webkit-scrollbar-track,
+.docs-content table::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar-thumb,
+.docs-toc::-webkit-scrollbar-thumb,
+.docs-content pre::-webkit-scrollbar-thumb,
+.docs-content table::-webkit-scrollbar-thumb {
+  background: var(--lb-fg-3);
+  border-radius: 999px;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar-thumb:hover,
+.docs-toc::-webkit-scrollbar-thumb:hover,
+.docs-content pre::-webkit-scrollbar-thumb:hover,
+.docs-content table::-webkit-scrollbar-thumb:hover {
+  background: var(--lb-fg-2);
 }
 
 .docs-toc {

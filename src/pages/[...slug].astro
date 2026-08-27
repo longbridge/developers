@@ -6,6 +6,7 @@ import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
 import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openapi-utils'
 import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
 import { buildMdxComponents } from '@/mdx-components'
+import { Pricing } from '@/components/mdx/Pricing'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -45,6 +46,12 @@ const layoutKind = resolveLayoutKind(entry)
 )}
 {layoutKind === 'plain' && (
   <PlainLayout title={titleStr} locale="en">
-    <Content components={buildMdxComponents('en')} />
+    {/* Pricing is a fully interactive island (billing toggle) — render it
+        hydrated instead of the SSR-only mdx-component so the toggle works. */}
+    {entry.data.id === 'pricing' ? (
+      <Pricing client:load locale="en" />
+    ) : (
+      <Content components={buildMdxComponents('en')} />
+    )}
   </PlainLayout>
 )}

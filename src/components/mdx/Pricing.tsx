@@ -337,11 +337,11 @@ function getPlanCycle(plan: { cycles: Record<string, PlanCycle> }, cycleKey: str
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function Pricing() {
-  const [locale, setLocale] = useState<'en' | 'zh-CN' | 'zh-HK'>('en')
+export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-CN' | 'zh-HK' } = {}) {
+  const [locale, setLocale] = useState<'en' | 'zh-CN' | 'zh-HK'>(initialLocale)
   const [cycle, setCycle] = useState('auto')
 
-  // Detect locale from URL pathname on client
+  // Detect locale from URL pathname on client (fallback / safety net)
   useEffect(() => {
     const path = window.location.pathname
     if (path.includes('/zh-CN/')) setLocale('zh-CN')

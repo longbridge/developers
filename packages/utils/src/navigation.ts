@@ -159,6 +159,16 @@ function buildItems(
           relFromDocs.startsWith(`${locale}/docs/`)
         const prefixed = inDocs ? `/docs${data.slug}` : data.slug
         link = locale === 'en' ? prefixed : `/${locale}${prefixed}`
+      } else if (data.slug && typeof data.slug === 'string') {
+        // Relative slug (no leading `/`): keep the file's DIRECTORY and use the
+        // slug as the last path segment, replacing the filename. Must mirror
+        // resolveUrl (slug.ts) exactly, or the sidebar/prev-next/breadcrumb
+        // link won't match the page's real route — e.g. financial_report.mdx
+        // with `slug: financial-report` routes to `…/financial-report` but the
+        // filename-derived link would be `…/financial_report` (404).
+        const dir = relFromDocs.split('/').slice(1).join('/') // strip locale seg
+        const rel = ('/' + dir + '/' + data.slug).replace(/\/{2,}/g, '/')
+        link = locale === 'en' ? rel : `/${locale}${rel}`
       } else {
         link = urlFromAbsPath(absEntry, locale)
       }
