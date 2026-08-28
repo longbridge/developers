@@ -51,6 +51,24 @@ body {
    space the header used to occupy in flow when it was sticky, so content
    position is unchanged. */
 #main-content { padding-top: 60px; }
+/* Whale app (Longbridge in-app WebView): the host provides its own chrome, so
+   hide the site top nav, mobile local-nav and marketing footer, and drop the
+   fixed-header offset. Ported from legacy LayoutInner `v-if="!isWhaleApp"`. */
+html.is-whale-app [data-lbus-component='top-nav'],
+html.is-whale-app [data-lbus-component='local-nav'],
+html.is-whale-app footer[data-lbus-component='footer'] {
+  display: none !important;
+}
+html.is-whale-app #main-content {
+  padding-top: 0 !important;
+}
+/* Theme-toggle circular reveal (ThemeToggle view-transition): disable the
+   default root cross-fade so the clip-path animation is the only effect. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 /* NOTE: tailwind v4 preflight already resets:
    - button/input font (was: `input, button, textarea, select { font: inherit }`)
    - img/svg/video display:block + max-width:100%

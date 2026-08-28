@@ -10,6 +10,7 @@ export const locale = {
   'nav.dashboard': '控制台',
   'nav.connectAi': '连接 AI',
   'nav.logout': '退出登录',
+  'helora.submitIssue': '提交问题',
   'nav.home': '首页',
   'nav.theme.light': '浅色',
   'nav.theme.dark': '深色',

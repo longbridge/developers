@@ -75,6 +75,12 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
     return () => document.removeEventListener('astro:page-load', onPageLoad)
   }, [])
   const navItems = navForLocale(locale)
+  // CN region hides Pricing / Docs / the Features menu (legacy CN_HIDDEN_KEYS).
+  const isCnRegion = import.meta.env.VITE_REGION === 'cn'
+  const CN_HIDDEN_LINKS = new Set(['/pricing', '/docs'])
+  const visibleNavItems = isCnRegion
+    ? navItems.filter((n) => !n.link || !CN_HIDDEN_LINKS.has(n.link))
+    : navItems
 
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 
@@ -106,11 +112,13 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
             logo→menu distance (web/desktop only; nav is display:none below lg). */}
         <nav className="flex-1 min-w-0 hidden lg:block lg:ml-[60px]" aria-label="Main navigation">
           <ul className="flex items-center gap-1 list-none p-0 m-0" role="list">
-            {/* Features dropdown — ported from legacy FeaturesMenu.vue */}
-            <li>
-              <FeaturesMenu locale={locale} />
-            </li>
-            {navItems.map((item) => (
+            {/* Features dropdown — ported from legacy FeaturesMenu.vue (hidden in CN) */}
+            {!isCnRegion && (
+              <li>
+                <FeaturesMenu locale={locale} />
+              </li>
+            )}
+            {visibleNavItems.map((item) => (
               <li key={item.link ?? item.text}>
                 {item.link ? (
                   <a
@@ -196,7 +204,8 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
           className="lg:hidden absolute left-0 right-0 top-full bg-[var(--lb-bg-1)] border-t border-[color:var(--app-card-stroke)] px-4 pt-2 pb-4 max-h-[calc(100dvh-60px)] overflow-y-auto"
           aria-label="Mobile navigation"
         >
-          {/* Features accordion — legacy .screen-menu-group */}
+          {/* Features accordion — legacy .screen-menu-group (hidden in CN) */}
+          {!isCnRegion && (
           <div className="border-b border-[color:var(--app-card-stroke)]">
             <button
               type="button"
@@ -226,8 +235,9 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
               </div>
             )}
           </div>
+          )}
           {/* Top-level links — legacy .app-nav-mobile > a */}
-          {navItems.map((item) =>
+          {visibleNavItems.map((item) =>
             item.link ? (
               <a
                 key={item.link}

@@ -10,6 +10,7 @@ export const locale = {
   'nav.dashboard': 'Dashboard',
   'nav.connectAi': 'Connect AI',
   'nav.logout': 'Log out',
+  'helora.submitIssue': 'Submit an issue',
   'nav.home': 'Home',
   'nav.theme.light': 'Light',
   'nav.theme.dark': 'Dark',

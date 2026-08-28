@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
+import { detectWhaleApp } from '@/lib/whale'
 
 type Pref = 'light' | 'dark' | 'system'
 
@@ -70,6 +71,9 @@ export default function ThemeToggle({ locale: _locale = 'en' }: Props) {
 
   useEffect(() => {
     setMounted(true)
+    // Whale app: the theme is UA-driven and applied inline in <head>; the toggle
+    // is hidden there, so don't let its mount effect override that theme.
+    if (detectWhaleApp()) return
     const stored = (localStorage.getItem('ui-mode') ?? 'system') as Pref
     setPref(stored)
     applyTheme(stored)
@@ -85,10 +89,40 @@ export default function ThemeToggle({ locale: _locale = 'en' }: Props) {
     return () => mql.removeEventListener('change', handler)
   }, [])
 
-  function cycle(): void {
+  function resolveDark(p: Pref): boolean {
+    return p === 'dark' || (p === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+  }
+
+  // Legacy useThemeToggle: circular clip-path reveal from the click point via
+  // the View Transitions API (falls back to an instant switch).
+  function cycle(e: React.MouseEvent): void {
     const next = CYCLE[pref]
-    setPref(next)
-    applyTheme(next)
+    const apply = () => {
+      setPref(next)
+      applyTheme(next)
+    }
+    const canAnimate =
+      'startViewTransition' in document &&
+      matchMedia('(prefers-reduced-motion: no-preference)').matches
+    if (!canAnimate) {
+      apply()
+      return
+    }
+    const x = e.clientX
+    const y = e.clientY
+    const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+    const clip = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+    const nextDark = resolveDark(next)
+    document.startViewTransition(apply).ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: nextDark ? [...clip].reverse() : clip },
+        {
+          duration: 300,
+          easing: 'ease-in',
+          pseudoElement: `::view-transition-${nextDark ? 'old' : 'new'}(root)`,
+        },
+      )
+    })
   }
 
   const isDark =

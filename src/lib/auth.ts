@@ -14,14 +14,7 @@ import type { Locale } from '@longbridge/openapi-utils'
 const INVITE_CODE_KEY = 'invite-code'
 const MOCK_KEY = '__mock_login'
 
-declare global {
-  interface Window {
-    longportInternal?: {
-      isLogin: () => boolean
-      getUserInfo: () => Promise<{ data: { member: { avatar?: string; name?: string } } }>
-    }
-  }
-}
+// window.longportInternal / __LB_PROXY__ / … are typed in platform-globals.d.ts.
 
 function readCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return undefined
@@ -90,12 +83,29 @@ export function readIsLogin(): boolean {
  *  logged in. Returns '' when unavailable. */
 export async function fetchAvatar(): Promise<string> {
   try {
-    if (window.longportInternal?.isLogin?.()) {
-      const res = await window.longportInternal.getUserInfo()
+    const lp = window.longportInternal
+    if (lp?.isLogin?.() && lp.getUserInfo) {
+      const res = await Promise.resolve(lp.getUserInfo())
       return res?.data?.member?.avatar ?? ''
     }
   } catch {
     /* ignore */
   }
   return ''
+}
+
+/**
+ * Legacy `saveInviteCodeFromUrl` (theme/index.ts): if the URL carries
+ * `?invite-code=…`, persist it to a 7-day cookie so the login redirect can
+ * pick it up later even after the user navigates away. Runs on first load and
+ * after every client-side navigation (see scripts/site-init.ts).
+ */
+export function saveInviteCodeFromUrl(): void {
+  if (typeof window === 'undefined') return
+  const inviteCode = new URLSearchParams(window.location.search).get(INVITE_CODE_KEY)
+  if (inviteCode) {
+    const expires = new Date()
+    expires.setDate(expires.getDate() + 7)
+    document.cookie = `${INVITE_CODE_KEY}=${encodeURIComponent(inviteCode)};expires=${expires.toUTCString()};path=/;SameSite=Lax`
+  }
 }

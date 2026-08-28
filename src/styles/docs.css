@@ -408,6 +408,10 @@ html:not([data-mode="dark"]) .docs-content pre.astro-code {
 
 /* Lists — Tailwind Preflight strips list markers; legacy `.vp-doc` keeps
    disc/decimal at 20px indent. */
+/* Mermaid diagrams (client-rendered from ```mermaid fences by mermaid-init). */
+.mermaid-diagram { display: flex; justify-content: center; margin: 20px 0; }
+.mermaid-diagram svg { max-width: 100%; height: auto; }
+
 .docs-content ul,
 .docs-content ol { padding-left: 20px; margin: 16px 0; }
 .docs-content ul { list-style: disc; }

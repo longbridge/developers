@@ -17,6 +17,35 @@ export interface Props {
 }
 const { title, description = '', locale = 'en', hideFooter = false } = Astro.props
 const pathname = new URL(Astro.request.url).pathname
+
+// Platform globals + analytics — resolved at build time, ported 1:1 from the
+// legacy VitePress config.mts (head[] + insertScript). PROXY is injected by the
+// build:canary script; NODE_ENV is production during `astro build`.
+const PROXY = process.env.PROXY
+const oneTapProxy = PROXY === 'canary' ? 'canary' : 'production'
+const isReleaseBuild = PROXY !== 'canary' && process.env.NODE_ENV === 'production'
+const heloraScriptSrc = 'https://assets.lbkrs.com/h5hub/helora-embed/helora-embed-1.0.1.iife.js'
+const apiProxyDefault = JSON.stringify(process.env.VITE_PORTAL_GATEWAY_BASE_URL)
+// Resolve window.__API_PROXY_URL__ from the app_id cookie (US tenants) before
+// the login bridge loads; must be an inline sync script in <head>.
+const apiProxyBootstrap = `(function(){var d=document;function c(n){var m=('; '+d.cookie).split('; '+n+'=');return m.length===2?decodeURIComponent(m.pop().split(';').shift()):undefined;}var a=c('app_id')||c('x-original-app-id');var US={longbridge_us:'https://mr.longbridge.com',longbridge_us_uat:'https://mr.longbridge-staging.com'};window.__API_PROXY_URL__=(a&&US[a])||${apiProxyDefault};})();`
+const gtagInit = `window.dataLayer = window.dataLayer||[];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-P81Y8BDYYS');`
+
+// Per-page SEO head — ported 1:1 from legacy config.mts transformHead:
+// canonical + hreflang alternates (en / zh-Hans / zh-Hant) + a text/markdown
+// discovery alternate + og/twitter. Computed from the URL + locale.
+const seoHost = import.meta.env.VITE_SITE_HOSTNAME ?? 'https://open.longbridge.com'
+const localePathname = pathname.replace(/\/+$/, '').replace(/^\//, '') // '', 'docs', 'zh-CN/docs/x'
+const neutralPath = localePathname.replace(/^zh-CN\/?/, '').replace(/^zh-HK\/?/, '')
+const join = (base: string, p: string) => (p ? `${base}/${p}` : `${base}/`)
+const canonicalUrl = join(seoHost, localePathname)
+const alternates = {
+  en: join(seoHost, neutralPath),
+  zhHans: join(seoHost, neutralPath ? `zh-CN/${neutralPath}` : 'zh-CN'),
+  zhHant: join(seoHost, neutralPath ? `zh-HK/${neutralPath}` : 'zh-HK'),
+  markdown: `${seoHost}/${localePathname ? `${localePathname}.md` : 'index.md'}`,
+}
+const ogImage = 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png'
 ---
 <!doctype html>
 <html lang={locale} data-mode="light" data-theme="default" data-nb-pref="system">
@@ -25,6 +54,20 @@ const pathname = new URL(Astro.request.url).pathname
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+
+    {/* Per-page SEO (ported from legacy config.mts transformHead) */}
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={alternates.en} />
+    <link rel="alternate" hreflang="zh-Hans" href={alternates.zhHans} />
+    <link rel="alternate" hreflang="zh-Hant" href={alternates.zhHant} />
+    <link rel="alternate" type="text/markdown" href={alternates.markdown} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+
     <ClientRouter />
     <script is:inline>
       // Applies the persisted theme to <html>. Runs synchronously on first
@@ -34,19 +77,65 @@ const pathname = new URL(Astro.request.url).pathname
       // on each navigation. The listener is registered once on <document>
       // (which survives swaps), so it is not duplicated per navigation.
       ;(function () {
+        // Whale app (Longbridge in-app WebView): UA carries lbcommitid +
+        // lbtheme/<mode>. Inside it, hide site chrome (is-whale-app) and take
+        // the theme from the UA instead of localStorage. Ported from legacy
+        // useWhaleApp + useLbDarkSync (no-flash: runs synchronously in <head>).
+        var WHALE = /lbcommitid/i
         function applyTheme() {
-          var pref = localStorage.getItem('ui-mode') || 'system'
-          var dark =
-            pref === 'dark' ||
-            (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
           var root = document.documentElement
+          var ua = (navigator && navigator.userAgent) || ''
+          var isWhale = WHALE.test(ua)
+          root.classList.toggle('is-whale-app', isWhale)
+          var dark
+          if (isWhale) {
+            var m = ua.match(/lbtheme\/(\S+)/)
+            var wt = m && m[1]
+            if (wt === 'dark' || wt === 'light') dark = wt === 'dark'
+          }
+          if (dark === undefined) {
+            var pref = localStorage.getItem('ui-mode') || 'system'
+            dark =
+              pref === 'dark' ||
+              (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+            root.dataset.nbPref = pref
+          }
           root.dataset.mode = dark ? 'dark' : 'light'
-          root.dataset.nbPref = pref
         }
         applyTheme()
         document.addEventListener('astro:after-swap', applyTheme)
       })()
     </script>
+
+    {/* ── Platform globals + analytics (ported 1:1 from legacy config.mts) ── */}
+    {/* Resolve window.__API_PROXY_URL__ before the login bridge loads. */}
+    <script is:inline set:html={apiProxyBootstrap} />
+    {/* Login bridge → window.longportInternal (login state, avatar, member id). */}
+    <script is:inline defer src="https://assets.lbctrl.com/openapi-sdk/release/longport-internal-202607201728.iife.js"></script>
+    {/* Favicons + meta */}
+    <link rel="shortcut icon" type="image/svg+xml" href="https://assets.lbkrs.com/uploads/bf1df347-6ee7-4f6d-b716-171c74e24521/logo-light.svg" />
+    <link rel="apple-touch-icon" media="(prefers-color-scheme: light)" href="https://assets.lbkrs.com/uploads/bf1df347-6ee7-4f6d-b716-171c74e24521/logo-light.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="192x192" media="(prefers-color-scheme: light)" href="https://assets.lbkrs.com/uploads/bf1df347-6ee7-4f6d-b716-171c74e24521/logo-light.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="512x512" media="(prefers-color-scheme: light)" href="https://assets.lbkrs.com/uploads/bf1df347-6ee7-4f6d-b716-171c74e24521/logo-light.svg" />
+    <link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: dark)" href="https://assets.lbkrs.com/uploads/1e1dcd32-a8a5-401f-a01c-aabec0cf9ff9/logo-dark.svg" />
+    <meta name="theme-color" content="#5f67ee" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="https://open.longbridge.com" />
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+    {/* Google Analytics */}
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-P81Y8BDYYS"></script>
+    <script is:inline set:html={gtagInit} />
+    {/* Env proxy consumed by One-Tap + sensors */}
+    <script is:inline set:html={`window.__LB_PROXY__ = ${JSON.stringify(oneTapProxy)};`} />
+    {/* 神策 sensors SDK */}
+    <script is:inline defer src="https://assets.lbkrs.com/pkg/sensorsdata/1.27.11.min.js"></script>
+    {/* iconfont */}
+    <script is:inline async src="https://at.alicdn.com/t/c/font_2621450_y740y72ffjq.js"></script>
+    {/* Google One-Tap login */}
+    <script is:inline src="https://assets.wbrks.com/plugin/session/google-one-tap.es.js" data-proxy={oneTapProxy}></script>
+    {/* Helora support widget */}
+    <script is:inline async src={heloraScriptSrc} data-helora-proxy={isReleaseBuild ? 'prod' : 'staging'}></script>
   </head>
   <body>
     <SkipLink />
@@ -65,5 +154,8 @@ const pathname = new URL(Astro.request.url).pathname
         boundary. TabItem !ctx branch emits data-tab-* attrs; this script reads
         them to build the interactive tab bar and manage visibility. */}
     <script>import '../scripts/tabs-hydrate'</script>
+    {/* Global client init: invite-code capture, 神策 sensors, route progress bar
+        (ports legacy theme/index.ts enhanceApp side effects). */}
+    <script>import '../scripts/site-init'</script>
   </body>
 </html>
