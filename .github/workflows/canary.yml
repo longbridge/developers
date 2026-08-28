@@ -30,8 +30,15 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
       - name: Install dependency
-        run: bun install
+        run: bun install --frozen-lockfile --verbose
 
       - name: Build canary
         run: bun run build:canary
