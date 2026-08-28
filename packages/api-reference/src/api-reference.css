@@ -589,7 +589,10 @@
 
 /* ── Dark mode ───────────────────────────────────────────────────────────── */
 
-:root[data-theme="dark"] .code-card,
+:root[data-theme="dark"] .code-card {
+  background: #1e2a3a;
+  border-color: rgba(255,255,255,0.08);
+}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .code-card {
     background: #1e2a3a;
@@ -597,7 +600,9 @@
   }
 }
 
-:root[data-theme="dark"] .card-header,
+:root[data-theme="dark"] .card-header {
+  background: #16202d;
+}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .card-header {
     background: #16202d;

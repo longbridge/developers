@@ -30,6 +30,8 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { 'en': 'en', 'zh-CN': 'zh-CN', 'zh-HK': 'zh-HK' },
       },
+      // Legacy config.mts sitemap.transformItems: drop migration URLs.
+      filter: (page) => !page.includes('migration'),
     }),
     regionHostnameRewrite(),
     prebuildMcpTools(),
