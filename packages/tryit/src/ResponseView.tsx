@@ -3,7 +3,7 @@
  * Ported from legacy TryIt/Code.vue; uses shiki for JSON highlighting
  */
 
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { ApiResponse } from './clients/http-client'
 
 interface ResponseViewProps {

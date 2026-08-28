@@ -137,7 +137,7 @@ export class LongbridgeApiClient {
   /**
    * 发送 HTTP 请求
    */
-  async request<T = any>(uri: string, options: RequestOptions = {}): Promise<ApiResponse> {
+  async request<T = any>(uri: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
     const { method = 'GET', params = {}, body, headers: customHeaders = {}, timeout = this.config.timeout } = options
 
     // 构建查询参数

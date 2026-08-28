@@ -4,13 +4,12 @@
  * Handles sidebar navigation, URL routing (?op= / ?page=), endpoint detail,
  * page content, param sections, and code panel.
  */
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { t } from '@longbridge/openapi-utils'
 import type { Locale } from '@longbridge/openapi-utils'
 import {
   parseSpec,
   splitDescriptionAndCode,
-  parseCodeBlock,
   localizeDocLinks,
   formatPath,
   epId,
@@ -18,7 +17,6 @@ import {
   buildResponseExample,
   type EndpointItem,
   type PageItem,
-  type TagGroup,
   type CodeBlock,
   type Section,
 } from './openapi-loader'
@@ -68,7 +66,6 @@ export interface ApiReferenceProps {
 function buildSections(ep: EndpointItem, locale: Locale): Section[] {
   const sections: Section[] = []
   const isZh = locale !== 'en'
-  const descKey = isZh ? 'x-description-zh' : 'description'
 
   // Auth section — always shown
   const authSection: Section = {
@@ -164,7 +161,6 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
 
 function buildCodeBlocks(ep: EndpointItem, serverUrl: string, locale: Locale): CodeBlock[] {
   const blocks: CodeBlock[] = []
-  const isZh = locale !== 'en'
 
   // Code samples from x-codeSamples
   if (ep.operation['x-codeSamples']?.length) {

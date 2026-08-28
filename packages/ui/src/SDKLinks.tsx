@@ -1,5 +1,3 @@
-import React from 'react'
-
 export interface SDKLinksProps {
   module?: 'quote' | 'trade' | 'grid'
   klass?: 'QuoteContext' | 'TradeContext' | 'GridContext'

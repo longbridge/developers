@@ -4,7 +4,7 @@
  * Locale: detected at runtime from window.location.pathname; SSR default 'en'.
  * No AppNav / AppFooter — BaseLayout.astro already renders TopNav + Footer.
  */
-import React, { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import './Pricing.css'
 
 // ── Inline i18n ───────────────────────────────────────────────────────────────

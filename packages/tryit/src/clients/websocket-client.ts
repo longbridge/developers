@@ -458,11 +458,7 @@ export class LongbridgeWebSocketClient {
    * 身份认证
    */
   private async authenticate(otp: string): Promise<void> {
-    try {
-      await this.sendRequest(CMD_AUTH, otp, undefined, true) // 跳过连接状态检查
-    } catch (error) {
-      throw error
-    }
+    await this.sendRequest(CMD_AUTH, otp, undefined, true) // 跳过连接状态检查
   }
 
   /**

@@ -4,7 +4,6 @@
  * Data source: quote-permissions.yaml (raw import, parsed once at module level).
  * Locale: MDX pages don't inject a locale prop, so locale defaults to 'en'.
  */
-import React from 'react'
 import { load } from 'js-yaml'
 import rawQP from '../../../quote-permissions.yaml?raw'
 import './QuotePermission.css'

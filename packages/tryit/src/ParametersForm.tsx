@@ -4,7 +4,7 @@
  * Replaces @jsonforms/vue with native controlled inputs
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export interface ParameterRow {
   name: string

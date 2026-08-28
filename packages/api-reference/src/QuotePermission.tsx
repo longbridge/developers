@@ -4,7 +4,6 @@
  * Ported 1:1 from ApiReference.vue (QuotePermission inline template).
  * Imports quote-permissions.yaml?raw via Vite raw import.
  */
-import React from 'react'
 import { load } from 'js-yaml'
 import type { Locale } from '@longbridge/openapi-utils'
 

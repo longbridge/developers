@@ -6,8 +6,7 @@
  *   https://mcp.longbridge.com/mcp/tools.json).
  * Locale: MDX pages don't inject a locale prop, so locale defaults to 'en'.
  */
-import React, { useRef, useState, useEffect } from 'react'
-import type { ReactNode } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import mcpToolsData from '../../../.data/mcp-tools.json'
 import './McpTools.css'
 

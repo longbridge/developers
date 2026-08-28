@@ -76,7 +76,7 @@ export function assertThemeToggle(
 export function assertLanguageSwitcher(
   targetLocale: string,
   resultPathname: string,
-  originalPath: string,
+  _originalPath: string,
 ): InteractionResult {
   const expectedPrefix = targetLocale === "en" ? "/" : `/${targetLocale}/`;
   const passed = resultPathname.startsWith(expectedPrefix);

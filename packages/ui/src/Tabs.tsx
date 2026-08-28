@@ -68,7 +68,7 @@ export function Tabs({ groupId, variant = 'line', children }: TabsProps) {
   // registerTab / setActiveTab / useEffect are retained for potential future
   // client:load hydration scenarios; they are no-ops in the current SSR path.
 
-  const [tabs, setTabs] = useState<TabInfo[]>([])
+  const [, setTabs] = useState<TabInfo[]>([])
   const [activeTab, setActiveTabState] = useState<string>('')
   const listenerRef = useRef<((v: string) => void) | null>(null)
 

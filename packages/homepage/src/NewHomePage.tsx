@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
 // Section order mirrors the legacy VitePress homepage (NewHomePage/index.vue)
 // 1:1: hero → channels → features → cli → ai skill → mcp → api caps → sdk →

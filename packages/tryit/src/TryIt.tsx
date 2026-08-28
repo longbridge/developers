@@ -62,7 +62,7 @@ function getMethodTextClass(method?: string): string {
   }
 }
 
-export function TryIt({ operationId, method, path, parameters = [] }: TryItProps) {
+export function TryIt({ method, path, parameters = [] }: TryItProps) {
   const { showTryIt, enter, leave } = useTryItMode()
   const { authData, setAuthData, autoFilled } = useAuthorization()
   const { result, setResult, isLoading, setIsLoading } = useResponse()
