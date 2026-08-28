@@ -223,13 +223,12 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
     }
   }, [query, status])
 
-  // Portal target
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null)
-  useEffect(() => {
-    setPortalTarget(document.body)
-  }, [])
-
-  if (!isOpen || !portalTarget) return null
+  // Portal into the LIVE document.body, read fresh on each render — not cached in
+  // state. TopNav is transition:persist, so this dialog mounts once and survives
+  // navigation, but ClientRouter replaces <body> on every swap; a cached target
+  // would keep pointing at the old, detached body and the dialog would render
+  // where nothing is visible. `isOpen` is false during SSR, so document is safe.
+  if (!isOpen || typeof document === 'undefined') return null
 
   const showIndexError = status === 'error' && query.trim().length > 0
 
@@ -328,7 +327,7 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
         </div>
       </div>
     </div>,
-    portalTarget,
+    document.body,
   )
 }
 
