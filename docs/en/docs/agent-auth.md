@@ -34,7 +34,7 @@ For a desktop client that fully supports the browser OAuth flow, the standard [M
 4. **Generate the code** — the page produces a short auth code and a ready-to-paste instruction text.
 5. **Paste it to your AI agent** — copy the instruction text and send it to your assistant. The agent redeems the code using one of the methods below.
 
-The code is valid for **5 minutes** and can be used **once**.
+The code is valid for **10 minutes** and can be used **once**.
 
 ## Redeem via CLI
 
@@ -68,7 +68,7 @@ Replace `<token>` with the token returned by `authenticate`. Note this points at
 ## Security
 
 - **Scope is pre-selected on the web** — the code can only grant the permissions you chose on the authorization page; an agent cannot request more than the code carries.
-- **5-minute TTL** — the code expires 5 minutes after it is generated.
+- **10-minute TTL** — the code expires 10 minutes after it is generated.
 - **One-time use** — the code is consumed on first successful redemption and cannot be reused.
 - **Revocable anytime** — go to your Longbridge account security settings and revoke the **AI Agent** authorization to end access.
 
@@ -78,7 +78,7 @@ Follow least privilege: grant only the scopes the current task needs. For any tr
 
 ### The code has expired
 
-Auth codes are valid for 5 minutes. Return to [https://open.longbridge.com/connect](https://open.longbridge.com/connect) and generate a new one, then redeem it promptly.
+Auth codes are valid for 10 minutes. Return to [https://open.longbridge.com/connect](https://open.longbridge.com/connect) and generate a new one, then redeem it promptly.
 
 ### The code was already used
 
