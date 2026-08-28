@@ -106,6 +106,27 @@
   background: color-mix(in srgb, var(--lb-up) 20%, transparent);
   color: var(--lb-up);
 }
+/* On phones the 4-cycle segmented control (Auto-renew / Monthly / Quarterly /
+   Annual) plus the label is wider than the viewport. Stack the label above,
+   let the row shrink (min-width:0), tighten the tab padding so all four
+   normally fit, and keep overflow-x:auto as a safety net so the tabs scroll
+   inside their box instead of pushing the page. */
+@media (max-width: 640px) {
+  .pricing-cycle {
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .pricing-cycle-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .pricing-cycle-tab {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
 
 /* ---- Paid Plans ---- */
 .pricing-plans-grid {

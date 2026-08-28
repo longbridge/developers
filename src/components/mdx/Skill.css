@@ -859,13 +859,17 @@
 /* ---- Get Started ---- */
 .skill-getstarted-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr) — not 1fr (= minmax(auto, 1fr)) — so a track can shrink below
+     its content's min-content width. The command block below is white-space:pre,
+     whose min-content is the full unbroken line; with `auto` that would blow the
+     track (and the page) past the viewport on mobile. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-top: 36px;
 }
 @media (max-width: 900px) {
   .skill-getstarted-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 .skill-getstarted-card {
@@ -876,6 +880,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  min-width: 0; /* allow the grid item to shrink instead of overflowing */
 }
 .skill-getstarted-card.recommended {
   border-color: var(--lb-brand);
@@ -911,6 +916,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  min-width: 0; /* shrink within the card */
 }
 .skill-getstarted-cmd code {
   font-size: 12px;
@@ -919,6 +925,8 @@
   line-height: 1.6;
   white-space: pre;
   flex: 1;
+  min-width: 0;
+  overflow-x: auto; /* long pre lines scroll inside the box, not the page */
 }
 .skill-getstarted-foot {
   display: flex;
