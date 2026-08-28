@@ -20,7 +20,12 @@ const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longportapp.com'
 
 export default defineConfig({
   site: SITE,
-  build: { format: 'file' },
+  // `assets: 'assets'` (default is `_astro`) so hashed CSS/JS land in /assets/ —
+  // the path the production nginx already serves (_assets.conf, matching the
+  // legacy VitePress output). Without this, /_astro/* has no nginx rule, falls
+  // to the catch-all, and every stylesheet/script 404s. public/assets/sdk.svg
+  // coexists (unique name, no clash with content-hashed files).
+  build: { format: 'file', assets: 'assets' },
   integrations: [
     react(),
     mdx(),
