@@ -9,6 +9,7 @@ import { buildMdxComponents } from '@/mdx-components'
 import { Pricing } from '@/components/mdx/Pricing'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { SkillPage } from '@/components/mdx/SkillPage'
+import { composeTitle } from '@/lib/site-title'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -27,13 +28,12 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
-// Fallback: index / marketing pages (sdk, pricing, skill) may ship no
-// `title` frontmatter — use `titleTemplate` if present, otherwise the
-// site brand. Legacy vitepress used the same order.
-const titleStr =
-  entry.data.title ??
-  (entry.data as { titleTemplate?: string }).titleTemplate ??
-  'Longbridge Developers'
+// Document title — legacy `createTitle` parity (brand suffix for content pages,
+// brand prefix for the homepage's `titleTemplate` tagline). See lib/site-title.
+const titleStr = composeTitle(
+  entry.data.title,
+  (entry.data as { titleTemplate?: string }).titleTemplate,
+)
 const layoutKind = resolveLayoutKind(entry)
 // docs/en/index.mdx — the homepage. Like Pricing, it is an interactive island
 // (CLI/SDK tabs, copy buttons, scroll reveal) so it must hydrate; the

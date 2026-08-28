@@ -9,6 +9,7 @@ import { buildMdxComponents } from '@/mdx-components'
 import { Pricing } from '@/components/mdx/Pricing'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { SkillPage } from '@/components/mdx/SkillPage'
+import { composeTitle } from '@/lib/site-title'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -27,10 +28,10 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
-const titleStr =
-  entry.data.title ??
-  (entry.data as { titleTemplate?: string }).titleTemplate ??
-  'Longbridge Developers'
+const titleStr = composeTitle(
+  entry.data.title,
+  (entry.data as { titleTemplate?: string }).titleTemplate,
+)
 const layoutKind = resolveLayoutKind(entry)
 // docs/zh-CN/index.mdx — the homepage; hydrated island like Pricing (see en page).
 const isHome = entry.id === 'zh-CN/index'
