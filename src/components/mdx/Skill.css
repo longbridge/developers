@@ -78,7 +78,7 @@
   margin-top: 3px;
   color: #f59e0b;
 }
-.skill-chatgpt-feature :deep(.skill-chatgpt-link) {
+.skill-chatgpt-feature .skill-chatgpt-link {
   color: var(--lb-fg-1);
   font-weight: 700;
   text-decoration: underline;
@@ -86,31 +86,31 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
-.skill-chatgpt-feature :deep(.skill-chatgpt-link:hover) {
+.skill-chatgpt-feature .skill-chatgpt-link:hover {
   color: var(--lb-fg-1);
   text-decoration-thickness: 2px;
 }
-.skill-chatgpt-feature :deep(code) {
+.skill-chatgpt-feature code {
   border-radius: 5px;
   padding: 1px 6px;
   border: 1px solid rgb(16 163 127 / 0.28);
   color: #065f46;
   background: rgb(16 163 127 / 0.12);
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   font-size: 0.92em;
   font-weight: 700;
 }
-.dark .skill-chatgpt-feature {
+[data-mode="dark"] .skill-chatgpt-feature {
   border-color: rgb(255 255 255 / 0.12);
   background: #202123;
   color: #ececf1;
 }
-.dark .skill-chatgpt-feature :deep(.skill-chatgpt-link),
-.dark .skill-chatgpt-feature :deep(.skill-chatgpt-link:hover) {
+[data-mode="dark"] .skill-chatgpt-feature .skill-chatgpt-link,
+[data-mode="dark"] .skill-chatgpt-feature .skill-chatgpt-link:hover {
   color: #ececf1;
   text-decoration-color: rgb(236 236 241 / 0.44);
 }
-.dark .skill-chatgpt-feature :deep(code) {
+[data-mode="dark"] .skill-chatgpt-feature code {
   border-color: rgb(16 163 127 / 0.42);
   color: #d1fae5;
   background: rgb(16 163 127 / 0.22);
@@ -156,7 +156,7 @@
 .skill-hero-install-cmd code {
   font-size: 12.5px;
   color: var(--lb-fg-1);
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   line-height: 1.6;
   white-space: pre;
   flex: 1;
@@ -255,7 +255,10 @@
   justify-content: center;
   gap: 8px;
 }
-.ai-agent-chip {
+/* Scoped to the catalog root: Skill.css is loaded site-wide via the MDX
+   component map, and these generic class names are also used by the
+   homepage (which ports the legacy definitions), so unscoped copies leaked. */
+.skill-page-root .ai-agent-chip {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -269,14 +272,28 @@
   border: 1px solid var(--app-card-stroke);
   white-space: nowrap;
 }
-.ai-agent-more {
+/* Legacy .ai-agent-mark lived in the shared app-styles.css (not Skill.vue),
+   so it was missed on the first port — the colored letter-badge inside each
+   chip. 18px white-on-color circle. */
+.skill-page-root .ai-agent-mark {
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  border-radius: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+.skill-page-root .ai-agent-more {
   background: transparent !important;
   border: 1px dashed var(--app-card-stroke) !important;
   color: var(--lb-fg-3) !important;
 }
 
 /* ---- Copy button ---- */
-.code-copy {
+.skill-page-root .code-copy {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -288,7 +305,7 @@
   transition: color 0.15s;
   flex-shrink: 0;
 }
-.code-copy:hover {
+.skill-page-root .code-copy:hover {
   color: var(--lb-fg-1);
 }
 
@@ -482,7 +499,7 @@
 .skill-demo-table td.is-sym {
   font-weight: 600;
   color: var(--lb-fg-1);
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   font-size: 11.5px;
 }
 .skill-demo-table tr.is-best {
@@ -538,7 +555,7 @@
   display: block;
   font-size: 11.5px;
   line-height: 1.4;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   color: rgba(255, 255, 255, 0.85);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -630,7 +647,7 @@
 .skill-card-id {
   font-size: 11px;
   color: var(--lb-fg-3);
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   background: var(--lb-bg-2);
   line-height: 12px;
   padding: 2px 6px;
@@ -794,7 +811,7 @@
   font-size: 11px;
   font-weight: 700;
   color: var(--lb-fg-3);
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
 }
 .user-case-read {
   font-size: 12px;
@@ -897,7 +914,7 @@
 }
 .skill-getstarted-cmd code {
   font-size: 12px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   color: var(--lb-fg-1);
   line-height: 1.6;
   white-space: pre;
@@ -921,30 +938,45 @@
   text-decoration: underline;
 }
 
-/* ---- Shared section ---- */
-.section {
+/* ---- Shared section ----
+   Scoped to `.skill-page-root` (see note above): these were unscoped and
+   leaked onto every page that loads this stylesheet. */
+.skill-page-root .section {
   padding: 80px 0;
 }
-.section-inner {
+.skill-page-root .section-inner {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
-.eyebrow {
+.skill-page-root .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
   color: var(--lb-brand);
 }
-.h-display {
+/* Leading dot + soft glow — legacy .eyebrow::before from the shared
+   app-styles.css (not Skill.vue), missed on the first port. */
+.skill-page-root .eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 16%, transparent);
+}
+.skill-page-root .h-display {
   font-size: clamp(32px, 5vw, 52px);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--lb-fg-1);
 }
-.h-section {
+.skill-page-root .h-section {
   font-size: clamp(22px, 3vw, 30px);
   font-weight: 700;
   line-height: 1.25;
@@ -952,26 +984,32 @@
   color: var(--lb-fg-1);
   margin: 0;
 }
-.h-card {
+.skill-page-root .h-card {
   font-size: 15px;
   font-weight: 700;
   color: var(--lb-fg-1);
   margin: 0;
 }
-.t-body {
+.skill-page-root .t-body {
   font-size: 16px;
   line-height: 1.65;
   color: var(--lb-fg-2);
 }
-.t-meta {
+.skill-page-root .t-meta {
   font-size: 14px;
   line-height: 1.55;
   color: var(--lb-fg-2);
   margin: 0;
 }
-.btn {
+.skill-page-root .btn {
   display: inline-flex;
   align-items: center;
+  /* height/justify/nowrap come from legacy's shared app-styles.css .btn base
+     (not Skill.vue), so they were missed on the first port — without nowrap the
+     "Download longbridge-all.zip" label wraps to 2 lines. */
+  justify-content: center;
+  height: 36px;
+  white-space: nowrap;
   gap: 6px;
   padding: 9px 18px;
   border-radius: 8px;
@@ -982,18 +1020,18 @@
   border: none;
   transition: opacity 0.15s;
 }
-.btn:hover {
+.skill-page-root .btn:hover {
   opacity: 0.85;
 }
-.btn-primary {
+.skill-page-root .btn-primary {
   background: var(--lb-brand);
   color: #fff;
 }
-.btn-dark {
+.skill-page-root .btn-dark {
   background: #111;
   color: #fff;
 }
-.dark .btn-dark {
+[data-mode="dark"] .skill-page-root .btn-dark {
   background: #fff;
   color: #111;
 }
@@ -1015,7 +1053,7 @@
   letter-spacing: 0.04em;
   margin-bottom: 10px;
 }
-.dark .sc-badge {
+[data-mode="dark"] .sc-badge {
   background: rgba(0, 184, 184, 0.15);
 }
 
@@ -1090,7 +1128,7 @@
   background: rgba(0, 184, 184, 0.12);
   color: #00b8b8;
 }
-.dark .sc-tab--active .sc-tab-count {
+[data-mode="dark"] .sc-tab--active .sc-tab-count {
   background: rgba(0, 184, 184, 0.18);
 }
 
@@ -1197,7 +1235,7 @@
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(43, 62, 92, 0.12);
 }
-.dark .sc-card:hover {
+[data-mode="dark"] .sc-card:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 .sc-ripple {
@@ -1242,7 +1280,7 @@
   white-space: nowrap;
 }
 .sc-card-pkg {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   font-size: 11px;
   color: var(--lb-fg-3);
   white-space: nowrap;
@@ -1258,7 +1296,7 @@
   background: rgba(245, 158, 11, 0.12);
   color: rgb(217, 119, 6);
 }
-.dark .sc-card-tag--hot {
+[data-mode="dark"] .sc-card-tag--hot {
   background: rgba(245, 158, 11, 0.18);
   color: rgb(245, 158, 11);
 }
@@ -1374,7 +1412,7 @@
   background: rgba(245, 158, 11, 0.08);
   flex-wrap: wrap;
 }
-.dark .sc-plugin-bar {
+[data-mode="dark"] .sc-plugin-bar {
   background: rgba(245, 158, 11, 0.12);
 }
 .sc-plugin-left {
@@ -1452,7 +1490,7 @@
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.045);
 }
-.dark .sc-plugin-cmd-block {
+[data-mode="dark"] .sc-plugin-cmd-block {
   background: rgba(255, 255, 255, 0.045);
 }
 .sc-plugin-cmd-lines {
@@ -1461,7 +1499,7 @@
   align-items: flex-start;
   gap: 4px;
   font-size: 12px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   color: var(--lb-fg-1);
   white-space: nowrap;
   overflow-x: auto;
@@ -1527,7 +1565,7 @@
     padding: 20px 20px 16px;
   }
 }
-.dark .sc-modal-head {
+[data-mode="dark"] .sc-modal-head {
   background: linear-gradient(135deg, rgba(0, 184, 184, 0.18) 0%, transparent 70%);
 }
 .sc-modal-deco {
@@ -1537,7 +1575,7 @@
   opacity: 0.07;
   pointer-events: none;
 }
-.dark .sc-modal-deco {
+[data-mode="dark"] .sc-modal-deco {
   opacity: 0.1;
 }
 .sc-modal-close {
@@ -1557,13 +1595,13 @@
   align-items: center;
   justify-content: center;
 }
-.dark .sc-modal-close {
+[data-mode="dark"] .sc-modal-close {
   background: rgba(255, 255, 255, 0.06);
 }
 .sc-modal-close:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-.dark .sc-modal-close:hover {
+[data-mode="dark"] .sc-modal-close:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 .sc-modal-hero {
@@ -1582,7 +1620,7 @@
   align-items: center;
   justify-content: center;
 }
-.dark .sc-modal-icon {
+[data-mode="dark"] .sc-modal-icon {
   background: rgba(0, 184, 184, 0.18);
 }
 .sc-modal-title {
@@ -1606,7 +1644,7 @@
   color: var(--lb-fg-3);
 }
 .sc-modal-meta code {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   font-size: 12px;
   color: var(--lb-fg-3);
 }
@@ -1714,7 +1752,7 @@
 .sc-modal-cmd-text {
   display: block;
   font-size: 12px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   color: var(--lb-fg-1);
   white-space: nowrap;
   overflow: hidden;
@@ -1743,7 +1781,7 @@
 .sc-modal-cmd-copy:hover {
   background: rgba(0, 0, 0, 0.06);
 }
-.dark .sc-modal-cmd-copy:hover {
+[data-mode="dark"] .sc-modal-cmd-copy:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 .sc-modal-labeled-cmd {
@@ -1764,7 +1802,7 @@
   line-height: 1.7;
 }
 .sc-modal-notes code {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--app-mono);
   font-size: 11.5px;
   color: var(--lb-fg-3);
 }

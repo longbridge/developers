@@ -7,6 +7,8 @@ import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openap
 import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
 import { buildMdxComponents } from '@/mdx-components'
 import { Pricing } from '@/components/mdx/Pricing'
+import { NewHomePage } from '@longbridge/openapi-homepage'
+import { SkillPage } from '@/components/mdx/SkillPage'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -30,6 +32,9 @@ const titleStr =
   (entry.data as { titleTemplate?: string }).titleTemplate ??
   'Longbridge Developers'
 const layoutKind = resolveLayoutKind(entry)
+// docs/zh-CN/index.mdx — the homepage; hydrated island like Pricing (see en page).
+const isHome = entry.id === 'zh-CN/index'
+const isSkill = entry.id === 'zh-CN/skill/index'
 ---
 {layoutKind === 'docs' && (
   <DocsLayout title={titleStr} locale="zh-CN" entry={entry} headings={headings}>
@@ -45,6 +50,10 @@ const layoutKind = resolveLayoutKind(entry)
   <PlainLayout title={titleStr} locale="zh-CN">
     {entry.data.id === 'pricing' ? (
       <Pricing client:load locale="zh-CN" />
+    ) : isHome ? (
+      <NewHomePage client:load locale="zh-CN" />
+    ) : isSkill ? (
+      <SkillPage client:load locale="zh-CN" />
     ) : (
       <Content components={buildMdxComponents('zh-CN')} />
     )}

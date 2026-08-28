@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
+// Section order mirrors the legacy VitePress homepage (NewHomePage/index.vue)
+// 1:1: hero → channels → features → cli → ai skill → mcp → api caps → sdk →
+// get started → cta. The site footer is rendered by the layout, as in legacy.
 import { HeroSection } from './sections/HeroSection'
-import { ProductSkill } from './sections/ProductSkill'
-import { ProductCLI } from './sections/ProductCLI'
-import { ProductMCP } from './sections/ProductMCP'
-import { ProductOpenAPI } from './sections/ProductOpenAPI'
-import { PlatformStats } from './sections/PlatformStats'
-import { ArchSection } from './sections/ArchSection'
-import { CoreFeaturesSection } from './sections/CoreFeaturesSection'
-import { MarketCoverage } from './sections/MarketCoverage'
-import { CapSection } from './sections/CapSection'
-import { GetStarted } from './sections/GetStarted'
-import { HomepageFooter } from './sections/HomepageFooter'
+import { ChannelsSection } from './sections/ChannelsSection'
+import { FeaturesSection } from './sections/FeaturesSection'
+import { CliSpotlightSection } from './sections/CliSpotlightSection'
+import { AiSkillSection } from './sections/AiSkillSection'
+import { McpSection } from './sections/McpSection'
+import { ApiCapabilitiesSection } from './sections/ApiCapabilitiesSection'
+import { SdkSection } from './sections/SdkSection'
+import { GetStartedSection } from './sections/GetStartedSection'
+import { CtaSection } from './sections/CtaSection'
 import './homepage.css'
 
 interface NewHomePageProps {
@@ -40,17 +41,15 @@ export function NewHomePage({ locale: propsLocale }: NewHomePageProps) {
   return (
     <div data-lbus-component="new-home-page" className="new-home-page">
       <HeroSection locale={locale} />
-      <ProductSkill locale={locale} />
-      <ProductCLI locale={locale} />
-      <ProductMCP locale={locale} />
-      <ProductOpenAPI locale={locale} />
-      <PlatformStats locale={locale} />
-      <ArchSection locale={locale} />
-      <CoreFeaturesSection locale={locale} />
-      <MarketCoverage locale={locale} />
-      <CapSection locale={locale} />
-      <GetStarted locale={locale} />
-      <HomepageFooter locale={locale} />
+      <ChannelsSection locale={locale} />
+      <FeaturesSection locale={locale} />
+      <CliSpotlightSection locale={locale} />
+      <AiSkillSection locale={locale} />
+      <McpSection locale={locale} />
+      <ApiCapabilitiesSection locale={locale} />
+      <SdkSection locale={locale} />
+      <GetStartedSection locale={locale} />
+      <CtaSection locale={locale} />
     </div>
   )
 }

@@ -28,3 +28,245 @@ section[data-lbus-component] {
   background: var(--vp-c-divider);
   margin-bottom: 0;
 }
+
+/* ============================================================
+   Legacy generic classes (ported verbatim from the VitePress theme's
+   app-styles.css: buttons, section chrome, type scale, code block, card).
+   Scoped under `.new-home-page` so they only apply to the ported homepage
+   sections and never leak into docs pages. Dark mode: legacy `.lb-dark`
+   → this site's `[data-mode="dark"]`. Every token referenced here exists
+   in src/styles/tokens.css with the legacy values.
+   ============================================================ */
+
+/* ---- Buttons ---- */
+:where(.new-home-page) .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: all var(--lb-transition-fast);
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+}
+:where(.new-home-page) .btn-primary {
+  background: var(--lb-fg-1);
+  color: var(--lb-fg-invert);
+}
+:where(.new-home-page) .btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+:where(.new-home-page) .btn-teal {
+  background: var(--lb-brand);
+  color: #003234;
+}
+[data-mode="dark"] :where(.new-home-page) .btn-teal {
+  color: #002424;
+}
+:where(.new-home-page) .btn-teal:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+:where(.new-home-page) .btn-ghost {
+  background: var(--lb-bg-2);
+  color: var(--lb-fg-1);
+}
+:where(.new-home-page) .btn-ghost:hover {
+  background: color-mix(in srgb, var(--lb-bg-2) 60%, var(--lb-bg-1));
+}
+:where(.new-home-page) .btn-outline {
+  background: transparent;
+  color: var(--lb-fg-1);
+  border-color: var(--app-card-stroke-strong);
+}
+:where(.new-home-page) .btn-outline:hover {
+  background: var(--lb-bg-2);
+}
+:where(.new-home-page) .btn-sm {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12.5px;
+}
+:where(.new-home-page) .btn-lg {
+  height: 44px;
+  padding: 0 22px;
+  font-size: 15px;
+}
+
+/* ---- Generic chrome ---- */
+:where(.new-home-page) .section {
+  padding: 80px 24px;
+}
+@media (max-width: 640px) {
+  :where(.new-home-page) .section {
+    padding: 48px 16px;
+  }
+}
+:where(.new-home-page) .section-inner {
+  max-width: var(--app-max);
+  margin: 0 auto;
+}
+:where(.new-home-page) .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lb-brand);
+}
+:where(.new-home-page) .eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 16%, transparent);
+}
+:where(.new-home-page) .h-display {
+  font-size: clamp(40px, 5.4vw, 64px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0;
+  color: var(--lb-fg-1);
+}
+:where(.new-home-page) .h-section {
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0;
+  color: var(--lb-fg-1);
+}
+:where(.new-home-page) .h-card {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--lb-fg-1);
+}
+:where(.new-home-page) .t-meta {
+  font-size: 13px;
+  color: var(--lb-fg-2);
+  line-height: 1.55;
+}
+:where(.new-home-page) .t-body {
+  font-size: 15px;
+  color: var(--lb-fg-2);
+  line-height: 1.65;
+}
+
+/* ---- Code block ---- */
+:where(.new-home-page) .code {
+  font-family: var(--app-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  background: var(--lb-bg-1);
+  color: var(--lb-fg-1);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 12px;
+  overflow: hidden;
+}
+:where(.new-home-page) .code-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 10px;
+  background: var(--lb-bg-2);
+  border-bottom: 1px solid var(--app-card-stroke);
+  font-size: 11.5px;
+  color: var(--lb-fg-2);
+}
+:where(.new-home-page) .code-tabs {
+  display: flex;
+  gap: 2px;
+  margin-left: 8px;
+}
+:where(.new-home-page) .code-tab {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  color: var(--lb-fg-3);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--lb-transition-fast);
+  border: none;
+  background: transparent;
+}
+:where(.new-home-page) .code-tab:hover {
+  color: var(--lb-fg-1);
+}
+:where(.new-home-page) .code-tab.is-active {
+  color: var(--lb-fg-1);
+  background: var(--lb-bg-1);
+  box-shadow: var(--app-shadow-1);
+}
+:where(.new-home-page) .code-copy {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--lb-fg-3);
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+}
+:where(.new-home-page) .code-copy:hover {
+  color: var(--lb-fg-1);
+  background: var(--lb-bg-1);
+}
+:where(.new-home-page) .code-body {
+  padding: 14px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  min-height: 80px;
+}
+:where(.new-home-page) .code-body .ln-comment {
+  color: var(--lb-fg-3);
+}
+:where(.new-home-page) .code-body .ln-key {
+  color: var(--lb-chart-purple);
+}
+:where(.new-home-page) .code-body .ln-str {
+  color: var(--lb-up);
+}
+:where(.new-home-page) .code-body .ln-fn {
+  color: var(--lb-chart-blue);
+}
+:where(.new-home-page) .code-body .ln-num {
+  color: var(--lb-chart-orange);
+}
+:where(.new-home-page) .code-body .ln-tok {
+  color: var(--lb-down);
+}
+:where(.new-home-page) .code-body .ln-prompt {
+  color: var(--lb-brand);
+  user-select: none;
+}
+
+/* ---- Misc ---- */
+:where(.new-home-page) .is-up {
+  color: var(--lb-up);
+}
+:where(.new-home-page) .is-down {
+  color: var(--lb-down);
+}
+:where(.new-home-page) .num {
+  font-variant-numeric: tabular-nums;
+}
+:where(.new-home-page) .card {
+  background: var(--lb-card);
+  border: 1px solid var(--app-card-stroke);
+  border-radius: 16px;
+}

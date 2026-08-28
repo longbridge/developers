@@ -7,6 +7,8 @@ import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openap
 import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
 import { buildMdxComponents } from '@/mdx-components'
 import { Pricing } from '@/components/mdx/Pricing'
+import { NewHomePage } from '@longbridge/openapi-homepage'
+import { SkillPage } from '@/components/mdx/SkillPage'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -33,6 +35,13 @@ const titleStr =
   (entry.data as { titleTemplate?: string }).titleTemplate ??
   'Longbridge Developers'
 const layoutKind = resolveLayoutKind(entry)
+// docs/en/index.mdx — the homepage. Like Pricing, it is an interactive island
+// (CLI/SDK tabs, copy buttons, scroll reveal) so it must hydrate; the
+// MDX-mapped <NewHomePage/> is SSR-only.
+const isHome = entry.id === 'en/index'
+// docs/en/skill/index.mdx — hydrated island like the homepage (tabs, copy
+// buttons, catalog filter + modal).
+const isSkill = entry.id === 'en/skill/index'
 ---
 {layoutKind === 'docs' && (
   <DocsLayout title={titleStr} locale="en" entry={entry} headings={headings}>
@@ -50,6 +59,10 @@ const layoutKind = resolveLayoutKind(entry)
         hydrated instead of the SSR-only mdx-component so the toggle works. */}
     {entry.data.id === 'pricing' ? (
       <Pricing client:load locale="en" />
+    ) : isHome ? (
+      <NewHomePage client:load locale="en" />
+    ) : isSkill ? (
+      <SkillPage client:load locale="en" />
     ) : (
       <Content components={buildMdxComponents('en')} />
     )}

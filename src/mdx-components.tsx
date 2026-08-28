@@ -5,12 +5,12 @@
  * and zh-HK doc pages. Pass `components={buildMdxComponents(locale)}` to every
  * <Content /> call in the dynamic route files — the factory closes over the
  * route's locale so components that need it (NewHomePage, McpTools, Pricing,
- * QuotePermission, SkillCatalog) render in the right language at SSR time.
+ * QuotePermission, SkillPage) render in the right language at SSR time.
  */
 
 import type { Locale } from '@longbridge/openapi-utils'
 import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks } from '@longbridge/openapi-ui'
-import { SkillCatalog } from '@/components/mdx/SkillCatalog'
+import { SkillPage } from '@/components/mdx/SkillPage'
 import { TryIt } from '@longbridge/openapi-tryit'
 import { McpTools } from '@/components/mdx/McpTools'
 import { NewHomePage } from '@longbridge/openapi-homepage'
@@ -60,7 +60,7 @@ export function buildMdxComponents(locale: Locale) {
     },
 
     // Locale-bound composites
-    Skill: bindLocale(SkillCatalog),
+    Skill: bindLocale(SkillPage),
     NewHomePage: bindLocale(NewHomePage),
     McpTools: bindLocale(McpTools),
     Pricing: bindLocale(Pricing),
