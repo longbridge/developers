@@ -87,7 +87,7 @@ const LOCALE = {
         { f: 'HK 10-level order book', g: 'HK' },
         { f: 'Real-time depth push', g: 'HK' },
         { f: 'Broker queue (HK)', g: 'HK' },
-        { f: 'CN A-shares real-time', g: 'CN' },
+        { f: 'CN A-shares real-time（China mainland IP only; other regions: 15-min delay）', g: 'CN' },
       ],
     },
     faq: {
@@ -198,7 +198,7 @@ const LOCALE = {
         { f: '港股 10 档买卖盘', g: '港股' },
         { f: '实时深度推送', g: '港股' },
         { f: '券商队列（港股）', g: '港股' },
-        { f: 'A 股实时行情', g: 'A 股' },
+        { f: 'A 股实时行情（受交易所规则限制，仅限中国大陆 IP；其他地区延迟 15 分钟）', g: 'A 股' },
       ],
     },
     faq: {
@@ -303,7 +303,7 @@ const LOCALE = {
         { f: '港股 10 檔買賣盤', g: '港股' },
         { f: '即時深度推送', g: '港股' },
         { f: '券商隊列（港股）', g: '港股' },
-        { f: 'A 股即時行情', g: 'A 股' },
+        { f: 'A 股即時行情（受交易所規則限制，僅限中國大陸 IP；其他地區延遲 15 分鐘）', g: 'A 股' },
       ],
     },
     faq: {
