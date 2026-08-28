@@ -26,7 +26,7 @@ export default function Footer({ locale }: Props) {
 
   return (
     <footer className="border-t border-[color:var(--lb-stroke)] text-[color:var(--lb-fg-2)] text-sm pt-14 pb-10 px-6" data-lbus-component="footer">
-      <div className="max-w-[1240px] mx-auto grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(5,1fr)]">
+      <div className="max-w-[1240px] mx-auto grid gap-x-6 gap-y-9 grid-cols-2 lg:gap-10 lg:grid-cols-[1.6fr_repeat(5,1fr)]">
         {/* Brand column */}
         <div className="flex flex-col gap-2 col-span-full lg:col-auto">
           <a href={homeHref} className="inline-flex items-center gap-2 text-[color:var(--lbus-c-text)] no-underline" aria-label="Longbridge Developers">
@@ -143,13 +143,12 @@ export default function Footer({ locale }: Props) {
         </div>
       </div>
 
-      <div className="border-t border-[color:var(--lb-stroke)] pt-4 flex flex-wrap gap-4 items-center justify-between">
+      <div className="border-t border-[color:var(--lb-stroke)] max-w-[1240px] mx-auto mt-10 pt-6 flex flex-col items-center gap-3 text-center sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:text-left text-[color:var(--lb-fg-3)] text-[12.5px]">
         <div>{t(locale, 'footer.rights', { year })}</div>
-        <div className="flex flex-wrap gap-4">
-          <span style={{ color: 'var(--lb-fg-3)' }}>·</span>
-          <a className="text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]" href="/">English</a>
-          <a className="text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-CN/">简体中文</a>
-          <a className="text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-HK/">繁體中文</a>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <a className="text-[color:var(--lb-fg-3)] no-underline hover:text-[color:var(--lb-brand)]" href="/">English</a>
+          <a className="text-[color:var(--lb-fg-3)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-CN/">简体中文</a>
+          <a className="text-[color:var(--lb-fg-3)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-HK/">繁體中文</a>
         </div>
       </div>
     </footer>

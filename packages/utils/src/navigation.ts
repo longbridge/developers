@@ -226,7 +226,14 @@ export function buildSidebar(
 
   // scope='docs' must exclude the cli/ subtree — cli has its own sidebar.
   const filtered = scope === 'docs'
-    ? nodes.filter((n) => n.label !== 'CLI' && !(n.link ?? '').startsWith('/docs/cli'))
+    ? nodes.filter(
+        (n) =>
+          n.label !== 'CLI' &&
+          !(n.link ?? '').startsWith('/docs/cli') &&
+          // MCP has its own top-nav tab (like CLI); keep it out of the docs sidebar.
+          n.label !== 'MCP' &&
+          (n.link ?? '') !== '/docs/mcp',
+      )
     : nodes
 
   return sortByPosition(filtered)

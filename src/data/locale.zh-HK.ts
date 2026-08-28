@@ -8,6 +8,8 @@ export const locale = {
   'nav.searchDocs': '搜尋文件…',
   'nav.getStarted': '立即開始',
   'nav.dashboard': '控制台',
+  'nav.connectAi': '連接 AI',
+  'nav.logout': '登出',
   'nav.home': '首頁',
   'nav.theme.light': '淺色',
   'nav.theme.dark': '深色',
@@ -20,6 +22,8 @@ export const locale = {
   'sidebar.collapse': '收起側邊欄',
   // TOC
   'toc.title': '頁面導航',
+  'toc.menu': '選單',
+  'toc.returnToTop': '回到頂部',
   // Footer
   'footer.tagline': '為全球開發者提供即時行情、交易與金融智能服務——透過 AI Skill、CLI、MCP、SDK 和 OpenAPI 全面賦能。',
   'footer.status': '所有服務正常運行',

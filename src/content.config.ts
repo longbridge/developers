@@ -14,6 +14,9 @@ const docsSchema = z.object({
   // avoids astro-mdx auto-layout module resolution.
   docs_layout: z.union([z.literal(false), z.string()]).optional(),
   hide_breadcrumb: z.boolean().optional(),
+  // `sidebar: false` hides the left nav on that page (e.g. mcp.mdx, which has
+  // its own top-nav tab) and keeps it out of the docs sidebar tree.
+  sidebar: z.boolean().optional(),
 })
 
 export const collections = {

@@ -21,6 +21,18 @@
        inset. The content region still extends to the right for wide text. */
     padding-left: max(0px, calc((100vw - 1240px) / 2));
   }
+  /* `sidebar: false` pages (e.g. MCP) drop the left nav column and let the
+     content region fill the width, centered by `.docs-inner`. */
+  .docs-layout--no-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 0;
+  }
+}
+/* No-sidebar pages also drop the breadcrumb, which is what normally offsets
+   the article from the nav. Restore legacy's gap (nav bottom → h1 = 32px on
+   the MCP page). */
+.docs-layout--no-sidebar .docs-content {
+  padding-top: 32px;
 }
 
 /* Content region (everything right of the sidebar). The top wash (晕染) lives
@@ -51,15 +63,26 @@
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 1rem 2rem;
+}
+@media (min-width: 1024px) {
+  .docs-inner {
+    padding: 0 2rem 2rem;
+  }
+}
+
+/* article + TOC live in this row; DocFooter is a sibling BELOW it inside
+   `.docs-inner`. Keeping the footer out of `.docs-main` means the sticky
+   TOC's containing block is just the article row, so a long TOC can no
+   longer slide down and overlap the footer. */
+.docs-main {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
 }
 @media (min-width: 1024px) {
-  .docs-inner {
+  .docs-main {
     grid-template-columns: minmax(0, 1fr) 14rem;
     gap: 4rem;
-    padding: 0 2rem 2rem;
   }
 }
 
@@ -75,6 +98,12 @@
 
 .docs-content [data-lbus-component="breadcrumb"] {
   margin-left: -2rem;
+}
+/* The breadcrumb <ol> would otherwise inherit the prose list padding
+   (`.docs-content ol { padding-left: 20px }`), pushing "Home" 20px right of the
+   nav edge and out of alignment with the article body. */
+.docs-content [data-lbus-component="breadcrumb"] ol {
+  padding-left: 0;
 }
 
 /* Body text — legacy `.vp-doc` uses --vp-c-text-1 = #3c3c43 (a soft near-black,
@@ -213,6 +242,19 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+  }
+  /* Single-column on mobile: drop the desktop left inset (and the breadcrumb's
+     negative pull) so the article's left/right padding is symmetric — the
+     16px comes from `.docs-inner` on both sides. The doc footer shares the same
+     2rem inset, so reset it too. */
+  .docs-content {
+    padding-left: 0;
+  }
+  .docs-content [data-lbus-component='breadcrumb'] {
+    margin-left: 0;
+  }
+  .docs-doc-footer {
+    padding-left: 0;
   }
 }
 /* Legacy `.footer-link`: constant muted #929295 (same in light + dark),

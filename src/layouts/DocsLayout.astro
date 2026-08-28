@@ -22,6 +22,9 @@ interface Props {
 
 const { title, locale, entry, headings } = Astro.props
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
+// `sidebar: false` (e.g. mcp.mdx — it has its own top-nav tab) renders the
+// docs page full-width with no left navigation, keeping only the TOC.
+const showSidebar = entry.data.sidebar !== false
 
 // Legacy renders the page title as the article H1. When the MDX body already
 // starts with its own `#` heading (155 pages do), VitePress shows that; when
@@ -48,21 +51,27 @@ const crumbs: BreadcrumbItem[] =
 ---
 
 <BaseLayout title={title} locale={locale} hideFooter>
-  <LocalNav locale={locale} pathname={pathname} nodes={sidebar} client:load />
-  <div class="docs-layout">
-    <Sidebar nodes={sidebar} pathname={pathname} client:load />
+  {showSidebar && (
+    <LocalNav locale={locale} pathname={pathname} nodes={sidebar} headings={headings} client:load />
+  )}
+  <div class:list={['docs-layout', { 'docs-layout--no-sidebar': !showSidebar }]}>
+    {showSidebar && (
+      <Sidebar nodes={sidebar} pathname={pathname} client:load />
+    )}
     <div class="docs-body">
       <div class="docs-inner">
-        <article class="docs-content">
-          {!entry.data.hide_breadcrumb && (
-            <Breadcrumb locale={locale} items={crumbs} />
-          )}
-          {injectedTitle && <h1>{injectedTitle}</h1>}
-          <slot />
-          <DocMeta entry={entry} locale={locale} />
-          <PrevNext prev={prev} next={next} />
-        </article>
-        <TOC headings={headings} locale={locale} client:load />
+        <div class="docs-main">
+          <article class="docs-content">
+            {showSidebar && !entry.data.hide_breadcrumb && (
+              <Breadcrumb locale={locale} items={crumbs} />
+            )}
+            {injectedTitle && <h1>{injectedTitle}</h1>}
+            <slot />
+            <DocMeta entry={entry} locale={locale} />
+            <PrevNext prev={prev} next={next} />
+          </article>
+          <TOC headings={headings} locale={locale} client:load />
+        </div>
         <DocFooter locale={locale} />
       </div>
     </div>

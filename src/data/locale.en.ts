@@ -8,6 +8,8 @@ export const locale = {
   'nav.searchDocs': 'Search docs…',
   'nav.getStarted': 'Get Started',
   'nav.dashboard': 'Dashboard',
+  'nav.connectAi': 'Connect AI',
+  'nav.logout': 'Log out',
   'nav.home': 'Home',
   'nav.theme.light': 'Light',
   'nav.theme.dark': 'Dark',
@@ -20,6 +22,8 @@ export const locale = {
   'sidebar.collapse': 'Collapse sidebar',
   // TOC
   'toc.title': 'On this page',
+  'toc.menu': 'Menu',
+  'toc.returnToTop': 'Return to Top',
   // Footer
   'footer.tagline':
     'Real-time market data, trading, and financial intelligence — delivered through AI Skill, CLI, MCP, SDK and OpenAPI for developers worldwide.',

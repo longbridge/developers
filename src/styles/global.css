@@ -45,6 +45,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   transition: background var(--lbus-transition-base), color var(--lbus-transition-base);
 }
+/* The top nav is position:fixed (like legacy .app-nav) so it stays pinned
+   during elastic overscroll instead of rubber-banding away from the fixed
+   mobile local-nav below it. Reserve its 60px height here — this replaces the
+   space the header used to occupy in flow when it was sticky, so content
+   position is unchanged. */
+#main-content { padding-top: 60px; }
 /* NOTE: tailwind v4 preflight already resets:
    - button/input font (was: `input, button, textarea, select { font: inherit }`)
    - img/svg/video display:block + max-width:100%
