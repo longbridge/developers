@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { SidebarNode } from '@longbridge/openapi-utils'
 import { SIDEBAR_ICONS } from './sidebar-icons'
 
@@ -65,12 +65,15 @@ export default function SidebarItem({ node, depth = 0, pathname = '/' }: Props) 
     // Market Data, …) rather than a muted sub-page leaf.
     const isCategoryLeaf = depth === 0 && node.isSection
     const base = 'flex items-center rounded-lg py-1 text-[14px] leading-6 no-underline'
-    const pad = isCategoryLeaf ? 'px-2' : 'px-4'
+    // px-2 for every item (leaf and group header alike) so icons/text share one
+    // left edge at each depth — px-4 on leaves made them sit 8px right of the
+    // collapsible headers, the misalignment the sidebar showed.
+    const pad = 'px-2'
     const cls = active
       ? `${base} ${pad} bg-[color-mix(in_oklab,var(--lb-brand)_10%,transparent)] text-[color:var(--lb-brand)] font-medium`
       : isCategoryLeaf
-        ? `${base} ${pad} text-[color:var(--lb-fg-1)] font-bold hover:bg-[var(--lb-bg-2)]`
-        : `${base} ${pad} text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)] hover:bg-[var(--lb-bg-2)]`
+        ? `${base} ${pad} text-[color:var(--lb-fg-1)] font-bold hover:text-[color:var(--lb-brand)]`
+        : `${base} ${pad} text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)]`
     return (
       <li data-lbus-component="sidebar-item">
         <a href={node.link} className={cls} aria-current={active ? 'page' : undefined}>
@@ -100,13 +103,21 @@ function SidebarGroup({
 }) {
   const [open, setOpen] = useState(active || !node.collapsed)
 
+  // The sidebar island is preserved across navigation (transition:persist), so
+  // this group keeps whatever open/closed state the user set — no remount, no
+  // collapse, no layout shift. When navigation lands on a page inside this group,
+  // make sure it's open, without touching any other group the user expanded.
+  useEffect(() => {
+    if (active) setOpen(true)
+  }, [active])
+
   const isTop = depth === 0
   // Only the top-level section headers (Quote / Fundamental / …) are bold.
   // Nested sub-section headers (Subscribe / Stocks / …) render at normal
   // weight, matching their sibling leaf links.
   const labelCls = isTop
-    ? 'flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)]'
-    : 'flex-1 min-w-0 truncate font-normal text-[color:var(--lb-fg-2)]'
+    ? 'flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)] group-hover:text-[color:var(--lb-brand)]'
+    : 'flex-1 min-w-0 truncate font-normal text-[color:var(--lb-fg-2)] group-hover:text-[color:var(--lb-brand)]'
 
   return (
     <li data-lbus-component="sidebar-group">
@@ -114,14 +125,21 @@ function SidebarGroup({
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg px-2 py-1 text-[14px] leading-6 hover:bg-[var(--lb-bg-2)]"
+        className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg px-2 py-1 text-[14px] leading-6"
       >
         {node.icon && <SidebarIcon name={node.icon} active={false} />}
         <span className={labelCls}>{node.label}</span>
         <Caret open={open} />
       </button>
       {open && (
-        <ul className="list-none pl-3 py-0 m-0 flex flex-col gap-[2px]" role="list">
+        // Level-2 (children of a top section) align flush with the section's
+        // icon column — no extra indent — matching the legacy sidebar. Deeper
+        // levels keep the pl-3 step AND get a left guide line so the nesting is
+        // visible (like the legacy vitepress nested tree).
+        <ul
+          className={`list-none py-0 m-0 flex flex-col gap-[2px] ${depth === 0 ? '' : 'pl-3 border-l border-[color:var(--app-card-stroke)]'}`}
+          role="list"
+        >
           {node.items!.map((child) => (
             <SidebarItem
               key={child.link ?? child.label}
