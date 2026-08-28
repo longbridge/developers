@@ -1,0 +1,67 @@
+/*
+ * QuantChart.css
+ * Ported from QuantChart.vue <style scoped>. All rules are scoped under the
+ * root class `.quant-chart-wrap` (also carries data-lbus-component="quant-chart")
+ * so nothing leaks into the surrounding MDX / doc content.
+ *
+ * VitePress theme vars in the legacy are mapped to this project's semantic
+ * tokens, which already redefine themselves for dark mode — so no explicit
+ * dark-mode block is needed here:
+ *   --vp-c-bg-soft      → --lb-bg-2
+ *   --vp-c-bg           → --lb-bg-1
+ *   --vp-c-divider      → --lb-line
+ *   --vp-c-text-3       → --lb-fg-3
+ *   --vp-c-text-2       → --lb-fg-2
+ *   --vp-c-text-1       → --lb-fg-1
+ *   --vp-font-family-mono → --lb-font-mono
+ */
+
+.quant-chart-wrap {
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--lb-bg-2);
+}
+
+.quant-chart-wrap .quant-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.quant-chart-wrap .quant-grid {
+  stroke: var(--lb-line);
+  stroke-width: 0.5;
+}
+
+.quant-chart-wrap .quant-axis-label {
+  font-size: 9px;
+  fill: var(--lb-fg-3);
+  font-family: var(--lb-font-mono);
+}
+
+.quant-chart-wrap .quant-legend {
+  font-size: 9px;
+  fill: var(--lb-fg-2);
+  font-family: var(--lb-font-mono);
+}
+
+.quant-chart-wrap .quant-tt-bg {
+  fill: var(--lb-bg-1);
+  stroke: var(--lb-line);
+}
+
+.quant-chart-wrap .quant-tt-date {
+  font-size: 9px;
+  fill: var(--lb-fg-2);
+  font-family: var(--lb-font-mono);
+  font-weight: 600;
+}
+
+.quant-chart-wrap .quant-tt-val {
+  font-size: 9px;
+  fill: var(--lb-fg-1);
+  font-family: var(--lb-font-mono);
+}

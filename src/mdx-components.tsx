@@ -19,7 +19,7 @@ import { QuotePermission } from '@/components/mdx/QuotePermission'
 import { getCliDocHref } from '@/lib/cli-doc-map'
 // ApiReference is mounted directly by ApiReferenceLayout.astro from
 // `@longbridge/openapi-api-reference`; it's not needed here as an mdx tag.
-import { QuantChart } from '@/components/mdx/placeholders/QuantChart'
+import { QuantChart } from '@/components/mdx/QuantChart'
 import { Footer } from '@/components/mdx/placeholders/Footer'
 
 /**
