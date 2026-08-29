@@ -48,7 +48,7 @@ end
 
 Client can subscribe different quote type through subscribe commmand.
 
-Subscribe command [protobuf defination](../quote/subscribe/subscribe)
+Subscribe command [protobuf definition](../quote/subscribe/subscribe)
 
 Example:
 
@@ -63,9 +63,9 @@ Example:
 
 > Here is `JSON` for easy showing case, actually need using protobuf encoding.
 
-Client can also check quote topics already subscribing, [protobuf defination](../quote/subscribe/subscription).
+Client can also check quote topics already subscribing, [protobuf definition](../quote/subscribe/subscription).
 
-After client success subscribing quote, server will push real-time quote data to client, data [protobuf defination](../quote/overview).
+After client success subscribing quote, server will push real-time quote data to client, data [protobuf definition](../quote/overview).
 
 ## Other Quote APIs
 

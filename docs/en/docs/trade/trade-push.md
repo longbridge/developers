@@ -79,7 +79,7 @@ Current support topics:
 Cmd: `17`
 :::
 
-Protobuf defination:
+Protobuf definition:
 
 ```protobuf
 // Unsub is Unsub command content, command is 17
@@ -103,7 +103,7 @@ After we `subscribe` to the trade gateway, we can get real-time trade updates fr
 Cmd: `18`
 :::
 
-Protobuf defination:
+Protobuf definition:
 
 ```protobuf
 // Dispatch type

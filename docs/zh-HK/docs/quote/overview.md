@@ -33,7 +33,7 @@ slug: overview
         <td><a href="./pull/brokers">獲取標的經紀隊列</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/broker-ids">獲取券商席位 id</a></td>
+        <td><a href="./pull/broker-ids">獲取券商席位 ID</a></td>
     </tr>
     <tr>
         <td><a href="./pull/trade">獲取標的成交明細</a></td>
@@ -42,7 +42,7 @@ slug: overview
         <td><a href="./pull/intraday">獲取標的分時</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/candlestick">獲取標的 k 線</a></td>
+        <td><a href="./pull/candlestick">獲取標的 K 線</a></td>
     </tr>
     <tr>
         <td><a href="./pull/optionchain-date">獲取標的的期權鏈到期日列表</a></td>
@@ -51,7 +51,7 @@ slug: overview
         <td><a href="./pull/optionchain-date-strike">獲取標的的期權鏈到期日期權標的列表</a></td>
     </tr>
     <tr>
-        <td><a href="./pull/issuer">獲取輪證發行商 id</a></td>
+        <td><a href="./pull/issuer">獲取輪證發行商 ID</a></td>
     </tr>
     <tr>
         <td><a href="./pull/warrant-filter">獲取輪證篩選列表</a></td>

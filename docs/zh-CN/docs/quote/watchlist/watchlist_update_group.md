@@ -57,7 +57,7 @@ from longbridge.openapi import QuoteContext, Config, SecuritiesUpdateMode, OAuth
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = QuoteContext(config)
-ctx.update_watchlist_group(10086, name = "WatchList2", securities = ["700.HK", "AAPL.US"], SecuritiesUpdateMode.Replace)
+ctx.update_watchlist_group(10086, name = "WatchList2", securities = ["700.HK", "AAPL.US"], mode = SecuritiesUpdateMode.Replace)
 ```
 
   </TabItem>
@@ -71,7 +71,7 @@ async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncQuoteContext.create(config)
-    ctx.update_watchlist_group(10086, name = "WatchList2", securities = ["700.HK", "AAPL.US"], SecuritiesUpdateMode.Replace)
+    ctx.update_watchlist_group(10086, name = "WatchList2", securities = ["700.HK", "AAPL.US"], mode = SecuritiesUpdateMode.Replace)
 
 if __name__ == "__main__":
     asyncio.run(main())
