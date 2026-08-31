@@ -316,6 +316,9 @@
   color: var(--lb-fg-2);
   border-bottom: 1px solid var(--app-card-stroke);
   vertical-align: middle;
+  /* Render the "\n" note in the A-shares row (China-mainland-IP caveat) as a
+     second line instead of a literal \n. */
+  white-space: pre-line;
 }
 .pricing-matrix tbody tr:last-child td {
   border-bottom: none;
