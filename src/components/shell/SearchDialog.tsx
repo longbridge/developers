@@ -28,7 +28,11 @@ const indexCache = new Map<Locale, MiniSearch<Section>>()
 const inflight = new Map<Locale, Promise<MiniSearch<Section>>>()
 
 async function buildIndex(locale: Locale): Promise<MiniSearch<Section>> {
-  const res = await fetch(`/search-index.${locale}.json`)
+  // Served from /assets/ (not the site root) so the production nginx serves it
+  // as a static file via _assets.conf. A root .json would fall to the catch-all,
+  // be rewritten to `<path>/index.html`, and 404 — the "Search index failed to
+  // load" seen on the deployed site. Mirrors the /assets asset-dir alignment.
+  const res = await fetch(`/assets/search-index.${locale}.json`)
   if (!res.ok) throw new Error(`search-index ${locale} ${res.status}`)
   const { sections } = (await res.json()) as { sections: Section[] }
 
