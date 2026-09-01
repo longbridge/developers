@@ -72,7 +72,7 @@ function initHeloraOnce(): void {
   if (heloraStarted) return
   heloraStarted = true
   // Host app provides its own support UI; CN site not onboarded yet.
-  if (detectWhaleApp() || import.meta.env.VITE_REGION === 'cn') return
+  if (detectWhaleApp() || import.meta.env.PUBLIC_REGION === 'cn') return
   const locale = (document.documentElement.lang || 'en') as Locale
   bootHelora(locale)
 }
