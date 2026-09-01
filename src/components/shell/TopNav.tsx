@@ -76,7 +76,7 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
   }, [])
   const navItems = navForLocale(locale)
   // CN region hides Pricing / Docs / the Features menu (legacy CN_HIDDEN_KEYS).
-  const isCnRegion = import.meta.env.VITE_REGION === 'cn'
+  const isCnRegion = import.meta.env.PUBLIC_REGION === 'cn'
   const CN_HIDDEN_LINKS = new Set(['/pricing', '/docs'])
   const visibleNavItems = isCnRegion
     ? navItems.filter((n) => !n.link || !CN_HIDDEN_LINKS.has(n.link))
