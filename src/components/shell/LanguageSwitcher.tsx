@@ -13,8 +13,11 @@ const LOCALES: { value: Locale; label: string }[] = [
 ]
 
 function buildUrl(currentLocale: Locale, targetLocale: Locale, currentPath: string): string {
-  // Strip current locale prefix to get bare path
-  let barePath = currentPath
+  // Strip current locale prefix to get bare path.
+  // `currentPath` can carry a `.html` suffix (build format:'file' → Astro.url
+  // pathname is `…/overview.html`); drop it so the switched-locale link points
+  // at the clean URL, not the 404 `.html` file.
+  let barePath = currentPath.replace(/(?:index)?\.html$/, '')
   if (currentLocale !== 'en') {
     const prefix = `/${currentLocale}`
     if (barePath.startsWith(prefix + '/')) {
