@@ -28,15 +28,15 @@ Streaming 通过 WebSocket 订阅的方式提供实时行情数据。无需轮�
 
 | 数据 | 拉取接口 |
 |------|----------|
-| 报价 | [实时报价](../stocks/quote) |
-| 盘口 | [盘口](../stocks/depth) |
-| 经纪队列 | [经纪队列](../stocks/brokers) |
-| 逐笔明细 | [逐笔明细](../stocks/trade) |
-| 分时数据 | [分时数据](../stocks/intraday) |
-| K 线 | [K 线](../stocks/candlestick) |
+| 报价 | [实时报价](/zh-CN/docs/quote/pull/quote) |
+| 盘口 | [盘口](/zh-CN/docs/quote/pull/depth) |
+| 经纪队列 | [经纪队列](/zh-CN/docs/quote/pull/brokers) |
+| 逐笔明细 | [逐笔明细](/zh-CN/docs/quote/pull/trade) |
+| 分时数据 | [分时数据](/zh-CN/docs/quote/pull/intraday) |
+| K 线 | [K 线](/zh-CN/docs/quote/pull/candlestick) |
 
 ## 注意事项
 
 - 订阅状态与当前连接绑定，断线后自动清除。
-- 可通过[获取订阅信息](./subsciption)随时查询当前活跃的订阅列表。
+- 可通过[获取订阅信息](./subscription)随时查询当前活跃的订阅列表。
 - 可订阅的数据类型取决于你的行情权限，详见[行情权限等级](../overview#行情权限等级)。

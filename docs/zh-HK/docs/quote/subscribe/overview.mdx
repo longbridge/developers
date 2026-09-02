@@ -28,15 +28,15 @@ Streaming 透過 WebSocket 訂閱的方式提供即時行情數據。無需輪�
 
 | 數據 | 拉取介面 |
 |------|----------|
-| 報價 | [實時報價](../stocks/quote) |
-| 盤口 | [盤口](../stocks/depth) |
-| 券商佇列 | [券商佇列](../stocks/brokers) |
-| 逐筆明細 | [逐筆明細](../stocks/trade) |
-| 分時數據 | [分時數據](../stocks/intraday) |
-| K 線 | [K 線](../stocks/candlestick) |
+| 報價 | [實時報價](/zh-HK/docs/quote/pull/quote) |
+| 盤口 | [盤口](/zh-HK/docs/quote/pull/depth) |
+| 券商佇列 | [券商佇列](/zh-HK/docs/quote/pull/brokers) |
+| 逐筆明細 | [逐筆明細](/zh-HK/docs/quote/pull/trade) |
+| 分時數據 | [分時數據](/zh-HK/docs/quote/pull/intraday) |
+| K 線 | [K 線](/zh-HK/docs/quote/pull/candlestick) |
 
 ## 注意事項
 
 - 訂閱狀態與當前連線綁定，斷線後自動清除。
-- 可透過[獲取訂閱資訊](./subsciption)隨時查詢當前活躍的訂閱列表。
+- 可透過[獲取訂閱資訊](./subscription)隨時查詢當前活躍的訂閱列表。
 - 可訂閱的數據類型取決於你的行情權限，詳見[行情權限等級](../overview#行情權限等級)。
