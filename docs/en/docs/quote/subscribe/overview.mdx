@@ -28,15 +28,15 @@ Subscriptions push incremental updates in real time. For one-off or on-demand qu
 
 | Data | Pull API |
 |------|----------|
-| Quotes | [Quotes](../stocks/quote) |
-| Depth | [Depth](../stocks/depth) |
-| Broker queue | [Broker Queue](../stocks/brokers) |
-| Trades | [Trades](../stocks/trade) |
-| Intraday | [Intraday](../stocks/intraday) |
-| Candlesticks | [Candlesticks](../stocks/candlestick) |
+| Quotes | [Quotes](/docs/quote/pull/quote) |
+| Depth | [Depth](/docs/quote/pull/depth) |
+| Broker queue | [Broker Queue](/docs/quote/pull/brokers) |
+| Trades | [Trades](/docs/quote/pull/trade) |
+| Intraday | [Intraday](/docs/quote/pull/intraday) |
+| Candlesticks | [Candlesticks](/docs/quote/pull/candlestick) |
 
 ## Notes
 
 - Subscriptions are scoped to the current connection; they are cleared when the connection drops.
-- Use [Get Subscriptions](./subsciption) to inspect your active subscriptions at any time.
+- Use [Get Subscriptions](./subscription) to inspect your active subscriptions at any time.
 - Quote permissions determine which data types are available. See [Quote Permission Levels](../overview#quote-permission-levels).

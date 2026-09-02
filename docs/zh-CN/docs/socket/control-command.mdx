@@ -100,7 +100,7 @@ Server -->> Client: auth response, req_id: 1, session: xxx
 
 ```
 
-> 登录鉴权的 `token` 通过 [REST 接口](./socket-otp-api.md) 获取。
+> 登录鉴权的 `token` 通过 [REST 接口](/zh-CN/docs/socket-token-api) 获取。
 
 服务端在 token 校验成功后会给客户端返回一个 session，在 session 的有效期内，客户端可以使用 session 进行重新链接，不需要再获取 `token`。
 
