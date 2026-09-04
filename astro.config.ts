@@ -77,6 +77,21 @@ export default defineConfig({
             /<CliCommand>\r?\n([\s\S]*?)\r?\n[ \t]*<\/CliCommand>/g,
             (_m, inner: string) => `<CliCommand code={${JSON.stringify(inner)}} />`,
           )
+          // 1.6) Stash every code region: fenced blocks, inline spans, and the
+          //    CliCommand payload built just above. Their contents are literal
+          //    text that shiki escapes on its own, so the rewrites below must
+          //    not run over them — rule 5 turning `<iostream>` into `&lt;…&gt;`
+          //    gets escaped a second time downstream and the page renders the
+          //    entity text instead of the angle brackets. Fences are taken
+          //    before inline spans so a fence's own backticks are never read as
+          //    a span, and the CliCommand payload before both since it is a
+          //    JSON string that may itself contain backticks.
+          const codeRegions: string[] = []
+          const stashCode = (m: string) => `\uE000CODE${codeRegions.push(m) - 1}\uE000`
+          out = out
+            .replace(/<CliCommand code=\{"(?:[^"\\]|\\.)*"\} \/>/g, stashCode)
+            .replace(/^[ \t]*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^[ \t]*\1[ \t]*$/gm, stashCode)
+            .replace(/`[^`\n]+`/g, stashCode)
           // 2) Convert vitepress heading anchor syntax `## Foo {#bar}` →
           //    `<h2 id="bar">Foo<a …/></h2>`.
           //    MDX parses `{#bar}` as a JSX expression (acorn) before remark plugins run,
@@ -147,6 +162,10 @@ export default defineConfig({
             /^(:{3,})(success|warning|tip|info|danger|note|caution)([ \t]+)([^\n[\]{]+?)\s*$/gm,
             (_match, colons, name, _ws, title) => `${colons}${name}[${title.trim()}]`,
           )
+          // Put back the code regions stashed in 1.6, now that every rewrite
+          //    above has run. Indices come from our own placeholders, so the
+          //    fallback is unreachable; it only keeps the lookup total.
+          out = out.replace(/\uE000CODE(\d+)\uE000/g, (_m, i) => codeRegions[Number(i)] ?? '')
           return out === code ? null : { code: out, map: null }
         },
       },
