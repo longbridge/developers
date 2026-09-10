@@ -608,3 +608,43 @@
     background: #16202d;
   }
 }
+
+/* ── CLI block (docs-style terminal card) ────────────────────────────────── */
+
+.ep-cli-card {
+  position: relative;
+  margin: 16px 0 20px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  background: #0d1117;
+  overflow: hidden;
+}
+.ep-cli-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+  background: #161b22;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom-right-radius: 6px;
+}
+.ep-cli-pre {
+  margin: 0;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e6edf3;
+}
+.ep-cli-pre code { white-space: pre; }
+
+/* "SDK method parameters." note under the Parameters heading */
+.section-note {
+  margin: -4px 0 12px;
+  font-size: 13px;
+  color: #6b7280;
+}

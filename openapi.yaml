@@ -571,127 +571,25 @@ paths:
         獲取當前用戶的所有定投（DCA）計劃。
       tags:
         - DCA
-      parameters:
+      x-parameters:
         - name: status
-          in: query
+          type: string
           required: false
-          schema:
-            type: string
-          description: 'Filter by plan status: `Active`, `Suspended`, `Finished`.'
-          x-description-zh: 按计划状态筛选：`Active`、`Suspended`、`Finished`。
-          x-description-zh-hk: 按計劃狀態篩選：`Active`、`Suspended`、`Finished`。
+          description: 'Filter by plan status: `Active`, `Suspended`, `Finished`'
+          x-description-zh: 按计划状态筛选：`Active`（进行中）、`Suspended`（已暂停）、`Finished`（已结束）
+          x-description-zh-hk: 按計劃狀態篩選：`Active`（進行中）、`Suspended`（已暫停）、`Finished`（已結束）
         - name: symbol
-          in: query
+          type: string
           required: false
-          schema:
-            type: string
-          description: Filter by security symbol, e.g. `AAPL.US`.
-          x-description-zh: 按标的代码筛选，如 `AAPL.US`。
-          x-description-zh-hk: 按標的代碼篩選，如 `AAPL.US`。
+          description: Filter by security symbol
+          x-description-zh: 按证券代码筛选
+          x-description-zh-hk: 按證券代碼篩選
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca
             longbridge dca --status Active
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.list_dca()
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.list_dca()
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.list_dca()
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var resp = ctx.getListDca().get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: C++
-          label: C++
-          source: |
-            #include <iostream>
-            #include <longbridge.hpp>
-
-            using namespace longbridge;
-            using namespace longbridge::dca;
-
-            int main() {
-                OAuthBuilder("your-client-id").build(
-                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
-                    [](auto res) {
-                        if (!res) return;
-                        Config config = Config::from_oauth(*res);
-                        DCAContext ctx = DCAContext::create(config);
-                        ctx.list_dca([](auto resp) {
-                            if (resp) std::cout << "OK" << std::endl;
-                        });
-                    });
-                std::cin.get();
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.ListDca(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.list_dca().await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -750,152 +648,43 @@ paths:
         為指定證券創建新的定投。
       tags:
         - DCA
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - symbol
-                - per_invest_amount
-                - invest_frequency
-                - allow_margin_finance
-              properties:
-                symbol:
-                  type: string
-                  description: Security symbol, e.g. `AAPL.US`.
-                  x-description-zh: 标的代码，如 `AAPL.US`。
-                  x-description-zh-hk: 標的代碼，如 `AAPL.US`。
-                per_invest_amount:
-                  type: string
-                  description: Recurring investment amount per execution.
-                  x-description-zh: 每次定投金额。
-                  x-description-zh-hk: 每次定投金額。
-                invest_frequency:
-                  type: string
-                  description: 'Investment frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
-                  x-description-zh: 定投频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
-                  x-description-zh-hk: 定投頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
-                allow_margin_finance:
-                  type: integer
-                  description: 'Whether to allow margin financing: `1` yes, `0` no.'
-                  x-description-zh: 是否允许融资：`1` 是，`0` 否。
-                  x-description-zh-hk: 是否允許融資：`1` 是，`0` 否。
-                invest_day_of_week:
-                  type: string
-                  description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`.'
-                  x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`。
-                  x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`。
-                invest_day_of_month:
-                  type: string
-                  description: 'Day of month for monthly plans: `1`–`28`.'
-                  x-description-zh: 每月计划的执行日：`1`–`28`。
-                  x-description-zh-hk: 每月計劃的執行日：`1`–`28`。
+      x-parameters:
+        - name: symbol
+          type: string
+          required: true
+          description: Security symbol, e.g. `AAPL.US`
+          x-description-zh: 证券代码，例如 `AAPL.US`
+          x-description-zh-hk: 證券代碼，例如 `AAPL.US`
+        - name: amount
+          type: string
+          required: true
+          description: Recurring investment amount
+          x-description-zh: 定投金额
+          x-description-zh-hk: 定投金額
+        - name: frequency
+          type: string
+          required: true
+          description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`'
+          x-description-zh: 频率：`Daily`（每日）、`Weekly`（每周）、`Fortnightly`（每两周）、`Monthly`（每月）
+          x-description-zh-hk: 頻率：`Daily`（每日）、`Weekly`（每週）、`Fortnightly`（每兩週）、`Monthly`（每月）
+        - name: day_of_week
+          type: string
+          required: false
+          description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`'
+          x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`
+          x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`
+        - name: day_of_month
+          type: integer
+          required: false
+          description: Day of month for monthly plans (1–28)
+          x-description-zh: 每月计划的执行日期（1–28）
+          x-description-zh-hk: 每月計劃的執行日期（1–28）
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
             longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.create_dca("AAPL.US", amount="500", frequency="Monthly", day_of_month=15)
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.create_dca("AAPL.US", amount="500", frequency="Monthly", day_of_month=15)
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.create_dca()
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var resp = ctx.getCreateDca().get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: C++
-          label: C++
-          source: |
-            #include <iostream>
-            #include <longbridge.hpp>
-
-            using namespace longbridge;
-            using namespace longbridge::dca;
-
-            int main() {
-                OAuthBuilder("your-client-id").build(
-                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
-                    [](auto res) {
-                        if (!res) return;
-                        Config config = Config::from_oauth(*res);
-                        DCAContext ctx = DCAContext::create(config);
-                        ctx.create_dca([](auto resp) {
-                            if (resp) std::cout << "OK" << std::endl;
-                        });
-                    });
-                std::cin.get();
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.CreateDca(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.create_dca().await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -932,144 +721,25 @@ paths:
         暫停或恢復已有的定投。
       tags:
         - DCA
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - plan_id
-              properties:
-                plan_id:
-                  type: string
-                  description: DCA plan ID to update.
-                  x-description-zh: 要更新的定投计划 ID。
-                  x-description-zh-hk: 要更新的定投計劃 ID。
-                per_invest_amount:
-                  type: string
-                  description: New recurring investment amount.
-                  x-description-zh: 新的每次定投金额。
-                  x-description-zh-hk: 新的每次定投金額。
-                invest_frequency:
-                  type: string
-                  description: 'New frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
-                  x-description-zh: 新的频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
-                  x-description-zh-hk: 新的頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
-                invest_day_of_week:
-                  type: string
-                  description: 'New day of week: `mon`–`fri`.'
-                  x-description-zh: 新的执行星期：`mon`–`fri`。
-                  x-description-zh-hk: 新的執行星期：`mon`–`fri`。
-                invest_day_of_month:
-                  type: string
-                  description: 'New day of month: `1`–`28`.'
-                  x-description-zh: 新的执行日：`1`–`28`。
-                  x-description-zh-hk: 新的執行日：`1`–`28`。
+      x-parameters:
+        - name: id
+          type: string
+          required: true
+          description: Plan ID (path parameter)
+          x-description-zh: 计划 ID（路径参数）
+          x-description-zh-hk: 計劃 ID（路徑參數）
+        - name: action
+          type: string
+          required: true
+          description: 'Action to perform: `pause` or `resume`'
+          x-description-zh: 执行操作：`pause`（暂停）或 `resume`（恢复）
+          x-description-zh-hk: 執行操作：`pause`（暫停）或 `resume`（恢復）
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca pause 1225781523156889600
             longbridge dca resume 1225781523156889600
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.update_dca("1225781523156889600", action="pause")
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.update_dca("1225781523156889600", action="pause")
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.update_dca()
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var resp = ctx.getUpdateDca().get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: C++
-          label: C++
-          source: |
-            #include <iostream>
-            #include <longbridge.hpp>
-
-            using namespace longbridge;
-            using namespace longbridge::dca;
-
-            int main() {
-                OAuthBuilder("your-client-id").build(
-                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
-                    [](auto res) {
-                        if (!res) return;
-                        Config config = Config::from_oauth(*res);
-                        DCAContext ctx = DCAContext::create(config);
-                        ctx.update_dca([](auto resp) {
-                            if (resp) std::cout << "OK" << std::endl;
-                        });
-                    });
-                std::cin.get();
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.UpdateDca(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.update_dca().await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -1092,109 +762,31 @@ paths:
       x-summary-zh: 暂停 / 恢复 / 终止定投计划
       x-summary-zh-hk: 暫停 / 恢復 / 終止定投計劃
       description: |
-        Change the status of an existing DCA plan. Set `status` to `Suspended` to pause, `Active` to resume, or `Finished` to permanently stop the plan.
+        Change the status of an existing DCA plan: pause, resume, or permanently stop it.
       x-description-zh: |
-        更改现有定投计划的状态。将 `status` 设为 `Suspended` 暂停、`Active` 恢复、`Finished` 永久终止计划。
+        更改现有定投计划的状态：暂停、恢复或永久终止。
       x-description-zh-hk: |
-        更改現有定投計劃的狀態。將 `status` 設為 `Suspended` 暫停、`Active` 恢復、`Finished` 永久終止計劃。
+        更改現有定投計劃的狀態：暫停、恢復或永久終止。
       tags:
         - DCA
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - plan_id
-                - status
-              properties:
-                plan_id:
-                  type: string
-                  description: DCA plan ID.
-                  x-description-zh: 定投计划 ID。
-                  x-description-zh-hk: 定投計劃 ID。
-                status:
-                  type: string
-                  description: 'Target status: `Suspended` (pause), `Active` (resume), `Finished` (stop).'
-                  x-description-zh: 目标状态：`Suspended`（暂停）、`Active`（恢复）、`Finished`（终止）。
-                  x-description-zh-hk: 目標狀態：`Suspended`（暫停）、`Active`（恢復）、`Finished`（終止）。
+      x-parameters:
+        - name: plan_id
+          type: string
+          required: true
+          description: DCA plan ID.
+          x-description-zh: 定投计划 ID。
+          x-description-zh-hk: 定投計劃 ID。
+        - name: status
+          type: string
+          required: true
+          description: 'Target status: `Suspended` (pause), `Active` (resume), `Finished` (stop).'
+          x-description-zh: 目标状态：`Suspended`（暂停）、`Active`（恢复）、`Finished`（终止）。
+          x-description-zh-hk: 目標狀態：`Suspended`（暫停）、`Active`（恢復）、`Finished`（終止）。
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca pause 12345
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            ctx.pause("12345")
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                await ctx.pause("12345")
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              await ctx.pause('12345')
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        ctx.pause("12345").get();
-                    }
-                }
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tif err := c.Pause(context.Background(), \"12345\"); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                ctx.pause("12345").await?;
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -1229,134 +821,30 @@ paths:
         獲取指定定投的執行歷史，包含交易日期、金額和價格。
       tags:
         - DCA
-      parameters:
-        - name: plan_id
-          in: query
+      x-parameters:
+        - name: id
+          type: string
           required: true
-          schema:
-            type: string
-          description: DCA plan ID.
-          x-description-zh: 定投计划 ID。
-          x-description-zh-hk: 定投計劃 ID。
+          description: Plan ID (path parameter)
+          x-description-zh: 计划 ID（路径参数）
+          x-description-zh-hk: 計劃 ID（路徑參數）
         - name: page
-          in: query
-          required: true
-          schema:
-            type: integer
-          description: Page number, starting from `1`.
-          x-description-zh: 页码，从 `1` 开始。
-          x-description-zh-hk: 頁碼，從 `1` 開始。
+          type: integer
+          required: false
+          description: 'Page number (1-based, default: 1)'
+          x-description-zh: 页码（从 1 开始，默认：1）
+          x-description-zh-hk: 頁碼（從 1 開始，默認：1）
         - name: size
-          in: query
-          required: true
-          schema:
-            type: integer
-          description: Page size (number of records per page).
-          x-description-zh: 每页记录数。
-          x-description-zh-hk: 每頁記錄數。
+          type: integer
+          required: false
+          description: 'Records per page (default: 20)'
+          x-description-zh: 每页数量（默认：20）
+          x-description-zh-hk: 每頁數量（默認：20）
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca history 1225781523156889600
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.dca_history("1225781523156889600")
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.dca_history("1225781523156889600")
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.dca_history()
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var resp = ctx.getDcaHistory().get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: C++
-          label: C++
-          source: |
-            #include <iostream>
-            #include <longbridge.hpp>
-
-            using namespace longbridge;
-            using namespace longbridge::dca;
-
-            int main() {
-                OAuthBuilder("your-client-id").build(
-                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
-                    [](auto res) {
-                        if (!res) return;
-                        Config config = Config::from_oauth(*res);
-                        DCAContext ctx = DCAContext::create(config);
-                        ctx.dca_history([](auto resp) {
-                            if (resp) std::cout << "OK" << std::endl;
-                        });
-                    });
-                std::cin.get();
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.DcaHistory(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.dca_history().await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -1404,96 +892,18 @@ paths:
         獲取定投統計匯總信息，包括總投入金額和盈虧情況。
       tags:
         - DCA
-      parameters:
+      x-parameters:
         - name: symbol
-          in: query
+          type: string
           required: false
-          schema:
-            type: string
-          description: Filter statistics by security symbol.
-          x-description-zh: 按标的代码筛选统计。
-          x-description-zh-hk: 按標的代碼篩選統計。
+          description: Filter by symbol
+          x-description-zh: 按标的过滤
+          x-description-zh-hk: 按標的過濾
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca stats
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.stats()
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.stats()
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.stats()
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var resp = ctx.stats(null).get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.Stats(context.Background(), nil)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.stats(None).await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -1547,104 +957,18 @@ paths:
         檢查指定標的是否支持定投。
       tags:
         - DCA
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - symbols
-              properties:
-                symbols:
-                  type: array
-                  items:
-                    type: string
-                  description: List of security symbols to check for DCA support.
-                  x-description-zh: 要检查是否支持定投的标的代码列表。
-                  x-description-zh-hk: 要檢查是否支持定投的標的代碼列表。
+      x-parameters:
+        - name: symbols
+          type: string[]
+          required: true
+          description: List of security symbols to check
+          x-description-zh: 待检查的标的代码列表
+          x-description-zh-hk: 待檢查的標的代碼列表
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca check AAPL.US 700.HK
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.check_support(["AAPL.US", "700.HK"])
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.check_support(["AAPL.US", "700.HK"])
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.checkSupport(['AAPL.US', '700.HK'])
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-            import java.util.Arrays;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var resp = ctx.checkSupport(Arrays.asList("AAPL.US", "700.HK")).get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.CheckSupport(context.Background(), []string{\"AAPL.US\", \"700.HK\"})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.check_support(vec!["AAPL.US".into(), "700.HK".into()]).await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -1685,118 +1009,36 @@ paths:
         根據給定的定投計劃參數，計算下一次預計交易日期。
       tags:
         - DCA
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - symbol
-                - invest_frequency
-              properties:
-                symbol:
-                  type: string
-                  description: Security symbol.
-                  x-description-zh: 标的代码。
-                  x-description-zh-hk: 標的代碼。
-                invest_frequency:
-                  type: string
-                  description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
-                  x-description-zh: 频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
-                  x-description-zh-hk: 頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
-                invest_day_of_week:
-                  type: string
-                  description: 'Day of week for weekly plans: `mon`–`fri`.'
-                  x-description-zh: 每周计划的执行星期：`mon`–`fri`。
-                  x-description-zh-hk: 每週計劃的執行星期：`mon`–`fri`。
-                invest_day_of_month:
-                  type: string
-                  description: 'Day of month for monthly/fortnightly plans: `1`–`28`.'
-                  x-description-zh: 每月/每两周计划的执行日：`1`–`28`。
-                  x-description-zh-hk: 每月/每兩週計劃的執行日：`1`–`28`。
+      x-parameters:
+        - name: symbol
+          type: string
+          required: true
+          description: Security symbol
+          x-description-zh: 标的代码
+          x-description-zh-hk: 標的代碼
+        - name: frequency
+          type: string
+          required: true
+          description: 'DCA frequency: `daily`, `weekly`, `fortnightly`, `monthly`'
+          x-description-zh: 定投频率：`daily`、`weekly`、`fortnightly`、`monthly`
+          x-description-zh-hk: 定投頻率：`daily`、`weekly`、`fortnightly`、`monthly`
+        - name: day_of_week
+          type: string
+          required: false
+          description: 'Day of week for weekly plans: `mon`–`fri`'
+          x-description-zh: 每周计划的执行星期：`mon`–`fri`
+          x-description-zh-hk: 每週計劃的執行星期：`mon`–`fri`
+        - name: day_of_month
+          type: integer
+          required: false
+          description: 'Day of month for monthly/fortnightly plans: 1–28'
+          x-description-zh: 每月/每两周计划的执行日期：1–28
+          x-description-zh-hk: 每月/每兩週計劃的執行日期：1–28
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca calc-date AAPL.US --frequency monthly --day-of-month 15
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder, DCAFrequency
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            resp = ctx.calc_date("AAPL.US", DCAFrequency.Monthly, day_of_month=15)
-            print(resp)
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder, DCAFrequency
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                resp = await ctx.calc_date("AAPL.US", DCAFrequency.Monthly, day_of_month=15)
-                print(resp)
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth, DCAFrequency } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              const resp = await ctx.calcDate('AAPL.US', DCAFrequency.Monthly, undefined, 15)
-              console.log(resp)
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        var opts = new CalcDateOptions("AAPL.US", DCAFrequency.MONTHLY).dayOfMonth(15);
-                        var resp = ctx.calcDate(opts).get();
-                        System.out.println(resp);
-                    }
-                }
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tdayOfMonth := 15\n\topts := &dca.CalcDateOptions{\n\t\tSymbol:     \"AAPL.US\",\n\t\tFrequency:  dca.FrequencyMonthly,\n\t\tDayOfMonth: &dayOfMonth,\n\t}\n\tresp, err := c.CalcDate(context.Background(), opts)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, dca::DCAFrequency, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                let resp = ctx.calc_date("AAPL.US", DCAFrequency::Monthly, None, Some(15)).await?;
-                println!("{:?}", resp);
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response
@@ -1833,96 +1075,18 @@ paths:
         設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
       tags:
         - DCA
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - alter_hours
-              properties:
-                alter_hours:
-                  type: string
-                  description: 'Advance reminder hours before DCA execution: `1`, `6`, or `12`.'
-                  x-description-zh: 定投执行前的提前提醒小时数：`1`、`6` 或 `12`。
-                  x-description-zh-hk: 定投執行前的提前提醒小時數：`1`、`6` 或 `12`。
+      x-parameters:
+        - name: hours
+          type: string
+          required: true
+          description: 'Reminder advance hours: `1`, `6`, or `12`'
+          x-description-zh: 提醒提前小时数：`1`、`6` 或 `12`
+          x-description-zh-hk: 提醒提前小時數：`1`、`6` 或 `12`
       x-codeSamples:
         - lang: Shell
           label: CLI
           source: |
             longbridge dca set-reminder 12
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import DCAContext, Config, OAuthBuilder
-
-            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
-            config = Config.from_oauth(oauth)
-            ctx = DCAContext(config)
-
-            ctx.set_reminder("12")
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
-
-            async def main() -> None:
-                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
-                config = Config.from_oauth(oauth)
-                ctx = AsyncDCAContext.create(config)
-
-                await ctx.set_reminder("12")
-
-            if __name__ == "__main__":
-                asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, DCAContext, OAuth } = require('longbridge')
-
-            async function main() {
-              const oauth = await OAuth.build('your-client-id', (_, url) => {
-                console.log('Open this URL to authorize: ' + url)
-              })
-              const config = Config.fromOAuth(oauth)
-              const ctx = DCAContext.new(config)
-              await ctx.setReminder('12')
-            }
-            main().catch(console.error)
-        - lang: Java
-          label: Java
-          source: |
-            import com.longbridge.*;
-            import com.longbridge.dca.*;
-
-            class Main {
-                public static void main(String[] args) throws Exception {
-                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
-                         Config config = Config.fromOAuth(oauth);
-                         DCAContext ctx = DCAContext.create(config)) {
-                        ctx.setReminder("12").get();
-                    }
-                }
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tif err := c.SetReminder(context.Background(), \"12\"); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n"
-        - lang: Rust
-          label: Rust
-          source: |
-            use std::sync::Arc;
-            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
-
-            #[tokio::main]
-            async fn main() -> Result<(), Box<dyn std::error::Error>> {
-                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
-                let config = Arc::new(Config::from_oauth(oauth));
-                let ctx = DCAContext::new(config);
-                ctx.set_reminder("12").await?;
-                Ok(())
-            }
       responses:
         '200':
           description: Successful response

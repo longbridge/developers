@@ -29,8 +29,19 @@ export interface ParamRow {
 export interface Section {
   key: string
   title: string
+  note?: string
   params: ParamRow[]
   fallback?: boolean
+}
+
+/** A flat SDK-method parameter row (docs `## Parameters` table). */
+export interface XParameter {
+  name: string
+  type?: string
+  required?: boolean
+  description?: string
+  'x-description-zh'?: string
+  'x-description-zh-hk'?: string
 }
 
 export interface CodeSample {
@@ -48,6 +59,7 @@ export interface Operation {
   'x-description-zh'?: string
   'x-description-zh-hk'?: string
   'x-quote-command'?: string
+  'x-parameters'?: XParameter[]
   tags?: string[]
   parameters?: Parameter[]
   'x-codeSamples'?: CodeSample[]
@@ -180,7 +192,7 @@ export function pickLocale(
   en: string | undefined,
   zh: string | undefined,
   zhHk: string | undefined,
-  locale: Locale,
+  locale: Locale
 ): string {
   if (locale === 'zh-HK') return zhHk ?? zh ?? en ?? ''
   if (locale === 'zh-CN') return zh ?? en ?? ''
@@ -226,25 +238,39 @@ export function epId(ep: EndpointItem): string {
 }
 
 export function buildCurl(ep: EndpointItem, serverUrl: string): string {
-  const lines: string[] = [
-    `curl --request ${ep.method} \\`,
-    `  --url '${serverUrl}${ep.path}' \\`,
-    `  --header 'Authorization: Bearer <token>'`,
-  ]
-  const schema = ep.operation.requestBody?.content?.['application/json']?.schema
-  if (schema?.properties && ['POST', 'PUT', 'PATCH'].includes(ep.method)) {
-    const required: string[] = schema.required ?? []
-    const body: Record<string, any> = {}
-    for (const [k, v] of Object.entries(schema.properties as Record<string, any>)) {
-      if (required.includes(k)) {
-        body[k] = (v as any).type === 'integer' ? 0 : `<${k}>`
+  const isBody = ['POST', 'PUT', 'PATCH'].includes(ep.method)
+  const xp = ep.operation['x-parameters']
+  let url = `${serverUrl}${ep.path}`
+  const body: Record<string, any> = {}
+
+  if (xp?.length) {
+    // Real HTTP call derived from the documented parameters.
+    const required = xp.filter((p) => p.required)
+    if (isBody) {
+      for (const p of required) body[p.name] = p.type === 'integer' ? 0 : `<${p.name}>`
+    } else if (required.length) {
+      url += '?' + required.map((p) => `${p.name}=<${p.name}>`).join('&')
+    }
+  } else {
+    // Fallback: derive the body from the requestBody JSON schema (legacy ops).
+    const schema = ep.operation.requestBody?.content?.['application/json']?.schema
+    if (schema?.properties && isBody) {
+      const required: string[] = schema.required ?? []
+      for (const [k, v] of Object.entries(schema.properties as Record<string, any>)) {
+        if (required.includes(k)) body[k] = (v as any).type === 'integer' ? 0 : `<${k}>`
       }
     }
-    if (Object.keys(body).length) {
-      lines[lines.length - 1] += ' \\'
-      lines.push(`  --header 'Content-Type: application/json' \\`)
-      lines.push(`  --data '${JSON.stringify(body)}'`)
-    }
+  }
+
+  const lines: string[] = [
+    `curl --request ${ep.method} \\`,
+    `  --url '${url}' \\`,
+    `  --header 'Authorization: Bearer <token>'`,
+  ]
+  if (Object.keys(body).length) {
+    lines[lines.length - 1] += ' \\'
+    lines.push(`  --header 'Content-Type: application/json' \\`)
+    lines.push(`  --data '${JSON.stringify(body)}'`)
   }
   return lines.join('\n')
 }

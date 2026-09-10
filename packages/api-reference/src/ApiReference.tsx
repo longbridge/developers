@@ -63,6 +63,13 @@ export interface ApiReferenceProps {
 
 // ── Build sections for an endpoint ───────────────────────────────────────────
 
+const PARAM_TITLE: Record<Locale, string> = { en: 'Parameters', 'zh-CN': '参数', 'zh-HK': '參數' }
+const PARAM_NOTE: Record<Locale, string> = {
+  en: 'SDK method parameters.',
+  'zh-CN': 'SDK 方法参数。',
+  'zh-HK': 'SDK 方法參數。',
+}
+
 function buildSections(ep: EndpointItem, locale: Locale): Section[] {
   const sections: Section[] = []
 
@@ -81,6 +88,24 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
     ],
   }
   sections.push(authSection)
+
+  // Preferred: a single flat "Parameters" table (docs `## Parameters`).
+  const xp = ep.operation['x-parameters']
+  if (xp?.length) {
+    sections.push({
+      key: 'parameters',
+      title: PARAM_TITLE[locale] ?? 'Parameters',
+      note: PARAM_NOTE[locale],
+      params: xp.map((p) => ({
+        name: p.name,
+        type: p.type ?? 'string',
+        location: '',
+        required: !!p.required,
+        description: pickLocale(p.description, p['x-description-zh'], p['x-description-zh-hk'], locale),
+      })),
+    })
+    return sections
+  }
 
   // Path params
   const pathParams = (ep.operation.parameters ?? []).filter((p) => p.in === 'path')
@@ -161,17 +186,9 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
 function buildCodeBlocks(ep: EndpointItem, serverUrl: string, locale: Locale): CodeBlock[] {
   const blocks: CodeBlock[] = []
 
-  // Code samples from x-codeSamples
-  if (ep.operation['x-codeSamples']?.length) {
-    for (const sample of ep.operation['x-codeSamples']) {
-      blocks.push({
-        lang: sample.lang.toLowerCase(),
-        code: sample.source,
-        label: sample.label || sample.lang,
-      })
-    }
-  } else if (ep.method !== 'WEBSOCKET') {
-    // Auto-generated curl fallback (skipped for WebSocket operations)
+  // Request example = the real HTTP call to the path (curl), not SDK code.
+  // WebSocket operations have no HTTP request line.
+  if (ep.method !== 'WEBSOCKET') {
     blocks.push({
       lang: 'bash',
       code: buildCurl(ep, serverUrl),
@@ -190,6 +207,13 @@ function buildCodeBlocks(ep: EndpointItem, serverUrl: string, locale: Locale): C
   }
 
   return blocks
+}
+
+/** Extract the CLI sample (rendered as its own block, docs-style). */
+function cliSample(ep: EndpointItem | null): string {
+  if (!ep) return ''
+  const s = ep.operation['x-codeSamples']?.find((x) => x.label === 'CLI' || x.lang.toLowerCase() === 'shell')
+  return s?.source ?? ''
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -300,6 +324,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     // docs page style.
     return raw ? renderMd(raw, localePrefix) : ''
   }, [activeEndpoint, locale, localePrefix])
+
+  const epCli = useMemo(() => cliSample(activeEndpoint), [activeEndpoint])
 
   const epPathSegs = useMemo(() => (activeEndpoint ? formatPath(activeEndpoint.path) : []), [activeEndpoint])
 
@@ -455,10 +481,21 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
             {/* Prose description */}
             {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
 
+            {/* CLI — its own block, docs-style terminal card */}
+            {epCli && (
+              <div className="ep-cli-card">
+                <span className="ep-cli-badge">CLI</span>
+                <pre className="ep-cli-pre">
+                  <code>{epCli}</code>
+                </pre>
+              </div>
+            )}
+
             {/* Param sections */}
             {epSections.map((section) => (
               <section key={section.key} className="api-section">
                 <h4 className="section-title">{section.title}</h4>
+                {section.note && <p className="section-note">{section.note}</p>}
                 <div className="param-list">
                   {section.params.length === 0 ? (
                     <p className="param-fallback">{t(locale, 'api.fallback')}</p>
