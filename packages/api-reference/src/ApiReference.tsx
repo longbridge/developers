@@ -15,11 +15,13 @@ import {
   buildCurl,
   buildResponseExample,
   pickLocale,
+  PAGE_ICONS,
   type EndpointItem,
   type PageItem,
   type CodeBlock,
   type Section,
   type XParameter,
+  type TagGroup,
 } from './openapi-loader'
 import { CodePanel, CodeTabs } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
@@ -137,6 +139,94 @@ function ParamTable({ rows, locale }: { rows: RowVM[]; locale: Locale }) {
         </tbody>
       </table>
     </div>
+  )
+}
+
+// Sidebar item class strings — identical to the docs Sidebar (SidebarItem.tsx)
+// so they share Tailwind output and render pixel-identically.
+const NAV_LEAF =
+  'flex items-center w-full text-left bg-transparent border-0 cursor-pointer rounded-lg py-1 px-2 text-[14px] leading-6 no-underline'
+const NAV_LEAF_ACTIVE =
+  'bg-[color-mix(in_oklab,var(--lb-brand)_10%,transparent)] text-[color:var(--lb-brand)] font-medium'
+const NAV_LEAF_IDLE = 'text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)]'
+
+function Caret({ open }: { open: boolean }) {
+  return (
+    <span
+      className="ml-auto inline-flex items-center justify-center shrink-0 text-[color:var(--lb-fg-3)]"
+      aria-hidden="true">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`transition-transform duration-200 ${open ? 'rotate-90' : ''}`}>
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </span>
+  )
+}
+
+function ApiSidebarGroup({
+  group,
+  activeOp,
+  onSelect,
+  locale,
+  forceOpen,
+}: {
+  group: TagGroup
+  activeOp: string | null
+  onSelect: (id: string) => void
+  locale: Locale
+  forceOpen: boolean
+}) {
+  const hasActive = group.endpoints.some((ep) => epId(ep) === activeOp)
+  const [open, setOpen] = useState(true)
+  const isOpen = forceOpen || open || hasActive
+  const label = pickLocale(group.name, group.nameZh, group.nameZhHk, locale)
+  return (
+    <li data-lbus-component="sidebar-group" className="list-none">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={isOpen}
+        className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg px-2 py-1 text-[14px] leading-6">
+        <span className="flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)] group-hover:text-[color:var(--lb-brand)]">
+          {label}
+        </span>
+        <Caret open={isOpen} />
+      </button>
+      {isOpen && (
+        <ul className="list-none py-0 m-0 flex flex-col gap-[2px]" role="list">
+          {group.endpoints.map((ep) => {
+            const id = epId(ep)
+            const active = activeOp === id
+            const summary = pickLocale(
+              ep.operation.summary,
+              ep.operation['x-summary-zh'],
+              ep.operation['x-summary-zh-hk'],
+              locale
+            )
+            return (
+              <li key={id} className="list-none">
+                <button
+                  type="button"
+                  onClick={() => onSelect(id)}
+                  aria-current={active ? 'page' : undefined}
+                  className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
+                  <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
+                  <span className="flex-1 min-w-0 truncate">{summary}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </li>
   )
 }
 
@@ -462,43 +552,51 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <div className="sidebar-scroll">
-          {/* Static pages */}
-          {pages.map((pg) => (
-            <button
-              key={pg.id}
-              type="button"
-              className={`nav-item${activePage === pg.id ? ' is-active' : ''}`}
-              onClick={() => selectPage(pg.id)}>
-              {pickLocale(pg.title, pg.titleZh, pg.titleZhHk, locale)}
-            </button>
-          ))}
-          {/* Tag groups */}
-          {filteredGroups.map((g) => (
-            <div key={g.name} className="tag-group">
-              <p className="tag-label">{pickLocale(g.name, g.nameZh, g.nameZhHk, locale)}</p>
-              {g.endpoints.map((ep) => {
-                const id = epId(ep)
-                const summary = pickLocale(
-                  ep.operation.summary,
-                  ep.operation['x-summary-zh'],
-                  ep.operation['x-summary-zh-hk'],
-                  locale
-                )
+        <nav className="sidebar-scroll" aria-label="API navigation">
+          {/* Static pages — a bare (header-less) group, like docs Overview/Getting Started */}
+          {pages.length > 0 && (
+            <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
+              {pages.map((pg) => {
+                const active = activePage === pg.id
+                const icon = pg.icon ? PAGE_ICONS[pg.icon] : undefined
                 return (
-                  <button
-                    key={id}
-                    type="button"
-                    className={`nav-item${activeOp === id ? ' is-active' : ''}`}
-                    onClick={() => selectEndpoint(id)}>
-                    <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
-                    <span className="nav-label">{summary}</span>
-                  </button>
+                  <li key={pg.id} className="list-none">
+                    <button
+                      type="button"
+                      onClick={() => selectPage(pg.id)}
+                      aria-current={active ? 'page' : undefined}
+                      className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
+                      {icon && (
+                        <span
+                          className="inline-flex items-center shrink-0 mr-3 text-[color:var(--lb-fg-3)]"
+                          aria-hidden="true"
+                          dangerouslySetInnerHTML={{ __html: icon }}
+                        />
+                      )}
+                      <span className="flex-1 min-w-0 truncate">
+                        {pickLocale(pg.title, pg.titleZh, pg.titleZhHk, locale)}
+                      </span>
+                    </button>
+                  </li>
                 )
               })}
+            </ul>
+          )}
+          {/* Tag groups — each a collapsible section separated by a divider */}
+          {filteredGroups.map((g) => (
+            <div key={g.name} className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
+              <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
+                <ApiSidebarGroup
+                  group={g}
+                  activeOp={activeOp}
+                  onSelect={selectEndpoint}
+                  locale={locale}
+                  forceOpen={!!query.trim()}
+                />
+              </ul>
             </div>
           ))}
-        </div>
+        </nav>
       </aside>
 
       {/* ── Intro (nothing selected) ── */}
