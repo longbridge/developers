@@ -34,9 +34,11 @@ export interface Section {
   fallback?: boolean
 }
 
-/** A flat SDK-method parameter row (docs `## Parameters` table). */
+/** A documented HTTP parameter, split by location. */
 export interface XParameter {
   name: string
+  /** Where the parameter goes in the HTTP request. */
+  in?: 'path' | 'query' | 'body'
   type?: string
   required?: boolean
   description?: string

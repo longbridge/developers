@@ -729,17 +729,19 @@ paths:
         - DCA
       x-parameters:
         - name: status
+          in: query
           type: string
           required: false
-          description: 'Filter by plan status: `Active`, `Suspended`, `Finished`'
-          x-description-zh: 按计划状态筛选：`Active`（进行中）、`Suspended`（已暂停）、`Finished`（已结束）
-          x-description-zh-hk: 按計劃狀態篩選：`Active`（進行中）、`Suspended`（已暫停）、`Finished`（已結束）
+          description: 'Filter by plan status: `Active`, `Suspended`, `Finished`.'
+          x-description-zh: 按计划状态筛选：`Active`、`Suspended`、`Finished`。
+          x-description-zh-hk: 按計劃狀態篩選：`Active`、`Suspended`、`Finished`。
         - name: symbol
+          in: query
           type: string
           required: false
-          description: Filter by security symbol
-          x-description-zh: 按证券代码筛选
-          x-description-zh-hk: 按證券代碼篩選
+          description: Filter by security symbol, e.g. `AAPL.US`.
+          x-description-zh: 按标的代码筛选，如 `AAPL.US`。
+          x-description-zh-hk: 按標的代碼篩選，如 `AAPL.US`。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -785,6 +787,7 @@ paths:
           label: Node.js
           source: |
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/query", {
+              method: "GET",
               headers: {
                 "Authorization": "<access_token>",
                 "X-Api-Key": "<app_key>",
@@ -806,7 +809,7 @@ paths:
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .GET()
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -815,7 +818,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .get("https://openapi.longbridge.com/v1/dailycoins/query")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/dailycoins/query")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
@@ -838,6 +841,7 @@ paths:
                 headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
                 headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/query");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -1045,35 +1049,47 @@ paths:
         - DCA
       x-parameters:
         - name: symbol
+          in: body
           type: string
           required: true
-          description: Security symbol, e.g. `AAPL.US`
-          x-description-zh: 证券代码，例如 `AAPL.US`
-          x-description-zh-hk: 證券代碼，例如 `AAPL.US`
-        - name: amount
+          description: Security symbol, e.g. `AAPL.US`.
+          x-description-zh: 标的代码，如 `AAPL.US`。
+          x-description-zh-hk: 標的代碼，如 `AAPL.US`。
+        - name: per_invest_amount
+          in: body
           type: string
           required: true
-          description: Recurring investment amount
-          x-description-zh: 定投金额
-          x-description-zh-hk: 定投金額
-        - name: frequency
+          description: Recurring investment amount per execution.
+          x-description-zh: 每次定投金额。
+          x-description-zh-hk: 每次定投金額。
+        - name: invest_frequency
+          in: body
           type: string
           required: true
-          description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`'
-          x-description-zh: 频率：`Daily`（每日）、`Weekly`（每周）、`Fortnightly`（每两周）、`Monthly`（每月）
-          x-description-zh-hk: 頻率：`Daily`（每日）、`Weekly`（每週）、`Fortnightly`（每兩週）、`Monthly`（每月）
-        - name: day_of_week
-          type: string
-          required: false
-          description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`'
-          x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`
-          x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`
-        - name: day_of_month
+          description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
+          x-description-zh: 频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+          x-description-zh-hk: 頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+        - name: allow_margin_finance
+          in: body
           type: integer
+          required: true
+          description: 'Whether to allow margin financing: `1` yes, `0` no.'
+          x-description-zh: 是否允许融资：`1` 是，`0` 否。
+          x-description-zh-hk: 是否允許融資：`1` 是，`0` 否。
+        - name: invest_day_of_week
+          in: body
+          type: string
           required: false
-          description: Day of month for monthly plans (1–28)
-          x-description-zh: 每月计划的执行日期（1–28）
-          x-description-zh-hk: 每月計劃的執行日期（1–28）
+          description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`.'
+          x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`。
+          x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`。
+        - name: invest_day_of_month
+          in: body
+          type: string
+          required: false
+          description: 'Day of month for monthly plans: `1`–`28`.'
+          x-description-zh: 每月计划的执行日：`1`–`28`。
+          x-description-zh-hk: 每月計劃的執行日：`1`–`28`。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -1091,7 +1107,7 @@ paths:
               --header 'X-Timestamp: <timestamp>' \
               --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","amount":"<amount>","frequency":"<frequency>"}'
+              --data '{"symbol":"<symbol>","per_invest_amount":"<per_invest_amount>","invest_frequency":"<invest_frequency>","allow_margin_finance":"<allow_margin_finance>"}'
         - lang: Python
           label: Python
           source: |
@@ -1100,7 +1116,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/create",
                 headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "amount": "<amount>", "frequency": "<frequency>"},
+                json={"symbol": "<symbol>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "allow_margin_finance": "<allow_margin_finance>"},
             )
             print(resp.json())
         - lang: Python
@@ -1114,7 +1130,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/create",
                         headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "amount": "<amount>", "frequency": "<frequency>"},
+                        json={"symbol": "<symbol>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "allow_margin_finance": "<allow_margin_finance>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -1131,7 +1147,7 @@ paths:
                 "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", amount: "<amount>", frequency: "<frequency>" }),
+              body: JSON.stringify({ symbol: "<symbol>", per_invest_amount: "<per_invest_amount>", invest_frequency: "<invest_frequency>", allow_margin_finance: "<allow_margin_finance>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -1148,7 +1164,7 @@ paths:
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"amount\":\"<amount>\",\"frequency\":\"<frequency>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":\"<allow_margin_finance>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -1157,12 +1173,12 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .post("https://openapi.longbridge.com/v1/dailycoins/create")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/create")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "amount": "<amount>" , "frequency": "<frequency>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "per_invest_amount": "<per_invest_amount>" , "invest_frequency": "<invest_frequency>" , "allow_margin_finance": "<allow_margin_finance>" }))
                     .send()
                     .await?
                     .text()
@@ -1183,7 +1199,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/create");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"amount\":\"<amount>\",\"frequency\":\"<frequency>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":\"<allow_margin_finance>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -1191,7 +1207,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/create\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"amount\":\"<amount>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/create\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":\"<allow_margin_finance>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: id
           type: string
@@ -1236,18 +1252,41 @@ paths:
       tags:
         - DCA
       x-parameters:
-        - name: id
+        - name: plan_id
+          in: body
           type: string
           required: true
-          description: Plan ID (path parameter)
-          x-description-zh: 计划 ID（路径参数）
-          x-description-zh-hk: 計劃 ID（路徑參數）
-        - name: action
+          description: DCA plan ID to update.
+          x-description-zh: 要更新的定投计划 ID。
+          x-description-zh-hk: 要更新的定投計劃 ID。
+        - name: per_invest_amount
+          in: body
           type: string
-          required: true
-          description: 'Action to perform: `pause` or `resume`'
-          x-description-zh: 执行操作：`pause`（暂停）或 `resume`（恢复）
-          x-description-zh-hk: 執行操作：`pause`（暫停）或 `resume`（恢復）
+          required: false
+          description: New recurring investment amount.
+          x-description-zh: 新的每次定投金额。
+          x-description-zh-hk: 新的每次定投金額。
+        - name: invest_frequency
+          in: body
+          type: string
+          required: false
+          description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
+          x-description-zh: 频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+          x-description-zh-hk: 頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+        - name: invest_day_of_week
+          in: body
+          type: string
+          required: false
+          description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`.'
+          x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`。
+          x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`。
+        - name: invest_day_of_month
+          in: body
+          type: string
+          required: false
+          description: 'Day of month for monthly plans: `1`–`28`.'
+          x-description-zh: 每月计划的执行日：`1`–`28`。
+          x-description-zh-hk: 每月計劃的執行日：`1`–`28`。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -1265,7 +1304,7 @@ paths:
               --header 'X-Timestamp: <timestamp>' \
               --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
-              --data '{"id":"<id>","action":"<action>"}'
+              --data '{"plan_id":"<plan_id>"}'
         - lang: Python
           label: Python
           source: |
@@ -1274,7 +1313,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/update",
                 headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                json={"id": "<id>", "action": "<action>"},
+                json={"plan_id": "<plan_id>"},
             )
             print(resp.json())
         - lang: Python
@@ -1288,7 +1327,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/update",
                         headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                        json={"id": "<id>", "action": "<action>"},
+                        json={"plan_id": "<plan_id>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -1305,7 +1344,7 @@ paths:
                 "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id: "<id>", action: "<action>" }),
+              body: JSON.stringify({ plan_id: "<plan_id>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -1322,7 +1361,7 @@ paths:
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"action\":\"<action>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"plan_id\":\"<plan_id>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -1331,12 +1370,12 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .post("https://openapi.longbridge.com/v1/dailycoins/update")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/update")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .json(&serde_json::json!({ "id": "<id>" , "action": "<action>" }))
+                    .json(&serde_json::json!({ "plan_id": "<plan_id>" }))
                     .send()
                     .await?
                     .text()
@@ -1357,7 +1396,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/update");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"action\":\"<action>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"plan_id\":\"<plan_id>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -1365,7 +1404,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update\", strings.NewReader(`{\"id\":\"<id>\",\"action\":\"<action>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update\", strings.NewReader(`{\"plan_id\":\"<plan_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -1397,12 +1436,14 @@ paths:
         - DCA
       x-parameters:
         - name: plan_id
+          in: body
           type: string
           required: true
           description: DCA plan ID.
           x-description-zh: 定投计划 ID。
           x-description-zh-hk: 定投計劃 ID。
         - name: status
+          in: body
           type: string
           required: true
           description: 'Target status: `Suspended` (pause), `Active` (resume), `Finished` (stop).'
@@ -1481,7 +1522,7 @@ paths:
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"plan_id\":\"<plan_id>\",\"status\":\"<status>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"plan_id\":\"<plan_id>\",\"status\":\"<status>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -1490,7 +1531,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .post("https://openapi.longbridge.com/v1/dailycoins/toggle")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/toggle")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
@@ -1560,24 +1601,27 @@ paths:
       tags:
         - DCA
       x-parameters:
-        - name: id
+        - name: plan_id
+          in: query
           type: string
           required: true
-          description: Plan ID (path parameter)
-          x-description-zh: 计划 ID（路径参数）
-          x-description-zh-hk: 計劃 ID（路徑參數）
+          description: DCA plan ID.
+          x-description-zh: 定投计划 ID。
+          x-description-zh-hk: 定投計劃 ID。
         - name: page
+          in: query
           type: integer
-          required: false
-          description: 'Page number (1-based, default: 1)'
-          x-description-zh: 页码（从 1 开始，默认：1）
-          x-description-zh-hk: 頁碼（從 1 開始，默認：1）
+          required: true
+          description: Page number, starting from `1`.
+          x-description-zh: 页码，从 `1` 开始。
+          x-description-zh-hk: 頁碼，從 `1` 開始。
         - name: size
+          in: query
           type: integer
-          required: false
-          description: 'Records per page (default: 20)'
-          x-description-zh: 每页数量（默认：20）
-          x-description-zh-hk: 每頁數量（默認：20）
+          required: true
+          description: Page size (records per page).
+          x-description-zh: 每页记录数。
+          x-description-zh-hk: 每頁記錄數。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -1588,7 +1632,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>' \
+              --url 'https://openapi.longbridge.com/v1/dailycoins/query-records?plan_id=<plan_id>&page=<page>&size=<size>' \
               --header 'Authorization: <access_token>' \
               --header 'X-Api-Key: <app_key>' \
               --header 'X-Timestamp: <timestamp>' \
@@ -1601,7 +1645,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/dailycoins/query-records",
                 headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
-                params={"id": "<id>"},
+                params={"plan_id": "<plan_id>", "page": "<page>", "size": "<size>"},
             )
             print(resp.json())
         - lang: Python
@@ -1615,7 +1659,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/dailycoins/query-records",
                         headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
-                        params={"id": "<id>"},
+                        params={"plan_id": "<plan_id>", "page": "<page>", "size": "<size>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -1624,9 +1668,12 @@ paths:
           label: Node.js
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/dailycoins/query-records")
-            url.searchParams.set("id", "<id>")
+            url.searchParams.set("plan_id", "<plan_id>")
+            url.searchParams.set("page", "<page>")
+            url.searchParams.set("size", "<size>")
 
             const resp = await fetch(url, {
+              method: "GET",
               headers: {
                 "Authorization": "<access_token>",
                 "X-Api-Key": "<app_key>",
@@ -1643,12 +1690,12 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/query-records?plan_id=<plan_id>&page=<page>&size=<size>"))
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .GET()
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -1657,12 +1704,12 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .get("https://openapi.longbridge.com/v1/dailycoins/query-records")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/dailycoins/query-records")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .query(&[("id", "<id>")])
+                    .query(&[("plan_id", "<plan_id>"), ("page", "<page>"), ("size", "<size>")])
                     .send()
                     .await?
                     .text()
@@ -1680,7 +1727,8 @@ paths:
                 headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
                 headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
                 headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/query-records?plan_id=<plan_id>&page=<page>&size=<size>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -1688,7 +1736,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/query-records?plan_id=<plan_id>&page=<page>&size=<size>\", nil)\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: records
           type: object[]
@@ -1823,11 +1871,12 @@ paths:
         - DCA
       x-parameters:
         - name: symbol
+          in: query
           type: string
           required: false
-          description: Filter by symbol
-          x-description-zh: 按标的过滤
-          x-description-zh-hk: 按標的過濾
+          description: Filter statistics by security symbol.
+          x-description-zh: 按标的代码筛选统计。
+          x-description-zh-hk: 按標的代碼篩選統計。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -1872,6 +1921,7 @@ paths:
           label: Node.js
           source: |
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/statistic", {
+              method: "GET",
               headers: {
                 "Authorization": "<access_token>",
                 "X-Api-Key": "<app_key>",
@@ -1893,7 +1943,7 @@ paths:
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .GET()
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -1902,7 +1952,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .get("https://openapi.longbridge.com/v1/dailycoins/statistic")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/dailycoins/statistic")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
@@ -1925,6 +1975,7 @@ paths:
                 headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
                 headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/statistic");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -2031,11 +2082,12 @@ paths:
         - DCA
       x-parameters:
         - name: symbols
-          type: string[]
+          in: body
+          type: array
           required: true
-          description: List of security symbols to check
-          x-description-zh: 待检查的标的代码列表
-          x-description-zh-hk: 待檢查的標的代碼列表
+          description: List of security symbols to check for DCA support.
+          x-description-zh: 要检查是否支持定投的标的代码列表。
+          x-description-zh-hk: 要檢查是否支持定投的標的代碼列表。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -2109,7 +2161,7 @@ paths:
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -2118,7 +2170,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .post("https://openapi.longbridge.com/v1/dailycoins/batch-check-support")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/batch-check-support")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
@@ -2214,29 +2266,33 @@ paths:
         - DCA
       x-parameters:
         - name: symbol
+          in: body
           type: string
           required: true
-          description: Security symbol
-          x-description-zh: 标的代码
-          x-description-zh-hk: 標的代碼
-        - name: frequency
+          description: Security symbol.
+          x-description-zh: 标的代码。
+          x-description-zh-hk: 標的代碼。
+        - name: invest_frequency
+          in: body
           type: string
           required: true
-          description: 'DCA frequency: `daily`, `weekly`, `fortnightly`, `monthly`'
-          x-description-zh: 定投频率：`daily`、`weekly`、`fortnightly`、`monthly`
-          x-description-zh-hk: 定投頻率：`daily`、`weekly`、`fortnightly`、`monthly`
-        - name: day_of_week
+          description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
+          x-description-zh: 频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+          x-description-zh-hk: 頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+        - name: invest_day_of_week
+          in: body
           type: string
           required: false
-          description: 'Day of week for weekly plans: `mon`–`fri`'
-          x-description-zh: 每周计划的执行星期：`mon`–`fri`
-          x-description-zh-hk: 每週計劃的執行星期：`mon`–`fri`
-        - name: day_of_month
-          type: integer
+          description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`.'
+          x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`。
+          x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`。
+        - name: invest_day_of_month
+          in: body
+          type: string
           required: false
-          description: 'Day of month for monthly/fortnightly plans: 1–28'
-          x-description-zh: 每月/每两周计划的执行日期：1–28
-          x-description-zh-hk: 每月/每兩週計劃的執行日期：1–28
+          description: 'Day of month for monthly plans: `1`–`28`.'
+          x-description-zh: 每月计划的执行日：`1`–`28`。
+          x-description-zh-hk: 每月計劃的執行日：`1`–`28`。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -2253,7 +2309,7 @@ paths:
               --header 'X-Timestamp: <timestamp>' \
               --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","frequency":"<frequency>"}'
+              --data '{"symbol":"<symbol>","invest_frequency":"<invest_frequency>"}'
         - lang: Python
           label: Python
           source: |
@@ -2262,7 +2318,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date",
                 headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "frequency": "<frequency>"},
+                json={"symbol": "<symbol>", "invest_frequency": "<invest_frequency>"},
             )
             print(resp.json())
         - lang: Python
@@ -2276,7 +2332,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date",
                         headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "frequency": "<frequency>"},
+                        json={"symbol": "<symbol>", "invest_frequency": "<invest_frequency>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -2293,7 +2349,7 @@ paths:
                 "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", frequency: "<frequency>" }),
+              body: JSON.stringify({ symbol: "<symbol>", invest_frequency: "<invest_frequency>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -2310,7 +2366,7 @@ paths:
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"frequency\":\"<frequency>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -2319,12 +2375,12 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .post("https://openapi.longbridge.com/v1/dailycoins/calc-trd-date")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "frequency": "<frequency>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "invest_frequency": "<invest_frequency>" }))
                     .send()
                     .await?
                     .text()
@@ -2345,7 +2401,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"frequency\":\"<frequency>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -2353,7 +2409,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/calc-trd-date\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/calc-trd-date\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: trade_date
           type: string
@@ -2398,12 +2454,13 @@ paths:
       tags:
         - DCA
       x-parameters:
-        - name: hours
+        - name: alter_hours
+          in: body
           type: string
           required: true
-          description: 'Reminder advance hours: `1`, `6`, or `12`'
-          x-description-zh: 提醒提前小时数：`1`、`6` 或 `12`
-          x-description-zh-hk: 提醒提前小時數：`1`、`6` 或 `12`
+          description: 'Advance reminder hours before DCA execution: `1`, `6`, or `12`.'
+          x-description-zh: 定投执行前的提前提醒小时数：`1`、`6` 或 `12`。
+          x-description-zh-hk: 定投執行前的提前提醒小時數：`1`、`6` 或 `12`。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -2420,7 +2477,7 @@ paths:
               --header 'X-Timestamp: <timestamp>' \
               --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
-              --data '{"hours":"<hours>"}'
+              --data '{"alter_hours":"<alter_hours>"}'
         - lang: Python
           label: Python
           source: |
@@ -2429,7 +2486,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours",
                 headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                json={"hours": "<hours>"},
+                json={"alter_hours": "<alter_hours>"},
             )
             print(resp.json())
         - lang: Python
@@ -2443,7 +2500,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours",
                         headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
-                        json={"hours": "<hours>"},
+                        json={"alter_hours": "<alter_hours>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -2460,7 +2517,7 @@ paths:
                 "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ hours: "<hours>" }),
+              body: JSON.stringify({ alter_hours: "<alter_hours>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -2477,7 +2534,7 @@ paths:
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"hours\":\"<hours>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"alter_hours\":\"<alter_hours>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -2486,12 +2543,12 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .post("https://openapi.longbridge.com/v1/dailycoins/update-alter-hours")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours")
                     .header("Authorization", "<access_token>")
                     .header("X-Api-Key", "<app_key>")
                     .header("X-Timestamp", "<timestamp>")
                     .header("X-Api-Signature", "<signature>")
-                    .json(&serde_json::json!({ "hours": "<hours>" }))
+                    .json(&serde_json::json!({ "alter_hours": "<alter_hours>" }))
                     .send()
                     .await?
                     .text()
@@ -2512,7 +2569,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"hours\":\"<hours>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"alter_hours\":\"<alter_hours>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -2520,7 +2577,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update-alter-hours\", strings.NewReader(`{\"hours\":\"<hours>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update-alter-hours\", strings.NewReader(`{\"alter_hours\":\"<alter_hours>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response

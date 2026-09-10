@@ -78,6 +78,9 @@ const PARAM_NOTE: Record<Locale, string> = {
 const L = {
   request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
   parameters: { en: 'Parameters', 'zh-CN': '参数', 'zh-HK': '參數' },
+  pathParams: { en: 'Path Parameters', 'zh-CN': '路径参数', 'zh-HK': '路徑參數' },
+  queryParams: { en: 'Query Parameters', 'zh-CN': '查询参数', 'zh-HK': '查詢參數' },
+  requestBody: { en: 'Request Body', 'zh-CN': '请求体', 'zh-HK': '請求體' },
   requestExample: { en: 'Request Example', 'zh-CN': '请求示例', 'zh-HK': '請求示例' },
   response: { en: 'Response', 'zh-CN': '响应', 'zh-HK': '響應' },
   responseProps: { en: 'Response Properties', 'zh-CN': '响应字段', 'zh-HK': '響應欄位' },
@@ -567,7 +570,32 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
   // Docs-model data (new endpoints authored with x-request-examples)
   const isDocsModel = !!activeEndpoint?.operation['x-request-examples']
-  const epParams = useMemo(() => rowsFrom(activeEndpoint?.operation['x-parameters'], locale), [activeEndpoint, locale])
+  const xparams = activeEndpoint?.operation['x-parameters']
+  const epPathParams = useMemo(
+    () =>
+      rowsFrom(
+        (xparams ?? []).filter((p) => p.in === 'path'),
+        locale
+      ),
+    [xparams, locale]
+  )
+  const epQueryParams = useMemo(
+    () =>
+      rowsFrom(
+        (xparams ?? []).filter((p) => p.in === 'query'),
+        locale
+      ),
+    [xparams, locale]
+  )
+  const epBodyParams = useMemo(
+    () =>
+      rowsFrom(
+        (xparams ?? []).filter((p) => p.in === 'body'),
+        locale
+      ),
+    [xparams, locale]
+  )
+  const hasParams = epPathParams.length + epQueryParams.length + epBodyParams.length > 0
   const epRespProps = useMemo(
     () => rowsFrom(activeEndpoint?.operation['x-response-properties'], locale),
     [activeEndpoint, locale]
@@ -637,7 +665,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const tocItems = isDocsModel
     ? [
         { id: 'request', label: L.request[locale], sub: false },
-        ...(epParams.length ? [{ id: 'parameters', label: L.parameters[locale], sub: true }] : []),
+        ...(hasParams ? [{ id: 'parameters', label: L.parameters[locale], sub: true }] : []),
         ...(epReqExamples.length ? [{ id: 'request-example', label: L.requestExample[locale], sub: true }] : []),
         { id: 'response', label: L.response[locale], sub: false },
         ...(epRespProps.length ? [{ id: 'response-properties', label: L.responseProps[locale], sub: true }] : []),
@@ -805,12 +833,27 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                       {/* ── Request ── */}
                       <h2 id="request">{L.request[locale]}</h2>
 
-                      {epParams.length > 0 && (
-                        <section id="parameters" className="api-section">
-                          <h3>{L.parameters[locale]}</h3>
-                          <p className="section-note">{PARAM_NOTE[locale]}</p>
-                          <ParamTable rows={epParams} locale={locale} />
-                        </section>
+                      {hasParams && (
+                        <div id="parameters">
+                          {epPathParams.length > 0 && (
+                            <section className="api-section">
+                              <h3>{L.pathParams[locale]}</h3>
+                              <ParamTable rows={epPathParams} locale={locale} />
+                            </section>
+                          )}
+                          {epQueryParams.length > 0 && (
+                            <section className="api-section">
+                              <h3>{L.queryParams[locale]}</h3>
+                              <ParamTable rows={epQueryParams} locale={locale} />
+                            </section>
+                          )}
+                          {epBodyParams.length > 0 && (
+                            <section className="api-section">
+                              <h3>{L.requestBody[locale]}</h3>
+                              <ParamTable rows={epBodyParams} locale={locale} />
+                            </section>
+                          )}
+                        </div>
                       )}
 
                       {epReqExamples.length > 0 && (
