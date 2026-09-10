@@ -443,9 +443,9 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
       {/* ── Endpoint detail ── */}
       {showEndpoint && activeEndpoint && (
-        <div data-lbus-component="api-main-endpoint" className="api-main api-main--split">
-          {/* Left column: metadata + params */}
-          <div className="api-content">
+        <div data-lbus-component="api-main-endpoint" className="api-main api-main--docs">
+          {/* Single-column, docs-style flow */}
+          <div className="api-content api-content--docs">
             {epTag && <p className="ep-tag">{epTag}</p>}
             <h1 className="ep-title">
               {pickLocale(
@@ -491,37 +491,59 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               </div>
             )}
 
-            {/* Param sections */}
+            {/* Param sections — docs-style tables */}
             {epSections.map((section) => (
               <section key={section.key} className="api-section">
-                <h4 className="section-title">{section.title}</h4>
+                <h2 className="section-title">{section.title}</h2>
                 {section.note && <p className="section-note">{section.note}</p>}
-                <div className="param-list">
-                  {section.params.length === 0 ? (
-                    <p className="param-fallback">{t(locale, 'api.fallback')}</p>
-                  ) : (
-                    section.params.map((row) => (
-                      <div key={row.name} className="param-row">
-                        <div className="param-meta">
-                          <code className="param-name">{row.name}</code>
-                          <span className="param-type">{row.type}</span>
-                          <span className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}>
-                            {row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}
-                          </span>
-                        </div>
-                        {row.description && <p className="param-desc">{row.description}</p>}
-                      </div>
-                    ))
-                  )}
-                </div>
+                {section.params.length === 0 ? (
+                  <p className="param-fallback">{t(locale, 'api.fallback')}</p>
+                ) : (
+                  <div className="api-table-wrap">
+                    <table className="api-param-table">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Required</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.params.map((row) => (
+                          <tr key={row.name}>
+                            <td>
+                              <code>{row.name}</code>
+                            </td>
+                            <td>
+                              <span className="param-type">{row.type}</span>
+                            </td>
+                            <td>
+                              <span className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}>
+                                {row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}
+                              </span>
+                            </td>
+                            <td>{row.description}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </section>
             ))}
-          </div>
 
-          {/* Right column: code samples */}
-          {epCodeBlocks.length > 0 && (
-            <CodePanel blocks={epCodeBlocks} labelCopy={t(locale, 'api.copy')} labelCopied={t(locale, 'api.copied')} />
-          )}
+            {/* Request / Response examples — stacked labeled code cards */}
+            {epCodeBlocks.length > 0 && (
+              <section className="api-section api-section--code">
+                <CodePanel
+                  blocks={epCodeBlocks}
+                  labelCopy={t(locale, 'api.copy')}
+                  labelCopied={t(locale, 'api.copied')}
+                />
+              </section>
+            )}
+          </div>
         </div>
       )}
     </div>

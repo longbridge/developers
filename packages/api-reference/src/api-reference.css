@@ -648,3 +648,81 @@
   font-size: 13px;
   color: #6b7280;
 }
+
+/* ── Docs-style single-column endpoint detail ────────────────────────────── */
+
+.api-main--docs {
+  display: block;
+}
+.api-content--docs {
+  max-width: 900px;
+  min-width: 0;
+}
+
+/* Section headings like docs (not the small uppercase labels) */
+.api-main--docs .section-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--lb-fg-1, #1f2937);
+  margin: 32px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+}
+
+/* Parameters / schema tables — mirror docs `.docs-content table` */
+.api-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.api-param-table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.api-param-table th,
+.api-param-table td {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  padding: 8px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+.api-param-table th {
+  background: var(--lb-bg-2, #f8fafc);
+  color: var(--lb-fg-2, #64748b);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.api-param-table tbody tr:nth-child(2n) {
+  background: var(--lb-bg-2, #f8fafc);
+}
+.api-param-table td code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+.api-param-table .param-type {
+  color: var(--lb-fg-2, #64748b);
+  font-size: 13px;
+}
+.api-param-table .param-required.is-required {
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 12px;
+}
+.api-param-table .param-required.is-optional {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Code examples flow in the single column (not sticky right rail) */
+.api-main--docs .code-panel {
+  position: static;
+  top: auto;
+  max-width: 100%;
+}
+.api-section--code {
+  margin-top: 8px;
+}
