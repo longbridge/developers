@@ -645,10 +645,16 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   }, [activeEndpoint, groups, locale])
 
   // ── Page content ──────────────────────────────────────────────────────────
-  const pageHtml = useMemo<string>(() => {
-    if (!activePg) return ''
+  // Page markdown, split at the [[SIGNING_TABS]] marker so a CodeTabs component
+  // can be injected in the middle (Authentication page signing implementations).
+  const pageParts = useMemo(() => {
+    if (!activePg) return { before: '', after: '' }
     const raw = pickLocale(activePg.content, activePg.contentZh, activePg.contentZhHk, locale)
-    return raw ? renderMd(raw, localePrefix) : ''
+    const [before, after = ''] = raw.split('[[SIGNING_TABS]]')
+    return {
+      before: before ? renderMd(before, localePrefix) : '',
+      after: after ? renderMd(after, localePrefix) : '',
+    }
   }, [activePg, locale, localePrefix])
 
   // ── Copy path ─────────────────────────────────────────────────────────────
@@ -787,7 +793,23 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               )}
 
               {/* ── Page content ── */}
-              {showPage && <div className="vp-doc prose" dangerouslySetInnerHTML={{ __html: pageHtml }} />}
+              {showPage && (
+                <div className="vp-doc prose">
+                  <div dangerouslySetInnerHTML={{ __html: pageParts.before }} />
+                  {activePg?.codeTabs?.length ? (
+                    <CodeTabs
+                      blocks={activePg.codeTabs.map((s) => ({
+                        lang: s.lang.toLowerCase(),
+                        code: s.source,
+                        label: s.label,
+                      }))}
+                      labelCopy={t(locale, 'api.copy')}
+                      labelCopied={t(locale, 'api.copied')}
+                    />
+                  ) : null}
+                  {pageParts.after && <div dangerouslySetInnerHTML={{ __html: pageParts.after }} />}
+                </div>
+              )}
 
               {/* ── Endpoint detail ── */}
               {showEndpoint && activeEndpoint && (

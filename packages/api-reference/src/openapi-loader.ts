@@ -108,6 +108,8 @@ export interface PageItem {
   contentZh?: string
   contentZhHk?: string
   icon?: string
+  /** Optional multi-language code tabs, injected where `[[SIGNING_TABS]]` appears. */
+  codeTabs?: CodeSample[]
 }
 
 export interface TagGroup {
@@ -175,6 +177,7 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
     contentZh: p['x-content-zh'],
     contentZhHk: p['x-content-zh-hk'],
     icon: p['x-icon'],
+    codeTabs: p['x-code-tabs'],
   }))
 
   return {

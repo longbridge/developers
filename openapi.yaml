@@ -67,45 +67,7 @@ x-pages:
 
       Compute the four API-Key headers from your credentials. Other languages follow the same steps.
 
-      ```python
-      import hashlib, hmac, time
-
-      def sign(method, path, query="", body="", *, app_key, app_secret, access_token):
-          ts = str(int(time.time() * 1000))
-          signed_headers = "authorization;x-api-key;x-timestamp"
-          signed_values = f"authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n"
-          canonical = f"{method}|{path}|{query}|{signed_values}|{signed_headers}|"
-          if body:
-              canonical += hashlib.sha1(body.encode()).hexdigest()
-          payload = "HMAC-SHA256|" + hashlib.sha1(canonical.encode()).hexdigest()
-          sig = hmac.new(app_secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
-          return {
-              "Authorization": access_token,
-              "X-Api-Key": app_key,
-              "X-Timestamp": ts,
-              "X-Api-Signature": f"HMAC-SHA256 SignedHeaders={signed_headers}, Signature={sig}",
-          }
-      ```
-
-      ```javascript
-      const crypto = require('crypto')
-
-      function sign(method, path, query = '', body = '', { appKey, appSecret, accessToken }) {
-        const ts = String(Date.now())
-        const signedHeaders = 'authorization;x-api-key;x-timestamp'
-        const signedValues = `authorization:${accessToken}\nx-api-key:${appKey}\nx-timestamp:${ts}\n`
-        let canonical = `${method}|${path}|${query}|${signedValues}|${signedHeaders}|`
-        if (body) canonical += crypto.createHash('sha1').update(body).digest('hex')
-        const payload = 'HMAC-SHA256|' + crypto.createHash('sha1').update(canonical).digest('hex')
-        const sig = crypto.createHmac('sha256', appSecret).update(payload).digest('hex')
-        return {
-          Authorization: accessToken,
-          'X-Api-Key': appKey,
-          'X-Timestamp': ts,
-          'X-Api-Signature': `HMAC-SHA256 SignedHeaders=${signedHeaders}, Signature=${sig}`,
-        }
-      }
-      ```
+      [[SIGNING_TABS]]
 
       > The per-endpoint **Request Example** tabs default to **OAuth 2.0** (`Authorization: Bearer <access_token>`).
       > To use API-Key auth instead, drop the `Authorization: Bearer …` header and add the four signed
@@ -161,45 +123,7 @@ x-pages:
 
       用凭证计算四个 API-Key 头，其他语言遵循相同步骤。
 
-      ```python
-      import hashlib, hmac, time
-
-      def sign(method, path, query="", body="", *, app_key, app_secret, access_token):
-          ts = str(int(time.time() * 1000))
-          signed_headers = "authorization;x-api-key;x-timestamp"
-          signed_values = f"authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n"
-          canonical = f"{method}|{path}|{query}|{signed_values}|{signed_headers}|"
-          if body:
-              canonical += hashlib.sha1(body.encode()).hexdigest()
-          payload = "HMAC-SHA256|" + hashlib.sha1(canonical.encode()).hexdigest()
-          sig = hmac.new(app_secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
-          return {
-              "Authorization": access_token,
-              "X-Api-Key": app_key,
-              "X-Timestamp": ts,
-              "X-Api-Signature": f"HMAC-SHA256 SignedHeaders={signed_headers}, Signature={sig}",
-          }
-      ```
-
-      ```javascript
-      const crypto = require('crypto')
-
-      function sign(method, path, query = '', body = '', { appKey, appSecret, accessToken }) {
-        const ts = String(Date.now())
-        const signedHeaders = 'authorization;x-api-key;x-timestamp'
-        const signedValues = `authorization:${accessToken}\nx-api-key:${appKey}\nx-timestamp:${ts}\n`
-        let canonical = `${method}|${path}|${query}|${signedValues}|${signedHeaders}|`
-        if (body) canonical += crypto.createHash('sha1').update(body).digest('hex')
-        const payload = 'HMAC-SHA256|' + crypto.createHash('sha1').update(canonical).digest('hex')
-        const sig = crypto.createHmac('sha256', appSecret).update(payload).digest('hex')
-        return {
-          Authorization: accessToken,
-          'X-Api-Key': appKey,
-          'X-Timestamp': ts,
-          'X-Api-Signature': `HMAC-SHA256 SignedHeaders=${signedHeaders}, Signature=${sig}`,
-        }
-      }
-      ```
+      [[SIGNING_TABS]]
 
       > 各接口的 **请求示例** 默认用 **OAuth 2.0**（`Authorization: Bearer <access_token>`）。若改用 API Key 鉴权，去掉 `Authorization: Bearer …`，改为附上 `sign(...)` 返回的四个签名头。
     x-content-zh-hk: |
@@ -253,47 +177,175 @@ x-pages:
 
       用憑證計算四個 API-Key 標頭，其他語言遵循相同步驟。
 
-      ```python
-      import hashlib, hmac, time
-
-      def sign(method, path, query="", body="", *, app_key, app_secret, access_token):
-          ts = str(int(time.time() * 1000))
-          signed_headers = "authorization;x-api-key;x-timestamp"
-          signed_values = f"authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n"
-          canonical = f"{method}|{path}|{query}|{signed_values}|{signed_headers}|"
-          if body:
-              canonical += hashlib.sha1(body.encode()).hexdigest()
-          payload = "HMAC-SHA256|" + hashlib.sha1(canonical.encode()).hexdigest()
-          sig = hmac.new(app_secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
-          return {
-              "Authorization": access_token,
-              "X-Api-Key": app_key,
-              "X-Timestamp": ts,
-              "X-Api-Signature": f"HMAC-SHA256 SignedHeaders={signed_headers}, Signature={sig}",
-          }
-      ```
-
-      ```javascript
-      const crypto = require('crypto')
-
-      function sign(method, path, query = '', body = '', { appKey, appSecret, accessToken }) {
-        const ts = String(Date.now())
-        const signedHeaders = 'authorization;x-api-key;x-timestamp'
-        const signedValues = `authorization:${accessToken}\nx-api-key:${appKey}\nx-timestamp:${ts}\n`
-        let canonical = `${method}|${path}|${query}|${signedValues}|${signedHeaders}|`
-        if (body) canonical += crypto.createHash('sha1').update(body).digest('hex')
-        const payload = 'HMAC-SHA256|' + crypto.createHash('sha1').update(canonical).digest('hex')
-        const sig = crypto.createHmac('sha256', appSecret).update(payload).digest('hex')
-        return {
-          Authorization: accessToken,
-          'X-Api-Key': appKey,
-          'X-Timestamp': ts,
-          'X-Api-Signature': `HMAC-SHA256 SignedHeaders=${signedHeaders}, Signature=${sig}`,
-        }
-      }
-      ```
+      [[SIGNING_TABS]]
 
       > 各接口的 **請求示例** 預設用 **OAuth 2.0**（`Authorization: Bearer <access_token>`）。若改用 API Key 鑑權，去掉 `Authorization: Bearer …`，改為附上 `sign(...)` 返回的四個簽名標頭。
+    x-code-tabs:
+      - label: cURL
+        lang: Shell
+        source: |
+          #!/usr/bin/env bash
+          # Requires openssl. Fill in APP_KEY / APP_SECRET / ACCESS_TOKEN.
+          METHOD="GET"; REQ_PATH="/v1/dailycoins/query"; QUERY=""; BODY=""
+          TS="$(date +%s)000"
+          SIGNED_HEADERS="authorization;x-api-key;x-timestamp"
+          SIGNED_VALUES="authorization:${ACCESS_TOKEN}
+          x-api-key:${APP_KEY}
+          x-timestamp:${TS}
+          "
+          CANON="${METHOD}|${REQ_PATH}|${QUERY}|${SIGNED_VALUES}|${SIGNED_HEADERS}|"
+          [ -n "$BODY" ] && CANON="${CANON}$(printf %s "$BODY" | openssl dgst -sha1 | awk '{print $2}')"
+          PAYLOAD="HMAC-SHA256|$(printf %s "$CANON" | openssl dgst -sha1 | awk '{print $2}')"
+          SIG="$(printf %s "$PAYLOAD" | openssl dgst -sha256 -hmac "$APP_SECRET" | awk '{print $2}')"
+
+          curl --request "$METHOD" \
+            --url "https://openapi.longbridge.com${REQ_PATH}${QUERY:+?$QUERY}" \
+            --header "Authorization: ${ACCESS_TOKEN}" \
+            --header "X-Api-Key: ${APP_KEY}" \
+            --header "X-Timestamp: ${TS}" \
+            --header "X-Api-Signature: HMAC-SHA256 SignedHeaders=${SIGNED_HEADERS}, Signature=${SIG}"
+      - label: Python
+        lang: Python
+        source: |
+          import hashlib, hmac, time
+
+          def sign(method, path, query="", body="", *, app_key, app_secret, access_token):
+              ts = str(int(time.time() * 1000))
+              signed_headers = "authorization;x-api-key;x-timestamp"
+              signed_values = f"authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n"
+              canonical = f"{method}|{path}|{query}|{signed_values}|{signed_headers}|"
+              if body:
+                  canonical += hashlib.sha1(body.encode()).hexdigest()
+              payload = "HMAC-SHA256|" + hashlib.sha1(canonical.encode()).hexdigest()
+              sig = hmac.new(app_secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
+              return {
+                  "Authorization": access_token,
+                  "X-Api-Key": app_key,
+                  "X-Timestamp": ts,
+                  "X-Api-Signature": f"HMAC-SHA256 SignedHeaders={signed_headers}, Signature={sig}",
+              }
+      - label: Node.js
+        lang: JavaScript
+        source: |
+          const crypto = require('crypto')
+
+          function sign(method, path, query = '', body = '', { appKey, appSecret, accessToken }) {
+            const ts = String(Date.now())
+            const signedHeaders = 'authorization;x-api-key;x-timestamp'
+            const signedValues = `authorization:${accessToken}\nx-api-key:${appKey}\nx-timestamp:${ts}\n`
+            let canonical = `${method}|${path}|${query}|${signedValues}|${signedHeaders}|`
+            if (body) canonical += crypto.createHash('sha1').update(body).digest('hex')
+            const payload = 'HMAC-SHA256|' + crypto.createHash('sha1').update(canonical).digest('hex')
+            const sig = crypto.createHmac('sha256', appSecret).update(payload).digest('hex')
+            return {
+              Authorization: accessToken,
+              'X-Api-Key': appKey,
+              'X-Timestamp': ts,
+              'X-Api-Signature': `HMAC-SHA256 SignedHeaders=${signedHeaders}, Signature=${sig}`,
+            }
+          }
+      - label: Java
+        lang: Java
+        source: |
+          import java.nio.charset.StandardCharsets;
+          import java.security.MessageDigest;
+          import java.util.HexFormat;
+          import java.util.Map;
+          import javax.crypto.Mac;
+          import javax.crypto.spec.SecretKeySpec;
+
+          static String sha1Hex(String s) throws Exception {
+              byte[] d = MessageDigest.getInstance("SHA-1").digest(s.getBytes(StandardCharsets.UTF_8));
+              return HexFormat.of().formatHex(d);
+          }
+
+          static Map<String, String> sign(String method, String path, String query, String body,
+                                          String appKey, String appSecret, String accessToken) throws Exception {
+              String ts = String.valueOf(System.currentTimeMillis());
+              String signedHeaders = "authorization;x-api-key;x-timestamp";
+              String signedValues = "authorization:" + accessToken + "\nx-api-key:" + appKey + "\nx-timestamp:" + ts + "\n";
+              String canonical = method + "|" + path + "|" + query + "|" + signedValues + "|" + signedHeaders + "|";
+              if (!body.isEmpty()) canonical += sha1Hex(body);
+              String payload = "HMAC-SHA256|" + sha1Hex(canonical);
+              Mac mac = Mac.getInstance("HmacSHA256");
+              mac.init(new SecretKeySpec(appSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+              String sig = HexFormat.of().formatHex(mac.doFinal(payload.getBytes(StandardCharsets.UTF_8)));
+              return Map.of(
+                  "Authorization", accessToken,
+                  "X-Api-Key", appKey,
+                  "X-Timestamp", ts,
+                  "X-Api-Signature", "HMAC-SHA256 SignedHeaders=" + signedHeaders + ", Signature=" + sig);
+          }
+      - label: Rust
+        lang: Rust
+        source: |
+          use hmac::{Hmac, Mac};
+          use sha1::{Digest, Sha1};
+          use sha2::Sha256;
+
+          fn sha1_hex(s: &str) -> String {
+              format!("{:x}", Sha1::digest(s.as_bytes()))
+          }
+
+          fn sign(method: &str, path: &str, query: &str, body: &str,
+                  app_key: &str, app_secret: &str, access_token: &str) -> Vec<(String, String)> {
+              let ts = std::time::SystemTime::now()
+                  .duration_since(std::time::UNIX_EPOCH).unwrap().as_millis().to_string();
+              let signed_headers = "authorization;x-api-key;x-timestamp";
+              let signed_values = format!("authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n");
+              let mut canonical = format!("{method}|{path}|{query}|{signed_values}|{signed_headers}|");
+              if !body.is_empty() {
+                  canonical.push_str(&sha1_hex(body));
+              }
+              let payload = format!("HMAC-SHA256|{}", sha1_hex(&canonical));
+              let mut mac = Hmac::<Sha256>::new_from_slice(app_secret.as_bytes()).unwrap();
+              mac.update(payload.as_bytes());
+              let sig = format!("{:x}", mac.finalize().into_bytes());
+              vec![
+                  ("Authorization".into(), access_token.into()),
+                  ("X-Api-Key".into(), app_key.into()),
+                  ("X-Timestamp".into(), ts),
+                  ("X-Api-Signature".into(), format!("HMAC-SHA256 SignedHeaders={signed_headers}, Signature={sig}")),
+              ]
+          }
+      - label: C++
+        lang: C++
+        source: |
+          #include <openssl/hmac.h>
+          #include <openssl/sha.h>
+          #include <string>
+
+          static std::string to_hex(const unsigned char* d, size_t n) {
+              static const char* h = "0123456789abcdef";
+              std::string s;
+              for (size_t i = 0; i < n; i++) { s += h[d[i] >> 4]; s += h[d[i] & 0xf]; }
+              return s;
+          }
+          static std::string sha1_hex(const std::string& s) {
+              unsigned char d[SHA_DIGEST_LENGTH];
+              SHA1((const unsigned char*)s.data(), s.size(), d);
+              return to_hex(d, SHA_DIGEST_LENGTH);
+          }
+
+          // ts = current unix time in milliseconds (as a string)
+          std::string signature(const std::string& method, const std::string& path, const std::string& query,
+                                const std::string& body, const std::string& app_key, const std::string& app_secret,
+                                const std::string& access_token, const std::string& ts) {
+              std::string signed_headers = "authorization;x-api-key;x-timestamp";
+              std::string signed_values =
+                  "authorization:" + access_token + "\nx-api-key:" + app_key + "\nx-timestamp:" + ts + "\n";
+              std::string canonical =
+                  method + "|" + path + "|" + query + "|" + signed_values + "|" + signed_headers + "|";
+              if (!body.empty()) canonical += sha1_hex(body);
+              std::string payload = "HMAC-SHA256|" + sha1_hex(canonical);
+              unsigned char mac[EVP_MAX_MD_SIZE]; unsigned int len = 0;
+              HMAC(EVP_sha256(), app_secret.data(), (int)app_secret.size(),
+                   (const unsigned char*)payload.data(), payload.size(), mac, &len);
+              return "HMAC-SHA256 SignedHeaders=" + signed_headers + ", Signature=" + to_hex(mac, len);
+          }
+      - label: Go
+        lang: Go
+        source: "package main\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha1\"\n\t\"crypto/sha256\"\n\t\"encoding/hex\"\n\t\"fmt\"\n\t\"strconv\"\n\t\"time\"\n)\n\nfunc sign(method, path, query, body, appKey, appSecret, accessToken string) map[string]string {\n\tts := strconv.FormatInt(time.Now().UnixMilli(), 10)\n\tsignedHeaders := \"authorization;x-api-key;x-timestamp\"\n\tsignedValues := fmt.Sprintf(\"authorization:%s\\nx-api-key:%s\\nx-timestamp:%s\\n\", accessToken, appKey, ts)\n\tcanonical := fmt.Sprintf(\"%s|%s|%s|%s|%s|\", method, path, query, signedValues, signedHeaders)\n\tif body != \"\" {\n\t\tbh := sha1.Sum([]byte(body))\n\t\tcanonical += hex.EncodeToString(bh[:])\n\t}\n\tch := sha1.Sum([]byte(canonical))\n\tpayload := \"HMAC-SHA256|\" + hex.EncodeToString(ch[:])\n\tmac := hmac.New(sha256.New, []byte(appSecret))\n\tmac.Write([]byte(payload))\n\tsig := hex.EncodeToString(mac.Sum(nil))\n\treturn map[string]string{\n\t\t\"Authorization\":   accessToken,\n\t\t\"X-Api-Key\":       appKey,\n\t\t\"X-Timestamp\":     ts,\n\t\t\"X-Api-Signature\": fmt.Sprintf(\"HMAC-SHA256 SignedHeaders=%s, Signature=%s\", signedHeaders, sig),\n\t}\n}\n"
   - id: overview
     title: Overview
     x-title-zh: 概览
