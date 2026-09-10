@@ -97,6 +97,12 @@ const L = {
     'zh-HK': '參見',
   },
   errorCodeLink: { en: 'Error Codes', 'zh-CN': '错误码文档', 'zh-HK': '錯誤碼文檔' },
+  apiKeyNoteBody: {
+    en: 'Shown with OAuth (Bearer). For API-Key auth, sign the request — see ',
+    'zh-CN': '示例使用 OAuth（Bearer）。如用 API Key 鉴权，请对请求签名 —— 见',
+    'zh-HK': '示例使用 OAuth（Bearer）。如用 API Key 鑑權，請對請求簽名 —— 見',
+  },
+  authLink: { en: 'Authentication', 'zh-CN': '鉴权', 'zh-HK': '鑑權' },
 } as const
 
 type RowVM = { name: string; type: string; required: boolean; description: string }
@@ -864,6 +870,11 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                             labelCopy={t(locale, 'api.copy')}
                             labelCopied={t(locale, 'api.copied')}
                           />
+                          <p className="error-code-note">
+                            {L.apiKeyNoteBody[locale]}
+                            <a href={`${localePrefix}/docs/api?page=authentication`}>{L.authLink[locale]}</a>
+                            {locale === 'en' ? '.' : '。'}
+                          </p>
                         </section>
                       )}
 
