@@ -106,39 +106,33 @@ function rowsFrom(xs: XParameter[] | undefined, locale: Locale): RowVM[] {
   }))
 }
 
+// Plain table — rendered inside `article.docs-content`, so it inherits the
+// exact docs table styling.
 function ParamTable({ rows, locale }: { rows: RowVM[]; locale: Locale }) {
   if (!rows.length) return null
   return (
-    <div className="api-table-wrap">
-      <table className="api-param-table">
-        <thead>
-          <tr>
-            <th>{L.name[locale]}</th>
-            <th>{L.type[locale]}</th>
-            <th>{L.required[locale]}</th>
-            <th>{L.description[locale]}</th>
+    <table>
+      <thead>
+        <tr>
+          <th>{L.name[locale]}</th>
+          <th>{L.type[locale]}</th>
+          <th>{L.required[locale]}</th>
+          <th>{L.description[locale]}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.name}>
+            <td>
+              <code>{row.name}</code>
+            </td>
+            <td>{row.type}</td>
+            <td>{row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}</td>
+            <td>{row.description}</td>
           </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.name}>
-              <td>
-                <code>{row.name}</code>
-              </td>
-              <td>
-                <span className="param-type">{row.type}</span>
-              </td>
-              <td>
-                <span className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}>
-                  {row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}
-                </span>
-              </td>
-              <td>{row.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   )
 }
 
@@ -538,10 +532,26 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const showPage = !!activePg
   const showEndpoint = !!activeEndpoint
 
+  // On-this-page TOC entries for the active endpoint.
+  const tocItems = isDocsModel
+    ? [
+        { id: 'request', label: L.request[locale], sub: false },
+        ...(epParams.length ? [{ id: 'parameters', label: L.parameters[locale], sub: true }] : []),
+        ...(epReqExamples.length ? [{ id: 'request-example', label: L.requestExample[locale], sub: true }] : []),
+        { id: 'response', label: L.response[locale], sub: false },
+        ...(epRespProps.length ? [{ id: 'response-properties', label: L.responseProps[locale], sub: true }] : []),
+        ...(epRespJson ? [{ id: 'response-json', label: L.responseJson[locale], sub: true }] : []),
+        { id: 'error-code', label: L.errorCode[locale], sub: false },
+      ]
+    : []
+
   return (
-    <div data-lbus-component="api-reference" className="api-reference-page">
-      {/* ── Sidebar ── */}
-      <aside data-lbus-component="api-sidebar" className="api-sidebar">
+    <div data-lbus-component="api-reference" className="docs-layout">
+      {/* ── Sidebar (docs sidebar DOM) ── */}
+      <aside
+        data-lbus-component="sidebar"
+        className="fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-[color:var(--lb-stroke)] bg-[var(--lbus-c-bg)] px-6 py-6 lg:sticky lg:top-[60px] lg:z-auto lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:translate-x-0"
+        aria-label="API navigation">
         <div className="sidebar-search">
           <input
             ref={searchInputRef}
@@ -552,7 +562,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <nav className="sidebar-scroll" aria-label="API navigation">
+        <nav aria-label="API navigation">
           {/* Static pages — a bare (header-less) group, like docs Overview/Getting Started */}
           {pages.length > 0 && (
             <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
@@ -599,203 +609,183 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         </nav>
       </aside>
 
-      {/* ── Intro (nothing selected) ── */}
-      {showIntro && (
-        <div data-lbus-component="api-intro" className="api-intro">
-          <div className="intro-content">
-            <h2 className="intro-title">{t(locale, 'api.intro.title')}</h2>
-            <p className="intro-desc">{t(locale, 'api.intro.desc')}</p>
-            <div className="intro-cards">
-              <div className="intro-card">
-                <strong className="intro-card-title">{t(locale, 'api.intro.httpTitle')}</strong>
-                <p className="intro-card-desc">{t(locale, 'api.intro.httpDesc')}</p>
-              </div>
-              <div className="intro-card">
-                <strong className="intro-card-title">{t(locale, 'api.intro.wsTitle')}</strong>
-                <p className="intro-card-desc">{t(locale, 'api.intro.wsDesc')}</p>
-              </div>
-            </div>
-            <p className="intro-hint">{t(locale, 'api.intro.hint')}</p>
-          </div>
-        </div>
-      )}
+      <div className="docs-body">
+        <div className="docs-inner">
+          <div className="docs-main">
+            <article className="docs-content">
+              {/* ── Intro (nothing selected) ── */}
+              {showIntro && (
+                <div className="intro-content">
+                  <h2 className="intro-title">{t(locale, 'api.intro.title')}</h2>
+                  <p className="intro-desc">{t(locale, 'api.intro.desc')}</p>
+                  <div className="intro-cards">
+                    <div className="intro-card">
+                      <strong className="intro-card-title">{t(locale, 'api.intro.httpTitle')}</strong>
+                      <p className="intro-card-desc">{t(locale, 'api.intro.httpDesc')}</p>
+                    </div>
+                    <div className="intro-card">
+                      <strong className="intro-card-title">{t(locale, 'api.intro.wsTitle')}</strong>
+                      <p className="intro-card-desc">{t(locale, 'api.intro.wsDesc')}</p>
+                    </div>
+                  </div>
+                  <p className="intro-hint">{t(locale, 'api.intro.hint')}</p>
+                </div>
+              )}
 
-      {/* ── Page content ── */}
-      {showPage && (
-        <div data-lbus-component="api-main-page" className="api-main">
-          <div className="api-content api-page-content vp-doc prose" dangerouslySetInnerHTML={{ __html: pageHtml }} />
-        </div>
-      )}
+              {/* ── Page content ── */}
+              {showPage && <div className="vp-doc prose" dangerouslySetInnerHTML={{ __html: pageHtml }} />}
 
-      {/* ── Endpoint detail ── */}
-      {showEndpoint && activeEndpoint && (
-        <div data-lbus-component="api-main-endpoint" className="api-main api-main--docs">
-          <div className={isDocsModel ? 'api-doc-layout' : ''}>
-            <div className="api-content api-content--docs">
-              {epTag && <p className="ep-tag">{epTag}</p>}
-              <h1 className="ep-title">
-                {pickLocale(
-                  activeEndpoint.operation.summary,
-                  activeEndpoint.operation['x-summary-zh'],
-                  activeEndpoint.operation['x-summary-zh-hk'],
-                  locale
-                )}
-              </h1>
+              {/* ── Endpoint detail ── */}
+              {showEndpoint && activeEndpoint && (
+                <>
+                  {epTag && <p className="ep-tag">{epTag}</p>}
+                  <h1 className="ep-title">
+                    {pickLocale(
+                      activeEndpoint.operation.summary,
+                      activeEndpoint.operation['x-summary-zh'],
+                      activeEndpoint.operation['x-summary-zh-hk'],
+                      locale
+                    )}
+                  </h1>
 
-              {/* Path + method badge */}
-              <div className="ep-path">
-                <span className={`ep-method-badge method-${activeEndpoint.method.toLowerCase()}`}>
-                  {activeEndpoint.method}
-                </span>
-                <span className="ep-path-text">
-                  {epPathSegs.map((seg, i) => (
-                    <span key={i} className={seg.isParam ? 'path-param' : 'path-static'}>
-                      {seg.text}
+                  {/* Path + method badge */}
+                  <div className="ep-path">
+                    <span className={`ep-method-badge method-${activeEndpoint.method.toLowerCase()}`}>
+                      {activeEndpoint.method}
                     </span>
-                  ))}
-                </span>
-                <button type="button" className="path-copy-btn" title={t(locale, 'api.pathCopy')} onClick={copyPath}>
-                  {pathCopied ? '✓' : t(locale, 'api.pathCopy')}
-                </button>
-              </div>
+                    <span className="ep-path-text">
+                      {epPathSegs.map((seg, i) => (
+                        <span key={i} className={seg.isParam ? 'path-param' : 'path-static'}>
+                          {seg.text}
+                        </span>
+                      ))}
+                    </span>
+                    <button
+                      type="button"
+                      className="path-copy-btn"
+                      title={t(locale, 'api.pathCopy')}
+                      onClick={copyPath}>
+                      {pathCopied ? '✓' : t(locale, 'api.pathCopy')}
+                    </button>
+                  </div>
 
-              {/* Quote permission badge */}
-              {activeEndpoint.operation['x-quote-command'] && (
-                <QuotePermission command={activeEndpoint.operation['x-quote-command']} locale={locale} />
-              )}
-
-              {/* Prose description */}
-              {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
-
-              {/* CLI — reuse the docs CliCommand card for pixel parity */}
-              {epCli && <CliCommand code={epCli} locale={locale} />}
-
-              {isDocsModel ? (
-                <>
-                  {/* ── Request ── */}
-                  <h2 id="request" className="section-title">
-                    {L.request[locale]}
-                  </h2>
-
-                  {epParams.length > 0 && (
-                    <section id="parameters" className="api-section">
-                      <h3 className="section-subtitle">{L.parameters[locale]}</h3>
-                      <p className="section-note">{PARAM_NOTE[locale]}</p>
-                      <ParamTable rows={epParams} locale={locale} />
-                    </section>
+                  {/* Quote permission badge */}
+                  {activeEndpoint.operation['x-quote-command'] && (
+                    <QuotePermission command={activeEndpoint.operation['x-quote-command']} locale={locale} />
                   )}
 
-                  {epReqExamples.length > 0 && (
-                    <section id="request-example" className="api-section">
-                      <h3 className="section-subtitle">{L.requestExample[locale]}</h3>
-                      <CodeTabs
-                        blocks={epReqExamples}
-                        labelCopy={t(locale, 'api.copy')}
-                        labelCopied={t(locale, 'api.copied')}
-                      />
-                    </section>
-                  )}
+                  {/* Prose description */}
+                  {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
 
-                  {/* ── Response ── */}
-                  <h2 id="response" className="section-title">
-                    {L.response[locale]}
-                  </h2>
+                  {/* CLI — reuse the docs CliCommand card for pixel parity */}
+                  {epCli && <CliCommand code={epCli} locale={locale} />}
 
-                  {epRespProps.length > 0 && (
-                    <section id="response-properties" className="api-section">
-                      <h3 className="section-subtitle">{L.responseProps[locale]}</h3>
-                      <ParamTable rows={epRespProps} locale={locale} />
-                    </section>
-                  )}
+                  {isDocsModel ? (
+                    <>
+                      {/* ── Request ── */}
+                      <h2 id="request">{L.request[locale]}</h2>
 
-                  {epRespJson && (
-                    <section id="response-json" className="api-section">
-                      <h3 className="section-subtitle">{L.responseJson[locale]}</h3>
-                      <CodeTabs
-                        blocks={[{ lang: 'json', code: epRespJson, label: 'JSON' }]}
-                        labelCopy={t(locale, 'api.copy')}
-                        labelCopied={t(locale, 'api.copied')}
-                      />
-                    </section>
-                  )}
-
-                  {/* ── Error Code ── */}
-                  <h2 id="error-code" className="section-title">
-                    {L.errorCode[locale]}
-                  </h2>
-                  <p className="error-code-note">
-                    {L.errorCodeBody[locale]}
-                    <a href={`${localePrefix}/docs/error-codes`}>{L.errorCodeLink[locale]}</a>
-                    {locale === 'en' ? ' page for the full list of error codes.' : '。'}
-                  </p>
-                </>
-              ) : (
-                <>
-                  {/* Legacy scalar rendering (un-migrated ops) */}
-                  {epSections.map((section) => (
-                    <section key={section.key} className="api-section">
-                      <h2 className="section-title">{section.title}</h2>
-                      {section.note && <p className="section-note">{section.note}</p>}
-                      {section.params.length === 0 ? (
-                        <p className="param-fallback">{t(locale, 'api.fallback')}</p>
-                      ) : (
-                        <ParamTable rows={section.params} locale={locale} />
+                      {epParams.length > 0 && (
+                        <section id="parameters" className="api-section">
+                          <h3>{L.parameters[locale]}</h3>
+                          <p className="section-note">{PARAM_NOTE[locale]}</p>
+                          <ParamTable rows={epParams} locale={locale} />
+                        </section>
                       )}
-                    </section>
-                  ))}
-                  {epCodeBlocks.length > 0 && (
-                    <section className="api-section api-section--code">
-                      <CodePanel
-                        blocks={epCodeBlocks}
-                        labelCopy={t(locale, 'api.copy')}
-                        labelCopied={t(locale, 'api.copied')}
-                      />
-                    </section>
+
+                      {epReqExamples.length > 0 && (
+                        <section id="request-example" className="api-section">
+                          <h3>{L.requestExample[locale]}</h3>
+                          <CodeTabs
+                            blocks={epReqExamples}
+                            labelCopy={t(locale, 'api.copy')}
+                            labelCopied={t(locale, 'api.copied')}
+                          />
+                        </section>
+                      )}
+
+                      {/* ── Response ── */}
+                      <h2 id="response">{L.response[locale]}</h2>
+
+                      {epRespProps.length > 0 && (
+                        <section id="response-properties" className="api-section">
+                          <h3>{L.responseProps[locale]}</h3>
+                          <ParamTable rows={epRespProps} locale={locale} />
+                        </section>
+                      )}
+
+                      {epRespJson && (
+                        <section id="response-json" className="api-section">
+                          <h3>{L.responseJson[locale]}</h3>
+                          <CodeTabs
+                            blocks={[{ lang: 'json', code: epRespJson, label: 'JSON' }]}
+                            labelCopy={t(locale, 'api.copy')}
+                            labelCopied={t(locale, 'api.copied')}
+                          />
+                        </section>
+                      )}
+
+                      {/* ── Error Code ── */}
+                      <h2 id="error-code">{L.errorCode[locale]}</h2>
+                      <p className="error-code-note">
+                        {L.errorCodeBody[locale]}
+                        <a href={`${localePrefix}/docs/error-codes`}>{L.errorCodeLink[locale]}</a>
+                        {locale === 'en' ? ' page for the full list of error codes.' : '。'}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      {/* Legacy scalar rendering (un-migrated ops) */}
+                      {epSections.map((section) => (
+                        <section key={section.key} className="api-section">
+                          <h2>{section.title}</h2>
+                          {section.note && <p className="section-note">{section.note}</p>}
+                          {section.params.length === 0 ? (
+                            <p className="param-fallback">{t(locale, 'api.fallback')}</p>
+                          ) : (
+                            <ParamTable rows={section.params} locale={locale} />
+                          )}
+                        </section>
+                      ))}
+                      {epCodeBlocks.length > 0 && (
+                        <section className="api-section api-section--code">
+                          <CodePanel
+                            blocks={epCodeBlocks}
+                            labelCopy={t(locale, 'api.copy')}
+                            labelCopied={t(locale, 'api.copied')}
+                          />
+                        </section>
+                      )}
+                    </>
                   )}
                 </>
               )}
-            </div>
+            </article>
 
-            {/* On this page TOC */}
-            {isDocsModel && (
-              <aside className="api-toc">
-                <p className="api-toc-title">{L.onThisPage[locale]}</p>
-                <ul className="api-toc-list">
-                  <li>
-                    <a href="#request">{L.request[locale]}</a>
-                  </li>
-                  {epParams.length > 0 && (
-                    <li className="is-sub">
-                      <a href="#parameters">{L.parameters[locale]}</a>
-                    </li>
-                  )}
-                  {epReqExamples.length > 0 && (
-                    <li className="is-sub">
-                      <a href="#request-example">{L.requestExample[locale]}</a>
-                    </li>
-                  )}
-                  <li>
-                    <a href="#response">{L.response[locale]}</a>
-                  </li>
-                  {epRespProps.length > 0 && (
-                    <li className="is-sub">
-                      <a href="#response-properties">{L.responseProps[locale]}</a>
-                    </li>
-                  )}
-                  {epRespJson && (
-                    <li className="is-sub">
-                      <a href="#response-json">{L.responseJson[locale]}</a>
-                    </li>
-                  )}
-                  <li>
-                    <a href="#error-code">{L.errorCode[locale]}</a>
-                  </li>
-                </ul>
+            {/* On this page TOC (docs TOC DOM) */}
+            {showEndpoint && isDocsModel && tocItems.length > 0 && (
+              <aside className="docs-toc text-[0.85rem]" data-lbus-component="toc" aria-label="Table of contents">
+                <nav>
+                  <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[color:var(--lbus-c-text)] mb-3 mt-0">
+                    {L.onThisPage[locale]}
+                  </p>
+                  <ul className="list-none p-0 m-0 flex flex-col gap-1" role="list">
+                    {tocItems.map((it) => (
+                      <li key={it.id} className={it.sub ? 'pl-3' : ''}>
+                        <a
+                          href={`#${it.id}`}
+                          className="block py-[0.15rem] text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]">
+                          {it.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
               </aside>
             )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
