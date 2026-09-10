@@ -121,7 +121,6 @@
 
 /* ── Method badges (nav + detail) ────────────────────────────────────────── */
 
-.nav-method,
 .ep-method-badge {
   display: inline-block;
   padding: 1px 5px;
@@ -131,6 +130,24 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   flex-shrink: 0;
+}
+
+/* Sidebar method badge — fixed width so GET/POST/PUT/DELETE all align, and
+   subtle enough to sit next to the docs-style item text. */
+.nav-method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  margin-right: 8px;
+  padding: 2px 0;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .method-get    { background: #dcfce7; color: #166534; }
