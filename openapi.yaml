@@ -6,6 +6,162 @@ info:
     watchlist management, and content queries for the Longbridge trading platform.
   version: '1.0.0'
 x-pages:
+  - id: authentication
+    title: Authentication
+    x-title-zh: 鉴权
+    x-title-zh-hk: 鑑權
+    x-icon: lock
+    content: |
+      Longbridge OpenAPI authenticates every HTTP request with three credentials plus an
+      HMAC-SHA256 signature.
+
+      ## Credentials
+
+      | Credential | Description | Where to get it |
+      | ---------- | ----------- | --------------- |
+      | **App Key** | Public application identifier. Sent as the `X-Api-Key` header. | [OpenAPI console](https://open.longbridge.com/account) |
+      | **App Secret** | Private key used only to compute the request signature. **Never sent over the wire.** | OpenAPI console |
+      | **Access Token** | Per-user token. Sent as the `Authorization` header. | OpenAPI console (or the token-refresh API) |
+
+      > Prefer an SDK: the Rust/Python/Node.js/Java/C++/Go SDKs compute the signature for you
+      > from these three values. The raw-HTTP examples below are for building a client by hand.
+
+      ## Request headers
+
+      Every request carries these headers:
+
+      | Header | Value |
+      | ------ | ----- |
+      | `Authorization` | `<access_token>` (the access token, not a Bearer token) |
+      | `X-Api-Key` | `<app_key>` |
+      | `X-Timestamp` | Current unix time in **milliseconds** |
+      | `X-Api-Signature` | `HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature=<sig>` |
+
+      ## Computing `X-Api-Signature`
+
+      1. Build the signed-headers string:
+
+         ```text
+         authorization:<access_token>
+         x-api-key:<app_key>
+         x-timestamp:<timestamp>
+         ```
+
+      2. Build the string to sign (`|`-separated), where `sha1(...)` is a lowercase hex SHA-1
+         digest and the trailing body hash is present only when there is a request body:
+
+         ```text
+         {METHOD}|{PATH}|{QUERY}|{signed_values}|authorization;x-api-key;x-timestamp|{sha1(body)}
+         ```
+
+      3. Sign it:
+
+         ```text
+         payload   = "HMAC-SHA256|" + sha1(string_to_sign)
+         signature = hex( HMAC_SHA256(payload, App Secret) )
+         ```
+
+      4. Send `X-Api-Signature: HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature={signature}`.
+
+      In the per-endpoint **Request Example** tabs, `<access_token>`, `<app_key>`, `<timestamp>`
+      and `<signature>` are placeholders — replace them with your credentials and the signature
+      computed as above.
+    x-content-zh: |
+      Longbridge OpenAPI 的每个 HTTP 请求都用三项凭证 + 一个 HMAC-SHA256 签名进行鉴权。
+
+      ## 凭证
+
+      | 凭证 | 说明 | 获取方式 |
+      | ---- | ---- | -------- |
+      | **App Key** | 应用公开标识，作为 `X-Api-Key` 头发送。 | [OpenAPI 控制台](https://open.longbridge.com/account) |
+      | **App Secret** | 仅用于计算请求签名的私钥，**不会在网络上传输**。 | OpenAPI 控制台 |
+      | **Access Token** | 用户级令牌，作为 `Authorization` 头发送。 | OpenAPI 控制台（或令牌刷新接口） |
+
+      > 建议直接用 SDK：Rust/Python/Node.js/Java/C++/Go SDK 会用这三项凭证自动计算签名。下面的 raw HTTP 示例仅用于手写客户端。
+
+      ## 请求头
+
+      | 头 | 值 |
+      | -- | -- |
+      | `Authorization` | `<access_token>`（直接是 access token，不是 Bearer token） |
+      | `X-Api-Key` | `<app_key>` |
+      | `X-Timestamp` | 当前 unix 时间（**毫秒**） |
+      | `X-Api-Signature` | `HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature=<sig>` |
+
+      ## 计算 `X-Api-Signature`
+
+      1. 构造 signed-values：
+
+         ```text
+         authorization:<access_token>
+         x-api-key:<app_key>
+         x-timestamp:<timestamp>
+         ```
+
+      2. 构造待签名字符串（`|` 分隔，`sha1(...)` 为小写十六进制 SHA-1；末尾 body 哈希仅在有请求体时出现）：
+
+         ```text
+         {METHOD}|{PATH}|{QUERY}|{signed_values}|authorization;x-api-key;x-timestamp|{sha1(body)}
+         ```
+
+      3. 签名：
+
+         ```text
+         payload   = "HMAC-SHA256|" + sha1(string_to_sign)
+         signature = hex( HMAC_SHA256(payload, App Secret) )
+         ```
+
+      4. 发送 `X-Api-Signature: HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature={signature}`。
+
+      各接口的 **请求示例** 里 `<access_token>`、`<app_key>`、`<timestamp>`、`<signature>` 都是占位符，请替换为你的凭证与按上述算法计算的签名。
+    x-content-zh-hk: |
+      Longbridge OpenAPI 的每個 HTTP 請求都用三項憑證 + 一個 HMAC-SHA256 簽名進行鑑權。
+
+      ## 憑證
+
+      | 憑證 | 說明 | 獲取方式 |
+      | ---- | ---- | -------- |
+      | **App Key** | 應用公開標識，作為 `X-Api-Key` 標頭發送。 | [OpenAPI 控制台](https://open.longbridge.com/account) |
+      | **App Secret** | 僅用於計算請求簽名的私鑰，**不會在網絡上傳輸**。 | OpenAPI 控制台 |
+      | **Access Token** | 用戶級令牌，作為 `Authorization` 標頭發送。 | OpenAPI 控制台（或令牌刷新接口） |
+
+      > 建議直接用 SDK：Rust/Python/Node.js/Java/C++/Go SDK 會用這三項憑證自動計算簽名。下面的 raw HTTP 示例僅用於手寫客戶端。
+
+      ## 請求標頭
+
+      | 標頭 | 值 |
+      | -- | -- |
+      | `Authorization` | `<access_token>`（直接是 access token，不是 Bearer token） |
+      | `X-Api-Key` | `<app_key>` |
+      | `X-Timestamp` | 當前 unix 時間（**毫秒**） |
+      | `X-Api-Signature` | `HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature=<sig>` |
+
+      ## 計算 `X-Api-Signature`
+
+      1. 構造 signed-values：
+
+         ```text
+         authorization:<access_token>
+         x-api-key:<app_key>
+         x-timestamp:<timestamp>
+         ```
+
+      2. 構造待簽名字符串（`|` 分隔，`sha1(...)` 為小寫十六進制 SHA-1；末尾 body 哈希僅在有請求體時出現）：
+
+         ```text
+         {METHOD}|{PATH}|{QUERY}|{signed_values}|authorization;x-api-key;x-timestamp|{sha1(body)}
+         ```
+
+      3. 簽名：
+
+         ```text
+         payload   = "HMAC-SHA256|" + sha1(string_to_sign)
+         signature = hex( HMAC_SHA256(payload, App Secret) )
+         ```
+
+      4. 發送 `X-Api-Signature: HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature={signature}`。
+
+      各接口的 **請求示例** 裏 `<access_token>`、`<app_key>`、`<timestamp>`、`<signature>` 都是佔位符，請替換為你的憑證與按上述算法計算的簽名。
   - id: overview
     title: Overview
     x-title-zh: 概览
@@ -596,7 +752,10 @@ paths:
           source: |
             curl --request GET \
               --url 'https://openapi.longbridge.com/v1/dailycoins/query' \
-              --header 'Authorization: Bearer <token>'
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>'
         - lang: Python
           label: Python
           source: |
@@ -604,7 +763,7 @@ paths:
 
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/dailycoins/query",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
             )
             print(resp.json())
         - lang: Python
@@ -617,7 +776,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/dailycoins/query",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -626,7 +785,12 @@ paths:
           label: Node.js
           source: |
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/query", {
-              headers: { Authorization: "Bearer <token>" },
+              headers: {
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
+              },
             })
             console.log(await resp.json())
         - lang: Java
@@ -638,7 +802,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/query"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .GET()
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -649,7 +816,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .get("https://openapi.longbridge.com/v1/dailycoins/query")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .send()
                     .await?
                     .text()
@@ -663,7 +833,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/query");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -672,7 +845,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/query\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/query\", nil)\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: plans
           type: object[]
@@ -913,7 +1086,10 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/dailycoins/create' \
-              --header 'Authorization: Bearer <token>' \
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
               --data '{"symbol":"<symbol>","amount":"<amount>","frequency":"<frequency>"}'
         - lang: Python
@@ -923,7 +1099,7 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/create",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                 json={"symbol": "<symbol>", "amount": "<amount>", "frequency": "<frequency>"},
             )
             print(resp.json())
@@ -937,7 +1113,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/create",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                         json={"symbol": "<symbol>", "amount": "<amount>", "frequency": "<frequency>"},
                     ) as resp:
                         print(await resp.json())
@@ -949,7 +1125,10 @@ paths:
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/create", {
               method: "POST",
               headers: {
-                Authorization: "Bearer <token>",
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ symbol: "<symbol>", amount: "<amount>", frequency: "<frequency>" }),
@@ -964,7 +1143,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/create"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"amount\":\"<amount>\",\"frequency\":\"<frequency>\"}"))
                     .build();
@@ -976,7 +1158,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .post("https://openapi.longbridge.com/v1/dailycoins/create")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .json(&serde_json::json!({ "symbol": "<symbol>" , "amount": "<amount>" , "frequency": "<frequency>" }))
                     .send()
                     .await?
@@ -991,7 +1176,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/create");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -1003,7 +1191,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/create\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"amount\":\"<amount>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/create\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"amount\":\"<amount>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: id
           type: string
@@ -1072,7 +1260,10 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/dailycoins/update' \
-              --header 'Authorization: Bearer <token>' \
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
               --data '{"id":"<id>","action":"<action>"}'
         - lang: Python
@@ -1082,7 +1273,7 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/update",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                 json={"id": "<id>", "action": "<action>"},
             )
             print(resp.json())
@@ -1096,7 +1287,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/update",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                         json={"id": "<id>", "action": "<action>"},
                     ) as resp:
                         print(await resp.json())
@@ -1108,7 +1299,10 @@ paths:
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/update", {
               method: "POST",
               headers: {
-                Authorization: "Bearer <token>",
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ id: "<id>", action: "<action>" }),
@@ -1123,7 +1317,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/update"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"action\":\"<action>\"}"))
                     .build();
@@ -1135,7 +1332,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .post("https://openapi.longbridge.com/v1/dailycoins/update")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .json(&serde_json::json!({ "id": "<id>" , "action": "<action>" }))
                     .send()
                     .await?
@@ -1150,7 +1350,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/update");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -1162,7 +1365,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update\", strings.NewReader(`{\"id\":\"<id>\",\"action\":\"<action>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update\", strings.NewReader(`{\"id\":\"<id>\",\"action\":\"<action>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -1216,7 +1419,10 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/dailycoins/toggle' \
-              --header 'Authorization: Bearer <token>' \
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
               --data '{"plan_id":"<plan_id>","status":"<status>"}'
         - lang: Python
@@ -1226,7 +1432,7 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/toggle",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                 json={"plan_id": "<plan_id>", "status": "<status>"},
             )
             print(resp.json())
@@ -1240,7 +1446,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/toggle",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                         json={"plan_id": "<plan_id>", "status": "<status>"},
                     ) as resp:
                         print(await resp.json())
@@ -1252,7 +1458,10 @@ paths:
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/toggle", {
               method: "POST",
               headers: {
-                Authorization: "Bearer <token>",
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ plan_id: "<plan_id>", status: "<status>" }),
@@ -1267,7 +1476,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/toggle"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"plan_id\":\"<plan_id>\",\"status\":\"<status>\"}"))
                     .build();
@@ -1279,7 +1491,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .post("https://openapi.longbridge.com/v1/dailycoins/toggle")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .json(&serde_json::json!({ "plan_id": "<plan_id>" , "status": "<status>" }))
                     .send()
                     .await?
@@ -1294,7 +1509,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/toggle");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -1306,7 +1524,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/toggle\", strings.NewReader(`{\"plan_id\":\"<plan_id>\",\"status\":\"<status>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/toggle\", strings.NewReader(`{\"plan_id\":\"<plan_id>\",\"status\":\"<status>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -1371,7 +1589,10 @@ paths:
           source: |
             curl --request GET \
               --url 'https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>' \
-              --header 'Authorization: Bearer <token>'
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>'
         - lang: Python
           label: Python
           source: |
@@ -1379,7 +1600,7 @@ paths:
 
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/dailycoins/query-records",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
                 params={"id": "<id>"},
             )
             print(resp.json())
@@ -1393,7 +1614,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/dailycoins/query-records",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
                         params={"id": "<id>"},
                     ) as resp:
                         print(await resp.json())
@@ -1406,7 +1627,12 @@ paths:
             url.searchParams.set("id", "<id>")
 
             const resp = await fetch(url, {
-              headers: { Authorization: "Bearer <token>" },
+              headers: {
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
+              },
             })
             console.log(await resp.json())
         - lang: Java
@@ -1418,7 +1644,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .GET()
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -1429,7 +1658,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .get("https://openapi.longbridge.com/v1/dailycoins/query-records")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .query(&[("id", "<id>")])
                     .send()
                     .await?
@@ -1444,7 +1676,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -1453,7 +1688,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/query-records?id=<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: records
           type: object[]
@@ -1604,7 +1839,10 @@ paths:
           source: |
             curl --request GET \
               --url 'https://openapi.longbridge.com/v1/dailycoins/statistic' \
-              --header 'Authorization: Bearer <token>'
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>'
         - lang: Python
           label: Python
           source: |
@@ -1612,7 +1850,7 @@ paths:
 
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/dailycoins/statistic",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
             )
             print(resp.json())
         - lang: Python
@@ -1625,7 +1863,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/dailycoins/statistic",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -1634,7 +1872,12 @@ paths:
           label: Node.js
           source: |
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/statistic", {
-              headers: { Authorization: "Bearer <token>" },
+              headers: {
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
+              },
             })
             console.log(await resp.json())
         - lang: Java
@@ -1646,7 +1889,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/statistic"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .GET()
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -1657,7 +1903,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .get("https://openapi.longbridge.com/v1/dailycoins/statistic")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .send()
                     .await?
                     .text()
@@ -1671,7 +1920,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/statistic");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -1680,7 +1932,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/statistic\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/dailycoins/statistic\", nil)\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: active_count
           type: string
@@ -1795,7 +2047,10 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/dailycoins/batch-check-support' \
-              --header 'Authorization: Bearer <token>' \
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
               --data '{"symbols":"<symbols>"}'
         - lang: Python
@@ -1805,7 +2060,7 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/batch-check-support",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                 json={"symbols": "<symbols>"},
             )
             print(resp.json())
@@ -1819,7 +2074,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/batch-check-support",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                         json={"symbols": "<symbols>"},
                     ) as resp:
                         print(await resp.json())
@@ -1831,7 +2086,10 @@ paths:
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/batch-check-support", {
               method: "POST",
               headers: {
-                Authorization: "Bearer <token>",
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ symbols: "<symbols>" }),
@@ -1846,7 +2104,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/batch-check-support"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
                     .build();
@@ -1858,7 +2119,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .post("https://openapi.longbridge.com/v1/dailycoins/batch-check-support")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .json(&serde_json::json!({ "symbols": "<symbols>" }))
                     .send()
                     .await?
@@ -1873,7 +2137,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/batch-check-support");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -1885,7 +2152,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/batch-check-support\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/batch-check-support\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: infos
           type: object[]
@@ -1981,7 +2248,10 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/dailycoins/calc-trd-date' \
-              --header 'Authorization: Bearer <token>' \
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
               --data '{"symbol":"<symbol>","frequency":"<frequency>"}'
         - lang: Python
@@ -1991,7 +2261,7 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                 json={"symbol": "<symbol>", "frequency": "<frequency>"},
             )
             print(resp.json())
@@ -2005,7 +2275,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                         json={"symbol": "<symbol>", "frequency": "<frequency>"},
                     ) as resp:
                         print(await resp.json())
@@ -2017,7 +2287,10 @@ paths:
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/calc-trd-date", {
               method: "POST",
               headers: {
-                Authorization: "Bearer <token>",
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ symbol: "<symbol>", frequency: "<frequency>" }),
@@ -2032,7 +2305,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/calc-trd-date"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"frequency\":\"<frequency>\"}"))
                     .build();
@@ -2044,7 +2320,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .post("https://openapi.longbridge.com/v1/dailycoins/calc-trd-date")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .json(&serde_json::json!({ "symbol": "<symbol>" , "frequency": "<frequency>" }))
                     .send()
                     .await?
@@ -2059,7 +2338,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -2071,7 +2353,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/calc-trd-date\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/calc-trd-date\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: trade_date
           type: string
@@ -2133,7 +2415,10 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/dailycoins/update-alter-hours' \
-              --header 'Authorization: Bearer <token>' \
+              --header 'Authorization: <access_token>' \
+              --header 'X-Api-Key: <app_key>' \
+              --header 'X-Timestamp: <timestamp>' \
+              --header 'X-Api-Signature: <signature>' \
               --header 'Content-Type: application/json' \
               --data '{"hours":"<hours>"}'
         - lang: Python
@@ -2143,7 +2428,7 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours",
-                headers={"Authorization": "Bearer <token>"},
+                headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                 json={"hours": "<hours>"},
             )
             print(resp.json())
@@ -2157,7 +2442,7 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours",
-                        headers={"Authorization": "Bearer <token>"},
+                        headers={"Authorization": "<access_token>", "X-Api-Key": "<app_key>", "X-Timestamp": "<timestamp>", "X-Api-Signature": "<signature>", "Content-Type": "application/json"},
                         json={"hours": "<hours>"},
                     ) as resp:
                         print(await resp.json())
@@ -2169,7 +2454,10 @@ paths:
             const resp = await fetch("https://openapi.longbridge.com/v1/dailycoins/update-alter-hours", {
               method: "POST",
               headers: {
-                Authorization: "Bearer <token>",
+                "Authorization": "<access_token>",
+                "X-Api-Key": "<app_key>",
+                "X-Timestamp": "<timestamp>",
+                "X-Api-Signature": "<signature>",
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ hours: "<hours>" }),
@@ -2184,7 +2472,10 @@ paths:
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/update-alter-hours"))
-                    .header("Authorization", "Bearer <token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("{\"hours\":\"<hours>\"}"))
                     .build();
@@ -2196,7 +2487,10 @@ paths:
             let client = reqwest::Client::new();
             let resp = client
                     .post("https://openapi.longbridge.com/v1/dailycoins/update-alter-hours")
-                    .bearer_auth("<token>")
+                    .header("Authorization", "<access_token>")
+                    .header("X-Api-Key", "<app_key>")
+                    .header("X-Timestamp", "<timestamp>")
+                    .header("X-Api-Signature", "<signature>")
                     .json(&serde_json::json!({ "hours": "<hours>" }))
                     .send()
                     .await?
@@ -2211,7 +2505,10 @@ paths:
             int main() {
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <token>");
+                headers = curl_slist_append(headers, "Authorization: <access_token>");
+                headers = curl_slist_append(headers, "X-Api-Key: <app_key>");
+                headers = curl_slist_append(headers, "X-Timestamp: <timestamp>");
+                headers = curl_slist_append(headers, "X-Api-Signature: <signature>");
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/update-alter-hours");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
@@ -2223,7 +2520,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update-alter-hours\", strings.NewReader(`{\"hours\":\"<hours>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update-alter-hours\", strings.NewReader(`{\"hours\":\"<hours>\"}`))\n\treq.Header.Set(\"Authorization\", \"<access_token>\")\n\treq.Header.Set(\"X-Api-Key\", \"<app_key>\")\n\treq.Header.Set(\"X-Timestamp\", \"<timestamp>\")\n\treq.Header.Set(\"X-Api-Signature\", \"<signature>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
