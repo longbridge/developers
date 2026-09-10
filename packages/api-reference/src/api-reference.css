@@ -734,6 +734,7 @@
   gap: 3rem;
   align-items: start;
   max-width: 80rem;
+  margin: 0 auto;
 }
 @media (max-width: 1024px) {
   .api-doc-layout {
