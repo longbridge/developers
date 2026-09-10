@@ -9,12 +9,12 @@ import { t } from '@longbridge/openapi-utils'
 import type { Locale } from '@longbridge/openapi-utils'
 import {
   parseSpec,
-  splitDescriptionAndCode,
   localizeDocLinks,
   formatPath,
   epId,
   buildCurl,
   buildResponseExample,
+  pickLocale,
   type EndpointItem,
   type PageItem,
   type CodeBlock,
@@ -65,7 +65,6 @@ export interface ApiReferenceProps {
 
 function buildSections(ep: EndpointItem, locale: Locale): Section[] {
   const sections: Section[] = []
-  const isZh = locale !== 'en'
 
   // Auth section — always shown
   const authSection: Section = {
@@ -94,7 +93,7 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
         type: p.schema?.type ?? 'string',
         location: 'path',
         required: p.required ?? false,
-        description: (isZh ? p['x-description-zh'] : p.description) ?? p.description ?? '',
+        description: pickLocale(p.description, p['x-description-zh'], p['x-description-zh-hk'], locale),
       })),
     })
   }
@@ -110,7 +109,7 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
         type: p.schema?.type ?? 'string',
         location: 'query',
         required: p.required ?? false,
-        description: (isZh ? p['x-description-zh'] : p.description) ?? p.description ?? '',
+        description: pickLocale(p.description, p['x-description-zh'], p['x-description-zh-hk'], locale),
       })),
     })
   }
@@ -125,7 +124,7 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
       type: v.type ?? 'object',
       location: 'body',
       required: required.includes(name),
-      description: (isZh ? v['x-description-zh'] : v.description) ?? v.description ?? '',
+      description: pickLocale(v.description, v['x-description-zh'], v['x-description-zh-hk'], locale),
     }))
     sections.push({
       key: 'body',
@@ -145,7 +144,7 @@ function buildSections(ep: EndpointItem, locale: Locale): Section[] {
       type: v.type ?? 'object',
       location: 'response',
       required: false,
-      description: (isZh ? v['x-description-zh'] : v.description) ?? v.description ?? '',
+      description: pickLocale(v.description, v['x-description-zh'], v['x-description-zh-hk'], locale),
     }))
     sections.push({
       key: 'response',
@@ -171,8 +170,8 @@ function buildCodeBlocks(ep: EndpointItem, serverUrl: string, locale: Locale): C
         label: sample.label || sample.lang,
       })
     }
-  } else {
-    // Auto-generated curl fallback
+  } else if (ep.method !== 'WEBSOCKET') {
+    // Auto-generated curl fallback (skipped for WebSocket operations)
     blocks.push({
       lang: 'bash',
       code: buildCurl(ep, serverUrl),
@@ -254,7 +253,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         ...g,
         endpoints: g.endpoints.filter((ep) => {
           const op = ep.operation
-          const summary = (op.summary ?? '') + ' ' + (op['x-summary-zh'] ?? '')
+          const summary = (op.summary ?? '') + ' ' + (op['x-summary-zh'] ?? '') + ' ' + (op['x-summary-zh-hk'] ?? '')
           return (
             ep.path.toLowerCase().includes(q) ||
             summary.toLowerCase().includes(q) ||
@@ -282,46 +281,42 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   }, [pages, activePage])
 
   // ── Derive data for active endpoint ──────────────────────────────────────
-  const isZh = locale !== 'en'
-
   const epSections = useMemo<Section[]>(
     () => (activeEndpoint ? buildSections(activeEndpoint, locale) : []),
-    [activeEndpoint, locale],
+    [activeEndpoint, locale]
   )
 
   const epCodeBlocks = useMemo<CodeBlock[]>(
     () => (activeEndpoint ? buildCodeBlocks(activeEndpoint, serverUrl, locale) : []),
-    [activeEndpoint, serverUrl, locale],
+    [activeEndpoint, serverUrl, locale]
   )
 
   const epProse = useMemo<string>(() => {
     if (!activeEndpoint) return ''
-    const raw = isZh
-      ? (activeEndpoint.operation['x-description-zh'] ?? activeEndpoint.operation.description ?? '')
-      : (activeEndpoint.operation.description ?? '')
-    const { prose } = splitDescriptionAndCode(raw)
-    return prose ? renderMd(prose, localePrefix) : ''
-  }, [activeEndpoint, isZh, localePrefix])
+    const op = activeEndpoint.operation
+    const raw = pickLocale(op.description, op['x-description-zh'], op['x-description-zh-hk'], locale)
+    // Render the full description (prose + embedded code blocks such as
+    // protobuf) so WebSocket / quote message schemas show inline, matching the
+    // docs page style.
+    return raw ? renderMd(raw, localePrefix) : ''
+  }, [activeEndpoint, locale, localePrefix])
 
-  const epPathSegs = useMemo(
-    () => (activeEndpoint ? formatPath(activeEndpoint.path) : []),
-    [activeEndpoint],
-  )
+  const epPathSegs = useMemo(() => (activeEndpoint ? formatPath(activeEndpoint.path) : []), [activeEndpoint])
 
   const epTag = useMemo<string>(() => {
     if (!activeEndpoint) return ''
     const tag = activeEndpoint.operation.tags?.[0] ?? ''
-    // find zh name from groups
+    // find localized name from groups
     const grp = groups.find((g) => g.name === tag)
-    return isZh ? (grp?.nameZh ?? tag) : tag
-  }, [activeEndpoint, groups, isZh])
+    return pickLocale(tag, grp?.nameZh, grp?.nameZhHk, locale)
+  }, [activeEndpoint, groups, locale])
 
   // ── Page content ──────────────────────────────────────────────────────────
   const pageHtml = useMemo<string>(() => {
     if (!activePg) return ''
-    const raw = isZh ? (activePg.contentZh ?? activePg.content) : activePg.content
+    const raw = pickLocale(activePg.content, activePg.contentZh, activePg.contentZhHk, locale)
     return raw ? renderMd(raw, localePrefix) : ''
-  }, [activePg, isZh, localePrefix])
+  }, [activePg, locale, localePrefix])
 
   // ── Copy path ─────────────────────────────────────────────────────────────
   const [pathCopied, setPathCopied] = useState(false)
@@ -360,30 +355,29 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               key={pg.id}
               type="button"
               className={`nav-item${activePage === pg.id ? ' is-active' : ''}`}
-              onClick={() => selectPage(pg.id)}
-            >
-              {isZh ? (pg.titleZh ?? pg.title) : pg.title}
+              onClick={() => selectPage(pg.id)}>
+              {pickLocale(pg.title, pg.titleZh, pg.titleZhHk, locale)}
             </button>
           ))}
           {/* Tag groups */}
           {filteredGroups.map((g) => (
             <div key={g.name} className="tag-group">
-              <p className="tag-label">{isZh ? (g.nameZh ?? g.name) : g.name}</p>
+              <p className="tag-label">{pickLocale(g.name, g.nameZh, g.nameZhHk, locale)}</p>
               {g.endpoints.map((ep) => {
                 const id = epId(ep)
-                const summary = isZh
-                  ? (ep.operation['x-summary-zh'] ?? ep.operation.summary ?? '')
-                  : (ep.operation.summary ?? '')
+                const summary = pickLocale(
+                  ep.operation.summary,
+                  ep.operation['x-summary-zh'],
+                  ep.operation['x-summary-zh-hk'],
+                  locale
+                )
                 return (
                   <button
                     key={id}
                     type="button"
                     className={`nav-item${activeOp === id ? ' is-active' : ''}`}
-                    onClick={() => selectEndpoint(id)}
-                  >
-                    <span className={`nav-method method-${ep.method.toLowerCase()}`}>
-                      {ep.method}
-                    </span>
+                    onClick={() => selectEndpoint(id)}>
+                    <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
                     <span className="nav-label">{summary}</span>
                   </button>
                 )
@@ -417,10 +411,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       {/* ── Page content ── */}
       {showPage && (
         <div data-lbus-component="api-main-page" className="api-main">
-          <div
-            className="api-content api-page-content vp-doc prose"
-            dangerouslySetInnerHTML={{ __html: pageHtml }}
-          />
+          <div className="api-content api-page-content vp-doc prose" dangerouslySetInnerHTML={{ __html: pageHtml }} />
         </div>
       )}
 
@@ -431,9 +422,12 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
           <div className="api-content">
             {epTag && <p className="ep-tag">{epTag}</p>}
             <h1 className="ep-title">
-              {isZh
-                ? (activeEndpoint.operation['x-summary-zh'] ?? activeEndpoint.operation.summary ?? '')
-                : (activeEndpoint.operation.summary ?? '')}
+              {pickLocale(
+                activeEndpoint.operation.summary,
+                activeEndpoint.operation['x-summary-zh'],
+                activeEndpoint.operation['x-summary-zh-hk'],
+                locale
+              )}
             </h1>
 
             {/* Path + method badge */}
@@ -448,31 +442,18 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   </span>
                 ))}
               </span>
-              <button
-                type="button"
-                className="path-copy-btn"
-                title={t(locale, 'api.pathCopy')}
-                onClick={copyPath}
-              >
+              <button type="button" className="path-copy-btn" title={t(locale, 'api.pathCopy')} onClick={copyPath}>
                 {pathCopied ? '✓' : t(locale, 'api.pathCopy')}
               </button>
             </div>
 
             {/* Quote permission badge */}
             {activeEndpoint.operation['x-quote-command'] && (
-              <QuotePermission
-                command={activeEndpoint.operation['x-quote-command']}
-                locale={locale}
-              />
+              <QuotePermission command={activeEndpoint.operation['x-quote-command']} locale={locale} />
             )}
 
             {/* Prose description */}
-            {epProse && (
-              <div
-                className="prose vp-doc"
-                dangerouslySetInnerHTML={{ __html: epProse }}
-              />
-            )}
+            {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
 
             {/* Param sections */}
             {epSections.map((section) => (
@@ -487,17 +468,11 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                         <div className="param-meta">
                           <code className="param-name">{row.name}</code>
                           <span className="param-type">{row.type}</span>
-                          <span
-                            className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}
-                          >
-                            {row.required
-                              ? t(locale, 'api.param.required')
-                              : t(locale, 'api.param.optional')}
+                          <span className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}>
+                            {row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}
                           </span>
                         </div>
-                        {row.description && (
-                          <p className="param-desc">{row.description}</p>
-                        )}
+                        {row.description && <p className="param-desc">{row.description}</p>}
                       </div>
                     ))
                   )}
@@ -508,11 +483,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
           {/* Right column: code samples */}
           {epCodeBlocks.length > 0 && (
-            <CodePanel
-              blocks={epCodeBlocks}
-              labelCopy={t(locale, 'api.copy')}
-              labelCopied={t(locale, 'api.copied')}
-            />
+            <CodePanel blocks={epCodeBlocks} labelCopy={t(locale, 'api.copy')} labelCopied={t(locale, 'api.copied')} />
           )}
         </div>
       )}
