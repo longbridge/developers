@@ -65,6 +65,7 @@
       "name": "@longbridge/openapi-api-reference",
       "version": "0.0.0",
       "dependencies": {
+        "@longbridge/openapi-ui": "workspace:*",
         "js-yaml": "^4",
         "markdown-it": "^14",
       },

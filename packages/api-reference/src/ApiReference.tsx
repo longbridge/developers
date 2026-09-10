@@ -23,6 +23,7 @@ import {
 } from './openapi-loader'
 import { CodePanel, CodeTabs } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
+import { CliCommand } from '@longbridge/openapi-ui'
 import MarkdownIt from 'markdown-it'
 
 // ── markdown-it setup ─────────────────────────────────────────────────────────
@@ -568,15 +569,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               {/* Prose description */}
               {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
 
-              {/* CLI — its own block, docs-style terminal card */}
-              {epCli && (
-                <div className="ep-cli-card">
-                  <span className="ep-cli-badge">CLI</span>
-                  <pre className="ep-cli-pre">
-                    <code>{epCli}</code>
-                  </pre>
-                </div>
-              )}
+              {/* CLI — reuse the docs CliCommand card for pixel parity */}
+              {epCli && <CliCommand code={epCli} locale={locale} />}
 
               {isDocsModel ? (
                 <>

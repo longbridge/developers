@@ -10,6 +10,7 @@
     "./src/api-reference.css": "./src/api-reference.css"
   },
   "dependencies": {
+    "@longbridge/openapi-ui": "workspace:*",
     "js-yaml": "^4",
     "markdown-it": "^14"
   },

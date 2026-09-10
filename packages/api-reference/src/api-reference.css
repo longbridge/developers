@@ -730,12 +730,17 @@
 /* ── Docs-model: content + right TOC grid ────────────────────────────────── */
 .api-doc-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 48px;
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: 3rem;
   align-items: start;
-  max-width: 1080px;
+  max-width: 80rem;
 }
-/* Let the grid track cap the content width (readable column, not full-bleed) */
+@media (max-width: 1024px) {
+  .api-doc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* Let the grid track cap the content width (matches docs .docs-inner) */
 .api-doc-layout .api-content--docs {
   max-width: none;
 }
