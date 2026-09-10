@@ -4,6 +4,7 @@
  * Ported 1:1 from ApiReference.vue (chunks A + B).
  */
 import { load } from 'js-yaml'
+import type { Locale } from '@longbridge/openapi-utils'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -13,6 +14,7 @@ export interface Parameter {
   required?: boolean
   description?: string
   'x-description-zh'?: string
+  'x-description-zh-hk'?: string
   schema?: { type?: string }
 }
 
@@ -41,8 +43,10 @@ export interface Operation {
   operationId: string
   summary: string
   'x-summary-zh'?: string
+  'x-summary-zh-hk'?: string
   description?: string
   'x-description-zh'?: string
+  'x-description-zh-hk'?: string
   'x-quote-command'?: string
   tags?: string[]
   parameters?: Parameter[]
@@ -83,14 +87,17 @@ export interface PageItem {
   id: string
   title: string
   titleZh?: string
+  titleZhHk?: string
   content: string
   contentZh?: string
+  contentZhHk?: string
   icon?: string
 }
 
 export interface TagGroup {
   name: string
   nameZh?: string
+  nameZhHk?: string
   endpoints: EndpointItem[]
 }
 
@@ -117,7 +124,7 @@ export const PAGE_ICONS: Record<string, string> = {
 export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageItem[]; serverUrl: string } {
   const parsed = load(rawYaml) as any
   const serverUrl: string = parsed.servers?.[0]?.url ?? ''
-  const methods = ['get', 'post', 'put', 'delete', 'patch']
+  const methods = ['get', 'post', 'put', 'delete', 'patch', 'websocket']
   const byTag: Record<string, EndpointItem[]> = {}
 
   for (const [path, pathItem] of Object.entries((parsed.paths ?? {}) as Record<string, any>)) {
@@ -134,8 +141,10 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
 
   const specTagObjs: any[] = (parsed.tags ?? []) as any[]
   const tagZhMap: Record<string, string> = {}
+  const tagZhHkMap: Record<string, string> = {}
   for (const t of specTagObjs) {
     if (t['x-name-zh']) tagZhMap[t.name] = t['x-name-zh']
+    if (t['x-name-zh-hk']) tagZhHkMap[t.name] = t['x-name-zh-hk']
   }
   const specTags: string[] = specTagObjs.map((x: any) => x.name)
   const ordered = [...specTags, ...Object.keys(byTag).filter((x) => !specTags.includes(x))]
@@ -145,16 +154,37 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
     id: p.id,
     title: p.title,
     titleZh: p['x-title-zh'],
+    titleZhHk: p['x-title-zh-hk'],
     content: p.content ?? '',
     contentZh: p['x-content-zh'],
+    contentZhHk: p['x-content-zh-hk'],
     icon: p['x-icon'],
   }))
 
   return {
-    groups: ordered.filter((x) => byTag[x]).map((x) => ({ name: x, nameZh: tagZhMap[x], endpoints: byTag[x] })),
+    groups: ordered
+      .filter((x) => byTag[x])
+      .map((x) => ({ name: x, nameZh: tagZhMap[x], nameZhHk: tagZhHkMap[x], endpoints: byTag[x] })),
     pages,
     serverUrl,
   }
+}
+
+/**
+ * Resolve a localized string with fallback:
+ *   zh-HK → zh-hk ?? zh ?? en
+ *   zh-CN → zh ?? en
+ *   en    → en
+ */
+export function pickLocale(
+  en: string | undefined,
+  zh: string | undefined,
+  zhHk: string | undefined,
+  locale: Locale,
+): string {
+  if (locale === 'zh-HK') return zhHk ?? zh ?? en ?? ''
+  if (locale === 'zh-CN') return zh ?? en ?? ''
+  return en ?? ''
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
