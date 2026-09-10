@@ -19,8 +19,9 @@ import {
   type PageItem,
   type CodeBlock,
   type Section,
+  type XParameter,
 } from './openapi-loader'
-import { CodePanel } from './CodeSample'
+import { CodePanel, CodeTabs } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
 import MarkdownIt from 'markdown-it'
 
@@ -68,6 +69,74 @@ const PARAM_NOTE: Record<Locale, string> = {
   en: 'SDK method parameters.',
   'zh-CN': 'SDK 方法参数。',
   'zh-HK': 'SDK 方法參數。',
+}
+
+// Docs-model section labels (trilingual).
+const L = {
+  request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
+  parameters: { en: 'Parameters', 'zh-CN': '参数', 'zh-HK': '參數' },
+  requestExample: { en: 'Request Example', 'zh-CN': '请求示例', 'zh-HK': '請求示例' },
+  response: { en: 'Response', 'zh-CN': '响应', 'zh-HK': '響應' },
+  responseProps: { en: 'Response Properties', 'zh-CN': '响应字段', 'zh-HK': '響應欄位' },
+  responseJson: { en: 'Response JSON Example', 'zh-CN': '响应 JSON 示例', 'zh-HK': '響應 JSON 示例' },
+  errorCode: { en: 'Error Code', 'zh-CN': '错误码', 'zh-HK': '錯誤碼' },
+  onThisPage: { en: 'On this page', 'zh-CN': '本页目录', 'zh-HK': '本頁目錄' },
+  name: { en: 'Name', 'zh-CN': '名称', 'zh-HK': '名稱' },
+  type: { en: 'Type', 'zh-CN': '类型', 'zh-HK': '類型' },
+  required: { en: 'Required', 'zh-CN': '必填', 'zh-HK': '必填' },
+  description: { en: 'Description', 'zh-CN': '说明', 'zh-HK': '說明' },
+  errorCodeBody: {
+    en: 'See the ',
+    'zh-CN': '参见',
+    'zh-HK': '參見',
+  },
+  errorCodeLink: { en: 'Error Codes', 'zh-CN': '错误码文档', 'zh-HK': '錯誤碼文檔' },
+} as const
+
+type RowVM = { name: string; type: string; required: boolean; description: string }
+function rowsFrom(xs: XParameter[] | undefined, locale: Locale): RowVM[] {
+  return (xs ?? []).map((p) => ({
+    name: p.name,
+    type: p.type ?? 'string',
+    required: !!p.required,
+    description: pickLocale(p.description, p['x-description-zh'], p['x-description-zh-hk'], locale),
+  }))
+}
+
+function ParamTable({ rows, locale }: { rows: RowVM[]; locale: Locale }) {
+  if (!rows.length) return null
+  return (
+    <div className="api-table-wrap">
+      <table className="api-param-table">
+        <thead>
+          <tr>
+            <th>{L.name[locale]}</th>
+            <th>{L.type[locale]}</th>
+            <th>{L.required[locale]}</th>
+            <th>{L.description[locale]}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.name}>
+              <td>
+                <code>{row.name}</code>
+              </td>
+              <td>
+                <span className="param-type">{row.type}</span>
+              </td>
+              <td>
+                <span className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}>
+                  {row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}
+                </span>
+              </td>
+              <td>{row.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 function buildSections(ep: EndpointItem, locale: Locale): Section[] {
@@ -310,6 +379,24 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     [activeEndpoint, locale]
   )
 
+  // Docs-model data (new endpoints authored with x-request-examples)
+  const isDocsModel = !!activeEndpoint?.operation['x-request-examples']
+  const epParams = useMemo(() => rowsFrom(activeEndpoint?.operation['x-parameters'], locale), [activeEndpoint, locale])
+  const epRespProps = useMemo(
+    () => rowsFrom(activeEndpoint?.operation['x-response-properties'], locale),
+    [activeEndpoint, locale]
+  )
+  const epReqExamples = useMemo<CodeBlock[]>(
+    () =>
+      (activeEndpoint?.operation['x-request-examples'] ?? []).map((s) => ({
+        lang: s.lang.toLowerCase(),
+        code: s.source,
+        label: s.label,
+      })),
+    [activeEndpoint]
+  )
+  const epRespJson = useMemo(() => (activeEndpoint ? buildResponseExample(activeEndpoint) : null), [activeEndpoint])
+
   const epCodeBlocks = useMemo<CodeBlock[]>(
     () => (activeEndpoint ? buildCodeBlocks(activeEndpoint, serverUrl, locale) : []),
     [activeEndpoint, serverUrl, locale]
@@ -444,104 +531,175 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       {/* ── Endpoint detail ── */}
       {showEndpoint && activeEndpoint && (
         <div data-lbus-component="api-main-endpoint" className="api-main api-main--docs">
-          {/* Single-column, docs-style flow */}
-          <div className="api-content api-content--docs">
-            {epTag && <p className="ep-tag">{epTag}</p>}
-            <h1 className="ep-title">
-              {pickLocale(
-                activeEndpoint.operation.summary,
-                activeEndpoint.operation['x-summary-zh'],
-                activeEndpoint.operation['x-summary-zh-hk'],
-                locale
-              )}
-            </h1>
+          <div className={isDocsModel ? 'api-doc-layout' : ''}>
+            <div className="api-content api-content--docs">
+              {epTag && <p className="ep-tag">{epTag}</p>}
+              <h1 className="ep-title">
+                {pickLocale(
+                  activeEndpoint.operation.summary,
+                  activeEndpoint.operation['x-summary-zh'],
+                  activeEndpoint.operation['x-summary-zh-hk'],
+                  locale
+                )}
+              </h1>
 
-            {/* Path + method badge */}
-            <div className="ep-path">
-              <span className={`ep-method-badge method-${activeEndpoint.method.toLowerCase()}`}>
-                {activeEndpoint.method}
-              </span>
-              <span className="ep-path-text">
-                {epPathSegs.map((seg, i) => (
-                  <span key={i} className={seg.isParam ? 'path-param' : 'path-static'}>
-                    {seg.text}
-                  </span>
-                ))}
-              </span>
-              <button type="button" className="path-copy-btn" title={t(locale, 'api.pathCopy')} onClick={copyPath}>
-                {pathCopied ? '✓' : t(locale, 'api.pathCopy')}
-              </button>
+              {/* Path + method badge */}
+              <div className="ep-path">
+                <span className={`ep-method-badge method-${activeEndpoint.method.toLowerCase()}`}>
+                  {activeEndpoint.method}
+                </span>
+                <span className="ep-path-text">
+                  {epPathSegs.map((seg, i) => (
+                    <span key={i} className={seg.isParam ? 'path-param' : 'path-static'}>
+                      {seg.text}
+                    </span>
+                  ))}
+                </span>
+                <button type="button" className="path-copy-btn" title={t(locale, 'api.pathCopy')} onClick={copyPath}>
+                  {pathCopied ? '✓' : t(locale, 'api.pathCopy')}
+                </button>
+              </div>
+
+              {/* Quote permission badge */}
+              {activeEndpoint.operation['x-quote-command'] && (
+                <QuotePermission command={activeEndpoint.operation['x-quote-command']} locale={locale} />
+              )}
+
+              {/* Prose description */}
+              {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
+
+              {/* CLI — its own block, docs-style terminal card */}
+              {epCli && (
+                <div className="ep-cli-card">
+                  <span className="ep-cli-badge">CLI</span>
+                  <pre className="ep-cli-pre">
+                    <code>{epCli}</code>
+                  </pre>
+                </div>
+              )}
+
+              {isDocsModel ? (
+                <>
+                  {/* ── Request ── */}
+                  <h2 id="request" className="section-title">
+                    {L.request[locale]}
+                  </h2>
+
+                  {epParams.length > 0 && (
+                    <section id="parameters" className="api-section">
+                      <h3 className="section-subtitle">{L.parameters[locale]}</h3>
+                      <p className="section-note">{PARAM_NOTE[locale]}</p>
+                      <ParamTable rows={epParams} locale={locale} />
+                    </section>
+                  )}
+
+                  {epReqExamples.length > 0 && (
+                    <section id="request-example" className="api-section">
+                      <h3 className="section-subtitle">{L.requestExample[locale]}</h3>
+                      <CodeTabs
+                        blocks={epReqExamples}
+                        labelCopy={t(locale, 'api.copy')}
+                        labelCopied={t(locale, 'api.copied')}
+                      />
+                    </section>
+                  )}
+
+                  {/* ── Response ── */}
+                  <h2 id="response" className="section-title">
+                    {L.response[locale]}
+                  </h2>
+
+                  {epRespProps.length > 0 && (
+                    <section id="response-properties" className="api-section">
+                      <h3 className="section-subtitle">{L.responseProps[locale]}</h3>
+                      <ParamTable rows={epRespProps} locale={locale} />
+                    </section>
+                  )}
+
+                  {epRespJson && (
+                    <section id="response-json" className="api-section">
+                      <h3 className="section-subtitle">{L.responseJson[locale]}</h3>
+                      <CodeTabs
+                        blocks={[{ lang: 'json', code: epRespJson, label: 'JSON' }]}
+                        labelCopy={t(locale, 'api.copy')}
+                        labelCopied={t(locale, 'api.copied')}
+                      />
+                    </section>
+                  )}
+
+                  {/* ── Error Code ── */}
+                  <h2 id="error-code" className="section-title">
+                    {L.errorCode[locale]}
+                  </h2>
+                  <p className="error-code-note">
+                    {L.errorCodeBody[locale]}
+                    <a href={`${localePrefix}/docs/error-codes`}>{L.errorCodeLink[locale]}</a>
+                    {locale === 'en' ? ' page for the full list of error codes.' : '。'}
+                  </p>
+                </>
+              ) : (
+                <>
+                  {/* Legacy scalar rendering (un-migrated ops) */}
+                  {epSections.map((section) => (
+                    <section key={section.key} className="api-section">
+                      <h2 className="section-title">{section.title}</h2>
+                      {section.note && <p className="section-note">{section.note}</p>}
+                      {section.params.length === 0 ? (
+                        <p className="param-fallback">{t(locale, 'api.fallback')}</p>
+                      ) : (
+                        <ParamTable rows={section.params} locale={locale} />
+                      )}
+                    </section>
+                  ))}
+                  {epCodeBlocks.length > 0 && (
+                    <section className="api-section api-section--code">
+                      <CodePanel
+                        blocks={epCodeBlocks}
+                        labelCopy={t(locale, 'api.copy')}
+                        labelCopied={t(locale, 'api.copied')}
+                      />
+                    </section>
+                  )}
+                </>
+              )}
             </div>
 
-            {/* Quote permission badge */}
-            {activeEndpoint.operation['x-quote-command'] && (
-              <QuotePermission command={activeEndpoint.operation['x-quote-command']} locale={locale} />
-            )}
-
-            {/* Prose description */}
-            {epProse && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: epProse }} />}
-
-            {/* CLI — its own block, docs-style terminal card */}
-            {epCli && (
-              <div className="ep-cli-card">
-                <span className="ep-cli-badge">CLI</span>
-                <pre className="ep-cli-pre">
-                  <code>{epCli}</code>
-                </pre>
-              </div>
-            )}
-
-            {/* Param sections — docs-style tables */}
-            {epSections.map((section) => (
-              <section key={section.key} className="api-section">
-                <h2 className="section-title">{section.title}</h2>
-                {section.note && <p className="section-note">{section.note}</p>}
-                {section.params.length === 0 ? (
-                  <p className="param-fallback">{t(locale, 'api.fallback')}</p>
-                ) : (
-                  <div className="api-table-wrap">
-                    <table className="api-param-table">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Type</th>
-                          <th>Required</th>
-                          <th>Description</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {section.params.map((row) => (
-                          <tr key={row.name}>
-                            <td>
-                              <code>{row.name}</code>
-                            </td>
-                            <td>
-                              <span className="param-type">{row.type}</span>
-                            </td>
-                            <td>
-                              <span className={`param-required ${row.required ? 'is-required' : 'is-optional'}`}>
-                                {row.required ? t(locale, 'api.param.required') : t(locale, 'api.param.optional')}
-                              </span>
-                            </td>
-                            <td>{row.description}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </section>
-            ))}
-
-            {/* Request / Response examples — stacked labeled code cards */}
-            {epCodeBlocks.length > 0 && (
-              <section className="api-section api-section--code">
-                <CodePanel
-                  blocks={epCodeBlocks}
-                  labelCopy={t(locale, 'api.copy')}
-                  labelCopied={t(locale, 'api.copied')}
-                />
-              </section>
+            {/* On this page TOC */}
+            {isDocsModel && (
+              <aside className="api-toc">
+                <p className="api-toc-title">{L.onThisPage[locale]}</p>
+                <ul className="api-toc-list">
+                  <li>
+                    <a href="#request">{L.request[locale]}</a>
+                  </li>
+                  {epParams.length > 0 && (
+                    <li className="is-sub">
+                      <a href="#parameters">{L.parameters[locale]}</a>
+                    </li>
+                  )}
+                  {epReqExamples.length > 0 && (
+                    <li className="is-sub">
+                      <a href="#request-example">{L.requestExample[locale]}</a>
+                    </li>
+                  )}
+                  <li>
+                    <a href="#response">{L.response[locale]}</a>
+                  </li>
+                  {epRespProps.length > 0 && (
+                    <li className="is-sub">
+                      <a href="#response-properties">{L.responseProps[locale]}</a>
+                    </li>
+                  )}
+                  {epRespJson && (
+                    <li className="is-sub">
+                      <a href="#response-json">{L.responseJson[locale]}</a>
+                    </li>
+                  )}
+                  <li>
+                    <a href="#error-code">{L.errorCode[locale]}</a>
+                  </li>
+                </ul>
+              </aside>
             )}
           </div>
         </div>

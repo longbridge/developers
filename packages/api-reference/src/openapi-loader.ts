@@ -60,6 +60,8 @@ export interface Operation {
   'x-description-zh-hk'?: string
   'x-quote-command'?: string
   'x-parameters'?: XParameter[]
+  'x-response-properties'?: XParameter[]
+  'x-request-examples'?: CodeSample[]
   tags?: string[]
   parameters?: Parameter[]
   'x-codeSamples'?: CodeSample[]

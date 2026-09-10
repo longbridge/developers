@@ -24,13 +24,12 @@ function highlightCode(code: string, lang: string): string {
     return code.replace(
       /("(?:[^"\\]|\\.)*")(\s*:)|("(?:[^"\\]|\\.)*")|(-?\b\d+\.?\d*(?:[eE][+-]?\d+)?\b)|\b(true|false|null)\b/g,
       (_m, key, colon, str, num, bool) => {
-        if (key !== undefined)
-          return `<span class="hl-k">${esc(key)}</span>${esc(colon ?? '')}`
+        if (key !== undefined) return `<span class="hl-k">${esc(key)}</span>${esc(colon ?? '')}`
         if (str !== undefined) return `<span class="hl-s">${esc(str)}</span>`
         if (num !== undefined) return `<span class="hl-n">${esc(num)}</span>`
         if (bool !== undefined) return `<span class="hl-b">${esc(bool)}</span>`
         return esc(_m)
-      },
+      }
     )
   }
 
@@ -57,8 +56,7 @@ function highlightCode(code: string, lang: string): string {
           const firstSpace = bare.search(/\s/)
           if (firstSpace === -1) {
             const result =
-              `<span class="hl-cmd">${esc(bare)}</span>` +
-              (continuation ? '<span class="hl-punct"> \\</span>' : '')
+              `<span class="hl-cmd">${esc(bare)}</span>` + (continuation ? '<span class="hl-punct"> \\</span>' : '')
             return result
           }
           const cmd = bare.slice(0, firstSpace)
@@ -80,13 +78,10 @@ function highlightCode(code: string, lang: string): string {
     // comments first (so strings inside comments don't get double-wrapped)
     return escaped
       .replace(/(\/\/[^\n]*|#[^\n]*)/g, (c) => `<span class="hl-comment">${c}</span>`)
-      .replace(
-        /(&quot;[^&]*&quot;|&#39;[^&]*&#39;|`[^`]*`)/g,
-        (s) => `<span class="hl-s">${s}</span>`,
-      )
+      .replace(/(&quot;[^&]*&quot;|&#39;[^&]*&#39;|`[^`]*`)/g, (s) => `<span class="hl-s">${s}</span>`)
       .replace(
         /\b(const|let|var|function|return|import|export|from|async|await|class|new|typeof|instanceof|def|lambda|yield|for|while|if|elif|else|in|not|and|or|True|False|None|pass|with|as|raise|try|except|finally)\b/g,
-        (kw) => `<span class="hl-b">${kw}</span>`,
+        (kw) => `<span class="hl-b">${kw}</span>`
       )
   }
 
@@ -120,23 +115,69 @@ export function CodePanel({ blocks, labelCopy, labelCopied }: CodePanelProps) {
         <div key={block.label} className="code-card">
           <div className="card-header">
             <span className="card-label">{block.label}</span>
-            <button
-              type="button"
-              className="copy-btn"
-              onClick={() => copyCode(block.label, block.code)}
-            >
+            <button type="button" className="copy-btn" onClick={() => copyCode(block.label, block.code)}>
               {copiedLabel === block.label ? labelCopied : labelCopy}
             </button>
           </div>
           <div className="card-body">
             <pre className="code-pre">
-              <code
-                dangerouslySetInnerHTML={{ __html: highlightCode(block.code, block.lang) }}
-              />
+              <code dangerouslySetInnerHTML={{ __html: highlightCode(block.code, block.lang) }} />
             </pre>
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+// ── CodeTabs (docs-style, light) ──────────────────────────────────────────────
+// A single light code card with language tabs (used for Request Example).
+
+interface CodeTabsProps {
+  blocks: CodeBlock[]
+  labelCopy: string
+  labelCopied: string
+}
+
+export function CodeTabs({ blocks, labelCopy, labelCopied }: CodeTabsProps) {
+  const [active, setActive] = React.useState(0)
+  const [copied, setCopied] = React.useState(false)
+  if (!blocks.length) return null
+  const block = blocks[Math.min(active, blocks.length - 1)]
+
+  function copy() {
+    navigator.clipboard
+      .writeText(block.code)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 1800)
+      })
+      .catch(() => {})
+  }
+
+  return (
+    <div data-lbus-component="code-tabs" className="code-tabs">
+      <div className="code-tabs-bar">
+        <div className="code-tabs-list">
+          {blocks.map((b, i) => (
+            <button
+              key={b.label}
+              type="button"
+              className={`code-tab${i === active ? ' is-active' : ''}`}
+              onClick={() => setActive(i)}>
+              {b.label}
+            </button>
+          ))}
+        </div>
+        <button type="button" className="code-tabs-copy" onClick={copy}>
+          {copied ? labelCopied : labelCopy}
+        </button>
+      </div>
+      <div className="code-tabs-body">
+        <pre className="code-pre">
+          <code dangerouslySetInnerHTML={{ __html: highlightCode(block.code, block.lang) }} />
+        </pre>
+      </div>
     </div>
   )
 }
