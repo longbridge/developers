@@ -1026,133 +1026,133 @@ paths:
           description: List of DCA plans, see [DcaPlan](#DcaPlan)
           x-description-zh: 定投计划列表，见 [DcaPlan](#DcaPlan)
           x-description-zh-hk: 定投計劃列表，見 [DcaPlan](#DcaPlan)
-        - name: plan_id
+        - name: └ plan_id
           type: string
           required: true
           description: DCA plan ID
           x-description-zh: 定投计划 ID
           x-description-zh-hk: 定投計劃 ID
-        - name: symbol
+        - name: └ symbol
           type: string
           required: true
           description: Security symbol
           x-description-zh: 证券代码
           x-description-zh-hk: 證券代碼
-        - name: stock_name
+        - name: └ stock_name
           type: string
           required: false
           description: Security name
           x-description-zh: 标的名称
           x-description-zh-hk: 標的名稱
-        - name: market
+        - name: └ market
           type: string
           required: false
           description: Market
           x-description-zh: 市场
           x-description-zh-hk: 市場
-        - name: status
+        - name: └ status
           type: string
           required: false
           description: 'Plan status: `Active`, `Suspended`, `Finished`'
           x-description-zh: 计划状态：`Active`（进行中）、`Suspended`（已暂停）、`Finished`（已结束）
           x-description-zh-hk: 計劃狀態：`Active`（進行中）、`Suspended`（已暫停）、`Finished`（已結束）
-        - name: per_invest_amount
+        - name: └ per_invest_amount
           type: string
           required: false
           description: Amount per investment
           x-description-zh: 每次投入金额
           x-description-zh-hk: 每次投入金額
-        - name: invest_frequency
+        - name: └ invest_frequency
           type: string
           required: false
           description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`'
           x-description-zh: 投资频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`
           x-description-zh-hk: 投資頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`
-        - name: invest_day_of_week
+        - name: └ invest_day_of_week
           type: string
           required: false
           description: Day of week for weekly plans
           x-description-zh: 每周扣款日
           x-description-zh-hk: 每週扣款日
-        - name: invest_day_of_month
+        - name: └ invest_day_of_month
           type: string
           required: false
           description: Day of month for monthly plans
           x-description-zh: 每月扣款日
           x-description-zh-hk: 每月扣款日
-        - name: next_trd_date
+        - name: └ next_trd_date
           type: string
           required: false
           description: Next trade date
           x-description-zh: 下次交易日
           x-description-zh-hk: 下次交易日
-        - name: cum_amount
+        - name: └ cum_amount
           type: string
           required: false
           description: Cumulative invested amount
           x-description-zh: 累计投入金额
           x-description-zh-hk: 累計投入金額
-        - name: cum_profit
+        - name: └ cum_profit
           type: string
           required: false
           description: Cumulative profit/loss
           x-description-zh: 累计盈亏
           x-description-zh-hk: 累計盈虧
-        - name: average_cost
+        - name: └ average_cost
           type: string
           required: false
           description: Average cost per share
           x-description-zh: 平均持仓成本
           x-description-zh-hk: 平均持倉成本
-        - name: allow_margin_finance
+        - name: └ allow_margin_finance
           type: boolean
           required: false
           description: Whether margin financing is allowed
           x-description-zh: 是否允许融资
           x-description-zh-hk: 是否允許融資
-        - name: alter_hours
+        - name: └ alter_hours
           type: string
           required: false
           description: Reminder hours before trade
           x-description-zh: 提前提醒小时数
           x-description-zh-hk: 提前提醒小時數
-        - name: display_account
+        - name: └ display_account
           type: string
           required: false
           description: Account display name
           x-description-zh: 账户显示名称
           x-description-zh-hk: 賬戶顯示名稱
-        - name: account_channel
+        - name: └ account_channel
           type: string
           required: false
           description: Account channel
           x-description-zh: 账户渠道
           x-description-zh-hk: 賬戶渠道
-        - name: aaid
+        - name: └ aaid
           type: string
           required: false
           description: Account asset ID
           x-description-zh: 账户资产 ID
           x-description-zh-hk: 賬戶資產 ID
-        - name: member_id
+        - name: └ member_id
           type: string
           required: false
           description: Member ID
           x-description-zh: 用户 ID
           x-description-zh-hk: 用戶 ID
-        - name: issue_number
+        - name: └ issue_number
           type: string
           required: false
           description: Execution count
           x-description-zh: 已执行次数
           x-description-zh-hk: 已執行次數
-        - name: created_at
+        - name: └ created_at
           type: string
           required: false
           description: Creation timestamp
           x-description-zh: 创建时间
           x-description-zh-hk: 創建時間
-        - name: updated_at
+        - name: └ updated_at
           type: string
           required: false
           description: Last update timestamp
@@ -1853,61 +1853,61 @@ paths:
           description: List of execution records
           x-description-zh: 执行记录列表，
           x-description-zh-hk: 執行紀錄列表，
-        - name: ∟ symbol
+        - name: └ symbol
           type: string
           required: true
           description: Security symbol
           x-description-zh: 证券代码
           x-description-zh-hk: 證券代碼
-        - name: ∟ order_id
+        - name: └ order_id
           type: string
           required: false
           description: Associated order ID
           x-description-zh: 关联订单 ID
           x-description-zh-hk: 關聯訂單 ID
-        - name: ∟ status
+        - name: └ status
           type: string
           required: false
           description: Execution status
           x-description-zh: 执行状态
           x-description-zh-hk: 執行狀態
-        - name: ∟ action
+        - name: └ action
           type: string
           required: false
           description: Action type (e.g. `buy`)
           x-description-zh: 操作类型
           x-description-zh-hk: 操作類型
-        - name: ∟ order_type
+        - name: └ order_type
           type: string
           required: false
           description: Order type (e.g. `market`)
           x-description-zh: 订单类型
           x-description-zh-hk: 訂單類型
-        - name: ∟ executed_qty
+        - name: └ executed_qty
           type: string
           required: false
           description: Executed quantity
           x-description-zh: 成交数量
           x-description-zh-hk: 成交數量
-        - name: ∟ executed_price
+        - name: └ executed_price
           type: string
           required: false
           description: Executed price
           x-description-zh: 成交价格
           x-description-zh-hk: 成交價格
-        - name: ∟ executed_amount
+        - name: └ executed_amount
           type: string
           required: false
           description: Executed cost amount
           x-description-zh: 成交金额
           x-description-zh-hk: 成交金額
-        - name: ∟ rejected_reason
+        - name: └ rejected_reason
           type: string
           required: false
           description: Rejection reason if failed
           x-description-zh: 拒绝原因（如有）
           x-description-zh-hk: 拒絕原因（如有）
-        - name: ∟ created_at
+        - name: └ created_at
           type: string
           required: false
           description: Creation Unix timestamp
@@ -2279,13 +2279,13 @@ paths:
           description: List of DCA support results
           x-description-zh: 定投支持情况列表，
           x-description-zh-hk: 定投支持情況列表，
-        - name: ∟ symbol
+        - name: └ symbol
           type: string
           required: true
           description: Security symbol
           x-description-zh: 证券代码
           x-description-zh-hk: 證券代碼
-        - name: ∟ support_regular_saving
+        - name: └ support_regular_saving
           type: boolean
           required: true
           description: Whether DCA is supported
