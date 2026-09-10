@@ -730,9 +730,14 @@
 /* ── Docs-model: content + right TOC grid ────────────────────────────────── */
 .api-doc-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 200px;
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 48px;
   align-items: start;
+  max-width: 1080px;
+}
+/* Let the grid track cap the content width (readable column, not full-bleed) */
+.api-doc-layout .api-content--docs {
+  max-width: none;
 }
 @media (max-width: 1100px) {
   .api-doc-layout {
