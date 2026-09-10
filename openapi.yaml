@@ -471,6 +471,58 @@ servers:
   - url: https://openapi.longbridge.cn
     description: China mainland
 tags:
+  # ── Canonical taxonomy (mirrors the docs/ module tree). Endpoints are being
+  #    migrated onto these tags; the legacy tags below are removed as each
+  #    module is migrated. Empty tags do not render in the sidebar. ──
+  - name: Quote
+    x-name-zh: 行情
+    x-name-zh-hk: 行情
+    description: Real-time and static market quotes for stocks, options, and warrants.
+  - name: Realtime (WebSocket)
+    x-name-zh: 实时推送
+    x-name-zh-hk: 實時推送
+    description: WebSocket subscribe/unsubscribe and server push for quotes, depth, brokers, trades, candlesticks, and order updates.
+  - name: Watchlist
+    x-name-zh: 自选股
+    x-name-zh-hk: 自選股
+    description: Manage watchlist groups and the securities they contain.
+  - name: Analytics
+    x-name-zh: 分析
+    x-name-zh-hk: 分析
+    description: Fundamentals, valuation, ratings, shareholders, screener, and signal analytics.
+  - name: Trade
+    x-name-zh: 交易与订单
+    x-name-zh-hk: 交易與訂單
+    description: Order lifecycle — submit, modify, cancel, and query orders and executions.
+  - name: Assets
+    x-name-zh: 持仓与资金
+    x-name-zh-hk: 持倉與資金
+    description: Account assets, cash, positions, exchange rates, and profit analysis.
+  - name: Grid
+    x-name-zh: 网格交易
+    x-name-zh-hk: 網格交易
+    description: Automated grid strategy orders.
+  - name: DCA
+    x-name-zh: 定投
+    x-name-zh-hk: 定投
+    description: Dollar-cost-averaging (recurring investment) plans.
+  - name: Alert
+    x-name-zh: 提醒
+    x-name-zh-hk: 提醒
+    description: Price and event alert reminders.
+  - name: Content
+    x-name-zh: 社区与资讯
+    x-name-zh-hk: 社區與資訊
+    description: News, filings, and community topics for a symbol.
+  - name: Market
+    x-name-zh: 市场
+    x-name-zh-hk: 市場
+    description: Market status, temperature, calendars, security lists, and rankings.
+  - name: AI
+    x-name-zh: AI
+    x-name-zh-hk: AI
+    description: AI agents and workspaces.
+  # ── Legacy tags (to be removed as endpoints migrate onto the taxonomy above) ──
   - name: Watchlist Management
     x-name-zh: 自选股管理
     description: Manage user watchlist groups (list/create/update/delete) and query the securities contained in each group. Supports adding, removing, or replacing securities within a group.
@@ -504,6 +556,7 @@ paths:
       operationId: list_watchlist_groups
       summary: Get Watchlists
       x-summary-zh: 获取自选股分组列表
+      x-summary-zh-hk: 獲取自選股分組列表
       description: |
         Get all watchlist groups for the current user. Each group contains an ID, name, and a list
         of securities with the price and timestamp at which each security was added.
@@ -550,6 +603,7 @@ paths:
       operationId: create_watchlist_group
       summary: Create Watchlist
       x-summary-zh: 创建自选股分组
+      x-summary-zh-hk: 創建自選股分組
       description: |
         Create a new watchlist group, optionally pre-populated with securities.
       x-description-zh: 创建新的自选股分组，可选择在创建时预填充证券。
@@ -599,6 +653,7 @@ paths:
       operationId: update_watchlist_group
       summary: Update Watchlist
       x-summary-zh: 更新自选股分组
+      x-summary-zh-hk: 更新自選股分組
       description: |
         Update the name or member list of a watchlist group. Use `mode` to control how
         `securities` are applied: `add` appends, `remove` removes, `replace` overwrites the entire list.
@@ -663,6 +718,7 @@ paths:
       operationId: delete_watchlist_group
       summary: Delete Watchlist
       x-summary-zh: 删除自选股分组
+      x-summary-zh-hk: 刪除自選股分組
       description: |
         Delete the specified watchlist group. Set `purge=true` to also clear all securities
         from the group before deletion.
@@ -709,6 +765,7 @@ paths:
       x-quote-command: security-list
       summary: Query Tradable Securities List
       x-summary-zh: 查询可交易证券列表
+      x-summary-zh-hk: 查詢可交易證券列表
       description: |
         Query the list of tradable securities filtered by market and category. Primarily used to
         retrieve securities eligible for extended-hours (pre-market / after-hours) trading sessions.
@@ -761,6 +818,7 @@ paths:
       x-quote-command: market-temp
       summary: Get Historical Market Temperature
       x-summary-zh: 获取历史市场温度
+      x-summary-zh-hk: 獲取歷史市場溫度
       description: |
         Get the historical market temperature time series for the specified market within a date range.
         Each data point contains the daily temperature, valuation, and sentiment scores (all scored 0–100).
@@ -827,6 +885,7 @@ paths:
       x-quote-command: market-temp
       summary: Get Current Market Temperature
       x-summary-zh: 获取当前市场情绪
+      x-summary-zh-hk: 獲取當前市場情緒
       description: |
         Get the current sentiment temperature snapshot for the specified market.
         Scores range from 0–100; a higher value indicates a more bullish market.
@@ -875,6 +934,7 @@ paths:
       operationId: list_cash_flow
       summary: Cash Flow
       x-summary-zh: 资金流水查询
+      x-summary-zh-hk: 資金流水查詢
       description: |
         Query account cash flow history. Covers deposit, withdrawal, dividends, settlement,
         and other business types. Supports time range and pagination.
@@ -960,6 +1020,7 @@ paths:
       operationId: account_cash
       summary: Account Cash
       x-summary-zh: 账户现金
+      x-summary-zh-hk: 賬戶現金
       description: |
         Query account cash balance, buying power, margin details, and per-currency cash breakdown.
       x-description-zh: 查询账户现金余额、购买力、保证金详情及各币种资金明细。
@@ -1023,6 +1084,7 @@ paths:
       operationId: list_stock_positions
       summary: Stock Position
       x-summary-zh: 股票持仓
+      x-summary-zh-hk: 股票持倉
       description: |
         Query all stock (equity) positions, grouped by sub-account channel.
       x-description-zh: 查询所有股票（权益类）持仓，按子账户渠道分组返回。
@@ -1082,6 +1144,7 @@ paths:
       operationId: list_fund_positions
       summary: Fund Position
       x-summary-zh: 基金持仓
+      x-summary-zh-hk: 基金持倉
       description: |
         Query all public fund positions, grouped by sub-account channel.
       x-description-zh: 查询所有公募基金持仓，按子账户渠道分组返回。
@@ -1131,6 +1194,7 @@ paths:
       operationId: list_statements
       summary: List Statements
       x-summary-zh: 查询结单列表
+      x-summary-zh-hk: 查詢結單列表
       description: |
         Query available account statements (daily or monthly). Returns a list of statement
         dates and file keys that can be used with the download endpoint.
@@ -1199,6 +1263,7 @@ paths:
       operationId: get_statement_download_url
       summary: Get Statement Download URL
       x-summary-zh: 获取结单下载地址
+      x-summary-zh-hk: 獲取結單下載地址
       description: |
         Get a presigned download URL for a specific statement file. The URL returns a JSON
         document containing the full statement content with all sections.
@@ -1244,6 +1309,7 @@ paths:
       x-quote-command: filings
       summary: Get Filings by Symbol
       x-summary-zh: 获取标的监管文件
+      x-summary-zh-hk: 獲取標的監管文件
       description: |
         Get the list of regulatory filings or disclosure documents for the specified symbol.
         Each filing includes a title, file name, download URLs, and publication timestamp.
@@ -1290,6 +1356,7 @@ paths:
       operationId: list_news
       summary: Get News by Symbol
       x-summary-zh: 获取标的新闻
+      x-summary-zh-hk: 獲取標的新聞
       description: |
         Get the latest news articles for the specified symbol.
       x-description-zh: 获取指定标的的最新新闻资讯列表。
@@ -1336,6 +1403,7 @@ paths:
       operationId: list_topics
       summary: List Community Topics by Symbol
       x-summary-zh: 按标的获取社区讨论
+      x-summary-zh-hk: 按標的獲取社區討論
       description: |
         Get the list of community discussion topics for the specified symbol.
       x-description-zh: 获取指定标的的社区讨论。
@@ -1382,6 +1450,7 @@ paths:
       operationId: list_my_topics
       summary: List My Published Topics
       x-summary-zh: 获取我发布的讨论
+      x-summary-zh-hk: 獲取我發佈的討論
       description: |
         Get the list of topics published by the current authenticated user.
         Supports pagination and filtering by topic type.
@@ -1464,6 +1533,7 @@ paths:
       operationId: create_topic
       summary: Create Topic
       x-summary-zh: 创建社区讨论
+      x-summary-zh-hk: 創建社區討論
       description: |
         Create a new community topic. Two content types are supported:
 
@@ -1606,6 +1676,7 @@ paths:
       operationId: topic_detail
       summary: Topic Detail
       x-summary-zh: 获取讨论详情
+      x-summary-zh-hk: 獲取討論詳情
       description: |
         Get the full details of a community topic by its ID.
 
@@ -1683,6 +1754,7 @@ paths:
       operationId: list_topic_replies
       summary: List Topic Replies
       x-summary-zh: 获取讨论回复列表
+      x-summary-zh-hk: 獲取討論回覆列表
       description: |
         Get the reply list for a specific topic, with pagination.
 
@@ -1774,6 +1846,7 @@ paths:
       operationId: create_topic_reply
       summary: Create Topic Reply
       x-summary-zh: 创建讨论回复
+      x-summary-zh-hk: 創建討論回覆
       description: |
         Post a reply to a community topic. Supports nesting under an existing reply.
 
@@ -1912,6 +1985,7 @@ paths:
       operationId: list_history_executions
       summary: Historical Execution
       x-summary-zh: 历史成交查询
+      x-summary-zh-hk: 歷史成交查詢
       description: |
         Query historical execution (fill) records. Supports filtering by time range, order ID,
         and symbol, with pagination.
@@ -1990,6 +2064,7 @@ paths:
       operationId: order_detail
       summary: Order Detail
       x-summary-zh: 订单详情查询
+      x-summary-zh-hk: 訂單詳情查詢
       description: |
         Query full details of a single order by order ID, including fee breakdown and status history.
       x-description-zh: 通过订单 ID 查询单笔订单的完整详情，包括费用明细和状态变更历史。
@@ -2072,6 +2147,7 @@ paths:
       operationId: replace_order
       summary: Modify Order
       x-summary-zh: 修改订单
+      x-summary-zh-hk: 修改訂單
       description: |
         Modify the parameters of a pending order. Only orders in `NewStatus` or `PartialFilledStatus`
         can be modified.
@@ -2156,6 +2232,7 @@ paths:
       operationId: cancel_order
       summary: Cancel Order
       x-summary-zh: 撤销订单
+      x-summary-zh-hk: 撤銷訂單
       description: |
         Cancel a pending order. Only orders in `NewStatus` or `PartialFilledStatus` can be cancelled.
         After successful cancellation the order status changes to `CanceledStatus`.
@@ -2189,6 +2266,7 @@ paths:
       operationId: estimate_max_buy_quantity
       summary: Estimate Maximum Buy Quantity
       x-summary-zh: 估算最大可买数量
+      x-summary-zh-hk: 估算最大可買數量
       description: |
         Estimate the maximum purchasable quantity for a security based on the current account
         balance and margin, given a specific order type and price.
@@ -2315,6 +2393,7 @@ paths:
       operationId: list_history_orders
       summary: Historical Order
       x-summary-zh: 历史订单查询
+      x-summary-zh-hk: 歷史訂單查詢
       description: |
         Query historical order records with pagination. Supports filtering by time range, symbol,
         market, side, and status.
@@ -2473,6 +2552,7 @@ paths:
       operationId: list_today_executions
       summary: Today's Execution
       x-summary-zh: 当日成交查询
+      x-summary-zh-hk: 當日成交查詢
       description: |
         Query today's execution (fill) records. Supports filtering by order ID and symbol.
       x-description-zh: 查询当日成交（成交明细）记录，支持按订单 ID 和标的筛选。
@@ -2528,6 +2608,7 @@ paths:
       operationId: list_today_orders
       summary: Today's Order
       x-summary-zh: 当日订单查询
+      x-summary-zh-hk: 當日訂單查詢
       description: |
         Query today's orders with support for multi-condition filtering.
       x-description-zh: 查询当日订单，支持多条件组合筛选。
@@ -2678,6 +2759,7 @@ paths:
       operationId: submit_grid_order
       summary: Submit Grid Order
       x-summary-zh: 提交网格订单
+      x-summary-zh-hk: 提交網格訂單
       description: |
         Submit a grid strategy order. The grid places buy orders as the price falls and sell
         orders as it rises, within the `[lower_limit_price, upper_limit_price]` band anchored to
@@ -2734,6 +2816,7 @@ paths:
       operationId: replace_grid_order
       summary: Modify Grid Order
       x-summary-zh: 修改网格订单
+      x-summary-zh-hk: 修改網格訂單
       description: |
         Modify the rule of an existing grid order. Provide the `order_id` and a full
         `grid_trading_rule` with the new parameters.
@@ -2780,6 +2863,7 @@ paths:
       operationId: list_grid_orders
       summary: List Grid Orders
       x-summary-zh: 网格订单列表
+      x-summary-zh-hk: 網格訂單列表
       description: |
         Query grid orders with pagination and optional filtering by market, symbol, and status.
       x-description-zh: 分页查询网格订单，支持按市场、标的和状态筛选。
@@ -2889,6 +2973,7 @@ paths:
       operationId: list_grid_orders_by_ids
       summary: Query Grid Orders by IDs
       x-summary-zh: 按 ID 查询网格订单
+      x-summary-zh-hk: 按 ID 查詢網格訂單
       description: |
         Query specific grid orders by their IDs (request body). Returns the matching grid orders.
       x-description-zh: 通过订单 ID（请求体）查询指定的网格订单，返回匹配的网格订单列表。
@@ -2951,6 +3036,7 @@ paths:
       operationId: grid_order_detail
       summary: Grid Order Detail
       x-summary-zh: 网格订单详情
+      x-summary-zh-hk: 網格訂單詳情
       description: |
         Query the full detail of a single grid order, including its rule, triggered sub-orders,
         and lifecycle history (both paged via `history_id` / `limit`).
@@ -3043,6 +3129,7 @@ paths:
       operationId: grid_trigger_history
       summary: Grid Trigger History
       x-summary-zh: 网格触发历史
+      x-summary-zh-hk: 網格觸發歷史
       description: |
         Query the trigger history of a grid order — the individual orders that the grid has
         fired. The required parameter is `grid_order_id` (not `order_id`).
@@ -3117,6 +3204,7 @@ paths:
       operationId: cancel_grid_order
       summary: Cancel Grid Order
       x-summary-zh: 取消网格订单
+      x-summary-zh-hk: 取消網格訂單
       description: |
         Cancel a grid order. The grid stops and no further triggers are placed.
       x-description-zh: 取消网格订单。网格停止，不再触发新的挂单。
@@ -3159,6 +3247,7 @@ paths:
       operationId: suspend_grid_order
       summary: Suspend Grid Order
       x-summary-zh: 暂停网格订单
+      x-summary-zh-hk: 暫停網格訂單
       description: |
         Suspend a running grid order. The grid stops triggering but is kept and can be restarted.
       x-description-zh: 暂停运行中的网格订单。网格停止触发，但会保留并可重新启动。
@@ -3201,6 +3290,7 @@ paths:
       operationId: restart_grid_order
       summary: Restart Grid Order
       x-summary-zh: 重启网格订单
+      x-summary-zh-hk: 重啟網格訂單
       description: |
         Restart a suspended grid order. The grid resumes triggering.
       x-description-zh: 重新启动已暂停的网格订单。网格恢复触发。
@@ -3243,6 +3333,7 @@ paths:
       operationId: submit_strategy_questionnaire
       summary: Submit Strategy Questionnaire
       x-summary-zh: 提交策略问卷
+      x-summary-zh-hk: 提交策略問卷
       description: |
         Record the user's consent to the strategy risk disclosure. This is required once before
         using grid trading. The consent body is `{ "type": "strategy", "items": { "agree": "true" } }`.
@@ -3294,6 +3385,7 @@ paths:
       operationId: grid_symbol_info
       summary: Grid Symbol Info
       x-summary-zh: 网格标的信息
+      x-summary-zh-hk: 網格標的資訊
       description: |
         Query the security info used to build a grid order — name, latest price, board lot sizes,
         price-step (bid-size) rules, and channel / authorization info (whether the strategy consent
