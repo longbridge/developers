@@ -124,8 +124,8 @@ function ParamTable({ rows, locale }: { rows: RowVM[]; locale: Locale }) {
         </tr>
       </thead>
       <tbody>
-        {rows.map((row) => (
-          <tr key={row.name}>
+        {rows.map((row, i) => (
+          <tr key={`${row.name}-${i}`}>
             <td>
               <code>{row.name}</code>
             </td>

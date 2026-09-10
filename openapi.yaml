@@ -1804,18 +1804,6 @@ paths:
           description: Creation Unix timestamp
           x-description-zh: 执行时间
           x-description-zh-hk: 執行時間
-        - name: ∟ created_at
-          type: string
-          required: false
-          description: Execution time
-          x-description-zh: 执行时间
-          x-description-zh-hk: 執行時間
-        - name: ∟ rejected_reason
-          type: string
-          required: false
-          description: Rejection reason (if any)
-          x-description-zh: 拒绝原因（如有）
-          x-description-zh-hk: 拒絕原因（如有）
         - name: has_more
           type: boolean
           required: false
