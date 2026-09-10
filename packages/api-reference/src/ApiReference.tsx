@@ -114,7 +114,7 @@ function rowsFrom(xs: XParameter[] | undefined, locale: Locale): RowVM[] {
 function ParamTable({ rows, locale }: { rows: RowVM[]; locale: Locale }) {
   if (!rows.length) return null
   return (
-    <table>
+    <table className="api-fields">
       <thead>
         <tr>
           <th>{L.name[locale]}</th>
