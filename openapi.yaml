@@ -551,6 +551,1392 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/dailycoins/query:
+    get:
+      operationId: dca_list
+      summary: List DCA Plans
+      x-summary-zh: 获取定投列表
+      x-summary-zh-hk: 獲取定投列表
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Get all recurring investment (DCA) plans for the current user.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        获取当前用户的所有定投（DCA）计划。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        獲取當前用戶的所有定投（DCA）計劃。
+      tags:
+        - DCA
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Filter by plan status: `Active`, `Suspended`, `Finished`.'
+          x-description-zh: 按计划状态筛选：`Active`、`Suspended`、`Finished`。
+          x-description-zh-hk: 按計劃狀態篩選：`Active`、`Suspended`、`Finished`。
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by security symbol, e.g. `AAPL.US`.
+          x-description-zh: 按标的代码筛选，如 `AAPL.US`。
+          x-description-zh-hk: 按標的代碼篩選，如 `AAPL.US`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca
+            longbridge dca --status Active
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.list_dca()
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.list_dca()
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.list_dca()
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var resp = ctx.getListDca().get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: C++
+          label: C++
+          source: |
+            #include <iostream>
+            #include <longbridge.hpp>
+
+            using namespace longbridge;
+            using namespace longbridge::dca;
+
+            int main() {
+                OAuthBuilder("your-client-id").build(
+                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
+                    [](auto res) {
+                        if (!res) return;
+                        Config config = Config::from_oauth(*res);
+                        DCAContext ctx = DCAContext::create(config);
+                        ctx.list_dca([](auto resp) {
+                            if (resp) std::cout << "OK" << std::endl;
+                        });
+                    });
+                std::cin.get();
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.ListDca(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.list_dca().await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  plans:
+                    - plan_id: '1239402174908207104'
+                      symbol: AAPL.US
+                      stock_name: Apple Inc.
+                      market: US
+                      status: Active
+                      per_invest_amount: '100'
+                      invest_frequency: Monthly
+                      invest_day_of_month: '15'
+                      invest_day_of_week: ''
+                      next_trd_date: '1778853600'
+                      cum_amount: '0'
+                      cum_profit: '0'
+                      average_cost: '0'
+                      allow_margin_finance: false
+                      alter_hours: '6'
+                      display_account: LBPT10065023
+                      member_id: '3162'
+                      aaid: '20975338'
+                      account_channel: lb_papertrading
+                      issue_number: 0
+                      created_at: '1778725628'
+                      updated_at: '1778725628'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/create:
+    post:
+      operationId: dca_create
+      summary: Create DCA Plan
+      x-summary-zh: 创建定投
+      x-summary-zh-hk: 創建定投
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Create a new recurring investment plan for a security.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        为指定证券创建新的定投。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        為指定證券創建新的定投。
+      tags:
+        - DCA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - symbol
+                - per_invest_amount
+                - invest_frequency
+                - allow_margin_finance
+              properties:
+                symbol:
+                  type: string
+                  description: Security symbol, e.g. `AAPL.US`.
+                  x-description-zh: 标的代码，如 `AAPL.US`。
+                  x-description-zh-hk: 標的代碼，如 `AAPL.US`。
+                per_invest_amount:
+                  type: string
+                  description: Recurring investment amount per execution.
+                  x-description-zh: 每次定投金额。
+                  x-description-zh-hk: 每次定投金額。
+                invest_frequency:
+                  type: string
+                  description: 'Investment frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
+                  x-description-zh: 定投频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+                  x-description-zh-hk: 定投頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+                allow_margin_finance:
+                  type: integer
+                  description: 'Whether to allow margin financing: `1` yes, `0` no.'
+                  x-description-zh: 是否允许融资：`1` 是，`0` 否。
+                  x-description-zh-hk: 是否允許融資：`1` 是，`0` 否。
+                invest_day_of_week:
+                  type: string
+                  description: 'Day of week for weekly/fortnightly plans: `mon`–`fri`.'
+                  x-description-zh: 每周/每两周计划的执行星期：`mon`–`fri`。
+                  x-description-zh-hk: 每週/每兩週計劃的執行星期：`mon`–`fri`。
+                invest_day_of_month:
+                  type: string
+                  description: 'Day of month for monthly plans: `1`–`28`.'
+                  x-description-zh: 每月计划的执行日：`1`–`28`。
+                  x-description-zh-hk: 每月計劃的執行日：`1`–`28`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca create AAPL.US --amount 500 --frequency monthly --day-of-month 15
+            longbridge dca create TSLA.US --amount 200 --frequency weekly --day-of-week mon
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.create_dca("AAPL.US", amount="500", frequency="Monthly", day_of_month=15)
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.create_dca("AAPL.US", amount="500", frequency="Monthly", day_of_month=15)
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.create_dca()
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var resp = ctx.getCreateDca().get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: C++
+          label: C++
+          source: |
+            #include <iostream>
+            #include <longbridge.hpp>
+
+            using namespace longbridge;
+            using namespace longbridge::dca;
+
+            int main() {
+                OAuthBuilder("your-client-id").build(
+                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
+                    [](auto res) {
+                        if (!res) return;
+                        Config config = Config::from_oauth(*res);
+                        DCAContext ctx = DCAContext::create(config);
+                        ctx.create_dca([](auto resp) {
+                            if (resp) std::cout << "OK" << std::endl;
+                        });
+                    });
+                std::cin.get();
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.CreateDca(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.create_dca().await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  id: '1225781523156889601'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/update:
+    post:
+      operationId: dca_update
+      summary: Update DCA Plan
+      x-summary-zh: 更新定投
+      x-summary-zh-hk: 更新定投
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Pause or resume an existing recurring investment plan.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        暂停或恢复已有的定投。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        暫停或恢復已有的定投。
+      tags:
+        - DCA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plan_id
+              properties:
+                plan_id:
+                  type: string
+                  description: DCA plan ID to update.
+                  x-description-zh: 要更新的定投计划 ID。
+                  x-description-zh-hk: 要更新的定投計劃 ID。
+                per_invest_amount:
+                  type: string
+                  description: New recurring investment amount.
+                  x-description-zh: 新的每次定投金额。
+                  x-description-zh-hk: 新的每次定投金額。
+                invest_frequency:
+                  type: string
+                  description: 'New frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
+                  x-description-zh: 新的频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+                  x-description-zh-hk: 新的頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+                invest_day_of_week:
+                  type: string
+                  description: 'New day of week: `mon`–`fri`.'
+                  x-description-zh: 新的执行星期：`mon`–`fri`。
+                  x-description-zh-hk: 新的執行星期：`mon`–`fri`。
+                invest_day_of_month:
+                  type: string
+                  description: 'New day of month: `1`–`28`.'
+                  x-description-zh: 新的执行日：`1`–`28`。
+                  x-description-zh-hk: 新的執行日：`1`–`28`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca pause 1225781523156889600
+            longbridge dca resume 1225781523156889600
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.update_dca("1225781523156889600", action="pause")
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.update_dca("1225781523156889600", action="pause")
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.update_dca()
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var resp = ctx.getUpdateDca().get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: C++
+          label: C++
+          source: |
+            #include <iostream>
+            #include <longbridge.hpp>
+
+            using namespace longbridge;
+            using namespace longbridge::dca;
+
+            int main() {
+                OAuthBuilder("your-client-id").build(
+                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
+                    [](auto res) {
+                        if (!res) return;
+                        Config config = Config::from_oauth(*res);
+                        DCAContext ctx = DCAContext::create(config);
+                        ctx.update_dca([](auto resp) {
+                            if (resp) std::cout << "OK" << std::endl;
+                        });
+                    });
+                std::cin.get();
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.UpdateDca(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.update_dca().await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/toggle:
+    post:
+      operationId: dca_toggle
+      summary: Pause / Resume / Stop DCA Plan
+      x-summary-zh: 暂停 / 恢复 / 终止定投计划
+      x-summary-zh-hk: 暫停 / 恢復 / 終止定投計劃
+      description: |
+        Change the status of an existing DCA plan. Set `status` to `Suspended` to pause, `Active` to resume, or `Finished` to permanently stop the plan.
+      x-description-zh: |
+        更改现有定投计划的状态。将 `status` 设为 `Suspended` 暂停、`Active` 恢复、`Finished` 永久终止计划。
+      x-description-zh-hk: |
+        更改現有定投計劃的狀態。將 `status` 設為 `Suspended` 暫停、`Active` 恢復、`Finished` 永久終止計劃。
+      tags:
+        - DCA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plan_id
+                - status
+              properties:
+                plan_id:
+                  type: string
+                  description: DCA plan ID.
+                  x-description-zh: 定投计划 ID。
+                  x-description-zh-hk: 定投計劃 ID。
+                status:
+                  type: string
+                  description: 'Target status: `Suspended` (pause), `Active` (resume), `Finished` (stop).'
+                  x-description-zh: 目标状态：`Suspended`（暂停）、`Active`（恢复）、`Finished`（终止）。
+                  x-description-zh-hk: 目標狀態：`Suspended`（暫停）、`Active`（恢復）、`Finished`（終止）。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca pause 12345
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            ctx.pause("12345")
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                await ctx.pause("12345")
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              await ctx.pause('12345')
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        ctx.pause("12345").get();
+                    }
+                }
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tif err := c.Pause(context.Background(), \"12345\"); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                ctx.pause("12345").await?;
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/query-records:
+    get:
+      operationId: dca_history
+      summary: DCA Trade History
+      x-summary-zh: 定投交易历史
+      x-summary-zh-hk: 定投交易歷史
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Get the execution history for a specific DCA plan including trade dates, amounts, and prices.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        获取指定定投的执行历史，包含交易日期、金额和价格。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        獲取指定定投的執行歷史，包含交易日期、金額和價格。
+      tags:
+        - DCA
+      parameters:
+        - name: plan_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: DCA plan ID.
+          x-description-zh: 定投计划 ID。
+          x-description-zh-hk: 定投計劃 ID。
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Page number, starting from `1`.
+          x-description-zh: 页码，从 `1` 开始。
+          x-description-zh-hk: 頁碼，從 `1` 開始。
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Page size (number of records per page).
+          x-description-zh: 每页记录数。
+          x-description-zh-hk: 每頁記錄數。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca history 1225781523156889600
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.dca_history("1225781523156889600")
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.dca_history("1225781523156889600")
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.dca_history()
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var resp = ctx.getDcaHistory().get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: C++
+          label: C++
+          source: |
+            #include <iostream>
+            #include <longbridge.hpp>
+
+            using namespace longbridge;
+            using namespace longbridge::dca;
+
+            int main() {
+                OAuthBuilder("your-client-id").build(
+                    [](const std::string& url) { std::cout << "Open: " << url << std::endl; },
+                    [](auto res) {
+                        if (!res) return;
+                        Config config = Config::from_oauth(*res);
+                        DCAContext ctx = DCAContext::create(config);
+                        ctx.dca_history([](auto resp) {
+                            if (resp) std::cout << "OK" << std::endl;
+                        });
+                    });
+                std::cin.get();
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.DcaHistory(context.Background())\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.dca_history().await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  has_more: false
+                  records:
+                    - symbol: AAPL.US
+                      order_id: '123456'
+                      status: Filled
+                      action: Buy
+                      order_type: Market
+                      executed_qty: '1'
+                      executed_price: '180.50'
+                      executed_amount: '180.50'
+                      created_at: '1763769600'
+                      rejected_reason: ''
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/statistic:
+    get:
+      operationId: dca_stats
+      summary: DCA Statistics
+      x-summary-zh: 定投统计
+      x-summary-zh-hk: 定投統計
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Get DCA statistics summary including total invested amount and profit/loss.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        获取定投统计汇总信息，包括总投入金额和盈亏情况。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        獲取定投統計匯總信息，包括總投入金額和盈虧情況。
+      tags:
+        - DCA
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter statistics by security symbol.
+          x-description-zh: 按标的代码筛选统计。
+          x-description-zh-hk: 按標的代碼篩選統計。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca stats
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.stats()
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.stats()
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.stats()
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var resp = ctx.stats(null).get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.Stats(context.Background(), nil)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.stats(None).await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  active_count: '2'
+                  finished_count: '1'
+                  suspended_count: '0'
+                  rest_days: '3'
+                  total_amount: '5400'
+                  total_profit: '120.50'
+                  nearest_plans:
+                    - plan_id: '1239402174908207104'
+                      symbol: AAPL.US
+                      stock_name: Apple Inc.
+                      market: US
+                      status: Active
+                      per_invest_amount: '100'
+                      invest_frequency: Monthly
+                      invest_day_of_month: '15'
+                      next_trd_date: '1778853600'
+                      cum_amount: '0'
+                      cum_profit: '0'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/batch-check-support:
+    post:
+      operationId: dca_check_support
+      summary: Check DCA Support
+      x-summary-zh: 检查定投支持
+      x-summary-zh-hk: 檢查定投支持
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Check whether the given securities support DCA recurring investment.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        检查指定标的是否支持定投。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        檢查指定標的是否支持定投。
+      tags:
+        - DCA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - symbols
+              properties:
+                symbols:
+                  type: array
+                  items:
+                    type: string
+                  description: List of security symbols to check for DCA support.
+                  x-description-zh: 要检查是否支持定投的标的代码列表。
+                  x-description-zh-hk: 要檢查是否支持定投的標的代碼列表。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca check AAPL.US 700.HK
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.check_support(["AAPL.US", "700.HK"])
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.check_support(["AAPL.US", "700.HK"])
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.checkSupport(['AAPL.US', '700.HK'])
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+            import java.util.Arrays;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var resp = ctx.checkSupport(Arrays.asList("AAPL.US", "700.HK")).get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tresp, err := c.CheckSupport(context.Background(), []string{\"AAPL.US\", \"700.HK\"})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.check_support(vec!["AAPL.US".into(), "700.HK".into()]).await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  infos:
+                    - symbol: AAPL.US
+                      support_regular_saving: true
+                    - symbol: 700.HK
+                      support_regular_saving: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/calc-trd-date:
+    post:
+      operationId: dca_calc_date
+      summary: Calculate DCA Date
+      x-summary-zh: 计算定投日期
+      x-summary-zh-hk: 計算定投日期
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Calculate the next projected trade date for given DCA plan parameters.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        根据给定的定投计划参数，计算下一次预计交易日期。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        根據給定的定投計劃參數，計算下一次預計交易日期。
+      tags:
+        - DCA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - symbol
+                - invest_frequency
+              properties:
+                symbol:
+                  type: string
+                  description: Security symbol.
+                  x-description-zh: 标的代码。
+                  x-description-zh-hk: 標的代碼。
+                invest_frequency:
+                  type: string
+                  description: 'Frequency: `Daily`, `Weekly`, `Fortnightly`, `Monthly`.'
+                  x-description-zh: 频率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+                  x-description-zh-hk: 頻率：`Daily`、`Weekly`、`Fortnightly`、`Monthly`。
+                invest_day_of_week:
+                  type: string
+                  description: 'Day of week for weekly plans: `mon`–`fri`.'
+                  x-description-zh: 每周计划的执行星期：`mon`–`fri`。
+                  x-description-zh-hk: 每週計劃的執行星期：`mon`–`fri`。
+                invest_day_of_month:
+                  type: string
+                  description: 'Day of month for monthly/fortnightly plans: `1`–`28`.'
+                  x-description-zh: 每月/每两周计划的执行日：`1`–`28`。
+                  x-description-zh-hk: 每月/每兩週計劃的執行日：`1`–`28`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca calc-date AAPL.US --frequency monthly --day-of-month 15
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder, DCAFrequency
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            resp = ctx.calc_date("AAPL.US", DCAFrequency.Monthly, day_of_month=15)
+            print(resp)
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder, DCAFrequency
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                resp = await ctx.calc_date("AAPL.US", DCAFrequency.Monthly, day_of_month=15)
+                print(resp)
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth, DCAFrequency } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              const resp = await ctx.calcDate('AAPL.US', DCAFrequency.Monthly, undefined, 15)
+              console.log(resp)
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        var opts = new CalcDateOptions("AAPL.US", DCAFrequency.MONTHLY).dayOfMonth(15);
+                        var resp = ctx.calcDate(opts).get();
+                        System.out.println(resp);
+                    }
+                }
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tdayOfMonth := 15\n\topts := &dca.CalcDateOptions{\n\t\tSymbol:     \"AAPL.US\",\n\t\tFrequency:  dca.FrequencyMonthly,\n\t\tDayOfMonth: &dayOfMonth,\n\t}\n\tresp, err := c.CalcDate(context.Background(), opts)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", resp)\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, dca::DCAFrequency, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                let resp = ctx.calc_date("AAPL.US", DCAFrequency::Monthly, None, Some(15)).await?;
+                println!("{:?}", resp);
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  trade_date: '2024-02-15'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/dailycoins/update-alter-hours:
+    post:
+      operationId: dca_set_reminder
+      summary: Set DCA Reminder
+      x-summary-zh: 设置定投提醒
+      x-summary-zh-hk: 設置定投提醒
+      description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
+        Set the advance reminder time for DCA plans. Supported values: `1`, `6`, or `12` hours.
+      x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
+        设置定投计划的提前提醒时间。支持的值：`1`、`6` 或 `12` 小时。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
+        設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
+      tags:
+        - DCA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - alter_hours
+              properties:
+                alter_hours:
+                  type: string
+                  description: 'Advance reminder hours before DCA execution: `1`, `6`, or `12`.'
+                  x-description-zh: 定投执行前的提前提醒小时数：`1`、`6` 或 `12`。
+                  x-description-zh-hk: 定投執行前的提前提醒小時數：`1`、`6` 或 `12`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge dca set-reminder 12
+        - lang: Python
+          label: Python
+          source: |
+            from longbridge.openapi import DCAContext, Config, OAuthBuilder
+
+            oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+            config = Config.from_oauth(oauth)
+            ctx = DCAContext(config)
+
+            ctx.set_reminder("12")
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            from longbridge.openapi import AsyncDCAContext, Config, OAuthBuilder
+
+            async def main() -> None:
+                oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+                config = Config.from_oauth(oauth)
+                ctx = AsyncDCAContext.create(config)
+
+                await ctx.set_reminder("12")
+
+            if __name__ == "__main__":
+                asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const { Config, DCAContext, OAuth } = require('longbridge')
+
+            async function main() {
+              const oauth = await OAuth.build('your-client-id', (_, url) => {
+                console.log('Open this URL to authorize: ' + url)
+              })
+              const config = Config.fromOAuth(oauth)
+              const ctx = DCAContext.new(config)
+              await ctx.setReminder('12')
+            }
+            main().catch(console.error)
+        - lang: Java
+          label: Java
+          source: |
+            import com.longbridge.*;
+            import com.longbridge.dca.*;
+
+            class Main {
+                public static void main(String[] args) throws Exception {
+                    try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+                         Config config = Config.fromOAuth(oauth);
+                         DCAContext ctx = DCAContext.create(config)) {
+                        ctx.setReminder("12").get();
+                    }
+                }
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\n\t\"github.com/longbridge/openapi-go/config\"\n\t\"github.com/longbridge/openapi-go/oauth\"\n\t\"github.com/longbridge/openapi-go/dca\"\n)\n\nfunc main() {\n\to := oauth.New(\"your-client-id\").\n\t\tOnOpenURL(func(url string) { fmt.Println(\"Open this URL to authorize:\", url) })\n\tif err := o.Build(context.Background()); err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tconf, err := config.New(config.WithOAuthClient(o))\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tc, err := dca.NewFromCfg(conf)\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tdefer c.Close()\n\tif err := c.SetReminder(context.Background(), \"12\"); err != nil {\n\t\tlog.Fatal(err)\n\t}\n}\n"
+        - lang: Rust
+          label: Rust
+          source: |
+            use std::sync::Arc;
+            use longbridge::{oauth::OAuthBuilder, dca::DCAContext, Config};
+
+            #[tokio::main]
+            async fn main() -> Result<(), Box<dyn std::error::Error>> {
+                let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+                let config = Arc::new(Config::from_oauth(oauth));
+                let ctx = DCAContext::new(config);
+                ctx.set_reminder("12").await?;
+                Ok(())
+            }
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/watchlist/groups:
     get:
       operationId: list_watchlist_groups
