@@ -737,7 +737,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                       className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
                       {icon && (
                         <span
-                          className="inline-flex items-center shrink-0 mr-3 text-[color:var(--lb-fg-3)]"
+                          className="nav-page-icon inline-flex items-center justify-center shrink-0 text-[color:var(--lb-fg-3)]"
                           aria-hidden="true"
                           dangerouslySetInnerHTML={{ __html: icon }}
                         />
