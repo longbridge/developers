@@ -891,6 +891,2864 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/asset/account:
+    get:
+      operationId: account_balance
+      summary: Account Assets
+      x-summary-zh: 账户资金
+      x-summary-zh-hk: 賬戶資金
+      description: |
+        The API is used to obtain the available, desirable, frozen, to-be-settled, and in-transit
+        funds (fund purchase and redemption) information for each currency of the user.
+      x-description-zh: |
+        该接口用于获取用户每个币种可用、可取、冻结、待结算金额、在途资金 (基金申购赎回) 信息。
+      x-description-zh-hk: |
+        該接口用於獲取用戶每個幣種可用、可取、凍結、待結算金額、在途資金 (基金申購贖回) 信息。
+      tags:
+        - Assets
+      x-parameters:
+        - name: currency
+          in: query
+          type: string
+          required: false
+          description: Currency (HKD, USD, CNH)
+          x-description-zh: 币种（HKD、USD、CNH）
+          x-description-zh-hk: 幣種（HKD、USD、CNH）
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge assets
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/asset/account' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/asset/account",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/asset/account",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/asset/account", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/asset/account"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/asset/account")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/asset/account");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/asset/account\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: false
+          description: Account Balance
+          x-description-zh: 账户资金信息
+          x-description-zh-hk: 賬戶資金信息
+        - name: └ total_cash
+          type: string
+          required: true
+          description: Total Cash
+          x-description-zh: 现金总额
+          x-description-zh-hk: 現金總額
+        - name: └ max_finance_amount
+          type: string
+          required: true
+          description: Maximum Financing Amount
+          x-description-zh: 最大融资金额
+          x-description-zh-hk: 最大融資金額
+        - name: └ remaining_finance_amount
+          type: string
+          required: true
+          description: Remaining Financing Amount
+          x-description-zh: 剩余融资金额
+          x-description-zh-hk: 剩餘融資金額
+        - name: └ risk_level
+          type: string
+          required: true
+          description: Risk control level <br/> <br/> <b>Option:</b><br/> `0` - safe <br/> `1` - medium risk<br/> `2` - early warning<br/> `3` - danger
+          x-description-zh: 风控等级 <br/> <br/> <b>可选值:</b><br/> `0` - 安全 <br/> `1` - 中风险<br/> `2` - 预警<br/> `3` - 危险
+          x-description-zh-hk: 風控等級 <br/> <br/> <b>可選值:</b><br/> `0` - 安全 <br/> `1` - 中風險<br/> `2` - 預警<br/> `3` - 危險
+        - name: └ margin_call
+          type: string
+          required: true
+          description: Margin Call
+          x-description-zh: 追缴保证金
+          x-description-zh-hk: 追繳保證金
+        - name: └ net_assets
+          type: string
+          required: true
+          description: net asset
+          x-description-zh: 净资产
+          x-description-zh-hk: 淨資產
+        - name: └ init_margin
+          type: string
+          required: true
+          description: initial margin
+          x-description-zh: 初始保证金
+          x-description-zh-hk: 初始保證金
+        - name: └ maintenance_margin
+          type: string
+          required: true
+          description: maintenance margin
+          x-description-zh: 维持保证金
+          x-description-zh-hk: 維持保證金
+        - name: └ currency
+          type: string
+          required: true
+          description: Currency
+          x-description-zh: 币种
+          x-description-zh-hk: 幣種
+        - name: └ buy_power
+          type: string
+          required: true
+          description: Buy Power
+          x-description-zh: 购买力
+          x-description-zh-hk: 購買力
+        - name: └ cash_infos
+          type: object[]
+          required: false
+          description: Cash Details
+          x-description-zh: 现金详情
+          x-description-zh-hk: 現金詳情
+        - name: └ ∟ withdraw_cash
+          type: string
+          required: true
+          description: Withdraw Cash
+          x-description-zh: 可提现金
+          x-description-zh-hk: 可提現金
+        - name: └ ∟ available_cash
+          type: string
+          required: true
+          description: Available Cash
+          x-description-zh: 可用现金
+          x-description-zh-hk: 可用現金
+        - name: └ ∟ frozen_cash
+          type: string
+          required: true
+          description: Frozen Cash
+          x-description-zh: 冻结现金
+          x-description-zh-hk: 凍結現金
+        - name: └ ∟ settling_cash
+          type: string
+          required: true
+          description: Cash to be Settled
+          x-description-zh: 待结算现金
+          x-description-zh-hk: 待結算現金
+        - name: └ ∟ currency
+          type: string
+          required: true
+          description: Currency
+          x-description-zh: 币种
+          x-description-zh-hk: 幣種
+        - name: └ frozen_transaction_fees
+          type: object[]
+          required: false
+          description: frozen fees
+          x-description-zh: 冻结费用
+          x-description-zh-hk: 凍結費用
+        - name: └ ∟ frozen_transaction_fee
+          type: string
+          required: false
+          description: frozen amount
+          x-description-zh: 费用金额
+          x-description-zh-hk: 費用金额
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  list:
+                    - total_cash: '1759070010.72'
+                      max_finance_amount: '977582000'
+                      remaining_finance_amount: '0'
+                      risk_level: '1'
+                      margin_call: '2598051051.50'
+                      currency: HKD
+                      net_assets: '24145.90'
+                      init_margin: '1540.09'
+                      maintenance_margin: '1540.09'
+                      buy_power: '1759070.12'
+                      cash_infos:
+                        - withdraw_cash: '97592.30'
+                          available_cash: '195902464.37'
+                          frozen_cash: '11579339.13'
+                          settling_cash: '207288537.81'
+                          currency: HKD
+                        - withdraw_cash: '199893416.74'
+                          available_cash: '199893416.74'
+                          frozen_cash: '28723.76'
+                          settling_cash: '-276806.51'
+                          currency: USD
+                      frozen_transaction_fees:
+                        - currency: USD
+                          frozen_transaction_fee: '6.51'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/asset/cashflow:
+    get:
+      operationId: cash_flow
+      summary: Cash Flow
+      x-summary-zh: 资金流水
+      x-summary-zh-hk: 資金流水
+      description: |
+        The API is used to obtain capital inflow/outflow direction, capital type, capital amount, occurrence time,
+        associated stock code and capital flow description information.
+      x-description-zh: |
+        该接口用于获取资金流入/流出方向、资金类别、资金金额、发生时间、关联股票代码和资金流水说明信息。
+      x-description-zh-hk: |
+        該接口用於獲取資金流入/流出方向、資金類別、資金金額、發生時間、關聯股票代碼和資金流水說明信息。
+      tags:
+        - Assets
+      x-parameters:
+        - name: start_time
+          in: query
+          type: string
+          required: true
+          description: start time timestamp, in `seconds`, E.g:`1650037563`
+          x-description-zh: 开始时间，时间戳，以 `秒` 为单位，例如：`1650037563`
+          x-description-zh-hk: 开始时间，时间戳，以 `秒` 为单位，例如：`1650037563`
+        - name: end_time
+          in: query
+          type: string
+          required: true
+          description: end time timestamp, in `seconds`, E.g:`1650747581`
+          x-description-zh: 结束时间，时间戳，以 `秒` 为单位，例如：`1650747581`
+          x-description-zh-hk: 结束时间，时间戳，以 `秒` 为单位，例如：`1650747581`
+        - name: business_type
+          in: query
+          type: string
+          required: false
+          description: Balance type<br/><br/> <b>Option:</b> <br/>`1` - cash <br/>`2` - stock<br/> `3` - fund
+          x-description-zh: 资金类型 <br/><br/> <b>可选值:</b> <br/>`1` - 现金 <br/>`2` - 股票<br/> `3` - 基金
+          x-description-zh-hk: 资金类型 <br/><br/> <b>可选值:</b> <br/>`1` - 现金 <br/>`2` - 股票<br/> `3` - 基金
+        - name: symbol
+          in: query
+          type: string
+          required: false
+          description: Target code, E.g:`AAPL.US`
+          x-description-zh: 标的代码，例如：`AAPL.US`
+          x-description-zh-hk: 标的代码，例如：`AAPL.US`
+        - name: page
+          in: query
+          type: string
+          required: false
+          description: start page <br/><br/><b>Default value:</b> `1` <br/><b>Data validation rules:</b><br/> <b>Ranges:</b> `>=1`
+          x-description-zh: 起始页 <br/><br/><b>默认值:</b> `1` <br/><b>数据校验规则:</b><br/> <b>取值范围:</b> `>=1`
+          x-description-zh-hk: 起始页 <br/><br/><b>默认值:</b> `1` <br/><b>数据校验规则:</b><br/> <b>取值范围:</b> `>=1`
+        - name: size
+          in: query
+          type: string
+          required: false
+          description: page size <br/><br/><b>Default value:</b> `50` <br/><b>Data validation rules:</b> `1~10000`
+          x-description-zh: 每页大小 <br/><br/><b>默认值:</b> `50` <br/><b>数据校验规则:</b> `1~10000`
+          x-description-zh-hk: 每页大小 <br/><br/><b>默认值:</b> `50` <br/><b>数据校验规则:</b> `1~10000`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge cash-flow
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/asset/cashflow?start_time=<start_time>&end_time=<end_time>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/asset/cashflow",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"start_time": "<start_time>", "end_time": "<end_time>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/asset/cashflow",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"start_time": "<start_time>", "end_time": "<end_time>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/asset/cashflow")
+            url.searchParams.set("start_time", "<start_time>")
+            url.searchParams.set("end_time", "<end_time>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/asset/cashflow?start_time=<start_time>&end_time=<end_time>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/asset/cashflow")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("start_time", "<start_time>"), ("end_time", "<end_time>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/asset/cashflow?start_time=<start_time>&end_time=<end_time>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/asset/cashflow?start_time=<start_time>&end_time=<end_time>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: false
+          description: Cash flow info
+          x-description-zh: 流水信息
+          x-description-zh-hk: 流水信息
+        - name: └ transaction_flow_name
+          type: string
+          required: true
+          description: Cash flow name
+          x-description-zh: 流水名称
+          x-description-zh-hk: 流水名稱
+        - name: └ direction
+          type: string
+          required: true
+          description: outflow direction <br/><br/><b>Option:</b> <br/>`1` - outflow <br/> `2` - inflow
+          x-description-zh: 流出方向 <br/><br/><b>可选值:</b> <br/>`1` - 流出 <br/> `2` - 流入
+          x-description-zh-hk: 流出方向 <br/><br/><b>可選值:</b> <br/>`1` - 流出 <br/> `2` - 流入
+        - name: └ business_type
+          type: string
+          required: true
+          description: Funding Category <br/><br/><b>Option:</b> <br/>`1` - cash <br/> `2` - stock <br/> `3` - fund
+          x-description-zh: 资金类别 <br/><br/><b>可选值:</b> <br/>`1` - 现金 <br/> `2` - 股票 <br/> `3` - 基金
+          x-description-zh-hk: 资金类别 <br/><br/><b>可選值:</b> <br/>`1` - 現金 <br/> `2` - 股票 <br/> `3` - 基金
+        - name: └ balance
+          type: string
+          required: true
+          description: Cash amount
+          x-description-zh: 资金金额
+          x-description-zh-hk: 資金金額
+        - name: └ currency
+          type: string
+          required: true
+          description: Cash Currency
+          x-description-zh: 资金币种
+          x-description-zh-hk: 資金幣種
+        - name: └ business_time
+          type: string
+          required: true
+          description: business time
+          x-description-zh: 业务时间
+          x-description-zh-hk: 業務時間
+        - name: └ symbol
+          type: string
+          required: false
+          description: associated Stock code information
+          x-description-zh: 关联股票代码信息
+          x-description-zh-hk: 關聯股票代碼信息
+        - name: └ description
+          type: string
+          required: false
+          description: Cash flow description
+          x-description-zh: 资金流水说明
+          x-description-zh-hk: 資金流水說明
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  list:
+                    - transaction_flow_name: BuyContract-Stocks
+                      direction: 1
+                      balance: '-248.60'
+                      currency: USD
+                      business_time: '1621507957'
+                      symbol: AAPL.US
+                      description: AAPL
+                    - transaction_flow_name: BuyContract-Stocks
+                      direction: 1
+                      balance: '-125.16'
+                      currency: USD
+                      business_time: '1621504824'
+                      symbol: AAPL.US
+                      description: AAPL
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/asset/fund:
+    get:
+      operationId: fund_positions
+      summary: Fund Positions
+      x-summary-zh: 基金持仓
+      x-summary-zh-hk: 基金持倉
+      description: |
+        The API is used to obtain fund position information including account, fund code, holding share, cost net worth,
+        current net worth, and currency.
+      x-description-zh: |
+        该接口用于获取包括账户、基金代码、持有份额、成本净值、当前净值、币种在内的基金持仓信息。
+      x-description-zh-hk: |
+        該接口用於獲取包括賬戶、基金代碼、持有份額、成本淨值、當前淨值、幣種在內的基金持倉信息。
+      tags:
+        - Assets
+      x-parameters:
+        - name: symbol
+          in: query
+          type: array
+          required: false
+          description: Fund code, in `ISIN` format, E.g:`HK0000676327` <a href="https://en.wikipedia.org/wiki/International_Securities_Identification_Number">ISIN explain</a>
+          x-description-zh: 基金代码，使用 `ISIN` 格式，例如：`HK0000676327` <a href="https://en.wikipedia.org/wiki/International_Securities_Identification_Number">ISIN 解释</a>
+          x-description-zh-hk: 基金代碼，使用 `ISIN` 格式，例如：`HK0000676327` <a href="https://en.wikipedia.org/wiki/International_Securities_Identification_Number">ISIN 解釋</a>
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge fund-positions
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/asset/fund' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/asset/fund",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/asset/fund",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/asset/fund", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/asset/fund"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/asset/fund")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/asset/fund");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/asset/fund\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: false
+          description: stock holding information
+          x-description-zh: 股票持仓信息
+          x-description-zh-hk: 股票持倉信息
+        - name: └ account_channel
+          type: string
+          required: true
+          description: account type
+          x-description-zh: 账户类型
+          x-description-zh-hk: 賬戶類型
+        - name: └ fund_info
+          type: object[]
+          required: false
+          description: Fund Details
+          x-description-zh: 基金详情
+          x-description-zh-hk: 基金詳情
+        - name: └ ∟ symbol
+          type: string
+          required: true
+          description: Fund ISIN code
+          x-description-zh: 基金 ISIN 代码
+          x-description-zh-hk: 基金 ISIN 代碼
+        - name: └ ∟ current_net_asset_value
+          type: string
+          required: true
+          description: current Equity
+          x-description-zh: 当前净值
+          x-description-zh-hk: 當前淨值
+        - name: └ ∟ net_asset_value_day
+          type: string
+          required: true
+          description: current Equity time
+          x-description-zh: 当前净值时间
+          x-description-zh-hk: 當前淨值時間
+        - name: └ ∟ symbol_name
+          type: string
+          required: true
+          description: Fund name
+          x-description-zh: 基金名称
+          x-description-zh-hk: 基金名稱
+        - name: └ ∟ currency
+          type: string
+          required: true
+          description: Currency
+          x-description-zh: 币种
+          x-description-zh-hk: 幣種
+        - name: └ ∟ cost_net_asset_value
+          type: string
+          required: true
+          description: Net Cost
+          x-description-zh: 成本净值
+          x-description-zh-hk: 成本淨值
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  list:
+                    - account_channel: lb
+                      fund_info:
+                        - symbol: HK0000447943
+                          symbol_name: GAOTENG EMERGING MARKETS PLUS  LONG/SHORT FIXED INCOME ALPHA FUND
+                          currency: USD
+                          holding_units: '5.000'
+                          current_net_asset_value: '0'
+                          cost_net_asset_value: '0.00'
+                          net_asset_value_day: '1649865600'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/asset/stock:
+    get:
+      operationId: stock_positions
+      summary: Stock Positions
+      x-summary-zh: 股票持仓
+      x-summary-zh-hk: 股票持倉
+      description: |
+        The API is used to obtain stock position information including account, stock code, number of shares held,
+        number of available shares, average position price (calculated according to account settings), and currency.
+      x-description-zh: |
+        该接口用于获取包括账户、股票代码、持仓股数、可用股数、持仓均价（按账户设置计算均价方式）、币种在内的股票持仓信息。
+      x-description-zh-hk: |
+        該接口用於獲取包括賬戶、股票代碼、持倉股數、可用股數、持倉均價（按賬戶設置計算均價方式）、幣種在內的股票持倉信息。
+      tags:
+        - Assets
+      x-parameters:
+        - name: symbol
+          in: query
+          type: array
+          required: false
+          description: Stock code, use `ticker.region` format, E.g:`AAPL.US`
+          x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge positions
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/asset/stock' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/asset/stock",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/asset/stock",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/asset/stock", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/asset/stock"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/asset/stock")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/asset/stock");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/asset/stock\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: false
+          description: Stock holding information
+          x-description-zh: 股票持仓信息
+          x-description-zh-hk: 股票持倉信息
+        - name: └ account_channel
+          type: string
+          required: true
+          description: Account type
+          x-description-zh: 账户类型
+          x-description-zh-hk: 賬戶類型
+        - name: └ stock_info
+          type: object[]
+          required: false
+          description: Stock list
+          x-description-zh: 股票列表
+          x-description-zh-hk: 股票列表
+        - name: └ ∟ symbol
+          type: string
+          required: true
+          description: Stock code
+          x-description-zh: 股票代码
+          x-description-zh-hk: 股票代碼
+        - name: └ ∟ symbol_name
+          type: string
+          required: true
+          description: Stock name
+          x-description-zh: 股票名称
+          x-description-zh-hk: 股票名稱
+        - name: └ ∟ quantity
+          type: string
+          required: true
+          description: The number of holdings
+          x-description-zh: 持仓股数
+          x-description-zh-hk: 持倉股數
+        - name: └ ∟ available_quantity
+          type: string
+          required: false
+          description: Available quantity
+          x-description-zh: 可用股数
+          x-description-zh-hk: 可用股數
+        - name: └ ∟ currency
+          type: string
+          required: true
+          description: Currency
+          x-description-zh: 币种
+          x-description-zh-hk: 幣種
+        - name: └ ∟ market
+          type: string
+          required: true
+          description: market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: └ ∟ cost_price
+          type: string
+          required: true
+          description: Cost Price(According to the client's choice of average purchase or diluted cost)
+          x-description-zh: 成本价格 (具体根据客户端选择平均买入还是摊薄成本)
+          x-description-zh-hk: 成本價格 (具體根據客戶端選擇平均買入還是攤薄成本)
+        - name: └ ∟ init_quantity
+          type: string
+          required: false
+          description: Initial position before market opening
+          x-description-zh: 开盘前初始持仓
+          x-description-zh-hk: 開盤前初始持倉
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  list:
+                    - account_channel: lb
+                      stock_info:
+                        - symbol: 700.HK
+                          symbol_name: TENCENT
+                          currency: HKD
+                          quantity: '650'
+                          market: HK
+                          available_quantity: '-450'
+                          cost_price: '457.53'
+                          init_quantity: '214'
+                        - symbol: 9991.HK
+                          symbol_name: BAOZUN-SW
+                          currency: HKD
+                          market: HK
+                          quantity: '200'
+                          available_quantity: '0'
+                          cost_price: '32.25'
+                          init_quantity: '214'
+                        - symbol: TCEHY.US
+                          symbol_name: Tencent (ADR)
+                          currency: USD
+                          market: US
+                          quantity: '10'
+                          available_quantity: '10'
+                          init_quantity: '18'
+                        - symbol: 2628.HK
+                          symbol_name: CHINA LIFE
+                          currency: HKD
+                          market: HK
+                          quantity: '9000'
+                          available_quantity: '0'
+                          init_quantity: '8000'
+                        - symbol: 5.HK
+                          symbol_name: HSBC HOLDINGS
+                          currency: HKD
+                          market: HK
+                          quantity: '2400'
+                          available_quantity: '2000'
+                          init_quantity: '2000'
+                        - symbol: BABA.US
+                          symbol_name: Alibaba
+                          currency: USD
+                          market: US
+                          quantity: '2000209'
+                          available_quantity: '2000209'
+                          init_quantity: '214'
+                        - symbol: 2.HK
+                          symbol_name: CLP HOLDINGS
+                          currency: HKD
+                          market: HK
+                          quantity: '2000'
+                          available_quantity: '2000'
+                          init_quantity: '2000'
+                        - symbol: NOK.US
+                          symbol_name: Nokia
+                          currency: USD
+                          market: US
+                          quantity: '1'
+                          available_quantity: '0'
+                          init_quantity: '1'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/asset/exchange_rates:
+    get:
+      operationId: exchange_rate
+      summary: Exchange Rates
+      x-summary-zh: 汇率
+      x-summary-zh-hk: 匯率
+      description: |
+        Get current foreign exchange rates for all currency pairs used in your account.
+      x-description-zh: |
+        获取账户中所有货币对的当前外汇汇率。
+      x-description-zh-hk: |
+        獲取賬戶中所有貨幣對的當前外匯匯率。
+      tags:
+        - Assets
+      x-parameters:
+        - name: base
+          in: query
+          type: string
+          required: false
+          description: Base currency, e.g. `USD`. Omit for all pairs.
+          x-description-zh: 基础货币，例如 `USD`，不传则返回所有货币对
+          x-description-zh-hk: 基礎貨幣，例如 `USD`，不傳則返回所有貨幣對
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge exchange-rate
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/asset/exchange_rates' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/asset/exchange_rates",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/asset/exchange_rates",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/asset/exchange_rates", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/asset/exchange_rates"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/asset/exchange_rates")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/asset/exchange_rates");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/asset/exchange_rates\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: exchanges
+          type: object[]
+          required: true
+          description: List of exchange rates
+          x-description-zh: 汇率列表，
+          x-description-zh-hk: 匯率列表，
+        - name: └ base_currency
+          type: string
+          required: true
+          description: Base currency
+          x-description-zh: 基准货币
+          x-description-zh-hk: 基準貨幣
+        - name: └ other_currency
+          type: string
+          required: true
+          description: Quote currency
+          x-description-zh: 报价货币
+          x-description-zh-hk: 報價貨幣
+        - name: └ bid_rate
+          type: number
+          required: false
+          description: Bid rate
+          x-description-zh: 买入汇率
+          x-description-zh-hk: 買入匯率
+        - name: └ offer_rate
+          type: number
+          required: false
+          description: Offer rate
+          x-description-zh: 卖出汇率
+          x-description-zh-hk: 賣出匯率
+        - name: └ average_rate
+          type: number
+          required: false
+          description: Average exchange rate
+          x-description-zh: 平均汇率
+          x-description-zh-hk: 平均匯率
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  exchanges:
+                    - base_currency: USD
+                      other_currency: HKD
+                      bid_rate: 7.785
+                      offer_rate: 7.795
+                      average_rate: 7.79
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/risk/margin-ratio:
+    get:
+      operationId: margin_ratio
+      summary: Margin Ratio
+      x-summary-zh: 保证金比例
+      x-summary-zh-hk: 保證金比例
+      description: |
+        This API is used to obtain the initial margin ratio, maintain the margin ratio and strengthen the
+        margin ratio of stocks.
+      x-description-zh: |
+        该接口用于获取股票初始保证金比例、维持保证金比例、强平保证金比例。
+      x-description-zh-hk: |
+        該接口用於獲取股票初始保證金比例、維持保證金比例、強平保證金比例。
+      tags:
+        - Assets
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: true
+          description: 'Stock symbol, using the format `ticker.region`, for example: `AAPL.US`'
+          x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge margin-ratio TSLA.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/risk/margin-ratio?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/risk/margin-ratio",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/risk/margin-ratio",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/risk/margin-ratio")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/risk/margin-ratio?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/risk/margin-ratio")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/risk/margin-ratio?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/risk/margin-ratio?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: im_factor
+          type: string
+          required: true
+          description: Initial margin ratio
+          x-description-zh: 初始保证金比例
+          x-description-zh-hk: 初始保證金比例
+        - name: mm_factor
+          type: string
+          required: true
+          description: Maintain the initial margin ratio
+          x-description-zh: 维持保证金比例
+          x-description-zh-hk: 維持保證金比例
+        - name: fm_factor
+          type: string
+          required: true
+          description: Forced close-out margin ratio
+          x-description-zh: 强平保证金比例
+          x-description-zh-hk: 強平保證金比例
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  im_factor: '0.1'
+                  mm_factor: '0.1'
+                  fm_factor: '0.1'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/us/assets/overview:
+    get:
+      operationId: us_asset_overview
+      summary: US Asset Overview
+      x-summary-zh: 美股资产概览
+      x-summary-zh-hk: 美股資產概覽
+      description: |
+        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+
+        Get an overview of US account assets — buying power, cash, stocks, options, and crypto.
+      x-description-zh: |
+        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+
+        获取美股账户资产概览——买入力、现金、股票、期权和加密货币。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+
+        獲取美股賬戶資產概覽——買入力、現金、股票、期權和加密貨幣。
+      tags:
+        - Assets
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # US account asset overview
+            longbridge positions
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/us/assets/overview' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/us/assets/overview",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/us/assets/overview",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/us/assets/overview", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/overview"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/us/assets/overview")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/overview");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/us/assets/overview\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: account_type
+          type: string
+          required: true
+          description: Account type identifier
+          x-description-zh: 账户类型标识
+          x-description-zh-hk: 賬戶類型標識
+        - name: asset_timestamp
+          type: string
+          required: true
+          description: Snapshot time (Unix seconds)
+          x-description-zh: 资产数据快照时间（Unix 秒）
+          x-description-zh-hk: 資產數據快照時間（Unix 秒）
+        - name: cash_buy_power
+          type: string
+          required: true
+          description: Available buying power (cash)
+          x-description-zh: 可用买入力（现金）
+          x-description-zh-hk: 可用買入力（现金）
+        - name: overnight_buy_power
+          type: string
+          required: true
+          description: Overnight buying power
+          x-description-zh: 隔夜买入力
+          x-description-zh-hk: 隔夜買入力
+        - name: currency
+          type: string
+          required: true
+          description: Base currency
+          x-description-zh: 基础货币
+          x-description-zh-hk: 基礎貨幣
+        - name: cash_list
+          type: USCashEntry[]
+          required: false
+          description: Cash balances by currency
+          x-description-zh: 按货币分列的现金余额
+          x-description-zh-hk: 按貨幣分列的現金餘額
+        - name: stock_list
+          type: USStockEntry[]
+          required: false
+          description: Stock positions
+          x-description-zh: 股票持仓
+          x-description-zh-hk: 股票持倉
+        - name: option_list
+          type: object[]
+          required: false
+          description: Option positions
+          x-description-zh: 期权持仓
+          x-description-zh-hk: 期權持倉
+        - name: crypto_list
+          type: USCryptoEntry[]
+          required: false
+          description: Crypto positions
+          x-description-zh: 加密货币持仓
+          x-description-zh-hk: 加密貨幣持倉
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                account_type: US
+                asset_timestamp: 1751866334
+                cash_buy_power: '12500.00'
+                overnight_buy_power: '10000.00'
+                currency: USD
+                cash_list:
+                  - currency: USD
+                    total_cash: '12500.00'
+                    settled_cash: '12000.00'
+                    total_amount: '12500.00'
+                    outstanding: '500.00'
+                    frozen_buy_cash: '0.00'
+                stock_list:
+                  - symbol: AAPL.US
+                    quantity: '10'
+                    currency: USD
+                    average_cost: '180.00'
+                    last_done: '185.00'
+                    prev_close: '183.00'
+                    asset_type: stock
+                    trade_status: Normal
+                crypto_list:
+                  - symbol: BTCUSD.BKKT
+                    average_cost: '50000.00'
+                    currency: USD
+                    asset_type: crypto
+                    industry_name: Cryptocurrency
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/us/assets/pl/realized:
+    get:
+      operationId: us_realized_pl
+      summary: US Realized P&L
+      x-summary-zh: 美股已实现盈亏
+      x-summary-zh-hk: 美股已實現盈虧
+      description: |
+        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+
+        Get realized profit and loss for a US account, broken down by asset category.
+      x-description-zh: |
+        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+
+        获取美股账户已实现盈亏，按资产类别（股票/期权/加密货币）分组。
+      x-description-zh-hk: |
+        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+
+        獲取美股賬戶已實現盈虧，按資產類別（股票/期權/加密貨幣）分組。
+      tags:
+        - Assets
+      x-parameters:
+        - name: currency
+          in: query
+          type: string
+          required: true
+          description: Settlement currency, e.g. `USD`
+          x-description-zh: 结算货币，例如 `USD`
+          x-description-zh-hk: 結算貨幣，例如 `USD`
+        - name: category
+          in: query
+          type: string
+          required: false
+          description: 'Asset category: `ALL` \'
+          x-description-zh: 资产类别：`ALL` \
+          x-description-zh-hk: 資產類別：`ALL` \
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # US realized P&L
+            longbridge profit-analysis realized
+            # Filter by stock
+            longbridge profit-analysis realized --category stock
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/us/assets/pl/realized?currency=<currency>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/us/assets/pl/realized",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"currency": "<currency>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/us/assets/pl/realized",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"currency": "<currency>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/us/assets/pl/realized")
+            url.searchParams.set("currency", "<currency>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/pl/realized?currency=<currency>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/us/assets/pl/realized")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("currency", "<currency>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/pl/realized?currency=<currency>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/us/assets/pl/realized?currency=<currency>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: realized_pl_list
+          type: USRealizedPLEntry[]
+          required: true
+          description: P&L breakdown by asset category
+          x-description-zh: 按资产类别分列的盈亏明细
+          x-description-zh-hk: 按資產類別分列的盈虧明細
+        - name: category
+          type: int
+          required: true
+          description: 'Asset category: `1`=stock, `2`=option, `3`=crypto'
+          x-description-zh: 资产类别：`1`=股票，`2`=期权，`3`=加密货币
+          x-description-zh-hk: 資產類別：`1`=股票，`2`=期權，`3`=加密貨幣
+        - name: currency
+          type: string
+          required: true
+          description: Currency code (e.g. `USD`)
+          x-description-zh: 货币代码，如 `USD`
+          x-description-zh-hk: 貨幣代碼，如 `USD`
+        - name: metrics
+          type: USRealizedPLMetric[]
+          required: true
+          description: P&L metrics by time period
+          x-description-zh: 按时期分列的盈亏指标
+          x-description-zh-hk: 按時期分列的盈虧指標
+        - name: amount
+          type: string
+          required: true
+          description: Realized P&L amount
+          x-description-zh: 已实现盈亏金额
+          x-description-zh-hk: 已實現盈虧金額
+        - name: period
+          type: int
+          required: true
+          description: Time period
+          x-description-zh: 时间周期
+          x-description-zh-hk: 時間週期
+        - name: rate
+          type: string
+          required: true
+          description: Return rate (%)
+          x-description-zh: 收益率（%）
+          x-description-zh-hk: 收益率（%）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                realized_pl_list:
+                  - category: 1
+                    currency: USD
+                    metrics:
+                      - amount: '1250.50'
+                        period: 1
+                        rate: '0.0312'
+                  - category: 3
+                    currency: USD
+                    metrics:
+                      - amount: '-85.20'
+                        period: 1
+                        rate: '-0.0215'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/portfolio/profit-analysis-summary:
+    get:
+      operationId: profit_analysis_summary
+      summary: Profit Analysis Summary
+      x-summary-zh: 盈亏分析汇总
+      x-summary-zh-hk: 盈虧分析匯總
+      description: |
+        Get a P&L summary for the account including total asset, total P&L, and yield metrics.
+      x-description-zh: |
+        获取账户盈亏汇总，包含总资产、总盈亏和收益率指标。
+      x-description-zh-hk: |
+        獲取賬戶盈虧匯總，包含總資產、總盈虧和收益率指標。
+      tags:
+        - Assets
+      x-parameters:
+        - name: start_date
+          in: query
+          type: string
+          required: false
+          description: Analysis start date in `YYYY-MM-DD` format
+          x-description-zh: 分析开始日期，格式 `YYYY-MM-DD`
+          x-description-zh-hk: 分析開始日期，格式 `YYYY-MM-DD`
+        - name: end_date
+          in: query
+          type: string
+          required: false
+          description: Analysis end date in `YYYY-MM-DD` format
+          x-description-zh: 分析结束日期，格式 `YYYY-MM-DD`
+          x-description-zh-hk: 分析結束日期，格式 `YYYY-MM-DD`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge profit-analysis
+            longbridge profit-analysis --start 2026-01-01
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/portfolio/profit-analysis-summary\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: summary
+          type: object
+          required: true
+          description: Overall summary
+          x-description-zh: 总体汇总
+          x-description-zh-hk: 總體匯總
+        - name: sublist
+          type: object
+          required: false
+          description: Per-position breakdown
+          x-description-zh: 逐仓位明细
+          x-description-zh-hk: 逐倉位明細
+        - name: currency
+          type: string
+          required: false
+          description: Currency
+          x-description-zh: 货币
+          x-description-zh-hk: 貨幣
+        - name: sum_profit
+          type: string
+          required: false
+          description: Total profit/loss
+          x-description-zh: 总盈亏
+          x-description-zh-hk: 總盈虧
+        - name: sum_profit_rate
+          type: string
+          required: false
+          description: Total profit/loss rate
+          x-description-zh: 总盈亏率
+          x-description-zh-hk: 總盈虧率
+        - name: invest_amount
+          type: string
+          required: false
+          description: Total invested amount
+          x-description-zh: 总投入金额
+          x-description-zh-hk: 總投入金額
+        - name: current_total_asset
+          type: string
+          required: false
+          description: Current total asset value
+          x-description-zh: 当前总资产
+          x-description-zh-hk: 當前總資產
+        - name: initial_asset_value
+          type: string
+          required: false
+          description: Initial asset value
+          x-description-zh: 初始资产价值
+          x-description-zh-hk: 初始資產價值
+        - name: ending_asset_value
+          type: string
+          required: false
+          description: Ending asset value
+          x-description-zh: 期末资产价值
+          x-description-zh-hk: 期末資產價值
+        - name: is_traded
+          type: boolean
+          required: false
+          description: Whether any trades exist
+          x-description-zh: 是否有交易记录
+          x-description-zh-hk: 是否有交易紀錄
+        - name: start_date
+          type: string
+          required: false
+          description: Period start date
+          x-description-zh: 统计开始日期
+          x-description-zh-hk: 統計開始日期
+        - name: start_time
+          type: string
+          required: false
+          description: Period start timestamp
+          x-description-zh: 统计开始时间戳
+          x-description-zh-hk: 統計開始時間戳
+        - name: end_date
+          type: string
+          required: false
+          description: Period end date
+          x-description-zh: 统计结束日期
+          x-description-zh-hk: 統計結束日期
+        - name: end_time
+          type: string
+          required: false
+          description: Period end timestamp
+          x-description-zh: 统计结束时间戳
+          x-description-zh-hk: 統計結束時間戳
+        - name: profits
+          type: object
+          required: false
+          description: Profit breakdown by category
+          x-description-zh: 按类型分解的盈亏
+          x-description-zh-hk: 按類型分解的盈虧
+        - name: profits.stock
+          type: string
+          required: false
+          description: Stock profit
+          x-description-zh: 股票盈亏
+          x-description-zh-hk: 股票盈虧
+        - name: profits.crypto
+          type: string
+          required: false
+          description: Crypto profit
+          x-description-zh: 加密货币盈亏
+          x-description-zh-hk: 加密貨幣盈虧
+        - name: profits.fund
+          type: string
+          required: false
+          description: Fund profit
+          x-description-zh: 基金盈亏
+          x-description-zh-hk: 基金盈虧
+        - name: profits.ipo
+          type: string
+          required: false
+          description: IPO profit
+          x-description-zh: 打新盈亏
+          x-description-zh-hk: 打新盈虧
+        - name: profits.mmf
+          type: string
+          required: false
+          description: Money market fund profit
+          x-description-zh: 货币基金盈亏
+          x-description-zh-hk: 貨幣基金盈虧
+        - name: profits.other
+          type: string
+          required: false
+          description: Other profit
+          x-description-zh: 其他盈亏
+          x-description-zh-hk: 其他盈虧
+        - name: profits.cumulative_transaction_amount
+          type: string
+          required: false
+          description: Cumulative transaction amount
+          x-description-zh: 累计交易金额
+          x-description-zh-hk: 累計交易金額
+        - name: start
+          type: string
+          required: false
+          description: Period start
+          x-description-zh: 统计期开始
+          x-description-zh-hk: 統計期開始
+        - name: end
+          type: string
+          required: false
+          description: Period end
+          x-description-zh: 统计期结束
+          x-description-zh-hk: 統計期結束
+        - name: updated_at
+          type: string
+          required: false
+          description: Last update timestamp
+          x-description-zh: 最后更新时间戳
+          x-description-zh-hk: 最後更新時間戳
+        - name: updated_date
+          type: string
+          required: false
+          description: Last update date
+          x-description-zh: 最后更新日期
+          x-description-zh-hk: 最後更新日期
+        - name: items
+          type: object[]
+          required: false
+          description: Per-position P&L items, see [ProfitAnalysisItem](#ProfitAnalysisItem)
+          x-description-zh: 逐仓位盈亏列表，见 [ProfitAnalysisItem](#ProfitAnalysisItem)
+          x-description-zh-hk: 逐倉位盈虧列表，見 [ProfitAnalysisItem](#ProfitAnalysisItem)
+        - name: symbol
+          type: string
+          required: false
+          description: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: market
+          type: string
+          required: false
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: profit
+          type: string
+          required: false
+          description: Profit/loss
+          x-description-zh: 盈亏
+          x-description-zh-hk: 盈虧
+        - name: profit_rate
+          type: string
+          required: false
+          description: Profit/loss rate
+          x-description-zh: 盈亏率
+          x-description-zh-hk: 盈虧率
+        - name: holding_period
+          type: string
+          required: false
+          description: Holding period (days)
+          x-description-zh: 持仓天数
+          x-description-zh-hk: 持倉天數
+        - name: clearance_times
+          type: integer
+          required: false
+          description: Number of clearances
+          x-description-zh: 清仓次数
+          x-description-zh-hk: 清倉次數
+        - name: is_holding
+          type: boolean
+          required: false
+          description: Whether currently holding
+          x-description-zh: 是否持有中
+          x-description-zh-hk: 是否持有中
+        - name: item_type
+          type: string
+          required: false
+          description: 'Asset type: `Stock`, `Fund`, `Crypto`, etc.'
+          x-description-zh: 资产类型：`Stock`、`Fund`、`Crypto` 等
+          x-description-zh-hk: 資產類型：`Stock`、`Fund`、`Crypto` 等
+        - name: isin
+          type: string
+          required: false
+          description: ISIN code
+          x-description-zh: ISIN 代码
+          x-description-zh-hk: ISIN 代碼
+        - name: security_code
+          type: string
+          required: false
+          description: Security code
+          x-description-zh: 证券代码（短）
+          x-description-zh-hk: 證券代碼（短）
+        - name: underlying_profit
+          type: string
+          required: false
+          description: Underlying stock profit
+          x-description-zh: 正股盈亏
+          x-description-zh-hk: 正股盈虧
+        - name: derivatives_profit
+          type: string
+          required: false
+          description: Derivatives profit
+          x-description-zh: 衍生品盈亏
+          x-description-zh-hk: 衍生品盈虧
+        - name: order_profit
+          type: string
+          required: false
+          description: Order profit
+          x-description-zh: 订单盈亏
+          x-description-zh-hk: 訂單盈虧
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  summary:
+                    currency: USD
+                    sum_profit: '62905.97'
+                    sum_profit_rate: '0.6128'
+                    invest_amount: '102659.74'
+                    current_total_asset: '165565.71'
+                    initial_asset_value: '0.00'
+                    ending_asset_value: '165565.71'
+                    is_traded: true
+                    start_date: '2025-10-17'
+                    start_time: '1760659200'
+                    end_date: '2026-05-14'
+                    end_time: '1778731947'
+                    profits:
+                      stock: '66370.84'
+                      crypto: '0'
+                      fund: null
+                      ipo: null
+                      mmf: null
+                      other: null
+                      cumulative_transaction_amount: '1244920.28'
+                  sublist:
+                    start: '2025-10-17'
+                    start_date: '2025-10-17'
+                    end: '2026-05-14'
+                    end_date: '2026-05-14'
+                    updated_at: '1778731947'
+                    updated_date: '2026-05-14'
+                    items:
+                      - symbol: AAPL.US
+                        name: Apple
+                        market: US
+                        currency: USD
+                        profit: '100.00'
+                        profit_rate: '0.05'
+                        holding_period: '180'
+                        clearance_times: 0
+                        is_holding: true
+                        item_type: Stock
+                        isin: ''
+                        security_code: AAPL
+                        underlying_profit: '100.00'
+                        derivatives_profit: '0.00'
+                        order_profit: null
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/portfolio/profit-analysis/by-market:
+    get:
+      operationId: profit_analysis_by_market
+      summary: Profit Analysis by Market
+      x-summary-zh: 按市场盈亏分析
+      x-summary-zh-hk: 按市場盈虧分析
+      description: |
+        Get P&L breakdown grouped by market (US, HK, CN, SG).
+      x-description-zh: |
+        获取按市场分组的盈亏分析（美股、港股、A 股、新加坡股）。
+      x-description-zh-hk: |
+        獲取按市場分組的盈虧分析（美股、港股、A 股、新加坡股）。
+      tags:
+        - Assets
+      x-parameters:
+        - name: start_date
+          in: query
+          type: string
+          required: false
+          description: Analysis start date in `YYYY-MM-DD` format
+          x-description-zh: 分析开始日期，格式 `YYYY-MM-DD`
+          x-description-zh-hk: 分析開始日期，格式 `YYYY-MM-DD`
+        - name: end_date
+          in: query
+          type: string
+          required: false
+          description: Analysis end date in `YYYY-MM-DD` format
+          x-description-zh: 分析结束日期，格式 `YYYY-MM-DD`
+          x-description-zh-hk: 分析結束日期，格式 `YYYY-MM-DD`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge profit-analysis --format json
+            longbridge profit-analysis --start 2026-01-01
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/portfolio/profit-analysis/by-market\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: has_more
+          type: boolean
+          required: false
+          description: Whether there are more pages
+          x-description-zh: Whether there are more pages
+          x-description-zh-hk: Whether there are more pages
+        - name: profit
+          type: string
+          required: false
+          description: Total profit/loss
+          x-description-zh: Total profit/loss
+          x-description-zh-hk: Total profit/loss
+        - name: stock_items
+          type: object[]
+          required: false
+          description: P&L breakdown by stock
+          x-description-zh: P&L breakdown by stock
+          x-description-zh-hk: P&L breakdown by stock
+        - name: └ code
+          type: string
+          required: false
+          description: Stock code
+          x-description-zh: Stock code
+          x-description-zh-hk: Stock code
+        - name: └ market
+          type: string
+          required: false
+          description: Market code
+          x-description-zh: 市场代码
+          x-description-zh-hk: 市場代碼
+        - name: └ name
+          type: string
+          required: false
+          description: Stock name
+          x-description-zh: Stock name
+          x-description-zh-hk: Stock name
+        - name: └ profit
+          type: string
+          required: false
+          description: Profit/loss for this stock
+          x-description-zh: Profit/loss for this stock
+          x-description-zh-hk: Profit/loss for this stock
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  has_more: false
+                  profit: '-16325.26'
+                  stock_items:
+                    - code: AAPL
+                      market: US
+                      name: Apple
+                      profit: '100.00'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/portfolio/profit-analysis/detail:
+    get:
+      operationId: profit_analysis_detail
+      summary: Profit Analysis Detail
+      x-summary-zh: 盈亏分析明细
+      x-summary-zh-hk: 盈虧分析明細
+      description: |
+        Get detailed P&L for a specific security including transaction flow and cost breakdown.
+      x-description-zh: |
+        获取指定证券的详细盈亏分析，包含交易流水和成本分解。
+      x-description-zh-hk: |
+        獲取指定證券的詳細盈虧分析，包含交易流水和成本分解。
+      tags:
+        - Assets
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: true
+          description: Security symbol, e.g. `AAPL.US`
+          x-description-zh: 证券代码，例如 `AAPL.US`
+          x-description-zh-hk: 證券代碼，例如 `AAPL.US`
+        - name: start
+          in: query
+          type: string
+          required: false
+          description: Start date, `YYYY-MM-DD`
+          x-description-zh: 开始日期，格式 `YYYY-MM-DD`
+          x-description-zh-hk: 開始日期，格式 `YYYY-MM-DD`
+        - name: end
+          in: query
+          type: string
+          required: false
+          description: End date, `YYYY-MM-DD`
+          x-description-zh: 结束日期，格式 `YYYY-MM-DD`
+          x-description-zh-hk: 結束日期，格式 `YYYY-MM-DD`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge profit-analysis detail TSLA.US
+            longbridge profit-analysis detail AAPL.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/portfolio/profit-analysis/detail?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: currency
+          type: string
+          required: false
+          description: Currency
+          x-description-zh: 货币
+          x-description-zh-hk: 貨幣
+        - name: profit
+          type: string
+          required: false
+          description: Total profit/loss
+          x-description-zh: 总盈亏
+          x-description-zh-hk: 總盈虧
+        - name: start
+          type: integer
+          required: false
+          description: Period start
+          x-description-zh: 统计期开始
+          x-description-zh-hk: 統計期開始
+        - name: end
+          type: integer
+          required: false
+          description: Period end
+          x-description-zh: 统计期结束
+          x-description-zh-hk: 統計期結束
+        - name: start_date
+          type: string
+          required: false
+          description: Start date
+          x-description-zh: 开始日期
+          x-description-zh-hk: 開始日期
+        - name: end_date
+          type: string
+          required: false
+          description: End date
+          x-description-zh: 结束日期
+          x-description-zh-hk: 結束日期
+        - name: default_tag
+          type: integer
+          required: false
+          description: Default display tag
+          x-description-zh: 默认显示标签
+          x-description-zh-hk: 默認顯示標簽
+        - name: underlying_details
+          type: object
+          required: false
+          description: Underlying asset P&L breakdown
+          x-description-zh: 正股盈亏明细
+          x-description-zh-hk: 正股盈虧明細
+        - name: updated_at
+          type: string
+          required: false
+          description: Last update timestamp
+          x-description-zh: 最后更新时间
+          x-description-zh-hk: 最後更新時間
+        - name: updated_date
+          type: string
+          required: false
+          description: Last update date
+          x-description-zh: 最后更新日期
+          x-description-zh-hk: 最後更新日期
+        - name: derivative_pnl_details
+          type: object
+          required: false
+          description: Derivatives P&L breakdown
+          x-description-zh: 衍生品盈亏明细
+          x-description-zh-hk: 衍生品盈虧明細
+        - name: holding_value
+          type: string
+          required: false
+          description: Current holding value
+          x-description-zh: 当前持仓市值
+          x-description-zh-hk: 當前持倉市值
+        - name: holding_value_at_beginning
+          type: string
+          required: false
+          description: Holding value at period start
+          x-description-zh: 期初持仓市值
+          x-description-zh-hk: 期初持倉市值
+        - name: holding_value_at_ending
+          type: string
+          required: false
+          description: Holding value at period end
+          x-description-zh: 期末持仓市值
+          x-description-zh-hk: 期末持倉市值
+        - name: long_holding_value
+          type: string
+          required: false
+          description: Long position value
+          x-description-zh: 多头持仓市值
+          x-description-zh-hk: 多頭持倉市值
+        - name: short_holding_value
+          type: string
+          required: false
+          description: Short position value
+          x-description-zh: 空头持仓市值
+          x-description-zh-hk: 空頭持倉市值
+        - name: cumulative_credited_amount
+          type: string
+          required: false
+          description: Cumulative credited amount
+          x-description-zh: 累计入账金额
+          x-description-zh-hk: 累計入賬金額
+        - name: cumulative_debited_amount
+          type: string
+          required: false
+          description: Cumulative debited amount
+          x-description-zh: 累计出账金额
+          x-description-zh-hk: 累計出賬金額
+        - name: cumulative_fee_amount
+          type: string
+          required: false
+          description: Cumulative fee amount
+          x-description-zh: 累计费用金额
+          x-description-zh-hk: 累計費用金額
+        - name: credited_details
+          type: object[]
+          required: false
+          description: Credit transaction details
+          x-description-zh: 入账明细
+          x-description-zh-hk: 入賬明細
+        - name: debited_details
+          type: object[]
+          required: false
+          description: Debit transaction details
+          x-description-zh: 出账明细
+          x-description-zh-hk: 出賬明細
+        - name: fee_details
+          type: object[]
+          required: false
+          description: Fee transaction details
+          x-description-zh: 费用明细
+          x-description-zh-hk: 費用明細
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  name: Apple
+                  currency: USD
+                  profit: '100.00'
+                  start: '1763769600'
+                  end: '1778724973'
+                  start_date: '2025-11-22'
+                  end_date: '2026-05-14'
+                  default_tag: 0
+                  updated_at: '1778724973'
+                  updated_date: '2026-05-14'
+                  underlying_details:
+                    profit: '100.00'
+                    holding_value: '1790.16'
+                    holding_value_at_beginning: null
+                    holding_value_at_ending: '1790.16'
+                    long_holding_value: '1790.16'
+                    short_holding_value: '0.00'
+                    cumulative_credited_amount: '0.00'
+                    cumulative_debited_amount: '0.00'
+                    cumulative_fee_amount: '0.00'
+                    credited_details: []
+                    debited_details: []
+                    fee_details: []
+                  derivative_pnl_details:
+                    profit: '0.00'
+                    holding_value: '0.00'
+                    holding_value_at_beginning: null
+                    holding_value_at_ending: '0.00'
+                    long_holding_value: '0.00'
+                    short_holding_value: '0.00'
+                    cumulative_credited_amount: '0.00'
+                    cumulative_debited_amount: '0.00'
+                    cumulative_fee_amount: '0.00'
+                    credited_details: []
+                    debited_details: []
+                    fee_details: []
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/portfolio/profit-analysis/flows:
+    get:
+      operationId: profit_analysis_flows
+      summary: Profit Analysis Flows
+      x-summary-zh: 盈亏流水
+      x-summary-zh-hk: 盈虧流水
+      description: |
+        Query account cash flow history including deposits, withdrawals, dividends, and settlements.
+      x-description-zh: |
+        查询账户资金流水历史，包含入金、出金、分红和结算等。
+      x-description-zh-hk: |
+        查詢賬戶資金流水歷史，包含入金、出金、股息和結算等。
+      tags:
+        - Assets
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: true
+          description: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: 'Page number (default: 1)'
+          x-description-zh: 页码（默认 1）
+          x-description-zh-hk: 頁碼（預設 1）
+        - name: size
+          in: query
+          type: integer
+          required: false
+          description: 'Page size (default: 20)'
+          x-description-zh: 每页数量（默认 20）
+          x-description-zh-hk: 每頁數量（預設 20）
+        - name: derivative
+          in: query
+          type: boolean
+          required: false
+          description: Include derivative positions
+          x-description-zh: 是否包含衍生品仓位
+          x-description-zh-hk: 是否包含衍生品倉位
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge cash-flow
+            longbridge cash-flow --format json
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/portfolio/profit-analysis/flows?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: flows_list
+          type: object[]
+          required: true
+          description: Paginated list of flow items
+          x-description-zh: 资金流水列表（分页），
+          x-description-zh-hk: 資金流水列表（分頁），
+        - name: └ executed_date
+          type: string
+          required: true
+          description: Execution date (e.g. `2024-01-15`)
+          x-description-zh: 执行日期（如 `2024-01-15`）
+          x-description-zh-hk: 執行日期（如 `2024-01-15`）
+        - name: └ executed_timestamp
+          type: string
+          required: false
+          description: Execution timestamp
+          x-description-zh: 执行时间戳
+          x-description-zh-hk: 執行時間戳
+        - name: └ code
+          type: string
+          required: false
+          description: Security code
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: └ direction
+          type: string
+          required: false
+          description: 'Direction: `In` or `Out`'
+          x-description-zh: 方向：`In`（买入）或 `Out`（卖出）
+          x-description-zh-hk: 方向：`In`（買入）或 `Out`（賣出）
+        - name: └ executed_quantity
+          type: string
+          required: false
+          description: Executed quantity
+          x-description-zh: 成交数量
+          x-description-zh-hk: 成交數量
+        - name: └ executed_price
+          type: string
+          required: false
+          description: Executed price
+          x-description-zh: 成交价格
+          x-description-zh-hk: 成交價格
+        - name: └ executed_cost
+          type: string
+          required: false
+          description: Executed cost
+          x-description-zh: 成交成本
+          x-description-zh-hk: 成交成本
+        - name: └ describe
+          type: string
+          required: false
+          description: Human-readable description
+          x-description-zh: 描述说明
+          x-description-zh-hk: 描述說明
+        - name: has_more
+          type: boolean
+          required: false
+          description: Whether there are more pages
+          x-description-zh: 是否有更多页
+          x-description-zh-hk: 是否有更多頁
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  has_more: false
+                  flows_list:
+                    - code: AAPL
+                      symbol: AAPL.US
+                      direction: In
+                      executed_date: '2025-11-22'
+                      executed_timestamp: '1763769600'
+                      executed_quantity: '10'
+                      executed_price: '180.50'
+                      executed_cost: '1805.00'
+                      describe: Buy AAPL.US
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/trade/order:
     post:
       operationId: submit_order
@@ -10541,266 +13399,6 @@ paths:
                   valuation: 59
                   sentiment: 82
                   updated_at: '1774317902'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/asset/cashflow:
-    get:
-      operationId: list_cash_flow
-      summary: Cash Flow
-      x-summary-zh: 资金流水查询
-      x-summary-zh-hk: 資金流水查詢
-      description: |
-        Query account cash flow history. Covers deposit, withdrawal, dividends, settlement,
-        and other business types. Supports time range and pagination.
-      x-description-zh: 查询账户资金流水历史，涵盖入金、出金、分红、结算等业务类型，支持时间范围筛选和分页。
-      tags:
-        - Portfolio & Cash
-      parameters:
-        - name: start_time
-          in: query
-          required: false
-          description: Query range start time as a Unix timestamp (seconds).
-          schema:
-            type: integer
-            nullable: true
-        - name: end_time
-          in: query
-          required: false
-          description: Query range end time as a Unix timestamp (seconds).
-          schema:
-            type: integer
-            nullable: true
-        - name: business_type
-          in: query
-          required: false
-          description: Business type filter (integer). Omit to return all types.
-          schema:
-            type: integer
-            nullable: true
-        - name: symbol
-          in: query
-          required: false
-          description: Filter by security symbol (e.g. `AAPL.US`). Supports multiple values.
-          schema:
-            type: array
-            nullable: true
-            items:
-              type: string
-        - name: page
-          in: query
-          required: false
-          description: Page number (1-based). Defaults to `1`.
-          schema:
-            type: integer
-            nullable: true
-        - name: size
-          in: query
-          required: false
-          description: Number of records per page. Defaults to `20`.
-          schema:
-            type: integer
-            nullable: true
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge cash-flow
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  list:
-                    - transaction_flow_name: 在途分红
-                      direction: 1
-                      business_type: 0
-                      balance: '13.65'
-                      currency: USD
-                      business_time: '1771826509'
-                      symbol: MSFT.US
-                      description: 'MSFT.US Cash Dividend: 0.91 USD per share(in transit)'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/asset/account:
-    get:
-      operationId: account_cash
-      summary: Account Cash
-      x-summary-zh: 账户现金
-      x-summary-zh-hk: 賬戶現金
-      description: |
-        Query account cash balance, buying power, margin details, and per-currency cash breakdown.
-      x-description-zh: 查询账户现金余额、购买力、保证金详情及各币种资金明细。
-      tags:
-        - Portfolio & Cash
-      parameters:
-        - name: currency
-          in: query
-          required: false
-          description: Filter by currency code (e.g. `USD`, `HKD`). Omit to return all currencies.
-          schema:
-            type: string
-            nullable: true
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge balance
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  list:
-                    - total_cash: '456943.18'
-                      max_finance_amount: '3200000.00'
-                      remaining_finance_amount: '3654289.90'
-                      risk_level: '0'
-                      margin_call: '0'
-                      currency: HKD
-                      net_assets: '962678.11'
-                      init_margin: '141090.88'
-                      maintenance_margin: '123141.91'
-                      buy_power: '821587.22'
-                      frozen_transaction_fees: []
-                      cash_infos:
-                        - currency: USD
-                          withdraw_cash: '-38665.68'
-                          available_cash: '-38665.68'
-                          frozen_cash: '332.19'
-                          settling_cash: '-10108.02'
-                          redemption_cash: '0.00'
-                        - currency: HKD
-                          withdraw_cash: '755592.21'
-                          available_cash: '755592.21'
-                          frozen_cash: '64.69'
-                          settling_cash: '-27760.00'
-                          redemption_cash: '0.00'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/asset/stock:
-    get:
-      operationId: list_stock_positions
-      summary: Stock Position
-      x-summary-zh: 股票持仓
-      x-summary-zh-hk: 股票持倉
-      description: |
-        Query all stock (equity) positions, grouped by sub-account channel.
-      x-description-zh: 查询所有股票（权益类）持仓，按子账户渠道分组返回。
-      tags:
-        - Portfolio & Cash
-      parameters:
-        - name: symbol
-          in: query
-          required: false
-          description: Filter by security symbol (e.g. `AAPL.US`). Supports multiple values. Omit to return all positions.
-          schema:
-            type: array
-            nullable: true
-            items:
-              type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge positions
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  list:
-                    - account_channel: lb_papertrading
-                      stock_info:
-                        - symbol: NVDA.US
-                          symbol_name: 英伟达
-                          currency: USD
-                          quantity: '101'
-                          available_quantity: '101'
-                          cost_price: '50.229'
-                          market: US
-                          init_quantity: '101'
-                        - symbol: AAPL.US
-                          symbol_name: 苹果
-                          currency: USD
-                          quantity: '133'
-                          available_quantity: '133'
-                          cost_price: '211.589'
-                          market: US
-                          init_quantity: '133'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/asset/fund:
-    get:
-      operationId: list_fund_positions
-      summary: Fund Position
-      x-summary-zh: 基金持仓
-      x-summary-zh-hk: 基金持倉
-      description: |
-        Query all public fund positions, grouped by sub-account channel.
-      x-description-zh: 查询所有公募基金持仓，按子账户渠道分组返回。
-      tags:
-        - Portfolio & Cash
-      parameters:
-        - name: symbol
-          in: query
-          required: false
-          description: Filter by fund symbol. Supports multiple values. Omit to return all fund positions.
-          schema:
-            type: array
-            nullable: true
-            items:
-              type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge fund-positions
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  list:
-                    - fund_info:
-                        - symbol: HK0000676533
-                          symbol_name: 某只基金
-                          holding_units: '1000.00'
-                          current_net_asset_value: '1.2345'
-                          cost_net_asset_value: '1.1000'
-                          net_asset_value_day: '1774310400'
-                          currency: HKD
         default:
           description: Unexpected error
           content:
