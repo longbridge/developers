@@ -891,6 +891,710 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/notify/reminders:
+    get:
+      operationId: list_alerts
+      summary: List Alerts
+      x-summary-zh: 获取股价提醒列表
+      x-summary-zh-hk: 獲取股價提醒列表
+      description: |
+        Get all price alerts for the current user, with optional filtering by symbol.
+      x-description-zh: |
+        获取当前用户的所有股价提醒，支持按标的筛选。
+      x-description-zh-hk: |
+        獲取當前用戶的所有股價提醒，支持按標的篩選。
+      tags:
+        - Alert
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: false
+          description: Filter by security symbol, e.g. `TSLA.US`
+          x-description-zh: 按证券代码筛选，例如 `TSLA.US`
+          x-description-zh-hk: 按證券代碼篩選，例如 `TSLA.US`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge alert
+            longbridge alert TSLA.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/notify/reminders' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/notify/reminders",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/notify/reminders",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/notify/reminders", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/notify/reminders")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/notify/reminders\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: lists
+          type: object[]
+          required: true
+          description: Alert groups per security, see [AlertSymbolGroup](#AlertSymbolGroup)
+          x-description-zh: 按标的分组的提醒列表，见 [AlertSymbolGroup](#AlertSymbolGroup)
+          x-description-zh-hk: 按標的分組的提醒列表，見 [AlertSymbolGroup](#AlertSymbolGroup)
+        - name: symbol
+          type: string
+          required: true
+          description: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: code
+          type: string
+          required: false
+          description: Ticker code
+          x-description-zh: 股票代码
+          x-description-zh-hk: 股票代碼
+        - name: market
+          type: string
+          required: false
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: price
+          type: string
+          required: false
+          description: Latest price
+          x-description-zh: 最新价
+          x-description-zh-hk: 最新價
+        - name: chg
+          type: string
+          required: false
+          description: Day change amount
+          x-description-zh: 当日涨跌额
+          x-description-zh-hk: 當日漲跌額
+        - name: p_chg
+          type: string
+          required: false
+          description: Day change percentage
+          x-description-zh: 当日涨跌幅
+          x-description-zh-hk: 當日漲跌幅
+        - name: product
+          type: string
+          required: false
+          description: Product type
+          x-description-zh: 产品类型
+          x-description-zh-hk: 產品類型
+        - name: indicators
+          type: object[]
+          required: false
+          description: Alert indicators, see [AlertItem](#AlertItem)
+          x-description-zh: 股价提醒列表，见 [AlertItem](#AlertItem)
+          x-description-zh-hk: 股價提醒列表，見 [AlertItem](#AlertItem)
+        - name: id
+          type: string
+          required: true
+          description: Alert ID
+          x-description-zh: 提醒 ID
+          x-description-zh-hk: 提醒 ID
+        - name: indicator_id
+          type: string
+          required: false
+          description: 'Condition: `1`=price_rise, `2`=price_fall, `3`=pct_rise, `4`=pct_fall'
+          x-description-zh: 条件：`1`=价格上涨，`2`=价格下跌，`3`=涨幅，`4`=跌幅
+          x-description-zh-hk: 條件：`1`=價格上漲，`2`=價格下跌，`3`=漲幅，`4`=跌幅
+        - name: enabled
+          type: boolean
+          required: false
+          description: Whether the alert is active
+          x-description-zh: 是否启用
+          x-description-zh-hk: 是否啟用
+        - name: frequency
+          type: integer
+          required: false
+          description: 'Frequency: `1`=daily, `2`=every_time, `3`=once'
+          x-description-zh: 触发频率：`1`=每日，`2`=每次，`3`=一次
+          x-description-zh-hk: 觸發頻率：`1`=每日，`2`=每次，`3`=一次
+        - name: scope
+          type: integer
+          required: false
+          description: Scope
+          x-description-zh: 范围
+          x-description-zh-hk: 範圍
+        - name: text
+          type: string
+          required: false
+          description: Display text
+          x-description-zh: 显示文本
+          x-description-zh-hk: 顯示文本
+        - name: state
+          type: integer[]
+          required: false
+          description: Trigger state flags
+          x-description-zh: 触发状态标志
+          x-description-zh-hk: 觸發狀態標誌
+        - name: value_map
+          type: object
+          required: false
+          description: Trigger value (e.g. `{"price":"400"}` or `{"chg":"5"}`)
+          x-description-zh: 触发值（如 `{"price":"400"}` 或 `{"chg":"5"}`）
+          x-description-zh-hk: 觸發值（如 `{"price":"400"}` 或 `{"chg":"5"}`）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  lists:
+                    - symbol: AAPL.US
+                      code: AAPL
+                      market: US
+                      name: Apple
+                      price: '298.87'
+                      chg: '4.07'
+                      p_chg: '1.38'
+                      product: stock
+                      indicators:
+                        - id: '514050'
+                          indicator_id: '1'
+                          enabled: true
+                          frequency: 2
+                          scope: 0
+                          text: 价格涨到 400
+                          state:
+                            - 1
+                          value_map:
+                            price: '400'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: create_alert
+      summary: Create Alert
+      x-summary-zh: 创建股价提醒
+      x-summary-zh-hk: 創建股價提醒
+      description: |
+        Create a new price alert for a security when it rises above or falls below a target price.
+      x-description-zh: |
+        为指定证券创建股价提醒，当价格高于或低于目标价时触发通知。
+      x-description-zh-hk: |
+        為指定證券創建股價提醒，當價格高於或低於目標價時觸發通知。
+      tags:
+        - Alert
+      x-parameters:
+        - name: symbol
+          in: body
+          type: string
+          required: true
+          description: Security symbol, e.g. `TSLA.US`
+          x-description-zh: 证券代码，例如 `TSLA.US`
+          x-description-zh-hk: 證券代碼，例如 `TSLA.US`
+        - name: price
+          in: body
+          type: string
+          required: true
+          description: Target price
+          x-description-zh: 目标价格
+          x-description-zh-hk: 目標價格
+        - name: direction
+          in: body
+          type: string
+          required: true
+          description: 'Alert direction: `rise` or `fall`'
+          x-description-zh: 提醒方向：`rise`（上涨）或 `fall`（下跌）
+          x-description-zh-hk: 提醒方向：`rise`（上漲）或 `fall`（下跌）
+        - name: frequency
+          in: body
+          type: string
+          required: false
+          description: 'Trigger frequency: `once` (default) or `every`'
+          x-description-zh: 触发频率：`once`（仅一次，默认）或 `every`（每次）
+          x-description-zh-hk: 觸發頻率：`once`（僅一次，默認）或 `every`（每次）
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge alert add TSLA.US --price 300 --direction rise
+            longbridge alert add AAPL.US --price 150 --direction fall
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/notify/reminders' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbol":"<symbol>","price":"<price>","direction":"<direction>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/notify/reminders",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbol": "<symbol>", "price": "<price>", "direction": "<direction>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/notify/reminders",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbol": "<symbol>", "price": "<price>", "direction": "<direction>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/notify/reminders", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ symbol: "<symbol>", price: "<price>", direction: "<direction>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/notify/reminders")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "price": "<price>" , "direction": "<direction>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: id
+          type: int64
+          required: true
+          description: ID of the newly created alert
+          x-description-zh: 新创建提醒的 ID
+          x-description-zh-hk: 新創建提醒的 ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  id: 486469
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: update_alert
+      summary: Update Alert
+      x-summary-zh: 更新股价提醒
+      x-summary-zh-hk: 更新股價提醒
+      description: |
+        Enable or disable an existing price alert. First call `list` to obtain the full `AlertItem`, set `item.enabled` to `True` or `False`, then call `update(item)`.
+      x-description-zh: |
+        启用或禁用已有的股价提醒。先通过 `list` 获取完整的 `AlertItem`，修改 `item.enabled` 后调用 `update(item)`。
+      x-description-zh-hk: |
+        啟用或禁用已有的股價提醒。
+      tags:
+        - Alert
+      x-parameters:
+        - name: id
+          in: body
+          type: integer
+          required: true
+          description: Alert ID (path parameter)
+          x-description-zh: 提醒 ID（路径参数）
+          x-description-zh-hk: 提醒 ID（路徑參數）
+        - name: enabled
+          in: body
+          type: boolean
+          required: true
+          description: 'New enabled state: `true` to enable, `false` to disable — set on the `AlertItem` before calling `update`'
+          x-description-zh: 设为 `true` 启用，`false` 禁用
+          x-description-zh-hk: 設為 `true` 啟用，`false` 禁用
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Enable an alert
+            longbridge alert enable 486469
+            # Disable an alert
+            longbridge alert disable 486469
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request PUT \
+              --url 'https://openapi.longbridge.com/v1/notify/reminders' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"id":"<id>","enabled":"<enabled>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.put(
+                "https://openapi.longbridge.com/v1/notify/reminders",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"id": "<id>", "enabled": "<enabled>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.put(
+                        "https://openapi.longbridge.com/v1/notify/reminders",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"id": "<id>", "enabled": "<enabled>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/notify/reminders", {
+              method: "PUT",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: "<id>", enabled: "<enabled>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"enabled\":\"<enabled>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::PUT, "https://openapi.longbridge.com/v1/notify/reminders")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "id": "<id>" , "enabled": "<enabled>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"enabled\":\"<enabled>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"id\":\"<id>\",\"enabled\":\"<enabled>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: delete_alert
+      summary: Delete Alert
+      x-summary-zh: 删除股价提醒
+      x-summary-zh-hk: 刪除股價提醒
+      description: |
+        Delete a price alert by its ID.
+      x-description-zh: |
+        根据 ID 删除指定的股价提醒。
+      x-description-zh-hk: |
+        根據 ID 刪除指定的股價提醒。
+      tags:
+        - Alert
+      x-parameters:
+        - name: id
+          in: query
+          type: integer
+          required: true
+          description: Alert ID (path parameter)
+          x-description-zh: 提醒 ID（路径参数）
+          x-description-zh-hk: 提醒 ID（路徑參數）
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge alert delete 486469
+            longbridge alert delete 112326
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request DELETE \
+              --url 'https://openapi.longbridge.com/v1/notify/reminders?id=<id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.delete(
+                "https://openapi.longbridge.com/v1/notify/reminders",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"id": "<id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.delete(
+                        "https://openapi.longbridge.com/v1/notify/reminders",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"id": "<id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/notify/reminders")
+            url.searchParams.set("id", "<id>")
+
+            const resp = await fetch(url, {
+              method: "DELETE",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders?id=<id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("DELETE", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::DELETE, "https://openapi.longbridge.com/v1/notify/reminders")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("id", "<id>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders?id=<id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"DELETE\", \"https://openapi.longbridge.com/v1/notify/reminders?id=<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/content/{symbol}/news:
     get:
       operationId: list_news
