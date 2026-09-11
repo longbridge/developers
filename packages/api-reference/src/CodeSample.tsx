@@ -19,7 +19,7 @@ function esc(s: string): string {
 
 // ── Syntax highlighter ────────────────────────────────────────────────────────
 
-function highlightCode(code: string, lang: string): string {
+export function highlightCode(code: string, lang: string): string {
   if (lang === 'json') {
     return code.replace(
       /("(?:[^"\\]|\\.)*")(\s*:)|("(?:[^"\\]|\\.)*")|(-?\b\d+\.?\d*(?:[eE][+-]?\d+)?\b)|\b(true|false|null)\b/g,

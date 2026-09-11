@@ -23,14 +23,21 @@ import {
   type XParameter,
   type TagGroup,
 } from './openapi-loader'
-import { CodePanel, CodeTabs } from './CodeSample'
+import { CodePanel, CodeTabs, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
 import { CliCommand } from '@longbridge/openapi-ui'
 import MarkdownIt from 'markdown-it'
 
 // ── markdown-it setup ─────────────────────────────────────────────────────────
 
-const _md = new MarkdownIt({ html: false, linkify: true, typographer: false })
+const _md = new MarkdownIt({
+  html: false,
+  linkify: true,
+  typographer: false,
+  // Syntax-highlight fenced code blocks in x-page markdown with the same
+  // highlighter the CodeTabs/CodePanel use, so page code matches endpoint code.
+  highlight: (str, lang) => highlightCode(str, (lang || '').toLowerCase()),
+})
 
 // Patch link_open to add target="_blank" for external links
 const _defLinkOpen = _md.renderer.rules.link_open
@@ -795,9 +802,12 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               {/* ── Page content ── */}
               {showPage && activePg && (
                 <>
-                  <h1 className="ep-title">
-                    {pickLocale(activePg.title, activePg.titleZh, activePg.titleZhHk, locale)}
-                  </h1>
+                  {/* Inject the page title as H1 only when the body has none (mirrors DocsLayout). */}
+                  {!/<h1[ >]/.test(pageParts.before) && (
+                    <h1 className="ep-title">
+                      {pickLocale(activePg.title, activePg.titleZh, activePg.titleZhHk, locale)}
+                    </h1>
+                  )}
                   <div className="api-page-md" dangerouslySetInnerHTML={{ __html: pageParts.before }} />
                   {activePg.codeTabs?.length ? (
                     <CodeTabs

@@ -875,24 +875,35 @@
   color: #24292e;
   background: #f6f8fa;
 }
-/* github-light token colors */
+/* github-light token colors (shared by CodeTabs and x-page markdown code) */
 .code-tabs .hl-k,
-.code-tabs .hl-b {
+.code-tabs .hl-b,
+.api-page-md .hl-k,
+.api-page-md .hl-b {
   color: #d73a49;
 }
-.code-tabs .hl-s {
+.code-tabs .hl-s,
+.api-page-md .hl-s {
   color: #032f62;
 }
-.code-tabs .hl-n {
+.code-tabs .hl-n,
+.api-page-md .hl-n {
   color: #005cc5;
 }
-.code-tabs .hl-cmd {
+.code-tabs .hl-cmd,
+.api-page-md .hl-cmd {
   color: #6f42c1;
 }
-.code-tabs .hl-punct {
+.code-tabs .hl-flag,
+.api-page-md .hl-flag {
+  color: #e36209;
+}
+.code-tabs .hl-punct,
+.api-page-md .hl-punct {
   color: #24292e;
 }
-.code-tabs .hl-comment {
+.code-tabs .hl-comment,
+.api-page-md .hl-comment {
   color: #6a737d;
   font-style: italic;
 }
