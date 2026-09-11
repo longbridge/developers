@@ -891,6 +891,3278 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/content/{symbol}/news:
+    get:
+      operationId: list_news
+      summary: Security News
+      x-summary-zh: 个股资讯
+      x-summary-zh-hk: 個股資訊
+      description: |
+        Get the news list for a specified security. Browse the full feed on [News](https://longbridge.com/news).
+      x-description-zh: |
+        获取指定股票的资讯列表。完整资讯流可访问 [资讯](https://longbridge.com/news)。
+      x-description-zh-hk: |
+        獲取指定股票的資訊列表。完整資訊流可瀏覽 [資訊](https://longbridge.com/news)。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # latest news for Tesla
+            longbridge news TSLA.US
+            # latest news for Apple
+            longbridge news AAPL.US
+            # latest news for NVDA
+            longbridge news NVDA.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/content/{symbol}/news' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/content/{symbol}/news",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/content/{symbol}/news",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/{symbol}/news", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/{symbol}/news"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/{symbol}/news")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/{symbol}/news");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/{symbol}/news\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: items
+          type: object[]
+          required: true
+          description: News list
+          x-description-zh: 资讯列表
+          x-description-zh-hk: 資訊列表
+        - name: └ id
+          type: string
+          required: true
+          description: News ID
+          x-description-zh: 资讯 ID
+          x-description-zh-hk: 資訊 ID
+        - name: └ title
+          type: string
+          required: true
+          description: Title
+          x-description-zh: 标题
+          x-description-zh-hk: 標題
+        - name: └ description
+          type: string
+          required: true
+          description: Summary/description
+          x-description-zh: 摘要/描述
+          x-description-zh-hk: 摘要/描述
+        - name: └ url
+          type: string
+          required: true
+          description: Detail page URL
+          x-description-zh: 资讯详情链接
+          x-description-zh-hk: 資訊詳情鏈接
+        - name: └ published_at
+          type: string
+          required: true
+          description: Published time, Unix timestamp (seconds)
+          x-description-zh: 发布时间，Unix 时间戳（秒）
+          x-description-zh-hk: 發佈時間，Unix 時間戳（秒）
+        - name: └ comments_count
+          type: int32
+          required: true
+          description: Comment count
+          x-description-zh: 评论数
+          x-description-zh-hk: 評論數
+        - name: └ likes_count
+          type: int32
+          required: true
+          description: Like count
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點贊數
+        - name: └ shares_count
+          type: int32
+          required: true
+          description: Share count
+          x-description-zh: 分享数
+          x-description-zh-hk: 分享數
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '279528757'
+                      title: Beats cross-industry collaboration breaks the circle with Nike! Apple aims to ignite a new wave of wearable consumer trends, while Nike bets on the narrative of "sports technology."
+                      description: Apple's Beats has collaborated with Nike to launch a limited edition Powerbeats Pro 2 headphones, featuring Nike's Swoosh logo. The headphones will be available online and at select Apple Stores on March 20, priced at $250. This marks Beats' first collaboration with an external sports brand, signifying further synergy between the two companies in branding and product ecosystems. The headphones feature real-time heart rate tracking and a battery life of up to 45 hours
+                      url: https://longbridge.com/news/279528757
+                      published_at: '1773805586'
+                      comments_count: 0
+                      likes_count: 0
+                      shares_count: 0
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/content/{symbol}/topics:
+    get:
+      operationId: list_topics
+      summary: Topics by Symbol
+      x-summary-zh: 标的社区讨论
+      x-summary-zh-hk: 標的社區討論
+      description: |
+        Get the topic/discussion list for a specified security. Browse the full community on [Topics](https://longbridge.com/topics).
+      x-description-zh: |
+        获取指定股票的讨论列表。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
+      x-description-zh-hk: |
+        獲取指定股票的討論列表。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # community discussion topics for Tesla
+            longbridge topic TSLA.US
+            # community discussion topics for Apple
+            longbridge topic AAPL.US
+            # community discussion topics for NVDA
+            longbridge topic NVDA.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/content/{symbol}/topics' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/content/{symbol}/topics",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/content/{symbol}/topics",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/{symbol}/topics", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/{symbol}/topics"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/{symbol}/topics")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/{symbol}/topics");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/{symbol}/topics\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: items
+          type: object[]
+          required: true
+          description: Topic list
+          x-description-zh: 讨论列表
+          x-description-zh-hk: 討論列表
+        - name: └ id
+          type: string
+          required: true
+          description: Topic ID
+          x-description-zh: 讨论 ID
+          x-description-zh-hk: 討論 ID
+        - name: └ title
+          type: string
+          required: true
+          description: Title
+          x-description-zh: 标题
+          x-description-zh-hk: 標題
+        - name: └ description
+          type: string
+          required: true
+          description: Summary/description
+          x-description-zh: 摘要/描述
+          x-description-zh-hk: 摘要/描述
+        - name: └ url
+          type: string
+          required: true
+          description: Detail page URL
+          x-description-zh: 讨论详情链接
+          x-description-zh-hk: 討論詳情鏈接
+        - name: └ published_at
+          type: string
+          required: true
+          description: Published time, Unix timestamp (seconds)
+          x-description-zh: 发布时间，Unix 时间戳（秒）
+          x-description-zh-hk: 發佈時間，Unix 時間戳（秒）
+        - name: └ comments_count
+          type: int32
+          required: true
+          description: Comment count
+          x-description-zh: 评论数
+          x-description-zh-hk: 評論數
+        - name: └ likes_count
+          type: int32
+          required: true
+          description: Like count
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點贊數
+        - name: └ shares_count
+          type: int32
+          required: true
+          description: Share count
+          x-description-zh: 分享数
+          x-description-zh-hk: 分享數
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '39304657'
+                      title: NVDA GTC in focus; Alibaba 'Token strategy' ramps up | Daily News Recap
+                      description: '0317 | Dolphin Research Focus: 🐬 Stock #1, $NVIDIA(NVDA.US) — NVIDIA''s GTC 2026 officially kicked off, and founder &amp; CEO Jensen Huang delivered the keynote.He announced a Vera Rubin Space Module under the next-gen Vera Rubin architecture, designed for orbital data centers, delivering 25x performance vs. H100.He also unveiled a partnership with Groq to co-develop new LPU chips...'
+                      url: https://longbridge.com/topics/39304657
+                      published_at: '1773736144'
+                      comments_count: 1
+                      likes_count: 7
+                      shares_count: 4
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/content/topics/mine:
+    get:
+      operationId: list_my_topics
+      summary: My Topics
+      x-summary-zh: 我的讨论
+      x-summary-zh-hk: 我的討論
+      description: |
+        Get the list of topics I have published. View them on [Topics](https://longbridge.com/topics).
+      x-description-zh: |
+        获取当前登录用户发布的讨论列表，支持分页与类型过滤。可在 [社区](https://longbridge.com/topics)查看。
+      x-description-zh-hk: |
+        獲取當前登錄用戶發布的討論列表，支持分頁與類型過濾。可在 [社區](https://longbridge.com/topics)查看。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic mine
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/content/topics/mine' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/content/topics/mine",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/content/topics/mine",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/mine", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/mine"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/mine")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/mine");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/mine\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: items
+          type: object[]
+          required: true
+          description: Topic list
+          x-description-zh: 讨论列表
+          x-description-zh-hk: 討論列表
+        - name: └ id
+          type: string
+          required: true
+          description: Topic ID
+          x-description-zh: 讨论 ID
+          x-description-zh-hk: 討論 ID
+        - name: └ title
+          type: string
+          required: false
+          description: Topic title (may be empty for short posts)
+          x-description-zh: 标题（短帖可能为空）
+          x-description-zh-hk: 標題（短帖可能為空）
+        - name: └ description
+          type: string
+          required: false
+          description: Plain-text summary of the topic body
+          x-description-zh: 纯文本摘要
+          x-description-zh-hk: 純文本摘要
+        - name: └ body
+          type: string
+          required: false
+          description: Full topic body in Markdown format
+          x-description-zh: Markdown 格式正文
+          x-description-zh-hk: Markdown 格式正文
+        - name: └ topic_type
+          type: string
+          required: true
+          description: Topic type. One of `article`, `post`
+          x-description-zh: 内容类型，`article`（长文）或 `post`（短帖）
+          x-description-zh-hk: 內容類型，`article`（長文）或 `post`（短帖）
+        - name: └ tickers
+          type: string[]
+          required: false
+          description: Associated security symbols (e.g. `["AAPL.US", "700.HK"]`)
+          x-description-zh: 关联标的代码，如 `["AAPL.US", "700.HK"]`
+          x-description-zh-hk: 關聯標的代碼，如 `["AAPL.US", "700.HK"]`
+        - name: └ hashtags
+          type: string[]
+          required: false
+          description: Associated hashtag names
+          x-description-zh: 讨论标签名称列表
+          x-description-zh-hk: 討論標籤名稱列表
+        - name: └ images
+          type: object[]
+          required: false
+          description: Images attached to the topic
+          x-description-zh: 附图列表
+          x-description-zh-hk: 附圖列表
+        - name: └ ∟ url
+          type: string
+          required: false
+          description: Original image URL
+          x-description-zh: 原始图片 URL
+          x-description-zh-hk: 原始圖片 URL
+        - name: └ ∟ sm
+          type: string
+          required: false
+          description: Small thumbnail URL
+          x-description-zh: 小缩略图 URL
+          x-description-zh-hk: 小縮略圖 URL
+        - name: └ ∟ lg
+          type: string
+          required: false
+          description: Large thumbnail URL
+          x-description-zh: 大缩略图 URL
+          x-description-zh-hk: 大縮略圖 URL
+        - name: └ likes_count
+          type: int32
+          required: false
+          description: Number of likes
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點讚數
+        - name: └ comments_count
+          type: int32
+          required: false
+          description: Number of comments
+          x-description-zh: 评论数
+          x-description-zh-hk: 評論數
+        - name: └ views_count
+          type: int32
+          required: false
+          description: Number of views
+          x-description-zh: 浏览数
+          x-description-zh-hk: 瀏覽數
+        - name: └ shares_count
+          type: int32
+          required: false
+          description: Number of shares
+          x-description-zh: 分享数
+          x-description-zh-hk: 分享數
+        - name: └ license
+          type: int32
+          required: false
+          description: Copyright declaration. `0` = none, `1` = original, `2` = non-original
+          x-description-zh: 版权声明，`0`=无声明，`1`=原创，`2`=非原创
+          x-description-zh-hk: 版權聲明，`0`=無聲明，`1`=原創，`2`=非原創
+        - name: └ detail_url
+          type: string
+          required: false
+          description: Link to the topic detail page
+          x-description-zh: 讨论详情页链接
+          x-description-zh-hk: 討論詳情頁連結
+        - name: └ author
+          type: object
+          required: false
+          description: Author information
+          x-description-zh: 作者信息
+          x-description-zh-hk: 作者信息
+        - name: └ ∟ member_id
+          type: string
+          required: false
+          description: Author member ID
+          x-description-zh: 作者 member ID
+          x-description-zh-hk: 作者 member ID
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Author display name
+          x-description-zh: 作者昵称
+          x-description-zh-hk: 作者昵稱
+        - name: └ ∟ avatar
+          type: string
+          required: false
+          description: Author avatar URL
+          x-description-zh: 作者头像 URL
+          x-description-zh-hk: 作者頭像 URL
+        - name: └ created_at
+          type: string
+          required: true
+          description: Unix timestamp (seconds) when the topic was created
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+        - name: └ updated_at
+          type: string
+          required: false
+          description: Unix timestamp (seconds) when the topic was last updated
+          x-description-zh: 最后更新时间，Unix 时间戳（秒）
+          x-description-zh-hk: 最後更新時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '39304657'
+                      title: My Analysis on AAPL
+                      description: A brief summary of my article...
+                      body: Full markdown content here...
+                      topic_type: article
+                      tickers:
+                        - AAPL.US
+                      hashtags:
+                        - earnings
+                      images: []
+                      likes_count: 12
+                      comments_count: 3
+                      views_count: 200
+                      shares_count: 1
+                      license: 1
+                      detail_url: https://longbridge.com/topics/39304657
+                      author:
+                        member_id: '10086'
+                        name: John
+                        avatar: https://example.com/avatar.jpg
+                      created_at: '1742000000'
+                      updated_at: '1742000000'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/content/topics:
+    post:
+      operationId: create_topic
+      summary: Create Topic
+      x-summary-zh: 创建讨论
+      x-summary-zh-hk: 創建討論
+      description: |
+        Create a new community topic on [Topics](https://longbridge.com/topics). Two content types are supported:
+
+        | Type             | `title`      | `body` format   | Notes                                                                                                                  |
+        | ---------------- | ------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+        | `post` (default) | Optional     | Plain text only | Markdown syntax (e.g. `**bold**`, `# heading`) is NOT rendered — it appears as literal characters, similar to a tweet. |
+        | `article`        | **Required** | Markdown        | The server converts Markdown to HTML for display. Supports headers, tables, bold, code blocks, etc.                    |
+
+        Only users who have opened a **Longbridge account and hold assets** are allowed to publish community topics and replies via Longbridge Developers API or CLI. Returns `403` otherwise.
+
+        <TipContainer type="tip">
+        Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+
+        > ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+        </TipContainer>
+
+        **Rate limit:** Max 3 topics per user per minute and 10 per 24 hours. Exceeding the limit returns `429`.
+
+        > ⚠️ Rate limit thresholds are for reference only and may be adjusted by the platform at any time.
+      x-description-zh: |
+        在 [社区](https://longbridge.com/topics)创建一篇新讨论。支持两种内容类型：
+
+        | 类型 | `title` | `body` 格式 | 说明 |
+        |------|---------|-------------|------|
+        | `post`（默认） | 可选 | 纯文本 | Markdown 语法（如 `**加粗**`、`# 标题`）**不会渲染**，将作为字面字符显示，类似发推文。 |
+        | `article` | **必填** | Markdown | 服务端将 Markdown 转为 HTML 展示，支持标题、表格、加粗、代码块等。 |
+
+        仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。否则返回 `403`。
+
+        <TipContainer type="tip">
+        正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。`tickers` 字段用于补充正文中未显式提及的标的。
+
+        > ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+        </TipContainer>
+
+        **频率限制：** 同一用户每分钟最多创建 3 篇，24 小时内最多 10 篇，超出返回 `429`。
+
+        > ⚠️ 以上频率限制规则仅供参考，平台可能随时进行内部调整。
+      x-description-zh-hk: |
+        在 [社區](https://longbridge.com/topics)創建一篇新討論。支持兩種內容類型：
+
+        | 類型 | `title` | `body` 格式 | 說明 |
+        |------|---------|-------------|------|
+        | `post`（默認） | 可選 | 純文本 | Markdown 語法（如 `**加粗**`、`# 標題`）**不會渲染**，將作為字面字符顯示，類似發推文。 |
+        | `article` | **必填** | Markdown | 服務端將 Markdown 轉為 HTML 展示，支持標題、表格、加粗、代碼塊等。 |
+
+        僅限 **Longbridge 開戶且持有資產** 的用戶才允許通過 Longbridge Developers 的 API 或 CLI 發布社區討論和回覆。否則返回 `403`。
+
+        <TipContainer type="tip">
+        正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。`tickers` 字段用於補充正文中未顯式提及的標的。
+
+        > ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
+        </TipContainer>
+
+        **頻率限制：** 同一用戶每分鐘最多創建 3 篇，24 小時內最多 10 篇，超出返回 `429`。
+
+        > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # publish a topic for Tesla
+            longbridge topic create --body "Tesla Q1 earnings analysis" --tickers TSLA.US
+            # publish a topic for Apple
+            longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/content/topics' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/content/topics",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/content/topics",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/content/topics")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/content/topics\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: item
+          type: object
+          required: true
+          description: Newly created topic details
+          x-description-zh: 新建讨论详情
+          x-description-zh-hk: 新建討論詳情
+        - name: └ id
+          type: string
+          required: true
+          description: Topic ID
+          x-description-zh: 讨论 ID
+          x-description-zh-hk: 討論 ID
+        - name: └ title
+          type: string
+          required: false
+          description: Topic title
+          x-description-zh: 标题
+          x-description-zh-hk: 標題
+        - name: └ description
+          type: string
+          required: false
+          description: Plain-text summary (auto-generated from body)
+          x-description-zh: 纯文本摘要（由正文自动截取）
+          x-description-zh-hk: 純文本摘要（由正文自動截取）
+        - name: └ body
+          type: string
+          required: false
+          description: Full body text (Markdown for `article`)
+          x-description-zh: 完整正文（`article` 类型为 Markdown）
+          x-description-zh-hk: 完整正文（`article` 類型為 Markdown）
+        - name: └ topic_type
+          type: string
+          required: false
+          description: Topic type. One of `article`, `post`
+          x-description-zh: 内容类型，`article` 或 `post`
+          x-description-zh-hk: 內容類型，`article` 或 `post`
+        - name: └ tickers
+          type: string[]
+          required: false
+          description: Associated security symbols
+          x-description-zh: 关联标的代码
+          x-description-zh-hk: 關聯標的代碼
+        - name: └ hashtags
+          type: string[]
+          required: false
+          description: Associated hashtag names
+          x-description-zh: 讨论标签名称列表
+          x-description-zh-hk: 討論標籤名稱列表
+        - name: └ images
+          type: object[]
+          required: false
+          description: Image list
+          x-description-zh: 附图列表
+          x-description-zh-hk: 附圖列表
+        - name: └ ∟ url
+          type: string
+          required: false
+          description: Original image URL
+          x-description-zh: 原始图片 URL
+          x-description-zh-hk: 原始圖片 URL
+        - name: └ ∟ sm
+          type: string
+          required: false
+          description: Small thumbnail URL
+          x-description-zh: 小缩略图 URL
+          x-description-zh-hk: 小縮略圖 URL
+        - name: └ ∟ lg
+          type: string
+          required: false
+          description: Large thumbnail URL
+          x-description-zh: 大缩略图 URL
+          x-description-zh-hk: 大縮略圖 URL
+        - name: └ likes_count
+          type: int32
+          required: false
+          description: Number of likes
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點讚數
+        - name: └ comments_count
+          type: int32
+          required: false
+          description: Number of replies
+          x-description-zh: 回复数
+          x-description-zh-hk: 回覆數
+        - name: └ views_count
+          type: int32
+          required: false
+          description: Number of views
+          x-description-zh: 浏览数
+          x-description-zh-hk: 瀏覽數
+        - name: └ shares_count
+          type: int32
+          required: false
+          description: Number of shares
+          x-description-zh: 分享数
+          x-description-zh-hk: 分享數
+        - name: └ detail_url
+          type: string
+          required: false
+          description: Direct URL to the topic
+          x-description-zh: 讨论页面直链
+          x-description-zh-hk: 討論頁面直鏈
+        - name: └ author
+          type: object
+          required: false
+          description: Author information
+          x-description-zh: 作者信息
+          x-description-zh-hk: 作者信息
+        - name: └ ∟ member_id
+          type: string
+          required: false
+          description: Author member ID
+          x-description-zh: 作者 member ID
+          x-description-zh-hk: 作者 member ID
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Author display name
+          x-description-zh: 作者昵称
+          x-description-zh-hk: 作者暱稱
+        - name: └ ∟ avatar
+          type: string
+          required: false
+          description: Author avatar URL
+          x-description-zh: 作者头像 URL
+          x-description-zh-hk: 作者頭像 URL
+        - name: └ created_at
+          type: string
+          required: true
+          description: Unix timestamp (seconds) when the topic was created
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+        - name: └ updated_at
+          type: string
+          required: false
+          description: Unix timestamp (seconds) of last update
+          x-description-zh: 最近更新时间，Unix 时间戳（秒）
+          x-description-zh-hk: 最近更新時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  item:
+                    id: '39304657'
+                    title: My View on AAPL
+                    topic_type: article
+                    tickers:
+                      - AAPL.US
+                    hashtags:
+                      - earnings
+                    created_at: '1742000000'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/content/topics/{id}:
+    get:
+      operationId: topic_detail
+      summary: Topic Detail
+      x-summary-zh: 讨论详情
+      x-summary-zh-hk: 討論詳情
+      description: |
+        Get the full details of a community topic by its ID, including the body (Markdown), author info, associated tickers and hashtags, engagement counts, and the direct URL. View the topic on [Topics](https://longbridge.com/topics).
+      x-description-zh: |
+        根据讨论 ID 获取完整详情，包含正文（Markdown）、作者信息、关联标的与标签、互动数据及详情页链接。可在 [社区](https://longbridge.com/topics)查看。
+      x-description-zh-hk: |
+        根據討論 ID 獲取完整詳情，包含正文（Markdown）、作者信息、關聯標的與標籤、互動數據及詳情頁鏈接。可在 [社區](https://longbridge.com/topics)查看。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic detail 6993508780031016960
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/content/topics/{id}' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/content/topics/{id}",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/content/topics/{id}",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/{id}", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/{id}"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/{id}")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/{id}");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/{id}\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: item
+          type: object
+          required: true
+          description: Topic detail object
+          x-description-zh: 讨论详情
+          x-description-zh-hk: 討論詳情
+        - name: └ id
+          type: string
+          required: true
+          description: Topic ID
+          x-description-zh: 讨论 ID
+          x-description-zh-hk: 討論 ID
+        - name: └ title
+          type: string
+          required: false
+          description: Title (may be empty for short posts)
+          x-description-zh: 标题（短帖可能为空）
+          x-description-zh-hk: 標題（短帖可能為空）
+        - name: └ description
+          type: string
+          required: false
+          description: Plain-text excerpt
+          x-description-zh: 纯文本摘要
+          x-description-zh-hk: 純文本摘要
+        - name: └ body
+          type: string
+          required: false
+          description: Markdown body
+          x-description-zh: Markdown 格式正文
+          x-description-zh-hk: Markdown 格式正文
+        - name: └ topic_type
+          type: string
+          required: true
+          description: 'Content type: `article` or `post`'
+          x-description-zh: 内容类型，`article`（长文）或 `post`（短帖）
+          x-description-zh-hk: 內容類型，`article`（長文）或 `post`（短帖）
+        - name: └ tickers
+          type: string[]
+          required: false
+          description: Associated security symbols (e.g. `["AAPL.US", "700.HK"]`)
+          x-description-zh: 关联标的代码，如 `["AAPL.US", "700.HK"]`
+          x-description-zh-hk: 關聯標的代碼，如 `["AAPL.US", "700.HK"]`
+        - name: └ hashtags
+          type: string[]
+          required: false
+          description: Hashtag names
+          x-description-zh: 讨论标签名称列表
+          x-description-zh-hk: 討論標籤名稱列表
+        - name: └ images
+          type: object[]
+          required: false
+          description: Attached images
+          x-description-zh: 附图列表
+          x-description-zh-hk: 附圖列表
+        - name: └ ∟ url
+          type: string
+          required: false
+          description: Original image URL
+          x-description-zh: 原始图片 URL
+          x-description-zh-hk: 原始圖片 URL
+        - name: └ ∟ sm
+          type: string
+          required: false
+          description: Small thumbnail URL
+          x-description-zh: 小缩略图 URL
+          x-description-zh-hk: 小縮略圖 URL
+        - name: └ ∟ lg
+          type: string
+          required: false
+          description: Large image URL
+          x-description-zh: 大缩略图 URL
+          x-description-zh-hk: 大縮略圖 URL
+        - name: └ likes_count
+          type: int32
+          required: false
+          description: Likes count
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點讚數
+        - name: └ comments_count
+          type: int32
+          required: false
+          description: Replies count
+          x-description-zh: 回复数
+          x-description-zh-hk: 回覆數
+        - name: └ views_count
+          type: int32
+          required: false
+          description: Views count
+          x-description-zh: 浏览数
+          x-description-zh-hk: 瀏覽數
+        - name: └ shares_count
+          type: int32
+          required: false
+          description: Shares count
+          x-description-zh: 分享数
+          x-description-zh-hk: 分享數
+        - name: └ detail_url
+          type: string
+          required: false
+          description: URL to the topic detail page
+          x-description-zh: 讨论详情页链接
+          x-description-zh-hk: 討論詳情頁鏈接
+        - name: └ author
+          type: object
+          required: false
+          description: Author info
+          x-description-zh: 作者信息
+          x-description-zh-hk: 作者信息
+        - name: └ ∟ member_id
+          type: string
+          required: false
+          description: Author member ID
+          x-description-zh: 作者 member ID
+          x-description-zh-hk: 作者 member ID
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Author display name
+          x-description-zh: 作者昵称
+          x-description-zh-hk: 作者暱稱
+        - name: └ ∟ avatar
+          type: string
+          required: false
+          description: Author avatar URL
+          x-description-zh: 作者头像 URL
+          x-description-zh-hk: 作者頭像 URL
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time as Unix timestamp (seconds)
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+        - name: └ updated_at
+          type: string
+          required: false
+          description: Last updated time as Unix timestamp (seconds)
+          x-description-zh: 最后更新时间，Unix 时间戳（秒）
+          x-description-zh-hk: 最後更新時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  item:
+                    id: '6993508780031016960'
+                    title: My Analysis on AAPL
+                    description: Brief plain-text summary...
+                    body: '**Bullish** on AAPL because...'
+                    topic_type: article
+                    tickers:
+                      - AAPL.US
+                    hashtags:
+                      - earnings
+                    images:
+                      - url: https://cdn.longbridge.com/img/abc.jpg
+                        sm: https://cdn.longbridge.com/img/abc_sm.jpg
+                        lg: https://cdn.longbridge.com/img/abc_lg.jpg
+                    likes_count: 42
+                    comments_count: 7
+                    views_count: 1500
+                    shares_count: 3
+                    detail_url: https://longbridge.com/topics/6993508780031016960
+                    author:
+                      member_id: '10086'
+                      name: Jane Doe
+                      avatar: https://example.com/avatar.jpg
+                    created_at: '1742000000'
+                    updated_at: '1742001000'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/content/topics/{topic_id}/comments:
+    get:
+      operationId: list_topic_replies
+      summary: Topic Replies
+      x-summary-zh: 讨论回复
+      x-summary-zh-hk: 討論回覆
+      description: |
+        Get a paginated list of replies for a specific topic. Browse the discussion on [Topics](https://longbridge.com/topics).
+
+        Each reply includes author info, body (plain text), engagement counts, and a `reply_to_id` field: `"0"` indicates a top-level reply; any other value identifies the parent reply for nested replies.
+      x-description-zh: |
+        获取指定讨论下的回复列表，支持分页。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
+
+        每条回复包含作者信息、正文（纯文本）、互动数据及 `reply_to_id` 字段：`"0"` 表示顶层回复，其他值表示对指定回复的嵌套回复。
+      x-description-zh-hk: |
+        獲取指定討論下的回覆列表，支持分頁。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
+
+        每條回覆包含作者信息、正文（純文本）、互動數據及 `reply_to_id` 字段：`"0"` 表示頂層回覆，其他值表示對指定回覆的嵌套回覆。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic replies 6993508780031016960
+            longbridge topic replies 6993508780031016960 --page 2 --size 20
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: items
+          type: object[]
+          required: true
+          description: List of replies
+          x-description-zh: 回复列表
+          x-description-zh-hk: 回覆列表
+        - name: └ id
+          type: string
+          required: true
+          description: Reply ID
+          x-description-zh: 回复 ID
+          x-description-zh-hk: 回覆 ID
+        - name: └ topic_id
+          type: string
+          required: true
+          description: Parent topic ID
+          x-description-zh: 所属讨论 ID
+          x-description-zh-hk: 所屬討論 ID
+        - name: └ body
+          type: string
+          required: false
+          description: Reply body (plain text)
+          x-description-zh: 回复正文（纯文本）
+          x-description-zh-hk: 回覆正文（純文本）
+        - name: └ reply_to_id
+          type: string
+          required: false
+          description: Parent reply ID; `"0"` = top-level reply
+          x-description-zh: 父回复 ID，`"0"` 表示顶层回复
+          x-description-zh-hk: 父回覆 ID，`"0"` 表示頂層回覆
+        - name: └ author
+          type: object
+          required: false
+          description: Author info
+          x-description-zh: 作者信息
+          x-description-zh-hk: 作者信息
+        - name: └ ∟ member_id
+          type: string
+          required: false
+          description: Author member ID
+          x-description-zh: 作者 member ID
+          x-description-zh-hk: 作者 member ID
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Author display name
+          x-description-zh: 作者昵称
+          x-description-zh-hk: 作者暱稱
+        - name: └ ∟ avatar
+          type: string
+          required: false
+          description: Author avatar URL
+          x-description-zh: 作者头像 URL
+          x-description-zh-hk: 作者頭像 URL
+        - name: └ images
+          type: object[]
+          required: false
+          description: Attached images
+          x-description-zh: 附图列表
+          x-description-zh-hk: 附圖列表
+        - name: └ ∟ url
+          type: string
+          required: false
+          description: Original image URL
+          x-description-zh: 原始图片 URL
+          x-description-zh-hk: 原始圖片 URL
+        - name: └ ∟ sm
+          type: string
+          required: false
+          description: Small thumbnail URL
+          x-description-zh: 小缩略图 URL
+          x-description-zh-hk: 小縮略圖 URL
+        - name: └ ∟ lg
+          type: string
+          required: false
+          description: Large image URL
+          x-description-zh: 大缩略图 URL
+          x-description-zh-hk: 大縮略圖 URL
+        - name: └ likes_count
+          type: int32
+          required: false
+          description: Likes count
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點讚數
+        - name: └ comments_count
+          type: int32
+          required: false
+          description: Nested replies count
+          x-description-zh: 嵌套回复数
+          x-description-zh-hk: 嵌套回覆數
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time as Unix timestamp (seconds)
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '7001234567890123456'
+                      topic_id: '6993508780031016960'
+                      body: Great analysis!
+                      reply_to_id: '0'
+                      author:
+                        member_id: '10087'
+                        name: John Smith
+                        avatar: https://example.com/avatar2.jpg
+                      images: []
+                      likes_count: 5
+                      comments_count: 2
+                      created_at: '1742001500'
+                    - id: '7001234567890123457'
+                      topic_id: '6993508780031016960'
+                      body: I disagree on the valuation part.
+                      reply_to_id: '7001234567890123456'
+                      author:
+                        member_id: '10088'
+                        name: Alice Lee
+                        avatar: https://example.com/avatar3.jpg
+                      images: []
+                      likes_count: 1
+                      comments_count: 0
+                      created_at: '1742001800'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: create_topic_reply
+      summary: Create Topic Reply
+      x-summary-zh: 创建讨论回复
+      x-summary-zh-hk: 創建討論回覆
+      description: |
+        Post a reply to a community topic. Supports nesting under an existing reply. Browse the community on [Topics](https://longbridge.com/topics).
+
+        Only users who have opened a **[Longbridge account](https://longbridge.com/hk/download) and hold assets** are allowed to publish community topics and replies via Longbridge Developers API or CLI. Returns `403` otherwise.
+
+        **Body format:** Plain text only — HTML and Markdown are **not** rendered.
+
+        <TipContainer type="tip">
+        Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform.
+
+        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+        </TipContainer>
+
+        **Rate limit:** The first 3 replies per user per topic have no wait requirement. After that, each subsequent reply must wait an incrementally longer interval since the previous one:
+
+        | Reply # (after 3rd) | Required wait |
+        | ------------------- | ------------- |
+        | 4th                 | 3 s           |
+        | 5th                 | 5 s           |
+        | 6th                 | 8 s           |
+        | 7th                 | 13 s          |
+        | 8th                 | 21 s          |
+        | 9th                 | 34 s          |
+        | 10th+               | 55 s (cap)    |
+
+        Exceeding the limit returns `429`.
+
+        > ⚠️ Rate limit thresholds are for reference only and may be adjusted by the platform at any time.
+      x-description-zh: |
+        在指定讨论下发布回复，支持嵌套回复已有回复。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
+
+        仅限 **[Longbridge 开户](https://longbridge.com/hk/download)且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。否则返回 `403`。
+
+        **正文格式：** 仅支持纯文本，不支持 HTML 或 Markdown。
+
+        <TipContainer type="tip">
+        正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。
+
+        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+        </TipContainer>
+
+        **频率限制：** 同一用户在同一讨论下，前 3 条无间隔限制；此后每条须与上一条保持递增间隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封顶），超出限制返回 `429`。
+
+        > ⚠️ 以上频率限制规则仅供参考，平台可能随时进行内部调整。
+      x-description-zh-hk: |
+        在指定討論下發布回覆，支持嵌套回覆已有回覆。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
+
+        僅限 **[Longbridge 開戶](https://longbridge.com/hk/download)且持有資產** 的用戶才允許通過 Longbridge Developers 的 API 或 CLI 發布社區討論和回覆。否則返回 `403`。
+
+        **正文格式：** 僅支持純文本，不支持 HTML 或 Markdown。
+
+        <TipContainer type="tip">
+        正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。
+
+        ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
+        </TipContainer>
+
+        **頻率限制：** 同一用戶在同一討論下，前 3 條無間隔限制；此後每條須與上一條保持遞增間隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封頂），超出限制返回 `429`。
+
+        > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+      tags:
+        - Content
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: item
+          type: object
+          required: true
+          description: Created reply details
+          x-description-zh: 新建回复详情
+          x-description-zh-hk: 新建回覆詳情
+        - name: └ id
+          type: string
+          required: true
+          description: Reply ID
+          x-description-zh: 回复 ID
+          x-description-zh-hk: 回覆 ID
+        - name: └ topic_id
+          type: string
+          required: true
+          description: Parent topic ID
+          x-description-zh: 所属讨论 ID
+          x-description-zh-hk: 所屬討論 ID
+        - name: └ body
+          type: string
+          required: false
+          description: Reply body (plain text)
+          x-description-zh: 回复正文（纯文本）
+          x-description-zh-hk: 回覆正文（純文本）
+        - name: └ reply_to_id
+          type: string
+          required: false
+          description: Parent reply ID; `"0"` = top-level reply
+          x-description-zh: 父回复 ID，`"0"` 表示顶层回复
+          x-description-zh-hk: 父回覆 ID，`"0"` 表示頂層回覆
+        - name: └ author
+          type: object
+          required: false
+          description: Author info
+          x-description-zh: 作者信息
+          x-description-zh-hk: 作者信息
+        - name: └ ∟ member_id
+          type: string
+          required: false
+          description: Author member ID
+          x-description-zh: 作者 member ID
+          x-description-zh-hk: 作者 member ID
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Author display name
+          x-description-zh: 作者昵称
+          x-description-zh-hk: 作者暱稱
+        - name: └ ∟ avatar
+          type: string
+          required: false
+          description: Author avatar URL
+          x-description-zh: 作者头像 URL
+          x-description-zh-hk: 作者頭像 URL
+        - name: └ images
+          type: object[]
+          required: false
+          description: Attached images
+          x-description-zh: 附图列表
+          x-description-zh-hk: 附圖列表
+        - name: └ ∟ url
+          type: string
+          required: false
+          description: Original image URL
+          x-description-zh: 原始图片 URL
+          x-description-zh-hk: 原始圖片 URL
+        - name: └ ∟ sm
+          type: string
+          required: false
+          description: Small thumbnail URL
+          x-description-zh: 小缩略图 URL
+          x-description-zh-hk: 小縮略圖 URL
+        - name: └ ∟ lg
+          type: string
+          required: false
+          description: Large image URL
+          x-description-zh: 大缩略图 URL
+          x-description-zh-hk: 大縮略圖 URL
+        - name: └ likes_count
+          type: int32
+          required: false
+          description: Likes count
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點讚數
+        - name: └ comments_count
+          type: int32
+          required: false
+          description: Nested replies count
+          x-description-zh: 嵌套回复数
+          x-description-zh-hk: 嵌套回覆數
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time as Unix timestamp (seconds)
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  item:
+                    id: '7001234567890123460'
+                    topic_id: '6993508780031016960'
+                    body: Great analysis!
+                    reply_to_id: '0'
+                    author:
+                      member_id: '10086'
+                      name: Jane Doe
+                      avatar: https://example.com/avatar.jpg
+                    images: []
+                    likes_count: 0
+                    comments_count: 0
+                    created_at: '1742002000'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/sharelists:
+    get:
+      operationId: list_sharelists
+      summary: List Sharelists
+      x-summary-zh: 股单列表
+      x-summary-zh-hk: 股單列表
+      description: |
+        Get all community stock lists (sharelists) created by or subscribed to by the current user.
+      x-description-zh: |
+        获取当前用户创建的或订阅的所有社区自选股列表。
+      x-description-zh-hk: |
+        獲取當前用戶創建的或訂閱的所有社區自選股列表。
+      tags:
+        - Content
+      x-parameters:
+        - name: type
+          in: query
+          type: string
+          required: false
+          description: 'Filter: `mine` or `subscribed`. Omit for both.'
+          x-description-zh: 筛选：`mine`（我创建的）或 `subscribed`（我订阅的），不传则返回两者
+          x-description-zh-hk: 篩選：`mine`（我創建的）或 `subscribed`（我訂閱的），不傳則返回兩者
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist
+            longbridge sharelist --format json
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/sharelists' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/sharelists",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/sharelists",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/sharelists")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/sharelists\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: sharelists
+          type: object[]
+          required: false
+          description: User's own sharelists, see [SharelistInfo](#SharelistInfo)
+          x-description-zh: 用户自建股单列表，见 [SharelistInfo](#SharelistInfo)
+          x-description-zh-hk: 用戶自建股單列表，見 [SharelistInfo](#SharelistInfo)
+        - name: subscribed_sharelists
+          type: object[]
+          required: false
+          description: Subscribed sharelists, see [SharelistInfo](#SharelistInfo)
+          x-description-zh: 已订阅股单列表，见 [SharelistInfo](#SharelistInfo)
+          x-description-zh-hk: 已訂閱股單列表，見 [SharelistInfo](#SharelistInfo)
+        - name: tail_mark
+          type: string
+          required: false
+          description: Pagination cursor for subscribed list
+          x-description-zh: 已订阅列表的分页游标
+          x-description-zh-hk: 已訂閱列表的分頁游標
+        - name: id
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+        - name: description
+          type: string
+          required: false
+          description: Description
+          x-description-zh: 描述
+          x-description-zh-hk: 描述
+        - name: cover
+          type: string
+          required: false
+          description: Cover image URL
+          x-description-zh: 封面图片 URL
+          x-description-zh-hk: 封面圖片 URL
+        - name: subscribers_count
+          type: integer
+          required: false
+          description: Number of subscribers
+          x-description-zh: 订阅人数
+          x-description-zh-hk: 訂閱人數
+        - name: chg
+          type: string
+          required: false
+          description: Day change percentage
+          x-description-zh: 日涨跌幅
+          x-description-zh-hk: 日漲跌幅
+        - name: this_year_chg
+          type: string
+          required: false
+          description: Year-to-date change percentage
+          x-description-zh: 今年以来涨跌幅
+          x-description-zh-hk: 今年以來漲跌幅
+        - name: subscribed
+          type: boolean
+          required: false
+          description: Whether the current user is subscribed
+          x-description-zh: 当前用户是否已订阅
+          x-description-zh-hk: 當前用戶是否已訂閱
+        - name: sharelist_type
+          type: integer
+          required: false
+          description: 'Type: `0`=regular, `3`=official, `4`=industry'
+          x-description-zh: 类型：`0`=普通，`3`=官方，`4`=行业
+          x-description-zh-hk: 類型：`0`=普通，`3`=官方，`4`=行業
+        - name: industry_code
+          type: string
+          required: false
+          description: Industry code (for industry sharelists)
+          x-description-zh: 行业代码（行业股单适用）
+          x-description-zh-hk: 行業代碼（行業股單適用）
+        - name: stocks
+          type: object[]
+          required: false
+          description: Constituent stocks, see [SharelistStock](#SharelistStock)
+          x-description-zh: 成份股列表，见 [SharelistStock](#SharelistStock)
+          x-description-zh-hk: 成份股列表，見 [SharelistStock](#SharelistStock)
+        - name: symbol
+          type: string
+          required: true
+          description: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: code
+          type: string
+          required: false
+          description: Ticker code
+          x-description-zh: 股票代码
+          x-description-zh-hk: 股票代碼
+        - name: market
+          type: string
+          required: false
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: intro
+          type: string
+          required: false
+          description: Brief description
+          x-description-zh: 简介
+          x-description-zh-hk: 簡介
+        - name: last_done
+          type: string
+          required: false
+          description: Latest price
+          x-description-zh: 最新价格
+          x-description-zh-hk: 最新價格
+        - name: change
+          type: string
+          required: false
+          description: Day change percentage
+          x-description-zh: 日涨跌幅
+          x-description-zh-hk: 日漲跌幅
+        - name: trade_status
+          type: integer
+          required: false
+          description: Trade status code
+          x-description-zh: 交易状态码
+          x-description-zh-hk: 交易狀態碼
+        - name: latency
+          type: boolean
+          required: false
+          description: Whether quote data is delayed
+          x-description-zh: 是否为延迟行情数据
+          x-description-zh-hk: 是否為延遲行情數據
+        - name: unread_change_log_category
+          type: string
+          required: false
+          description: Unread change log category
+          x-description-zh: 未读变更日志分类
+          x-description-zh-hk: 未讀變更日誌分類
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  mine:
+                    - id: 15921
+                      name: AI Picks
+                      type: Regular
+                      day_change: '-0.40'
+                      ytd_change: '6.64'
+                      subscribers: 500
+                  subscribed: []
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: create_sharelist
+      summary: Create Sharelist
+      x-summary-zh: 创建股单
+      x-summary-zh-hk: 創建股單
+      description: |
+        Create a new community stock list with an optional initial set of securities.
+      x-description-zh: |
+        创建新的社区自选股列表，可选择预设初始证券。
+      x-description-zh-hk: |
+        創建新的社區自選股列表，可選擇預設初始證券。
+      tags:
+        - Content
+      x-parameters:
+        - name: description
+          in: body
+          type: string
+          required: false
+          description: Description
+          x-description-zh: 描述
+          x-description-zh-hk: 描述
+        - name: securities
+          in: body
+          type: array
+          required: false
+          description: Initial list of security symbols, e.g. `["AAPL.US", "NVDA.US"]`
+          x-description-zh: 初始证券代码列表，例如 `["AAPL.US", "NVDA.US"]`
+          x-description-zh-hk: 初始證券代碼列表，例如 `["AAPL.US", "NVDA.US"]`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist create --name "AI Picks" --description "Top AI infrastructure stocks"
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/sharelists' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/sharelists",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/sharelists",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/sharelists")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: id
+          type: int64
+          required: true
+          description: ID of the newly created sharelist
+          x-description-zh: 新创建股单的 ID
+          x-description-zh-hk: 新創建股單的 ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  id: 15922
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/sharelists/popular:
+    get:
+      operationId: popular_sharelists
+      summary: Popular Sharelists
+      x-summary-zh: 热门股单
+      x-summary-zh-hk: 熱門股單
+      description: |
+        Get popular/trending sharelists from the community.
+      x-description-zh: |
+        获取社区热门股单列表。
+      x-description-zh-hk: |
+        獲取社區熱門股單列表。
+      tags:
+        - Content
+      x-parameters:
+        - name: count
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results, default 20
+          x-description-zh: 返回数量上限，默认 20
+          x-description-zh-hk: 返回數量上限，默認 20
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist popular --count 10
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/sharelists/popular' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/sharelists/popular",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/sharelists/popular",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists/popular", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/popular"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/sharelists/popular")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/popular");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/sharelists/popular\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: sharelists
+          type: object[]
+          required: false
+          description: User's own sharelists, see [SharelistInfo](#SharelistInfo)
+          x-description-zh: 用户自建股单列表，见 [SharelistInfo](#SharelistInfo)
+          x-description-zh-hk: 用戶自建股單列表，見 [SharelistInfo](#SharelistInfo)
+        - name: subscribed_sharelists
+          type: object[]
+          required: false
+          description: Subscribed sharelists, see [SharelistInfo](#SharelistInfo)
+          x-description-zh: 已订阅股单列表，见 [SharelistInfo](#SharelistInfo)
+          x-description-zh-hk: 已訂閱股單列表，見 [SharelistInfo](#SharelistInfo)
+        - name: tail_mark
+          type: string
+          required: false
+          description: Pagination cursor for subscribed list
+          x-description-zh: 已订阅列表的分页游标
+          x-description-zh-hk: 已訂閱列表的分頁游標
+        - name: id
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+        - name: description
+          type: string
+          required: false
+          description: Description
+          x-description-zh: 描述
+          x-description-zh-hk: 描述
+        - name: cover
+          type: string
+          required: false
+          description: Cover image URL
+          x-description-zh: 封面图片 URL
+          x-description-zh-hk: 封面圖片 URL
+        - name: subscribers_count
+          type: integer
+          required: false
+          description: Number of subscribers
+          x-description-zh: 订阅人数
+          x-description-zh-hk: 訂閱人數
+        - name: chg
+          type: string
+          required: false
+          description: Day change percentage
+          x-description-zh: 日涨跌幅
+          x-description-zh-hk: 日漲跌幅
+        - name: this_year_chg
+          type: string
+          required: false
+          description: Year-to-date change percentage
+          x-description-zh: 今年以来涨跌幅
+          x-description-zh-hk: 今年以來漲跌幅
+        - name: subscribed
+          type: boolean
+          required: false
+          description: Whether the current user is subscribed
+          x-description-zh: 当前用户是否已订阅
+          x-description-zh-hk: 當前用戶是否已訂閱
+        - name: sharelist_type
+          type: integer
+          required: false
+          description: 'Type: `0`=regular, `3`=official, `4`=industry'
+          x-description-zh: 类型：`0`=普通，`3`=官方，`4`=行业
+          x-description-zh-hk: 類型：`0`=普通，`3`=官方，`4`=行業
+        - name: industry_code
+          type: string
+          required: false
+          description: Industry code (for industry sharelists)
+          x-description-zh: 行业代码（行业股单适用）
+          x-description-zh-hk: 行業代碼（行業股單適用）
+        - name: stocks
+          type: object[]
+          required: false
+          description: Constituent stocks, see [SharelistStock](#SharelistStock)
+          x-description-zh: 成份股列表，见 [SharelistStock](#SharelistStock)
+          x-description-zh-hk: 成份股列表，見 [SharelistStock](#SharelistStock)
+        - name: symbol
+          type: string
+          required: true
+          description: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: code
+          type: string
+          required: false
+          description: Ticker code
+          x-description-zh: 股票代码
+          x-description-zh-hk: 股票代碼
+        - name: market
+          type: string
+          required: false
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: intro
+          type: string
+          required: false
+          description: Brief description
+          x-description-zh: 简介
+          x-description-zh-hk: 簡介
+        - name: last_done
+          type: string
+          required: false
+          description: Latest price
+          x-description-zh: 最新价格
+          x-description-zh-hk: 最新價格
+        - name: change
+          type: string
+          required: false
+          description: Day change percentage
+          x-description-zh: 日涨跌幅
+          x-description-zh-hk: 日漲跌幅
+        - name: trade_status
+          type: integer
+          required: false
+          description: Trade status code
+          x-description-zh: 交易状态码
+          x-description-zh-hk: 交易狀態碼
+        - name: latency
+          type: boolean
+          required: false
+          description: Whether quote data is delayed
+          x-description-zh: 是否为延迟行情数据
+          x-description-zh-hk: 是否為延遲行情數據
+        - name: unread_change_log_category
+          type: string
+          required: false
+          description: Unread change log category
+          x-description-zh: 未读变更日志分类
+          x-description-zh-hk: 未讀變更日誌分類
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - id: 123
+                      name: AI Picks
+                      description: Top AI infrastructure stocks
+                    - id: 456
+                      name: EV Leaders
+                      description: Electric vehicle sector leaders
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/sharelists/{id}:
+    get:
+      operationId: sharelist_detail
+      summary: Sharelist Detail
+      x-summary-zh: 股单详情
+      x-summary-zh-hk: 股單詳情
+      description: |
+        Get sharelist detail including name, description, and constituent stocks.
+      x-description-zh: |
+        获取股单详情，包括名称、描述及成分股列表。
+      x-description-zh-hk: |
+        獲取股單詳情，包括名稱、描述及成分股列表。
+      tags:
+        - Content
+      x-parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist detail 123
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/sharelists/<id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/sharelists/<id>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/sharelists/<id>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists/<id>", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/sharelists/<id>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/sharelists/<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: sharelist
+          type: object
+          required: true
+          description: Sharelist information
+          x-description-zh: 股单详情
+          x-description-zh-hk: 股單詳情
+        - name: scopes
+          type: object
+          required: false
+          description: Subscription scope info
+          x-description-zh: 订阅权限信息
+          x-description-zh-hk: 訂閱權限資訊
+        - name: id
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+        - name: description
+          type: string
+          required: false
+          description: Description
+          x-description-zh: 描述
+          x-description-zh-hk: 描述
+        - name: cover
+          type: string
+          required: false
+          description: Cover image URL
+          x-description-zh: 封面图 URL
+          x-description-zh-hk: 封面圖 URL
+        - name: subscribers_count
+          type: integer
+          required: false
+          description: Number of subscribers
+          x-description-zh: 订阅人数
+          x-description-zh-hk: 訂閱人數
+        - name: chg
+          type: string
+          required: false
+          description: Day change percentage
+          x-description-zh: 当日涨跌幅
+          x-description-zh-hk: 當日漲跌幅
+        - name: this_year_chg
+          type: string
+          required: false
+          description: Year-to-date change
+          x-description-zh: 年初至今涨跌幅
+          x-description-zh-hk: 年初至今漲跌幅
+        - name: subscribed
+          type: boolean
+          required: false
+          description: Whether subscribed
+          x-description-zh: 是否已订阅
+          x-description-zh-hk: 是否已訂閱
+        - name: sharelist_type
+          type: integer
+          required: false
+          description: 'Type: `0`=regular, `3`=official, `4`=industry'
+          x-description-zh: 类型：`0`=普通，`3`=官方，`4`=行业
+          x-description-zh-hk: 類型：`0`=普通，`3`=官方，`4`=行業
+        - name: industry_code
+          type: string
+          required: false
+          description: Industry code
+          x-description-zh: 行业代码
+          x-description-zh-hk: 行業代碼
+        - name: stocks
+          type: object[]
+          required: false
+          description: Constituent stocks, see [SharelistStock](#SharelistStock)
+          x-description-zh: 成分股列表，见 [SharelistStock](#SharelistStock)
+          x-description-zh-hk: 成分股列表，見 [SharelistStock](#SharelistStock)
+        - name: is_self
+          type: boolean
+          required: false
+          description: Whether the current user is the creator
+          x-description-zh: 是否为创建者
+          x-description-zh-hk: 是否為建立者
+        - name: subscription
+          type: boolean
+          required: false
+          description: Whether the current user is subscribed
+          x-description-zh: 是否已订阅
+          x-description-zh-hk: 是否已訂閱
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  id: 123
+                  name: AI Picks
+                  description: Top AI infrastructure stocks
+                  securities:
+                    - AAPL.US
+                    - NVDA.US
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: delete_sharelist
+      summary: Delete Sharelist
+      x-summary-zh: 删除股单
+      x-summary-zh-hk: 刪除股單
+      description: |
+        Permanently delete a sharelist you own. This action cannot be undone.
+      x-description-zh: |
+        永久删除您创建的自选股列表，此操作不可撤销。
+      x-description-zh-hk: |
+        永久刪除您創建的自選股列表，此操作不可撤銷。
+      tags:
+        - Content
+      x-parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: Sharelist ID (path parameter)
+          x-description-zh: 股单 ID（路径参数）
+          x-description-zh-hk: 股單 ID（路徑參數）
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist delete 15921
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request DELETE \
+              --url 'https://openapi.longbridge.com/v1/sharelists/<id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.delete(
+                "https://openapi.longbridge.com/v1/sharelists/<id>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.delete(
+                        "https://openapi.longbridge.com/v1/sharelists/<id>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists/<id>", {
+              method: "DELETE",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("DELETE", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::DELETE, "https://openapi.longbridge.com/v1/sharelists/<id>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"DELETE\", \"https://openapi.longbridge.com/v1/sharelists/<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/sharelists/{id}/items:
+    post:
+      operationId: sharelist_add_securities
+      summary: Add Securities to Sharelist
+      x-summary-zh: 添加标的到股单
+      x-summary-zh-hk: 新增標的到股單
+      description: |
+        Add one or more securities to a sharelist.
+      x-description-zh: |
+        向股单中添加一个或多个标的。
+      x-description-zh-hk: |
+        向股單中新增一個或多個標的。
+      tags:
+        - Content
+      x-parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+        - name: symbols
+          in: body
+          type: array
+          required: true
+          description: Security symbols to add
+          x-description-zh: 待添加的标的代码
+          x-description-zh-hk: 待新增的標的代碼
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist add 123 TSLA.US AAPL.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/sharelists/<id>/items' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbols":"<symbols>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/sharelists/<id>/items",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbols": "<symbols>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/sharelists/<id>/items",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbols": "<symbols>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists/<id>/items", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ symbols: "<symbols>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>/items"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/sharelists/<id>/items")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbols": "<symbols>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>/items");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":\"<symbols>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: sharelist_remove_securities
+      summary: Remove Securities from Sharelist
+      x-summary-zh: 从股单移除标的
+      x-summary-zh-hk: 從股單移除標的
+      description: |
+        Remove one or more securities from a sharelist.
+      x-description-zh: |
+        从股单中移除一个或多个标的。
+      x-description-zh-hk: |
+        從股單中移除一個或多個標的。
+      tags:
+        - Content
+      x-parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+        - name: symbols
+          in: query
+          type: array
+          required: true
+          description: Security symbols to remove
+          x-description-zh: 待移除的标的代码
+          x-description-zh-hk: 待移除的標的代碼
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist remove 123 TSLA.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request DELETE \
+              --url 'https://openapi.longbridge.com/v1/sharelists/<id>/items?symbols=<symbols>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.delete(
+                "https://openapi.longbridge.com/v1/sharelists/<id>/items",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbols": "<symbols>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.delete(
+                        "https://openapi.longbridge.com/v1/sharelists/<id>/items",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbols": "<symbols>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/sharelists/<id>/items")
+            url.searchParams.set("symbols", "<symbols>")
+
+            const resp = await fetch(url, {
+              method: "DELETE",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>/items?symbols=<symbols>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("DELETE", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::DELETE, "https://openapi.longbridge.com/v1/sharelists/<id>/items")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbols", "<symbols>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>/items?symbols=<symbols>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"DELETE\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items?symbols=<symbols>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/sharelists/{id}/items/sort:
+    post:
+      operationId: sharelist_sort_securities
+      summary: Sort Securities in Sharelist
+      x-summary-zh: 股单标的排序
+      x-summary-zh-hk: 股單標的排序
+      description: |
+        Reorder the securities in a sharelist. The symbols list defines the new order.
+      x-description-zh: |
+        对股单中的标的重新排序。传入的标的代码列表即为新顺序。
+      x-description-zh-hk: |
+        對股單中的標的重新排序。傳入的標的代碼列表即為新順序。
+      tags:
+        - Content
+      x-parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: Sharelist ID
+          x-description-zh: 股单 ID
+          x-description-zh-hk: 股單 ID
+        - name: symbols
+          in: body
+          type: array
+          required: true
+          description: Security symbols in the desired order
+          x-description-zh: 按期望顺序排列的标的代码
+          x-description-zh-hk: 按期望順序排列的標的代碼
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge sharelist sort 123 TSLA.US AAPL.US 700.HK
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/sharelists/<id>/items/sort' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbols":"<symbols>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbols": "<symbols>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbols": "<symbols>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/sharelists/<id>/items/sort", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ symbols: "<symbols>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>/items/sort"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbols": "<symbols>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":\"<symbols>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items/sort\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/asset/account:
     get:
       operationId: account_balance
@@ -13561,635 +16833,6 @@ paths:
                       file_urls:
                         - https://www.sec.gov/Archives/edgar/data/320193/.../wk-form4_1773786674.xml
                       publish_at: '1773786677'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/content/{symbol}/news:
-    get:
-      operationId: list_news
-      summary: Get News by Symbol
-      x-summary-zh: 获取标的新闻
-      x-summary-zh-hk: 獲取標的新聞
-      description: |
-        Get the latest news articles for the specified symbol.
-      x-description-zh: 获取指定标的的最新新闻资讯列表。
-      tags:
-        - News & Filings
-      parameters:
-        - name: symbol
-          in: path
-          required: true
-          description: 'Security symbol to query news for (e.g. `AAPL.US`, `700.HK`).'
-          schema:
-            type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge news <SYMBOL>
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  items:
-                    - id: '280228333'
-                      title: 苹果拟在地图应用引入广告
-                      description: 苹果计划在其地图应用中引入广告，以推动服务业务增长...
-                      url: https://longbridge.com/news/280228333
-                      published_at: '1774310775'
-                      comments_count: 0
-                      likes_count: 0
-                      shares_count: 0
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/content/{symbol}/topics:
-    get:
-      operationId: list_topics
-      summary: List Community Topics by Symbol
-      x-summary-zh: 按标的获取社区讨论
-      x-summary-zh-hk: 按標的獲取社區討論
-      description: |
-        Get the list of community discussion topics for the specified symbol.
-      x-description-zh: 获取指定标的的社区讨论。
-      tags:
-        - Community
-      parameters:
-        - name: symbol
-          in: path
-          required: true
-          description: 'Security symbol to query topics for (e.g. `AAPL.US`, `700.HK`).'
-          schema:
-            type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge topics <SYMBOL>
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  items:
-                    - id: '39469738'
-                      title: ''
-                      description: 期待苹果的 AI。我相信在用户端侧，苹果能把 AI 做得很好。
-                      url: https://longbridge.com/topics/39469738
-                      published_at: '1774325592'
-                      comments_count: 0
-                      likes_count: 0
-                      shares_count: 0
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/content/topics/mine:
-    get:
-      operationId: list_my_topics
-      summary: List My Published Topics
-      x-summary-zh: 获取我发布的讨论
-      x-summary-zh-hk: 獲取我發佈的討論
-      description: |
-        Get the list of topics published by the current authenticated user.
-        Supports pagination and filtering by topic type.
-      x-description-zh: 获取当前认证用户已发布的讨论列表，支持分页和按讨论类型筛选。
-      tags:
-        - Community
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge topic mine
-            longbridge topic mine --type article
-            longbridge topic mine --type post --size 10 --page 2
-            longbridge topic mine --format json
-      parameters:
-        - name: page
-          in: query
-          required: false
-          description: Page number (1-based). Defaults to `1`.
-          schema:
-            type: integer
-            nullable: true
-        - name: size
-          in: query
-          required: false
-          description: Number of items per page, range 1–500. Defaults to `50`.
-          schema:
-            type: integer
-            nullable: true
-        - name: topic_type
-          in: query
-          required: false
-          description: |
-            Filter by topic type. One of:
-            - `article` — long-form article (has title)
-            - `post` — short post
-
-            Omit to return all types.
-          schema:
-            type: string
-            nullable: true
-            enum:
-              - article
-              - post
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  items:
-                    - id: '39304657'
-                      title: My Analysis on AAPL
-                      description: A brief summary of my article...
-                      body: Full markdown content here...
-                      topic_type: article
-                      likes_count: 12
-                      comments_count: 3
-                      views_count: 200
-                      shares_count: 1
-                      tickers:
-                        - AAPL.US
-                      hashtags:
-                        - earnings
-                      license: 1
-                      detail_url: https://longbridge.com/topics/39304657
-                      created_at: '1742000000'
-                      updated_at: '1742000000'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/content/topics:
-    post:
-      operationId: create_topic
-      summary: Create Topic
-      x-summary-zh: 创建社区讨论
-      x-summary-zh-hk: 創建社區討論
-      description: |
-        Create a new community topic. Two content types are supported:
-
-        - `post` (default): Plain text only, Markdown is **not** rendered — appears as literal characters.
-        - `article`: This should with `title` params, suppports Markdown with headers, tables, bold, code blocks, etc.
-
-        Only users who have opened a **Longbridge account and hold assets** are allowed.
-
-        Symbols mentioned in the body (e.g. `TSLA.US`, `700.HK`) are automatically recognized and linked as related stocks. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
-
-        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
-
-        **Rate limit:** Max 3 topics per user per minute, 10 per 24 hours. Exceeding the limit returns `429`.
-
-        > Rate limit thresholds are for reference only and may be adjusted at any time.
-      x-description-zh: |
-        创建新的社区讨论，根据 `topic_type` 支持两种类型的发布：
-
-        - `post`:（默认），仅支持**纯文本**, 不支持 Markdown。
-        - `article`: 选择这项类型，`title` 字段必填，支持 Markdown 格式包含标题、表格、加粗等格式支持。
-
-        仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。
-
-        正文中提到的标的代码（如 `TSLA.US`, `700.HK`）会被平台自动识别并关联。`tickers` 用于补充正文中未显式提及的标的。
-
-        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
-
-        **频率限制：** 同一用户每分钟最多创建 3 篇，24 小时内最多 10 篇，超出返回 `429`。
-
-        > 频率限制规则仅供参考，平台可能随时进行内部调整。
-      tags:
-        - Community
-      x-codeSamples:
-        - lang: Bash
-          label: CLI
-          source: |
-            # Short post (plain text, Markdown not rendered)
-            longbridge topic create --body "Bullish on 700.HK today"
-
-            # Short post with tickers
-            longbridge topic create --body "NVDA GTC highlights" --tickers NVDA.US,700.HK
-
-            # Article (Markdown, title required)
-            longbridge topic create --title "My Analysis" --body "**Bullish** on 700.HK because..." --type article
-
-            # Article from file
-            longbridge topic create --title "Q4 Preview" --body "$(cat analysis.md)" --type article
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - body
-              properties:
-                title:
-                  type: string
-                  description: Topic title. Required when `topic_type` is `article`; optional for `post`.
-                body:
-                  type: string
-                  description: |
-                    Topic body.
-
-                    - `post`: plain text only — Markdown is not rendered.
-                    - `article`: Markdown is supported.
-                topic_type:
-                  type: string
-                  nullable: true
-                  enum:
-                    - article
-                    - post
-                  description: |
-                    Topic type. One of:
-                    - `article` — long-form article with a title
-                    - `post` — short post (default)
-                tickers:
-                  type: array
-                  nullable: true
-                  description: 'Associated security symbols, format `{symbol}.{market}` (e.g. `["AAPL.US", "700.HK"]`). Maximum 10.'
-                  items:
-                    type: string
-                hashtags:
-                  type: array
-                  nullable: true
-                  description: Associated hashtag names (e.g. `["earnings", "fed"]`). Maximum 1.
-                  items:
-                    type: string
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  item:
-                    id: '39304657'
-                    title: My View on AAPL
-                    description: Brief plain-text summary...
-                    body: '**Bullish** on AAPL because...'
-                    topic_type: article
-                    tickers:
-                      - AAPL.US
-                    hashtags:
-                      - earnings
-                    images: []
-                    likes_count: 0
-                    comments_count: 0
-                    views_count: 0
-                    shares_count: 0
-                    detail_url: https://longbridge.com/topics/39304657
-                    author:
-                      member_id: '10086'
-                      name: Jane Doe
-                      avatar: https://example.com/avatar.jpg
-                    created_at: '1742000000'
-                    updated_at: '1742000000'
-        '403':
-          description: Forbidden — user has not opened a Longbridge account or has no assets.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '429':
-          description: Too Many Requests — rate limit exceeded (3/min or 10/24h per user).
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/content/topics/{id}:
-    get:
-      operationId: topic_detail
-      summary: Topic Detail
-      x-summary-zh: 获取讨论详情
-      x-summary-zh-hk: 獲取討論詳情
-      description: |
-        Get the full details of a community topic by its ID.
-
-        The response includes:
-        - Full body text (Markdown for `article` type, plain text for `post`)
-        - Author profile (member ID, display name, avatar)
-        - Associated tickers and hashtags
-        - Engagement counts (likes, replies, views, shares)
-        - Direct URL to the topic page
-      x-description-zh: |
-        根据 ID 获取社区讨论的完整详情。
-
-        返回内容包括：
-        - 完整正文（`article` 类型为 Markdown，`post` 类型为纯文本）
-        - 作者信息（member ID、昵称、头像）
-        - 关联标的代码和标签
-        - 互动数据（点赞、回复、浏览、分享数）
-        - 讨论页面直链
-      tags:
-        - Community
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: 'Topic ID (e.g. `6993508780031016960`).'
-          schema:
-            type: string
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |
-            longbridge topic detail 6993508780031016960
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  item:
-                    id: '6993508780031016960'
-                    title: My Analysis on AAPL
-                    description: A brief plain-text summary of the topic.
-                    body: '**Bullish** on AAPL because...'
-                    topic_type: article
-                    author:
-                      member_id: '1000001'
-                      name: Jane Doe
-                      avatar: https://cdn.longbridge.com/avatars/1000001.jpg
-                    tickers:
-                      - AAPL.US
-                    hashtags:
-                      - earnings
-                    images:
-                      - url: https://cdn.longbridge.com/img/abc.jpg
-                        sm: https://cdn.longbridge.com/img/abc_sm.jpg
-                        lg: https://cdn.longbridge.com/img/abc_lg.jpg
-                    likes_count: 42
-                    comments_count: 7
-                    views_count: 1500
-                    shares_count: 3
-                    detail_url: https://longbridge.com/topics/6993508780031016960
-                    created_at: '1742000000'
-                    updated_at: '1742001000'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/content/topics/{topic_id}/comments:
-    get:
-      operationId: list_topic_replies
-      summary: List Topic Replies
-      x-summary-zh: 获取讨论回复列表
-      x-summary-zh-hk: 獲取討論回覆列表
-      description: |
-        Get the reply list for a specific topic, with pagination.
-
-        Each reply includes:
-        - Author profile (member ID, display name, avatar)
-        - Body (plain text)
-        - Engagement counts (likes, nested replies)
-        - `reply_to_id`: `"0"` means a top-level reply; any other value is the ID of the parent reply it is nested under.
-      x-description-zh: |
-        获取指定讨论下的回复列表，支持分页。
-
-        每条回复包含：
-        - 作者信息（member ID、昵称、头像）
-        - 正文（纯文本）
-        - 互动数据（点赞数、嵌套回复数）
-        - `reply_to_id`：`"0"` 表示顶层回复，其他值表示对指定回复的嵌套回复
-      tags:
-        - Community
-      parameters:
-        - name: topic_id
-          in: path
-          required: true
-          description: 'Topic ID (e.g. `6993508780031016960`).'
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          description: Page number (1-based). Defaults to `1`.
-          schema:
-            type: integer
-            nullable: true
-        - name: size
-          in: query
-          required: false
-          description: Number of items per page, range 1–50. Defaults to `20`.
-          schema:
-            type: integer
-            nullable: true
-            minimum: 1
-            maximum: 50
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |
-            longbridge topic replies 6993508780031016960
-            longbridge topic replies 6993508780031016960 --page 2 --size 20
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  items:
-                    - id: '7001234567890123456'
-                      topic_id: '6993508780031016960'
-                      body: Great analysis, fully agree!
-                      reply_to_id: '0'
-                      author:
-                        member_id: '1000002'
-                        name: John Smith
-                        avatar: https://cdn.longbridge.com/avatars/1000002.jpg
-                      images: []
-                      likes_count: 5
-                      comments_count: 2
-                      created_at: '1742001500'
-                    - id: '7001234567890123457'
-                      topic_id: '6993508780031016960'
-                      body: I disagree on the valuation part.
-                      reply_to_id: '7001234567890123456'
-                      author:
-                        member_id: '1000003'
-                        name: Alice Lee
-                        avatar: https://cdn.longbridge.com/avatars/1000003.jpg
-                      images: []
-                      likes_count: 1
-                      comments_count: 0
-                      created_at: '1742001800'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      operationId: create_topic_reply
-      summary: Create Topic Reply
-      x-summary-zh: 创建讨论回复
-      x-summary-zh-hk: 創建討論回覆
-      description: |
-        Post a reply to a community topic. Supports nesting under an existing reply.
-
-        Plain text only — HTML and Markdown are **not** rendered.
-
-        Only users who have opened a **Longbridge account and hold assets** are allowed.
-
-        Symbols mentioned in the body (e.g. `TSLA.US`, `700.HK`) are automatically recognized and linked as related stocks. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
-
-        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
-
-        **Rate limit:** The first 3 replies per user per topic have no wait requirement. After that, each subsequent reply must wait an incrementally longer interval:
-
-        | Reply # (after 3rd) | Required wait |
-        | ------------------- | ------------- |
-        | 4th                 | 3 s           |
-        | 5th                 | 5 s           |
-        | 6th                 | 8 s           |
-        | 7th                 | 13 s          |
-        | 8th                 | 21 s          |
-        | 9th                 | 34 s          |
-        | 10th+               | 55 s (cap)    |
-
-        Exceeding the rate limit returns `429`.
-
-        > Rate limit thresholds are for reference only and may be adjusted at any time.
-      x-description-zh: |
-        在指定讨论下发布回复，支持嵌套回复已有回复。
-
-        **正文格式：** 仅支持纯文本，不支持 HTML 或 Markdown。
-
-        仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。
-
-        正文中提到的标的代码（如 `TSLA.US`, `700.HK`）会被平台自动识别并关联。`tickers` 用于补充正文中未显式提及的标的。
-
-        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
-
-        **频率限制：** 同一用户在同一讨论下，前 3 条无间隔限制；第 4 条起须与上一条间隔递增：
-
-        | 回复条数（第 3 条后）| 须等待时长 |
-        | -------------------- | ---------- |
-        | 第 4 条              | 3 秒       |
-        | 第 5 条              | 5 秒       |
-        | 第 6 条              | 8 秒       |
-        | 第 7 条              | 13 秒      |
-        | 第 8 条              | 21 秒      |
-        | 第 9 条              | 34 秒      |
-        | 第 10 条起           | 55 秒（上限）|
-
-        超出限制返回 `429`。
-
-        > 频率限制规则仅供参考，平台可能随时进行内部调整。
-      tags:
-        - Community
-      parameters:
-        - name: topic_id
-          in: path
-          required: true
-          description: 'Topic ID to reply to (e.g. `6993508780031016960`).'
-          schema:
-            type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            # Top-level reply
-            longbridge topic create-reply 6993508780031016960 --body "Great post!"
-
-            # Reply to an existing comment
-            longbridge topic create-reply 6993508780031016960 --body "Agreed!" --reply-to 7001234567890123456
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - body
-              properties:
-                body:
-                  type: string
-                  description: |
-                    The reply body content.
-
-                    Plain text only — HTML and Markdown are **not** rendered.
-                reply_to_id:
-                  type: string
-                  nullable: true
-                  description: |
-                    ID of the comment to reply to.
-
-                    Omit or set to `"0"` to post a top-level comment.
-                    When set to a valid comment ID, the new comment will be treated as a reply to that comment.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  item:
-                    id: '7001234567890123460'
-                    topic_id: '6993508780031016960'
-                    body: Great post!
-                    reply_to_id: '0'
-                    author:
-                      member_id: '1000001'
-                      name: Jane Doe
-                      avatar: https://cdn.longbridge.com/avatars/1000001.jpg
-                    images: []
-                    likes_count: 0
-                    comments_count: 0
-                    created_at: '1742002000'
-        '403':
-          description: Forbidden — the authenticated user has not opened a Longbridge account or does not hold assets.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '429':
-          description: Too Many Requests — rate limit exceeded for this user in this topic. Wait for the required interval before retrying.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
         default:
           description: Unexpected error
           content:
