@@ -891,6 +891,938 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/ai/agents:
+    get:
+      operationId: ai_public_agents
+      summary: Public Agents
+      x-summary-zh: 公开 Agent
+      x-summary-zh-hk: 公開 Agent
+      description: |
+        List all publicly available Agents on the platform — the same catalog shown on the Explore page. The returned `uid` is the Agent identifier used in the [Start Conversation](/docs/ai/chat/conversation) endpoint path.
+
+        Unlike [Agents in Workspace](/docs/ai/workspace/agents), this endpoint is not scoped to a Workspace: it returns every Agent that is published and publicly shared.
+      x-description-zh: |
+        列出平台上所有公开可用的 Agent——与探索页展示的是同一份目录。返回的 `uid` 即[发起对话](/zh-CN/docs/ai/chat/conversation)接口路径中使用的 Agent 标识。
+
+        与 [Workspace 下的 Agent](/zh-CN/docs/ai/workspace/agents) 不同，本接口不限定 Workspace：返回所有已发布且公开分享的 Agent。
+      x-description-zh-hk: |
+        列出平台上所有公開可用的 Agent——與探索頁展示的是同一份目錄。返回的 `uid` 即[發起對話](/zh-HK/docs/ai/chat/conversation)接口路徑中使用的 Agent 標識。
+
+        與 [Workspace 下的 Agent](/zh-HK/docs/ai/workspace/agents) 不同，本接口不限定 Workspace：返回所有已發佈且公開分享的 Agent。
+      tags:
+        - AI
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/ai/agents' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/ai/agents",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/ai/agents",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/ai/agents")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/ai/agents\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: agents
+          type: object[]
+          required: true
+          description: Agent list, ordered by last updated time descending
+          x-description-zh: Agent 列表，按最后更新时间倒序
+          x-description-zh-hk: Agent 列表，按最後更新時間倒序
+        - name: └ uid
+          type: string
+          required: true
+          description: Agent UID, used as the path parameter of [Start Conversation](/docs/ai/chat/conversation)
+          x-description-zh: Agent UID，用作[发起对话](/zh-CN/docs/ai/chat/conversation)的路径参数
+          x-description-zh-hk: Agent UID，用作[發起對話](/zh-HK/docs/ai/chat/conversation)的路徑參數
+        - name: └ name
+          type: string
+          required: true
+          description: Agent name, localized by the `Accept-Language` header
+          x-description-zh: Agent 名称，按 `Accept-Language` 请求头本地化
+          x-description-zh-hk: Agent 名稱，按 `Accept-Language` 請求頭本地化
+        - name: └ description
+          type: string
+          required: false
+          description: Agent description, localized by the `Accept-Language` header
+          x-description-zh: Agent 描述，按 `Accept-Language` 请求头本地化
+          x-description-zh-hk: Agent 描述，按 `Accept-Language` 請求頭本地化
+        - name: └ mode
+          type: string
+          required: true
+          description: Agent mode, e.g. `chat`
+          x-description-zh: Agent 模式，如 `chat`
+          x-description-zh-hk: Agent 模式，如 `chat`
+        - name: └ icon
+          type: string
+          required: false
+          description: Icon URL
+          x-description-zh: 图标 URL
+          x-description-zh-hk: 圖標 URL
+        - name: └ is_published
+          type: boolean
+          required: true
+          description: Always `true` for this endpoint
+          x-description-zh: 本接口下恒为 `true`
+          x-description-zh-hk: 本接口下恆為 `true`
+        - name: └ published_at
+          type: int64
+          required: false
+          description: Publish time, Unix timestamp in seconds
+          x-description-zh: 发布时间，Unix 秒级时间戳
+          x-description-zh-hk: 發佈時間，Unix 秒級時間戳
+        - name: └ created_at
+          type: int64
+          required: false
+          description: Creation time, Unix timestamp in seconds
+          x-description-zh: 创建时间，Unix 秒级时间戳
+          x-description-zh-hk: 創建時間，Unix 秒級時間戳
+        - name: └ updated_at
+          type: int64
+          required: false
+          description: Last updated time, Unix timestamp in seconds
+          x-description-zh: 最后更新时间，Unix 秒级时间戳
+          x-description-zh-hk: 最後更新時間，Unix 秒級時間戳
+        - name: total
+          type: int32
+          required: true
+          description: Total number of public Agents matching the query
+          x-description-zh: 符合条件的公开 Agent 总数
+          x-description-zh-hk: 符合條件的公開 Agent 總數
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  agents:
+                    - uid: ag_7d3f9b2c
+                      name: US Stock Analyst
+                      description: Answers US stock questions with market and fundamental data
+                      mode: chat
+                      icon: https://cdn.longbridge.com/icons/agent.png
+                      is_published: true
+                      published_at: 1742000000
+                      created_at: 1741000000
+                      updated_at: 1742001000
+                  total: 35
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/ai/workspaces:
+    get:
+      operationId: ai_workspaces
+      summary: My Workspaces
+      x-summary-zh: 我的 Workspace
+      x-summary-zh-hk: 我的 Workspace
+      description: |
+        List all Workspaces the current account belongs to. A Workspace is the organizational unit for Agents: find the target Workspace via this endpoint first, then use [Agents in Workspace](/docs/ai/workspace/agents) to list the Agents available in it.
+      x-description-zh: |
+        获取当前账户加入的全部 Workspace 列表。Workspace 是 Agent 的组织单位，先通过本接口找到目标 Workspace，再用 [Workspace 下的 Agent](/zh-CN/docs/ai/workspace/agents) 查询其中可用的 Agent。
+      x-description-zh-hk: |
+        獲取當前賬戶加入的全部 Workspace 列表。Workspace 是 Agent 的組織單位，先通過本接口找到目標 Workspace，再用 [Workspace 下的 Agent](/zh-HK/docs/ai/workspace/agents) 查詢其中可用的 Agent。
+      tags:
+        - AI
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/ai/workspaces' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/ai/workspaces",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/ai/workspaces",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/workspaces", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/workspaces"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/ai/workspaces")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/workspaces");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/ai/workspaces\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: workspaces
+          type: object[]
+          required: true
+          description: Workspaces the current account belongs to
+          x-description-zh: 当前账户加入的 Workspace 列表
+          x-description-zh-hk: 當前賬戶加入的 Workspace 列表
+        - name: └ id
+          type: string
+          required: true
+          description: Workspace ID
+          x-description-zh: Workspace ID
+          x-description-zh-hk: Workspace ID
+        - name: └ name
+          type: string
+          required: true
+          description: Workspace name
+          x-description-zh: Workspace 名称
+          x-description-zh-hk: Workspace 名稱
+        - name: └ created_at
+          type: int64
+          required: false
+          description: Creation time, Unix timestamp in seconds
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+        - name: └ updated_at
+          type: int64
+          required: false
+          description: Last updated time, Unix timestamp in seconds
+          x-description-zh: 最后更新时间，Unix 时间戳（秒）
+          x-description-zh-hk: 最後更新時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  workspaces:
+                    - id: '1001'
+                      name: My Workspace
+                      created_at: 1742000000
+                      updated_at: 1742001000
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/ai/workspaces/{workspace_id}/agents:
+    get:
+      operationId: ai_workspace_agents
+      summary: Agents in Workspace
+      x-summary-zh: Workspace 下的 Agent
+      x-summary-zh-hk: Workspace 下的 Agent
+      description: |
+        List the Agents in the specified Workspace. The returned `uid` is the Agent identifier used in the [Start Conversation](/docs/ai/chat/conversation) endpoint path; only Agents with `is_published` set to `true` can start conversations.
+      x-description-zh: |
+        获取指定 Workspace 下的 Agent 列表。返回的 `uid` 即 [发起对话](/zh-CN/docs/ai/chat/conversation) 接口路径中的 Agent 标识；只有 `is_published` 为 `true` 的 Agent 才能发起对话。
+      x-description-zh-hk: |
+        獲取指定 Workspace 下的 Agent 列表。返回的 `uid` 即 [發起對話](/zh-HK/docs/ai/chat/conversation) 接口路徑中的 Agent 標識；只有 `is_published` 為 `true` 的 Agent 才能發起對話。
+      tags:
+        - AI
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: agents
+          type: object[]
+          required: true
+          description: Agent list
+          x-description-zh: Agent 列表
+          x-description-zh-hk: Agent 列表
+        - name: └ uid
+          type: string
+          required: true
+          description: Agent UID, used as the path parameter of [Start Conversation](/docs/ai/chat/conversation)
+          x-description-zh: Agent UID，用于 [发起对话](/zh-CN/docs/ai/chat/conversation) 的路径参数
+          x-description-zh-hk: Agent UID，用於 [發起對話](/zh-HK/docs/ai/chat/conversation) 的路徑參數
+        - name: └ name
+          type: string
+          required: true
+          description: Agent name
+          x-description-zh: Agent 名称
+          x-description-zh-hk: Agent 名稱
+        - name: └ description
+          type: string
+          required: false
+          description: Agent description
+          x-description-zh: Agent 描述
+          x-description-zh-hk: Agent 描述
+        - name: └ mode
+          type: string
+          required: true
+          description: Agent mode, e.g. `chat`
+          x-description-zh: Agent 模式，如 `chat`
+          x-description-zh-hk: Agent 模式，如 `chat`
+        - name: └ icon
+          type: string
+          required: false
+          description: Icon URL
+          x-description-zh: 图标 URL
+          x-description-zh-hk: 圖標 URL
+        - name: └ is_published
+          type: boolean
+          required: true
+          description: Whether published; only published Agents can start conversations
+          x-description-zh: 是否已发布，仅已发布的 Agent 可发起对话
+          x-description-zh-hk: 是否已發佈，僅已發佈的 Agent 可發起對話
+        - name: └ published_at
+          type: int64
+          required: false
+          description: Publish time, Unix timestamp in seconds; 0 if unpublished
+          x-description-zh: 发布时间，Unix 时间戳（秒），未发布为 0
+          x-description-zh-hk: 發佈時間，Unix 時間戳（秒），未發佈為 0
+        - name: └ created_at
+          type: int64
+          required: false
+          description: Creation time, Unix timestamp in seconds
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+        - name: └ updated_at
+          type: int64
+          required: false
+          description: Last updated time, Unix timestamp in seconds
+          x-description-zh: 最后更新时间，Unix 时间戳（秒）
+          x-description-zh-hk: 最後更新時間，Unix 時間戳（秒）
+        - name: total
+          type: int32
+          required: true
+          description: Total number of matching Agents
+          x-description-zh: 符合条件的 Agent 总数
+          x-description-zh-hk: 符合條件的 Agent 總數
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  agents:
+                    - uid: ag_7d3f9b2c
+                      name: US Stock Analyst
+                      description: Answers US stock questions with market and fundamental data
+                      mode: chat
+                      icon: https://cdn.longbridge.com/icons/agent.png
+                      is_published: true
+                      published_at: 1742000000
+                      created_at: 1741000000
+                      updated_at: 1742001000
+                  total: 12
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/ai/agents/{agent_id}/conversations:
+    post:
+      operationId: ai_conversation
+      summary: Start Conversation
+      x-summary-zh: 发起对话
+      x-summary-zh-hk: 發起對話
+      description: |
+        Ask a question to the specified Agent. You can start a brand-new conversation, or pass the `chat_uid` of an existing one to continue asking in the same conversation.
+
+        The Agent generates the answer using capabilities such as market data and account access. When the Agent needs more information or confirmation from you, the run is **interrupted** (`status` is `interrupted`) — send your answers via [Continue Conversation](/docs/ai/chat/continue) to resume it.
+
+        Choose the response mode with the `Accept` header: `text/event-stream` streams the run progress and answer via SSE; any other value returns a blocking response with the aggregated final result.
+      x-description-zh: |
+        向指定 Agent 提问。可以开启一个全新会话，也可以传入已有会话的 `chat_uid` 在同一会话中追加提问。
+
+        Agent 会结合行情、账户等能力生成回答。当 Agent 需要你补充信息或确认时，本次运行会**中断**（`status` 为 `interrupted`），此时需通过 [继续对话](/zh-CN/docs/ai/chat/continue) 回传答案后才能继续。
+
+        通过请求头 `Accept` 选择响应模式：`text/event-stream` 为 SSE 流式，逐步推送运行过程与回答；其他值为阻塞式，一次性返回聚合后的最终结果。
+      x-description-zh-hk: |
+        向指定 Agent 提問。可以開啟一個全新會話，也可以傳入已有會話的 `chat_uid` 在同一會話中追加提問。
+
+        Agent 會結合行情、賬戶等能力生成回答。當 Agent 需要你補充信息或確認時，本次運行會**中斷**（`status` 為 `interrupted`），此時需通過 [繼續對話](/zh-HK/docs/ai/chat/continue) 回傳答案後才能繼續。
+
+        通過請求頭 `Accept` 選擇響應模式：`text/event-stream` 為 SSE 流式，逐步推送運行過程與回答；其他值為阻塞式，一次性返回聚合後的最終結果。
+      tags:
+        - AI
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: chat_uid
+          type: string
+          required: true
+          description: Conversation identifier, used for follow-up questions and troubleshooting
+          x-description-zh: 会话标识，追加提问或排查问题时使用
+          x-description-zh-hk: 會話標識，追加提問或排查問題時使用
+        - name: message_id
+          type: string
+          required: true
+          description: Message ID of this round (as a string)
+          x-description-zh: 本轮消息 ID（字符串形式）
+          x-description-zh-hk: 本輪消息 ID（字符串形式）
+        - name: status
+          type: string
+          required: true
+          description: 'Final run status: `succeeded` / `interrupted` / `failed` / `stopped`'
+          x-description-zh: 运行终态：`succeeded` / `interrupted` / `failed` / `stopped`
+          x-description-zh-hk: 運行終態：`succeeded` / `interrupted` / `failed` / `stopped`
+        - name: answer
+          type: string
+          required: false
+          description: Final answer text; valid when `status` is `succeeded`
+          x-description-zh: 最终回答文本，`status` 为 `succeeded` 时有效
+          x-description-zh-hk: 最終回答文本，`status` 為 `succeeded` 時有效
+        - name: references
+          type: object[]
+          required: false
+          description: Sources referenced by the answer; `null` if none
+          x-description-zh: 回答引用的资料来源，无引用时为 `null`
+          x-description-zh-hk: 回答引用的資料來源，無引用時為 `null`
+        - name: elapsed_time
+          type: number
+          required: false
+          description: Run duration in seconds
+          x-description-zh: 运行耗时（秒）
+          x-description-zh-hk: 運行耗時（秒）
+        - name: interrupt
+          type: object
+          required: false
+          description: Present only when `status` is `interrupted`
+          x-description-zh: 仅当 `status` 为 `interrupted` 时出现
+          x-description-zh-hk: 僅當 `status` 為 `interrupted` 時出現
+        - name: └ node_id
+          type: string
+          required: true
+          description: ID of the node that triggered the interrupt
+          x-description-zh: 触发中断的节点 ID
+          x-description-zh-hk: 觸發中斷的節點 ID
+        - name: └ tool_call_id
+          type: string
+          required: true
+          description: Tool call ID of this inquiry; used as the answer key when continuing
+          x-description-zh: 本次询问对应的工具调用 ID，继续对话时作为答案的 key
+          x-description-zh-hk: 本次詢問對應的工具調用 ID，繼續對話時作為答案的 key
+        - name: └ questions
+          type: object[]
+          required: true
+          description: Questions you need to answer
+          x-description-zh: 需要你回答的问题列表
+          x-description-zh-hk: 需要你回答的問題列表
+        - name: └ ∟ question
+          type: string
+          required: true
+          description: Question text
+          x-description-zh: 问题文本
+          x-description-zh-hk: 問題文本
+        - name: └ ∟ options
+          type: object[]
+          required: false
+          description: Options; empty means free-form answer
+          x-description-zh: 可选项，为空表示自由作答
+          x-description-zh-hk: 可選項，為空表示自由作答
+        - name: └ ∟∟ description
+          type: string
+          required: false
+          description: Option text
+          x-description-zh: 选项文本
+          x-description-zh-hk: 選項文本
+        - name: └ ∟ multi_select
+          type: boolean
+          required: false
+          description: Whether multiple options may be selected
+          x-description-zh: 是否允许多选
+          x-description-zh-hk: 是否允許多選
+        - name: └ message_id
+          type: int64
+          required: false
+          description: ID of the paused message
+          x-description-zh: 被暂停的消息 ID
+          x-description-zh-hk: 被暫停的消息 ID
+        - name: └ chat_id
+          type: int64
+          required: false
+          description: ID of the owning conversation
+          x-description-zh: 所属会话 ID
+          x-description-zh-hk: 所屬會話 ID
+        - name: error
+          type: object
+          required: false
+          description: Present only when the run failed
+          x-description-zh: 仅当运行出错时出现
+          x-description-zh-hk: 僅當運行出錯時出現
+        - name: └ code
+          type: int32
+          required: false
+          description: Error code
+          x-description-zh: 错误码
+          x-description-zh-hk: 錯誤碼
+        - name: └ message
+          type: string
+          required: false
+          description: Error message
+          x-description-zh: 错误信息
+          x-description-zh-hk: 錯誤信息
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  chat_uid: ct_9f2c1a5b
+                  message_id: '42'
+                  status: succeeded
+                  answer: Tesla (TSLA.US) recently...
+                  references:
+                    - index: 1
+                      title: ...
+                      url: ...
+                  elapsed_time: 3.21
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue:
+    post:
+      operationId: ai_continue
+      summary: Continue Conversation
+      x-summary-zh: 继续对话
+      x-summary-zh-hk: 繼續對話
+      description: |
+        When [Start Conversation](/docs/ai/chat/conversation) returns `status = interrupted`, the Agent is waiting for more information from you. Send your answers via this endpoint and the paused run resumes from the interrupt point, until it succeeds, gets interrupted again, or fails.
+
+        A single round of conversation may be interrupted multiple times: if the run returns `interrupted` again after continuing, call this endpoint again with the new `interrupt`.
+
+        As with Start Conversation, choose blocking / SSE streaming response mode with the `Accept` header.
+      x-description-zh: |
+        当 [发起对话](/zh-CN/docs/ai/chat/conversation) 返回 `status = interrupted` 时，Agent 正等待你补充信息。通过本接口回传答案，暂停的运行会从中断处继续执行，直到成功、再次中断或失败。
+
+        同一轮对话可能发生多次中断：若继续后再次返回 `interrupted`，按新的 `interrupt` 重复调用本接口即可。
+
+        与发起对话一致，通过请求头 `Accept` 选择阻塞式 / SSE 流式响应。
+      x-description-zh-hk: |
+        當 [發起對話](/zh-HK/docs/ai/chat/conversation) 返回 `status = interrupted` 時，Agent 正等待你補充信息。通過本接口回傳答案，暫停的運行會從中斷處繼續執行，直到成功、再次中斷或失敗。
+
+        同一輪對話可能發生多次中斷：若繼續後再次返回 `interrupted`，按新的 `interrupt` 重複調用本接口即可。
+
+        與發起對話一致，通過請求頭 `Accept` 選擇阻塞式 / SSE 流式響應。
+      tags:
+        - AI
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  chat_uid: ct_9f2c1a5b
+                  message_id: '43'
+                  status: succeeded
+                  answer: Over the past month, Tesla (TSLA.US)...
+                  references: []
+                  elapsed_time: 2.74
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/notify/reminders:
     get:
       operationId: list_alerts
