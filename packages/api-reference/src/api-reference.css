@@ -970,3 +970,26 @@
 :root[data-theme="dark"] .api-page-md :not(pre) > code {
   background: rgba(255, 255, 255, 0.1);
 }
+
+/* Copy button injected into x-page markdown code blocks */
+.api-page-md pre .page-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.api-page-md pre:hover .page-copy-btn {
+  opacity: 1;
+}
+:root[data-theme="dark"] .api-page-md pre .page-copy-btn {
+  background: #161b22;
+  color: #9ca3af;
+}

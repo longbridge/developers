@@ -539,6 +539,39 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   // ── Search ────────────────────────────────────────────────────────────────
   const [query, setQuery] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  // Add a copy button to each x-page markdown code block (rendered as raw HTML,
+  // so enhanced imperatively rather than via a React component).
+  const copyLabel = t(locale, 'api.copy')
+  const copiedLabel = t(locale, 'api.copied')
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+    const pres = root.querySelectorAll<HTMLElement>('.api-page-md pre')
+    const cleanups: Array<() => void> = []
+    pres.forEach((pre) => {
+      if (pre.querySelector('.page-copy-btn')) return
+      pre.style.position = 'relative'
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'page-copy-btn'
+      btn.textContent = copyLabel
+      const onClick = () => {
+        const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? ''
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = copiedLabel
+          window.setTimeout(() => {
+            btn.textContent = copyLabel
+          }, 1500)
+        })
+      }
+      btn.addEventListener('click', onClick)
+      pre.appendChild(btn)
+      cleanups.push(() => btn.remove())
+    })
+    return () => cleanups.forEach((c) => c())
+  }, [activePage, locale, copyLabel, copiedLabel])
 
   const filteredGroups = useMemo(() => {
     if (!query.trim()) return groups
@@ -712,7 +745,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         : []
 
   return (
-    <div data-lbus-component="api-reference" className="docs-layout">
+    <div ref={rootRef} data-lbus-component="api-reference" className="docs-layout">
       {/* ── Sidebar (docs sidebar DOM) ── */}
       <aside
         data-lbus-component="sidebar"
