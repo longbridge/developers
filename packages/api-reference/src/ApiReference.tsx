@@ -793,10 +793,13 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               )}
 
               {/* ── Page content ── */}
-              {showPage && (
-                <div className="vp-doc prose">
+              {showPage && activePg && (
+                <>
+                  <h1 className="ep-title">
+                    {pickLocale(activePg.title, activePg.titleZh, activePg.titleZhHk, locale)}
+                  </h1>
                   <div dangerouslySetInnerHTML={{ __html: pageParts.before }} />
-                  {activePg?.codeTabs?.length ? (
+                  {activePg.codeTabs?.length ? (
                     <CodeTabs
                       blocks={activePg.codeTabs.map((s) => ({
                         lang: s.lang.toLowerCase(),
@@ -808,7 +811,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                     />
                   ) : null}
                   {pageParts.after && <div dangerouslySetInnerHTML={{ __html: pageParts.after }} />}
-                </div>
+                </>
               )}
 
               {/* ── Endpoint detail ── */}
