@@ -829,7 +829,11 @@ tags:
   - name: Analytics
     x-name-zh: 分析
     x-name-zh-hk: 分析
-    description: Fundamentals, valuation, ratings, shareholders, screener, and signal analytics.
+    description: Fundamentals, valuation, ratings, shareholders, and analyst analytics.
+  - name: Screener
+    x-name-zh: 选股器
+    x-name-zh-hk: 選股器
+    description: Screen securities by indicators, run saved or recommended strategies, and inspect strategy detail.
   - name: Trade
     x-name-zh: 交易与订单
     x-name-zh-hk: 交易與訂單
@@ -891,6 +895,998 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/quote/ai/screener/indicators:
+    get:
+      operationId: screener_indicators
+      summary: Screener Indicators
+      x-summary-zh: 选股指标
+      x-summary-zh-hk: 選股指標
+      description: |
+        Get all indicator definitions supported by the [stock screener](https://longbridge.com/screener), including keys, names, units, and available ranges. Use these to build custom filter conditions.
+
+        Endpoint: `GET /v1/quote/ai/screener/indicators`
+
+        > **SDK response:** The `data` field contains a grouped structure `{"groups": [{...}]}`. The CLI `screener indicators --format json` flattens this to a flat array for convenience.
+      x-description-zh: |
+        获取[选股器](https://longbridge.com/screener)支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
+
+        接口：`GET /v1/quote/ai/screener/indicators`
+
+        > **SDK 响应：** `data` 字段为分组结构 `{"groups": [{...}]}`。CLI `screener indicators --format json` 会将其展平为扁平数组以方便使用。
+      x-description-zh-hk: |
+        獲取[選股器](https://longbridge.com/screener)支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
+
+        接口：`GET /v1/quote/ai/screener/indicators`
+
+        > **SDK 響應：** `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
+      tags:
+        - Screener
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge screener indicators
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/ai/screener/indicators' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/ai/screener/indicators",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/ai/screener/indicators",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/ai/screener/indicators", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ai/screener/indicators"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/ai/screener/indicators")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ai/screener/indicators");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ai/screener/indicators\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: groups
+          type: object[]
+          required: false
+          description: Indicator groups
+          x-description-zh: 指标分组
+          x-description-zh-hk: 指標分組
+        - name: └ group_name
+          type: string
+          required: false
+          description: Group name
+          x-description-zh: 分组名称
+          x-description-zh-hk: 分組名稱
+        - name: └ indicators
+          type: object[]
+          required: false
+          description: Indicators in this group
+          x-description-zh: 该分组下的指标
+          x-description-zh-hk: 該分組下的指標
+        - name: └ ∟ id
+          type: string
+          required: false
+          description: Indicator ID (string)
+          x-description-zh: 指标 ID（字符串类型）
+          x-description-zh-hk: 指標 ID（字符串類型）
+        - name: └ ∟ key
+          type: string
+          required: false
+          description: Indicator key for building filter conditions (no `filter_` prefix)
+          x-description-zh: 指标键值，用于构建筛选条件（不含 `filter_` 前缀）
+          x-description-zh-hk: 指標鍵值，用於構建篩選條件（不含 `filter_` 前綴）
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Indicator display name
+          x-description-zh: 指标显示名称
+          x-description-zh-hk: 指標顯示名稱
+        - name: └ ∟ unit
+          type: string
+          required: false
+          description: Unit (e.g. `%`, `亿`)
+          x-description-zh: 单位（如 `%`、`亿`）
+          x-description-zh-hk: 單位（如 `%`、`億`）
+        - name: └ ∟ min
+          type: string
+          required: false
+          description: Global lower bound; null means no lower bound
+          x-description-zh: 指标全局下限；null 表示无下限
+          x-description-zh-hk: 指標全局下限；null 表示無下限
+        - name: └ ∟ max
+          type: string
+          required: false
+          description: Global upper bound; null means no upper bound
+          x-description-zh: 指标全局上限；null 表示无上限
+          x-description-zh-hk: 指標全局上限；null 表示無上限
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  groups:
+                    - group_name: 公司规模与财务
+                      indicators:
+                        - id: '1'
+                          key: marketcap
+                          name: 市值
+                          unit: 亿
+                          min: null
+                          max: null
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/ai/screener/search:
+    post:
+      operationId: screener_search
+      summary: Screener Search
+      x-summary-zh: 选股筛选
+      x-summary-zh-hk: 選股篩選
+      description: |
+        Filter stocks by strategy ID or custom indicator conditions, with pagination support.
+
+        Endpoint: `POST /v1/quote/ai/screener/search`
+
+        > **Note on JSON output format:** The response uses a flat `items[]` array (not `stocks[]`), all numeric fields are JSON numbers (not strings), and indicator keys do not carry the `filter_` prefix.
+      x-description-zh: |
+        按策略 ID 或自定义指标条件筛选股票，支持分页。
+
+        接口：`POST /v1/quote/ai/screener/search`
+
+        > **JSON 输出格式说明：** 响应使用扁平的 `items[]` 数组（非 `stocks[]`），所有数值字段为 JSON 数字类型（非字符串），指标键名不含 `filter_` 前缀。
+      x-description-zh-hk: |
+        按策略 ID 或自定義指標條件篩選股票，支持分頁。
+
+        接口：`POST /v1/quote/ai/screener/search`
+
+        > **JSON 輸出格式說明：** 響應使用扁平的 `items[]` 數組（非 `stocks[]`），所有數值字段為 JSON 數字類型（非字符串），指標鍵名不含 `filter_` 前綴。
+      tags:
+        - Screener
+      x-parameters:
+        - name: market
+          in: body
+          type: string
+          required: true
+          description: 'Market: `US`, `HK`, `CN`, `SG`'
+          x-description-zh: 市场：`US`、`HK`、`CN`、`SG`
+          x-description-zh-hk: 市場：`US`、`HK`、`CN`、`SG`
+        - name: strategy_id
+          in: body
+          type: integer
+          required: false
+          description: Strategy ID; use alone or combined with custom conditions
+          x-description-zh: 策略 ID；与自定义条件二选一，或同时使用
+          x-description-zh-hk: 策略 ID；與自定義條件二選一，或同時使用
+        - name: conditions
+          in: body
+          type: array
+          required: false
+          description: Custom filter conditions (Mode B, when strategy_id is omitted)
+          x-description-zh: 自定义筛选条件（模式 B，不传 strategy_id 时使用）
+          x-description-zh-hk: 自定義篩選條件（模式 B，不傳 strategy_id 時使用）
+        - name: show
+          in: body
+          type: array
+          required: false
+          description: Extra indicator keys to include in the response beyond the 7 default columns
+          x-description-zh: 额外需要返回的指标键名，在默认 7 列之外追加
+          x-description-zh-hk: 額外需要返回的指標鍵名，在默認 7 列之外追加
+        - name: page
+          in: body
+          type: integer
+          required: false
+          description: 0-based page number, default 0
+          x-description-zh: 页码，从 0 开始，默认 0
+          x-description-zh-hk: 頁碼，從 0 開始，默認 0
+        - name: size
+          in: body
+          type: integer
+          required: false
+          description: Page size, default 20
+          x-description-zh: 每页条数，默认 20
+          x-description-zh-hk: 每頁條數，默認 20
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge screener search --strategy-id 42
+            longbridge screener search --market HK --filter filter_marketcap:100:1000
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/quote/ai/screener/search' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"market":"<market>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/quote/ai/screener/search",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"market": "<market>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/quote/ai/screener/search",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"market": "<market>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/ai/screener/search", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ market: "<market>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ai/screener/search"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"market\":\"<market>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/quote/ai/screener/search")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "market": "<market>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ai/screener/search");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"market\":\"<market>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/ai/screener/search\", strings.NewReader(`{\"market\":\"<market>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: total
+          type: integer
+          required: false
+          description: Total number of matching stocks
+          x-description-zh: 满足条件的股票总数
+          x-description-zh-hk: 滿足條件的股票總數
+        - name: page
+          type: integer
+          required: false
+          description: Current page number (zero-based)
+          x-description-zh: 当前页码（从零开始）
+          x-description-zh-hk: 當前頁碼（從零開始）
+        - name: market
+          type: string
+          required: false
+          description: Market of the result set
+          x-description-zh: 结果集的市场
+          x-description-zh-hk: 結果集的市場
+        - name: items
+          type: object[]
+          required: false
+          description: Filtered stock list
+          x-description-zh: 筛选结果股票列表
+          x-description-zh-hk: 篩選結果股票列表
+        - name: └ symbol
+          type: string
+          required: false
+          description: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
+        - name: └ name
+          type: string
+          required: false
+          description: Security name
+          x-description-zh: 证券名称
+          x-description-zh-hk: 證券名稱
+        - name: └ prevchg
+          type: number
+          required: false
+          description: Previous day price change ratio (e.g. `1.24` = 1.24%)
+          x-description-zh: 昨日涨跌幅（如 `1.24` 表示 1.24%）
+          x-description-zh-hk: 昨日漲跌幅（如 `1.24` 表示 1.24%）
+        - name: └ marketcap
+          type: number
+          required: false
+          description: Market capitalisation (numeric)
+          x-description-zh: 市值（数字类型）
+          x-description-zh-hk: 市值（數字類型）
+        - name: └ pettm
+          type: number
+          required: false
+          description: P/E ratio (TTM, numeric)
+          x-description-zh: 市盈率 TTM（数字类型）
+          x-description-zh-hk: 市盈率 TTM（數字類型）
+        - name: └ pbmrq
+          type: number
+          required: false
+          description: P/B ratio (MRQ, numeric)
+          x-description-zh: 市净率 MRQ（数字类型）
+          x-description-zh-hk: 市淨率 MRQ（數字類型）
+        - name: └ salesgrowthyoy
+          type: number
+          required: false
+          description: Revenue growth YoY (%)
+          x-description-zh: 营收同比增速（%）
+          x-description-zh-hk: 營收同比增速（%）
+        - name: └ industry
+          type: string
+          required: false
+          description: Industry classification
+          x-description-zh: 行业分类
+          x-description-zh-hk: 行業分類
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  total: 88
+                  page: 0
+                  market: US
+                  items:
+                    - symbol: AAPL.US
+                      name: Apple Inc.
+                      prevchg: 0.62
+                      marketcap: 3241500000000
+                      pettm: 32.15
+                      pbmrq: 50.21
+                      salesgrowthyoy: 8.04
+                    - symbol: MSFT.US
+                      name: Microsoft
+                      prevchg: 1.05
+                      marketcap: 3085000000000
+                      pettm: 35.42
+                      pbmrq: 12.87
+                      salesgrowthyoy: 12.61
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/ai/screener/strategies/recommend:
+    get:
+      operationId: screener_recommend_strategies
+      summary: Preset Screener Strategies
+      x-summary-zh: 预设选股策略
+      x-summary-zh-hk: 預設選股策略
+      description: |
+        Get the list of platform-preset stock screener strategies, including recent average daily change and constituent stocks.
+
+        Endpoint: `GET /v1/quote/ai/screener/strategies/recommend`
+      x-description-zh: |
+        获取平台预设的选股策略列表，含近期平均日涨跌幅和策略内股票。
+
+        接口：`GET /v1/quote/ai/screener/strategies/recommend`
+      x-description-zh-hk: |
+        獲取平台預設的選股策略列表，含近期平均日漲跌幅和策略內股票。
+
+        接口：`GET /v1/quote/ai/screener/strategies/recommend`
+      tags:
+        - Screener
+      x-parameters:
+        - name: market
+          in: query
+          type: string
+          required: false
+          description: 'Market filter: `US`, `HK`, `CN`, `SG`. Default: `US`'
+          x-description-zh: 市场筛选：`US`、`HK`、`CN`、`SG`，默认 `US`
+          x-description-zh-hk: 市場篩選：`US`、`HK`、`CN`、`SG`，默認 `US`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge screener strategies
+            longbridge screener strategies --market HK
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ai/screener/strategies/recommend\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: strategys
+          type: object[]
+          required: false
+          description: Strategy list
+          x-description-zh: 策略列表
+          x-description-zh-hk: 策略列表
+        - name: └ id
+          type: integer
+          required: false
+          description: Strategy ID (pass to `screener_strategy` or `screener_search`)
+          x-description-zh: 策略 ID（传入 `screener_strategy` 或 `screener_search`）
+          x-description-zh-hk: 策略 ID（傳入 `screener_strategy` 或 `screener_search`）
+        - name: └ name
+          type: string
+          required: false
+          description: Strategy name
+          x-description-zh: 策略名称
+          x-description-zh-hk: 策略名稱
+        - name: └ type
+          type: string
+          required: false
+          description: '`"platform"` for preset strategies'
+          x-description-zh: '`"platform"` 表示平台预设策略'
+          x-description-zh-hk: '`"platform"` 表示平台預設策略'
+        - name: └ market
+          type: string
+          required: false
+          description: Target market (e.g. `"US"`, `"HK"`)
+          x-description-zh: 目标市场（如 `"US"`、`"HK"`）
+          x-description-zh-hk: 目標市場（如 `"US"`、`"HK"`）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  strategys:
+                    - id: 19
+                      name: 今日大涨股票
+                      type: platform
+                      market: US
+                    - id: 20
+                      name: 今年增长冠军
+                      type: platform
+                      market: US
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/ai/screener/strategies/mine:
+    get:
+      operationId: screener_user_strategies
+      summary: My Screener Strategies
+      x-summary-zh: 我的选股策略
+      x-summary-zh-hk: 我的選股策略
+      description: |
+        Get the list of custom stock screener strategies created by the currently logged-in user.
+
+        Endpoint: `GET /v1/quote/ai/screener/strategies/mine`
+      x-description-zh: |
+        获取当前登录用户创建的自定义选股策略列表。
+
+        接口：`GET /v1/quote/ai/screener/strategies/mine`
+      x-description-zh-hk: |
+        獲取當前登錄用戶創建的自定義選股策略列表。
+
+        接口：`GET /v1/quote/ai/screener/strategies/mine`
+      tags:
+        - Screener
+      x-parameters:
+        - name: market
+          in: query
+          type: string
+          required: false
+          description: 'Market filter: `US`, `HK`, `CN`, `SG`. Default: `US`'
+          x-description-zh: 市场筛选：`US`、`HK`、`CN`、`SG`，默认 `US`
+          x-description-zh-hk: 市場篩選：`US`、`HK`、`CN`、`SG`，默認 `US`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge screener strategies --mine
+            longbridge screener strategies --mine --market HK
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ai/screener/strategies/mine\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  strategys:
+                    - id: 42
+                      name: My Growth Strategy
+                      type: user
+                      market: US
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/ai/screener/strategy/{id}:
+    get:
+      operationId: screener_strategy
+      summary: Screener Strategy Detail
+      x-summary-zh: 选股策略详情
+      x-summary-zh-hk: 選股策略詳情
+      description: |
+        Get the full configuration of a single stock screener strategy by strategy ID, including all indicator groups and the filter range for each indicator.
+
+        Endpoint: `GET /v1/quote/ai/screener/strategy/\{id\}` (strategy ID as path parameter)
+      x-description-zh: |
+        根据策略 ID 获取单个选股策略的完整配置，包含所有指标分组和各指标的筛选范围。
+
+        接口：`GET /v1/quote/ai/screener/strategy/\{id\}`（策略 ID 为路径参数）
+      x-description-zh-hk: |
+        根據策略 ID 獲取單個選股策略的完整配置，包含所有指標分組和各指標的篩選範圍。
+
+        接口：`GET /v1/quote/ai/screener/strategy/\{id\}`（策略 ID 為路徑參數）
+      tags:
+        - Screener
+      x-parameters:
+        - name: id
+          in: path
+          type: integer
+          required: true
+          description: Strategy ID from `screener_recommend_strategies` or `screener_user_strategies`
+          x-description-zh: 策略 ID，来自 `screener_recommend_strategies` 或 `screener_user_strategies`
+          x-description-zh-hk: 策略 ID，來自 `screener_recommend_strategies` 或 `screener_user_strategies`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge screener run 42
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ai/screener/strategy/<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: id
+          type: integer
+          required: false
+          description: Strategy ID
+          x-description-zh: 策略 ID
+          x-description-zh-hk: 策略 ID
+        - name: market
+          type: string
+          required: false
+          description: Target market
+          x-description-zh: 目标市场
+          x-description-zh-hk: 目標市場
+        - name: type
+          type: string
+          required: false
+          description: Strategy type
+          x-description-zh: 策略类型
+          x-description-zh-hk: 策略類型
+        - name: filter
+          type: object
+          required: false
+          description: Filter configuration
+          x-description-zh: 筛选配置
+          x-description-zh-hk: 篩選配置
+        - name: └ filters
+          type: object[]
+          required: false
+          description: Filter conditions
+          x-description-zh: 筛选条件列表
+          x-description-zh-hk: 篩選條件列表
+        - name: └ ∟ key
+          type: string
+          required: false
+          description: Indicator key (no `filter_` prefix)
+          x-description-zh: 指标键值（不含 `filter_` 前缀）
+          x-description-zh-hk: 指標鍵值（不含 `filter_` 前綴）
+        - name: └ ∟ min
+          type: string
+          required: false
+          description: Lower bound
+          x-description-zh: 下限
+          x-description-zh-hk: 下限
+        - name: └ ∟ max
+          type: string
+          required: false
+          description: Upper bound
+          x-description-zh: 上限
+          x-description-zh-hk: 上限
+        - name: └ ∟ tech_values
+          type: object
+          required: false
+          description: Technical indicator params
+          x-description-zh: 技术指标参数
+          x-description-zh-hk: 技術指標參數
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  id: 19
+                  name: 今日大涨股票
+                  market: US
+                  type: platform
+                  filter:
+                    filters:
+                      - key: prevchg
+                        min: '2'
+                        max: ''
+                        tech_values: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/quote/short-positions/hk:
     get:
       operationId: short_positions_hk
