@@ -993,3 +993,14 @@
   background: #161b22;
   color: #9ca3af;
 }
+
+/* Push the slim DocFooter to the bottom on short pages (e.g. the intro) instead
+   of letting it float up right under the content. Scoped to the reference. */
+[data-lbus-component="api-reference"] .docs-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+}
+[data-lbus-component="api-reference"] .docs-main {
+  flex: 1 0 auto;
+}
