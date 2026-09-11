@@ -922,3 +922,40 @@
   width: 42px;
   margin-right: 8px;
 }
+
+/* Markdown code blocks inside x-pages — styled like the CodeTabs card (light,
+   rounded, bordered) instead of bare text. */
+.api-page-md pre {
+  margin: 16px 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: #f6f8fa;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #24292e;
+}
+.api-page-md pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+/* Inline code inside x-page prose */
+.api-page-md :not(pre) > code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] .api-page-md pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-theme="dark"] .api-page-md :not(pre) > code {
+  background: rgba(255, 255, 255, 0.1);
+}

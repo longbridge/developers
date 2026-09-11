@@ -798,7 +798,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   <h1 className="ep-title">
                     {pickLocale(activePg.title, activePg.titleZh, activePg.titleZhHk, locale)}
                   </h1>
-                  <div dangerouslySetInnerHTML={{ __html: pageParts.before }} />
+                  <div className="api-page-md" dangerouslySetInnerHTML={{ __html: pageParts.before }} />
                   {activePg.codeTabs?.length ? (
                     <CodeTabs
                       blocks={activePg.codeTabs.map((s) => ({
@@ -810,7 +810,9 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                       labelCopied={t(locale, 'api.copied')}
                     />
                   ) : null}
-                  {pageParts.after && <div dangerouslySetInnerHTML={{ __html: pageParts.after }} />}
+                  {pageParts.after && (
+                    <div className="api-page-md" dangerouslySetInnerHTML={{ __html: pageParts.after }} />
+                  )}
                 </>
               )}
 
