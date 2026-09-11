@@ -891,6 +891,680 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/watchlist/groups:
+    get:
+      operationId: list_watchlist_groups
+      summary: Watchlist Groups
+      x-summary-zh: 关注分组
+      x-summary-zh-hk: 關注分組
+      description: |
+        Get Watchlist groups
+
+        <QuotePermission level="basic" />
+      x-description-zh: |
+        获取自选股分组
+
+        <QuotePermission level="basic" />
+      x-description-zh-hk: |
+        獲取關注分組
+
+        <QuotePermission level="basic" />
+      tags:
+        - Watchlist
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # list all watchlist groups and their symbols
+            longbridge watchlist
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/watchlist/groups' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/watchlist/groups",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/watchlist/groups",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/watchlist/groups", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/watchlist/groups")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/watchlist/groups\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: groups
+          type: object[]
+          required: false
+          description: Groups
+          x-description-zh: 分组
+          x-description-zh-hk: 分組
+        - name: └ id
+          type: integer
+          required: true
+          description: Group ID
+          x-description-zh: 分组 ID
+          x-description-zh-hk: 分組 ID
+        - name: └ name
+          type: string
+          required: true
+          description: Name
+          x-description-zh: 名称
+          x-description-zh-hk: 名稱
+        - name: └ securities
+          type: object[]
+          required: true
+          description: Security
+          x-description-zh: 股票
+          x-description-zh-hk: 股票
+        - name: └ ∟ symbol
+          type: string
+          required: true
+          description: Symbol
+          x-description-zh: 代码
+          x-description-zh-hk: 代碼
+        - name: └ ∟ market
+          type: string
+          required: true
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: └ ∟ name
+          type: string
+          required: true
+          description: Name
+          x-description-zh: 名称
+          x-description-zh-hk: 名稱
+        - name: └ ∟ watched_price
+          type: string
+          required: true
+          description: Watched price
+          x-description-zh: 关注时的价格
+          x-description-zh-hk: 關注時的價格
+        - name: └ ∟ watched_at
+          type: integer
+          required: true
+          description: Watched time
+          x-description-zh: 关注时间
+          x-description-zh-hk: 關注時間
+        - name: └ ∟ is_pinned
+          type: boolean
+          required: true
+          description: Whether the security is pinned
+          x-description-zh: 是否置顶
+          x-description-zh-hk: 是否置頂
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  groups:
+                    - id: 28020
+                      name: all
+                      securities:
+                        - symbol: 700.HK
+                          market: HK
+                          name: Tencent
+                          watched_price: '364.4'
+                          watched_at: 1652855022
+                          is_pinned: true
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: create_watchlist_group
+      summary: Create Group
+      x-summary-zh: 创建分组
+      x-summary-zh-hk: 創建分組
+      description: |
+        Create watched group
+
+        <QuotePermission level="basic" />
+      x-description-zh: |
+        创建自选股分组
+
+        <QuotePermission level="basic" />
+      x-description-zh-hk: |
+        創建自選股分組
+
+        <QuotePermission level="basic" />
+      tags:
+        - Watchlist
+      x-parameters:
+        - name: name
+          in: body
+          type: string
+          required: true
+          description: Watchlist group name.
+          x-description-zh: 自选股分组名称。
+          x-description-zh-hk: 自選股分組名稱。
+        - name: securities
+          in: body
+          type: array
+          required: false
+          description: Optional list of security symbols to pre-populate the group, e.g. `["AAPL.US","700.HK"]`.
+          x-description-zh: 可选：创建时预填充的证券代码列表，如 `["AAPL.US","700.HK"]`。
+          x-description-zh-hk: 可選：創建時預填充的證券代碼列表，如 `["AAPL.US","700.HK"]`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # create a new watchlist group
+            longbridge watchlist create "My Portfolio"
+            # create another watchlist group
+            longbridge watchlist create "Tech Stocks"
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/watchlist/groups' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"name":"<name>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/watchlist/groups",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"name": "<name>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/watchlist/groups",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"name": "<name>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/watchlist/groups", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name: "<name>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"name\":\"<name>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/watchlist/groups")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "name": "<name>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"name\":\"<name>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"name\":\"<name>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: id
+          type: integer
+          required: false
+          description: Group ID
+          x-description-zh: 分组 ID
+          x-description-zh-hk: 分組 ID
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  id: 10086
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: update_watchlist_group
+      summary: Manage Group Securities
+      x-summary-zh: 管理分组标的
+      x-summary-zh-hk: 管理分組標的
+      description: |
+        Update watched group
+
+        <QuotePermission level="basic" />
+      x-description-zh: |
+        更新自选股分组
+
+        <QuotePermission level="basic" />
+      x-description-zh-hk: |
+        更新自選股分組
+
+        <QuotePermission level="basic" />
+      tags:
+        - Watchlist
+      x-parameters:
+        - name: id
+          in: body
+          type: integer
+          required: true
+          description: Watchlist group ID.
+          x-description-zh: 自选股分组 ID。
+          x-description-zh-hk: 自選股分組 ID。
+        - name: name
+          in: body
+          type: string
+          required: false
+          description: New group name.
+          x-description-zh: 新的分组名称。
+          x-description-zh-hk: 新的分組名稱。
+        - name: securities
+          in: body
+          type: array
+          required: false
+          description: Security symbols to add/remove/replace, per `mode`.
+          x-description-zh: 按 `mode` 增/删/替换的证券代码列表。
+          x-description-zh-hk: 按 `mode` 增/刪/替換的證券代碼列表。
+        - name: mode
+          in: body
+          type: string
+          required: true
+          description: 'Securities update mode: `add`, `remove`, or `replace`.'
+          x-description-zh: 证券更新模式：`add`、`remove`、`replace`。
+          x-description-zh-hk: 證券更新模式：`add`、`remove`、`replace`。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # add symbols to a group
+            longbridge watchlist update <id> --add TSLA.US --add AAPL.US
+            # remove a symbol from a group
+            longbridge watchlist update <id> --remove NVDA.US
+            # add and remove at the same time
+            longbridge watchlist update <id> --add TSLA.US --remove AAPL.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request PUT \
+              --url 'https://openapi.longbridge.com/v1/watchlist/groups' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"id":"<id>","mode":"<mode>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.put(
+                "https://openapi.longbridge.com/v1/watchlist/groups",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"id": "<id>", "mode": "<mode>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.put(
+                        "https://openapi.longbridge.com/v1/watchlist/groups",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"id": "<id>", "mode": "<mode>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/watchlist/groups", {
+              method: "PUT",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: "<id>", mode: "<mode>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"mode\":\"<mode>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::PUT, "https://openapi.longbridge.com/v1/watchlist/groups")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "id": "<id>" , "mode": "<mode>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"mode\":\"<mode>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"id\":\"<id>\",\"mode\":\"<mode>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: delete_watchlist_group
+      summary: Delete Group
+      x-summary-zh: 删除分组
+      x-summary-zh-hk: 刪除分組
+      description: |
+        Delete watched group
+
+        <QuotePermission level="basic" />
+      x-description-zh: |
+        删除自选股分组
+
+        <QuotePermission level="basic" />
+      x-description-zh-hk: |
+        刪除自選股分組
+
+        <QuotePermission level="basic" />
+      tags:
+        - Watchlist
+      x-parameters:
+        - name: id
+          in: query
+          type: integer
+          required: true
+          description: Watchlist group ID.
+          x-description-zh: 自选股分组 ID。
+          x-description-zh-hk: 自選股分組 ID。
+        - name: purge
+          in: query
+          type: boolean
+          required: true
+          description: Whether to also remove the securities from the account watchlist.
+          x-description-zh: 是否同时从账户自选股中移除相关证券。
+          x-description-zh-hk: 是否同時從賬戶自選股中移除相關證券。
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # delete a watchlist group by ID (get ID from: longbridge watchlist)
+            longbridge watchlist delete <id>
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request DELETE \
+              --url 'https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.delete(
+                "https://openapi.longbridge.com/v1/watchlist/groups",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"id": "<id>", "purge": "<purge>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.delete(
+                        "https://openapi.longbridge.com/v1/watchlist/groups",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"id": "<id>", "purge": "<purge>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/watchlist/groups")
+            url.searchParams.set("id", "<id>")
+            url.searchParams.set("purge", "<purge>")
+
+            const resp = await fetch(url, {
+              method: "DELETE",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("DELETE", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::DELETE, "https://openapi.longbridge.com/v1/watchlist/groups")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("id", "<id>"), ("purge", "<purge>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"DELETE\", \"https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/dailycoins/query:
     get:
       operationId: dca_list
@@ -2623,214 +3297,6 @@ paths:
               example:
                 code: 0
                 message: success
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/watchlist/groups:
-    get:
-      operationId: list_watchlist_groups
-      summary: Get Watchlists
-      x-summary-zh: 获取自选股分组列表
-      x-summary-zh-hk: 獲取自選股分組列表
-      description: |
-        Get all watchlist groups for the current user. Each group contains an ID, name, and a list
-        of securities with the price and timestamp at which each security was added.
-      x-description-zh: 获取当前用户的所有自选股分组，每个分组包含 ID、名称及其中的证券列表（含加入价格和时间戳）。
-      tags:
-        - Watchlist Management
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge watchlist
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  groups:
-                    - id: '2630'
-                      name: My Watchlist
-                      securities:
-                        - symbol: AAPL.US
-                          market: US
-                          name: Apple Inc.
-                          watched_price: '211.59'
-                          watched_at: '1741690995'
-                          is_pinned: true
-                        - symbol: 700.HK
-                          market: HK
-                          name: 腾讯控股
-                          watched_price: '460.00'
-                          watched_at: '1725511157'
-                          is_pinned: false
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      operationId: create_watchlist_group
-      summary: Create Watchlist
-      x-summary-zh: 创建自选股分组
-      x-summary-zh-hk: 創建自選股分組
-      description: |
-        Create a new watchlist group, optionally pre-populated with securities.
-      x-description-zh: 创建新的自选股分组，可选择在创建时预填充证券。
-      tags:
-        - Watchlist Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                  minLength: 1
-                  description: Group name. Must be at least 1 character and within the system name length limit.
-                securities:
-                  type: array
-                  nullable: true
-                  description: Optional list of security symbols to pre-populate the group on creation (e.g. `["AAPL.US", "700.HK"]`).
-                  items:
-                    type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge watchlist create "NAME"
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  id: '4303353'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    put:
-      operationId: update_watchlist_group
-      summary: Update Watchlist
-      x-summary-zh: 更新自选股分组
-      x-summary-zh-hk: 更新自選股分組
-      description: |
-        Update the name or member list of a watchlist group. Use `mode` to control how
-        `securities` are applied: `add` appends, `remove` removes, `replace` overwrites the entire list.
-      x-description-zh: 更新自选股分组的名称或成员列表。使用 `mode` 控制 `securities` 的操作方式：`add` 追加、`remove` 移除、`replace` 替换全部。
-      tags:
-        - Watchlist Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - id
-              properties:
-                id:
-                  type: string
-                  description: ID of the group to update (required).
-                name:
-                  type: string
-                  nullable: true
-                  description: New group name. Omit to keep the existing name.
-                mode:
-                  type: string
-                  nullable: true
-                  enum:
-                    - add
-                    - remove
-                    - replace
-                  description: |
-                    Operation mode for the `securities` list. One of:
-                    - `add` — append securities to the group
-                    - `remove` — remove securities from the group
-                    - `replace` — replace all securities in the group
-                securities:
-                  type: array
-                  nullable: true
-                  description: List of security symbols affected by the operation (e.g. `["AAPL.US", "700.HK"]`).
-                  items:
-                    type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge watchlist update <ID>
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    delete:
-      operationId: delete_watchlist_group
-      summary: Delete Watchlist
-      x-summary-zh: 删除自选股分组
-      x-summary-zh-hk: 刪除自選股分組
-      description: |
-        Delete the specified watchlist group. Set `purge=true` to also clear all securities
-        from the group before deletion.
-      x-description-zh: 删除指定的自选股分组。设置 `purge=true` 可在删除前清空分组中的所有证券。
-      tags:
-        - Watchlist Management
-      parameters:
-        - name: id
-          in: query
-          required: true
-          description: ID of the group to delete.
-          schema:
-            type: string
-        - name: purge
-          in: query
-          required: false
-          description: If `true`, clears all securities from the group before deleting. Defaults to `false`.
-          schema:
-            type: boolean
-            nullable: true
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge watchlist delete <ID>
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
         default:
           description: Unexpected error
           content:
