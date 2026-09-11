@@ -380,9 +380,9 @@ x-pages:
       - `authorization_code`
       - `refresh_token`
 
-      ## OAuth 2.0 flow (step-by-step)
+      ## OAuth 2.0 authorization flow
 
-      ### 1) Register OAuth client
+      ### Register OAuth client
 
       If there is no UI for client creation in your environment, register dynamically:
 
@@ -399,7 +399,7 @@ x-pages:
 
       > Registration may return only `client_id` (public client, no `client_secret`). In this case, use PKCE and do not send `client_secret` in token requests.
 
-      ### 2) Build authorization URL and get `code`
+      ### Build authorization URL and get `code`
 
       ```text
       https://openapi.longbridge.com/oauth2/authorize
@@ -418,7 +418,7 @@ x-pages:
       YOUR_REDIRECT_URI?code=AUTH_CODE&state=YOUR_RANDOM_STATE
       ```
 
-      ### 3) Exchange `code` for `access_token`
+      ### Exchange `code` for `access_token`
 
       ```shell
       curl -X POST https://openapi.longbridge.com/oauth2/token \
@@ -432,7 +432,7 @@ x-pages:
       # -d "client_secret=YOUR_CLIENT_SECRET"
       ```
 
-      ### 4) Call API with Bearer token (TSLA.US example)
+      ### Call API with Bearer token (TSLA.US example)
 
       ```shell
       curl -X GET "https://openapi.longbridge.com/v1/quote/get_security_list?market=US&category=Overnight" \
@@ -458,7 +458,7 @@ x-pages:
       }
       ```
 
-      ### 5) Refresh token
+      ### Refresh token
 
       Use OAuth token endpoint for refresh (details in Refresh Token section below):
 
@@ -557,9 +557,9 @@ x-pages:
       - `authorization_code`
       - `refresh_token`
 
-      ## OAuth 2.0 接入流程（一步一步）
+      ## OAuth 2.0 授权流程
 
-      ### 1）注册 OAuth 客户端
+      ### 注册 OAuth 客户端
 
       如果没有可视化后台入口，可通过接口动态注册：
 
@@ -576,7 +576,7 @@ x-pages:
 
       > 注册返回可能仅包含 `client_id`（public client，不返回 `client_secret`）。这种情况下请使用 PKCE，并在 token 请求里不传 `client_secret`。
 
-      ### 2）构造授权链接并获取 code
+      ### 构造授权链接并获取 code
 
       ```text
       https://openapi.longbridge.com/oauth2/authorize
@@ -595,7 +595,7 @@ x-pages:
       YOUR_REDIRECT_URI?code=AUTH_CODE&state=YOUR_RANDOM_STATE
       ```
 
-      ### 3）用 code 换 access_token
+      ### 用 code 换 access_token
 
       ```bash
       curl -X POST https://openapi.longbridge.com/oauth2/token \
@@ -609,7 +609,7 @@ x-pages:
       # -d "client_secret=YOUR_CLIENT_SECRET"
       ```
 
-      ### 4）用 Bearer token 调 API（TSLA.US 实例）
+      ### 用 Bearer token 调 API（TSLA.US 实例）
 
       ```bash
       curl -X GET "https://openapi.longbridge.com/v1/quote/get_security_list?market=US&category=Overnight" \
@@ -635,7 +635,7 @@ x-pages:
       }
       ```
 
-      ### 5）刷新 token
+      ### 刷新 token
 
       通过 OAuth token endpoint 刷新（详见下方"刷新 Token"部分）：
 
