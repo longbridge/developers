@@ -891,6 +891,3089 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/gridtrading/submit:
+    post:
+      operationId: grid_submit
+      summary: Submit Grid Order
+      x-summary-zh: 提交网格订单
+      x-summary-zh-hk: 提交網格訂單
+      description: |
+        Submit a grid strategy order. The grid places buy orders as the price falls and sell orders as it rises, within the `[lower_limit_price, upper_limit_price]` band anchored to `submitted_base_price`.
+
+        Before using grid trading you must record the strategy risk-disclosure consent once — see [Submit Strategy Questionnaire](./questionnaire).
+      x-description-zh: |
+        提交网格策略订单。网格以 `submitted_base_price` 为基准价，在 `[lower_limit_price, upper_limit_price]` 区间内，价格下跌时挂买单、价格上涨时挂卖单。
+
+        使用网格交易前，你需要先记录一次策略风险揭示的同意确认，详见[提交策略问卷](./questionnaire)。
+      x-description-zh-hk: |
+        提交網格策略訂單。網格以 `submitted_base_price` 為基準價，在 `[lower_limit_price, upper_limit_price]` 區間內，價格下跌時掛買單、價格上漲時掛賣單。
+
+        使用網格交易前，你需要先記錄一次策略風險揭示的同意確認，詳見[提交策略問卷](./questionnaire)。
+      tags:
+        - Grid
+      x-parameters:
+        - name: symbol
+          in: body
+          type: string
+          required: true
+          description: 'Security symbol, `ticker.region` format, example: `700.HK`'
+          x-description-zh: 标的代码，`ticker.region` 格式，例如：`700.HK`
+          x-description-zh-hk: 標的代碼，`ticker.region` 格式，例如：`700.HK`
+        - name: settlement_currency
+          in: body
+          type: string
+          required: true
+          description: 'Settlement currency, example: `HKD`'
+          x-description-zh: 结算货币，例如：`HKD`
+          x-description-zh-hk: 結算貨幣，例如：`HKD`
+        - name: grid_trading_rule
+          in: body
+          type: object
+          required: true
+          description: The grid rule. Fields below.
+          x-description-zh: 网格规则，字段见下方。
+          x-description-zh-hk: 網格規則，欄位見下方。
+        - name: submitted_base_price
+          in: body
+          type: string
+          required: true
+          description: Base price the grid is anchored to
+          x-description-zh: 网格锚定的基准价
+          x-description-zh-hk: 網格錨定的基準價
+        - name: upper_limit_price
+          in: body
+          type: string
+          required: true
+          description: Upper price bound
+          x-description-zh: 价格上边界
+          x-description-zh-hk: 價格上邊界
+        - name: lower_limit_price
+          in: body
+          type: string
+          required: true
+          description: Lower price bound
+          x-description-zh: 价格下边界
+          x-description-zh-hk: 價格下邊界
+        - name: trigger_price_type
+          in: body
+          type: integer
+          required: true
+          description: How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent
+          x-description-zh: 触发阈值的解释方式<br/><br/>**可选值：**<br/>`1` - spread（绝对价差）<br/>`2` - percent（百分比）
+          x-description-zh-hk: 觸發閾值的解釋方式<br/><br/>**可選值：**<br/>`1` - spread（絕對價差）<br/>`2` - percent（百分比）
+        - name: trigger_spread_up
+          in: body
+          type: string
+          required: false
+          description: Upward trigger spread, required when `trigger_price_type` is `1`
+          x-description-zh: 上涨触发价差，`trigger_price_type` 为 `1` 时必填
+          x-description-zh-hk: 上漲觸發價差，`trigger_price_type` 為 `1` 時必填
+        - name: trigger_spread_down
+          in: body
+          type: string
+          required: false
+          description: Downward trigger spread, required when `trigger_price_type` is `1`
+          x-description-zh: 下跌触发价差，`trigger_price_type` 为 `1` 时必填
+          x-description-zh-hk: 下跌觸發價差，`trigger_price_type` 為 `1` 時必填
+        - name: trigger_percent_up
+          in: body
+          type: string
+          required: false
+          description: Upward trigger percent, required when `trigger_price_type` is `2`
+          x-description-zh: 上涨触发百分比，`trigger_price_type` 为 `2` 时必填
+          x-description-zh-hk: 上漲觸發百分比，`trigger_price_type` 為 `2` 時必填
+        - name: trigger_percent_down
+          in: body
+          type: string
+          required: false
+          description: Downward trigger percent, required when `trigger_price_type` is `2`
+          x-description-zh: 下跌触发百分比，`trigger_price_type` 为 `2` 时必填
+          x-description-zh-hk: 下跌觸發百分比，`trigger_price_type` 為 `2` 時必填
+        - name: trigger_quantity
+          in: body
+          type: string
+          required: true
+          description: Quantity per trigger
+          x-description-zh: 每次触发的数量
+          x-description-zh-hk: 每次觸發的數量
+        - name: upper_limit_quantity
+          in: body
+          type: string
+          required: true
+          description: Quantity handled when the upper bound is reached
+          x-description-zh: 达到上边界时处理的数量
+          x-description-zh-hk: 達到上邊界時處理的數量
+        - name: lower_limit_quantity
+          in: body
+          type: string
+          required: true
+          description: Quantity handled when the lower bound is reached
+          x-description-zh: 达到下边界时处理的数量
+          x-description-zh-hk: 達到下邊界時處理的數量
+        - name: time_in_force
+          in: body
+          type: integer
+          required: true
+          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC (Good-Til-Canceled)<br/>`6` - GTD (Good-Til-Date)
+          x-description-zh: 订单有效期<br/><br/>**可选值：**<br/>`0` - Day（当日有效）<br/>`1` - GTC（撤单前有效）<br/>`6` - GTD（到期前有效）
+          x-description-zh-hk: 訂單有效期<br/><br/>**可選值：**<br/>`0` - Day（當日有效）<br/>`1` - GTC（撤單前有效）<br/>`6` - GTD（到期前有效）
+        - name: expire_time
+          in: body
+          type: integer
+          required: false
+          description: Expiry time (Unix timestamp, in seconds), required when `time_in_force` is `6` (GTD)
+          x-description-zh: 到期时间（Unix 时间戳，单位秒），`time_in_force` 为 `6`（GTD）时必填
+          x-description-zh-hk: 到期時間（Unix 時間戳，單位秒），`time_in_force` 為 `6`（GTD）時必填
+        - name: upper_limit_event
+          in: body
+          type: integer
+          required: false
+          description: Action when the upper bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
+          x-description-zh: 达到上边界时的动作<br/><br/>**可选值：**<br/>`1` - ignore（继续运行）<br/>`2` - 按最新价平仓
+          x-description-zh-hk: 達到上邊界時的動作<br/><br/>**可選值：**<br/>`1` - ignore（繼續運行）<br/>`2` - 按最新價平倉
+        - name: lower_limit_event
+          in: body
+          type: integer
+          required: false
+          description: Action when the lower bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
+          x-description-zh: 达到下边界时的动作<br/><br/>**可选值：**<br/>`1` - ignore（继续运行）<br/>`2` - 按最新价平仓
+          x-description-zh-hk: 達到下邊界時的動作<br/><br/>**可選值：**<br/>`1` - ignore（繼續運行）<br/>`2` - 按最新價平倉
+        - name: trigger_sell_depth
+          in: body
+          type: integer
+          required: false
+          description: Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up` instead of a depth level
+          x-description-zh: 卖盘盘口档位（-5 ~ 5）。`0` 表示改用 `grid_order_type_up` 而非档位
+          x-description-zh-hk: 賣盤盤口檔位（-5 ~ 5）。`0` 表示改用 `grid_order_type_up` 而非檔位
+        - name: trigger_buy_depth
+          in: body
+          type: integer
+          required: false
+          description: Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down` instead of a depth level
+          x-description-zh: 买盘盘口档位（-5 ~ 5）。`0` 表示改用 `grid_order_type_down` 而非档位
+          x-description-zh-hk: 買盤盤口檔位（-5 ~ 5）。`0` 表示改用 `grid_order_type_down` 而非檔位
+        - name: grid_order_type_up
+          in: body
+          type: string
+          required: false
+          description: Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖盘订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣盤訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+        - name: grid_order_type_down
+          in: body
+          type: string
+          required: false
+          description: Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买盘订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買盤訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+        - name: multiple_trigger
+          in: body
+          type: boolean
+          required: false
+          description: Whether a single grid level may trigger multiple times
+          x-description-zh: 单个网格档位是否允许多次触发
+          x-description-zh-hk: 單個網格檔位是否允許多次觸發
+        - name: support_shortsell
+          in: body
+          type: boolean
+          required: false
+          description: Whether short selling is allowed
+          x-description-zh: 是否允许卖空
+          x-description-zh-hk: 是否允許賣空
+        - name: rth
+          in: body
+          type: integer
+          required: false
+          description: Regular-trading-hours flag (`0` / `1` / `2`)
+          x-description-zh: 常规交易时段标志（`0` / `1` / `2`）
+          x-description-zh-hk: 常規交易時段標誌（`0` / `1` / `2`）
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Submit a percent-triggered grid on 700.HK
+            longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
+            # Validate the rule without submitting
+            longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc --dry-run
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/submit' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbol":"<symbol>","settlement_currency":"<settlement_currency>","grid_trading_rule":"<grid_trading_rule>","submitted_base_price":"<submitted_base_price>","upper_limit_price":"<upper_limit_price>","lower_limit_price":"<lower_limit_price>","trigger_price_type":"<trigger_price_type>","trigger_quantity":"<trigger_quantity>","upper_limit_quantity":"<upper_limit_quantity>","lower_limit_quantity":"<lower_limit_quantity>","time_in_force":"<time_in_force>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/gridtrading/submit",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbol": "<symbol>", "settlement_currency": "<settlement_currency>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/gridtrading/submit",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbol": "<symbol>", "settlement_currency": "<settlement_currency>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/submit", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ symbol: "<symbol>", settlement_currency: "<settlement_currency>", grid_trading_rule: "<grid_trading_rule>", submitted_base_price: "<submitted_base_price>", upper_limit_price: "<upper_limit_price>", lower_limit_price: "<lower_limit_price>", trigger_price_type: "<trigger_price_type>", trigger_quantity: "<trigger_quantity>", upper_limit_quantity: "<upper_limit_quantity>", lower_limit_quantity: "<lower_limit_quantity>", time_in_force: "<time_in_force>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/submit"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/submit")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "settlement_currency": "<settlement_currency>" , "grid_trading_rule": "<grid_trading_rule>" , "submitted_base_price": "<submitted_base_price>" , "upper_limit_price": "<upper_limit_price>" , "lower_limit_price": "<lower_limit_price>" , "trigger_price_type": "<trigger_price_type>" , "trigger_quantity": "<trigger_quantity>" , "upper_limit_quantity": "<upper_limit_quantity>" , "lower_limit_quantity": "<lower_limit_quantity>" , "time_in_force": "<time_in_force>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/submit");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/submit\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  order_id: '764609681686573056'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/replace:
+    post:
+      operationId: grid_replace
+      summary: Modify Grid Order
+      x-summary-zh: 修改网格订单
+      x-summary-zh-hk: 修改網格訂單
+      description: |
+        Modify an existing grid order's rule. The whole `grid_trading_rule` is replaced with the one you submit, so pass the complete rule — not just the fields you changed.
+      x-description-zh: |
+        修改已存在的网格订单规则。提交的 `grid_trading_rule` 会整体替换原有规则，因此需要传入完整的规则，而不是仅传改动的字段。
+      x-description-zh-hk: |
+        修改已存在的網格訂單規則。提交的 `grid_trading_rule` 會整體替換原有規則，因此需要傳入完整的規則，而不是僅傳改動的欄位。
+      tags:
+        - Grid
+      x-parameters:
+        - name: order_id
+          in: body
+          type: string
+          required: true
+          description: 'Grid order ID, example: `764609681686573056`'
+          x-description-zh: 网格订单 ID，例如：`764609681686573056`
+          x-description-zh-hk: 網格訂單 ID，例如：`764609681686573056`
+        - name: grid_trading_rule
+          in: body
+          type: object
+          required: true
+          description: The full grid rule to apply. Fields below.
+          x-description-zh: 要应用的完整网格规则，字段见下。
+          x-description-zh-hk: 要應用的完整網格規則，欄位見下。
+        - name: submitted_base_price
+          in: body
+          type: string
+          required: true
+          description: Base price the grid is anchored to
+          x-description-zh: 网格锚定的基准价
+          x-description-zh-hk: 網格錨定的基準價
+        - name: upper_limit_price
+          in: body
+          type: string
+          required: true
+          description: Upper price bound
+          x-description-zh: 价格上边界
+          x-description-zh-hk: 價格上邊界
+        - name: lower_limit_price
+          in: body
+          type: string
+          required: true
+          description: Lower price bound
+          x-description-zh: 价格下边界
+          x-description-zh-hk: 價格下邊界
+        - name: trigger_price_type
+          in: body
+          type: integer
+          required: true
+          description: How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent
+          x-description-zh: 触发阈值的计算方式<br/><br/>**可选值：**<br/>`1` - 价差（绝对值）<br/>`2` - 百分比
+          x-description-zh-hk: 觸發閾值的計算方式<br/><br/>**可選值：**<br/>`1` - 價差（絕對值）<br/>`2` - 百分比
+        - name: trigger_spread_up
+          in: body
+          type: string
+          required: false
+          description: Upward trigger spread, required when `trigger_price_type` is `1`
+          x-description-zh: 向上触发价差，`trigger_price_type` 为 `1` 时必填
+          x-description-zh-hk: 向上觸發價差，`trigger_price_type` 為 `1` 時必填
+        - name: trigger_spread_down
+          in: body
+          type: string
+          required: false
+          description: Downward trigger spread, required when `trigger_price_type` is `1`
+          x-description-zh: 向下触发价差，`trigger_price_type` 为 `1` 时必填
+          x-description-zh-hk: 向下觸發價差，`trigger_price_type` 為 `1` 時必填
+        - name: trigger_percent_up
+          in: body
+          type: string
+          required: false
+          description: Upward trigger percent, required when `trigger_price_type` is `2`
+          x-description-zh: 向上触发百分比，`trigger_price_type` 为 `2` 时必填
+          x-description-zh-hk: 向上觸發百分比，`trigger_price_type` 為 `2` 時必填
+        - name: trigger_percent_down
+          in: body
+          type: string
+          required: false
+          description: Downward trigger percent, required when `trigger_price_type` is `2`
+          x-description-zh: 向下触发百分比，`trigger_price_type` 为 `2` 时必填
+          x-description-zh-hk: 向下觸發百分比，`trigger_price_type` 為 `2` 時必填
+        - name: trigger_quantity
+          in: body
+          type: string
+          required: true
+          description: Quantity per trigger
+          x-description-zh: 每次触发的数量
+          x-description-zh-hk: 每次觸發的數量
+        - name: upper_limit_quantity
+          in: body
+          type: string
+          required: true
+          description: Quantity handled when the upper bound is reached
+          x-description-zh: 到达上边界时处理的数量
+          x-description-zh-hk: 到達上邊界時處理的數量
+        - name: lower_limit_quantity
+          in: body
+          type: string
+          required: true
+          description: Quantity handled when the lower bound is reached
+          x-description-zh: 到达下边界时处理的数量
+          x-description-zh-hk: 到達下邊界時處理的數量
+        - name: time_in_force
+          in: body
+          type: integer
+          required: true
+          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC (Good-Til-Canceled)<br/>`6` - GTD (Good-Til-Date)
+          x-description-zh: 订单有效期类型<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC（撤单前有效）<br/>`6` - GTD（到期前有效）
+          x-description-zh-hk: 訂單有效期類型<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC（撤單前有效）<br/>`6` - GTD（到期前有效）
+        - name: expire_time
+          in: body
+          type: integer
+          required: false
+          description: Expiry time (Unix timestamp, in seconds), required when `time_in_force` is `6` (GTD)
+          x-description-zh: 到期时间（Unix 时间戳，单位秒），`time_in_force` 为 `6`（GTD）时必填
+          x-description-zh-hk: 到期時間（Unix 時間戳，單位秒），`time_in_force` 為 `6`（GTD）時必填
+        - name: upper_limit_event
+          in: body
+          type: integer
+          required: false
+          description: Action when the upper bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
+          x-description-zh: 到达上边界时的动作<br/><br/>**可选值：**<br/>`1` - 忽略（保持运行）<br/>`2` - 以最新价平仓
+          x-description-zh-hk: 到達上邊界時的動作<br/><br/>**可選值：**<br/>`1` - 忽略（保持運行）<br/>`2` - 以最新價平倉
+        - name: lower_limit_event
+          in: body
+          type: integer
+          required: false
+          description: Action when the lower bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
+          x-description-zh: 到达下边界时的动作<br/><br/>**可选值：**<br/>`1` - 忽略（保持运行）<br/>`2` - 以最新价平仓
+          x-description-zh-hk: 到達下邊界時的動作<br/><br/>**可選值：**<br/>`1` - 忽略（保持運行）<br/>`2` - 以最新價平倉
+        - name: trigger_sell_depth
+          in: body
+          type: integer
+          required: false
+          description: Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up` instead of a depth level
+          x-description-zh: 卖方向盘口档位（-5 ~ 5）。为 `0` 时使用 `grid_order_type_up` 而非档位
+          x-description-zh-hk: 賣方向盤口檔位（-5 ~ 5）。為 `0` 時使用 `grid_order_type_up` 而非檔位
+        - name: trigger_buy_depth
+          in: body
+          type: integer
+          required: false
+          description: Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down` instead of a depth level
+          x-description-zh: 买方向盘口档位（-5 ~ 5）。为 `0` 时使用 `grid_order_type_down` 而非档位
+          x-description-zh-hk: 買方向盤口檔位（-5 ~ 5）。為 `0` 時使用 `grid_order_type_down` 而非檔位
+        - name: grid_order_type_up
+          in: body
+          type: string
+          required: false
+          description: Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖方向订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣方向訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+        - name: grid_order_type_down
+          in: body
+          type: string
+          required: false
+          description: Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买方向订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買方向訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+        - name: multiple_trigger
+          in: body
+          type: boolean
+          required: false
+          description: Whether a single grid level may trigger multiple times
+          x-description-zh: 单个网格档位是否可多次触发
+          x-description-zh-hk: 單個網格檔位是否可多次觸發
+        - name: support_shortsell
+          in: body
+          type: boolean
+          required: false
+          description: Whether short selling is allowed
+          x-description-zh: 是否允许卖空
+          x-description-zh-hk: 是否允許賣空
+        - name: rth
+          in: body
+          type: integer
+          required: false
+          description: Regular-trading-hours flag (`0` / `1` / `2`)
+          x-description-zh: 常规交易时段标志（`0` / `1` / `2`）
+          x-description-zh-hk: 常規交易時段標誌（`0` / `1` / `2`）
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Modify a grid order's base/bound prices and quantities
+            longbridge grid replace 764609681686573056 --base-price 305 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
+            # Validate the new rule without applying it
+            longbridge grid replace 764609681686573056 --base-price 305 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc --dry-run
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/replace' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"order_id":"<order_id>","grid_trading_rule":"<grid_trading_rule>","submitted_base_price":"<submitted_base_price>","upper_limit_price":"<upper_limit_price>","lower_limit_price":"<lower_limit_price>","trigger_price_type":"<trigger_price_type>","trigger_quantity":"<trigger_quantity>","upper_limit_quantity":"<upper_limit_quantity>","lower_limit_quantity":"<lower_limit_quantity>","time_in_force":"<time_in_force>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/gridtrading/replace",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"order_id": "<order_id>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/gridtrading/replace",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"order_id": "<order_id>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/replace", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ order_id: "<order_id>", grid_trading_rule: "<grid_trading_rule>", submitted_base_price: "<submitted_base_price>", upper_limit_price: "<upper_limit_price>", lower_limit_price: "<lower_limit_price>", trigger_price_type: "<trigger_price_type>", trigger_quantity: "<trigger_quantity>", upper_limit_quantity: "<upper_limit_quantity>", lower_limit_quantity: "<lower_limit_quantity>", time_in_force: "<time_in_force>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/replace"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/replace")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "order_id": "<order_id>" , "grid_trading_rule": "<grid_trading_rule>" , "submitted_base_price": "<submitted_base_price>" , "upper_limit_price": "<upper_limit_price>" , "lower_limit_price": "<lower_limit_price>" , "trigger_price_type": "<trigger_price_type>" , "trigger_quantity": "<trigger_quantity>" , "upper_limit_quantity": "<upper_limit_quantity>" , "lower_limit_quantity": "<lower_limit_quantity>" , "time_in_force": "<time_in_force>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/replace");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/replace\", strings.NewReader(`{\"order_id\":\"<order_id>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/list:
+    get:
+      operationId: grid_list
+      summary: List Grid Orders
+      x-summary-zh: 网格订单列表
+      x-summary-zh-hk: 網格訂單列表
+      description: |
+        Get a paged list of your grid orders, optionally filtered by market, symbol, or status.
+      x-description-zh: |
+        分页获取网格订单列表，可按市场、标的或状态筛选。
+      x-description-zh-hk: |
+        分頁獲取網格訂單列表，可按市場、標的或狀態篩選。
+      tags:
+        - Grid
+      x-parameters:
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number, starts at `1`
+          x-description-zh: 页码，从 `1` 开始
+          x-description-zh-hk: 頁碼，從 `1` 開始
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Page size
+          x-description-zh: 每页数量
+          x-description-zh-hk: 每頁數量
+        - name: market
+          in: query
+          type: string
+          required: false
+          description: Market filter<br/><br/>**Enum Value:**<br/>`US` / `HK` / `CN` / `SG`
+          x-description-zh: 市场筛选<br/><br/>**可选值：**<br/>`US` / `HK` / `CN` / `SG`
+          x-description-zh-hk: 市場篩選<br/><br/>**可選值：**<br/>`US` / `HK` / `CN` / `SG`
+        - name: symbol
+          in: query
+          type: string
+          required: false
+          description: 'Security symbol, `ticker.region` format, example: `700.HK`'
+          x-description-zh: 标的代码，使用 `ticker.region` 格式，例如：`700.HK`
+          x-description-zh-hk: 標的代碼，使用 `ticker.region` 格式，例如：`700.HK`
+        - name: status
+          in: query
+          type: string
+          required: false
+          description: 'Grid order status filter, comma-joined, example: `Performing,Suspended`'
+          x-description-zh: 网格订单状态筛选，多个状态用逗号连接，例如：`Performing,Suspended`
+          x-description-zh-hk: 網格訂單狀態篩選，多個狀態用逗號連接，例如：`Performing,Suspended`
+        - name: sort_by
+          in: query
+          type: string
+          required: false
+          description: Field to sort by
+          x-description-zh: 排序字段
+          x-description-zh-hk: 排序字段
+        - name: sort_order
+          in: query
+          type: string
+          required: false
+          description: Sort direction
+          x-description-zh: 排序方向
+          x-description-zh-hk: 排序方向
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # List all grid orders (default)
+            longbridge grid
+            # Filter by symbol and status
+            longbridge grid --symbol 700.HK --status Performing
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/list' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/gridtrading/list",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/gridtrading/list",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/list", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/list"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/gridtrading/list")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/list");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/gridtrading/list\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: grid_order
+          type: object[]
+          required: false
+          description: Grid orders
+          x-description-zh: 网格订单
+          x-description-zh-hk: 網格訂單
+        - name: └ order_id
+          type: string
+          required: true
+          description: Grid order ID
+          x-description-zh: 网格订单 ID
+          x-description-zh-hk: 網格訂單 ID
+        - name: └ symbol
+          type: string
+          required: true
+          description: 'Stock symbol, use `ticker.region` format, example: `AAPL.US`'
+          x-description-zh: 标的代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
+        - name: └ stock_name
+          type: string
+          required: true
+          description: Stock name
+          x-description-zh: 标的名称
+          x-description-zh-hk: 標的名稱
+        - name: └ market
+          type: string
+          required: true
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: └ status
+          type: string
+          required: true
+          description: Grid order status
+          x-description-zh: 网格订单状态
+          x-description-zh-hk: 網格訂單狀態
+        - name: └ grid_status
+          type: string
+          required: true
+          description: Grid running status
+          x-description-zh: 网格运行状态
+          x-description-zh-hk: 網格運行狀態
+        - name: └ submitted_base_price
+          type: string
+          required: true
+          description: Base price submitted when the grid was created
+          x-description-zh: 创建网格时提交的基准价
+          x-description-zh-hk: 創建網格時提交的基準價
+        - name: └ current_base_price
+          type: string
+          required: true
+          description: Current base price
+          x-description-zh: 当前基准价
+          x-description-zh-hk: 當前基準價
+        - name: └ pre_trigger_base_price
+          type: string
+          required: true
+          description: Base price before the last trigger
+          x-description-zh: 上次触发前的基准价
+          x-description-zh-hk: 上次觸發前的基準價
+        - name: └ post_trigger_base_price
+          type: string
+          required: true
+          description: Base price after the last trigger
+          x-description-zh: 上次触发后的基准价
+          x-description-zh-hk: 上次觸發後的基準價
+        - name: └ upper_limit_price
+          type: string
+          required: true
+          description: Upper price bound
+          x-description-zh: 价格上限
+          x-description-zh-hk: 價格上限
+        - name: └ lower_limit_price
+          type: string
+          required: true
+          description: Lower price bound
+          x-description-zh: 价格下限
+          x-description-zh-hk: 價格下限
+        - name: └ trigger_price_type
+          type: int32
+          required: true
+          description: Trigger price type<br/><br/>**Enum Value:**<br/>`1` - Spread<br/>`2` - Percent
+          x-description-zh: 触发价类型<br/><br/>**可选值：**<br/>`1` - 价差<br/>`2` - 百分比
+          x-description-zh-hk: 觸發價類型<br/><br/>**可選值：**<br/>`1` - 價差<br/>`2` - 百分比
+        - name: └ trigger_spread_up
+          type: string
+          required: true
+          description: Upward trigger spread
+          x-description-zh: 向上触发价差
+          x-description-zh-hk: 向上觸發價差
+        - name: └ trigger_spread_down
+          type: string
+          required: true
+          description: Downward trigger spread
+          x-description-zh: 向下触发价差
+          x-description-zh-hk: 向下觸發價差
+        - name: └ trigger_percent_up
+          type: string
+          required: true
+          description: Upward trigger percent
+          x-description-zh: 向上触发百分比
+          x-description-zh-hk: 向上觸發百分比
+        - name: └ trigger_percent_down
+          type: string
+          required: true
+          description: Downward trigger percent
+          x-description-zh: 向下触发百分比
+          x-description-zh-hk: 向下觸發百分比
+        - name: └ pullback_percent
+          type: string
+          required: true
+          description: Pullback percent
+          x-description-zh: 回撤百分比
+          x-description-zh-hk: 回撤百分比
+        - name: └ pullback_spread
+          type: string
+          required: true
+          description: Pullback spread
+          x-description-zh: 回撤价差
+          x-description-zh-hk: 回撤價差
+        - name: └ rebound_percent
+          type: string
+          required: true
+          description: Rebound percent
+          x-description-zh: 反弹百分比
+          x-description-zh-hk: 反彈百分比
+        - name: └ rebound_spread
+          type: string
+          required: true
+          description: Rebound spread
+          x-description-zh: 反弹价差
+          x-description-zh-hk: 反彈價差
+        - name: └ trigger_sell_order_type
+          type: string
+          required: true
+          description: Sell-side order type
+          x-description-zh: 卖出方向订单类型
+          x-description-zh-hk: 賣出方向訂單類型
+        - name: └ trigger_buy_order_type
+          type: string
+          required: true
+          description: Buy-side order type
+          x-description-zh: 买入方向订单类型
+          x-description-zh-hk: 買入方向訂單類型
+        - name: └ trigger_sell_depth
+          type: int32
+          required: true
+          description: Sell-side order-book depth
+          x-description-zh: 卖出方向盘口深度
+          x-description-zh-hk: 賣出方向盤口深度
+        - name: └ trigger_buy_depth
+          type: int32
+          required: true
+          description: Buy-side order-book depth
+          x-description-zh: 买入方向盘口深度
+          x-description-zh-hk: 買入方向盤口深度
+        - name: └ trigger_quantity
+          type: string
+          required: true
+          description: Quantity per trigger
+          x-description-zh: 每次触发数量
+          x-description-zh-hk: 每次觸發數量
+        - name: └ trigger_sell_quantity
+          type: string
+          required: true
+          description: Sell-side trigger quantity
+          x-description-zh: 卖出方向触发数量
+          x-description-zh-hk: 賣出方向觸發數量
+        - name: └ trigger_buy_quantity
+          type: string
+          required: true
+          description: Buy-side trigger quantity
+          x-description-zh: 买入方向触发数量
+          x-description-zh-hk: 買入方向觸發數量
+        - name: └ upper_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled at the upper bound
+          x-description-zh: 触及上限时处理的数量
+          x-description-zh-hk: 觸及上限時處理的數量
+        - name: └ lower_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled at the lower bound
+          x-description-zh: 触及下限时处理的数量
+          x-description-zh-hk: 觸及下限時處理的數量
+        - name: └ upper_limit_event
+          type: int32
+          required: true
+          description: Action when the upper bound is reached<br/><br/>**Enum Value:**<br/>`1` - Ignore<br/>`2` - Close position at last price
+          x-description-zh: 触及上限时的处理动作<br/><br/>**可选值：**<br/>`1` - 忽略<br/>`2` - 以最新价平仓
+          x-description-zh-hk: 觸及上限時的處理動作<br/><br/>**可選值：**<br/>`1` - 忽略<br/>`2` - 以最新價平倉
+        - name: └ lower_limit_event
+          type: int32
+          required: true
+          description: Action when the lower bound is reached<br/><br/>**Enum Value:**<br/>`1` - Ignore<br/>`2` - Close position at last price
+          x-description-zh: 触及下限时的处理动作<br/><br/>**可选值：**<br/>`1` - 忽略<br/>`2` - 以最新价平仓
+          x-description-zh-hk: 觸及下限時的處理動作<br/><br/>**可選值：**<br/>`1` - 忽略<br/>`2` - 以最新價平倉
+        - name: └ multiple_trigger
+          type: boolean
+          required: true
+          description: Whether a single grid level can trigger multiple times
+          x-description-zh: 单个网格档位是否可多次触发
+          x-description-zh-hk: 單個網格檔位是否可多次觸發
+        - name: └ trigger_times
+          type: int32
+          required: true
+          description: Number of times triggered
+          x-description-zh: 触发次数
+          x-description-zh-hk: 觸發次數
+        - name: └ total_buy_quantity
+          type: string
+          required: true
+          description: Total bought quantity
+          x-description-zh: 累计买入数量
+          x-description-zh-hk: 累計買入數量
+        - name: └ total_sell_quantity
+          type: string
+          required: true
+          description: Total sold quantity
+          x-description-zh: 累计卖出数量
+          x-description-zh-hk: 累計賣出數量
+        - name: └ total_profit_balance
+          type: string
+          required: true
+          description: Total realized profit
+          x-description-zh: 累计已实现收益
+          x-description-zh-hk: 累計已實現收益
+        - name: └ settlement_currency
+          type: string
+          required: true
+          description: Settlement currency
+          x-description-zh: 结算币种
+          x-description-zh-hk: 結算幣種
+        - name: └ time_in_force
+          type: int32
+          required: true
+          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC (Good-Til-Canceled)<br/>`6` - GTD (Good-Til-Date)
+          x-description-zh: 订单有效期<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC（撤单前有效）<br/>`6` - GTD（指定日期前有效）
+          x-description-zh-hk: 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC（撤單前有效）<br/>`6` - GTD（指定日期前有效）
+        - name: └ gtd
+          type: string
+          required: true
+          description: 'GTD expiration date, format: `YYYY-MM-DD`'
+          x-description-zh: GTD 到期日，格式：`YYYY-MM-DD`
+          x-description-zh-hk: GTD 到期日，格式：`YYYY-MM-DD`
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time, in RFC3339 format
+          x-description-zh: 创建时间，RFC3339 格式
+          x-description-zh-hk: 創建時間，RFC3339 格式
+        - name: └ rth
+          type: int32
+          required: true
+          description: Regular trading hours flag
+          x-description-zh: 盘中交易时段标志
+          x-description-zh-hk: 盤中交易時段標誌
+        - name: └ support_shortsell
+          type: boolean
+          required: true
+          description: Whether short selling is allowed
+          x-description-zh: 是否允许卖空
+          x-description-zh-hk: 是否允許賣空
+        - name: └ grid_order_type_up
+          type: string
+          required: true
+          description: Sell-side order type used when the depth is `0`
+          x-description-zh: 深度为 `0` 时使用的卖出方向订单类型
+          x-description-zh-hk: 深度為 `0` 時使用的賣出方向訂單類型
+        - name: └ grid_order_type_down
+          type: string
+          required: true
+          description: Buy-side order type used when the depth is `0`
+          x-description-zh: 深度为 `0` 时使用的买入方向订单类型
+          x-description-zh-hk: 深度為 `0` 時使用的買入方向訂單類型
+        - name: has_more
+          type: boolean
+          required: true
+          description: Whether there are more pages
+          x-description-zh: 是否还有更多页
+          x-description-zh-hk: 是否還有更多頁
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  grid_order:
+                    - order_id: '764609681686573056'
+                      symbol: 700.HK
+                      stock_name: TENCENT
+                      market: HK
+                      status: Performing
+                      grid_status: Performing
+                      submitted_base_price: '300.000'
+                      current_base_price: '300.000'
+                      pre_trigger_base_price: '300.000'
+                      post_trigger_base_price: '306.000'
+                      upper_limit_price: '360.000'
+                      lower_limit_price: '240.000'
+                      trigger_price_type: 2
+                      trigger_spread_up: ''
+                      trigger_spread_down: ''
+                      trigger_percent_up: '2'
+                      trigger_percent_down: '2'
+                      pullback_percent: ''
+                      pullback_spread: ''
+                      rebound_percent: ''
+                      rebound_spread: ''
+                      trigger_sell_order_type: GMO
+                      trigger_buy_order_type: GMO
+                      trigger_sell_depth: 0
+                      trigger_buy_depth: 0
+                      trigger_quantity: '100'
+                      trigger_sell_quantity: '100'
+                      trigger_buy_quantity: '100'
+                      upper_limit_quantity: '200'
+                      lower_limit_quantity: '100'
+                      upper_limit_event: 1
+                      lower_limit_event: 1
+                      multiple_trigger: false
+                      trigger_times: 3
+                      total_buy_quantity: '300'
+                      total_sell_quantity: '200'
+                      total_profit_balance: '1250.00'
+                      settlement_currency: HKD
+                      time_in_force: 1
+                      gtd: ''
+                      created_at: '2025-01-15T09:30:00+08:00'
+                      rth: 0
+                      support_shortsell: false
+                      grid_order_type_up: GMO
+                      grid_order_type_down: GMO
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: grid_list_by_ids
+      summary: Query Grid Orders by IDs
+      x-summary-zh: 按 ID 查询网格订单
+      x-summary-zh-hk: 按 ID 查詢網格訂單
+      description: |
+        Query specific grid orders by their IDs.
+      x-description-zh: |
+        按 ID 查询指定的网格订单。
+      x-description-zh-hk: |
+        按 ID 查詢指定的網格訂單。
+      tags:
+        - Grid
+      x-parameters:
+        - name: order_ids
+          in: body
+          type: array
+          required: true
+          description: Grid order IDs to query
+          x-description-zh: 待查询的网格订单 ID
+          x-description-zh-hk: 待查詢的網格訂單 ID
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Query specific grid orders by ID
+            longbridge grid --ids 764609681686573056 764609681686573057
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/list' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"order_ids":"<order_ids>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/gridtrading/list",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"order_ids": "<order_ids>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/gridtrading/list",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"order_ids": "<order_ids>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/list", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ order_ids: "<order_ids>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/list"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_ids\":\"<order_ids>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/list")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "order_ids": "<order_ids>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/list");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_ids\":\"<order_ids>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/list\", strings.NewReader(`{\"order_ids\":\"<order_ids>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: grid_order
+          type: object[]
+          required: false
+          description: Grid orders
+          x-description-zh: 网格订单
+          x-description-zh-hk: 網格訂單
+        - name: └ order_id
+          type: string
+          required: true
+          description: Grid order ID
+          x-description-zh: 网格订单 ID
+          x-description-zh-hk: 網格訂單 ID
+        - name: └ symbol
+          type: string
+          required: true
+          description: 'Stock symbol, use `ticker.region` format, example: `AAPL.US`'
+          x-description-zh: 标的代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
+        - name: └ stock_name
+          type: string
+          required: true
+          description: Stock name
+          x-description-zh: 标的名称
+          x-description-zh-hk: 標的名稱
+        - name: └ market
+          type: string
+          required: true
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: └ status
+          type: string
+          required: true
+          description: Grid order status
+          x-description-zh: 网格订单状态
+          x-description-zh-hk: 網格訂單狀態
+        - name: └ grid_status
+          type: string
+          required: true
+          description: Grid running status
+          x-description-zh: 网格运行状态
+          x-description-zh-hk: 網格運行狀態
+        - name: └ submitted_base_price
+          type: string
+          required: true
+          description: Submitted base price the grid is anchored to
+          x-description-zh: 网格锚定的提交基准价格
+          x-description-zh-hk: 網格錨定的提交基準價格
+        - name: └ current_base_price
+          type: string
+          required: true
+          description: Current base price
+          x-description-zh: 当前基准价格
+          x-description-zh-hk: 當前基準價格
+        - name: └ pre_trigger_base_price
+          type: string
+          required: true
+          description: Base price before the last trigger
+          x-description-zh: 上次触发前的基准价格
+          x-description-zh-hk: 上次觸發前的基準價格
+        - name: └ post_trigger_base_price
+          type: string
+          required: true
+          description: Base price after the last trigger
+          x-description-zh: 上次触发后的基准价格
+          x-description-zh-hk: 上次觸發後的基準價格
+        - name: └ upper_limit_price
+          type: string
+          required: true
+          description: Upper price bound
+          x-description-zh: 价格上限
+          x-description-zh-hk: 價格上限
+        - name: └ lower_limit_price
+          type: string
+          required: true
+          description: Lower price bound
+          x-description-zh: 价格下限
+          x-description-zh-hk: 價格下限
+        - name: └ trigger_price_type
+          type: int32
+          required: true
+          description: Trigger price type<br/><br/> **Enum Value:**<br/> `1` - Spread<br/> `2` - Percent
+          x-description-zh: 触发价格类型<br/><br/> **Enum Value:**<br/> `1` - 价差<br/> `2` - 百分比
+          x-description-zh-hk: 觸發價格類型<br/><br/> **Enum Value:**<br/> `1` - 價差<br/> `2` - 百分比
+        - name: └ trigger_spread_up
+          type: string
+          required: true
+          description: Upward trigger spread, used when `trigger_price_type` is `1`
+          x-description-zh: 向上触发价差，`trigger_price_type` 为 `1` 时使用
+          x-description-zh-hk: 向上觸發價差，`trigger_price_type` 為 `1` 時使用
+        - name: └ trigger_spread_down
+          type: string
+          required: true
+          description: Downward trigger spread, used when `trigger_price_type` is `1`
+          x-description-zh: 向下触发价差，`trigger_price_type` 为 `1` 时使用
+          x-description-zh-hk: 向下觸發價差，`trigger_price_type` 為 `1` 時使用
+        - name: └ trigger_percent_up
+          type: string
+          required: true
+          description: Upward trigger percent, used when `trigger_price_type` is `2`
+          x-description-zh: 向上触发百分比，`trigger_price_type` 为 `2` 时使用
+          x-description-zh-hk: 向上觸發百分比，`trigger_price_type` 為 `2` 時使用
+        - name: └ trigger_percent_down
+          type: string
+          required: true
+          description: Downward trigger percent, used when `trigger_price_type` is `2`
+          x-description-zh: 向下触发百分比，`trigger_price_type` 为 `2` 时使用
+          x-description-zh-hk: 向下觸發百分比，`trigger_price_type` 為 `2` 時使用
+        - name: └ pullback_percent
+          type: string
+          required: true
+          description: Pullback percent
+          x-description-zh: 回调百分比
+          x-description-zh-hk: 回調百分比
+        - name: └ pullback_spread
+          type: string
+          required: true
+          description: Pullback spread
+          x-description-zh: 回调价差
+          x-description-zh-hk: 回調價差
+        - name: └ rebound_percent
+          type: string
+          required: true
+          description: Rebound percent
+          x-description-zh: 反弹百分比
+          x-description-zh-hk: 反彈百分比
+        - name: └ rebound_spread
+          type: string
+          required: true
+          description: Rebound spread
+          x-description-zh: 反弹价差
+          x-description-zh-hk: 反彈價差
+        - name: └ trigger_sell_order_type
+          type: string
+          required: true
+          description: Sell-side grid order type<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
+          x-description-zh: 卖出方网格订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
+          x-description-zh-hk: 賣出方網格訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+        - name: └ trigger_buy_order_type
+          type: string
+          required: true
+          description: Buy-side grid order type<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
+          x-description-zh: 买入方网格订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
+          x-description-zh-hk: 買入方網格訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+        - name: └ trigger_sell_depth
+          type: int32
+          required: true
+          description: Sell-side order-book depth, range `-5..5`; `0` means use `trigger_sell_order_type`
+          x-description-zh: 卖出方盘口深度，范围 `-5..5`；`0` 表示使用 `trigger_sell_order_type`
+          x-description-zh-hk: 賣出方盤口深度，範圍 `-5..5`；`0` 表示使用 `trigger_sell_order_type`
+        - name: └ trigger_buy_depth
+          type: int32
+          required: true
+          description: Buy-side order-book depth, range `-5..5`; `0` means use `trigger_buy_order_type`
+          x-description-zh: 买入方盘口深度，范围 `-5..5`；`0` 表示使用 `trigger_buy_order_type`
+          x-description-zh-hk: 買入方盤口深度，範圍 `-5..5`；`0` 表示使用 `trigger_buy_order_type`
+        - name: └ trigger_quantity
+          type: string
+          required: true
+          description: Quantity per trigger
+          x-description-zh: 每次触发数量
+          x-description-zh-hk: 每次觸發數量
+        - name: └ trigger_sell_quantity
+          type: string
+          required: true
+          description: Sell-side trigger quantity
+          x-description-zh: 卖出方触发数量
+          x-description-zh-hk: 賣出方觸發數量
+        - name: └ trigger_buy_quantity
+          type: string
+          required: true
+          description: Buy-side trigger quantity
+          x-description-zh: 买入方触发数量
+          x-description-zh-hk: 買入方觸發數量
+        - name: └ upper_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled at the upper bound
+          x-description-zh: 触及上限时处理的数量
+          x-description-zh-hk: 觸及上限時處理的數量
+        - name: └ lower_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled at the lower bound
+          x-description-zh: 触及下限时处理的数量
+          x-description-zh-hk: 觸及下限時處理的數量
+        - name: └ upper_limit_event
+          type: int32
+          required: true
+          description: Event when the upper bound is reached<br/><br/> **Enum Value:**<br/> `1` - Ignore (keep grid running)<br/> `2` - Close position at last price
+          x-description-zh: 触及上限时的处理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持网格运行）<br/> `2` - 以最新价平仓
+          x-description-zh-hk: 觸及上限時的處理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持網格運行）<br/> `2` - 以最新價平倉
+        - name: └ lower_limit_event
+          type: int32
+          required: true
+          description: Event when the lower bound is reached<br/><br/> **Enum Value:**<br/> `1` - Ignore (keep grid running)<br/> `2` - Close position at last price
+          x-description-zh: 触及下限时的处理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持网格运行）<br/> `2` - 以最新价平仓
+          x-description-zh-hk: 觸及下限時的處理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持網格運行）<br/> `2` - 以最新價平倉
+        - name: └ multiple_trigger
+          type: boolean
+          required: true
+          description: Whether a single grid level can trigger multiple times
+          x-description-zh: 单个网格档位是否可多次触发
+          x-description-zh-hk: 單個網格檔位是否可多次觸發
+        - name: └ trigger_times
+          type: int32
+          required: true
+          description: Number of times the grid has triggered
+          x-description-zh: 网格已触发次数
+          x-description-zh-hk: 網格已觸發次數
+        - name: └ total_buy_quantity
+          type: string
+          required: true
+          description: Total bought quantity
+          x-description-zh: 累计买入数量
+          x-description-zh-hk: 累計買入數量
+        - name: └ total_sell_quantity
+          type: string
+          required: true
+          description: Total sold quantity
+          x-description-zh: 累计卖出数量
+          x-description-zh-hk: 累計賣出數量
+        - name: └ total_profit_balance
+          type: string
+          required: true
+          description: Total profit balance
+          x-description-zh: 累计收益余额
+          x-description-zh-hk: 累計收益餘額
+        - name: └ settlement_currency
+          type: string
+          required: true
+          description: Settlement currency
+          x-description-zh: 结算货币
+          x-description-zh-hk: 結算貨幣
+        - name: └ time_in_force
+          type: int32
+          required: true
+          description: Time in force type<br/><br/> **Enum Value:**<br/> `0` - Day<br/> `1` - Good-Til-Canceled<br/> `6` - Good-Til-Date
+          x-description-zh: 订单有效期类型<br/><br/> **Enum Value:**<br/> `0` - 当日有效<br/> `1` - 撤单前有效<br/> `6` - 指定日期前有效
+          x-description-zh-hk: 訂單有效期類型<br/><br/> **Enum Value:**<br/> `0` - 當日有效<br/> `1` - 撤單前有效<br/> `6` - 指定日期前有效
+        - name: └ gtd
+          type: string
+          required: true
+          description: 'Good-Til-Date expiry date, format: `YYYY-MM-DD`'
+          x-description-zh: 指定日期前有效的到期日期，格式：`YYYY-MM-DD`
+          x-description-zh-hk: 指定日期前有效的到期日期，格式：`YYYY-MM-DD`
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time, formatted as RFC3339
+          x-description-zh: 创建时间，格式为 RFC3339
+          x-description-zh-hk: 創建時間，格式為 RFC3339
+        - name: └ rth
+          type: int32
+          required: true
+          description: Regular trading hours flag<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`
+          x-description-zh: 盘中交易时段标识<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`
+          x-description-zh-hk: 盤中交易時段標識<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`
+        - name: └ support_shortsell
+          type: boolean
+          required: true
+          description: Whether short selling is allowed
+          x-description-zh: 是否允许卖空
+          x-description-zh-hk: 是否允許賣空
+        - name: └ grid_order_type_up
+          type: string
+          required: true
+          description: Sell-side order type when depth is `0`<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
+          x-description-zh: 深度为 `0` 时卖出方的订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
+          x-description-zh-hk: 深度為 `0` 時賣出方的訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+        - name: └ grid_order_type_down
+          type: string
+          required: true
+          description: Buy-side order type when depth is `0`<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
+          x-description-zh: 深度为 `0` 时买入方的订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
+          x-description-zh-hk: 深度為 `0` 時買入方的訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  grid_order:
+                    - order_id: '764609681686573056'
+                      symbol: 700.HK
+                      stock_name: TENCENT
+                      market: HK
+                      status: Performing
+                      grid_status: Performing
+                      submitted_base_price: '300.000'
+                      current_base_price: '300.000'
+                      pre_trigger_base_price: '300.000'
+                      post_trigger_base_price: '306.000'
+                      upper_limit_price: '360.000'
+                      lower_limit_price: '240.000'
+                      trigger_price_type: 2
+                      trigger_spread_up: ''
+                      trigger_spread_down: ''
+                      trigger_percent_up: '2'
+                      trigger_percent_down: '2'
+                      pullback_percent: ''
+                      pullback_spread: ''
+                      rebound_percent: ''
+                      rebound_spread: ''
+                      trigger_sell_order_type: GMO
+                      trigger_buy_order_type: GMO
+                      trigger_sell_depth: 0
+                      trigger_buy_depth: 0
+                      trigger_quantity: '100'
+                      trigger_sell_quantity: '100'
+                      trigger_buy_quantity: '100'
+                      upper_limit_quantity: '200'
+                      lower_limit_quantity: '100'
+                      upper_limit_event: 1
+                      lower_limit_event: 1
+                      multiple_trigger: false
+                      trigger_times: 3
+                      total_buy_quantity: '300'
+                      total_sell_quantity: '200'
+                      total_profit_balance: '1250.00'
+                      settlement_currency: HKD
+                      time_in_force: 1
+                      gtd: ''
+                      created_at: '2025-01-15T09:30:00+08:00'
+                      rth: 0
+                      support_shortsell: false
+                      grid_order_type_up: GMO
+                      grid_order_type_down: GMO
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/detail:
+    get:
+      operationId: grid_detail
+      summary: Grid Order Detail
+      x-summary-zh: 网格订单详情
+      x-summary-zh-hk: 網格訂單詳情
+      description: |
+        Query the full detail of a single grid order, including its rule, paged executed sub-orders (`grid_sub_orders`), and paged lifecycle history (`grid_order_history`).
+      x-description-zh: |
+        查询单个网格订单的完整详情，包括网格规则、分页的成交子订单（`grid_sub_orders`）以及分页的生命周期历史（`grid_order_history`）。
+      x-description-zh-hk: |
+        查詢單個網格訂單的完整詳情，包括網格規則、分頁的成交子訂單（`grid_sub_orders`）以及分頁的生命週期歷史（`grid_order_history`）。
+      tags:
+        - Grid
+      x-parameters:
+        - name: order_id
+          in: query
+          type: string
+          required: true
+          description: 'Grid order ID, example: `764609681686573056`'
+          x-description-zh: 网格订单 ID，例如：`764609681686573056`
+          x-description-zh-hk: 網格訂單 ID，例如：`764609681686573056`
+        - name: history_id
+          in: query
+          type: string
+          required: false
+          description: Cursor for paging the lifecycle history. Pass the last `history_id` of a page to fetch older entries.
+          x-description-zh: 生命周期历史的分页游标，传入某页最后一条的 `history_id` 以获取更早的记录
+          x-description-zh-hk: 生命週期歷史的分頁游標，傳入某頁最後一條的 `history_id` 以獲取更早的記錄
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Page size for `grid_sub_orders` and `grid_order_history`
+          x-description-zh: '`grid_sub_orders` 与 `grid_order_history` 的分页大小'
+          x-description-zh-hk: '`grid_sub_orders` 與 `grid_order_history` 的分頁大小'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Rule, sub-orders and history of a grid order
+            longbridge grid detail 764609681686573056
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/detail?order_id=<order_id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/gridtrading/detail",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"order_id": "<order_id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/gridtrading/detail",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"order_id": "<order_id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/gridtrading/detail")
+            url.searchParams.set("order_id", "<order_id>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/detail?order_id=<order_id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/gridtrading/detail")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("order_id", "<order_id>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/detail?order_id=<order_id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/gridtrading/detail?order_id=<order_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: order_id
+          type: string
+          required: true
+          description: Grid order ID
+          x-description-zh: 网格订单 ID
+          x-description-zh-hk: 網格訂單 ID
+        - name: symbol
+          type: string
+          required: true
+          description: Security symbol, `ticker.region` format
+          x-description-zh: 标的代码，`ticker.region` 格式
+          x-description-zh-hk: 標的代碼，`ticker.region` 格式
+        - name: stock_name
+          type: string
+          required: true
+          description: Security name
+          x-description-zh: 标的名称
+          x-description-zh-hk: 標的名稱
+        - name: status
+          type: string
+          required: true
+          description: 'Grid order status, example: `Performing` / `Suspended`'
+          x-description-zh: 网格订单状态，例如：`Performing` / `Suspended`
+          x-description-zh-hk: 網格訂單狀態，例如：`Performing` / `Suspended`
+        - name: grid_status
+          type: string
+          required: true
+          description: Detailed grid running status
+          x-description-zh: 网格详细运行状态
+          x-description-zh-hk: 網格詳細運行狀態
+        - name: suspend_reason
+          type: string
+          required: true
+          description: Reason the grid is suspended, empty when running
+          x-description-zh: 网格被暂停的原因，运行中时为空
+          x-description-zh-hk: 網格被暫停的原因，運行中時為空
+        - name: sleeping_reason
+          type: string
+          required: true
+          description: Reason the grid is dormant, empty when active
+          x-description-zh: 网格休眠的原因，活跃时为空
+          x-description-zh-hk: 網格休眠的原因，活躍時為空
+        - name: submitted_base_price
+          type: string
+          required: true
+          description: Base price the grid was anchored to at submission
+          x-description-zh: 提交时网格锚定的基准价
+          x-description-zh-hk: 提交時網格錨定的基準價
+        - name: current_base_price
+          type: string
+          required: true
+          description: Current base price after triggers
+          x-description-zh: 触发后的当前基准价
+          x-description-zh-hk: 觸發後的當前基準價
+        - name: upper_limit_price
+          type: string
+          required: true
+          description: Upper price bound
+          x-description-zh: 价格上界
+          x-description-zh-hk: 價格上界
+        - name: lower_limit_price
+          type: string
+          required: true
+          description: Lower price bound
+          x-description-zh: 价格下界
+          x-description-zh-hk: 價格下界
+        - name: trigger_price_type
+          type: int32
+          required: true
+          description: How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent
+          x-description-zh: 触发阈值的计价方式<br/><br/>**枚举值：**<br/>`1` - 价差（绝对值）<br/>`2` - 百分比
+          x-description-zh-hk: 觸發閾值的計價方式<br/><br/>**枚舉值：**<br/>`1` - 價差（絕對值）<br/>`2` - 百分比
+        - name: trigger_spread_up
+          type: string
+          required: true
+          description: Upward trigger spread (when `trigger_price_type` is `1`)
+          x-description-zh: 向上触发价差（当 `trigger_price_type` 为 `1` 时）
+          x-description-zh-hk: 向上觸發價差（當 `trigger_price_type` 為 `1` 時）
+        - name: trigger_spread_down
+          type: string
+          required: true
+          description: Downward trigger spread (when `trigger_price_type` is `1`)
+          x-description-zh: 向下触发价差（当 `trigger_price_type` 为 `1` 时）
+          x-description-zh-hk: 向下觸發價差（當 `trigger_price_type` 為 `1` 時）
+        - name: trigger_percent_up
+          type: string
+          required: true
+          description: Upward trigger percent (when `trigger_price_type` is `2`)
+          x-description-zh: 向上触发百分比（当 `trigger_price_type` 为 `2` 时）
+          x-description-zh-hk: 向上觸發百分比（當 `trigger_price_type` 為 `2` 時）
+        - name: trigger_percent_down
+          type: string
+          required: true
+          description: Downward trigger percent (when `trigger_price_type` is `2`)
+          x-description-zh: 向下触发百分比（当 `trigger_price_type` 为 `2` 时）
+          x-description-zh-hk: 向下觸發百分比（當 `trigger_price_type` 為 `2` 時）
+        - name: pullback_percent
+          type: string
+          required: true
+          description: Pullback percent
+          x-description-zh: 回落百分比
+          x-description-zh-hk: 回落百分比
+        - name: pullback_spread
+          type: string
+          required: true
+          description: Pullback spread
+          x-description-zh: 回落价差
+          x-description-zh-hk: 回落價差
+        - name: rebound_percent
+          type: string
+          required: true
+          description: Rebound percent
+          x-description-zh: 反弹百分比
+          x-description-zh-hk: 反彈百分比
+        - name: rebound_spread
+          type: string
+          required: true
+          description: Rebound spread
+          x-description-zh: 反弹价差
+          x-description-zh-hk: 反彈價差
+        - name: multiple_trigger
+          type: boolean
+          required: true
+          description: Whether a single grid level may trigger multiple times
+          x-description-zh: 单个网格档位是否可多次触发
+          x-description-zh-hk: 單個網格檔位是否可多次觸發
+        - name: time_in_force
+          type: int32
+          required: true
+          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD
+          x-description-zh: 订单有效期<br/><br/>**枚举值：**<br/>`0` - 当日有效<br/>`1` - GTC<br/>`6` - GTD
+          x-description-zh-hk: 訂單有效期<br/><br/>**枚舉值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD
+        - name: trigger_quantity
+          type: string
+          required: true
+          description: Quantity per trigger
+          x-description-zh: 每次触发的数量
+          x-description-zh-hk: 每次觸發的數量
+        - name: trigger_sell_quantity
+          type: string
+          required: true
+          description: Cumulative quantity triggered on the sell side
+          x-description-zh: 卖出方向累计触发数量
+          x-description-zh-hk: 賣出方向累計觸發數量
+        - name: trigger_buy_quantity
+          type: string
+          required: true
+          description: Cumulative quantity triggered on the buy side
+          x-description-zh: 买入方向累计触发数量
+          x-description-zh-hk: 買入方向累計觸發數量
+        - name: upper_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled when the upper bound is reached
+          x-description-zh: 触及上界时处理的数量
+          x-description-zh-hk: 觸及上界時處理的數量
+        - name: lower_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled when the lower bound is reached
+          x-description-zh: 触及下界时处理的数量
+          x-description-zh-hk: 觸及下界時處理的數量
+        - name: upper_limit_event
+          type: int32
+          required: true
+          description: Action at the upper bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price
+          x-description-zh: 触及上界时的动作<br/><br/>**枚举值：**<br/>`1` - 忽略<br/>`2` - 按最新价平仓
+          x-description-zh-hk: 觸及上界時的動作<br/><br/>**枚舉值：**<br/>`1` - 忽略<br/>`2` - 按最新價平倉
+        - name: lower_limit_event
+          type: int32
+          required: true
+          description: Action at the lower bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price
+          x-description-zh: 触及下界时的动作<br/><br/>**枚举值：**<br/>`1` - 忽略<br/>`2` - 按最新价平仓
+          x-description-zh-hk: 觸及下界時的動作<br/><br/>**枚舉值：**<br/>`1` - 忽略<br/>`2` - 按最新價平倉
+        - name: trigger_sell_depth
+          type: int32
+          required: true
+          description: Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up`
+          x-description-zh: 卖出方向盘口深度（-5 ~ 5）。`0` = 使用 `grid_order_type_up`
+          x-description-zh-hk: 賣出方向盤口深度（-5 ~ 5）。`0` = 使用 `grid_order_type_up`
+        - name: trigger_buy_depth
+          type: int32
+          required: true
+          description: Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down`
+          x-description-zh: 买入方向盘口深度（-5 ~ 5）。`0` = 使用 `grid_order_type_down`
+          x-description-zh-hk: 買入方向盤口深度（-5 ~ 5）。`0` = 使用 `grid_order_type_down`
+        - name: created_at
+          type: string
+          required: true
+          description: Creation time, RFC3339 format
+          x-description-zh: 创建时间，RFC3339 格式
+          x-description-zh-hk: 創建時間，RFC3339 格式
+        - name: updated_at
+          type: string
+          required: true
+          description: Last update time, RFC3339 format
+          x-description-zh: 最后更新时间，RFC3339 格式
+          x-description-zh-hk: 最後更新時間，RFC3339 格式
+        - name: settlement_currency
+          type: string
+          required: true
+          description: 'Settlement currency, example: `HKD`'
+          x-description-zh: 结算货币，例如：`HKD`
+          x-description-zh-hk: 結算貨幣，例如：`HKD`
+        - name: expire_time
+          type: string
+          required: true
+          description: Expiry time, RFC3339 format (when `time_in_force` is GTD)
+          x-description-zh: 过期时间，RFC3339 格式（当 `time_in_force` 为 GTD 时）
+          x-description-zh-hk: 過期時間，RFC3339 格式（當 `time_in_force` 為 GTD 時）
+        - name: gtd
+          type: string
+          required: true
+          description: Good-Til-Date, `YYYY-MM-DD` format
+          x-description-zh: Good-Til-Date，`YYYY-MM-DD` 格式
+          x-description-zh-hk: Good-Til-Date，`YYYY-MM-DD` 格式
+        - name: grid_sub_orders
+          type: object[]
+          required: false
+          description: Executed sub-orders for this grid
+          x-description-zh: 该网格已成交的子订单
+          x-description-zh-hk: 該網格已成交的子訂單
+        - name: └ id
+          type: string
+          required: true
+          description: Sub-order ID
+          x-description-zh: 子订单 ID
+          x-description-zh-hk: 子訂單 ID
+        - name: └ price
+          type: string
+          required: true
+          description: Order price
+          x-description-zh: 订单价格
+          x-description-zh-hk: 訂單價格
+        - name: └ order_type
+          type: string
+          required: true
+          description: Order type
+          x-description-zh: 订单类型
+          x-description-zh-hk: 訂單類型
+        - name: └ quantity
+          type: string
+          required: true
+          description: Order quantity
+          x-description-zh: 订单数量
+          x-description-zh-hk: 訂單數量
+        - name: └ executed_qty
+          type: string
+          required: true
+          description: Executed quantity
+          x-description-zh: 已成交数量
+          x-description-zh-hk: 已成交數量
+        - name: └ action
+          type: int32
+          required: true
+          description: Buy/sell direction
+          x-description-zh: 买卖方向
+          x-description-zh-hk: 買賣方向
+        - name: └ status
+          type: string
+          required: true
+          description: Sub-order status
+          x-description-zh: 子订单状态
+          x-description-zh-hk: 子訂單狀態
+        - name: └ submitted_at
+          type: string
+          required: true
+          description: Submission time, RFC3339 format
+          x-description-zh: 提交时间，RFC3339 格式
+          x-description-zh-hk: 提交時間，RFC3339 格式
+        - name: └ rth
+          type: int32
+          required: true
+          description: Regular-trading-hours flag (`0` / `1` / `2`)
+          x-description-zh: 盘中交易时段标识（`0` / `1` / `2`）
+          x-description-zh-hk: 盤中交易時段標識（`0` / `1` / `2`）
+        - name: sub_has_more
+          type: boolean
+          required: true
+          description: Whether more sub-orders can be paged
+          x-description-zh: 是否还有更多子订单可分页
+          x-description-zh-hk: 是否還有更多子訂單可分頁
+        - name: grid_order_history
+          type: object[]
+          required: false
+          description: Lifecycle history entries
+          x-description-zh: 生命周期历史记录
+          x-description-zh-hk: 生命週期歷史記錄
+        - name: └ history_id
+          type: string
+          required: true
+          description: History entry ID, also used as the paging cursor
+          x-description-zh: 历史记录 ID，同时用作分页游标
+          x-description-zh-hk: 歷史記錄 ID，同時用作分頁游標
+        - name: └ created_at
+          type: string
+          required: true
+          description: Event time, RFC3339 format
+          x-description-zh: 事件时间，RFC3339 格式
+          x-description-zh-hk: 事件時間，RFC3339 格式
+        - name: └ suspend_reason
+          type: string
+          required: true
+          description: Suspend reason, when applicable
+          x-description-zh: 暂停原因（如适用）
+          x-description-zh-hk: 暫停原因（如適用）
+        - name: └ reason
+          type: string
+          required: true
+          description: Human-readable description of the event
+          x-description-zh: 事件的可读描述
+          x-description-zh-hk: 事件的可讀描述
+        - name: history_has_more
+          type: boolean
+          required: true
+          description: Whether more history entries can be paged via `history_id`
+          x-description-zh: 是否可通过 `history_id` 分页获取更多历史记录
+          x-description-zh-hk: 是否可通過 `history_id` 分頁獲取更多歷史記錄
+        - name: support_shortsell
+          type: boolean
+          required: true
+          description: Whether short selling is allowed
+          x-description-zh: 是否允许卖空
+          x-description-zh-hk: 是否允許賣空
+        - name: rth
+          type: int32
+          required: true
+          description: Regular-trading-hours flag (`0` / `1` / `2`)
+          x-description-zh: 盘中交易时段标识（`0` / `1` / `2`）
+          x-description-zh-hk: 盤中交易時段標識（`0` / `1` / `2`）
+        - name: grid_order_type_up
+          type: string
+          required: true
+          description: Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖出方向订单类型<br/><br/>**枚举值：**<br/>`GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣出方向訂單類型<br/><br/>**枚舉值：**<br/>`GMO` / `GLO` / `GTG`'
+        - name: grid_order_type_down
+          type: string
+          required: true
+          description: Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买入方向订单类型<br/><br/>**枚举值：**<br/>`GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買入方向訂單類型<br/><br/>**枚舉值：**<br/>`GMO` / `GLO` / `GTG`'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  order_id: '764609681686573056'
+                  symbol: 700.HK
+                  stock_name: TENCENT
+                  status: Performing
+                  grid_status: Performing
+                  suspend_reason: ''
+                  sleeping_reason: ''
+                  submitted_base_price: '300'
+                  current_base_price: '300'
+                  upper_limit_price: '360'
+                  lower_limit_price: '240'
+                  trigger_price_type: 2
+                  trigger_spread_up: ''
+                  trigger_spread_down: ''
+                  trigger_percent_up: '2'
+                  trigger_percent_down: '2'
+                  pullback_percent: ''
+                  pullback_spread: ''
+                  rebound_percent: ''
+                  rebound_spread: ''
+                  multiple_trigger: false
+                  time_in_force: 1
+                  trigger_quantity: '100'
+                  trigger_sell_quantity: '0'
+                  trigger_buy_quantity: '0'
+                  upper_limit_quantity: '200'
+                  lower_limit_quantity: '100'
+                  upper_limit_event: 1
+                  lower_limit_event: 1
+                  trigger_sell_depth: 0
+                  trigger_buy_depth: 0
+                  created_at: '2024-08-12T10:30:00+08:00'
+                  updated_at: '2024-08-12T10:30:00+08:00'
+                  settlement_currency: HKD
+                  expire_time: ''
+                  gtd: ''
+                  grid_sub_orders: []
+                  sub_has_more: false
+                  grid_order_history:
+                    - history_id: '764609681686573100'
+                      created_at: '2024-08-12T10:30:00+08:00'
+                      status: Performing
+                      suspend_reason: ''
+                      reason: Grid order started
+                  history_has_more: false
+                  support_shortsell: false
+                  rth: 0
+                  grid_order_type_up: GMO
+                  grid_order_type_down: GMO
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/trigger_history_list:
+    get:
+      operationId: grid_trigger_history
+      summary: Grid Trigger History
+      x-summary-zh: 网格触发历史
+      x-summary-zh-hk: 網格觸發歷史
+      description: |
+        Query the paged trigger history of a single grid order — the individual orders the grid has placed each time a trigger fired.
+      x-description-zh: |
+        查询单个网格订单的分页触发历史 —— 网格每次触发时所发出的具体订单。
+      x-description-zh-hk: |
+        查詢單個網格訂單的分頁觸發歷史 —— 網格每次觸發時所發出的具體訂單。
+      tags:
+        - Grid
+      x-parameters:
+        - name: grid_order_id
+          in: query
+          type: string
+          required: true
+          description: 'Grid order ID, example: `764609681686573056`'
+          x-description-zh: 网格订单 ID，例如：`764609681686573056`
+          x-description-zh-hk: 網格訂單 ID，例如：`764609681686573056`
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number, starting from `1`
+          x-description-zh: 页码，从 `1` 开始
+          x-description-zh-hk: 頁碼，從 `1` 開始
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Page size
+          x-description-zh: 分页大小
+          x-description-zh-hk: 分頁大小
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Trigger history of a grid order
+            longbridge grid triggers 764609681686573056
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/trigger_history_list?grid_order_id=<grid_order_id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/gridtrading/trigger_history_list",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"grid_order_id": "<grid_order_id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/gridtrading/trigger_history_list",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"grid_order_id": "<grid_order_id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/gridtrading/trigger_history_list")
+            url.searchParams.set("grid_order_id", "<grid_order_id>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/trigger_history_list?grid_order_id=<grid_order_id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/gridtrading/trigger_history_list")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("grid_order_id", "<grid_order_id>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/trigger_history_list?grid_order_id=<grid_order_id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/gridtrading/trigger_history_list?grid_order_id=<grid_order_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: trigger_orders
+          type: object[]
+          required: false
+          description: Triggered orders
+          x-description-zh: 触发订单
+          x-description-zh-hk: 觸發訂單
+        - name: └ id
+          type: string
+          required: true
+          description: Trigger order ID
+          x-description-zh: 触发订单 ID
+          x-description-zh-hk: 觸發訂單 ID
+        - name: └ status
+          type: string
+          required: true
+          description: Order status
+          x-description-zh: 订单状态
+          x-description-zh-hk: 訂單狀態
+        - name: └ name
+          type: string
+          required: true
+          description: Security name
+          x-description-zh: 股票名称
+          x-description-zh-hk: 股票名稱
+        - name: └ symbol
+          type: string
+          required: true
+          description: Security symbol, `ticker.region` format
+          x-description-zh: 股票代码，`ticker.region` 格式
+          x-description-zh-hk: 股票代碼，`ticker.region` 格式
+        - name: └ price
+          type: string
+          required: true
+          description: Order price
+          x-description-zh: 订单价格
+          x-description-zh-hk: 訂單價格
+        - name: └ quantity
+          type: string
+          required: true
+          description: Order quantity
+          x-description-zh: 订单数量
+          x-description-zh-hk: 訂單數量
+        - name: └ executed_price
+          type: string
+          required: true
+          description: Executed price
+          x-description-zh: 成交价格
+          x-description-zh-hk: 成交價格
+        - name: └ executed_qty
+          type: string
+          required: true
+          description: Executed quantity
+          x-description-zh: 已成交数量
+          x-description-zh-hk: 已成交數量
+        - name: └ submitted_at
+          type: string
+          required: true
+          description: Submission time, RFC3339 format
+          x-description-zh: 提交时间，RFC3339 格式
+          x-description-zh-hk: 提交時間，RFC3339 格式
+        - name: └ action
+          type: int32
+          required: true
+          description: Buy/sell direction
+          x-description-zh: 买卖方向
+          x-description-zh-hk: 買賣方向
+        - name: └ order_type
+          type: string
+          required: true
+          description: Order type
+          x-description-zh: 订单类型
+          x-description-zh-hk: 訂單類型
+        - name: └ trigger_price
+          type: string
+          required: true
+          description: Price that triggered this order
+          x-description-zh: 触发该订单的价格
+          x-description-zh-hk: 觸發該訂單的價格
+        - name: └ msg
+          type: string
+          required: true
+          description: Additional message
+          x-description-zh: 附加消息
+          x-description-zh-hk: 附加消息
+        - name: └ currency
+          type: string
+          required: true
+          description: Order currency
+          x-description-zh: 订单货币
+          x-description-zh-hk: 訂單貨幣
+        - name: └ last_done
+          type: string
+          required: true
+          description: Last traded price at trigger time
+          x-description-zh: 触发时的最新成交价
+          x-description-zh-hk: 觸發時的最新成交價
+        - name: └ updated_at
+          type: string
+          required: true
+          description: Last update time, RFC3339 format
+          x-description-zh: 最后更新时间，RFC3339 格式
+          x-description-zh-hk: 最後更新時間，RFC3339 格式
+        - name: └ time_in_force
+          type: int32
+          required: true
+          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD
+          x-description-zh: 订单有效期<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC<br/>`6` - GTD
+          x-description-zh-hk: 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD
+        - name: └ gtd
+          type: string
+          required: true
+          description: Good-Til-Date, `YYYY-MM-DD` format
+          x-description-zh: 到期日，`YYYY-MM-DD` 格式
+          x-description-zh-hk: 到期日，`YYYY-MM-DD` 格式
+        - name: └ trigger_at
+          type: string
+          required: true
+          description: Trigger time, RFC3339 format
+          x-description-zh: 触发时间，RFC3339 格式
+          x-description-zh-hk: 觸發時間，RFC3339 格式
+        - name: └ trigger_status
+          type: int32
+          required: true
+          description: Trigger status
+          x-description-zh: 触发状态
+          x-description-zh-hk: 觸發狀態
+        - name: has_more
+          type: boolean
+          required: false
+          description: Whether more pages are available
+          x-description-zh: 是否还有更多分页
+          x-description-zh-hk: 是否還有更多分頁
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  trigger_orders:
+                    - id: '764610000000000001'
+                      status: Filled
+                      name: TENCENT
+                      symbol: 700.HK
+                      price: '294'
+                      quantity: '100'
+                      executed_price: '294'
+                      executed_qty: '100'
+                      submitted_at: '2024-08-12T10:35:00+08:00'
+                      action: 1
+                      order_type: GMO
+                      trigger_price: '294'
+                      msg: ''
+                      currency: HKD
+                      last_done: '294'
+                      updated_at: '2024-08-12T10:35:05+08:00'
+                      time_in_force: 1
+                      gtd: ''
+                      trigger_at: '2024-08-12T10:35:00+08:00'
+                      trigger_status: 1
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/cancel:
+    post:
+      operationId: grid_cancel
+      summary: Cancel Grid Order
+      x-summary-zh: 取消网格订单
+      x-summary-zh-hk: 取消網格訂單
+      description: |
+        Cancel a grid order. The grid stops immediately and no further trigger orders are placed. Cancellation is permanent — a canceled grid cannot be restarted; submit a new grid order instead.
+      x-description-zh: |
+        取消网格订单。网格会立即停止，不再挂出新的触发订单。取消是不可逆的——已取消的网格无法重启，如需继续请重新提交新的网格订单。
+      x-description-zh-hk: |
+        取消網格訂單。網格會立即停止，不再掛出新的觸發訂單。取消是不可逆的——已取消的網格無法重啟，如需繼續請重新提交新的網格訂單。
+      tags:
+        - Grid
+      x-parameters:
+        - name: order_id
+          in: body
+          type: string
+          required: true
+          description: 'Grid order ID, example: `764609681686573056`'
+          x-description-zh: 网格订单 ID，例如：`764609681686573056`
+          x-description-zh-hk: 網格訂單 ID，例如：`764609681686573056`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Cancel a grid order by ID
+            longbridge grid cancel 764609681686573056
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/cancel' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"order_id":"<order_id>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/gridtrading/cancel",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"order_id": "<order_id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/gridtrading/cancel",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"order_id": "<order_id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/cancel", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ order_id: "<order_id>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/cancel"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/cancel")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "order_id": "<order_id>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/cancel");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/cancel\", strings.NewReader(`{\"order_id\":\"<order_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/suspend:
+    post:
+      operationId: grid_suspend
+      summary: Suspend Grid Order
+      x-summary-zh: 暂停网格订单
+      x-summary-zh-hk: 暫停網格訂單
+      description: |
+        Suspend a running grid order. The grid stops triggering new orders but is kept intact, so it can be resumed later with [Restart Grid Order](./restart). Use suspend when you want to pause the strategy without losing its configuration.
+      x-description-zh: |
+        暂停运行中的网格订单。网格停止触发新订单，但会保留原有配置，之后可通过[重启网格订单](./restart)恢复运行。当你希望暂停策略但不丢失其配置时，使用暂停操作。
+      x-description-zh-hk: |
+        暫停運行中的網格訂單。網格停止觸發新訂單，但會保留原有配置，之後可透過[重啟網格訂單](./restart)恢復運行。當你希望暫停策略但不丟失其配置時，使用暫停操作。
+      tags:
+        - Grid
+      x-parameters:
+        - name: order_id
+          in: body
+          type: string
+          required: true
+          description: 'Grid order ID, example: `764609681686573056`'
+          x-description-zh: 网格订单 ID，例如：`764609681686573056`
+          x-description-zh-hk: 網格訂單 ID，例如：`764609681686573056`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Suspend a running grid order by ID
+            longbridge grid suspend 764609681686573056
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/suspend' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"order_id":"<order_id>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/gridtrading/suspend",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"order_id": "<order_id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/gridtrading/suspend",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"order_id": "<order_id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/suspend", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ order_id: "<order_id>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/suspend"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/suspend")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "order_id": "<order_id>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/suspend");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/suspend\", strings.NewReader(`{\"order_id\":\"<order_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/gridtrading/restart:
+    post:
+      operationId: grid_restart
+      summary: Restart Grid Order
+      x-summary-zh: 重启网格订单
+      x-summary-zh-hk: 重啟網格訂單
+      description: |
+        Restart a suspended grid order. The grid resumes from its saved configuration and begins triggering orders again. Only a grid previously paused with [Suspend Grid Order](./suspend) can be restarted.
+      x-description-zh: |
+        重启已暂停的网格订单。网格会从保存的配置恢复，并重新开始触发订单。只有此前通过[暂停网格订单](./suspend)暂停的网格才能被重启。
+      x-description-zh-hk: |
+        重啟已暫停的網格訂單。網格會從保存的配置恢復，並重新開始觸發訂單。只有此前透過[暫停網格訂單](./suspend)暫停的網格才能被重啟。
+      tags:
+        - Grid
+      x-parameters:
+        - name: order_id
+          in: body
+          type: string
+          required: true
+          description: 'Grid order ID, example: `764609681686573056`'
+          x-description-zh: 网格订单 ID，例如：`764609681686573056`
+          x-description-zh-hk: 網格訂單 ID，例如：`764609681686573056`
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Restart a suspended grid order by ID
+            longbridge grid restart 764609681686573056
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/restart' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"order_id":"<order_id>"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/gridtrading/restart",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"order_id": "<order_id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/gridtrading/restart",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"order_id": "<order_id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/restart", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ order_id: "<order_id>" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/restart"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/restart")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "order_id": "<order_id>" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/restart");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/restart\", strings.NewReader(`{\"order_id\":\"<order_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/orders/info:
+    get:
+      operationId: grid_symbol_info
+      summary: Grid Symbol Info
+      x-summary-zh: 网格标的信息
+      x-summary-zh-hk: 網格標的信息
+      description: |
+        Fetch the grid-trading information for a security: lot size, last done price, price steps, and authorization status. Use it to build a valid grid rule before calling [Submit Grid Order](./submit). The `channel_info.strategy_granted` field tells you whether the strategy risk-disclosure consent has already been recorded — if it is `false`, submit the [Strategy Questionnaire](./questionnaire) first.
+      x-description-zh: |
+        获取标的的网格交易信息：每手股数、最新成交价、价格步长以及授权状态。在调用[提交网格订单](./submit)之前，用它来构建合法的网格规则。`channel_info.strategy_granted` 字段告诉你是否已记录策略风险披露同意——若为 `false`，请先提交[策略问卷](./questionnaire)。
+      x-description-zh-hk: |
+        獲取標的的網格交易信息：每手股數、最新成交價、價格步長以及授權狀態。在調用[提交網格訂單](./submit)之前，用它來構建合法的網格規則。`channel_info.strategy_granted` 欄位告訴你是否已記錄策略風險披露同意——若為 `false`，請先提交[策略問卷](./questionnaire)。
+      tags:
+        - Grid
+      x-parameters:
+        - name: counter_id
+          in: query
+          type: string
+          required: true
+          description: 'Security symbol, `ticker.region` format, example: `700.HK`'
+          x-description-zh: 'Security symbol, `ticker.region` format, example: `700.HK`'
+          x-description-zh-hk: 'Security symbol, `ticker.region` format, example: `700.HK`'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Show the grid-trading info for 700.HK
+            longbridge grid info 700.HK
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/orders/info",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"counter_id": "<counter_id>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/orders/info",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"counter_id": "<counter_id>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/orders/info")
+            url.searchParams.set("counter_id", "<counter_id>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/orders/info")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("counter_id", "<counter_id>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: last_done
+          type: string
+          required: true
+          description: Latest traded price
+          x-description-zh: 最新成交价
+          x-description-zh-hk: 最新成交價
+        - name: lot_size
+          type: string
+          required: true
+          description: Board lot size
+          x-description-zh: 每手股数
+          x-description-zh-hk: 每手股數
+        - name: buy_lot_size
+          type: string
+          required: true
+          description: Minimum lot size for a buy order
+          x-description-zh: 买入最小手数
+          x-description-zh-hk: 買入最小手數
+        - name: sell_lot_size
+          type: string
+          required: true
+          description: Minimum lot size for a sell order
+          x-description-zh: 卖出最小手数
+          x-description-zh-hk: 賣出最小手數
+        - name: bid_sizes
+          type: object[]
+          required: true
+          description: Price-step tiers
+          x-description-zh: 价格步长档位
+          x-description-zh-hk: 價格步長檔位
+        - name: └ str_proceed
+          type: string
+          required: true
+          description: Start price of the tier
+          x-description-zh: 档位起始价格
+          x-description-zh-hk: 檔位起始價格
+        - name: └ end_proceed
+          type: string
+          required: true
+          description: End price of the tier
+          x-description-zh: 档位结束价格
+          x-description-zh-hk: 檔位結束價格
+        - name: └ bid_size
+          type: string
+          required: true
+          description: Minimum price step within the tier
+          x-description-zh: 档位内的最小价格步长
+          x-description-zh-hk: 檔位內的最小價格步長
+        - name: channel_info
+          type: object
+          required: true
+          description: Trading-channel info and authorization. `strategy_granted` indicates whether the one-time strategy risk-disclosure consent has been recorded
+          x-description-zh: 交易通道信息与授权状态。`strategy_granted` 表示是否已记录一次性策略风险披露同意
+          x-description-zh-hk: 交易通道信息與授權狀態。`strategy_granted` 表示是否已記錄一次性策略風險披露同意
+        - name: └ strategy_granted
+          type: boolean
+          required: true
+          description: Whether the one-time strategy risk-disclosure consent has been recorded
+          x-description-zh: 是否已记录一次性策略风险披露同意
+          x-description-zh-hk: 是否已記錄一次性策略風險披露同意
+        - name: └ support_rth
+          type: boolean
+          required: true
+          description: Whether the security supports regular-trading-hours grids
+          x-description-zh: 标的是否支持盘中交易时段网格
+          x-description-zh-hk: 標的是否支持盤中交易時段網格
+        - name: └ currency
+          type: string
+          required: true
+          description: Trading currency
+          x-description-zh: 交易货币
+          x-description-zh-hk: 交易貨幣
+        - name: └ settlement_currency
+          type: string[]
+          required: true
+          description: Supported settlement currencies
+          x-description-zh: 支持的结算货币
+          x-description-zh-hk: 支持的結算貨幣
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  name: TENCENT
+                  last_done: '300.000'
+                  lot_size: '100'
+                  buy_lot_size: '100'
+                  sell_lot_size: '100'
+                  bid_sizes:
+                    - str_proceed: '0.010'
+                      end_proceed: '500.000'
+                      bid_size: '0.200'
+                  channel_info:
+                    strategy_granted: true
+                    support_rth: false
+                    currency: HKD
+                    settlement_currency:
+                      - HKD
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/watchlist/groups:
     get:
       operationId: list_watchlist_groups
@@ -5292,688 +8375,6 @@ paths:
                       trigger_count: 0
                       monitor_price: ''
                   has_more: false
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/submit:
-    post:
-      operationId: submit_grid_order
-      summary: Submit Grid Order
-      x-summary-zh: 提交网格订单
-      x-summary-zh-hk: 提交網格訂單
-      description: |
-        Submit a grid strategy order. The grid places buy orders as the price falls and sell
-        orders as it rises, within the `[lower_limit_price, upper_limit_price]` band anchored to
-        `submitted_base_price`. Before using grid trading you must record the strategy
-        risk-disclosure consent once (see `POST /v1/record/questionnaire`).
-      x-description-zh: |
-        提交网格策略订单。网格在 `[lower_limit_price, upper_limit_price]` 区间内、以
-        `submitted_base_price` 为基准，价格下跌时挂买单、上涨时挂卖单。使用网格交易前需先记录一次策略风险揭示确认（见
-        `POST /v1/record/questionnaire`）。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - symbol
-                - settlement_currency
-                - grid_trading_rule
-              properties:
-                symbol:
-                  type: string
-                  description: 'Security symbol in `ticker.region` format (e.g. `700.HK`).'
-                settlement_currency:
-                  type: string
-                  description: Settlement currency (e.g. `HKD`, `USD`).
-                grid_trading_rule:
-                  $ref: '#/components/schemas/GridTradeRule'
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  order_id: '764609681686573056'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/replace:
-    post:
-      operationId: replace_grid_order
-      summary: Modify Grid Order
-      x-summary-zh: 修改网格订单
-      x-summary-zh-hk: 修改網格訂單
-      description: |
-        Modify the rule of an existing grid order. Provide the `order_id` and a full
-        `grid_trading_rule` with the new parameters.
-      x-description-zh: 修改已存在网格订单的规则。需提供 `order_id` 以及包含新参数的完整 `grid_trading_rule`。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - order_id
-                - grid_trading_rule
-              properties:
-                order_id:
-                  type: string
-                  description: ID of the grid order to modify.
-                grid_trading_rule:
-                  $ref: '#/components/schemas/GridTradeRule'
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid replace 764609681686573056 --base-price 305 --upper-price 360 --lower-price 240 --trigger-type percent --trigger-up 2 --trigger-down 2 --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/list:
-    get:
-      operationId: list_grid_orders
-      summary: List Grid Orders
-      x-summary-zh: 网格订单列表
-      x-summary-zh-hk: 網格訂單列表
-      description: |
-        Query grid orders with pagination and optional filtering by market, symbol, and status.
-      x-description-zh: 分页查询网格订单，支持按市场、标的和状态筛选。
-      tags:
-        - Grid Trading
-      parameters:
-        - name: page
-          in: query
-          required: false
-          description: Page number (starts at 1).
-          schema:
-            type: integer
-            nullable: true
-        - name: limit
-          in: query
-          required: false
-          description: Page size.
-          schema:
-            type: integer
-            nullable: true
-        - name: market
-          in: query
-          required: false
-          description: Filter by market. One of `US`, `HK`, `CN`, `SG`.
-          schema:
-            type: string
-            nullable: true
-        - name: symbol
-          in: query
-          required: false
-          description: 'Filter by security symbol (e.g. `700.HK`).'
-          schema:
-            type: string
-            nullable: true
-        - name: status
-          in: query
-          required: false
-          description: 'Comma-joined status filter (e.g. `Performing,Suspended`).'
-          schema:
-            type: string
-            nullable: true
-        - name: sort_by
-          in: query
-          required: false
-          description: Sort field.
-          schema:
-            type: string
-            nullable: true
-        - name: sort_order
-          in: query
-          required: false
-          description: Sort order.
-          schema:
-            type: string
-            nullable: true
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid --symbol 700.HK --status Performing
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  grid_order:
-                    - order_id: '764609681686573056'
-                      symbol: 700.HK
-                      stock_name: 腾讯控股
-                      market: HK
-                      status: Performing
-                      grid_status: Running
-                      submitted_base_price: '300'
-                      current_base_price: '300'
-                      upper_limit_price: '360'
-                      lower_limit_price: '240'
-                      trigger_price_type: 2
-                      trigger_percent_up: '2'
-                      trigger_percent_down: '2'
-                      trigger_quantity: '100'
-                      upper_limit_quantity: '200'
-                      lower_limit_quantity: '100'
-                      upper_limit_event: 1
-                      lower_limit_event: 1
-                      multiple_trigger: false
-                      trigger_times: 0
-                      settlement_currency: HKD
-                      time_in_force: 1
-                      gtd: ''
-                      created_at: '2026-08-12T09:30:00+08:00'
-                      rth: 0
-                      support_shortsell: false
-                      grid_order_type_up: GMO
-                      grid_order_type_down: GMO
-                  has_more: false
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      operationId: list_grid_orders_by_ids
-      summary: Query Grid Orders by IDs
-      x-summary-zh: 按 ID 查询网格订单
-      x-summary-zh-hk: 按 ID 查詢網格訂單
-      description: |
-        Query specific grid orders by their IDs (request body). Returns the matching grid orders.
-      x-description-zh: 通过订单 ID（请求体）查询指定的网格订单，返回匹配的网格订单列表。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - order_ids
-              properties:
-                order_ids:
-                  type: array
-                  description: Grid order IDs to query.
-                  items:
-                    type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid --ids 764609681686573056 764609681686573057
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  grid_order:
-                    - order_id: '764609681686573056'
-                      symbol: 700.HK
-                      stock_name: 腾讯控股
-                      market: HK
-                      status: Performing
-                      grid_status: Running
-                      submitted_base_price: '300'
-                      upper_limit_price: '360'
-                      lower_limit_price: '240'
-                      trigger_price_type: 2
-                      trigger_percent_up: '2'
-                      trigger_percent_down: '2'
-                      trigger_quantity: '100'
-                      settlement_currency: HKD
-                      time_in_force: 1
-                      grid_order_type_up: GMO
-                      grid_order_type_down: GMO
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/detail:
-    get:
-      operationId: grid_order_detail
-      summary: Grid Order Detail
-      x-summary-zh: 网格订单详情
-      x-summary-zh-hk: 網格訂單詳情
-      description: |
-        Query the full detail of a single grid order, including its rule, triggered sub-orders,
-        and lifecycle history (both paged via `history_id` / `limit`).
-      x-description-zh: 查询单个网格订单的完整详情，包括规则、已触发的子订单以及生命周期历史（均可通过 `history_id` / `limit` 分页）。
-      tags:
-        - Grid Trading
-      parameters:
-        - name: order_id
-          in: query
-          required: true
-          description: Grid order ID to query.
-          schema:
-            type: string
-        - name: history_id
-          in: query
-          required: false
-          description: History cursor for paging through the lifecycle history.
-          schema:
-            type: string
-            nullable: true
-        - name: limit
-          in: query
-          required: false
-          description: Page size.
-          schema:
-            type: integer
-            nullable: true
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid detail 764609681686573056
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  order_id: '764609681686573056'
-                  symbol: 700.HK
-                  stock_name: 腾讯控股
-                  status: Performing
-                  grid_status: Running
-                  suspend_reason: ''
-                  sleeping_reason: ''
-                  submitted_base_price: '300'
-                  current_base_price: '300'
-                  upper_limit_price: '360'
-                  lower_limit_price: '240'
-                  trigger_price_type: 2
-                  trigger_percent_up: '2'
-                  trigger_percent_down: '2'
-                  multiple_trigger: false
-                  time_in_force: 1
-                  trigger_quantity: '100'
-                  upper_limit_quantity: '200'
-                  lower_limit_quantity: '100'
-                  upper_limit_event: 1
-                  lower_limit_event: 1
-                  trigger_sell_depth: 0
-                  trigger_buy_depth: 0
-                  created_at: '2026-08-12T09:30:00+08:00'
-                  updated_at: '2026-08-12T09:30:00+08:00'
-                  settlement_currency: HKD
-                  gtd: ''
-                  grid_sub_orders: []
-                  sub_has_more: false
-                  grid_order_history:
-                    - history_id: '1'
-                      created_at: '2026-08-12T09:30:00+08:00'
-                      status: Performing
-                      suspend_reason: ''
-                      reason: ''
-                  history_has_more: false
-                  support_shortsell: false
-                  rth: 0
-                  grid_order_type_up: GMO
-                  grid_order_type_down: GMO
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/trigger_history_list:
-    get:
-      operationId: grid_trigger_history
-      summary: Grid Trigger History
-      x-summary-zh: 网格触发历史
-      x-summary-zh-hk: 網格觸發歷史
-      description: |
-        Query the trigger history of a grid order — the individual orders that the grid has
-        fired. The required parameter is `grid_order_id` (not `order_id`).
-      x-description-zh: 查询某个网格订单的触发历史，即网格已触发生成的各笔订单。必填参数为 `grid_order_id`（而非 `order_id`）。
-      tags:
-        - Grid Trading
-      parameters:
-        - name: grid_order_id
-          in: query
-          required: true
-          description: Grid order ID whose trigger history to query.
-          schema:
-            type: string
-        - name: page
-          in: query
-          required: false
-          description: Page number.
-          schema:
-            type: integer
-            nullable: true
-        - name: limit
-          in: query
-          required: false
-          description: Page size.
-          schema:
-            type: integer
-            nullable: true
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid triggers 764609681686573056
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  trigger_orders:
-                    - id: '764700000000000000'
-                      status: FilledStatus
-                      name: 腾讯控股
-                      symbol: 700.HK
-                      price: '294'
-                      quantity: '100'
-                      executed_price: '294'
-                      executed_qty: '100'
-                      submitted_at: '2026-08-12T10:15:00+08:00'
-                      action: 1
-                      order_type: MO
-                      trigger_price: '294'
-                      msg: ''
-                      currency: HKD
-                      last_done: '294'
-                      updated_at: '2026-08-12T10:15:03+08:00'
-                      time_in_force: 1
-                      gtd: ''
-                      trigger_at: '2026-08-12T10:15:00+08:00'
-                      trigger_status: 0
-                  has_more: false
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/cancel:
-    post:
-      operationId: cancel_grid_order
-      summary: Cancel Grid Order
-      x-summary-zh: 取消网格订单
-      x-summary-zh-hk: 取消網格訂單
-      description: |
-        Cancel a grid order. The grid stops and no further triggers are placed.
-      x-description-zh: 取消网格订单。网格停止，不再触发新的挂单。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - order_id
-              properties:
-                order_id:
-                  type: string
-                  description: ID of the grid order to cancel.
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid cancel 764609681686573056
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/suspend:
-    post:
-      operationId: suspend_grid_order
-      summary: Suspend Grid Order
-      x-summary-zh: 暂停网格订单
-      x-summary-zh-hk: 暫停網格訂單
-      description: |
-        Suspend a running grid order. The grid stops triggering but is kept and can be restarted.
-      x-description-zh: 暂停运行中的网格订单。网格停止触发，但会保留并可重新启动。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - order_id
-              properties:
-                order_id:
-                  type: string
-                  description: ID of the grid order to suspend.
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid suspend 764609681686573056
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/gridtrading/restart:
-    post:
-      operationId: restart_grid_order
-      summary: Restart Grid Order
-      x-summary-zh: 重启网格订单
-      x-summary-zh-hk: 重啟網格訂單
-      description: |
-        Restart a suspended grid order. The grid resumes triggering.
-      x-description-zh: 重新启动已暂停的网格订单。网格恢复触发。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - order_id
-              properties:
-                order_id:
-                  type: string
-                  description: ID of the grid order to restart.
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid restart 764609681686573056
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/record/questionnaire:
-    post:
-      operationId: submit_strategy_questionnaire
-      summary: Submit Strategy Questionnaire
-      x-summary-zh: 提交策略问卷
-      x-summary-zh-hk: 提交策略問卷
-      description: |
-        Record the user's consent to the strategy risk disclosure. This is required once before
-        using grid trading. The consent body is `{ "type": "strategy", "items": { "agree": "true" } }`.
-      x-description-zh: |
-        记录用户对策略风险揭示的确认。使用网格交易前需执行一次。请求体为
-        `{ "type": "strategy", "items": { "agree": "true" } }`。
-      tags:
-        - Grid Trading
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - type
-                - items
-              properties:
-                type:
-                  type: string
-                  description: Questionnaire type. Use `strategy` for grid trading.
-                items:
-                  type: object
-                  description: 'Consent items. For grid trading: `{ "agree": "true" }`.'
-                  additionalProperties:
-                    type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid questionnaire
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /v1/orders/info:
-    get:
-      operationId: grid_symbol_info
-      summary: Grid Symbol Info
-      x-summary-zh: 网格标的信息
-      x-summary-zh-hk: 網格標的資訊
-      description: |
-        Query the security info used to build a grid order — name, latest price, board lot sizes,
-        price-step (bid-size) rules, and channel / authorization info (whether the strategy consent
-        was granted, RTH support, and supported currencies).
-      x-description-zh: 查询用于构建网格订单的证券信息——名称、最新价、每手股数、价位（报价步长）规则，以及渠道/授权信息（是否已完成策略确认、是否支持盘前盘后、支持的币种）。
-      tags:
-        - Grid Trading
-      parameters:
-        - name: counter_id
-          in: query
-          required: true
-          description: 'Security symbol in `ticker.region` format (e.g. `700.HK`).'
-          schema:
-            type: string
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge grid info 700.HK
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  name: 腾讯控股
-                  last_done: '300'
-                  lot_size: '100'
-                  buy_lot_size: '100'
-                  sell_lot_size: '100'
-                  bid_sizes:
-                    - str_proceed: '0'
-                      end_proceed: '500'
-                      bid_size: '0.2'
-                  channel_info:
-                    strategy_granted: true
-                    support_rth: true
-                    currency: HKD
-                    settlement_currency:
-                      - HKD
-                      - USD
         default:
           description: Unexpected error
           content:
