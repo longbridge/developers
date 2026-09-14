@@ -28,6 +28,7 @@ import { CodePanel, CodeTabs, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
 import { CliCommand } from '@longbridge/openapi-ui'
 import MarkdownIt from 'markdown-it'
+import container from 'markdown-it-container'
 
 // ── markdown-it setup ─────────────────────────────────────────────────────────
 
@@ -39,6 +40,23 @@ const _md = new MarkdownIt({
   // highlighter the CodeTabs/CodePanel use, so page code matches endpoint code.
   highlight: (str, lang) => highlightCode(str, (lang || '').toLowerCase()),
 })
+
+// `:::type Title` admonitions → docs-style callout boxes (same DOM/CSS as the
+// docs remark-callout output: `.callout.callout-<type>` + `.callout-title`).
+const CALLOUT_TYPES = ['tip', 'warning', 'danger', 'info', 'note', 'caution', 'success']
+for (const type of CALLOUT_TYPES) {
+  _md.use(container, type, {
+    render(tokens: any[], idx: number) {
+      const token = tokens[idx]
+      if (token.nesting === 1) {
+        const raw = token.info.trim().slice(type.length).trim()
+        const title = raw || type.charAt(0).toUpperCase() + type.slice(1)
+        return `<div class="callout callout-${type}" role="note" data-lbus-component="callout-${type}">\n<p class="callout-title">${_md.utils.escapeHtml(title)}</p>\n`
+      }
+      return '</div>\n'
+    },
+  })
+}
 
 // Patch link_open to add target="_blank" for external links
 const _defLinkOpen = _md.renderer.rules.link_open

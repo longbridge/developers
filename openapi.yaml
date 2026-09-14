@@ -1913,19 +1913,25 @@ paths:
 
         Endpoint: `GET /v1/quote/ai/screener/indicators`
 
-        > **SDK response:** The `data` field contains a grouped structure `{"groups": [{...}]}`. The CLI `screener indicators --format json` flattens this to a flat array for convenience.
+        :::warning SDK response
+        The `data` field contains a grouped structure `{"groups": [{...}]}`. The CLI `screener indicators --format json` flattens this to a flat array for convenience.
+        :::
       x-description-zh: |
         获取[选股器](https://longbridge.com/screener)支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
 
         接口：`GET /v1/quote/ai/screener/indicators`
 
-        > **SDK 响应：** `data` 字段为分组结构 `{"groups": [{...}]}`。CLI `screener indicators --format json` 会将其展平为扁平数组以方便使用。
+        :::warning SDK 响应
+        `data` 字段为分组结构 `{"groups": [{...}]}`。CLI `screener indicators --format json` 会将其展平为扁平数组以方便使用。
+        :::
       x-description-zh-hk: |
         獲取[選股器](https://longbridge.com/screener)支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
 
         接口：`GET /v1/quote/ai/screener/indicators`
 
-        > **SDK 響應：** `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
+        :::warning SDK 響應
+        `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
+        :::
       tags:
         - Screener
       x-codeSamples:
@@ -2110,19 +2116,25 @@ paths:
 
         Endpoint: `POST /v1/quote/ai/screener/search`
 
-        > **Note on JSON output format:** The response uses a flat `items[]` array (not `stocks[]`), all numeric fields are JSON numbers (not strings), and indicator keys do not carry the `filter_` prefix.
+        :::warning Note on JSON output format
+        The response uses a flat `items[]` array (not `stocks[]`), all numeric fields are JSON numbers (not strings), and indicator keys do not carry the `filter_` prefix.
+        :::
       x-description-zh: |
         按策略 ID 或自定义指标条件筛选股票，支持分页。
 
         接口：`POST /v1/quote/ai/screener/search`
 
-        > **JSON 输出格式说明：** 响应使用扁平的 `items[]` 数组（非 `stocks[]`），所有数值字段为 JSON 数字类型（非字符串），指标键名不含 `filter_` 前缀。
+        :::warning JSON 输出格式说明
+        响应使用扁平的 `items[]` 数组（非 `stocks[]`），所有数值字段为 JSON 数字类型（非字符串），指标键名不含 `filter_` 前缀。
+        :::
       x-description-zh-hk: |
         按策略 ID 或自定義指標條件篩選股票，支持分頁。
 
         接口：`POST /v1/quote/ai/screener/search`
 
-        > **JSON 輸出格式說明：** 響應使用扁平的 `items[]` 數組（非 `stocks[]`），所有數值字段為 JSON 數字類型（非字符串），指標鍵名不含 `filter_` 前綴。
+        :::warning JSON 輸出格式說明
+        響應使用扁平的 `items[]` 數組（非 `stocks[]`），所有數值字段為 JSON 數字類型（非字符串），指標鍵名不含 `filter_` 前綴。
+        :::
       tags:
         - Screener
       x-parameters:
@@ -4157,15 +4169,21 @@ paths:
       x-summary-zh: 经纪商持仓
       x-summary-zh-hk: 經紀商持倉
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         View broker holding positions for HK-listed stocks, including top buyers/sellers and full detail.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::
 
         查看港股券商持仓情况，包含主要买卖方和详细持仓列表。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::
 
         查看港股券商持倉情況，包含主要買賣方和詳細持倉列表。
       x-subgroup: Market Data
@@ -4364,15 +4382,21 @@ paths:
       x-summary-zh: 经纪商每日持仓历史
       x-summary-zh-hk: 經紀商每日持倉歷史
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Get daily holding history for a specific broker in an HK-listed security.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::
 
         获取某一经纪商在港股上市证券中的每日持仓历史记录。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::
 
         獲取某一經紀商在港股上市證券中的每日持倉歷史記錄。
       x-subgroup: Market Data
@@ -4556,15 +4580,21 @@ paths:
       x-summary-zh: 经纪商持仓详情
       x-summary-zh-hk: 經紀商持倉詳情
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Get full broker holding detail list for an HK-listed security (all brokers and their positions).
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::
 
         获取港股上市证券的完整经纪商持仓详情列表（所有经纪商及其持仓数量）。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::
 
         獲取港股上市證券的完整經紀商持倉詳情列表（所有經紀商及其持倉數量）。
       x-subgroup: Market Data
@@ -7347,15 +7377,21 @@ paths:
       x-summary-zh: 美股加密货币概览
       x-summary-zh-hk: 美股加密貨幣概覽
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get overview data for a US crypto trading pair — all-time highs/lows, asset info, and currency details.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股加密货币交易对的概览信息——历史最高/最低价、资产详情和货币信息。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股加密貨幣交易對的概覽資訊——歷史最高/最低價、資產詳情和貨幣資訊。
       x-subgroup: Stocks
@@ -11674,15 +11710,21 @@ paths:
       x-summary-zh: 经营数据
       x-summary-zh-hk: 經營數據
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Get operating metrics and financial indicator summaries by report period.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::
 
         按财报期获取经营数据及核心财务指标摘要。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::
 
         按財報期獲取經營數據及核心財務指標摘要。
       x-subgroup: Fundamentals
@@ -15166,15 +15208,21 @@ paths:
       x-summary-zh: 美股公司概览
       x-summary-zh-hk: 美股公司概覽
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get company overview for a US stock — introduction, market cap, ranking tags, and detail URL.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股公司概览信息——简介、市值、排名标签和详情链接。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股公司概覽資訊——簡介、市值、排名標籤和詳情連結。
       x-subgroup: Fundamentals
@@ -15356,15 +15404,21 @@ paths:
       x-summary-zh: 美股估值概览
       x-summary-zh-hk: 美股估值概覽
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get valuation overview for a US stock — current valuation indicators and historical range.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股估值概览——当前估值指标及历史区间。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股估值概覽——當前估值指標及歷史區間。
       x-subgroup: Fundamentals
@@ -15561,15 +15615,21 @@ paths:
       x-summary-zh: 美股财务概览
       x-summary-zh-hk: 美股財務概覽
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get financial overview for a US stock by reporting period — income, balance sheet, and cash flow summary.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         按报告周期获取美股财务概览——损益、资产负债和现金流摘要。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         按報告週期獲取美股財務概覽——損益、資產負債和現金流摘要。
       x-subgroup: Fundamentals
@@ -15847,15 +15907,21 @@ paths:
       x-summary-zh: 美股财务报表
       x-summary-zh-hk: 美股財務報表
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get a specific financial statement (income statement, balance sheet, or cash flow) for a US stock.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股指定财务报表（损益表、资产负债表或现金流量表）。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股指定財務報表（損益表、資產負債表或現金流量表）。
       x-subgroup: Fundamentals
@@ -16128,15 +16194,21 @@ paths:
       x-summary-zh: 美股关键财务指标
       x-summary-zh-hk: 美股關鍵財務指標
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get key financial metrics for a US stock — revenue, net income, EPS, margins, and growth rates.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股关键财务指标——营收、净利润、EPS、利润率和增长率。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股關鍵財務指標——營收、淨利潤、EPS、利潤率和增長率。
       x-subgroup: Fundamentals
@@ -16357,15 +16429,21 @@ paths:
       x-summary-zh: 美股分析师一致预期
       x-summary-zh-hk: 美股分析師一致預期
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get analyst consensus estimates for a US stock — revenue, EPS forecasts, and buy/hold/sell ratings.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股分析师一致预期——营收、EPS 预测及买入/持有/卖出评级。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股分析師一致預期——營收、EPS 預測及買入/持有/賣出評級。
       x-subgroup: Fundamentals
@@ -16576,15 +16654,21 @@ paths:
       x-summary-zh: 美股 ETF 分红信息
       x-summary-zh-hk: 美股 ETF 分紅資訊
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get dividend information for a US ETF — TTM dividend yield, payout frequency, and fiscal year breakdown.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股 ETF 分红信息——TTM 股息率、派息频率及财年明细。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股 ETF 分紅資訊——TTM 股息率、派息頻率及財年明細。
       x-subgroup: Fundamentals
@@ -16760,15 +16844,21 @@ paths:
       x-summary-zh: 美股公司分红
       x-summary-zh-hk: 美股公司分紅
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get dividend history for a US stock — TTM yield, payout count, and individual dividend records.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股股票分红历史——TTM 股息率、派息次数及逐笔分红记录。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股股票分紅歷史——TTM 股息率、派息次數及逐筆分紅記錄。
       x-subgroup: Fundamentals
@@ -16956,15 +17046,21 @@ paths:
       x-summary-zh: 美股 ETF 文件
       x-summary-zh-hk: 美股 ETF 文件
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         List regulatory documents for a US ETF — prospectus, fact sheets, and annual reports.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         列出美股 ETF 的监管文件——招股书、事实说明书和年报。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         列出美股 ETF 的監管文件——招股書、事實說明書和年報。
       x-subgroup: Fundamentals
@@ -17682,7 +17778,9 @@ paths:
 
         Choose the response mode with the `Accept` header: `text/event-stream` streams the run progress and answer via SSE; any other value returns a blocking response with the aggregated final result.
 
-        > **How to find an Agent's UID** Besides querying the Agents in Workspace endpoint, you can also get it directly from the Longbridge website: open the Agent's chat page — the URL looks like `https://longbridge.com/en/ai/agents/chatbot/chat`, where `chatbot` is the Agent's UID.
+        :::tip How to find an Agent's UID
+        Besides querying the Agents in Workspace endpoint, you can also get it directly from the Longbridge website: open the Agent's chat page — the URL looks like `https://longbridge.com/en/ai/agents/chatbot/chat`, where `chatbot` is the Agent's UID.
+        :::
       x-description-zh: |
         向指定 Agent 提问。可以开启一个全新会话，也可以传入已有会话的 `chat_uid` 在同一会话中追加提问。
 
@@ -17690,7 +17788,9 @@ paths:
 
         通过请求头 `Accept` 选择响应模式：`text/event-stream` 为 SSE 流式，逐步推送运行过程与回答；其他值为阻塞式，一次性返回聚合后的最终结果。
 
-        > **如何获取 Agent 的 UID** 除通过 Workspace 下的 Agent 接口查询外，也可以直接从 Longbridge 网页端获取：打开 Agent 的对话页，URL 形如 `https://longbridge.com/zh-CN/ai/agents/chatbot/chat`，其中 `chatbot` 即为该 Agent 的 UID。
+        :::tip 如何获取 Agent 的 UID
+        除通过 Workspace 下的 Agent 接口查询外，也可以直接从 Longbridge 网页端获取：打开 Agent 的对话页，URL 形如 `https://longbridge.com/zh-CN/ai/agents/chatbot/chat`，其中 `chatbot` 即为该 Agent 的 UID。
+        :::
       x-description-zh-hk: |
         向指定 Agent 提問。可以開啟一個全新會話，也可以傳入已有會話的 `chat_uid` 在同一會話中追加提問。
 
@@ -17698,7 +17798,9 @@ paths:
 
         通過請求頭 `Accept` 選擇響應模式：`text/event-stream` 為 SSE 流式，逐步推送運行過程與回答；其他值為阻塞式，一次性返回聚合後的最終結果。
 
-        > **如何獲取 Agent 的 UID** 除通過 Workspace 下的 Agent 接口查詢外，也可以直接從 Longbridge 網頁端獲取：打開 Agent 的對話頁，URL 形如 `https://longbridge.com/zh-HK/ai/agents/chatbot/chat`，其中 `chatbot` 即為該 Agent 的 UID。
+        :::tip 如何獲取 Agent 的 UID
+        除通過 Workspace 下的 Agent 接口查詢外，也可以直接從 Longbridge 網頁端獲取：打開 Agent 的對話頁，URL 形如 `https://longbridge.com/zh-HK/ai/agents/chatbot/chat`，其中 `chatbot` 即為該 Agent 的 UID。
+        :::
       x-subgroup: Conversation
       x-subgroup-zh: 对话
       x-subgroup-zh-hk: 對話
@@ -19477,13 +19579,17 @@ paths:
 
         Only users who have opened a **Longbridge account and hold assets** are allowed to publish community topics and replies via Longbridge Developers API or CLI. Returns `403` otherwise.
 
-        > **Tip:** Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
-        >
-        > ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+        :::tip Tip
+        Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+
+        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+        :::
 
         **Rate limit:** Max 3 topics per user per minute and 10 per 24 hours. Exceeding the limit returns `429`.
 
-        > ⚠️ Rate limit thresholds are for reference only and may be adjusted by the platform at any time.
+        :::warning
+        ⚠️ Rate limit thresholds are for reference only and may be adjusted by the platform at any time.
+        :::
       x-description-zh: |
         在 [社区](https://longbridge.com/topics)创建一篇新讨论。支持两种内容类型：
 
@@ -19494,13 +19600,17 @@ paths:
 
         仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。否则返回 `403`。
 
-        > **Tip:** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。`tickers` 字段用于补充正文中未显式提及的标的。
-        >
-        > ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+        :::tip Tip
+        正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。`tickers` 字段用于补充正文中未显式提及的标的。
+
+        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+        :::
 
         **频率限制：** 同一用户每分钟最多创建 3 篇，24 小时内最多 10 篇，超出返回 `429`。
 
-        > ⚠️ 以上频率限制规则仅供参考，平台可能随时进行内部调整。
+        :::warning
+        ⚠️ 以上频率限制规则仅供参考，平台可能随时进行内部调整。
+        :::
       x-description-zh-hk: |
         在 [社區](https://longbridge.com/topics)創建一篇新討論。支持兩種內容類型：
 
@@ -19511,13 +19621,17 @@ paths:
 
         僅限 **Longbridge 開戶且持有資產** 的用戶才允許通過 Longbridge Developers 的 API 或 CLI 發布社區討論和回覆。否則返回 `403`。
 
-        > **Tip:** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。`tickers` 字段用於補充正文中未顯式提及的標的。
-        >
-        > ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
+        :::tip Tip
+        正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。`tickers` 字段用於補充正文中未顯式提及的標的。
+
+        ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
+        :::
 
         **頻率限制：** 同一用戶每分鐘最多創建 3 篇，24 小時內最多 10 篇，超出返回 `429`。
 
-        > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+        :::warning
+        ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+        :::
       x-subgroup: Topics
       x-subgroup-zh: 话题
       x-subgroup-zh-hk: 話題
@@ -20334,9 +20448,11 @@ paths:
 
         **Body format:** Plain text only — HTML and Markdown are **not** rendered.
 
-        > **Tip:** Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform.
-        >
-        > ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+        :::tip Tip
+        Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform.
+
+        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
+        :::
 
         **Rate limit:** The first 3 replies per user per topic have no wait requirement. After that, each subsequent reply must wait an incrementally longer interval since the previous one:
 
@@ -20352,7 +20468,9 @@ paths:
 
         Exceeding the limit returns `429`.
 
-        > ⚠️ Rate limit thresholds are for reference only and may be adjusted by the platform at any time.
+        :::warning
+        ⚠️ Rate limit thresholds are for reference only and may be adjusted by the platform at any time.
+        :::
       x-description-zh: |
         在指定讨论下发布回复，支持嵌套回复已有回复。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
 
@@ -20360,13 +20478,17 @@ paths:
 
         **正文格式：** 仅支持纯文本，不支持 HTML 或 Markdown。
 
-        > **Tip:** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。
-        >
-        > ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+        :::tip Tip
+        正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。
+
+        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
+        :::
 
         **频率限制：** 同一用户在同一讨论下，前 3 条无间隔限制；此后每条须与上一条保持递增间隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封顶），超出限制返回 `429`。
 
-        > ⚠️ 以上频率限制规则仅供参考，平台可能随时进行内部调整。
+        :::warning
+        ⚠️ 以上频率限制规则仅供参考，平台可能随时进行内部调整。
+        :::
       x-description-zh-hk: |
         在指定討論下發布回覆，支持嵌套回覆已有回覆。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
 
@@ -20374,13 +20496,17 @@ paths:
 
         **正文格式：** 僅支持純文本，不支持 HTML 或 Markdown。
 
-        > **Tip:** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。
-        >
-        > ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
+        :::tip Tip
+        正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。
+
+        ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
+        :::
 
         **頻率限制：** 同一用戶在同一討論下，前 3 條無間隔限制；此後每條須與上一條保持遞增間隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封頂），超出限制返回 `429`。
 
-        > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+        :::warning
+        ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+        :::
       x-subgroup: Topics
       x-subgroup-zh: 话题
       x-subgroup-zh-hk: 話題
@@ -23413,15 +23539,21 @@ paths:
       x-summary-zh: 美股资产概览
       x-summary-zh-hk: 美股資產概覽
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get an overview of US account assets — buying power, cash, stocks, options, and crypto.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股账户资产概览——买入力、现金、股票、期权和加密货币。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股賬戶資產概覽——買入力、現金、股票、期權和加密貨幣。
       x-subgroup: Assets
@@ -23623,15 +23755,21 @@ paths:
       x-summary-zh: 美股已实现盈亏
       x-summary-zh-hk: 美股已實現盈虧
       description: |
-        > **Longbridge US Accounts** This method is only available for US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
 
         Get realized profit and loss for a US account, broken down by asset category.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
 
         获取美股账户已实现盈亏，按资产类别（股票/期权/加密货币）分组。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
 
         獲取美股賬戶已實現盈虧，按資產類別（股票/期權/加密貨幣）分組。
       x-subgroup: Assets
@@ -28644,7 +28782,9 @@ paths:
       x-summary-zh: 美股历史委托
       x-summary-zh-hk: 美股歷史委託
       description: |
-        > **Longbridge US Accounts** This method is only available for Longbridge US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for Longbridge US data-center accounts.
+        :::
 
         It is **not** available to accounts in other data centers (such as HK or SG), even when those accounts can trade US symbols. It is also **not** available to paper accounts (`enable_papertrading = true`): **the Longbridge US desk (US DC) does not provide paper accounts at all**, so the entire US region — every US-specific API, not just this one — is unavailable in a paper environment.
 
@@ -28652,7 +28792,9 @@ paths:
 
         Query historical and pending orders for US accounts with pagination and filtering.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于 Longbridge 美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于 Longbridge 美国数据中心账户。
+        :::
 
         其他数据中心的账户（如香港、新加坡）**不支持**该方法，即便这些账户可以交易美股；模拟账户（`enable_papertrading = true`）同样**不支持**：**Longbridge US 柜台（US DC）未提供模拟账户功能**，因此整个 US region——所有美股专用接口，而不只是本接口——在模拟环境下均不可用。
 
@@ -28660,7 +28802,9 @@ paths:
 
         查询美股账户的历史委托和待成交委托，支持分页和筛选。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於 Longbridge 美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於 Longbridge 美國數據中心賬戶。
+        :::
 
         其他數據中心的賬戶（如香港、新加坡）**不支持**該方法，即便這些賬戶可以交易美股；模擬賬戶（`enable_papertrading = true`）同樣**不支持**：**Longbridge US 櫃檯（US DC）未提供模擬賬戶功能**，因此整個 US region——所有美股專用接口，而不只是本接口——在模擬環境下均不可用。
 
@@ -28870,7 +29014,9 @@ paths:
       x-summary-zh: 美股委托详情
       x-summary-zh-hk: 美股委託詳情
       description: |
-        > **Longbridge US Accounts** This method is only available for Longbridge US data-center accounts.
+        :::warning Longbridge US Accounts
+        This method is only available for Longbridge US data-center accounts.
+        :::
 
         It is **not** available to accounts in other data centers (such as HK or SG), even when those accounts can trade US symbols. It is also **not** available to paper accounts (`enable_papertrading = true`): **the Longbridge US desk (US DC) does not provide paper accounts at all**, so the entire US region — every US-specific API, not just this one — is unavailable in a paper environment.
 
@@ -28878,7 +29024,9 @@ paths:
 
         Get detail for a specific US order — execution history, order status, and any attached child orders.
       x-description-zh: |
-        > **Longbridge US 账户** 此方法仅适用于 Longbridge 美国数据中心账户。
+        :::warning Longbridge US 账户
+        此方法仅适用于 Longbridge 美国数据中心账户。
+        :::
 
         其他数据中心的账户（如香港、新加坡）**不支持**该方法，即便这些账户可以交易美股；模拟账户（`enable_papertrading = true`）同样**不支持**：**Longbridge US 柜台（US DC）未提供模拟账户功能**，因此整个 US region——所有美股专用接口，而不只是本接口——在模拟环境下均不可用。
 
@@ -28886,7 +29034,9 @@ paths:
 
         获取美股指定委托的详情，包括成交历史，可选获取关联子委托。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶** 此方法僅適用於 Longbridge 美國數據中心賬戶。
+        :::warning Longbridge US 賬戶
+        此方法僅適用於 Longbridge 美國數據中心賬戶。
+        :::
 
         其他數據中心的賬戶（如香港、新加坡）**不支持**該方法，即便這些賬戶可以交易美股；模擬賬戶（`enable_papertrading = true`）同樣**不支持**：**Longbridge US 櫃檯（US DC）未提供模擬賬戶功能**，因此整個 US region——所有美股專用接口，而不只是本接口——在模擬環境下均不可用。
 
@@ -31181,15 +31331,21 @@ paths:
       description: |
         Query the paged trigger history of a single grid order — the individual orders the grid has placed each time a trigger fired.
 
-        > **Uses `grid_order_id`, not `order_id`** This endpoint uses `grid_order_id`, **not** `order_id` like the other grid endpoints. Using `order_id` here will not resolve the grid order.
+        :::warning Uses `grid_order_id`, not `order_id`
+        This endpoint uses `grid_order_id`, **not** `order_id` like the other grid endpoints. Using `order_id` here will not resolve the grid order.
+        :::
       x-description-zh: |
         查询单个网格订单的分页触发历史 —— 网格每次触发时所发出的具体订单。
 
-        > **使用 `grid_order_id` 而非 `order_id`** 该接口使用 `grid_order_id`，而**不是**其他网格接口所用的 `order_id`。此处传入 `order_id` 将无法定位到网格订单。
+        :::warning 使用 `grid_order_id` 而非 `order_id`
+        该接口使用 `grid_order_id`，而**不是**其他网格接口所用的 `order_id`。此处传入 `order_id` 将无法定位到网格订单。
+        :::
       x-description-zh-hk: |
         查詢單個網格訂單的分頁觸發歷史 —— 網格每次觸發時所發出的具體訂單。
 
-        > **使用 `grid_order_id` 而非 `order_id`** 該接口使用 `grid_order_id`，而**不是**其他網格接口所用的 `order_id`。此處傳入 `order_id` 將無法定位到網格訂單。
+        :::warning 使用 `grid_order_id` 而非 `order_id`
+        該接口使用 `grid_order_id`，而**不是**其他網格接口所用的 `order_id`。此處傳入 `order_id` 將無法定位到網格訂單。
+        :::
       x-subgroup: Grid Trading
       x-subgroup-zh: 网格交易
       x-subgroup-zh-hk: 網格交易
@@ -32821,15 +32977,21 @@ paths:
       x-summary-zh: 获取定投列表
       x-summary-zh-hk: 獲取定投列表
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Get all recurring investment (DCA) plans for the current user.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         获取当前用户的所有定投（DCA）计划。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         獲取當前用戶的所有定投（DCA）計劃。
       x-subgroup: DCA
@@ -33129,15 +33291,21 @@ paths:
       x-summary-zh: 创建定投
       x-summary-zh-hk: 創建定投
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Create a new recurring investment plan for a security.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         为指定证券创建新的定投。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         為指定證券創建新的定投。
       x-subgroup: DCA
@@ -33321,15 +33489,21 @@ paths:
       x-summary-zh: 更新定投
       x-summary-zh-hk: 更新定投
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Pause or resume an existing recurring investment plan.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         暂停或恢复已有的定投。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         暫停或恢復已有的定投。
       x-subgroup: DCA
@@ -33498,15 +33672,21 @@ paths:
       x-summary-zh: 暂停 / 恢复 / 终止定投计划
       x-summary-zh-hk: 暫停 / 恢復 / 終止定投計劃
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Change the status of an existing DCA plan: pause, resume, or permanently stop it.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         更改现有定投计划的状态：暂停、恢复或永久终止。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         更改現有定投計劃的狀態：暫停、恢復或永久終止。
       x-subgroup: DCA
@@ -33652,15 +33832,21 @@ paths:
       x-summary-zh: 定投交易历史
       x-summary-zh-hk: 定投交易歷史
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Get the execution history for a specific DCA plan including trade dates, amounts, and prices.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         获取指定定投的执行历史，包含交易日期、金额和价格。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         獲取指定定投的執行歷史，包含交易日期、金額和價格。
       x-subgroup: DCA
@@ -33897,15 +34083,21 @@ paths:
       x-summary-zh: 定投统计
       x-summary-zh-hk: 定投統計
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Get DCA statistics summary including total invested amount and profit/loss.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         获取定投统计汇总信息，包括总投入金额和盈亏情况。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         獲取定投統計匯總信息，包括總投入金額和盈虧情況。
       x-subgroup: DCA
@@ -34096,15 +34288,21 @@ paths:
       x-summary-zh: 检查定投支持
       x-summary-zh-hk: 檢查定投支持
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Check whether the given securities support DCA recurring investment.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         检查指定标的是否支持定投。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         檢查指定標的是否支持定投。
       x-subgroup: DCA
@@ -34268,15 +34466,21 @@ paths:
       x-summary-zh: 计算定投日期
       x-summary-zh-hk: 計算定投日期
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Calculate the next projected trade date for given DCA plan parameters.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         根据给定的定投计划参数，计算下一次预计交易日期。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         根據給定的定投計劃參數，計算下一次預計交易日期。
       x-subgroup: DCA
@@ -34445,15 +34649,21 @@ paths:
       x-summary-zh: 设置定投提醒
       x-summary-zh-hk: 設置定投提醒
       description: |
-        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Not for Longbridge US Accounts
+        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::
 
         Set the advance reminder time for DCA plans. Supported values: `1`, `6`, or `12` hours.
       x-description-zh: |
-        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning Longbridge US 账户不支持
+        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::
 
         设置定投计划的提前提醒时间。支持的值：`1`、`6` 或 `12` 小时。
       x-description-zh-hk: |
-        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning Longbridge US 賬戶不支援
+        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::
 
         設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
       x-subgroup: DCA

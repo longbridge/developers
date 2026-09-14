@@ -13,9 +13,11 @@
   "dependencies": {
     "@longbridge/openapi-ui": "workspace:*",
     "js-yaml": "^4",
-    "markdown-it": "^14"
+    "markdown-it": "^14",
+    "markdown-it-container": "^4.0.0"
   },
   "devDependencies": {
-    "@types/markdown-it": "^14"
+    "@types/markdown-it": "^14",
+    "@types/markdown-it-container": "^4.0.1"
   }
 }
