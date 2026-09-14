@@ -1,14 +1,13 @@
 /**
  * QuotePermission.tsx
- * Renders the permission badge + detail card for a quote command.
- * Ported 1:1 from ApiReference.vue (QuotePermission inline template).
- * Imports quote-permissions.yaml?raw via Vite raw import.
+ * Quote-permission badge + detail card — a faithful port of the docs MDX
+ * component (src/components/mdx/QuotePermission.tsx) so the reference renders it
+ * identically. Resolves command/level/market against quote-permissions.yaml.
  */
 import { load } from 'js-yaml'
 import type { Locale } from '@longbridge/openapi-utils'
-
-// Vite raw import — resolved at build time
 import rawQP from '../../../quote-permissions.yaml?raw'
+// CSS is loaded via api-reference.css (@import) so it ships with the layout.
 
 // ── YAML types ────────────────────────────────────────────────────────────────
 
@@ -16,90 +15,119 @@ interface LocaleString {
   en: string
   'zh-CN': string
   'zh-HK': string
+  [key: string]: string
 }
-
 interface LevelDef {
   label: LocaleString
   description: LocaleString
   link_text: LocaleString
 }
-
 interface CommandDef {
   level: string
   market?: string
-  description: LocaleString
+  description?: LocaleString
 }
-
 interface QPData {
   ui: {
     link_url: string
     permission_title: LocaleString
     separate_note: LocaleString
-    market_labels: Record<string, LocaleString>
+    market_labels?: Record<string, LocaleString>
   }
   levels: Record<string, LevelDef>
-  commands: Record<string, CommandDef>
+  commands?: Record<string, CommandDef>
 }
-
-// ── Level color map ───────────────────────────────────────────────────────────
-
-const LEVEL_CLASS: Record<string, string> = {
-  basic: 'qp-badge--green',
-  lv1: 'qp-badge--blue',
-  lv2: 'qp-badge--orange',
-  overnight: 'qp-badge--yellow',
-  opra: 'qp-badge--purple',
-}
-
-// ── Parse once at module level ────────────────────────────────────────────────
 
 let _qpData: QPData | null = null
 function getQPData(): QPData {
-  if (!_qpData) {
-    _qpData = load(rawQP) as QPData
-  }
+  if (!_qpData) _qpData = load(rawQP) as QPData
   return _qpData
 }
+
+// ── Shield-check SVG (14×14) ──────────────────────────────────────────────────
+
+const ShieldCheckIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round">
+    <path d="M20 13c0 5-3.5 7.5-7.76 8.95a1 1 0 0 1-.48 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+    <path d="m9 12 2 2 4-4" />
+  </svg>
+)
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export interface QuotePermissionProps {
-  /** The x-quote-command value from the OpenAPI operation */
-  command: string
-  locale: Locale
+  /** API command key — looked up in quote-permissions.yaml commands. */
+  command?: string
+  /** Explicit level override ('basic' | 'lv1' | 'lv2' | 'overnight' | 'opra'). */
+  level?: string
+  /** Explicit market override (e.g. 'US', 'HK'). */
+  market?: string
+  locale?: Locale
 }
 
-export function QuotePermission({ command, locale }: QuotePermissionProps) {
+export function QuotePermission({ command, level, market, locale = 'en' }: QuotePermissionProps) {
   const qp = getQPData()
-  const cmd = qp.commands?.[command]
-  if (!cmd) return null
-
-  const level = qp.levels?.[cmd.level]
-  if (!level) return null
+  const cmdEntry = command ? (qp.commands?.[command] ?? null) : null
+  const effectiveLevel = cmdEntry?.level ?? level ?? 'basic'
+  const effectiveMarket = market ?? cmdEntry?.market
+  const levelDef = qp.levels?.[effectiveLevel]
+  if (!levelDef) return null
 
   const ui = qp.ui
-  const locStr = (s: LocaleString) => s?.[locale] ?? s?.en ?? ''
-  const badgeClass = LEVEL_CLASS[cmd.level] ?? 'qp-badge--blue'
+  const l = (s: LocaleString | undefined): string => (s ? (s[locale] ?? s.en ?? '') : '')
 
-  const marketKey = cmd.market
-  const marketLabel = marketKey ? locStr(ui.market_labels?.[marketKey] ?? { en: marketKey, 'zh-CN': marketKey, 'zh-HK': marketKey }) : null
+  const title = l(ui?.permission_title)
+  const badgeLabel = l(levelDef.label)
+  const descriptionRaw = cmdEntry?.description ? l(cmdEntry.description) : l(levelDef.description)
+  const descriptionLines = descriptionRaw ? descriptionRaw.split('\n').filter(Boolean) : []
+  const linkUrl = ui?.link_url ?? ''
+  const linkText = l(levelDef.link_text)
+  const separateNote = l(ui?.separate_note)
+  const marketLabel = effectiveMarket
+    ? l(ui?.market_labels?.[effectiveMarket]) || effectiveMarket
+    : null
 
   return (
-    <div data-lbus-component="quote-permission" className="qp-wrapper">
+    <div data-lbus-component="quote-permission" className="qp-alert" data-level={effectiveLevel}>
       <div className="qp-header">
-        <span className="qp-title">{locStr(ui.permission_title)}</span>
-        <span className={`qp-badge ${badgeClass}`}>{locStr(level.label)}</span>
-        {marketLabel && <span className="qp-market">{marketLabel}</span>}
+        <span className="qp-icon">
+          <ShieldCheckIcon />
+        </span>
+        <span className="qp-label">{title}</span>
+        {marketLabel && <span className="qp-market-tag">{marketLabel}</span>}
+        <span className="qp-badge">{badgeLabel}</span>
       </div>
-      <p className="qp-desc">{locStr(cmd.description)}</p>
-      {ui.link_url && (
-        <p className="qp-note">
-          {locStr(ui.separate_note)}{' '}
-          <a href={ui.link_url} target="_blank" rel="noopener noreferrer" className="qp-link">
-            {locStr(level.link_text)}
-          </a>
-        </p>
-      )}
+
+      {descriptionLines.length > 1 ? (
+        <ul className="qp-list">
+          {descriptionLines.map((line) => (
+            <li key={line} className="qp-list-item">
+              {line}
+            </li>
+          ))}
+        </ul>
+      ) : descriptionLines.length === 1 ? (
+        <p className="qp-desc">{descriptionLines[0]}</p>
+      ) : null}
+
+      <div className="qp-footer">
+        <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="qp-link">
+          {linkText}
+        </a>
+        <span className="qp-sep" aria-hidden="true">
+          ·
+        </span>
+        <span className="qp-note">{separateNote}</span>
+      </div>
     </div>
   )
 }

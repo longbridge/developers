@@ -1,0 +1,234 @@
+/*
+ * QuotePermission.css
+ * Scoped to [data-lbus-component="quote-permission"] to avoid polluting global scope.
+ * Ported from QuotePermission.vue <style scoped> — @apply directives converted to
+ * plain CSS values using the same Tailwind v3 palette.
+ * Dark mode uses [data-mode="dark"] to match this project's convention.
+ */
+
+/* ── CSS custom properties by level (light mode) ── */
+[data-lbus-component="quote-permission"].qp-alert[data-level="basic"] {
+  --lc-border:     rgba(34, 197, 94, 0.3);
+  --lc-bg:         rgba(34, 197, 94, 0.07);
+  --lc-icon:       #16a34a;
+  --lc-badge-bg:   rgba(34, 197, 94, 0.15);
+  --lc-badge-text: #15803d;
+  --lc-desc:       rgba(22, 101, 52, 0.8);
+  --lc-link:       #15803d;
+  --lc-link-hover: #14532d;
+  --lc-dim:        rgba(22, 163, 74, 0.5);
+  --lc-market:     rgba(22, 163, 74, 0.7);
+}
+[data-lbus-component="quote-permission"].qp-alert[data-level="lv1"] {
+  --lc-border:     rgba(59, 130, 246, 0.3);
+  --lc-bg:         rgba(59, 130, 246, 0.07);
+  --lc-icon:       #2563eb;
+  --lc-badge-bg:   rgba(59, 130, 246, 0.15);
+  --lc-badge-text: #1d4ed8;
+  --lc-desc:       rgba(30, 64, 175, 0.8);
+  --lc-link:       #1d4ed8;
+  --lc-link-hover: #1e3a8a;
+  --lc-dim:        rgba(37, 99, 235, 0.5);
+  --lc-market:     rgba(37, 99, 235, 0.7);
+}
+[data-lbus-component="quote-permission"].qp-alert[data-level="lv2"] {
+  --lc-border:     rgba(249, 115, 22, 0.3);
+  --lc-bg:         rgba(249, 115, 22, 0.07);
+  --lc-icon:       #ea580c;
+  --lc-badge-bg:   rgba(249, 115, 22, 0.15);
+  --lc-badge-text: #c2410c;
+  --lc-desc:       rgba(154, 52, 18, 0.8);
+  --lc-link:       #c2410c;
+  --lc-link-hover: #7c2d12;
+  --lc-dim:        rgba(234, 88, 12, 0.5);
+  --lc-market:     rgba(234, 88, 12, 0.7);
+}
+[data-lbus-component="quote-permission"].qp-alert[data-level="overnight"] {
+  --lc-border:     rgba(234, 179, 8, 0.3);
+  --lc-bg:         rgba(234, 179, 8, 0.07);
+  --lc-icon:       #a16207;
+  --lc-badge-bg:   rgba(234, 179, 8, 0.15);
+  --lc-badge-text: #854d0e;
+  --lc-desc:       rgba(113, 63, 18, 0.8);
+  --lc-link:       #a16207;
+  --lc-link-hover: #713f12;
+  --lc-dim:        rgba(161, 98, 7, 0.5);
+  --lc-market:     rgba(161, 98, 7, 0.7);
+}
+[data-lbus-component="quote-permission"].qp-alert[data-level="opra"] {
+  --lc-border:     rgba(168, 85, 247, 0.3);
+  --lc-bg:         rgba(168, 85, 247, 0.07);
+  --lc-icon:       #9333ea;
+  --lc-badge-bg:   rgba(168, 85, 247, 0.15);
+  --lc-badge-text: #7e22ce;
+  --lc-desc:       rgba(107, 33, 168, 0.8);
+  --lc-link:       #7e22ce;
+  --lc-link-hover: #581c87;
+  --lc-dim:        rgba(147, 51, 234, 0.5);
+  --lc-market:     rgba(147, 51, 234, 0.7);
+}
+
+/* ── Dark mode overrides ── */
+[data-mode="dark"] [data-lbus-component="quote-permission"].qp-alert[data-level="basic"] {
+  --lc-icon:       #4ade80;
+  --lc-badge-bg:   rgba(34, 197, 94, 0.2);
+  --lc-badge-text: #86efac;
+  --lc-desc:       rgba(134, 239, 172, 0.8);
+  --lc-link:       #4ade80;
+  --lc-link-hover: #bbf7d0;
+  --lc-dim:        rgba(34, 197, 94, 0.5);
+  --lc-market:     rgba(74, 222, 128, 0.7);
+}
+[data-mode="dark"] [data-lbus-component="quote-permission"].qp-alert[data-level="lv1"] {
+  --lc-icon:       #60a5fa;
+  --lc-badge-bg:   rgba(59, 130, 246, 0.2);
+  --lc-badge-text: #93c5fd;
+  --lc-desc:       rgba(147, 197, 253, 0.8);
+  --lc-link:       #60a5fa;
+  --lc-link-hover: #bfdbfe;
+  --lc-dim:        rgba(59, 130, 246, 0.5);
+  --lc-market:     rgba(96, 165, 250, 0.7);
+}
+[data-mode="dark"] [data-lbus-component="quote-permission"].qp-alert[data-level="lv2"] {
+  --lc-icon:       #fb923c;
+  --lc-badge-bg:   rgba(249, 115, 22, 0.2);
+  --lc-badge-text: #fdba74;
+  --lc-desc:       rgba(253, 186, 116, 0.8);
+  --lc-link:       #fb923c;
+  --lc-link-hover: #fed7aa;
+  --lc-dim:        rgba(249, 115, 22, 0.5);
+  --lc-market:     rgba(251, 146, 60, 0.7);
+}
+[data-mode="dark"] [data-lbus-component="quote-permission"].qp-alert[data-level="overnight"] {
+  --lc-icon:       #facc15;
+  --lc-badge-bg:   rgba(234, 179, 8, 0.2);
+  --lc-badge-text: #fde047;
+  --lc-desc:       rgba(253, 224, 71, 0.8);
+  --lc-link:       #facc15;
+  --lc-link-hover: #fef08a;
+  --lc-dim:        rgba(234, 179, 8, 0.5);
+  --lc-market:     rgba(250, 204, 21, 0.7);
+}
+[data-mode="dark"] [data-lbus-component="quote-permission"].qp-alert[data-level="opra"] {
+  --lc-icon:       #c084fc;
+  --lc-badge-bg:   rgba(168, 85, 247, 0.2);
+  --lc-badge-text: #d8b4fe;
+  --lc-desc:       rgba(216, 180, 254, 0.8);
+  --lc-link:       #c084fc;
+  --lc-link-hover: #e9d5ff;
+  --lc-dim:        rgba(168, 85, 247, 0.5);
+  --lc-market:     rgba(192, 132, 252, 0.7);
+}
+
+/* ── Container ── */
+[data-lbus-component="quote-permission"].qp-alert {
+  border: 1px solid var(--lc-border);
+  background: var(--lc-bg);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  margin: 1rem 0;
+}
+
+/* ── Header ── */
+[data-lbus-component="quote-permission"] .qp-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+[data-lbus-component="quote-permission"] .qp-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--lc-icon);
+}
+
+[data-lbus-component="quote-permission"] .qp-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--lc-icon);
+}
+
+[data-lbus-component="quote-permission"] .qp-market-tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0 0.375rem;
+  border-radius: 9999px;
+  background: transparent;
+  white-space: nowrap;
+  color: var(--lc-market);
+  box-shadow: inset 0 0 0 1px var(--lc-border);
+}
+
+[data-lbus-component="quote-permission"] .qp-badge {
+  display: inline-block;
+  font-size: 0.8125rem;
+  line-height: 1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  margin-left: auto;
+  background: var(--lc-badge-bg);
+  color: var(--lc-badge-text);
+  box-shadow: inset 0 0 0 1px var(--lc-border);
+}
+
+/* ── Content ── */
+[data-lbus-component="quote-permission"] .qp-desc {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+  color: var(--lc-desc);
+}
+
+[data-lbus-component="quote-permission"] .qp-list {
+  margin: 0 0 0.5rem 0;
+  padding-left: 1.125rem;
+  list-style: disc;
+}
+
+[data-lbus-component="quote-permission"] .qp-list-item {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--lc-desc);
+}
+
+/* ── Footer ── */
+[data-lbus-component="quote-permission"] .qp-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+[data-lbus-component="quote-permission"] .qp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s;
+  color: var(--lc-link);
+}
+[data-lbus-component="quote-permission"] .qp-link:hover {
+  text-decoration: underline;
+  color: var(--lc-link-hover);
+}
+
+[data-lbus-component="quote-permission"] .qp-sep {
+  font-size: 0.75rem;
+  color: var(--lc-dim);
+}
+
+[data-lbus-component="quote-permission"] .qp-note {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  color: var(--lc-dim);
+}

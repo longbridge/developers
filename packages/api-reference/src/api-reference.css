@@ -5,6 +5,10 @@
  * Syntax highlight classes: .hl-k .hl-s .hl-n .hl-b .hl-cmd .hl-flag .hl-punct .hl-comment
  */
 
+/* Quote-permission card — ported 1:1 from the docs component so it renders
+   identically in the reference. */
+@import './QuotePermission.css';
+
 /* ── Root layout ─────────────────────────────────────────────────────────── */
 
 .api-reference-page {
