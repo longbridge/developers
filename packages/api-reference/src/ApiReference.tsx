@@ -585,45 +585,54 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const { groups, pages, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
 
   // ── URL state ─────────────────────────────────────────────────────────────
-  const getQuery = () => {
+  // Canonical URLs are path-based: `/docs/api/<operationId>` (locale-prefixed).
+  // The legacy `?op=` / `?page=` query form is still honored for old links.
+  const apiBase = `${localePrefix}/docs/api`
+  const getRoute = () => {
     if (typeof window === 'undefined') return { op: null, page: null }
+    const path = window.location.pathname.replace(/\/+$/, '')
+    if (path.startsWith(apiBase + '/')) {
+      const seg = path.slice(apiBase.length + 1)
+      if (seg && !seg.includes('/')) return { op: decodeURIComponent(seg), page: null }
+    }
     const p = new URLSearchParams(window.location.search)
     return { op: p.get('op'), page: p.get('page') }
   }
 
-  const [activeOp, setActiveOp] = useState<string | null>(() => getQuery().op)
-  const [activePage, setActivePage] = useState<string | null>(() => getQuery().page)
+  const [activeOp, setActiveOp] = useState<string | null>(() => getRoute().op)
+  const [activePage, setActivePage] = useState<string | null>(() => getRoute().page)
 
   // Listen for popstate
   useEffect(() => {
     function onPop() {
-      const q = getQuery()
+      const q = getRoute()
       setActiveOp(q.op)
       setActivePage(q.page)
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Navigate to endpoint
-  const selectEndpoint = useCallback((id: string) => {
-    const url = new URL(window.location.href)
-    url.searchParams.set('op', id)
-    url.searchParams.delete('page')
-    window.history.pushState({}, '', url.toString())
-    setActiveOp(id)
-    setActivePage(null)
-  }, [])
+  // Navigate to endpoint → /docs/api/<id>
+  const selectEndpoint = useCallback(
+    (id: string) => {
+      window.history.pushState({}, '', `${apiBase}/${id}`)
+      setActiveOp(id)
+      setActivePage(null)
+    },
+    [apiBase]
+  )
 
-  // Navigate to page
-  const selectPage = useCallback((id: string) => {
-    const url = new URL(window.location.href)
-    url.searchParams.set('page', id)
-    url.searchParams.delete('op')
-    window.history.pushState({}, '', url.toString())
-    setActivePage(id)
-    setActiveOp(null)
-  }, [])
+  // Navigate to page → /docs/api?page=<id> (pages stay on the query form)
+  const selectPage = useCallback(
+    (id: string) => {
+      window.history.pushState({}, '', `${apiBase}?page=${id}`)
+      setActivePage(id)
+      setActiveOp(null)
+    },
+    [apiBase]
+  )
 
   // ── Search ────────────────────────────────────────────────────────────────
   const [query, setQuery] = useState('')
