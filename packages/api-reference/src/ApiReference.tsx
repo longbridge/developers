@@ -894,8 +894,15 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   </div>
 
                   {/* Quote permission badge */}
-                  {activeEndpoint.operation['x-quote-command'] && (
-                    <QuotePermission command={activeEndpoint.operation['x-quote-command']} locale={locale} />
+                  {(activeEndpoint.operation['x-quote-command'] ||
+                    activeEndpoint.operation['x-quote-level'] ||
+                    activeEndpoint.operation['x-quote-market']) && (
+                    <QuotePermission
+                      command={activeEndpoint.operation['x-quote-command']}
+                      level={activeEndpoint.operation['x-quote-level']}
+                      market={activeEndpoint.operation['x-quote-market']}
+                      locale={locale}
+                    />
                   )}
 
                   {/* Prose description */}

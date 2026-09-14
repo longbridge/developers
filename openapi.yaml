@@ -17462,18 +17462,24 @@ paths:
         The Agent generates the answer using capabilities such as market data and account access. When the Agent needs more information or confirmation from you, the run is **interrupted** (`status` is `interrupted`) — send your answers via [Continue Conversation](/docs/ai/chat/continue) to resume it.
 
         Choose the response mode with the `Accept` header: `text/event-stream` streams the run progress and answer via SSE; any other value returns a blocking response with the aggregated final result.
+
+        > **How to find an Agent's UID** Besides querying the Agents in Workspace endpoint, you can also get it directly from the Longbridge website: open the Agent's chat page — the URL looks like `https://longbridge.com/en/ai/agents/chatbot/chat`, where `chatbot` is the Agent's UID.
       x-description-zh: |
         向指定 Agent 提问。可以开启一个全新会话，也可以传入已有会话的 `chat_uid` 在同一会话中追加提问。
 
         Agent 会结合行情、账户等能力生成回答。当 Agent 需要你补充信息或确认时，本次运行会**中断**（`status` 为 `interrupted`），此时需通过 [继续对话](/zh-CN/docs/ai/chat/continue) 回传答案后才能继续。
 
         通过请求头 `Accept` 选择响应模式：`text/event-stream` 为 SSE 流式，逐步推送运行过程与回答；其他值为阻塞式，一次性返回聚合后的最终结果。
+
+        > **如何获取 Agent 的 UID** 除通过 Workspace 下的 Agent 接口查询外，也可以直接从 Longbridge 网页端获取：打开 Agent 的对话页，URL 形如 `https://longbridge.com/zh-CN/ai/agents/chatbot/chat`，其中 `chatbot` 即为该 Agent 的 UID。
       x-description-zh-hk: |
         向指定 Agent 提問。可以開啟一個全新會話，也可以傳入已有會話的 `chat_uid` 在同一會話中追加提問。
 
         Agent 會結合行情、賬戶等能力生成回答。當 Agent 需要你補充信息或確認時，本次運行會**中斷**（`status` 為 `interrupted`），此時需通過 [繼續對話](/zh-HK/docs/ai/chat/continue) 回傳答案後才能繼續。
 
         通過請求頭 `Accept` 選擇響應模式：`text/event-stream` 為 SSE 流式，逐步推送運行過程與回答；其他值為阻塞式，一次性返回聚合後的最終結果。
+
+        > **如何獲取 Agent 的 UID** 除通過 Workspace 下的 Agent 接口查詢外，也可以直接從 Longbridge 網頁端獲取：打開 Agent 的對話頁，URL 形如 `https://longbridge.com/zh-HK/ai/agents/chatbot/chat`，其中 `chatbot` 即為該 Agent 的 UID。
       tags:
         - AI
       x-request-examples:
@@ -19225,11 +19231,9 @@ paths:
 
         Only users who have opened a **Longbridge account and hold assets** are allowed to publish community topics and replies via Longbridge Developers API or CLI. Returns `403` otherwise.
 
-        <TipContainer type="tip">
-        Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
-
+        > **Tip:** Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+        >
         > ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
-        </TipContainer>
 
         **Rate limit:** Max 3 topics per user per minute and 10 per 24 hours. Exceeding the limit returns `429`.
 
@@ -19244,11 +19248,9 @@ paths:
 
         仅限 **Longbridge 开户且持有资产** 的用户才允许通过 Longbridge Developers 的 API 或 CLI 发布社区讨论和回复。否则返回 `403`。
 
-        <TipContainer type="tip">
-        正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。`tickers` 字段用于补充正文中未显式提及的标的。
-
+        > **Tip:** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。`tickers` 字段用于补充正文中未显式提及的标的。
+        >
         > ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
-        </TipContainer>
 
         **频率限制：** 同一用户每分钟最多创建 3 篇，24 小时内最多 10 篇，超出返回 `429`。
 
@@ -19263,11 +19265,9 @@ paths:
 
         僅限 **Longbridge 開戶且持有資產** 的用戶才允許通過 Longbridge Developers 的 API 或 CLI 發布社區討論和回覆。否則返回 `403`。
 
-        <TipContainer type="tip">
-        正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。`tickers` 字段用於補充正文中未顯式提及的標的。
-
+        > **Tip:** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。`tickers` 字段用於補充正文中未顯式提及的標的。
+        >
         > ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
-        </TipContainer>
 
         **頻率限制：** 同一用戶每分鐘最多創建 3 篇，24 小時內最多 10 篇，超出返回 `429`。
 
@@ -20079,11 +20079,9 @@ paths:
 
         **Body format:** Plain text only — HTML and Markdown are **not** rendered.
 
-        <TipContainer type="tip">
-        Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform.
-
-        ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
-        </TipContainer>
+        > **Tip:** Stock symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked as related stocks by the platform.
+        >
+        > ⚠️ Do not abuse symbol linking to associate unrelated stocks. Content moderation may restrict publishing or mute the account.
 
         **Rate limit:** The first 3 replies per user per topic have no wait requirement. After that, each subsequent reply must wait an incrementally longer interval since the previous one:
 
@@ -20107,11 +20105,9 @@ paths:
 
         **正文格式：** 仅支持纯文本，不支持 HTML 或 Markdown。
 
-        <TipContainer type="tip">
-        正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。
-
-        ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
-        </TipContainer>
+        > **Tip:** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联为相关标的。
+        >
+        > ⚠️ 请勿滥用此功能关联与内容无关的标的，否则后台内容运营可能会限制发布，甚至有可能禁言。
 
         **频率限制：** 同一用户在同一讨论下，前 3 条无间隔限制；此后每条须与上一条保持递增间隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封顶），超出限制返回 `429`。
 
@@ -20123,11 +20119,9 @@ paths:
 
         **正文格式：** 僅支持純文本，不支持 HTML 或 Markdown。
 
-        <TipContainer type="tip">
-        正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。
-
-        ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
-        </TipContainer>
+        > **Tip:** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯為相關標的。
+        >
+        > ⚠️ 請勿濫用此功能關聯與內容無關的標的，否則後台內容運營可能會限制發布，甚至有可能禁言。
 
         **頻率限制：** 同一用戶在同一討論下，前 3 條無間隔限制；此後每條須與上一條保持遞增間隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封頂），超出限制返回 `429`。
 
@@ -30817,10 +30811,16 @@ paths:
       x-summary-zh-hk: 網格觸發歷史
       description: |
         Query the paged trigger history of a single grid order — the individual orders the grid has placed each time a trigger fired.
+
+        > **Uses `grid_order_id`, not `order_id`** This endpoint uses `grid_order_id`, **not** `order_id` like the other grid endpoints. Using `order_id` here will not resolve the grid order.
       x-description-zh: |
         查询单个网格订单的分页触发历史 —— 网格每次触发时所发出的具体订单。
+
+        > **使用 `grid_order_id` 而非 `order_id`** 该接口使用 `grid_order_id`，而**不是**其他网格接口所用的 `order_id`。此处传入 `order_id` 将无法定位到网格订单。
       x-description-zh-hk: |
         查詢單個網格訂單的分頁觸發歷史 —— 網格每次觸發時所發出的具體訂單。
+
+        > **使用 `grid_order_id` 而非 `order_id`** 該接口使用 `grid_order_id`，而**不是**其他網格接口所用的 `order_id`。此處傳入 `order_id` 將無法定位到網格訂單。
       tags:
         - Grid
       x-parameters:
@@ -31772,16 +31772,11 @@ paths:
       x-summary-zh-hk: 關注分組
       description: |
         Get Watchlist groups
-
-        <QuotePermission level="basic" />
       x-description-zh: |
         获取自选股分组
-
-        <QuotePermission level="basic" />
       x-description-zh-hk: |
         獲取關注分組
-
-        <QuotePermission level="basic" />
+      x-quote-level: basic
       tags:
         - Watchlist
       x-codeSamples:
@@ -31969,16 +31964,11 @@ paths:
       x-summary-zh-hk: 創建分組
       description: |
         Create watched group
-
-        <QuotePermission level="basic" />
       x-description-zh: |
         创建自选股分组
-
-        <QuotePermission level="basic" />
       x-description-zh-hk: |
         創建自選股分組
-
-        <QuotePermission level="basic" />
+      x-quote-level: basic
       tags:
         - Watchlist
       x-parameters:
@@ -32130,16 +32120,11 @@ paths:
       x-summary-zh-hk: 管理分組標的
       description: |
         Update watched group
-
-        <QuotePermission level="basic" />
       x-description-zh: |
         更新自选股分组
-
-        <QuotePermission level="basic" />
       x-description-zh-hk: |
         更新自選股分組
-
-        <QuotePermission level="basic" />
+      x-quote-level: basic
       tags:
         - Watchlist
       x-parameters:
@@ -32298,16 +32283,11 @@ paths:
       x-summary-zh-hk: 刪除分組
       description: |
         Delete watched group
-
-        <QuotePermission level="basic" />
       x-description-zh: |
         删除自选股分组
-
-        <QuotePermission level="basic" />
       x-description-zh-hk: |
         刪除自選股分組
-
-        <QuotePermission level="basic" />
+      x-quote-level: basic
       tags:
         - Watchlist
       x-parameters:
@@ -33113,10 +33093,16 @@ paths:
       x-summary-zh: 暂停 / 恢复 / 终止定投计划
       x-summary-zh-hk: 暫停 / 恢復 / 終止定投計劃
       description: |
+        > **Not for Longbridge US Accounts** This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+
         Change the status of an existing DCA plan: pause, resume, or permanently stop it.
       x-description-zh: |
+        > **Longbridge US 账户不支持** 此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+
         更改现有定投计划的状态：暂停、恢复或永久终止。
       x-description-zh-hk: |
+        > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+
         更改現有定投計劃的狀態：暫停、恢復或永久終止。
       tags:
         - DCA

@@ -5,7 +5,59 @@
  * llms.txt / llms-full.txt. No JS execution needed by the consumer.
  */
 import type { Locale } from '@longbridge/openapi-utils'
+import { load } from 'js-yaml'
 import { parseSpec, pickLocale, buildResponseExample, type EndpointItem, type XParameter } from './openapi-loader'
+import rawQuotePermissions from '../../../quote-permissions.yaml?raw'
+
+// ── Quote-permission callout (mirrors the <QuotePermission> MDX component) ─────
+
+interface QPLocaleString {
+  en?: string
+  'zh-CN'?: string
+  'zh-HK'?: string
+}
+interface QPData {
+  ui: { permission_title: QPLocaleString; separate_note: QPLocaleString; market_labels?: Record<string, QPLocaleString> }
+  levels: Record<string, { label: QPLocaleString; description: QPLocaleString }>
+  commands?: Record<string, { level: string; market?: string; description?: QPLocaleString }>
+}
+let _qp: QPData | null = null
+const qpData = (): QPData => (_qp ??= load(rawQuotePermissions) as QPData)
+
+const qpLocaleKey = (locale: Locale): keyof QPLocaleString =>
+  locale === 'zh-CN' ? 'zh-CN' : locale === 'zh-HK' ? 'zh-HK' : 'en'
+const qpStr = (s: QPLocaleString | undefined, locale: Locale): string =>
+  (s ? (s[qpLocaleKey(locale)] ?? s.en ?? '') : '')
+
+/**
+ * Render an operation's quote-permission requirement as a Markdown blockquote,
+ * resolving `x-quote-command` / `x-quote-level` / `x-quote-market` against
+ * quote-permissions.yaml. Returns '' when the operation has no permission marker.
+ */
+function quotePermissionMarkdown(
+  op: { 'x-quote-command'?: string; 'x-quote-level'?: string; 'x-quote-market'?: string },
+  locale: Locale
+): string {
+  const command = op['x-quote-command']
+  if (!command && !op['x-quote-level'] && !op['x-quote-market']) return ''
+  const qp = qpData()
+  const cmd = command ? qp.commands?.[command] : undefined
+  const level = cmd?.level ?? op['x-quote-level'] ?? 'basic'
+  const levelDef = qp.levels?.[level]
+  if (!levelDef) return ''
+  const market = op['x-quote-market'] ?? cmd?.market
+  const title = qpStr(qp.ui?.permission_title, locale)
+  const badge = qpStr(levelDef.label, locale)
+  const marketLabel = market ? qpStr(qp.ui?.market_labels?.[market], locale) || market : ''
+  const desc = qpStr(cmd?.description ?? levelDef.description, locale)
+  const note = qpStr(qp.ui?.separate_note, locale)
+
+  const head = [title, marketLabel, badge].filter(Boolean).join(' · ')
+  const lines = [`> **${head}**`]
+  for (const l of desc.split('\n').map((s) => s.trim()).filter(Boolean)) lines.push(`> ${l}`)
+  if (note) lines.push(`> _${note}_`)
+  return lines.join('\n') + '\n\n'
+}
 
 const loc = (
   p: { description?: string; 'x-description-zh'?: string; 'x-description-zh-hk'?: string },
@@ -29,6 +81,7 @@ export function endpointMarkdown(ep: EndpointItem, locale: Locale, base = 1): st
   const desc = pickLocale(op.description, op['x-description-zh'], op['x-description-zh-hk'], locale)
 
   let md = `${h(1)} ${title}\n\n\`${ep.method}\` \`${ep.path}\`\n\n`
+  md += quotePermissionMarkdown(op, locale)
   if (desc.trim()) md += desc.trim() + '\n\n'
 
   const xp = op['x-parameters'] ?? []

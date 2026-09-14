@@ -61,6 +61,8 @@ export interface Operation {
   'x-description-zh'?: string
   'x-description-zh-hk'?: string
   'x-quote-command'?: string
+  'x-quote-level'?: string
+  'x-quote-market'?: string
   'x-parameters'?: XParameter[]
   'x-response-properties'?: XParameter[]
   'x-request-examples'?: CodeSample[]
