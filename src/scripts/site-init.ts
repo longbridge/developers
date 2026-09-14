@@ -66,11 +66,10 @@ function initSensorsOnce(): void {
   void sensors.init()
 }
 
-/* ── Helora support widget: boot once (skip whale app + CN) ────────────────── */
-let heloraStarted = false
-function initHeloraOnce(): void {
-  if (heloraStarted) return
-  heloraStarted = true
+/* ── Helora support widget: (re)boot on every page-load ───────────────────────
+   ClientRouter 切页替换 <body> 会冲掉挂件的 Shadow DOM 宿主节点，故每次 page-load
+   都要重挂;bootHelora 内部可重入 (boot 自销毁旧实例，监听/observer/轮询不泄漏)。 */
+function initHelora(): void {
   // Host app provides its own support UI; CN site not onboarded yet.
   if (detectWhaleApp() || import.meta.env.VITE_REGION === 'cn') return
   const locale = (document.documentElement.lang || 'en') as Locale
@@ -81,7 +80,7 @@ function initHeloraOnce(): void {
 function onPageReady(): void {
   saveInviteCodeFromUrl()
   initSensorsOnce()
-  initHeloraOnce()
+  initHelora()
   void renderMermaid()
   finishProgress()
 }
