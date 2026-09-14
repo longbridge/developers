@@ -24700,9 +24700,9 @@ paths:
           in: body
           type: string
           required: true
-          description: '[Order Type](../trade-definition#ordertype)'
-          x-description-zh: '[订单类型](../trade-definition#ordertype)'
-          x-description-zh-hk: '[訂單類型](../trade-definition#ordertype)'
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: submitted_price
           in: body
           type: string
@@ -25597,9 +25597,9 @@ paths:
         - name: status
           type: string
           required: true
-          description: '[Order Status](../trade-definition#orderstatus)'
-          x-description-zh: '[订单状态](../trade-definition#orderstatus)'
-          x-description-zh-hk: '[訂單狀態](../trade-definition#orderstatus)'
+          description: 'Order Status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
         - name: stock_name
           type: string
           required: true
@@ -25651,9 +25651,9 @@ paths:
         - name: order_type
           type: string
           required: true
-          description: '[Order Type](../trade-definition#ordertype)'
-          x-description-zh: '[订单类型](../trade-definition#ordertype)'
-          x-description-zh-hk: '[訂單類型](../trade-definition#ordertype)'
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: last_done
           type: string
           required: true
@@ -26270,9 +26270,9 @@ paths:
           in: query
           type: array
           required: false
-          description: '[Order status](../trade-definition#orderstatus)<br/><br/>example: `status=FilledStatus&status=NewStatus`'
-          x-description-zh: '[订单状态](../trade-definition#orderstatus)<br/><br/>例如：`status=FilledStatus&status=NewStatus`'
-          x-description-zh-hk: '[訂單狀態](../trade-definition#orderstatus)<br/><br/>例如：`status=FilledStatus&status=NewStatus`'
+          description: 'Order status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.<br/><br/>example: `status=FilledStatus&status=NewStatus`'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
         - name: side
           in: query
           type: string
@@ -26409,9 +26409,9 @@ paths:
         - name: └ status
           type: string
           required: true
-          description: '[Order Status](../trade-definition#orderstatus)'
-          x-description-zh: '[订单状态](../trade-definition#orderstatus)'
-          x-description-zh-hk: '[订单状态](../trade-definition#orderstatus)'
+          description: 'Order Status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+          x-description-zh-hk: 订单状态。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
         - name: └ stock_name
           type: string
           required: true
@@ -26463,9 +26463,9 @@ paths:
         - name: └ order_type
           type: string
           required: true
-          description: '[Order Type](../trade-definition#ordertype)'
-          x-description-zh: '[订单类型](../trade-definition#ordertype)'
-          x-description-zh-hk: '[订单类型](../trade-definition#ordertype)'
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 订单类型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: └ last_done
           type: string
           required: true
@@ -26897,9 +26897,9 @@ paths:
           in: query
           type: array
           required: false
-          description: '[Order status](../trade-definition#orderstatus)<br/><br/>example: `status=FilledStatus&status=NewStatus`'
-          x-description-zh: '[订单状态](../trade-definition#orderstatus)<br/><br/>例如：`status=FilledStatus&status=NewStatus`'
-          x-description-zh-hk: '[訂單狀態](../trade-definition#orderstatus)<br/><br/>例如：`status=FilledStatus&status=NewStatus`'
+          description: 'Order status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.<br/><br/>example: `status=FilledStatus&status=NewStatus`'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
         - name: side
           in: query
           type: string
@@ -27042,9 +27042,9 @@ paths:
         - name: └ status
           type: string
           required: true
-          description: '[Order Status](../trade-definition#orderstatus)'
-          x-description-zh: '[订单状态](../trade-definition#orderstatus)'
-          x-description-zh-hk: '[訂單狀態](../trade-definition#orderstatus)'
+          description: 'Order Status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
         - name: └ stock_name
           type: string
           required: true
@@ -27096,9 +27096,9 @@ paths:
         - name: └ order_type
           type: string
           required: true
-          description: '[Order Type](../trade-definition#ordertype)'
-          x-description-zh: '[订单类型](../trade-definition#ordertype)'
-          x-description-zh-hk: '[訂單類型](../trade-definition#ordertype)'
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: └ last_done
           type: string
           required: true
@@ -27530,9 +27530,9 @@ paths:
           in: body
           type: string
           required: true
-          description: '[Order Type](../trade-definition#ordertype)'
-          x-description-zh: '[订单类型](../trade-definition#ordertype)'
-          x-description-zh-hk: '[訂單類型](../trade-definition#ordertype)'
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: submitted_price
           in: body
           type: string
@@ -27728,9 +27728,9 @@ paths:
           in: query
           type: string
           required: true
-          description: '[Order Type](../trade-definition#ordertype)'
-          x-description-zh: '[订单类型](../trade-definition#ordertype)'
-          x-description-zh-hk: '[訂單類型](../trade-definition#ordertype)'
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: price
           in: query
           type: string
