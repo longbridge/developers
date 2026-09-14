@@ -31076,385 +31076,211 @@ paths:
           required: false
           description: Order Detail
           x-description-zh: 订单信息
-          x-description-zh-hk: 订单信息
+          x-description-zh-hk: 訂單信息
         - name: └ order_id
           type: string
-          required: true
+          required: false
           description: Order ID
           x-description-zh: 订单 ID
-          x-description-zh-hk: 订单 ID
+          x-description-zh-hk: 訂單 ID
         - name: └ status
           type: string
-          required: true
+          required: false
           description: 'Order Status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.'
           x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
-          x-description-zh-hk: 订单状态。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
         - name: └ stock_name
           type: string
-          required: true
+          required: false
           description: Stock Name
           x-description-zh: 股票名称
-          x-description-zh-hk: 股票名称
+          x-description-zh-hk: 股票名稱
         - name: └ quantity
           type: string
-          required: true
+          required: false
           description: Submitted Quantity
           x-description-zh: 下单数量
-          x-description-zh-hk: 下单数量
+          x-description-zh-hk: 下單數量
         - name: └ executed_quantity
           type: string
-          required: true
+          required: false
           description: Executed Quantity. when the order is not filled, value is 0
           x-description-zh: 成交数量。. 当订单未成交时为 0
-          x-description-zh-hk: 成交数量。. 当订单未成交时为 0
+          x-description-zh-hk: 成交數量。. 當訂單未成交時為 0
         - name: └ price
           type: string
-          required: true
+          required: false
           description: Submitted Price. when market condition order is not triggered, value is empty string
           x-description-zh: 下单价格。. 当市价条件单未触发时为空字符串
-          x-description-zh-hk: 下单价格。. 当市价条件单未触发时为空字符串
+          x-description-zh-hk: 下單價格。. 當市價條件單未觸發時為空字符串
         - name: └ executed_price
           type: string
-          required: true
+          required: false
           description: Executed Price. when the order is not filled, value is 0
           x-description-zh: 成交价。. 当订单未成交时为 0
-          x-description-zh-hk: 成交价。. 当订单未成交时为 0
+          x-description-zh-hk: 成交價。. 當訂單未成交時為 0
         - name: └ submitted_at
           type: string
-          required: true
+          required: false
           description: Submitted Time
           x-description-zh: 下单时间
-          x-description-zh-hk: 下单时间
+          x-description-zh-hk: 下單時間
         - name: └ side
           type: string
-          required: true
+          required: false
           description: Order Side. **Enum Value:**, `Buy`, `Sell`
           x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出
-          x-description-zh-hk: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出
+          x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出
         - name: └ symbol
           type: string
-          required: true
+          required: false
           description: 'Stock symbol, use `ticker.region` format, example: `AAPL.US`'
           x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
-          x-description-zh-hk: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
         - name: └ order_type
           type: string
-          required: true
+          required: false
           description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
           x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
-          x-description-zh-hk: 订单类型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
-        - name: └ last_done
-          type: string
-          required: true
-          description: Last done. when the order is not filled, value is empty string
-          x-description-zh: 最近成交价格。. 当订单未成交时为空字符串
-          x-description-zh-hk: 最近成交价格。. 当订单未成交时为空字符串
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
         - name: └ trigger_price
           type: string
-          required: true
+          required: false
           description: '`LIT` / `MIT` Order Trigger Price. When the order is not `LIT` / `MIT` order, value is empty string'
           x-description-zh: '`LIT` / `MIT` 订单触发价格。. 当订单不是 `LIT` / `MIT` 订单为空字符串'
-          x-description-zh-hk: '`LIT` / `MIT` 订单触发价格。. 当订单不是 `LIT` / `MIT` 订单为空字符串'
-        - name: └ msg
-          type: string
-          required: true
-          description: Rejected message or remark, default value is empty string.
-          x-description-zh: 拒绝信息或备注，默认为空字符串。
-          x-description-zh-hk: 拒绝信息或备注，默认为空字符串。
+          x-description-zh-hk: '`LIT` / `MIT` 訂單觸發價格。. 當訂單不是 `LIT` / `MIT` 訂單為空字符串'
         - name: └ tag
           type: string
-          required: true
+          required: false
           description: Order tag. **Enum Value**, `Normal` - Normal Order, `Gtc` - Long term Order, `Grey` - Grey Order
           x-description-zh: 订单标记。**可选值：**, `Normal` - 普通订单，`Gtc` - 长期单，`Grey` - 暗盘单
-          x-description-zh-hk: 订单标记。**可选值：**, `Normal` - 普通订单，`Gtc` - 长期单，`Grey` - 暗盘单
+          x-description-zh-hk: 訂單標記。**可選值：**, `Normal` - 普通訂單，`Gtc` - 長期單，`Grey` - 暗盤單
         - name: └ time_in_force
           type: string
-          required: true
+          required: false
           description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
           x-description-zh: 订单有效期类型。**可选值：**, `Day` - 当日有效，`GTC` - 撤单前有效，`GTD` - 到期前有效
-          x-description-zh-hk: 订单有效期类型。**可选值：**, `Day` - 当日有效，`GTC` - 撤单前有效，`GTD` - 到期前有效
+          x-description-zh-hk: 訂單有效期類型。**可選值：**, `Day` - 當日有效，`GTC` - 撤單前有效，`GTD` - 到期前有效
         - name: └ expire_date
           type: string
-          required: true
+          required: false
           description: 'Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`. When not a long term order, default value is empty string'
           x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是长期单时，默认为空字符串。`
-          x-description-zh-hk: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是长期单时，默认为空字符串。`
+          x-description-zh-hk: 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是長期單時，默認為空字符串。`
         - name: └ updated_at
           type: string
-          required: true
+          required: false
           description: Last updated time, formatted as a timestamp (second)
           x-description-zh: 最近更新时间，格式为时间戳 (秒)，默认为 0。
-          x-description-zh-hk: 最近更新时间，格式为时间戳 (秒)，默认为 0。
+          x-description-zh-hk: 最近更新時間，格式為時間戳 (秒)，默認為 0。
         - name: └ trigger_at
           type: string
-          required: true
+          required: false
           description: Conditional order trigger time. formatted as a timestamp (second)
           x-description-zh: 条件单触发时间，格式为时间戳 (秒)，默认为 0。
-          x-description-zh-hk: 条件单触发时间，格式为时间戳 (秒)，默认为 0。
-        - name: └ trailing_amount
-          type: string
-          required: true
-          description: '`TSLPAMT` order trailing amount. When the order is not `TSLPAMT` order, value is empty string'
-          x-description-zh: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
-        - name: └ trailing_percent
-          type: string
-          required: true
-          description: '`TSLPPCT` order trailing percent. When the order is not `TSLPPCT` order, value is empty string'
-          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
-        - name: └ limit_offset
-          type: string
-          required: true
-          description: '`TSLPAMT` / `TSLPPCT` order limit offset amount. When the order is not `TSLPAMT` / `TSLPPCT` order, value is empty string'
-          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: 條件單觸發時間，格式為時間戳 (秒)，默認為 0。
         - name: └ trigger_status
           type: string
-          required: true
+          required: false
           description: Conditional Order Trigger Status, When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED. **Enum Value**, `NOT_USED`, `DEACTIVE`, `ACTIVE`, `RELEASED`
           x-description-zh: 条件单触发状态，当订单不是条件单或条件单未触发时，触发状态为 NOT_USED. **可选值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
-          x-description-zh-hk: 条件单触发状态，当订单不是条件单或条件单未触发时，触发状态为 NOT_USED. **可选值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
-        - name: └ currency
-          type: string
-          required: true
-          description: Currency
-          x-description-zh: 结算货币
-          x-description-zh-hk: 结算货币
+          x-description-zh-hk: 條件單觸發狀態，當訂單不是條件單或條件單未觸發時，觸發狀態為 NOT_USED. **可選值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已觸發
         - name: └ outside_rth
           type: string
-          required: true
+          required: false
           description: Enable or disable outside regular trading hours, Default is `UnknownOutsideRth` when the order is not a US stock. **Enum Value:**, `RTH_ONLY` - Regular trading hour only, `ANY_TIME` - Any time, `OVERNIGHT` - Overnight"
           x-description-zh: 是否允许盘前盘后，当订单不是美股时，默认为 UnknownOutsideRth. **可选值：**, `RTH_ONLY` - 不允许盘前盘后，`ANY_TIME` - 允许盘前盘后，`OVERNIGHT` - 夜盘"
-          x-description-zh-hk: 是否允许盘前盘后，当订单不是美股时，默认为 UnknownOutsideRth. **可选值：**, `RTH_ONLY` - 不允许盘前盘后，`ANY_TIME` - 允许盘前盘后，`OVERNIGHT` - 夜盘"
-        - name: └ remark
+          x-description-zh-hk: 是否允許盤前盤後，當訂單不是美股時，默認為 UnknownOutsideRth. **可選值：**, `RTH_ONLY` - 不允許盤前盤後，`ANY_TIME` - 允許盤前盤後，`OVERNIGHT` - 夜盤
+        - name: └ currency
           type: string
-          required: true
-          description: Remark
-          x-description-zh: 备注
-          x-description-zh-hk: 備註
+          required: false
+          description: Currency
+          x-description-zh: 结算货币
+          x-description-zh-hk: 結算貨幣
         - name: └ limit_depth_level
-          type: int32
-          required: true
+          type: integer
+          required: false
           description: Specifies the bid/ask depth level
           x-description-zh: 指定买卖档位
           x-description-zh-hk: 指定買賣檔位
-        - name: └ monitor_price
-          type: string
-          required: true
-          description: Monitoring price
-          x-description-zh: 监控价格
-          x-description-zh-hk: 監控價格
         - name: └ trigger_count
-          type: int32
-          required: true
+          type: integer
+          required: false
           description: Number of triggers
           x-description-zh: 触发次数
           x-description-zh-hk: 觸發次數
+        - name: └ trigger_qty_type
+          type: integer
+          required: false
+          description: Trigger quantity type.
+          x-description-zh: 触发数量类型。
+          x-description-zh-hk: 觸發數量類型。
         - name: └ attached_orders
-          type: object[]
+          type: array
           required: false
           description: List of attached order details
           x-description-zh: 附加订单详情列表
           x-description-zh-hk: 附加訂單詳情列表
-        - name: └ ∟ order_id
+        - name: └ last_done
           type: string
-          required: true
-          description: Attached order ID
-          x-description-zh: 附加订单 ID
-          x-description-zh-hk: 附加訂單 ID
-        - name: └ ∟ attached_type_display
-          type: int32
-          required: true
-          description: Attached order type. **Enum Value:**, `1` - Take Profit, `2` - Stop Loss
-          x-description-zh: 附加订单类型。**可选值：** `1` - 止盈 `2` - 止损
-          x-description-zh-hk: 附加訂單類型。**可選值：** `1` - 止盈 `2` - 止損
-        - name: └ ∟ trigger_price
+          required: false
+          description: Last done. when the order is not filled, value is empty string
+          x-description-zh: 最近成交价格。. 当订单未成交时为空字符串
+          x-description-zh-hk: 最近成交價格。. 當訂單未成交時為空字符串
+        - name: └ msg
           type: string
-          required: true
-          description: Trigger price
-          x-description-zh: 触发价格
-          x-description-zh-hk: 觸發價格
-        - name: └ ∟ quantity
+          required: false
+          description: Rejected message or remark, default value is empty string.
+          x-description-zh: 拒绝信息或备注，默认为空字符串。
+          x-description-zh-hk: 拒絕信息或備註，默認為空字符串。
+        - name: └ trailing_amount
           type: string
-          required: true
-          description: Order quantity
-          x-description-zh: 下单数量
-          x-description-zh-hk: 下單數量
-        - name: └ ∟ executed_qty
+          required: false
+          description: '`TSLPAMT` order trailing amount. When the order is not `TSLPAMT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` 訂單跟蹤金額。. 當訂單不是 `TSLPAMT` 訂單時為空字符串。'
+        - name: └ trailing_percent
           type: string
-          required: true
-          description: Executed quantity
-          x-description-zh: 成交数量
-          x-description-zh-hk: 成交數量
-        - name: └ ∟ status
+          required: false
+          description: '`TSLPPCT` order trailing percent. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPPCT` 訂單跟蹤漲跌幅。. 當訂單不是 `TSLPPCT` 訂單時為空字符串。'
+        - name: └ limit_offset
           type: string
-          required: true
-          description: Order status
-          x-description-zh: 订单状态
-          x-description-zh-hk: 訂單狀態
-        - name: └ ∟ updated_at
+          required: false
+          description: '`TSLPPCT` order limit offset amount. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 訂單指定價差。. 當訂單不是 `TSLPAMT` / `TSLPPCT` 訂單時為空字符串。'
+        - name: └ remark
           type: string
-          required: true
-          description: Last updated time, formatted as a timestamp (second)
-          x-description-zh: 最近更新时间，格式为时间戳 (秒)
-          x-description-zh-hk: 最近更新時間，格式為時間戳 (秒)
-        - name: └ ∟ withdrawn
-          type: boolean
-          required: true
-          description: Whether the order has been withdrawn
-          x-description-zh: 是否已撤销
-          x-description-zh-hk: 是否已撤銷
-        - name: └ ∟ gtd
+          required: false
+          description: Remark
+          x-description-zh: 备注
+          x-description-zh-hk: 備註
+        - name: └ monitor_price
           type: string
-          required: true
-          description: 'GTD expiration date, format: `YYYY-MM-DD`'
-          x-description-zh: GTD 到期日期，格式为 `YYYY-MM-DD`
-          x-description-zh-hk: GTD 到期日期，格式為 `YYYY-MM-DD`
-        - name: └ ∟ time_in_force
+          required: false
+          description: Monitoring price
+          x-description-zh: 监控价格
+          x-description-zh-hk: 監控價格
+        - name: └ monitor_counter_id
           type: string
-          required: true
-          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
-          x-description-zh: 订单有效期类型。**可选值：**, `Day` - 当日有效，`GTC` - 撤单前有效，`GTD` - 到期前有效
-          x-description-zh-hk: 訂單有效期類型。**可選值：**, `Day` - 當日有效，`GTC` - 撤單前有效，`GTD` - 到期前有效
-        - name: └ ∟ trigger_status
-          type: int32
-          required: true
-          description: Conditional order trigger status after the attached order is activated. `0` - Not activated, `1` - Monitoring, `2` - Cancelled, `4` - Triggered
-          x-description-zh: 附加单激活后的条件单触发状态。, `0` - 未激活，`1` - 监控中，`2` - 已撤单，`4` - 已触发
-          x-description-zh-hk: 附加單激活後的條件單觸發狀態。, `0` - 未激活，`1` - 監控中，`2` - 已撤單，`4` - 已觸發
-        - name: └ ∟ executed_amount
-          type: string
-          required: true
-          description: Executed amount
-          x-description-zh: 成交金额
-          x-description-zh-hk: 成交金額
-        - name: └ ∟ tag
-          type: int32
-          required: true
-          description: Order tag
-          x-description-zh: 订单标记
-          x-description-zh-hk: 訂單標記
-        - name: └ ∟ submitted_at
-          type: string
-          required: true
-          description: Submitted time, formatted as a timestamp (second)
-          x-description-zh: 下单时间，格式为时间戳 (秒)
-          x-description-zh-hk: 下單時間，格式為時間戳 (秒)
-        - name: └ ∟ executed_price
-          type: string
-          required: true
-          description: Executed price
-          x-description-zh: 成交价格
-          x-description-zh-hk: 成交價格
-        - name: └ ∟ force_only_rth
-          type: string
-          required: true
-          description: Whether execution is restricted to regular trading hours only
-          x-description-zh: 是否仅正常交易时段执行。
-          x-description-zh-hk: 是否僅正常交易時段執行。
-        - name: └ ∟ reviewed
-          type: boolean
-          required: true
-          description: Whether the order has been reviewed
-          x-description-zh: 是否已审核
-          x-description-zh-hk: 是否已審核
-        - name: └ ∟ activate_order_type
-          type: string
-          required: true
-          description: Order type submitted after triggering, e.g. `LIT` (limit-if-touched) or `MIT` (market-if-touched)
-          x-description-zh: 触发后提交的订单类型，例如 `LIT`（限价单）或 `MIT`（市价单）
-          x-description-zh-hk: 觸發後提交的訂單類型，例如 `LIT`（限價單）或 `MIT`（市價單）
-        - name: └ ∟ activate_rth
-          type: string
-          required: true
-          description: Whether the order submitted after triggering allows pre/post market trading
-          x-description-zh: 触发后提交订单是否允许盘前盘后。
-          x-description-zh-hk: 觸發後提交訂單是否允許盤前盤後。
-        - name: └ ∟ submit_price
-          type: string
-          required: true
-          description: Submitted price
-          x-description-zh: 委托价格
-          x-description-zh-hk: 委託價格
+          required: false
+          description: Internal ID of the monitored security (conditional orders).
+          x-description-zh: 监控标的内部标识（条件单）。
+          x-description-zh-hk: 監控標的內部標識（條件單）。
         - name: └ multi_leg
-          type: object
+          type: string
           required: false
           description: Multi-leg strategy information. Only returned for multi-leg option combination orders; otherwise not returned.
           x-description-zh: 多腿策略信息，仅多腿期权组合订单返回，非组合订单不返回。
           x-description-zh-hk: 多腿策略信息，僅多腿期權組合訂單返回，非組合訂單不返回。
-        - name: └ ∟ strategy
-          type: string
+        - name: has_more
+          type: boolean
           required: false
-          description: Multi-leg strategy. **Enum Value:**, `0` - CoveredCall (Covered stock), `1` - CoveredPut (Covered stock), `2` - VerticalCallSpread (Vertical spread), `3` - VerticalPutSpread (Vertical spread), `4` - Collar, `5` - Straddle, `6` - Strangle
-          x-description-zh: 多腿策略。**可选值：**, `0` - CoveredCall（股票担保）, `1` - CoveredPut（股票担保）, `2` - VerticalCallSpread（垂直策略）, `3` - VerticalPutSpread（垂直策略）, `4` - Collar（领式策略）, `5` - Straddle（跨式策略）, `6` - Strangle（宽跨式策略）
-          x-description-zh-hk: 多腿策略。**可選值：**, `0` - CoveredCall（股票擔保）, `1` - CoveredPut（股票擔保）, `2` - VerticalCallSpread（跨價期權）, `3` - VerticalPutSpread（跨價期權）, `4` - Collar（領式策略）, `5` - Straddle（馬鞍式策略）, `6` - Strangle（勒束式策略）
-        - name: └ ∟ strategy_name
-          type: string
-          required: false
-          description: Strategy name
-          x-description-zh: 策略名称
-          x-description-zh-hk: 策略名稱
-        - name: └ ∟ multileg_id
-          type: string
-          required: false
-          description: Multi-leg combination ID
-          x-description-zh: 多腿组合 ID
-          x-description-zh-hk: 多腿組合 ID
-        - name: └ ∟ code
-          type: string
-          required: false
-          description: Multi-leg combination code
-          x-description-zh: 多腿组合代码
-          x-description-zh-hk: 多腿組合代碼
-        - name: └ ∟ legs
-          type: object[]
-          required: false
-          description: Legs of the combination order
-          x-description-zh: 组合订单的各腿
-          x-description-zh-hk: 組合訂單的各腿
-        - name: └ ∟∟ symbol
-          type: string
-          required: false
-          description: 'Option symbol, use `ticker.region` format, example: `QQQ260731C764000.US`'
-          x-description-zh: 期权 symbol，使用 `ticker.region` 格式，例如：`QQQ260731C764000.US`
-          x-description-zh-hk: 期權 symbol，使用 `ticker.region` 格式，例如：`QQQ260731C764000.US`
-        - name: └ ∟∟ side
-          type: string
-          required: false
-          description: Order Side. **Enum Value:**, `Buy`, `Sell`
-          x-description-zh: 买卖方向。**可选值：**, `Buy`, `Sell`
-          x-description-zh-hk: 買賣方向。**可選值：**, `Buy`, `Sell`
-        - name: └ ∟∟ position
-          type: string
-          required: false
-          description: Position direction. **Enum Value:**, `LONG`, `SHORT`
-          x-description-zh: 持仓方向。**可选值：**, `LONG`, `SHORT`
-          x-description-zh-hk: 持倉方向。**可選值：**, `LONG`, `SHORT`
-        - name: └ ∟∟ ratio_quantity
-          type: string
-          required: false
-          description: Leg ratio quantity
-          x-description-zh: 该腿比例数量
-          x-description-zh-hk: 該腿比例數量
-        - name: └ ∟∟ strike_price
-          type: string
-          required: false
-          description: Strike price
-          x-description-zh: 行权价
-          x-description-zh-hk: 行權價
-        - name: └ ∟∟ expire_date
-          type: string
-          required: false
-          description: 'Option expiry date, format: `YYYYMMDD`'
-          x-description-zh: 期权到期日，格式：`YYYYMMDD`
-          x-description-zh-hk: 期權到期日，格式：`YYYYMMDD`
-        - name: └ ∟∟ contract_direction
-          type: string
-          required: false
-          description: Contract type. **Enum Value:**, `C` - Call, `P` - Put
-          x-description-zh: 合约类型。**可选值：**, `C` - 看涨（Call）, `P` - 看跌（Put）
-          x-description-zh-hk: 合約類型。**可選值：**, `C` - 看漲（Call）, `P` - 看跌（Put）
+          description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
+          x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
       responses:
         '200':
           description: Successful response
@@ -32313,48 +32139,54 @@ paths:
           description: Execution Detail
           x-description-zh: 成交明细信息
           x-description-zh-hk: 成交明細信息
-        - name: └ order_id
-          type: string
-          required: true
-          description: Order ID
-          x-description-zh: 订单 ID
-          x-description-zh-hk: 訂單 ID
         - name: └ trade_id
           type: string
-          required: true
+          required: false
           description: Execution ID
           x-description-zh: 成交 ID
           x-description-zh-hk: 成交 ID
+        - name: └ order_id
+          type: string
+          required: false
+          description: Order ID
+          x-description-zh: 订单 ID
+          x-description-zh-hk: 訂單 ID
         - name: └ symbol
           type: string
-          required: true
-          description: 'Stock symbol, use `ticker.region` format, example: `AAPL.US`'
+          required: false
+          description: 'Stock symbol, use `ticker.region` format,example: `AAPL.US`'
           x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
           x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
-        - name: └ trade_done_at
-          type: string
-          required: true
-          description: Trade done time, formatted as a timestamp (second)
-          x-description-zh: 成交时间，格式为时间戳 (秒)
-          x-description-zh-hk: 成交時間，格式為時間戳 (秒)
-        - name: └ quantity
-          type: string
-          required: true
-          description: Executed quantity
-          x-description-zh: 成交数量
-          x-description-zh-hk: 成交數量
         - name: └ price
           type: string
-          required: true
+          required: false
           description: Executed price
           x-description-zh: 成交价格
           x-description-zh-hk: 成交價格
+        - name: └ quantity
+          type: string
+          required: false
+          description: Executed quantity
+          x-description-zh: 成交数量
+          x-description-zh-hk: 成交數量
+        - name: └ trade_done_at
+          type: string
+          required: false
+          description: Trade done time, formatted as a timestamp (second)
+          x-description-zh: 成交时间，格式为时间戳 (秒)
+          x-description-zh-hk: 成交時間，格式為時間戳 (秒)
         - name: └ side
           type: string
-          required: true
+          required: false
           description: Trade side. **Enum Value:**, `Buy`, `Sell`
           x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出
           x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出
+        - name: has_more
+          type: boolean
+          required: false
+          description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
+          x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
       responses:
         '200':
           description: Successful response
