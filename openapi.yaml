@@ -3657,9 +3657,9 @@ paths:
           in: body
           type: string
           required: false
-          description: 'Submitted price, example: `388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` Order Required'
-          x-description-zh: 下单价格，例如：`388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` 订单必填
-          x-description-zh-hk: 下單價格，例如：`388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` 訂單必填
+          description: 'Submitted price, example: `388.5`. `LO` / `ELO` / `ALO` / `ODD` / `LIT` Order Required'
+          x-description-zh: 下单价格，例如：`388.5`. `LO` / `ELO` / `ALO` / `ODD` / `LIT` 订单必填
+          x-description-zh-hk: 下單價格，例如：`388.5`. `LO` / `ELO` / `ALO` / `ODD` / `LIT` 訂單必填
         - name: submitted_quantity
           in: body
           type: string
@@ -3671,58 +3671,58 @@ paths:
           in: body
           type: string
           required: false
-          description: 'Trigger price, example: `388.5`<br/><br/> `LIT` / `MIT` Order Required'
-          x-description-zh: 触发价格，例如：`388.5`<br/><br/> `LIT` / `MIT` 订单必填
-          x-description-zh-hk: 觸發價格，例如：`388.5`<br/><br/> `LIT` / `MIT` 訂單必填
+          description: 'Trigger price, example: `388.5`. `LIT` / `MIT` Order Required'
+          x-description-zh: 触发价格，例如：`388.5`. `LIT` / `MIT` 订单必填
+          x-description-zh-hk: 觸發價格，例如：`388.5`. `LIT` / `MIT` 訂單必填
         - name: limit_offset
           in: body
           type: string
           required: false
-          description: Limit offset amount<br/><br/> `TSLPAMT` / `TSLPPCT` Order Required when`limit_depth_level` is set to 0
-          x-description-zh: 指定价差，例如 "1.2" 表示价差 1.2 USD (如果是美股)<br/><br/> `TSLPAMT` / `TSLPPCT` 订单在 `limit_depth_level` 为 0 时必填
-          x-description-zh-hk: 指定價差<br/><br/> `TSLPAMT` / `TSLPPCT` 訂單在 `limit_depth_level` 為 0 時必填
+          description: Limit offset amount. `TSLPAMT` / `TSLPPCT` Order Required when`limit_depth_level` is set to 0
+          x-description-zh: 指定价差，例如 "1.2" 表示价差 1.2 USD (如果是美股). `TSLPAMT` / `TSLPPCT` 订单在 `limit_depth_level` 为 0 时必填
+          x-description-zh-hk: 指定價差. `TSLPAMT` / `TSLPPCT` 訂單在 `limit_depth_level` 為 0 時必填
         - name: trailing_amount
           in: body
           type: string
           required: false
-          description: Trailing amount<br/><br/> `TSLPAMT` Order Required
-          x-description-zh: 跟踪金额<br/><br/> `TSLPAMT` 订单必填
-          x-description-zh-hk: 跟蹤金額<br/><br/> `TSLPAMT` 訂單必填
+          description: Trailing amount. `TSLPAMT` Order Required
+          x-description-zh: 跟踪金额. `TSLPAMT` 订单必填
+          x-description-zh-hk: 跟蹤金額. `TSLPAMT` 訂單必填
         - name: trailing_percent
           in: body
           type: string
           required: false
-          description: Trailing percent<br/><br/> `TSLPPCT` Order Required
-          x-description-zh: 跟踪涨跌幅，单位为百分比，例如 "2.5" 表示 "2.5%"<br/><br/> `TSLPPCT` 订单必填
-          x-description-zh-hk: 跟蹤漲跌幅<br/><br/> `TSLPPCT` 訂單必填
+          description: Trailing percent. `TSLPPCT` Order Required
+          x-description-zh: 跟踪涨跌幅，单位为百分比，例如 "2.5" 表示 "2.5%". `TSLPPCT` 订单必填
+          x-description-zh-hk: 跟蹤漲跌幅. `TSLPPCT` 訂單必填
         - name: expire_date
           in: body
           type: string
           required: false
-          description: 'Long term order expire date, format `YYYY-MM-DD`, example: `2022-12-05`<br/><br/> Required when `time_in_force` is `GTD`'
-          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05`<br/><br/> time_in_force 为 `GTD` 时必填
-          x-description-zh-hk: 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05`<br/><br/> time_in_force 為 `GTD` 時必填
+          description: 'Long term order expire date, format `YYYY-MM-DD`, example: `2022-12-05`. Required when `time_in_force` is `GTD`'
+          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05`. time_in_force 为 `GTD` 时必填
+          x-description-zh-hk: 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05`. time_in_force 為 `GTD` 時必填
         - name: side
           in: body
           type: string
           required: true
-          description: Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
         - name: outside_rth
           in: body
           type: string
           required: false
-          description: Enable or disable outside regular trading hours<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - regular trading hour only<br/> `ANY_TIME` - any time<br/> `OVERNIGHT` - Overnight<br/> `OPTION_PRE_MARKET` - Overnight option
-          x-description-zh: 是否允许盘前盘后，美股必填<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘<br/> `OPTION_PRE_MARKET` - 夜盘期权
-          x-description-zh-hk: 是否允許盤前盤後，美股必填<br/><br/> **可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後<br/> `OVERNIGHT` - 夜盤<br/> `OPTION_PRE_MARKET` - 夜盤期權
+          description: Enable or disable outside regular trading hours. **Enum Value:**, `RTH_ONLY` - regular trading hour only, `ANY_TIME` - any time, `OVERNIGHT` - Overnight, `OPTION_PRE_MARKET` - Overnight option
+          x-description-zh: 是否允许盘前盘后，美股必填. **可选值：**, `RTH_ONLY` - 不允许盘前盘后, `ANY_TIME` - 允许盘前盘后, `OVERNIGHT` - 夜盘, `OPTION_PRE_MARKET` - 夜盘期权
+          x-description-zh-hk: 是否允許盤前盤後，美股必填. **可選值：**, `RTH_ONLY` - 不允許盤前盤後, `ANY_TIME` - 允許盤前盤後, `OVERNIGHT` - 夜盤, `OPTION_PRE_MARKET` - 夜盤期權
         - name: time_in_force
           in: body
           type: string
           required: true
-          description: Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order
-          x-description-zh: 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效
-          x-description-zh-hk: 訂單有效期類型<br/><br/> **可選值：**<br/> `Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效
+          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
+          x-description-zh: 订单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效
+          x-description-zh-hk: 訂單有效期類型. **可選值：**, `Day` - 當日有效, `GTC` - 撤單前有效, `GTD` - 到期前有效
         - name: remark
           in: body
           type: string
@@ -3734,23 +3734,23 @@ paths:
           in: body
           type: integer
           required: false
-          description: Specifies the bid/ask depth level. Value range is -5 ~ 0 ~ 5. <br/>Negative numbers indicate bid levels (e.g., -1 means best bid level 1),<br/>positive numbers indicate ask levels (e.g., 1 means best ask level 1).<br/>When set to 0, the `limit_offset` parameter takes effect.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders.
-          x-description-zh: 指定买卖档位，取值范围为 -5 ～ 0 ～ 5，负数代表买盘档位（如 -1 表示买一），<br/>正数代表卖盘档位（如 1 表示卖一），为 0 时 limit_offset 参数生效<br/>`TSLPAMT` / `TSLPPCT` 订单有效
-          x-description-zh-hk: 指定買賣檔位，取值範圍為 -5 ～ 0 ～ 5，負數代表買盤檔位（例如 -1 表示買一），<br/>正數代表賣盤檔位（例如 1 表示賣一），當為 0 時 limit_offset 參數生效<br/>`TSLPAMT` / `TSLPPCT` 訂單有效
+          description: Specifies the bid/ask depth level. Value range is -5 ~ 0 ~ 5. Negative numbers indicate bid levels (e.g. -1 means best bid level 1), positive numbers indicate ask levels (e.g. 1 means best ask level 1). When set to 0, the `limit_offset` parameter takes effect. Valid for `TSLPAMT` / `TSLPPCT` orders
+          x-description-zh: 指定买卖档位，取值范围为 -5 ～ 0 ～ 5，负数代表买盘档位（如 -1 表示买一），, 正数代表卖盘档位（如 1 表示卖一），为 0 时 limit_offset 参数生效, `TSLPAMT` / `TSLPPCT` 订单有效
+          x-description-zh-hk: 指定買賣檔位，取值範圍為 -5 ～ 0 ～ 5，負數代表買盤檔位（例如 -1 表示買一），, 正數代表賣盤檔位（例如 1 表示賣一），當為 0 時 limit_offset 參數生效, `TSLPAMT` / `TSLPPCT` 訂單有效
         - name: monitor_price
           in: body
           type: string
           required: false
-          description: Monitoring price. <br/>Monitoring starts only after reaching this price, updating the reference price.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders.
-          x-description-zh: 监控价格，需要达到该价格才会开始监控，更新参考价<br/>`TSLPAMT` / `TSLPPCT` 订单有效
-          x-description-zh-hk: 監控價格，需要達到該價格才會開始監控，更新參考價<br/>`TSLPAMT` / `TSLPPCT` 訂單有效
+          description: Monitoring price. Monitoring starts only after reaching this price, updating the reference price. Valid for `TSLPAMT` / `TSLPPCT` orders
+          x-description-zh: 监控价格，需要达到该价格才会开始监控，更新参考价, `TSLPAMT` / `TSLPPCT` 订单有效
+          x-description-zh-hk: 監控價格，需要達到該價格才會開始監控，更新參考價, `TSLPAMT` / `TSLPPCT` 訂單有效
         - name: trigger_count
           in: body
           type: integer
           required: false
-          description: Number of triggers. Value range is 0 ~ 3.<br/>Specifies that within 1 minute, the order will only be placed after being triggered multiple times.<br/>Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders.
-          x-description-zh: 触发次数，取值范围 0 ~ 3, 表示在 1 分钟内触发多次才会触发订单<br/>`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 订单有效
-          x-description-zh-hk: 觸發次數，取值範圍 0 ~ 3，表示在 1 分鐘內觸發多次才會觸發訂單，<br/>`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 訂單有效
+          description: Number of triggers. Value range is 0 ~ 3. Specifies that within 1 minute, the order will only be placed after being triggered multiple times. Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders
+          x-description-zh: 触发次数，取值范围 0 ~ 3, 表示在 1 分钟内触发多次才会触发订单, `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 订单有效
+          x-description-zh-hk: 觸發次數，取值範圍 0 ~ 3，表示在 1 分鐘內觸發多次才會觸發訂單，, `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 訂單有效
         - name: client_request_id
           in: body
           type: string
@@ -3769,9 +3769,9 @@ paths:
           in: body
           type: string
           required: false
-          description: Attached order type<br/><br/>**Enum Value:**<br/>`PROFIT_TAKER` - Take Profit<br/>`STOP_LOSS` - Stop Loss<br/>`BRACKET` - Bracket Order
-          x-description-zh: 附加单订单类型<br/><br/>**可选值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止损<br/>`BRACKET` - 括号单
-          x-description-zh-hk: 附加單訂單類型<br/><br/>**可選值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止損<br/>`BRACKET` - 括號單
+          description: Attached order type. **Enum Value:**, `PROFIT_TAKER` - Take Profit, `STOP_LOSS` - Stop Loss, `BRACKET` - Bracket Order
+          x-description-zh: 附加单订单类型. **可选值：**, `PROFIT_TAKER` - 止盈, `STOP_LOSS` - 止损, `BRACKET` - 括号单
+          x-description-zh-hk: 附加單訂單類型. **可選值：**, `PROFIT_TAKER` - 止盈, `STOP_LOSS` - 止損, `BRACKET` - 括號單
         - name: attached_params.profit_taker_price
           in: body
           type: string
@@ -3790,9 +3790,9 @@ paths:
           in: body
           type: string
           required: false
-          description: Attached order time in force type<br/><br/>**Enum Value:**<br/>`Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order (inherits the main order's `expire_date` in this case)
-          x-description-zh: 附加单有效期类型<br/><br/>**可选值：**<br/>`Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效（此时继承主单 expire_date）
-          x-description-zh-hk: 附加單有效期類型<br/><br/>**可選值：**<br/>`Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效（此時繼承主單 expire_date）
+          description: Attached order time in force type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order (inherits the main order's `expire_date` in this case)
+          x-description-zh: 附加单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效（此时继承主单 expire_date）
+          x-description-zh-hk: 附加單有效期類型. **可選值：**, `Day` - 當日有效, `GTC` - 撤單前有效, `GTD` - 到期前有效（此時繼承主單 expire_date）
         - name: attached_params.expire_time
           in: body
           type: integer
@@ -3825,9 +3825,9 @@ paths:
           in: body
           type: string
           required: false
-          description: Whether the order submitted after triggering allows pre/post market trading <br/><br/>**Enum Value:**<br/> `RTH_ONLY` - Regular trading hours only<br/> `ANY_TIME` - Any time
-          x-description-zh: 触发后提交的订单是否允许盘前盘后 <br/><br/>**可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后
-          x-description-zh-hk: 觸發後提交的訂單是否允許盤前盤後 <br/><br/>**可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後
+          description: Whether the order submitted after triggering allows pre/post market trading. **Enum Value:**, `RTH_ONLY` - Regular trading hours only, `ANY_TIME` - Any time
+          x-description-zh: 触发后提交的订单是否允许盘前盘后. **可选值：**, `RTH_ONLY` - 不允许盘前盘后, `ANY_TIME` - 允许盘前盘后
+          x-description-zh-hk: 觸發後提交的訂單是否允許盤前盤後. **可選值：**, `RTH_ONLY` - 不允許盤前盤後, `ANY_TIME` - 允許盤前盤後
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -3982,37 +3982,37 @@ paths:
           in: body
           type: string
           required: false
-          description: 'Replaced price, example: `388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` Order Required'
-          x-description-zh: 改单价格，例如：`388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` 订单必填
-          x-description-zh-hk: 改單價格，例如：`388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` 訂單必填
+          description: 'Replaced price, example: `388.5`. `LO` / `ELO` / `ALO` / `ODD` / `LIT` Order Required'
+          x-description-zh: 改单价格，例如：`388.5`. `LO` / `ELO` / `ALO` / `ODD` / `LIT` 订单必填
+          x-description-zh-hk: 改單價格，例如：`388.5`. `LO` / `ELO` / `ALO` / `ODD` / `LIT` 訂單必填
         - name: trigger_price
           in: body
           type: string
           required: false
-          description: 'Trigger price, example: `388.5`<br/><br/> `LIT` / `MIT` Order Required'
-          x-description-zh: 触发价格，例如：`388.5`<br/><br/> `LIT` / `MIT` 订单必填
-          x-description-zh-hk: 觸發價格，例如：`388.5`<br/><br/> `LIT` / `MIT` 訂單必填
+          description: 'Trigger price, example: `388.5`. `LIT` / `MIT` Order Required'
+          x-description-zh: 触发价格，例如：`388.5`. `LIT` / `MIT` 订单必填
+          x-description-zh-hk: 觸發價格，例如：`388.5`. `LIT` / `MIT` 訂單必填
         - name: limit_offset
           in: body
           type: string
           required: false
-          description: Limit offset amount<br/><br/> `TSLPAMT` / `TSLPPCT` Order Required when`limit_depth_level` is set to 0
-          x-description-zh: 指定价差<br/><br/> `TSLPAMT` / `TSLPPCT` 订单在 `limit_depth_level` 为 0 时必填
-          x-description-zh-hk: 指定價差<br/><br/> `TSLPAMT` / `TSLPPCT` 訂單在 `limit_depth_level` 為 0 時必填
+          description: Limit offset amount. `TSLPAMT` / `TSLPPCT` Order Required when`limit_depth_level` is set to 0
+          x-description-zh: 指定价差. `TSLPAMT` / `TSLPPCT` 订单在 `limit_depth_level` 为 0 时必填
+          x-description-zh-hk: 指定價差. `TSLPAMT` / `TSLPPCT` 訂單在 `limit_depth_level` 為 0 時必填
         - name: trailing_amount
           in: body
           type: string
           required: false
-          description: Trailing amount<br/><br/> `TSLPAMT` Order Required
-          x-description-zh: 跟踪金额<br/><br/> `TSLPAMT` 订单必填
-          x-description-zh-hk: 跟蹤金額<br/><br/> `TSLPAMT` 訂單必填
+          description: Trailing amount. `TSLPAMT` Order Required
+          x-description-zh: 跟踪金额. `TSLPAMT` 订单必填
+          x-description-zh-hk: 跟蹤金額. `TSLPAMT` 訂單必填
         - name: trailing_percent
           in: body
           type: string
           required: false
-          description: Trailing percent<br/><br/> `TSLPPCT` Order Required
-          x-description-zh: 跟踪涨跌幅<br/><br/> `TSLPPCT` 订单必填
-          x-description-zh-hk: 跟蹤漲跌幅<br/><br/> `TSLPPCT` 訂單必填
+          description: Trailing percent. `TSLPPCT` Order Required
+          x-description-zh: 跟踪涨跌幅. `TSLPPCT` 订单必填
+          x-description-zh-hk: 跟蹤漲跌幅. `TSLPPCT` 訂單必填
         - name: remark
           in: body
           type: string
@@ -4052,9 +4052,9 @@ paths:
           in: body
           type: string
           required: false
-          description: Attached order type<br/><br/>**Enum Value:**<br/>`PROFIT_TAKER` - Take Profit<br/>`STOP_LOSS` - Stop Loss<br/>`BRACKET` - Bracket Order
-          x-description-zh: 附加单订单类型<br/><br/>**可选值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止损<br/>`BRACKET` - 括号单
-          x-description-zh-hk: 附加單訂單類型<br/><br/>**可選值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止損<br/>`BRACKET` - 括號單
+          description: Attached order type. **Enum Value:**, `PROFIT_TAKER` - Take Profit, `STOP_LOSS` - Stop Loss, `BRACKET` - Bracket Order
+          x-description-zh: 附加单订单类型. **可选值：**, `PROFIT_TAKER` - 止盈, `STOP_LOSS` - 止损, `BRACKET` - 括号单
+          x-description-zh-hk: 附加單訂單類型. **可選值：**, `PROFIT_TAKER` - 止盈, `STOP_LOSS` - 止損, `BRACKET` - 括號單
         - name: attached_params.profit_taker_price
           in: body
           type: string
@@ -4073,9 +4073,9 @@ paths:
           in: body
           type: string
           required: false
-          description: Attached order time in force type<br/><br/>**Enum Value:**<br/>`Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order (inherits the main order's `expire_date` in this case)
-          x-description-zh: 附加单有效期类型<br/><br/>**可选值：**<br/>`Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效（此时继承主单 expire_date）
-          x-description-zh-hk: 附加單有效期類型<br/><br/>**可選值：**<br/>`Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效（此時繼承主單 expire_date）
+          description: Attached order time in force type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order (inherits the main order's `expire_date` in this case)
+          x-description-zh: 附加单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效（此时继承主单 expire_date）
+          x-description-zh-hk: 附加單有效期類型. **可選值：**, `Day` - 當日有效, `GTC` - 撤單前有效, `GTD` - 到期前有效（此時繼承主單 expire_date）
         - name: attached_params.expire_time
           in: body
           type: integer
@@ -4150,9 +4150,9 @@ paths:
           in: body
           type: string
           required: false
-          description: Whether the order submitted after triggering allows pre/post market trading<br/><br/>**Enum Value:**<br/> `RTH_ONLY` - Regular trading hours only<br/> `ANY_TIME` - Any time
-          x-description-zh: 触发后提交的订单是否允许盘前盘后<br/><br/>**可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后
-          x-description-zh-hk: 觸發後提交的訂單是否允許盤前盤後<br/><br/>**可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後
+          description: Whether the order submitted after triggering allows pre/post market trading. **Enum Value:**, `RTH_ONLY` - Regular trading hours only, `ANY_TIME` - Any time
+          x-description-zh: 触发后提交的订单是否允许盘前盘后. **可选值：**, `RTH_ONLY` - 不允许盘前盘后, `ANY_TIME` - 允许盘前盘后
+          x-description-zh-hk: 觸發後提交的訂單是否允許盤前盤後. **可選值：**, `RTH_ONLY` - 不允許盤前盤後, `ANY_TIME` - 允許盤前盤後
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -4293,9 +4293,9 @@ paths:
           in: body
           type: string
           required: true
-          description: Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy`<br/> `Sell`
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy`<br/> `Sell`
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy`, `Sell`
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy`, `Sell`
         - name: order_type
           in: body
           type: string
@@ -4307,9 +4307,9 @@ paths:
           in: body
           type: string
           required: false
-          description: 'Submitted price, example: `1.5`<br/><br/> Required for limit order types such as `LO`'
-          x-description-zh: 下单价格，例如：`1.5`<br/><br/> `LO` 等限价类型订单必填
-          x-description-zh-hk: 下單價格，例如：`1.5`<br/><br/> `LO` 等限價類型訂單必填
+          description: 'Submitted price, example: `1.5`. Required for limit order types such as `LO`'
+          x-description-zh: 下单价格，例如：`1.5`. `LO` 等限价类型订单必填
+          x-description-zh-hk: 下單價格，例如：`1.5`. `LO` 等限價類型訂單必填
         - name: submitted_quantity
           in: body
           type: string
@@ -4321,9 +4321,9 @@ paths:
           in: body
           type: string
           required: true
-          description: Multi-leg strategy<br/><br/> **Enum Value:**<br/> `CoveredCall` - Covered stock<br/> `CoveredPut` - Covered stock<br/> `VerticalCallSpread` - Vertical spread<br/> `VerticalPutSpread` - Vertical spread<br/> `Collar` - Collar<br/> `Straddle` - Straddle<br/> `Strangle` - Strangle
-          x-description-zh: 多腿策略<br/><br/> **可选值：**<br/> `CoveredCall` - 股票担保<br/> `CoveredPut` - 股票担保<br/> `VerticalCallSpread` - 垂直策略<br/> `VerticalPutSpread` - 垂直策略<br/> `Collar` - 领式策略<br/> `Straddle` - 跨式策略<br/> `Strangle` - 宽跨式策略
-          x-description-zh-hk: 多腿策略<br/><br/> **可選值：**<br/> `CoveredCall` - 股票擔保<br/> `CoveredPut` - 股票擔保<br/> `VerticalCallSpread` - 跨價期權<br/> `VerticalPutSpread` - 跨價期權<br/> `Collar` - 領式策略<br/> `Straddle` - 馬鞍式策略<br/> `Strangle` - 勒束式策略
+          description: Multi-leg strategy. **Enum Value:**, `CoveredCall` - Covered stock, `CoveredPut` - Covered stock, `VerticalCallSpread` - Vertical spread, `VerticalPutSpread` - Vertical spread, `Collar` - Collar, `Straddle` - Straddle, `Strangle` - Strangle
+          x-description-zh: 多腿策略. **可选值：**, `CoveredCall` - 股票担保, `CoveredPut` - 股票担保, `VerticalCallSpread` - 垂直策略, `VerticalPutSpread` - 垂直策略, `Collar` - 领式策略, `Straddle` - 跨式策略, `Strangle` - 宽跨式策略
+          x-description-zh-hk: 多腿策略. **可選值：**, `CoveredCall` - 股票擔保, `CoveredPut` - 股票擔保, `VerticalCallSpread` - 跨價期權, `VerticalPutSpread` - 跨價期權, `Collar` - 領式策略, `Straddle` - 馬鞍式策略, `Strangle` - 勒束式策略
         - name: legs
           in: body
           type: array
@@ -4774,9 +4774,9 @@ paths:
           in: body
           type: integer
           required: true
-          description: How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent
-          x-description-zh: 触发阈值的解释方式<br/><br/>**可选值：**<br/>`1` - spread（绝对价差）<br/>`2` - percent（百分比）
-          x-description-zh-hk: 觸發閾值的解釋方式<br/><br/>**可選值：**<br/>`1` - spread（絕對價差）<br/>`2` - percent（百分比）
+          description: How trigger thresholds are interpreted. **Enum Value:**, `1` - spread (absolute), `2` - percent
+          x-description-zh: 触发阈值的解释方式. **可选值：**, `1` - spread（绝对价差）, `2` - percent（百分比）
+          x-description-zh-hk: 觸發閾值的解釋方式. **可選值：**, `1` - spread（絕對價差）, `2` - percent（百分比）
         - name: trigger_spread_up
           in: body
           type: string
@@ -4830,9 +4830,9 @@ paths:
           in: body
           type: integer
           required: true
-          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC (Good-Til-Canceled)<br/>`6` - GTD (Good-Til-Date)
-          x-description-zh: 订单有效期<br/><br/>**可选值：**<br/>`0` - Day（当日有效）<br/>`1` - GTC（撤单前有效）<br/>`6` - GTD（到期前有效）
-          x-description-zh-hk: 訂單有效期<br/><br/>**可選值：**<br/>`0` - Day（當日有效）<br/>`1` - GTC（撤單前有效）<br/>`6` - GTD（到期前有效）
+          description: Time in force. **Enum Value:**, `0` - Day, `1` - GTC (Good-Til-Canceled), `6` - GTD (Good-Til-Date)
+          x-description-zh: 订单有效期. **可选值：**, `0` - Day（当日有效）, `1` - GTC（撤单前有效）, `6` - GTD（到期前有效）
+          x-description-zh-hk: 訂單有效期. **可選值：**, `0` - Day（當日有效）, `1` - GTC（撤單前有效）, `6` - GTD（到期前有效）
         - name: expire_time
           in: body
           type: integer
@@ -4844,16 +4844,16 @@ paths:
           in: body
           type: integer
           required: false
-          description: Action when the upper bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
-          x-description-zh: 达到上边界时的动作<br/><br/>**可选值：**<br/>`1` - ignore（继续运行）<br/>`2` - 按最新价平仓
-          x-description-zh-hk: 達到上邊界時的動作<br/><br/>**可選值：**<br/>`1` - ignore（繼續運行）<br/>`2` - 按最新價平倉
+          description: Action when the upper bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
+          x-description-zh: 达到上边界时的动作. **可选值：**, `1` - ignore（继续运行）, `2` - 按最新价平仓
+          x-description-zh-hk: 達到上邊界時的動作. **可選值：**, `1` - ignore（繼續運行）, `2` - 按最新價平倉
         - name: lower_limit_event
           in: body
           type: integer
           required: false
-          description: Action when the lower bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
-          x-description-zh: 达到下边界时的动作<br/><br/>**可选值：**<br/>`1` - ignore（继续运行）<br/>`2` - 按最新价平仓
-          x-description-zh-hk: 達到下邊界時的動作<br/><br/>**可選值：**<br/>`1` - ignore（繼續運行）<br/>`2` - 按最新價平倉
+          description: Action when the lower bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
+          x-description-zh: 达到下边界时的动作. **可选值：**, `1` - ignore（继续运行）, `2` - 按最新价平仓
+          x-description-zh-hk: 達到下邊界時的動作. **可選值：**, `1` - ignore（繼續運行）, `2` - 按最新價平倉
         - name: trigger_sell_depth
           in: body
           type: integer
@@ -4872,16 +4872,16 @@ paths:
           in: body
           type: string
           required: false
-          description: Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
-          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖盘订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
-          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣盤訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+          description: Sell-side order type when `trigger_sell_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖盘订单类型. **可选值：**, `GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣盤訂單類型. **可選值：**, `GMO` / `GLO` / `GTG`'
         - name: grid_order_type_down
           in: body
           type: string
           required: false
-          description: Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
-          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买盘订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
-          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買盤訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+          description: Buy-side order type when `trigger_buy_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买盘订单类型. **可选值：**, `GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買盤訂單類型. **可選值：**, `GMO` / `GLO` / `GTG`'
         - name: multiple_trigger
           in: body
           type: boolean
@@ -5081,9 +5081,9 @@ paths:
           in: body
           type: integer
           required: true
-          description: How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent
-          x-description-zh: 触发阈值的计算方式<br/><br/>**可选值：**<br/>`1` - 价差（绝对值）<br/>`2` - 百分比
-          x-description-zh-hk: 觸發閾值的計算方式<br/><br/>**可選值：**<br/>`1` - 價差（絕對值）<br/>`2` - 百分比
+          description: How trigger thresholds are interpreted. **Enum Value:**, `1` - spread (absolute), `2` - percent
+          x-description-zh: 触发阈值的计算方式. **可选值：**, `1` - 价差（绝对值）, `2` - 百分比
+          x-description-zh-hk: 觸發閾值的計算方式. **可選值：**, `1` - 價差（絕對值）, `2` - 百分比
         - name: trigger_spread_up
           in: body
           type: string
@@ -5137,9 +5137,9 @@ paths:
           in: body
           type: integer
           required: true
-          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC (Good-Til-Canceled)<br/>`6` - GTD (Good-Til-Date)
-          x-description-zh: 订单有效期类型<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC（撤单前有效）<br/>`6` - GTD（到期前有效）
-          x-description-zh-hk: 訂單有效期類型<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC（撤單前有效）<br/>`6` - GTD（到期前有效）
+          description: Time in force. **Enum Value:**, `0` - Day, `1` - GTC (Good-Til-Canceled), `6` - GTD (Good-Til-Date)
+          x-description-zh: 订单有效期类型. **可选值：**, `0` - 当日有效, `1` - GTC（撤单前有效）, `6` - GTD（到期前有效）
+          x-description-zh-hk: 訂單有效期類型. **可選值：**, `0` - 當日有效, `1` - GTC（撤單前有效）, `6` - GTD（到期前有效）
         - name: expire_time
           in: body
           type: integer
@@ -5151,16 +5151,16 @@ paths:
           in: body
           type: integer
           required: false
-          description: Action when the upper bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
-          x-description-zh: 到达上边界时的动作<br/><br/>**可选值：**<br/>`1` - 忽略（保持运行）<br/>`2` - 以最新价平仓
-          x-description-zh-hk: 到達上邊界時的動作<br/><br/>**可選值：**<br/>`1` - 忽略（保持運行）<br/>`2` - 以最新價平倉
+          description: Action when the upper bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
+          x-description-zh: 到达上边界时的动作. **可选值：**, `1` - 忽略（保持运行）, `2` - 以最新价平仓
+          x-description-zh-hk: 到達上邊界時的動作. **可選值：**, `1` - 忽略（保持運行）, `2` - 以最新價平倉
         - name: lower_limit_event
           in: body
           type: integer
           required: false
-          description: Action when the lower bound is reached<br/><br/>**Enum Value:**<br/>`1` - ignore (keep running)<br/>`2` - close position at last price
-          x-description-zh: 到达下边界时的动作<br/><br/>**可选值：**<br/>`1` - 忽略（保持运行）<br/>`2` - 以最新价平仓
-          x-description-zh-hk: 到達下邊界時的動作<br/><br/>**可選值：**<br/>`1` - 忽略（保持運行）<br/>`2` - 以最新價平倉
+          description: Action when the lower bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
+          x-description-zh: 到达下边界时的动作. **可选值：**, `1` - 忽略（保持运行）, `2` - 以最新价平仓
+          x-description-zh-hk: 到達下邊界時的動作. **可選值：**, `1` - 忽略（保持運行）, `2` - 以最新價平倉
         - name: trigger_sell_depth
           in: body
           type: integer
@@ -5179,16 +5179,16 @@ paths:
           in: body
           type: string
           required: false
-          description: Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
-          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖方向订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
-          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣方向訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+          description: Sell-side order type when `trigger_sell_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖方向订单类型. **可选值：**, `GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣方向訂單類型. **可選值：**, `GMO` / `GLO` / `GTG`'
         - name: grid_order_type_down
           in: body
           type: string
           required: false
-          description: Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
-          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买方向订单类型<br/><br/>**可选值：**<br/>`GMO` / `GLO` / `GTG`'
-          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買方向訂單類型<br/><br/>**可選值：**<br/>`GMO` / `GLO` / `GTG`'
+          description: Buy-side order type when `trigger_buy_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买方向订单类型. **可选值：**, `GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買方向訂單類型. **可選值：**, `GMO` / `GLO` / `GTG`'
         - name: multiple_trigger
           in: body
           type: boolean
@@ -5540,9 +5540,9 @@ paths:
         - name: └ trigger_price_type
           type: int32
           required: true
-          description: Trigger price type<br/><br/> **Enum Value:**<br/> `1` - Spread<br/> `2` - Percent
-          x-description-zh: 触发价格类型<br/><br/> **Enum Value:**<br/> `1` - 价差<br/> `2` - 百分比
-          x-description-zh-hk: 觸發價格類型<br/><br/> **Enum Value:**<br/> `1` - 價差<br/> `2` - 百分比
+          description: Trigger price type. **Enum Value:**, `1` - Spread, `2` - Percent
+          x-description-zh: 触发价格类型. **Enum Value:**, `1` - 价差, `2` - 百分比
+          x-description-zh-hk: 觸發價格類型. **Enum Value:**, `1` - 價差, `2` - 百分比
         - name: └ trigger_spread_up
           type: string
           required: true
@@ -5594,15 +5594,15 @@ paths:
         - name: └ trigger_sell_order_type
           type: string
           required: true
-          description: Sell-side grid order type<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
-          x-description-zh: 卖出方网格订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
-          x-description-zh-hk: 賣出方網格訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+          description: Sell-side grid order type. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 卖出方网格订单类型. **Enum Value:**, `GMO` - 网格市价单, `GLO` - 网格限价单, `GTG` - 网格触价单
+          x-description-zh-hk: 賣出方網格訂單類型. **Enum Value:**, `GMO` - 網格市價單, `GLO` - 網格限價單, `GTG` - 網格觸價單
         - name: └ trigger_buy_order_type
           type: string
           required: true
-          description: Buy-side grid order type<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
-          x-description-zh: 买入方网格订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
-          x-description-zh-hk: 買入方網格訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+          description: Buy-side grid order type. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 买入方网格订单类型. **Enum Value:**, `GMO` - 网格市价单, `GLO` - 网格限价单, `GTG` - 网格触价单
+          x-description-zh-hk: 買入方網格訂單類型. **Enum Value:**, `GMO` - 網格市價單, `GLO` - 網格限價單, `GTG` - 網格觸價單
         - name: └ trigger_sell_depth
           type: int32
           required: true
@@ -5648,15 +5648,15 @@ paths:
         - name: └ upper_limit_event
           type: int32
           required: true
-          description: Event when the upper bound is reached<br/><br/> **Enum Value:**<br/> `1` - Ignore (keep grid running)<br/> `2` - Close position at last price
-          x-description-zh: 触及上限时的处理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持网格运行）<br/> `2` - 以最新价平仓
-          x-description-zh-hk: 觸及上限時的處理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持網格運行）<br/> `2` - 以最新價平倉
+          description: Event when the upper bound is reached. **Enum Value:**, `1` - Ignore (keep grid running), `2` - Close position at last price
+          x-description-zh: 触及上限时的处理事件. **Enum Value:**, `1` - 忽略（保持网格运行）, `2` - 以最新价平仓
+          x-description-zh-hk: 觸及上限時的處理事件. **Enum Value:**, `1` - 忽略（保持網格運行）, `2` - 以最新價平倉
         - name: └ lower_limit_event
           type: int32
           required: true
-          description: Event when the lower bound is reached<br/><br/> **Enum Value:**<br/> `1` - Ignore (keep grid running)<br/> `2` - Close position at last price
-          x-description-zh: 触及下限时的处理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持网格运行）<br/> `2` - 以最新价平仓
-          x-description-zh-hk: 觸及下限時的處理事件<br/><br/> **Enum Value:**<br/> `1` - 忽略（保持網格運行）<br/> `2` - 以最新價平倉
+          description: Event when the lower bound is reached. **Enum Value:**, `1` - Ignore (keep grid running), `2` - Close position at last price
+          x-description-zh: 触及下限时的处理事件. **Enum Value:**, `1` - 忽略（保持网格运行）, `2` - 以最新价平仓
+          x-description-zh-hk: 觸及下限時的處理事件. **Enum Value:**, `1` - 忽略（保持網格運行）, `2` - 以最新價平倉
         - name: └ multiple_trigger
           type: boolean
           required: true
@@ -5696,9 +5696,9 @@ paths:
         - name: └ time_in_force
           type: int32
           required: true
-          description: Time in force type<br/><br/> **Enum Value:**<br/> `0` - Day<br/> `1` - Good-Til-Canceled<br/> `6` - Good-Til-Date
-          x-description-zh: 订单有效期类型<br/><br/> **Enum Value:**<br/> `0` - 当日有效<br/> `1` - 撤单前有效<br/> `6` - 指定日期前有效
-          x-description-zh-hk: 訂單有效期類型<br/><br/> **Enum Value:**<br/> `0` - 當日有效<br/> `1` - 撤單前有效<br/> `6` - 指定日期前有效
+          description: Time in force type. **Enum Value:**, `0` - Day, `1` - Good-Til-Canceled, `6` - Good-Til-Date
+          x-description-zh: 订单有效期类型. **Enum Value:**, `0` - 当日有效, `1` - 撤单前有效, `6` - 指定日期前有效
+          x-description-zh-hk: 訂單有效期類型. **Enum Value:**, `0` - 當日有效, `1` - 撤單前有效, `6` - 指定日期前有效
         - name: └ gtd
           type: string
           required: true
@@ -5714,9 +5714,9 @@ paths:
         - name: └ rth
           type: int32
           required: true
-          description: Regular trading hours flag<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`
-          x-description-zh: 盘中交易时段标识<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`
-          x-description-zh-hk: 盤中交易時段標識<br/><br/> **Enum Value:**<br/> `0`<br/> `1`<br/> `2`
+          description: Regular trading hours flag. **Enum Value:**, `0`, `1`, `2`
+          x-description-zh: 盘中交易时段标识. **Enum Value:**, `0`, `1`, `2`
+          x-description-zh-hk: 盤中交易時段標識. **Enum Value:**, `0`, `1`, `2`
         - name: └ support_shortsell
           type: boolean
           required: true
@@ -5726,15 +5726,15 @@ paths:
         - name: └ grid_order_type_up
           type: string
           required: true
-          description: Sell-side order type when depth is `0`<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
-          x-description-zh: 深度为 `0` 时卖出方的订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
-          x-description-zh-hk: 深度為 `0` 時賣出方的訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+          description: Sell-side order type when depth is `0`. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 深度为 `0` 时卖出方的订单类型. **Enum Value:**, `GMO` - 网格市价单, `GLO` - 网格限价单, `GTG` - 网格触价单
+          x-description-zh-hk: 深度為 `0` 時賣出方的訂單類型. **Enum Value:**, `GMO` - 網格市價單, `GLO` - 網格限價單, `GTG` - 網格觸價單
         - name: └ grid_order_type_down
           type: string
           required: true
-          description: Buy-side order type when depth is `0`<br/><br/> **Enum Value:**<br/> `GMO` - Grid market order<br/> `GLO` - Grid limit order<br/> `GTG` - Grid touch-to-go
-          x-description-zh: 深度为 `0` 时买入方的订单类型<br/><br/> **Enum Value:**<br/> `GMO` - 网格市价单<br/> `GLO` - 网格限价单<br/> `GTG` - 网格触价单
-          x-description-zh-hk: 深度為 `0` 時買入方的訂單類型<br/><br/> **Enum Value:**<br/> `GMO` - 網格市價單<br/> `GLO` - 網格限價單<br/> `GTG` - 網格觸價單
+          description: Buy-side order type when depth is `0`. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 深度为 `0` 时买入方的订单类型. **Enum Value:**, `GMO` - 网格市价单, `GLO` - 网格限价单, `GTG` - 网格触价单
+          x-description-zh-hk: 深度為 `0` 時買入方的訂單類型. **Enum Value:**, `GMO` - 網格市價單, `GLO` - 網格限價單, `GTG` - 網格觸價單
       responses:
         '200':
           description: Successful response
@@ -13788,16 +13788,16 @@ paths:
           in: query
           type: string
           required: false
-          description: 'Start time, formatted as a timestamp (second), example: `1650410999`.<br/><br/> If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time.'
-          x-description-zh: 开始时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>开始时间为空时，默认为结束时间或当前时间前九十天。
-          x-description-zh-hk: 開始時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>開始時間為空時，默認為結束時間或當前時間前九十天。
+          description: 'Start time, formatted as a timestamp (second), example: `1650410999`. If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time'
+          x-description-zh: 开始时间，格式为时间戳 (秒)，例如：`1650410999`。. 开始时间为空时，默认为结束时间或当前时间前九十天。
+          x-description-zh-hk: 開始時間，格式為時間戳 (秒)，例如：`1650410999`。. 開始時間為空時，默認為結束時間或當前時間前九十天。
         - name: end_at
           in: query
           type: string
           required: false
-          description: 'End time, formatted as a timestamp (second), example: `1650410999`. <br/><br/> If the end time is null, the default is the current time or 90 days after of the start time.'
-          x-description-zh: 结束时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>结束时间为空时，默认为开始时间后九十天或当前时间。
-          x-description-zh-hk: 結束時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>結束時間為空時，默認為開始時間後九十天或當前時間。
+          description: 'End time, formatted as a timestamp (second), example: `1650410999`. If the end time is null, the default is the current time or 90 days after of the start time'
+          x-description-zh: 结束时间，格式为时间戳 (秒)，例如：`1650410999`。. 结束时间为空时，默认为开始时间后九十天或当前时间。
+          x-description-zh-hk: 結束時間，格式為時間戳 (秒)，例如：`1650410999`。. 結束時間為空時，默認為開始時間後九十天或當前時間。
         - name: page
           in: query
           type: integer
@@ -13896,9 +13896,9 @@ paths:
         - name: has_more
           type: boolean
           required: true
-          description: has more orders record.<br/><br/>The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
-          x-description-zh: 是否有更多记录。<br/><br/>单次查询最多返回 1000 条记录，若结果超过 1000 条，has_more 为 true
-          x-description-zh-hk: 是否有更多記錄。<br/><br/>單次查詢最多返回 1000 條記錄，若結果超過 1000 條，has_more 為 true
+          description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
+          x-description-zh: 是否有更多记录。. 单次查询最多返回 1000 条记录，若结果超过 1000 条，has_more 为 true
+          x-description-zh-hk: 是否有更多記錄。. 單次查詢最多返回 1000 條記錄，若結果超過 1000 條，has_more 為 true
         - name: trades
           type: object[]
           required: false
@@ -13944,9 +13944,9 @@ paths:
         - name: └ side
           type: string
           required: true
-          description: Trade side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Trade side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
       responses:
         '200':
           description: Successful response
@@ -25563,9 +25563,9 @@ paths:
         - name: └ risk_level
           type: string
           required: true
-          description: Risk control level <br/> <br/> <b>Option:</b><br/> `0` - safe <br/> `1` - medium risk<br/> `2` - early warning<br/> `3` - danger
-          x-description-zh: 风控等级 <br/> <br/> <b>可选值:</b><br/> `0` - 安全 <br/> `1` - 中风险<br/> `2` - 预警<br/> `3` - 危险
-          x-description-zh-hk: 風控等級 <br/> <br/> <b>可選值:</b><br/> `0` - 安全 <br/> `1` - 中風險<br/> `2` - 預警<br/> `3` - 危險
+          description: Risk control level. <b>Option:</b>, `0` - safe, `1` - medium risk, `2` - early warning, `3` - danger
+          x-description-zh: 风控等级. <b>可选值:</b>, `0` - 安全, `1` - 中风险, `2` - 预警, `3` - 危险
+          x-description-zh-hk: 風控等級. <b>可選值:</b>, `0` - 安全, `1` - 中風險, `2` - 預警, `3` - 危險
         - name: └ margin_call
           type: string
           required: true
@@ -25726,9 +25726,9 @@ paths:
           in: query
           type: string
           required: false
-          description: Balance type<br/><br/> <b>Option:</b> <br/>`1` - cash <br/>`2` - stock<br/> `3` - fund
-          x-description-zh: 资金类型 <br/><br/> <b>可选值:</b> <br/>`1` - 现金 <br/>`2` - 股票<br/> `3` - 基金
-          x-description-zh-hk: 资金类型 <br/><br/> <b>可选值:</b> <br/>`1` - 现金 <br/>`2` - 股票<br/> `3` - 基金
+          description: Balance type. <b>Option:</b>, `1` - cash, `2` - stock, `3` - fund
+          x-description-zh: 资金类型. <b>可选值:</b>, `1` - 现金, `2` - 股票, `3` - 基金
+          x-description-zh-hk: 资金类型. <b>可选值:</b>, `1` - 现金, `2` - 股票, `3` - 基金
         - name: symbol
           in: query
           type: string
@@ -25740,16 +25740,16 @@ paths:
           in: query
           type: string
           required: false
-          description: start page <br/><br/><b>Default value:</b> `1` <br/><b>Data validation rules:</b><br/> <b>Ranges:</b> `>=1`
-          x-description-zh: 起始页 <br/><br/><b>默认值:</b> `1` <br/><b>数据校验规则:</b><br/> <b>取值范围:</b> `>=1`
-          x-description-zh-hk: 起始页 <br/><br/><b>默认值:</b> `1` <br/><b>数据校验规则:</b><br/> <b>取值范围:</b> `>=1`
+          description: start page. <b>Default value:</b> `1`, <b>Data validation rules:</b>, <b>Ranges:</b> `>=1`
+          x-description-zh: 起始页. <b>默认值:</b> `1`, <b>数据校验规则:</b>, <b>取值范围:</b> `>=1`
+          x-description-zh-hk: 起始页. <b>默认值:</b> `1`, <b>数据校验规则:</b>, <b>取值范围:</b> `>=1`
         - name: size
           in: query
           type: string
           required: false
-          description: page size <br/><br/><b>Default value:</b> `50` <br/><b>Data validation rules:</b> `1~10000`
-          x-description-zh: 每页大小 <br/><br/><b>默认值:</b> `50` <br/><b>数据校验规则:</b> `1~10000`
-          x-description-zh-hk: 每页大小 <br/><br/><b>默认值:</b> `50` <br/><b>数据校验规则:</b> `1~10000`
+          description: page size. <b>Default value:</b> `50`, <b>Data validation rules:</b> `1~10000`
+          x-description-zh: 每页大小. <b>默认值:</b> `50`, <b>数据校验规则:</b> `1~10000`
+          x-description-zh-hk: 每页大小. <b>默认值:</b> `50`, <b>数据校验规则:</b> `1~10000`
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -25865,15 +25865,15 @@ paths:
         - name: └ direction
           type: string
           required: true
-          description: outflow direction <br/><br/><b>Option:</b> <br/>`1` - outflow <br/> `2` - inflow
-          x-description-zh: 流出方向 <br/><br/><b>可选值:</b> <br/>`1` - 流出 <br/> `2` - 流入
-          x-description-zh-hk: 流出方向 <br/><br/><b>可選值:</b> <br/>`1` - 流出 <br/> `2` - 流入
+          description: outflow direction. <b>Option:</b>, `1` - outflow, `2` - inflow
+          x-description-zh: 流出方向. <b>可选值:</b>, `1` - 流出, `2` - 流入
+          x-description-zh-hk: 流出方向. <b>可選值:</b>, `1` - 流出, `2` - 流入
         - name: └ business_type
           type: string
           required: true
-          description: Funding Category <br/><br/><b>Option:</b> <br/>`1` - cash <br/> `2` - stock <br/> `3` - fund
-          x-description-zh: 资金类别 <br/><br/><b>可选值:</b> <br/>`1` - 现金 <br/> `2` - 股票 <br/> `3` - 基金
-          x-description-zh-hk: 资金类别 <br/><br/><b>可選值:</b> <br/>`1` - 現金 <br/> `2` - 股票 <br/> `3` - 基金
+          description: Funding Category. <b>Option:</b>, `1` - cash, `2` - stock, `3` - fund
+          x-description-zh: 资金类别. <b>可选值:</b>, `1` - 现金, `2` - 股票, `3` - 基金
+          x-description-zh-hk: 资金类别. <b>可選值:</b>, `1` - 現金, `2` - 股票, `3` - 基金
         - name: └ balance
           type: string
           required: true
@@ -28352,23 +28352,23 @@ paths:
           in: query
           type: array
           required: false
-          description: 'Order status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.<br/><br/>example: `status=FilledStatus&status=NewStatus`'
-          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
-          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
+          description: 'Order status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`. example: `status=FilledStatus&status=NewStatus`'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。. 例如：`status=FilledStatus&status=NewStatus`
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。. 例如：`status=FilledStatus&status=NewStatus`
         - name: side
           in: query
           type: string
           required: false
-          description: Order side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Order side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
         - name: market
           in: query
           type: string
           required: false
-          description: Market<br/><br/> **Enum Value:**<br/> `US` - United States of America Market<br/> `HK` - Hong Kong Market
-          x-description-zh: 市场<br/><br/> **可选值：**<br/> `US` - 美股<br/> `HK` - 港股
-          x-description-zh-hk: 市場<br/><br/> **可選值：**<br/> `US` - 美股<br/> `HK` - 港股
+          description: Market. **Enum Value:**, `US` - United States of America Market, `HK` - Hong Kong Market
+          x-description-zh: 市场. **可选值：**, `US` - 美股, `HK` - 港股
+          x-description-zh-hk: 市場. **可選值：**, `US` - 美股, `HK` - 港股
         - name: order_id
           in: query
           type: string
@@ -28509,21 +28509,21 @@ paths:
         - name: └ executed_quantity
           type: string
           required: true
-          description: Executed Quantity.<br/><br/>when the order is not filled, value is 0
-          x-description-zh: 成交数量。<br/><br/>当订单未成交时为 0
-          x-description-zh-hk: 成交数量。<br/><br/>当订单未成交时为 0
+          description: Executed Quantity. when the order is not filled, value is 0
+          x-description-zh: 成交数量。. 当订单未成交时为 0
+          x-description-zh-hk: 成交数量。. 当订单未成交时为 0
         - name: └ price
           type: string
           required: true
-          description: Submitted Price.<br/><br/>when market condition order is not triggered, value is empty string
-          x-description-zh: 下单价格。<br/><br/>当市价条件单未触发时为空字符串
-          x-description-zh-hk: 下单价格。<br/><br/>当市价条件单未触发时为空字符串
+          description: Submitted Price. when market condition order is not triggered, value is empty string
+          x-description-zh: 下单价格。. 当市价条件单未触发时为空字符串
+          x-description-zh-hk: 下单价格。. 当市价条件单未触发时为空字符串
         - name: └ executed_price
           type: string
           required: true
-          description: Executed Price.<br/><br/>when the order is not filled, value is 0
-          x-description-zh: 成交价。<br/><br/>当订单未成交时为 0
-          x-description-zh-hk: 成交价。<br/><br/>当订单未成交时为 0
+          description: Executed Price. when the order is not filled, value is 0
+          x-description-zh: 成交价。. 当订单未成交时为 0
+          x-description-zh-hk: 成交价。. 当订单未成交时为 0
         - name: └ submitted_at
           type: string
           required: true
@@ -28533,9 +28533,9 @@ paths:
         - name: └ side
           type: string
           required: true
-          description: Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
         - name: └ symbol
           type: string
           required: true
@@ -28551,15 +28551,15 @@ paths:
         - name: └ last_done
           type: string
           required: true
-          description: Last done.<br/><br/>when the order is not filled, value is empty string
-          x-description-zh: 最近成交价格。<br/><br/>当订单未成交时为空字符串
-          x-description-zh-hk: 最近成交价格。<br/><br/>当订单未成交时为空字符串
+          description: Last done. when the order is not filled, value is empty string
+          x-description-zh: 最近成交价格。. 当订单未成交时为空字符串
+          x-description-zh-hk: 最近成交价格。. 当订单未成交时为空字符串
         - name: └ trigger_price
           type: string
           required: true
-          description: '`LIT` / `MIT` Order Trigger Price.<br/><br/>When the order is not `LIT` / `MIT` order, value is empty string'
-          x-description-zh: '`LIT` / `MIT` 订单触发价格。<br/><br/>当订单不是 `LIT` / `MIT` 订单为空字符串'
-          x-description-zh-hk: '`LIT` / `MIT` 订单触发价格。<br/><br/>当订单不是 `LIT` / `MIT` 订单为空字符串'
+          description: '`LIT` / `MIT` Order Trigger Price. When the order is not `LIT` / `MIT` order, value is empty string'
+          x-description-zh: '`LIT` / `MIT` 订单触发价格。. 当订单不是 `LIT` / `MIT` 订单为空字符串'
+          x-description-zh-hk: '`LIT` / `MIT` 订单触发价格。. 当订单不是 `LIT` / `MIT` 订单为空字符串'
         - name: └ msg
           type: string
           required: true
@@ -28569,21 +28569,21 @@ paths:
         - name: └ tag
           type: string
           required: true
-          description: Order tag<br/><br/> **Enum Value**<br/> `Normal` - Normal Order<br/> `Gtc` - Long term Order<br/> `Grey` - Grey Order
-          x-description-zh: 订单标记<br/><br/> **可选值：**<br/> `Normal` - 普通订单<br/> `Gtc` - 长期单<br/> `Grey` - 暗盘单
-          x-description-zh-hk: 订单标记<br/><br/> **可选值：**<br/> `Normal` - 普通订单<br/> `Gtc` - 长期单<br/> `Grey` - 暗盘单
+          description: Order tag. **Enum Value**, `Normal` - Normal Order, `Gtc` - Long term Order, `Grey` - Grey Order
+          x-description-zh: 订单标记. **可选值：**, `Normal` - 普通订单, `Gtc` - 长期单, `Grey` - 暗盘单
+          x-description-zh-hk: 订单标记. **可选值：**, `Normal` - 普通订单, `Gtc` - 长期单, `Grey` - 暗盘单
         - name: └ time_in_force
           type: string
           required: true
-          description: Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order
-          x-description-zh: 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效
-          x-description-zh-hk: 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效
+          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
+          x-description-zh: 订单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效
+          x-description-zh-hk: 订单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效
         - name: └ expire_date
           type: string
           required: true
-          description: 'Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`.<br/><br/>When not a long term order, default value is empty string'
-          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。<br/><br/>不是长期单时，默认为空字符串。`
-          x-description-zh-hk: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。<br/><br/>不是长期单时，默认为空字符串。`
+          description: 'Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`. When not a long term order, default value is empty string'
+          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是长期单时，默认为空字符串。`
+          x-description-zh-hk: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是长期单时，默认为空字符串。`
         - name: └ updated_at
           type: string
           required: true
@@ -28599,27 +28599,27 @@ paths:
         - name: └ trailing_amount
           type: string
           required: true
-          description: '`TSLPAMT` order trailing amount.<br/><br/>When the order is not `TSLPAMT` order, value is empty string'
-          x-description-zh: '`TSLPAMT` 订单跟踪金额。<br/><br/>当订单不是 `TSLPAMT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPAMT` 订单跟踪金额。<br/><br/>当订单不是 `TSLPAMT` 订单时为空字符串。'
+          description: '`TSLPAMT` order trailing amount. When the order is not `TSLPAMT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
         - name: └ trailing_percent
           type: string
           required: true
-          description: '`TSLPPCT` order trailing percent.<br/><br/>When the order is not `TSLPPCT` order, value is empty string'
-          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。<br/><br/>当订单不是 `TSLPPCT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPPCT` 订单跟踪涨跌幅。<br/><br/>当订单不是 `TSLPPCT` 订单时为空字符串。'
+          description: '`TSLPPCT` order trailing percent. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
         - name: └ limit_offset
           type: string
           required: true
-          description: '`TSLPAMT` / `TSLPPCT` order limit offset amount.<br/><br/>When the order is not `TSLPAMT` / `TSLPPCT` order, value is empty string'
-          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。<br/><br/>当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 订单指定价差。<br/><br/>当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
+          description: '`TSLPAMT` / `TSLPPCT` order limit offset amount. When the order is not `TSLPAMT` / `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
         - name: └ trigger_status
           type: string
           required: true
-          description: Conditional Order Trigger Status<br/> When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED<br/><br/> **Enum Value**<br/> `NOT_USED`<br/> `DEACTIVE`<br /> `ACTIVE`<br /> `RELEASED`
-          x-description-zh: 条件单触发状态<br/> 当订单不是条件单或条件单未触发时，触发状态为 NOT_USED<br/><br/> **可选值：**<br/> `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
-          x-description-zh-hk: 条件单触发状态<br/> 当订单不是条件单或条件单未触发时，触发状态为 NOT_USED<br/><br/> **可选值：**<br/> `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
+          description: Conditional Order Trigger Status, When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED. **Enum Value**, `NOT_USED`, `DEACTIVE`, `ACTIVE`, `RELEASED`
+          x-description-zh: 条件单触发状态, 当订单不是条件单或条件单未触发时，触发状态为 NOT_USED. **可选值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
+          x-description-zh-hk: 条件单触发状态, 当订单不是条件单或条件单未触发时，触发状态为 NOT_USED. **可选值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
         - name: └ currency
           type: string
           required: true
@@ -28629,9 +28629,9 @@ paths:
         - name: └ outside_rth
           type: string
           required: true
-          description: Enable or disable outside regular trading hours<br/> Default is `UnknownOutsideRth` when the order is not a US stock<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - Regular trading hour only<br/> `ANY_TIME` - Any time<br/> `OVERNIGHT` - Overnight"
-          x-description-zh: 是否允许盘前盘后<br/> 当订单不是美股时，默认为 UnknownOutsideRth<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘"
-          x-description-zh-hk: 是否允许盘前盘后<br/> 当订单不是美股时，默认为 UnknownOutsideRth<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘"
+          description: Enable or disable outside regular trading hours, Default is `UnknownOutsideRth` when the order is not a US stock. **Enum Value:**, `RTH_ONLY` - Regular trading hour only, `ANY_TIME` - Any time, `OVERNIGHT` - Overnight"
+          x-description-zh: 是否允许盘前盘后, 当订单不是美股时，默认为 UnknownOutsideRth. **可选值：**, `RTH_ONLY` - 不允许盘前盘后, `ANY_TIME` - 允许盘前盘后, `OVERNIGHT` - 夜盘"
+          x-description-zh-hk: 是否允许盘前盘后, 当订单不是美股时，默认为 UnknownOutsideRth. **可选值：**, `RTH_ONLY` - 不允许盘前盘后, `ANY_TIME` - 允许盘前盘后, `OVERNIGHT` - 夜盘"
         - name: └ remark
           type: string
           required: true
@@ -28671,7 +28671,7 @@ paths:
         - name: └ ∟ attached_type_display
           type: int32
           required: true
-          description: Attached order type.<br/><br/> **Enum Value:**<br/> `1` - Take Profit<br/> `2` - Stop Loss
+          description: Attached order type. **Enum Value:**, `1` - Take Profit, `2` - Stop Loss
           x-description-zh: 附加订单类型。**可选值：** `1` - 止盈 `2` - 止损
           x-description-zh-hk: 附加訂單類型。**可選值：** `1` - 止盈 `2` - 止損
         - name: └ ∟ trigger_price
@@ -28719,9 +28719,9 @@ paths:
         - name: └ ∟ time_in_force
           type: string
           required: true
-          description: Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order
-          x-description-zh: 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效
-          x-description-zh-hk: 訂單有效期類型<br/><br/> **可選值：**<br/> `Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效
+          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
+          x-description-zh: 订单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效
+          x-description-zh-hk: 訂單有效期類型. **可選值：**, `Day` - 當日有效, `GTC` - 撤單前有效, `GTD` - 到期前有效
         - name: └ ∟ counter_id
           type: string
           required: true
@@ -28731,9 +28731,9 @@ paths:
         - name: └ ∟ trigger_status
           type: int32
           required: true
-          description: Conditional order trigger status after the attached order is activated.<br/> `0` - Not activated<br/> `1` - Monitoring<br/> `2` - Cancelled<br/> `4` - Triggered
-          x-description-zh: 附加单激活后的条件单触发状态。<br/>`0` - 未激活 <br/>`1` - 监控中 <br/>`2` - 已撤单 <br/>`4` - 已触发
-          x-description-zh-hk: 附加單激活後的條件單觸發狀態。<br/>`0` - 未激活 <br/>`1` - 監控中 <br/>`2` - 已撤單 <br/>`4` - 已觸發
+          description: Conditional order trigger status after the attached order is activated. `0` - Not activated, `1` - Monitoring, `2` - Cancelled, `4` - Triggered
+          x-description-zh: 附加单激活后的条件单触发状态。, `0` - 未激活, `1` - 监控中, `2` - 已撤单, `4` - 已触发
+          x-description-zh-hk: 附加單激活後的條件單觸發狀態。, `0` - 未激活, `1` - 監控中, `2` - 已撤單, `4` - 已觸發
         - name: └ ∟ executed_amount
           type: string
           required: true
@@ -28797,9 +28797,9 @@ paths:
         - name: └ ∟ strategy
           type: string
           required: false
-          description: Multi-leg strategy<br/><br/> **Enum Value:**<br/> `0` - CoveredCall (Covered stock)<br/> `1` - CoveredPut (Covered stock)<br/> `2` - VerticalCallSpread (Vertical spread)<br/> `3` - VerticalPutSpread (Vertical spread)<br/> `4` - Collar<br/> `5` - Straddle<br/> `6` - Strangle
-          x-description-zh: 多腿策略<br/><br/> **可选值：**<br/> `0` - CoveredCall（股票担保）<br/> `1` - CoveredPut（股票担保）<br/> `2` - VerticalCallSpread（垂直策略）<br/> `3` - VerticalPutSpread（垂直策略）<br/> `4` - Collar（领式策略）<br/> `5` - Straddle（跨式策略）<br/> `6` - Strangle（宽跨式策略）
-          x-description-zh-hk: 多腿策略<br/><br/> **可選值：**<br/> `0` - CoveredCall（股票擔保）<br/> `1` - CoveredPut（股票擔保）<br/> `2` - VerticalCallSpread（跨價期權）<br/> `3` - VerticalPutSpread（跨價期權）<br/> `4` - Collar（領式策略）<br/> `5` - Straddle（馬鞍式策略）<br/> `6` - Strangle（勒束式策略）
+          description: Multi-leg strategy. **Enum Value:**, `0` - CoveredCall (Covered stock), `1` - CoveredPut (Covered stock), `2` - VerticalCallSpread (Vertical spread), `3` - VerticalPutSpread (Vertical spread), `4` - Collar, `5` - Straddle, `6` - Strangle
+          x-description-zh: 多腿策略. **可选值：**, `0` - CoveredCall（股票担保）, `1` - CoveredPut（股票担保）, `2` - VerticalCallSpread（垂直策略）, `3` - VerticalPutSpread（垂直策略）, `4` - Collar（领式策略）, `5` - Straddle（跨式策略）, `6` - Strangle（宽跨式策略）
+          x-description-zh-hk: 多腿策略. **可選值：**, `0` - CoveredCall（股票擔保）, `1` - CoveredPut（股票擔保）, `2` - VerticalCallSpread（跨價期權）, `3` - VerticalPutSpread（跨價期權）, `4` - Collar（領式策略）, `5` - Straddle（馬鞍式策略）, `6` - Strangle（勒束式策略）
         - name: └ ∟ strategy_name
           type: string
           required: false
@@ -28833,15 +28833,15 @@ paths:
         - name: └ ∟∟ side
           type: string
           required: false
-          description: Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy`<br/> `Sell`
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy`<br/> `Sell`
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy`, `Sell`
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy`, `Sell`
         - name: └ ∟∟ position
           type: string
           required: false
-          description: Position direction<br/><br/> **Enum Value:**<br/> `LONG`<br/> `SHORT`
-          x-description-zh: 持仓方向<br/><br/> **可选值：**<br/> `LONG`<br/> `SHORT`
-          x-description-zh-hk: 持倉方向<br/><br/> **可選值：**<br/> `LONG`<br/> `SHORT`
+          description: Position direction. **Enum Value:**, `LONG`, `SHORT`
+          x-description-zh: 持仓方向. **可选值：**, `LONG`, `SHORT`
+          x-description-zh-hk: 持倉方向. **可選值：**, `LONG`, `SHORT`
         - name: └ ∟∟ ratio_quantity
           type: string
           required: false
@@ -28863,9 +28863,9 @@ paths:
         - name: └ ∟∟ contract_direction
           type: string
           required: false
-          description: Contract type<br/><br/> **Enum Value:**<br/> `C` - Call<br/> `P` - Put
-          x-description-zh: 合约类型<br/><br/> **可选值：**<br/> `C` - 看涨（Call）<br/> `P` - 看跌（Put）
-          x-description-zh-hk: 合約類型<br/><br/> **可選值：**<br/> `C` - 看漲（Call）<br/> `P` - 看跌（Put）
+          description: Contract type. **Enum Value:**, `C` - Call, `P` - Put
+          x-description-zh: 合约类型. **可选值：**, `C` - 看涨（Call）, `P` - 看跌（Put）
+          x-description-zh-hk: 合約類型. **可選值：**, `C` - 看漲（Call）, `P` - 看跌（Put）
       responses:
         '200':
           description: Successful response
@@ -28982,37 +28982,37 @@ paths:
           in: query
           type: array
           required: false
-          description: 'Order status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.<br/><br/>example: `status=FilledStatus&status=NewStatus`'
-          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
-          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。<br/><br/>例如：`status=FilledStatus&status=NewStatus`
+          description: 'Order status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`. example: `status=FilledStatus&status=NewStatus`'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。. 例如：`status=FilledStatus&status=NewStatus`
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。. 例如：`status=FilledStatus&status=NewStatus`
         - name: side
           in: query
           type: string
           required: false
-          description: Order side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Order side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
         - name: market
           in: query
           type: string
           required: false
-          description: Market<br/><br/> **Enum Value:**<br/> `US` - United States of America Market<br/> `HK` - Hong Kong Market
-          x-description-zh: 市场<br/><br/> **可选值：**<br/> `US` - 美股<br/> `HK` - 港股
-          x-description-zh-hk: 市場<br/><br/> **可選值：**<br/> `US` - 美股<br/> `HK` - 港股
+          description: Market. **Enum Value:**, `US` - United States of America Market, `HK` - Hong Kong Market
+          x-description-zh: 市场. **可选值：**, `US` - 美股, `HK` - 港股
+          x-description-zh-hk: 市場. **可選值：**, `US` - 美股, `HK` - 港股
         - name: start_at
           in: query
           type: string
           required: false
-          description: 'Start time, formatted as a timestamp (second), example: `1650410999`.<br/><br/> If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time.'
-          x-description-zh: 开始时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>开始时间为空时，默认为结束时间或当前时间前九十天。
-          x-description-zh-hk: 開始時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>開始時間為空時，默認為結束時間或當前時間前九十天。
+          description: 'Start time, formatted as a timestamp (second), example: `1650410999`. If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time'
+          x-description-zh: 开始时间，格式为时间戳 (秒)，例如：`1650410999`。. 开始时间为空时，默认为结束时间或当前时间前九十天。
+          x-description-zh-hk: 開始時間，格式為時間戳 (秒)，例如：`1650410999`。. 開始時間為空時，默認為結束時間或當前時間前九十天。
         - name: end_at
           in: query
           type: string
           required: false
-          description: 'End time, formatted as a timestamp (second), example: `1650410999`. <br/><br/> If the end time is null, the default is the current time or 90 days after of the start time.'
-          x-description-zh: 结束时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>结束时间为空时，默认为开始时间后九十天或当前时间。
-          x-description-zh-hk: 結束時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>結束時間為空時，默認為開始時間後九十天或當前時間。
+          description: 'End time, formatted as a timestamp (second), example: `1650410999`. If the end time is null, the default is the current time or 90 days after of the start time'
+          x-description-zh: 结束时间，格式为时间戳 (秒)，例如：`1650410999`。. 结束时间为空时，默认为开始时间后九十天或当前时间。
+          x-description-zh-hk: 結束時間，格式為時間戳 (秒)，例如：`1650410999`。. 結束時間為空時，默認為開始時間後九十天或當前時間。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -29109,9 +29109,9 @@ paths:
         - name: has_more
           type: boolean
           required: true
-          description: has more orders record.<br/><br/>The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
-          x-description-zh: 是否还有更多数据。<br/><br/>每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
-          x-description-zh-hk: 是否還有更多數據。<br/><br/>每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
+          description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
+          x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
         - name: orders
           type: object[]
           required: false
@@ -29145,21 +29145,21 @@ paths:
         - name: └ executed_quantity
           type: string
           required: true
-          description: Executed Quantity.<br/><br/>when the order is not filled, value is 0
-          x-description-zh: 成交数量。<br/><br/>当订单未成交时为 0
-          x-description-zh-hk: 成交數量。<br/><br/>當訂單未成交時為 0
+          description: Executed Quantity. when the order is not filled, value is 0
+          x-description-zh: 成交数量。. 当订单未成交时为 0
+          x-description-zh-hk: 成交數量。. 當訂單未成交時為 0
         - name: └ price
           type: string
           required: true
-          description: Submitted Price.<br/><br/>when market condition order is not triggered, value is empty string
-          x-description-zh: 下单价格。<br/><br/>当市价条件单未触发时为空字符串
-          x-description-zh-hk: 下單價格。<br/><br/>當市價條件單未觸發時為空字符串
+          description: Submitted Price. when market condition order is not triggered, value is empty string
+          x-description-zh: 下单价格。. 当市价条件单未触发时为空字符串
+          x-description-zh-hk: 下單價格。. 當市價條件單未觸發時為空字符串
         - name: └ executed_price
           type: string
           required: true
-          description: Executed Price.<br/><br/>when the order is not filled, value is 0
-          x-description-zh: 成交价。<br/><br/>当订单未成交时为 0
-          x-description-zh-hk: 成交價。<br/><br/>當訂單未成交時為 0
+          description: Executed Price. when the order is not filled, value is 0
+          x-description-zh: 成交价。. 当订单未成交时为 0
+          x-description-zh-hk: 成交價。. 當訂單未成交時為 0
         - name: └ submitted_at
           type: string
           required: true
@@ -29169,9 +29169,9 @@ paths:
         - name: └ side
           type: string
           required: true
-          description: Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
         - name: └ symbol
           type: string
           required: true
@@ -29187,15 +29187,15 @@ paths:
         - name: └ last_done
           type: string
           required: true
-          description: Last done.<br/><br/>when the order is not filled, value is empty string
-          x-description-zh: 最近成交价格。<br/><br/>当订单未成交时为空字符串
-          x-description-zh-hk: 最近成交價格。<br/><br/>當訂單未成交時為空字符串
+          description: Last done. when the order is not filled, value is empty string
+          x-description-zh: 最近成交价格。. 当订单未成交时为空字符串
+          x-description-zh-hk: 最近成交價格。. 當訂單未成交時為空字符串
         - name: └ trigger_price
           type: string
           required: true
-          description: '`LIT` / `MIT` Order Trigger Price.<br/><br/>When the order is not `LIT` / `MIT` order, value is empty string'
-          x-description-zh: '`LIT` / `MIT` 订单触发价格。<br/><br/>当订单不是 `LIT` / `MIT` 订单为空字符串'
-          x-description-zh-hk: '`LIT` / `MIT` 訂單觸發價格。<br/><br/>當訂單不是 `LIT` / `MIT` 訂單為空字符串'
+          description: '`LIT` / `MIT` Order Trigger Price. When the order is not `LIT` / `MIT` order, value is empty string'
+          x-description-zh: '`LIT` / `MIT` 订单触发价格。. 当订单不是 `LIT` / `MIT` 订单为空字符串'
+          x-description-zh-hk: '`LIT` / `MIT` 訂單觸發價格。. 當訂單不是 `LIT` / `MIT` 訂單為空字符串'
         - name: └ msg
           type: string
           required: true
@@ -29205,21 +29205,21 @@ paths:
         - name: └ tag
           type: string
           required: true
-          description: Order tag<br/><br/> **Enum Value**<br/> `Normal` - Normal Order<br/> `Gtc` - Long term Order<br/> `Grey` - Grey Order
-          x-description-zh: 订单标记<br/><br/> **可选值：**<br/> `Normal` - 普通订单<br/> `Gtc` - 长期单<br/> `Grey` - 暗盘单
-          x-description-zh-hk: 訂單標記<br/><br/> **可選值：**<br/> `Normal` - 普通訂單<br/> `Gtc` - 長期單<br/> `Grey` - 暗盤單
+          description: Order tag. **Enum Value**, `Normal` - Normal Order, `Gtc` - Long term Order, `Grey` - Grey Order
+          x-description-zh: 订单标记. **可选值：**, `Normal` - 普通订单, `Gtc` - 长期单, `Grey` - 暗盘单
+          x-description-zh-hk: 訂單標記. **可選值：**, `Normal` - 普通訂單, `Gtc` - 長期單, `Grey` - 暗盤單
         - name: └ time_in_force
           type: string
           required: true
-          description: Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order
-          x-description-zh: 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效
-          x-description-zh-hk: 訂單有效期類型<br/><br/> **可選值：**<br/> `Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效
+          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
+          x-description-zh: 订单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效
+          x-description-zh-hk: 訂單有效期類型. **可選值：**, `Day` - 當日有效, `GTC` - 撤單前有效, `GTD` - 到期前有效
         - name: └ expire_date
           type: string
           required: true
-          description: 'Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`.<br/><br/>When not a long term order, default value is empty string'
-          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。<br/><br/>不是长期单时，默认为空字符串。`
-          x-description-zh-hk: 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05。<br/><br/>不是長期單時，默認為空字符串。`
+          description: 'Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`. When not a long term order, default value is empty string'
+          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是长期单时，默认为空字符串。`
+          x-description-zh-hk: 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是長期單時，默認為空字符串。`
         - name: └ updated_at
           type: string
           required: true
@@ -29235,27 +29235,27 @@ paths:
         - name: └ trailing_amount
           type: string
           required: true
-          description: '`TSLPAMT` order trailing amount.<br/><br/>When the order is not `TSLPAMT` order, value is empty string'
-          x-description-zh: '`TSLPAMT` 订单跟踪金额。<br/><br/>当订单不是 `TSLPAMT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPAMT` 訂單跟蹤金額。<br/><br/>當訂單不是 `TSLPAMT` 訂單時為空字符串。'
+          description: '`TSLPAMT` order trailing amount. When the order is not `TSLPAMT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` 訂單跟蹤金額。. 當訂單不是 `TSLPAMT` 訂單時為空字符串。'
         - name: └ trailing_percent
           type: string
           required: true
-          description: '`TSLPPCT` order trailing percent.<br/><br/>When the order is not `TSLPPCT` order, value is empty string'
-          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。<br/><br/>当订单不是 `TSLPPCT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPPCT` 訂單跟蹤漲跌幅。<br/><br/>當訂單不是 `TSLPPCT` 訂單時為空字符串。'
+          description: '`TSLPPCT` order trailing percent. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPPCT` 訂單跟蹤漲跌幅。. 當訂單不是 `TSLPPCT` 訂單時為空字符串。'
         - name: └ limit_offset
           type: string
           required: true
-          description: '`TSLPPCT` order limit offset amount.<br/><br/>When the order is not `TSLPPCT` order, value is empty string'
-          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。<br/><br/>当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
-          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 訂單指定價差。<br/><br/>當訂單不是 `TSLPAMT` / `TSLPPCT` 訂單時為空字符串。'
+          description: '`TSLPPCT` order limit offset amount. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 訂單指定價差。. 當訂單不是 `TSLPAMT` / `TSLPPCT` 訂單時為空字符串。'
         - name: └ trigger_status
           type: string
           required: true
-          description: Conditional Order Trigger Status<br/> When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED<br/><br/> **Enum Value**<br/> `NOT_USED`<br/> `DEACTIVE`<br /> `ACTIVE`<br /> `RELEASED`
-          x-description-zh: 条件单触发状态<br/> 当订单不是条件单或条件单未触发时，触发状态为 NOT_USED<br/><br/> **可选值：**<br/> `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
-          x-description-zh-hk: 條件單觸發狀態<br/> 當訂單不是條件單或條件單未觸發時，觸發狀態為 NOT_USED<br/><br/> **可選值：**<br/> `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已觸發
+          description: Conditional Order Trigger Status, When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED. **Enum Value**, `NOT_USED`, `DEACTIVE`, `ACTIVE`, `RELEASED`
+          x-description-zh: 条件单触发状态, 当订单不是条件单或条件单未触发时，触发状态为 NOT_USED. **可选值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
+          x-description-zh-hk: 條件單觸發狀態, 當訂單不是條件單或條件單未觸發時，觸發狀態為 NOT_USED. **可選值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已觸發
         - name: └ currency
           type: string
           required: true
@@ -29265,9 +29265,9 @@ paths:
         - name: └ outside_rth
           type: string
           required: true
-          description: Enable or disable outside regular trading hours<br/> Default is `UnknownOutsideRth` when the order is not a US stock<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - Regular trading hour only<br/> `ANY_TIME` - Any time<br/> `OVERNIGHT` - Overnight"
-          x-description-zh: 是否允许盘前盘后<br/> 当订单不是美股时，默认为 UnknownOutsideRth<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘"
-          x-description-zh-hk: 是否允許盤前盤後<br/> 當訂單不是美股時，默認為 UnknownOutsideRth<br/><br/> **可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後<br/> `OVERNIGHT` - 夜盤
+          description: Enable or disable outside regular trading hours, Default is `UnknownOutsideRth` when the order is not a US stock. **Enum Value:**, `RTH_ONLY` - Regular trading hour only, `ANY_TIME` - Any time, `OVERNIGHT` - Overnight"
+          x-description-zh: 是否允许盘前盘后, 当订单不是美股时，默认为 UnknownOutsideRth. **可选值：**, `RTH_ONLY` - 不允许盘前盘后, `ANY_TIME` - 允许盘前盘后, `OVERNIGHT` - 夜盘"
+          x-description-zh-hk: 是否允許盤前盤後, 當訂單不是美股時，默認為 UnknownOutsideRth. **可選值：**, `RTH_ONLY` - 不允許盤前盤後, `ANY_TIME` - 允許盤前盤後, `OVERNIGHT` - 夜盤
         - name: └ remark
           type: string
           required: true
@@ -29307,7 +29307,7 @@ paths:
         - name: └ ∟ attached_type_display
           type: int32
           required: true
-          description: Attached order type.<br/><br/> **Enum Value:**<br/> `1` - Take Profit<br/> `2` - Stop Loss
+          description: Attached order type. **Enum Value:**, `1` - Take Profit, `2` - Stop Loss
           x-description-zh: 附加订单类型。**可选值：** `1` - 止盈 `2` - 止损
           x-description-zh-hk: 附加訂單類型。**可選值：** `1` - 止盈 `2` - 止損
         - name: └ ∟ trigger_price
@@ -29355,9 +29355,9 @@ paths:
         - name: └ ∟ time_in_force
           type: string
           required: true
-          description: Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order
-          x-description-zh: 订单有效期类型<br/><br/> **可选值：**<br/> `Day` - 当日有效<br/> `GTC` - 撤单前有效<br/> `GTD` - 到期前有效
-          x-description-zh-hk: 訂單有效期類型<br/><br/> **可選值：**<br/> `Day` - 當日有效<br/> `GTC` - 撤單前有效<br/> `GTD` - 到期前有效
+          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
+          x-description-zh: 订单有效期类型. **可选值：**, `Day` - 当日有效, `GTC` - 撤单前有效, `GTD` - 到期前有效
+          x-description-zh-hk: 訂單有效期類型. **可選值：**, `Day` - 當日有效, `GTC` - 撤單前有效, `GTD` - 到期前有效
         - name: └ ∟ counter_id
           type: string
           required: true
@@ -29367,9 +29367,9 @@ paths:
         - name: └ ∟ trigger_status
           type: int32
           required: true
-          description: Conditional order trigger status after the attached order is activated.<br/> `0` - Not activated<br/> `1` - Monitoring<br/> `2` - Cancelled<br/> `4` - Triggered
-          x-description-zh: 附加单激活后的条件单触发状态。<br/>`0` - 未激活 <br/>`1` - 监控中 <br/>`2` - 已撤单 <br/>`4` - 已触发
-          x-description-zh-hk: 附加單激活後的條件單觸發狀態。<br/>`0` - 未激活 <br/>`1` - 監控中 <br/>`2` - 已撤單 <br/>`4` - 已觸發
+          description: Conditional order trigger status after the attached order is activated. `0` - Not activated, `1` - Monitoring, `2` - Cancelled, `4` - Triggered
+          x-description-zh: 附加单激活后的条件单触发状态。, `0` - 未激活, `1` - 监控中, `2` - 已撤单, `4` - 已触发
+          x-description-zh-hk: 附加單激活後的條件單觸發狀態。, `0` - 未激活, `1` - 監控中, `2` - 已撤單, `4` - 已觸發
         - name: └ ∟ executed_amount
           type: string
           required: true
@@ -29433,9 +29433,9 @@ paths:
         - name: └ ∟ strategy
           type: string
           required: false
-          description: Multi-leg strategy<br/><br/> **Enum Value:**<br/> `0` - CoveredCall (Covered stock)<br/> `1` - CoveredPut (Covered stock)<br/> `2` - VerticalCallSpread (Vertical spread)<br/> `3` - VerticalPutSpread (Vertical spread)<br/> `4` - Collar<br/> `5` - Straddle<br/> `6` - Strangle
-          x-description-zh: 多腿策略<br/><br/> **可选值：**<br/> `0` - CoveredCall（股票担保）<br/> `1` - CoveredPut（股票担保）<br/> `2` - VerticalCallSpread（垂直策略）<br/> `3` - VerticalPutSpread（垂直策略）<br/> `4` - Collar（领式策略）<br/> `5` - Straddle（跨式策略）<br/> `6` - Strangle（宽跨式策略）
-          x-description-zh-hk: 多腿策略<br/><br/> **可選值：**<br/> `0` - CoveredCall（股票擔保）<br/> `1` - CoveredPut（股票擔保）<br/> `2` - VerticalCallSpread（跨價期權）<br/> `3` - VerticalPutSpread（跨價期權）<br/> `4` - Collar（領式策略）<br/> `5` - Straddle（馬鞍式策略）<br/> `6` - Strangle（勒束式策略）
+          description: Multi-leg strategy. **Enum Value:**, `0` - CoveredCall (Covered stock), `1` - CoveredPut (Covered stock), `2` - VerticalCallSpread (Vertical spread), `3` - VerticalPutSpread (Vertical spread), `4` - Collar, `5` - Straddle, `6` - Strangle
+          x-description-zh: 多腿策略. **可选值：**, `0` - CoveredCall（股票担保）, `1` - CoveredPut（股票担保）, `2` - VerticalCallSpread（垂直策略）, `3` - VerticalPutSpread（垂直策略）, `4` - Collar（领式策略）, `5` - Straddle（跨式策略）, `6` - Strangle（宽跨式策略）
+          x-description-zh-hk: 多腿策略. **可選值：**, `0` - CoveredCall（股票擔保）, `1` - CoveredPut（股票擔保）, `2` - VerticalCallSpread（跨價期權）, `3` - VerticalPutSpread（跨價期權）, `4` - Collar（領式策略）, `5` - Straddle（馬鞍式策略）, `6` - Strangle（勒束式策略）
         - name: └ ∟ strategy_name
           type: string
           required: false
@@ -29469,15 +29469,15 @@ paths:
         - name: └ ∟∟ side
           type: string
           required: false
-          description: Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy`<br/> `Sell`
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy`<br/> `Sell`
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy`, `Sell`
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy`, `Sell`
         - name: └ ∟∟ position
           type: string
           required: false
-          description: Position direction<br/><br/> **Enum Value:**<br/> `LONG`<br/> `SHORT`
-          x-description-zh: 持仓方向<br/><br/> **可选值：**<br/> `LONG`<br/> `SHORT`
-          x-description-zh-hk: 持倉方向<br/><br/> **可選值：**<br/> `LONG`<br/> `SHORT`
+          description: Position direction. **Enum Value:**, `LONG`, `SHORT`
+          x-description-zh: 持仓方向. **可选值：**, `LONG`, `SHORT`
+          x-description-zh-hk: 持倉方向. **可選值：**, `LONG`, `SHORT`
         - name: └ ∟∟ ratio_quantity
           type: string
           required: false
@@ -29499,9 +29499,9 @@ paths:
         - name: └ ∟∟ contract_direction
           type: string
           required: false
-          description: Contract type<br/><br/> **Enum Value:**<br/> `C` - Call<br/> `P` - Put
-          x-description-zh: 合约类型<br/><br/> **可选值：**<br/> `C` - 看涨（Call）<br/> `P` - 看跌（Put）
-          x-description-zh-hk: 合約類型<br/><br/> **可選值：**<br/> `C` - 看漲（Call）<br/> `P` - 看跌（Put）
+          description: Contract type. **Enum Value:**, `C` - Call, `P` - Put
+          x-description-zh: 合约类型. **可选值：**, `C` - 看涨（Call）, `P` - 看跌（Put）
+          x-description-zh-hk: 合約類型. **可選值：**, `C` - 看漲（Call）, `P` - 看跌（Put）
       responses:
         '200':
           description: Successful response
@@ -29632,9 +29632,9 @@ paths:
           in: query
           type: string
           required: true
-          description: Order side<br/><br/> **Enum Value**<br/> `Buy` - Buy<br/> `Sell` - Sell (Short selling is only supported for US stocks)
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出 卖出只支持美股卖空查询
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出 賣出只支持美股賣空查詢
+          description: Order side. **Enum Value**, `Buy` - Buy, `Sell` - Sell (Short selling is only supported for US stocks)
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出 卖出只支持美股卖空查询
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出 賣出只支持美股賣空查詢
         - name: currency
           in: query
           type: string
@@ -29949,9 +29949,9 @@ paths:
         - name: └ side
           type: string
           required: true
-          description: Trade side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Trade side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
       responses:
         '200':
           description: Successful response
@@ -30004,16 +30004,16 @@ paths:
           in: query
           type: string
           required: false
-          description: 'Start time, formatted as a timestamp (second), example: `1650410999`.<br/><br/> If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time.'
-          x-description-zh: 开始时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>开始时间为空时，默认为结束时间或当前时间前九十天。
-          x-description-zh-hk: 開始時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>開始時間為空時，默認為結束時間或當前時間前九十天。
+          description: 'Start time, formatted as a timestamp (second), example: `1650410999`. If the start time is null, the default is the 90 days before of the end time or 90 days before of the current time'
+          x-description-zh: 开始时间，格式为时间戳 (秒)，例如：`1650410999`。. 开始时间为空时，默认为结束时间或当前时间前九十天。
+          x-description-zh-hk: 開始時間，格式為時間戳 (秒)，例如：`1650410999`。. 開始時間為空時，默認為結束時間或當前時間前九十天。
         - name: end_at
           in: query
           type: string
           required: false
-          description: 'End time, formatted as a timestamp (second), example: `1650410999`. <br/><br/> If the end time is null, the default is the current time or 90 days after of the start time.'
-          x-description-zh: 结束时间，格式为时间戳 (秒)，例如：`1650410999`。<br/><br/>结束时间为空时，默认为开始时间后九十天或当前时间。
-          x-description-zh-hk: 結束時間，格式為時間戳 (秒)，例如：`1650410999`。<br/><br/>結束時間為空時，默認為開始時間後九十天或當前時間。
+          description: 'End time, formatted as a timestamp (second), example: `1650410999`. If the end time is null, the default is the current time or 90 days after of the start time'
+          x-description-zh: 结束时间，格式为时间戳 (秒)，例如：`1650410999`。. 结束时间为空时，默认为开始时间后九十天或当前时间。
+          x-description-zh-hk: 結束時間，格式為時間戳 (秒)，例如：`1650410999`。. 結束時間為空時，默認為開始時間後九十天或當前時間。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -30110,9 +30110,9 @@ paths:
         - name: has_more
           type: boolean
           required: true
-          description: has more orders record.<br/><br/>The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
-          x-description-zh: 是否还有更多数据。<br/><br/>每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
-          x-description-zh-hk: 是否還有更多數據。<br/><br/>每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
+          description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
+          x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
         - name: trades
           type: object[]
           required: false
@@ -30158,9 +30158,9 @@ paths:
         - name: └ side
           type: string
           required: true
-          description: Trade side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`
-          x-description-zh: 买卖方向<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出
-          x-description-zh-hk: 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出
+          description: Trade side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向. **可选值：**, `Buy` - 买入, `Sell` - 卖出
+          x-description-zh-hk: 買賣方向. **可選值：**, `Buy` - 買入, `Sell` - 賣出
       responses:
         '200':
           description: Successful response
@@ -30565,9 +30565,9 @@ paths:
         - name: trigger_price_type
           type: int32
           required: true
-          description: How trigger thresholds are interpreted<br/><br/>**Enum Value:**<br/>`1` - spread (absolute)<br/>`2` - percent
-          x-description-zh: 触发阈值的计价方式<br/><br/>**枚举值：**<br/>`1` - 价差（绝对值）<br/>`2` - 百分比
-          x-description-zh-hk: 觸發閾值的計價方式<br/><br/>**枚舉值：**<br/>`1` - 價差（絕對值）<br/>`2` - 百分比
+          description: How trigger thresholds are interpreted. **Enum Value:**, `1` - spread (absolute), `2` - percent
+          x-description-zh: 触发阈值的计价方式. **枚举值：**, `1` - 价差（绝对值）, `2` - 百分比
+          x-description-zh-hk: 觸發閾值的計價方式. **枚舉值：**, `1` - 價差（絕對值）, `2` - 百分比
         - name: trigger_spread_up
           type: string
           required: true
@@ -30625,9 +30625,9 @@ paths:
         - name: time_in_force
           type: int32
           required: true
-          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD
-          x-description-zh: 订单有效期<br/><br/>**枚举值：**<br/>`0` - 当日有效<br/>`1` - GTC<br/>`6` - GTD
-          x-description-zh-hk: 訂單有效期<br/><br/>**枚舉值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD
+          description: Time in force. **Enum Value:**, `0` - Day, `1` - GTC, `6` - GTD
+          x-description-zh: 订单有效期. **枚举值：**, `0` - 当日有效, `1` - GTC, `6` - GTD
+          x-description-zh-hk: 訂單有效期. **枚舉值：**, `0` - 當日有效, `1` - GTC, `6` - GTD
         - name: trigger_quantity
           type: string
           required: true
@@ -30661,15 +30661,15 @@ paths:
         - name: upper_limit_event
           type: int32
           required: true
-          description: Action at the upper bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price
-          x-description-zh: 触及上界时的动作<br/><br/>**枚举值：**<br/>`1` - 忽略<br/>`2` - 按最新价平仓
-          x-description-zh-hk: 觸及上界時的動作<br/><br/>**枚舉值：**<br/>`1` - 忽略<br/>`2` - 按最新價平倉
+          description: Action at the upper bound. **Enum Value:**, `1` - ignore, `2` - close position at last price
+          x-description-zh: 触及上界时的动作. **枚举值：**, `1` - 忽略, `2` - 按最新价平仓
+          x-description-zh-hk: 觸及上界時的動作. **枚舉值：**, `1` - 忽略, `2` - 按最新價平倉
         - name: lower_limit_event
           type: int32
           required: true
-          description: Action at the lower bound<br/><br/>**Enum Value:**<br/>`1` - ignore<br/>`2` - close position at last price
-          x-description-zh: 触及下界时的动作<br/><br/>**枚举值：**<br/>`1` - 忽略<br/>`2` - 按最新价平仓
-          x-description-zh-hk: 觸及下界時的動作<br/><br/>**枚舉值：**<br/>`1` - 忽略<br/>`2` - 按最新價平倉
+          description: Action at the lower bound. **Enum Value:**, `1` - ignore, `2` - close position at last price
+          x-description-zh: 触及下界时的动作. **枚举值：**, `1` - 忽略, `2` - 按最新价平仓
+          x-description-zh-hk: 觸及下界時的動作. **枚舉值：**, `1` - 忽略, `2` - 按最新價平倉
         - name: trigger_sell_depth
           type: int32
           required: true
@@ -30829,15 +30829,15 @@ paths:
         - name: grid_order_type_up
           type: string
           required: true
-          description: Sell-side order type when `trigger_sell_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
-          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖出方向订单类型<br/><br/>**枚举值：**<br/>`GMO` / `GLO` / `GTG`'
-          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣出方向訂單類型<br/><br/>**枚舉值：**<br/>`GMO` / `GLO` / `GTG`'
+          description: Sell-side order type when `trigger_sell_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖出方向订单类型. **枚举值：**, `GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣出方向訂單類型. **枚舉值：**, `GMO` / `GLO` / `GTG`'
         - name: grid_order_type_down
           type: string
           required: true
-          description: Buy-side order type when `trigger_buy_depth` is `0`<br/><br/>**Enum Value:**<br/>`GMO` / `GLO` / `GTG`
-          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买入方向订单类型<br/><br/>**枚举值：**<br/>`GMO` / `GLO` / `GTG`'
-          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買入方向訂單類型<br/><br/>**枚舉值：**<br/>`GMO` / `GLO` / `GTG`'
+          description: Buy-side order type when `trigger_buy_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
+          x-description-zh: '`trigger_buy_depth` 为 `0` 时的买入方向订单类型. **枚举值：**, `GMO` / `GLO` / `GTG`'
+          x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買入方向訂單類型. **枚舉值：**, `GMO` / `GLO` / `GTG`'
       responses:
         '200':
           description: Successful response
@@ -31158,9 +31158,9 @@ paths:
         - name: └ time_in_force
           type: int32
           required: true
-          description: Time in force<br/><br/>**Enum Value:**<br/>`0` - Day<br/>`1` - GTC<br/>`6` - GTD
-          x-description-zh: 订单有效期<br/><br/>**可选值：**<br/>`0` - 当日有效<br/>`1` - GTC<br/>`6` - GTD
-          x-description-zh-hk: 訂單有效期<br/><br/>**可選值：**<br/>`0` - 當日有效<br/>`1` - GTC<br/>`6` - GTD
+          description: Time in force. **Enum Value:**, `0` - Day, `1` - GTC, `6` - GTD
+          x-description-zh: 订单有效期. **可选值：**, `0` - 当日有效, `1` - GTC, `6` - GTD
+          x-description-zh-hk: 訂單有效期. **可選值：**, `0` - 當日有效, `1` - GTC, `6` - GTD
         - name: └ gtd
           type: string
           required: true
