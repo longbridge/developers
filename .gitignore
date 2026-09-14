@@ -42,6 +42,10 @@ docs/superpowers/*
 !docs/superpowers/specs/**
 !docs/superpowers/plans/
 !docs/superpowers/plans/**
+# API Reference planning docs are working artifacts — keep them out of git.
+docs/superpowers/plans/2026-09-10-api-reference-expansion.md
+docs/superpowers/plans/api-reference-endpoint-inventory.md
+docs/superpowers/specs/2026-09-09-api-reference-expansion-design.md
 .claude/worktrees
 .worktrees
 
