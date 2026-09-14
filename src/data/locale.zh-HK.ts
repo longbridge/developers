@@ -64,6 +64,6 @@ export const locale = {
   'api.intro.hint': '點選側邊欄中的任意介面，查看參數說明、程式碼範例和回應範例。',
   'api.param.required': '必填',
   'api.param.optional': '可選',
-  'api.fallback': '本規範中未定義請求體欄位。',
+  'api.fallback': '此接口無需請求參數。',
   'api.pathCopy': '複製路徑',
 } as const
