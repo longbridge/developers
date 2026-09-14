@@ -63,6 +63,9 @@ export interface Operation {
   'x-quote-command'?: string
   'x-quote-level'?: string
   'x-quote-market'?: string
+  'x-subgroup'?: string
+  'x-subgroup-zh'?: string
+  'x-subgroup-zh-hk'?: string
   'x-parameters'?: XParameter[]
   'x-response-properties'?: XParameter[]
   'x-request-examples'?: CodeSample[]
@@ -114,11 +117,21 @@ export interface PageItem {
   codeTabs?: CodeSample[]
 }
 
-export interface TagGroup {
+export interface SubGroup {
   name: string
   nameZh?: string
   nameZhHk?: string
   endpoints: EndpointItem[]
+}
+
+export interface TagGroup {
+  name: string
+  nameZh?: string
+  nameZhHk?: string
+  /** Endpoints not assigned to any subgroup (flat groups render these directly). */
+  endpoints: EndpointItem[]
+  /** Ordered docs subsections; empty for flat groups. */
+  subgroups: SubGroup[]
 }
 
 export interface CodeBlock {
@@ -162,12 +175,53 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
   const specTagObjs: any[] = (parsed.tags ?? []) as any[]
   const tagZhMap: Record<string, string> = {}
   const tagZhHkMap: Record<string, string> = {}
+  // tag name → ordered subgroup definitions from the tag's `x-subgroups`.
+  const tagSubOrder: Record<string, Array<{ name: string; nameZh?: string; nameZhHk?: string }>> = {}
   for (const t of specTagObjs) {
     if (t['x-name-zh']) tagZhMap[t.name] = t['x-name-zh']
     if (t['x-name-zh-hk']) tagZhHkMap[t.name] = t['x-name-zh-hk']
+    if (Array.isArray(t['x-subgroups'])) {
+      tagSubOrder[t.name] = t['x-subgroups'].map((s: any) => ({
+        name: s.name,
+        nameZh: s['x-name-zh'],
+        nameZhHk: s['x-name-zh-hk'],
+      }))
+    }
   }
   const specTags: string[] = specTagObjs.map((x: any) => x.name)
   const ordered = [...specTags, ...Object.keys(byTag).filter((x) => !specTags.includes(x))]
+
+  // Partition a tag's endpoints into ordered subgroups (by op x-subgroup) plus
+  // the leftover flat endpoints (ops without a subgroup).
+  const buildSubgroups = (
+    tag: string,
+    eps: EndpointItem[]
+  ): { subgroups: SubGroup[]; flat: EndpointItem[] } => {
+    const order = tagSubOrder[tag] ?? []
+    const flat: EndpointItem[] = []
+    const bySub: Record<string, EndpointItem[]> = {}
+    for (const ep of eps) {
+      const key = ep.operation['x-subgroup']
+      if (key) (bySub[key] ??= []).push(ep)
+      else flat.push(ep)
+    }
+    const seen = new Set<string>()
+    const subgroups: SubGroup[] = []
+    const push = (name: string, nameZh?: string, nameZhHk?: string) => {
+      if (seen.has(name) || !bySub[name]?.length) return
+      seen.add(name)
+      const z = bySub[name][0].operation
+      subgroups.push({
+        name,
+        nameZh: nameZh ?? z['x-subgroup-zh'],
+        nameZhHk: nameZhHk ?? z['x-subgroup-zh-hk'],
+        endpoints: bySub[name],
+      })
+    }
+    for (const s of order) push(s.name, s.nameZh, s.nameZhHk)
+    for (const name of Object.keys(bySub)) push(name) // any subgroup not listed in order
+    return { subgroups, flat }
+  }
 
   const rawPages: any[] = (parsed['x-pages'] ?? []) as any[]
   const pages: PageItem[] = rawPages.map((p: any) => ({
@@ -185,7 +239,10 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
   return {
     groups: ordered
       .filter((x) => byTag[x])
-      .map((x) => ({ name: x, nameZh: tagZhMap[x], nameZhHk: tagZhHkMap[x], endpoints: byTag[x] })),
+      .map((x) => {
+        const { subgroups, flat } = buildSubgroups(x, byTag[x])
+        return { name: x, nameZh: tagZhMap[x], nameZhHk: tagZhHkMap[x], endpoints: flat, subgroups }
+      }),
     pages,
     serverUrl,
   }

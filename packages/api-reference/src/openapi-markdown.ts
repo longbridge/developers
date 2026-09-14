@@ -117,7 +117,9 @@ export function endpointList(
   const { groups } = parseSpec(rawYaml)
   const out: Array<{ operationId: string; method: string; path: string; tag: string; summary: string }> = []
   for (const g of groups) {
-    for (const ep of g.endpoints) {
+    // Flat endpoints plus every subsection's endpoints.
+    const eps = [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)]
+    for (const ep of eps) {
       out.push({
         operationId: ep.operation.operationId,
         method: ep.method,
@@ -134,7 +136,9 @@ export function endpointList(
 export function endpointMarkdownById(rawYaml: string, operationId: string, locale: Locale): string | null {
   const { groups } = parseSpec(rawYaml)
   for (const g of groups) {
-    const ep = g.endpoints.find((e) => e.operation.operationId === operationId)
+    const ep = [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)].find(
+      (e) => e.operation.operationId === operationId
+    )
     if (ep) return endpointMarkdown(ep, locale, 1)
   }
   return null
@@ -160,7 +164,14 @@ export function referenceMarkdown(rawYaml: string, locale: Locale): string {
   for (const g of groups) {
     const tag = pickLocale(g.name, g.nameZh, g.nameZhHk, locale)
     md += `## ${tag}\n\n`
+    // Flat endpoints (groups without subsections, e.g. Screener) at level 3.
     for (const ep of g.endpoints) md += endpointMarkdown(ep, locale, 3) + '\n'
+    // Subsections (docs subgroups): `### Subsection` then endpoints at level 4.
+    for (const sg of g.subgroups) {
+      const sub = pickLocale(sg.name, sg.nameZh, sg.nameZhHk, locale)
+      md += `### ${sub}\n\n`
+      for (const ep of sg.endpoints) md += endpointMarkdown(ep, locale, 4) + '\n'
+    }
   }
   return md.trimEnd() + '\n'
 }

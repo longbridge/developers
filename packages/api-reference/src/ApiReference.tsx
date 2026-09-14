@@ -22,6 +22,7 @@ import {
   type Section,
   type XParameter,
   type TagGroup,
+  type SubGroup,
 } from './openapi-loader'
 import { CodePanel, CodeTabs, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
@@ -282,6 +283,85 @@ function Caret({ open }: { open: boolean }) {
   )
 }
 
+/** Render a flat list of endpoint leaves (shared by groups and subgroups). */
+function EndpointLeaves({
+  endpoints,
+  activeOp,
+  onSelect,
+  locale,
+}: {
+  endpoints: EndpointItem[]
+  activeOp: string | null
+  onSelect: (id: string) => void
+  locale: Locale
+}) {
+  return (
+    <>
+      {endpoints.map((ep) => {
+        const id = epId(ep)
+        const active = activeOp === id
+        const summary = pickLocale(
+          ep.operation.summary,
+          ep.operation['x-summary-zh'],
+          ep.operation['x-summary-zh-hk'],
+          locale
+        )
+        return (
+          <li key={id} className="list-none">
+            <button
+              type="button"
+              onClick={() => onSelect(id)}
+              aria-current={active ? 'page' : undefined}
+              className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
+              <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
+              <span className="flex-1 min-w-0 truncate">{summary}</span>
+            </button>
+          </li>
+        )
+      })}
+    </>
+  )
+}
+
+/** A docs subsection: a nested collapsible level between group and endpoints. */
+function ApiSidebarSubGroup({
+  sub,
+  activeOp,
+  onSelect,
+  locale,
+  forceOpen,
+}: {
+  sub: SubGroup
+  activeOp: string | null
+  onSelect: (id: string) => void
+  locale: Locale
+  forceOpen: boolean
+}) {
+  const hasActive = sub.endpoints.some((ep) => epId(ep) === activeOp)
+  const [open, setOpen] = useState(false)
+  const isOpen = forceOpen || open || hasActive
+  const label = pickLocale(sub.name, sub.nameZh, sub.nameZhHk, locale)
+  return (
+    <li data-lbus-component="sidebar-subgroup" className="list-none">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={isOpen}
+        className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg pl-3 pr-2 py-1 text-[13px] leading-6">
+        <span className="flex-1 min-w-0 truncate font-semibold text-[color:var(--lb-fg-2)] group-hover:text-[color:var(--lb-brand)]">
+          {label}
+        </span>
+        <Caret open={isOpen} />
+      </button>
+      {isOpen && (
+        <ul className="list-none py-0 m-0 pl-2 flex flex-col gap-[2px]" role="list">
+          <EndpointLeaves endpoints={sub.endpoints} activeOp={activeOp} onSelect={onSelect} locale={locale} />
+        </ul>
+      )}
+    </li>
+  )
+}
+
 function ApiSidebarGroup({
   group,
   activeOp,
@@ -295,7 +375,9 @@ function ApiSidebarGroup({
   locale: Locale
   forceOpen: boolean
 }) {
-  const hasActive = group.endpoints.some((ep) => epId(ep) === activeOp)
+  const hasActive =
+    group.endpoints.some((ep) => epId(ep) === activeOp) ||
+    group.subgroups.some((sg) => sg.endpoints.some((ep) => epId(ep) === activeOp))
   const [open, setOpen] = useState(true)
   const isOpen = forceOpen || open || hasActive
   const label = pickLocale(group.name, group.nameZh, group.nameZhHk, locale)
@@ -313,28 +395,17 @@ function ApiSidebarGroup({
       </button>
       {isOpen && (
         <ul className="list-none py-0 m-0 flex flex-col gap-[2px]" role="list">
-          {group.endpoints.map((ep) => {
-            const id = epId(ep)
-            const active = activeOp === id
-            const summary = pickLocale(
-              ep.operation.summary,
-              ep.operation['x-summary-zh'],
-              ep.operation['x-summary-zh-hk'],
-              locale
-            )
-            return (
-              <li key={id} className="list-none">
-                <button
-                  type="button"
-                  onClick={() => onSelect(id)}
-                  aria-current={active ? 'page' : undefined}
-                  className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
-                  <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
-                  <span className="flex-1 min-w-0 truncate">{summary}</span>
-                </button>
-              </li>
-            )
-          })}
+          <EndpointLeaves endpoints={group.endpoints} activeOp={activeOp} onSelect={onSelect} locale={locale} />
+          {group.subgroups.map((sg) => (
+            <ApiSidebarSubGroup
+              key={sg.name}
+              sub={sg}
+              activeOp={activeOp}
+              onSelect={onSelect}
+              locale={locale}
+              forceOpen={forceOpen}
+            />
+          ))}
         </ul>
       )}
     </li>
@@ -576,28 +647,34 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const filteredGroups = useMemo(() => {
     if (!query.trim()) return groups
     const q = query.toLowerCase()
+    const matchEp = (ep: EndpointItem) => {
+      const op = ep.operation
+      const summary = (op.summary ?? '') + ' ' + (op['x-summary-zh'] ?? '') + ' ' + (op['x-summary-zh-hk'] ?? '')
+      return (
+        ep.path.toLowerCase().includes(q) ||
+        summary.toLowerCase().includes(q) ||
+        ep.method.toLowerCase().includes(q) ||
+        (op.tags ?? []).some((tg) => tg.toLowerCase().includes(q))
+      )
+    }
     return groups
       .map((g) => ({
         ...g,
-        endpoints: g.endpoints.filter((ep) => {
-          const op = ep.operation
-          const summary = (op.summary ?? '') + ' ' + (op['x-summary-zh'] ?? '') + ' ' + (op['x-summary-zh-hk'] ?? '')
-          return (
-            ep.path.toLowerCase().includes(q) ||
-            summary.toLowerCase().includes(q) ||
-            ep.method.toLowerCase().includes(q) ||
-            (op.tags ?? []).some((tg) => tg.toLowerCase().includes(q))
-          )
-        }),
+        endpoints: g.endpoints.filter(matchEp),
+        subgroups: g.subgroups
+          .map((sg) => ({ ...sg, endpoints: sg.endpoints.filter(matchEp) }))
+          .filter((sg) => sg.endpoints.length > 0),
       }))
-      .filter((g) => g.endpoints.length > 0)
+      .filter((g) => g.endpoints.length > 0 || g.subgroups.length > 0)
   }, [groups, query])
 
   // ── Find active endpoint / page ───────────────────────────────────────────
   const activeEndpoint = useMemo<EndpointItem | null>(() => {
     if (!activeOp) return null
     for (const g of groups) {
-      const found = g.endpoints.find((ep) => epId(ep) === activeOp)
+      const found =
+        g.endpoints.find((ep) => epId(ep) === activeOp) ??
+        g.subgroups.flatMap((sg) => sg.endpoints).find((ep) => epId(ep) === activeOp)
       if (found) return found
     }
     return null

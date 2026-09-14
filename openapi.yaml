@@ -815,18 +815,55 @@ tags:
     x-name-zh: 行情
     x-name-zh-hk: 行情
     description: Real-time and static quotes, subscriptions, options, warrants, market analytics, and watchlists.
+    x-subgroups:
+      - name: Stocks
+        x-name-zh: 个股行情
+        x-name-zh-hk: 個股
+      - name: Options
+        x-name-zh: 期权
+        x-name-zh-hk: 期權
+      - name: Analytics
+        x-name-zh: 数据分析
+        x-name-zh-hk: 數據分析
+      - name: Watchlist
+        x-name-zh: 自选股
+        x-name-zh-hk: 自選股
   - name: Fundamental
     x-name-zh: 基本面
     x-name-zh-hk: 基本面
     description: Company fundamentals, financials, valuation, ratings, shareholders, and market data.
+    x-subgroups:
+      - name: Fundamentals
+        x-name-zh: 基本面数据
+        x-name-zh-hk: 基本面數據
+      - name: Market Data
+        x-name-zh: 市场数据
+        x-name-zh-hk: 市場數據
   - name: Market
     x-name-zh: 市场
     x-name-zh-hk: 市場
     description: Market status, temperature, rankings, and financial calendars.
+    x-subgroups:
+      - name: Market Status
+        x-name-zh: 市场状态
+        x-name-zh-hk: 市場狀態
+      - name: Financial Calendar
+        x-name-zh: 财经日历
+        x-name-zh-hk: 財經日曆
   - name: News & Contents
     x-name-zh: 资讯与社区
     x-name-zh-hk: 資訊與社區
     description: News, filings, and community topics and sharelists.
+    x-subgroups:
+      - name: News
+        x-name-zh: 资讯
+        x-name-zh-hk: 資訊
+      - name: Topics
+        x-name-zh: 话题
+        x-name-zh-hk: 話題
+      - name: Sharelist
+        x-name-zh: 股单
+        x-name-zh-hk: 股單
   - name: Screener
     x-name-zh: 选股
     x-name-zh-hk: 選股
@@ -835,14 +872,44 @@ tags:
     x-name-zh: 交易
     x-name-zh-hk: 交易
     description: Orders, executions, grid strategies, and account assets.
+    x-subgroups:
+      - name: Order
+        x-name-zh: 订单
+        x-name-zh-hk: 訂單
+      - name: Grid Trading
+        x-name-zh: 网格交易
+        x-name-zh-hk: 網格交易
+      - name: Execution
+        x-name-zh: 成交
+        x-name-zh-hk: 成交
+      - name: Assets
+        x-name-zh: 资产
+        x-name-zh-hk: 資產
   - name: Account
     x-name-zh: 账户
     x-name-zh-hk: 帳戶
     description: Recurring investment (DCA) plans, portfolio, statements, and alert reminders.
+    x-subgroups:
+      - name: Portfolio
+        x-name-zh: 投资组合
+        x-name-zh-hk: 投資組合
+      - name: Alerts
+        x-name-zh: 股价提醒
+        x-name-zh-hk: 股價提醒
+      - name: DCA
+        x-name-zh: 定投
+        x-name-zh-hk: 定投
   - name: AI Agent
     x-name-zh: AI Agent
     x-name-zh-hk: AI Agent
     description: AI agents, workspaces, and conversations.
+    x-subgroups:
+      - name: Workspace
+        x-name-zh: 工作空间
+        x-name-zh-hk: 工作空間
+      - name: Conversation
+        x-name-zh: 对话
+        x-name-zh-hk: 對話
 security:
   - oauth2:
       - openapi
@@ -859,6 +926,9 @@ paths:
         查询策略信号，可按标的、策略、催化因子和时间范围过滤。每条信号代表某个策略对一只标的的判断，由一个催化事实（fact）触发。
       x-description-zh-hk: |
         查詢策略信號，可按標的、策略、催化因子和時間範圍過濾。每條信號代表某個策略對一隻標的的判斷，由一個催化事實（fact）觸發。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -1207,6 +1277,9 @@ paths:
         按 ID 获取单条信号，包含 `json_data` 中的完整分析。
       x-description-zh-hk: |
         按 ID 獲取單條信號，包含 `json_data` 中的完整分析。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -1395,6 +1468,9 @@ paths:
         查询某只标的的催化事实（fact）事件——异常检测、因子读数、数据来源与自然语言摘要。事实是策略所响应的对象：信号会在 `key_fact_id` 中标明触发它的事实。
       x-description-zh-hk: |
         查詢某隻標的的催化事實（fact）事件——異常檢測、因子讀數、數據來源與自然語言摘要。事實是策略所響應的對象：信號會在 `key_fact_id` 中標明觸發它的事實。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -1634,6 +1710,9 @@ paths:
         获取 ETF 资产配置，按元素类型分组：持仓、地区、资产类别与行业。
       x-description-zh-hk: |
         獲取 ETF 資產配置，按元素類型分組：持倉、地區、資產類別與行業。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -2820,6 +2899,9 @@ paths:
         获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
       x-description-zh-hk: |
         獲取美股或港股沽空持倉數據。市場根據代碼後綴自動識別：`.HK` → 港交所沽空數據（每日更新）；其他 → 美股 FINRA 沽空數據（雙月更新）。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -3031,6 +3113,9 @@ paths:
         获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
       x-description-zh-hk: |
         獲取美股或港股沽空持倉數據。市場根據代碼後綴自動識別：`.HK` → 港交所沽空數據（每日更新）；其他 → 美股 FINRA 沽空數據（雙月更新）。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -3242,6 +3327,9 @@ paths:
         获取个股每日沽空成交量数据，支持美股（FINRA）和港股（HKEX）。美股数据每两周更新一次，港股数据每个交易日更新。
       x-description-zh-hk: |
         獲取個股每日沽空成交量數據，支持美股（FINRA）和港股（HKEX）。美股數據每兩週更新一次，港股數據每個交易日更新。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -3446,6 +3534,9 @@ paths:
         获取个股每日沽空成交量数据，支持美股（FINRA）和港股（HKEX）。美股数据每两周更新一次，港股数据每个交易日更新。
       x-description-zh-hk: |
         獲取個股每日沽空成交量數據，支持美股（FINRA）和港股（HKEX）。美股數據每兩週更新一次，港股數據每個交易日更新。
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
       tags:
         - Quote
       x-parameters:
@@ -3650,6 +3741,9 @@ paths:
         获取 A+H 两地上市股票的 A/H 溢价比率，对比 A 股和 H 股价格。
       x-description-zh-hk: |
         獲取 A+H 兩地上市股票的 A/H 溢價比率，對比 A 股和 H 股價格。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -3866,6 +3960,9 @@ paths:
         获取两地上市证券的盘中 A/H 溢价时间序列数据。
       x-description-zh-hk: |
         獲取兩地上市證券的盤中 A/H 溢價時間序列數據。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -4071,6 +4168,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
 
         查看港股券商持倉情況，包含主要買賣方和詳細持倉列表。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -4275,6 +4375,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
 
         獲取某一經紀商在港股上市證券中的每日持倉歷史記錄。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -4464,6 +4567,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
 
         獲取港股上市證券的完整經紀商持倉詳情列表（所有經紀商及其持倉數量）。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -4713,6 +4819,9 @@ paths:
         获取指数或 ETF 的成分股列表，支持排序并显示涨跌统计。
       x-description-zh-hk: |
         獲取指數或 ETF 的成分股列表，支持排序並顯示漲跌統計。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -4984,6 +5093,9 @@ paths:
         获取指定证券的成交统计数据，展示成交量的价格分布。
       x-description-zh-hk: |
         獲取指定證券的成交統計數據，展示成交量的價格分布。
+      x-subgroup: Market Data
+      x-subgroup-zh: 市场数据
+      x-subgroup-zh-hk: 市場數據
       tags:
         - Fundamental
       x-parameters:
@@ -5227,6 +5339,9 @@ paths:
         获取按月统计的机构评级（买入/持有/卖出）分布时间线，最新月份在前。
       x-description-zh-hk: |
         獲取按月統計的機構評級（買入/持有/賣出）分佈時間線，最新月份在前。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -5427,6 +5542,9 @@ paths:
         获取各交易所当前的开市/休市状态。
       x-description-zh-hk: |
         獲取各交易所當前的開市/休市狀態。
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
       tags:
         - Market
       x-parameters:
@@ -5596,6 +5714,9 @@ paths:
         获取人气排行榜的标签分类配置，`second_tags[].key` 可传入 `rank_list`。
       x-description-zh-hk: |
         獲取人氣排行榜的標籤分類配置，`second_tags[].key` 可傳入 `rank_list`。
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
       tags:
         - Market
       x-codeSamples:
@@ -5782,6 +5903,9 @@ paths:
         根据排行榜标签 key 获取股票排行。key 来自 `rank_categories` 的 `second_tags[].key`，例如 `hot_all-us`（美股总热度）。
       x-description-zh-hk: |
         根據排行榜標籤 key 獲取股票排行。key 來自 `rank_categories` 的 `second_tags[].key`，例如 `hot_all-us`（美股總熱度）。
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
       tags:
         - Market
       x-parameters:
@@ -6052,6 +6176,9 @@ paths:
         识别市场异动，包括价格异常波动、成交量激增等非正常交易行为。
       x-description-zh-hk: |
         識別市場異動，包括價格異常波動、成交量激增等非正常交易行為。
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
       tags:
         - Market
       x-parameters:
@@ -6246,6 +6373,9 @@ paths:
         获取价格波动超过近 20 个交易日标准差的异动股票，系统自动关联相关新闻解读异动原因。
       x-description-zh-hk: |
         獲取價格波動超過近 20 個交易日標準差的異動股票，系統自動關聯相關新聞解讀異動原因。
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
       tags:
         - Market
       x-parameters:
@@ -6525,6 +6655,9 @@ paths:
         浏览即将发布的财报及近期业绩，包含 EPS 和营收预期。
       x-description-zh-hk: |
         瀏覽即將發布的財報及近期業績，包含 EPS 和營收預期。
+      x-subgroup: Financial Calendar
+      x-subgroup-zh: 财经日历
+      x-subgroup-zh-hk: 財經日曆
       tags:
         - Market
       x-parameters:
@@ -6820,6 +6953,9 @@ paths:
         获取今日认购/认沽期权成交量快照。
       x-description-zh-hk: |
         獲取今日認購/認沽期權成交量快照。
+      x-subgroup: Options
+      x-subgroup-zh: 期权
+      x-subgroup-zh-hk: 期權
       tags:
         - Quote
       x-parameters:
@@ -6978,6 +7114,9 @@ paths:
         获取美股期权的历史每日认购/认沽成交量和未平仓量数据。
       x-description-zh-hk: |
         獲取美股期權的歷史每日認購/認沽成交量和未平倉量數據。
+      x-subgroup: Options
+      x-subgroup-zh: 期权
+      x-subgroup-zh-hk: 期權
       tags:
         - Quote
       x-parameters:
@@ -7219,6 +7358,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股加密貨幣交易對的概覽資訊——歷史最高/最低價、資產詳情和貨幣資訊。
+      x-subgroup: Stocks
+      x-subgroup-zh: 个股行情
+      x-subgroup-zh-hk: 個股
       tags:
         - Quote
       x-parameters:
@@ -7458,6 +7600,9 @@ paths:
         在自选股分组中置顶或取消置顶指定证券，以控制显示顺序。
       x-description-zh-hk: |
         在自選股分組中置頂或取消置頂指定證券，以控制顯示順序。
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
       tags:
         - Quote
       x-parameters:
@@ -7606,6 +7751,9 @@ paths:
         该接口用于获取订单的成交明细，包括买入和卖出的成交记录，同时支持当日成交和历史成交查询。
       x-description-zh-hk: |
         該接口用於獲取訂單的成交明細，包括買入和賣出的成交記錄，同時支持當日成交和歷史成交查詢。
+      x-subgroup: Execution
+      x-subgroup-zh: 成交
+      x-subgroup-zh-hk: 成交
       tags:
         - Trade
       x-parameters:
@@ -7822,6 +7970,9 @@ paths:
         获取任意上市公司的利润表、资产负债表和现金流量表。
       x-description-zh-hk: |
         獲取任意上市公司的利潤表、資產負債表和現金流量表。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -8106,6 +8257,9 @@ paths:
         获取 AI 生成的财报摘要、营收/EBIT/EPS 预测对比（超预期/低于预期），以及关键财务指标。
       x-description-zh-hk: |
         獲取 AI 生成的財報摘要、營收/EBIT/EPS 預測對比（超預期/低於預期），以及關鍵財務指標。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -8444,6 +8598,9 @@ paths:
         获取机构共识预测，包括营收、EPS 和净利润预测。
       x-description-zh-hk: |
         獲取機構共識預測，包括營收、EPS 和淨利潤預測。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -8704,6 +8861,9 @@ paths:
         获取 EPS 预测及分析师共识估值。
       x-description-zh-hk: |
         獲取 EPS 預測及分析師共識估值。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -8911,6 +9071,9 @@ paths:
         获取当前估值指标（市盈率、市净率、市销率、股息率）及 5 年历史区间数据。
       x-description-zh-hk: |
         獲取當前估值指標（市盈率、市凈率、市銷率、股息率）及 5 年歷史區間數據。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -9102,6 +9265,9 @@ paths:
         获取历史估值指标时间序列（市盈率、市净率、市销率、股息率）。
       x-description-zh-hk: |
         獲取歷史估值指標時間序列（市盈率、市淨率、市銷率、股息率）。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -9317,6 +9483,9 @@ paths:
         对比多只股票的估值指标（PE/PB/PS/市值/收盘价）。不传对比股票时，服务端自动选取同行业标的。
       x-description-zh-hk: |
         對比多隻股票的估值指標（PE/PB/PS/市值/收盤價）。不傳對比股票時，服務端自動選取同行業標的。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -9632,6 +9801,9 @@ paths:
         获取同行业内的同类公司估值对比数据。
       x-description-zh-hk: |
         獲取同行業內的同類公司估值對比數據。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -9857,6 +10029,9 @@ paths:
         获取该证券所在行业的估值分布直方图。
       x-description-zh-hk: |
         獲取該證券所在行業的估值分佈直方圖。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -10030,6 +10205,9 @@ paths:
         按市场和指标获取行业排行榜。返回的 Counter ID 可直接传入 `industry_peers` 查询子行业树。
       x-description-zh-hk: |
         按市場和指標獲取行業排行榜。返回的 Counter ID 可直接傳入 `industry_peers` 查詢子行業樹。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -10261,6 +10439,9 @@ paths:
         获取行业分组的层级子板块树，含各节点股票数量、日涨跌幅和年初至今涨跌幅。Counter ID 可从 `industry_rank` 返回结果中获取。
       x-description-zh-hk: |
         獲取行業分組的層級子板塊樹，含各節點股票數量、日漲跌幅和年初至今漲跌幅。Counter ID 可從 `industry_rank` 返回結果中獲取。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -10470,6 +10651,9 @@ paths:
         获取公司基本资料，包括成立年份、员工人数、总部地址和业务描述。
       x-description-zh-hk: |
         獲取公司基本資料，包括成立年份、員工人數、總部地址和業務描述。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -10808,6 +10992,9 @@ paths:
         获取公司关键高管列表（CEO、CFO 等）。
       x-description-zh-hk: |
         獲取公司關鍵高管列表（CEO、CFO 等）。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -11030,6 +11217,9 @@ paths:
         获取指定证券的公司行动历史，包括拆股、合并、分拆和配股等。
       x-description-zh-hk: |
         獲取指定證券的公司行動歷史，包括拆股、合並、分拆和配股等。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -11272,6 +11462,9 @@ paths:
         获取投资关系数据，包括母公司、子公司及主要持股。
       x-description-zh-hk: |
         獲取投資關係數據，包括母公司、子公司及主要持股。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -11492,6 +11685,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
 
         按財報期獲取經營數據及核心財務指標摘要。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -11750,6 +11946,9 @@ paths:
         获取股票回购数据，包括历史回购金额及回购比例。
       x-description-zh-hk: |
         獲取股票回購數據，包括歷史回購金額及回購比例。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -11972,6 +12171,9 @@ paths:
         获取指定证券的分红历史及即将公布的分红信息。
       x-description-zh-hk: |
         獲取指定證券的股息歷史及即將公布的股息信息。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -12172,6 +12374,9 @@ paths:
         获取详细分红信息，包括宣告日、除息日和派发日。
       x-description-zh-hk: |
         獲取詳細分紅資訊，包括宣告日、除息日和派發日。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -12352,6 +12557,9 @@ paths:
         获取公司主要机构股东和个人股东信息。
       x-description-zh-hk: |
         獲取公司主要機構股東和個人股東信息。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -12559,6 +12767,9 @@ paths:
         获取上市公司前 20 大股东（机构、个人、内部人）的持股数据，支持多报告期对比。`object_id` 可传入 `shareholder_detail` 查看详情。
       x-description-zh-hk: |
         獲取上市公司前 20 大股東（機構、個人、內部人）的持股數據，支持多報告期對比。`object_id` 可傳入 `shareholder_detail` 查看詳情。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -12789,6 +13000,9 @@ paths:
         获取单个股东的持仓历史及交易明细。`object_id` 来自 `shareholder_top` 返回结果。
       x-description-zh-hk: |
         獲取單個股東的持倉歷史及交易明細。`object_id` 來自 `shareholder_top` 返回結果。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -13058,6 +13272,9 @@ paths:
         获取持有指定证券的基金列表，含持股数量和持股比例。
       x-description-zh-hk: |
         獲取持有指定證券的基金列表，含持股數量和持股比例。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -13244,6 +13461,9 @@ paths:
         获取指定证券的机构分析师评级和一致预期数据。
       x-description-zh-hk: |
         獲取指定證券的機構分析師評級和一致預期數據。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -13438,6 +13658,9 @@ paths:
         获取分析师机构评级快照（评级分布及平均目标价）。
       x-description-zh-hk: |
         獲取分析師機構評級快照（評級分佈及平均目標價）。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -13821,6 +14044,9 @@ paths:
         获取历史分析师评级及目标价详情。
       x-description-zh-hk: |
         獲取歷史分析師評級及目標價詳情。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -14099,6 +14325,9 @@ paths:
         获取上市公司当前报告期的业务分部收入占比。
       x-description-zh-hk: |
         獲取上市公司當前報告期的業務分部收入佔比。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -14286,6 +14515,9 @@ paths:
         获取上市公司按报告期的历史业务分部收入趋势。
       x-description-zh-hk: |
         獲取上市公司按報告期的歷史業務分部收入趨勢。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -14506,6 +14738,9 @@ paths:
         获取指定宏观经济指标的历史发布数据，包括实际值、预测值、前值和下次发布时间。
       x-description-zh-hk: |
         獲取指定宏觀經濟指標的歷史發布數據，包括實際值、預測值、前值和下次發布時間。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -14732,6 +14967,9 @@ paths:
         列出 Longbridge 支持的宏观经济指标，可按国家/地区筛选。
       x-description-zh-hk: |
         列出 Longbridge 支持的宏觀經濟指標，可按國家/地區篩選。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -14939,6 +15177,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股公司概覽資訊——簡介、市值、排名標籤和詳情連結。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -15126,6 +15367,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股估值概覽——當前估值指標及歷史區間。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -15328,6 +15572,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         按報告週期獲取美股財務概覽——損益、資產負債和現金流摘要。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -15611,6 +15858,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股指定財務報表（損益表、資產負債表或現金流量表）。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -15889,6 +16139,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股關鍵財務指標——營收、淨利潤、EPS、利潤率和增長率。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -16115,6 +16368,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股分析師一致預期——營收、EPS 預測及買入/持有/賣出評級。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -16331,6 +16587,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股 ETF 分紅資訊——TTM 股息率、派息頻率及財年明細。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -16512,6 +16771,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股股票分紅歷史——TTM 股息率、派息次數及逐筆分紅記錄。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -16705,6 +16967,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         列出美股 ETF 的監管文件——招股書、事實說明書和年報。
+      x-subgroup: Fundamentals
+      x-subgroup-zh: 基本面数据
+      x-subgroup-zh-hk: 基本面數據
       tags:
         - Fundamental
       x-parameters:
@@ -17064,6 +17329,9 @@ paths:
         获取当前账户加入的全部 Workspace 列表。Workspace 是 Agent 的组织单位，先通过本接口找到目标 Workspace，再用 [Workspace 下的 Agent](/zh-CN/docs/ai/workspace/agents) 查询其中可用的 Agent。
       x-description-zh-hk: |
         獲取當前賬戶加入的全部 Workspace 列表。Workspace 是 Agent 的組織單位，先通過本接口找到目標 Workspace，再用 [Workspace 下的 Agent](/zh-HK/docs/ai/workspace/agents) 查詢其中可用的 Agent。
+      x-subgroup: Workspace
+      x-subgroup-zh: 工作空间
+      x-subgroup-zh-hk: 工作空間
       tags:
         - AI Agent
       x-request-examples:
@@ -17216,6 +17484,9 @@ paths:
         获取指定 Workspace 下的 Agent 列表。返回的 `uid` 即 [发起对话](/zh-CN/docs/ai/chat/conversation) 接口路径中的 Agent 标识；只有 `is_published` 为 `true` 的 Agent 才能发起对话。
       x-description-zh-hk: |
         獲取指定 Workspace 下的 Agent 列表。返回的 `uid` 即 [發起對話](/zh-HK/docs/ai/chat/conversation) 接口路徑中的 Agent 標識；只有 `is_published` 為 `true` 的 Agent 才能發起對話。
+      x-subgroup: Workspace
+      x-subgroup-zh: 工作空间
+      x-subgroup-zh-hk: 工作空間
       tags:
         - AI Agent
       x-request-examples:
@@ -17428,6 +17699,9 @@ paths:
         通過請求頭 `Accept` 選擇響應模式：`text/event-stream` 為 SSE 流式，逐步推送運行過程與回答；其他值為阻塞式，一次性返回聚合後的最終結果。
 
         > **如何獲取 Agent 的 UID** 除通過 Workspace 下的 Agent 接口查詢外，也可以直接從 Longbridge 網頁端獲取：打開 Agent 的對話頁，URL 形如 `https://longbridge.com/zh-HK/ai/agents/chatbot/chat`，其中 `chatbot` 即為該 Agent 的 UID。
+      x-subgroup: Conversation
+      x-subgroup-zh: 对话
+      x-subgroup-zh-hk: 對話
       tags:
         - AI Agent
       x-request-examples:
@@ -17680,6 +17954,9 @@ paths:
         同一輪對話可能發生多次中斷：若繼續後再次返回 `interrupted`，按新的 `interrupt` 重複調用本接口即可。
 
         與發起對話一致，通過請求頭 `Accept` 選擇阻塞式 / SSE 流式響應。
+      x-subgroup: Conversation
+      x-subgroup-zh: 对话
+      x-subgroup-zh-hk: 對話
       tags:
         - AI Agent
       x-request-examples:
@@ -17802,6 +18079,9 @@ paths:
         获取当前用户的所有股价提醒，支持按标的筛选。
       x-description-zh-hk: |
         獲取當前用戶的所有股價提醒，支持按標的篩選。
+      x-subgroup: Alerts
+      x-subgroup-zh: 股价提醒
+      x-subgroup-zh-hk: 股價提醒
       tags:
         - Account
       x-parameters:
@@ -18054,6 +18334,9 @@ paths:
         为指定证券创建股价提醒，当价格高于或低于目标价时触发通知。
       x-description-zh-hk: |
         為指定證券創建股價提醒，當價格高於或低於目標價時觸發通知。
+      x-subgroup: Alerts
+      x-subgroup-zh: 股价提醒
+      x-subgroup-zh-hk: 股價提醒
       tags:
         - Account
       x-parameters:
@@ -18222,6 +18505,9 @@ paths:
         启用或禁用已有的股价提醒。先通过 `list` 获取完整的 `AlertItem`，修改 `item.enabled` 后调用 `update(item)`。
       x-description-zh-hk: |
         啟用或禁用已有的股價提醒。
+      x-subgroup: Alerts
+      x-subgroup-zh: 股价提醒
+      x-subgroup-zh-hk: 股價提醒
       tags:
         - Account
       x-parameters:
@@ -18370,6 +18656,9 @@ paths:
         根据 ID 删除指定的股价提醒。
       x-description-zh-hk: |
         根據 ID 刪除指定的股價提醒。
+      x-subgroup: Alerts
+      x-subgroup-zh: 股价提醒
+      x-subgroup-zh-hk: 股價提醒
       tags:
         - Account
       x-parameters:
@@ -18506,6 +18795,9 @@ paths:
         获取指定股票的资讯列表。完整资讯流可访问 [资讯](https://longbridge.com/news)。
       x-description-zh-hk: |
         獲取指定股票的資訊列表。完整資訊流可瀏覽 [資訊](https://longbridge.com/news)。
+      x-subgroup: News
+      x-subgroup-zh: 资讯
+      x-subgroup-zh-hk: 資訊
       tags:
         - News & Contents
       x-codeSamples:
@@ -18696,6 +18988,9 @@ paths:
         获取指定股票的讨论列表。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
       x-description-zh-hk: |
         獲取指定股票的討論列表。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
       x-codeSamples:
@@ -18886,6 +19181,9 @@ paths:
         获取当前登录用户发布的讨论列表，支持分页与类型过滤。可在 [社区](https://longbridge.com/topics)查看。
       x-description-zh-hk: |
         獲取當前登錄用戶發布的討論列表，支持分頁與類型過濾。可在 [社區](https://longbridge.com/topics)查看。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
       x-codeSamples:
@@ -19220,6 +19518,9 @@ paths:
         **頻率限制：** 同一用戶每分鐘最多創建 3 篇，24 小時內最多 10 篇，超出返回 `429`。
 
         > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
       x-codeSamples:
@@ -19492,6 +19793,9 @@ paths:
         根据讨论 ID 获取完整详情，包含正文（Markdown）、作者信息、关联标的与标签、互动数据及详情页链接。可在 [社区](https://longbridge.com/topics)查看。
       x-description-zh-hk: |
         根據討論 ID 獲取完整詳情，包含正文（Markdown）、作者信息、關聯標的與標籤、互動數據及詳情頁鏈接。可在 [社區](https://longbridge.com/topics)查看。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
       x-codeSamples:
@@ -19783,6 +20087,9 @@ paths:
         獲取指定討論下的回覆列表，支持分頁。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
 
         每條回覆包含作者信息、正文（純文本）、互動數據及 `reply_to_id` 字段：`"0"` 表示頂層回覆，其他值表示對指定回覆的嵌套回覆。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
       x-codeSamples:
@@ -20074,6 +20381,9 @@ paths:
         **頻率限制：** 同一用戶在同一討論下，前 3 條無間隔限制；此後每條須與上一條保持遞增間隔（3 s → 5 s → 8 s → 13 s → 21 s → 34 s → 55 s 封頂），超出限制返回 `429`。
 
         > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
       x-codeSamples:
@@ -20305,6 +20615,9 @@ paths:
         获取当前用户创建的或订阅的所有社区自选股列表。
       x-description-zh-hk: |
         獲取當前用戶創建的或訂閱的所有社區自選股列表。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -20575,6 +20888,9 @@ paths:
         创建新的社区自选股列表，可选择预设初始证券。
       x-description-zh-hk: |
         創建新的社區自選股列表，可選擇預設初始證券。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -20729,6 +21045,9 @@ paths:
         获取社区热门股单列表。
       x-description-zh-hk: |
         獲取社區熱門股單列表。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -20998,6 +21317,9 @@ paths:
         获取股单详情，包括名称、描述及成分股列表。
       x-description-zh-hk: |
         獲取股單詳情，包括名稱、描述及成分股列表。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -21217,6 +21539,9 @@ paths:
         永久删除您创建的自选股列表，此操作不可撤销。
       x-description-zh-hk: |
         永久刪除您創建的自選股列表，此操作不可撤銷。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -21346,6 +21671,9 @@ paths:
         向股单中添加一个或多个标的。
       x-description-zh-hk: |
         向股單中新增一個或多個標的。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -21490,6 +21818,9 @@ paths:
         从股单中移除一个或多个标的。
       x-description-zh-hk: |
         從股單中移除一個或多個標的。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -21631,6 +21962,9 @@ paths:
         对股单中的标的重新排序。传入的标的代码列表即为新顺序。
       x-description-zh-hk: |
         對股單中的標的重新排序。傳入的標的代碼列表即為新順序。
+      x-subgroup: Sharelist
+      x-subgroup-zh: 股单
+      x-subgroup-zh-hk: 股單
       tags:
         - News & Contents
       x-parameters:
@@ -21777,6 +22111,9 @@ paths:
         该接口用于获取用户每个币种可用、可取、冻结、待结算金额、在途资金 (基金申购赎回) 信息。
       x-description-zh-hk: |
         該接口用於獲取用戶每個幣種可用、可取、凍結、待結算金額、在途資金 (基金申購贖回) 信息。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-parameters:
@@ -22046,6 +22383,9 @@ paths:
         该接口用于获取资金流入/流出方向、资金类别、资金金额、发生时间、关联股票代码和资金流水说明信息。
       x-description-zh-hk: |
         該接口用於獲取資金流入/流出方向、資金類別、資金金額、發生時間、關聯股票代碼和資金流水說明信息。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-parameters:
@@ -22287,6 +22627,9 @@ paths:
         该接口用于获取包括账户、基金代码、持有份额、成本净值、当前净值、币种在内的基金持仓信息。
       x-description-zh-hk: |
         該接口用於獲取包括賬戶、基金代碼、持有份額、成本淨值、當前淨值、幣種在內的基金持倉信息。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-parameters:
@@ -22481,6 +22824,9 @@ paths:
         该接口用于获取包括账户、股票代码、持仓股数、可用股数、持仓均价（按账户设置计算均价方式）、币种在内的股票持仓信息。
       x-description-zh-hk: |
         該接口用於獲取包括賬戶、股票代碼、持倉股數、可用股數、持倉均價（按賬戶設置計算均價方式）、幣種在內的股票持倉信息。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-parameters:
@@ -22737,6 +23083,9 @@ paths:
         获取账户中所有货币对的当前外汇汇率。
       x-description-zh-hk: |
         獲取賬戶中所有貨幣對的當前外匯匯率。
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
       tags:
         - Account
       x-parameters:
@@ -22910,6 +23259,9 @@ paths:
         该接口用于获取股票初始保证金比例、维持保证金比例、强平保证金比例。
       x-description-zh-hk: |
         該接口用於獲取股票初始保證金比例、維持保證金比例、強平保證金比例。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-parameters:
@@ -23072,6 +23424,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股賬戶資產概覽——買入力、現金、股票、期權和加密貨幣。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-codeSamples:
@@ -23279,6 +23634,9 @@ paths:
         > **Longbridge US 賬戶** 此方法僅適用於美國數據中心賬戶。
 
         獲取美股賬戶已實現盈虧，按資產類別（股票/期權/加密貨幣）分組。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
       tags:
         - Trade
       x-parameters:
@@ -23477,6 +23835,9 @@ paths:
         获取账户盈亏汇总，包含总资产、总盈亏和收益率指标。
       x-description-zh-hk: |
         獲取賬戶盈虧匯總，包含總資產、總盈虧和收益率指標。
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
       tags:
         - Account
       x-parameters:
@@ -23899,6 +24260,9 @@ paths:
         获取按市场分组的盈亏分析（美股、港股、A 股、新加坡股）。
       x-description-zh-hk: |
         獲取按市場分組的盈虧分析（美股、港股、A 股、新加坡股）。
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
       tags:
         - Account
       x-parameters:
@@ -24086,6 +24450,9 @@ paths:
         获取指定证券的详细盈亏分析，包含交易流水和成本分解。
       x-description-zh-hk: |
         獲取指定證券的詳細盈虧分析，包含交易流水和成本分解。
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
       tags:
         - Account
       x-parameters:
@@ -24405,6 +24772,9 @@ paths:
         查询账户资金流水历史，包含入金、出金、分红和结算等。
       x-description-zh-hk: |
         查詢賬戶資金流水歷史，包含入金、出金、股息和結算等。
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
       tags:
         - Account
       x-parameters:
@@ -24634,6 +25004,9 @@ paths:
         该接口用于港美股，窝轮，期权的委托下单。
       x-description-zh-hk: |
         該接口用於港美股，窩輪，期權的委托下單。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -24956,6 +25329,9 @@ paths:
         该接口用于修改订单的价格，数量。
       x-description-zh-hk: |
         該接口用於修改訂單的價格，數量。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -25277,6 +25653,9 @@ paths:
         该接口用于订单撤销。
       x-description-zh-hk: |
         該接口用於訂單撤銷。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -25419,6 +25798,9 @@ paths:
         该接口用于订单详情查询。
       x-description-zh-hk: |
         該接口用於訂單詳情查詢。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -26204,6 +26586,9 @@ paths:
         该接口用于获取当日订单和订单查询。
       x-description-zh-hk: |
         該接口用於獲取當日訂單和訂單查詢。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -26831,6 +27216,9 @@ paths:
         该接口用于获取历史订单。
       x-description-zh-hk: |
         該接口用於獲取歷史訂單。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -27464,6 +27852,9 @@ paths:
         该接口用于提交多腿期权组合订单（如垂直价差、跨式、宽跨式、领口等）。各腿作为一个策略订单一起提交。
       x-description-zh-hk: |
         該接口用於提交多腿期權組合訂單（如垂直價差、跨式、寬跨式、領口等）。各腿作為一個策略訂單一起提交。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -27662,6 +28053,9 @@ paths:
         该接口用于港美股，窝轮，期权的预估最大购买数量。
       x-description-zh-hk: |
         該接口用於港美股，窩輪，期權的預估最大購買數量。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -27849,6 +28243,9 @@ paths:
         该接口用于获取当日订单的成交明细。
       x-description-zh-hk: |
         該接口用於獲取當日訂單的成交明細。
+      x-subgroup: Execution
+      x-subgroup-zh: 成交
+      x-subgroup-zh-hk: 成交
       tags:
         - Trade
       x-parameters:
@@ -28042,6 +28439,9 @@ paths:
         该接口用于获取历史订单的成交明细，包括买入和卖出的成交记录，不支持当日成交明细查询。
       x-description-zh-hk: |
         該接口用於獲取歷史訂單的成交明細，包括買入和賣出的成交記錄，不支持當日成交明細查詢。
+      x-subgroup: Execution
+      x-subgroup-zh: 成交
+      x-subgroup-zh-hk: 成交
       tags:
         - Trade
       x-parameters:
@@ -28267,6 +28667,9 @@ paths:
         使用不受支持的賬戶調用時會返回錯誤，而不是空結果——請勿將該失敗理解為「此賬戶沒有委託」。如需模擬環境，請改用 AP 賬戶與通用交易接口。
 
         查詢美股賬戶的歷史委託和待成交委託，支持分頁和篩選。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -28490,6 +28893,9 @@ paths:
         使用不受支持的賬戶調用時會返回錯誤，而不是空結果——請勿將該失敗理解為「此委託不存在」。如需模擬環境，請改用 AP 賬戶與通用交易接口。
 
         獲取美股指定委託的詳情，包括成交歷史，可選獲取關聯子委託。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
       tags:
         - Trade
       x-parameters:
@@ -28641,6 +29047,9 @@ paths:
         提交網格策略訂單。網格以 `submitted_base_price` 為基準價，在 `[lower_limit_price, upper_limit_price]` 區間內，價格下跌時掛買單、價格上漲時掛賣單。
 
         使用網格交易前，你需要先記錄一次策略風險揭示的同意確認，詳見[提交策略問卷](./questionnaire)。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -28952,6 +29361,9 @@ paths:
         修改已存在的网格订单规则。提交的 `grid_trading_rule` 会整体替换原有规则，因此需要传入完整的规则，而不是仅传改动的字段。
       x-description-zh-hk: |
         修改已存在的網格訂單規則。提交的 `grid_trading_rule` 會整體替換原有規則，因此需要傳入完整的規則，而不是僅傳改動的欄位。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -29255,6 +29667,9 @@ paths:
         分页获取网格订单列表，可按市场、标的或状态筛选。
       x-description-zh-hk: |
         分頁獲取網格訂單列表，可按市場、標的或狀態篩選。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -29758,6 +30173,9 @@ paths:
         按 ID 查询指定的网格订单。
       x-description-zh-hk: |
         按 ID 查詢指定的網格訂單。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -30221,6 +30639,9 @@ paths:
         查询单个网格订单的完整详情，包括网格规则、分页的成交子订单（`grid_sub_orders`）以及分页的生命周期历史（`grid_order_history`）。
       x-description-zh-hk: |
         查詢單個網格訂單的完整詳情，包括網格規則、分頁的成交子訂單（`grid_sub_orders`）以及分頁的生命週期歷史（`grid_order_history`）。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -30769,6 +31190,9 @@ paths:
         查詢單個網格訂單的分頁觸發歷史 —— 網格每次觸發時所發出的具體訂單。
 
         > **使用 `grid_order_id` 而非 `order_id`** 該接口使用 `grid_order_id`，而**不是**其他網格接口所用的 `order_id`。此處傳入 `order_id` 將無法定位到網格訂單。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -31074,6 +31498,9 @@ paths:
         取消网格订单。网格会立即停止，不再挂出新的触发订单。取消是不可逆的——已取消的网格无法重启，如需继续请重新提交新的网格订单。
       x-description-zh-hk: |
         取消網格訂單。網格會立即停止，不再掛出新的觸發訂單。取消是不可逆的——已取消的網格無法重啟，如需繼續請重新提交新的網格訂單。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -31214,6 +31641,9 @@ paths:
         暂停运行中的网格订单。网格停止触发新订单，但会保留原有配置，之后可通过[重启网格订单](./restart)恢复运行。当你希望暂停策略但不丢失其配置时，使用暂停操作。
       x-description-zh-hk: |
         暫停運行中的網格訂單。網格停止觸發新訂單，但會保留原有配置，之後可透過[重啟網格訂單](./restart)恢復運行。當你希望暫停策略但不丟失其配置時，使用暫停操作。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -31354,6 +31784,9 @@ paths:
         重启已暂停的网格订单。网格会从保存的配置恢复，并重新开始触发订单。只有此前通过[暂停网格订单](./suspend)暂停的网格才能被重启。
       x-description-zh-hk: |
         重啟已暫停的網格訂單。網格會從保存的配置恢復，並重新開始觸發訂單。只有此前透過[暫停網格訂單](./suspend)暫停的網格才能被重啟。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -31494,6 +31927,9 @@ paths:
         获取标的的网格交易信息：每手股数、最新成交价、价格步长以及授权状态。在调用[提交网格订单](./submit)之前，用它来构建合法的网格规则。`channel_info.strategy_granted` 字段告诉你是否已记录策略风险披露同意——若为 `false`，请先提交[策略问卷](./questionnaire)。
       x-description-zh-hk: |
         獲取標的的網格交易信息：每手股數、最新成交價、價格步長以及授權狀態。在調用[提交網格訂單](./submit)之前，用它來構建合法的網格規則。`channel_info.strategy_granted` 欄位告訴你是否已記錄策略風險披露同意——若為 `false`，請先提交[策略問卷](./questionnaire)。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
       tags:
         - Trade
       x-parameters:
@@ -31724,6 +32160,9 @@ paths:
         获取自选股分组
       x-description-zh-hk: |
         獲取關注分組
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
       x-quote-level: basic
       tags:
         - Quote
@@ -31916,6 +32355,9 @@ paths:
         创建自选股分组
       x-description-zh-hk: |
         創建自選股分組
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
       x-quote-level: basic
       tags:
         - Quote
@@ -32072,6 +32514,9 @@ paths:
         更新自选股分组
       x-description-zh-hk: |
         更新自選股分組
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
       x-quote-level: basic
       tags:
         - Quote
@@ -32235,6 +32680,9 @@ paths:
         删除自选股分组
       x-description-zh-hk: |
         刪除自選股分組
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
       x-quote-level: basic
       tags:
         - Quote
@@ -32384,6 +32832,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         獲取當前用戶的所有定投（DCA）計劃。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -32689,6 +33140,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         為指定證券創建新的定投。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -32878,6 +33332,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         暫停或恢復已有的定投。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -33052,6 +33509,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         更改現有定投計劃的狀態：暫停、恢復或永久終止。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -33203,6 +33663,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         獲取指定定投的執行歷史，包含交易日期、金額和價格。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -33445,6 +33908,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         獲取定投統計匯總信息，包括總投入金額和盈虧情況。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -33641,6 +34107,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         檢查指定標的是否支持定投。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -33810,6 +34279,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         根據給定的定投計劃參數，計算下一次預計交易日期。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -33984,6 +34456,9 @@ paths:
         > **Longbridge US 賬戶不支援** 此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
 
         設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
+      x-subgroup: DCA
+      x-subgroup-zh: 定投
+      x-subgroup-zh-hk: 定投
       tags:
         - Account
       x-parameters:
@@ -34163,6 +34638,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      x-subgroup: Stocks
+      x-subgroup-zh: 个股行情
+      x-subgroup-zh-hk: 個股
   /v1/quote/history_market_temperature:
     get:
       operationId: list_market_temperature
@@ -34230,6 +34708,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
   /v1/quote/market_temperature:
     get:
       operationId: market_temperature
@@ -34280,6 +34761,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      x-subgroup: Market Status
+      x-subgroup-zh: 市场状态
+      x-subgroup-zh-hk: 市場狀態
   /v1/statement/list:
     get:
       operationId: list_statements
@@ -34351,6 +34835,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
   /v1/statement/download:
     get:
       operationId: get_statement_download_url
@@ -34396,6 +34883,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      x-subgroup: Portfolio
+      x-subgroup-zh: 投资组合
+      x-subgroup-zh-hk: 投資組合
   /v1/quote/filings:
     get:
       operationId: list_filings
@@ -34444,6 +34934,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      x-subgroup: Analytics
+      x-subgroup-zh: 数据分析
+      x-subgroup-zh-hk: 數據分析
 components:
   securitySchemes:
     oauth2:
