@@ -45,7 +45,9 @@ const _md = new MarkdownIt({
 // docs remark-callout output: `.callout.callout-<type>` + `.callout-title`).
 const CALLOUT_TYPES = ['tip', 'warning', 'danger', 'info', 'note', 'caution', 'success']
 for (const type of CALLOUT_TYPES) {
-  _md.use(container, type, {
+  // markdown-it-container ships types for a different @types/markdown-it build,
+  // so its plugin signature doesn't unify with our MarkdownIt instance — cast.
+  _md.use(container as unknown as Parameters<(typeof _md)['use']>[0], type, {
     render(tokens: any[], idx: number) {
       const token = tokens[idx]
       if (token.nesting === 1) {
