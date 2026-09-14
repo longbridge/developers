@@ -924,23 +924,19 @@ paths:
         Filter stocks by strategy ID or custom indicator conditions, with pagination support.
 
         :::warning Note on JSON output format
-        The response uses a flat `items[]` array (not `stocks[]`), all numeric fields are JSON numbers (not strings), and indicator keys do not carry the `filter_` prefix.
+        Each `items[]` entry carries its metrics inside a nested `indicators[]` array (not flat top-level fields). Indicator `key` values carry the `filter_` prefix (e.g. `filter_pettm`), and every `value` is returned as a string.
         :::
       x-description-zh: |
         按策略 ID 或自定义指标条件筛选股票，支持分页。
 
-        接口：`POST /v1/quote/ai/screener/search`
-
         :::warning JSON 输出格式说明
-        响应使用扁平的 `items[]` 数组（非 `stocks[]`），所有数值字段为 JSON 数字类型（非字符串），指标键名不含 `filter_` 前缀。
+        每个 `items[]` 元素的指标值都在嵌套的 `indicators[]` 数组里（并非扁平的顶层字段）。指标 `key` 带 `filter_` 前缀（如 `filter_pettm`），每个 `value` 都以字符串返回。
         :::
       x-description-zh-hk: |
         按策略 ID 或自定義指標條件篩選股票，支持分頁。
 
-        接口：`POST /v1/quote/ai/screener/search`
-
         :::warning JSON 輸出格式說明
-        響應使用扁平的 `items[]` 數組（非 `stocks[]`），所有數值字段為 JSON 數字類型（非字符串），指標鍵名不含 `filter_` 前綴。
+        每個 `items[]` 元素的指標值都在嵌套的 `indicators[]` 數組裡（並非扁平的頂層字段）。指標 `key` 帶 `filter_` 前綴（如 `filter_pettm`），每個 `value` 都以字符串返回。
         :::
       tags:
         - Screener
@@ -1087,75 +1083,57 @@ paths:
         - name: total
           type: integer
           required: false
-          description: Total number of matching stocks
-          x-description-zh: 满足条件的股票总数
-          x-description-zh-hk: 滿足條件的股票總數
-        - name: page
-          type: integer
-          required: false
-          description: Current page number (zero-based)
-          x-description-zh: 当前页码（从零开始）
-          x-description-zh-hk: 當前頁碼（從零開始）
-        - name: market
-          type: string
-          required: false
-          description: Market of the result set
-          x-description-zh: 结果集的市场
-          x-description-zh-hk: 結果集的市場
+          description: Total number of matching stocks.
+          x-description-zh: 满足条件的股票总数。
+          x-description-zh-hk: 滿足條件的股票總數。
         - name: items
           type: object[]
           required: false
-          description: Filtered stock list
-          x-description-zh: 筛选结果股票列表
-          x-description-zh-hk: 篩選結果股票列表
-        - name: └ symbol
+          description: Matched stock list.
+          x-description-zh: 匹配的股票列表。
+          x-description-zh-hk: 匹配的股票列表。
+        - name: └ counter_id
           type: string
           required: false
-          description: Security symbol
-          x-description-zh: 证券代码
-          x-description-zh-hk: 證券代碼
+          description: Internal security identifier, e.g. `ST/US/WXT`.
+          x-description-zh: 内部标的标识，如 `ST/US/WXT`。
+          x-description-zh-hk: 內部標的標識，如 `ST/US/WXT`。
         - name: └ name
           type: string
           required: false
-          description: Security name
-          x-description-zh: 证券名称
-          x-description-zh-hk: 證券名稱
-        - name: └ prevchg
-          type: number
+          description: Security name.
+          x-description-zh: 标的名称。
+          x-description-zh-hk: 標的名稱。
+        - name: └ indicators
+          type: object[]
           required: false
-          description: Previous day price change ratio (e.g. `1.24` = 1.24%)
-          x-description-zh: 昨日涨跌幅（如 `1.24` 表示 1.24%）
-          x-description-zh-hk: 昨日漲跌幅（如 `1.24` 表示 1.24%）
-        - name: └ marketcap
-          type: number
-          required: false
-          description: Market capitalisation (numeric)
-          x-description-zh: 市值（数字类型）
-          x-description-zh-hk: 市值（數字類型）
-        - name: └ pettm
-          type: number
-          required: false
-          description: P/E ratio (TTM, numeric)
-          x-description-zh: 市盈率 TTM（数字类型）
-          x-description-zh-hk: 市盈率 TTM（數字類型）
-        - name: └ pbmrq
-          type: number
-          required: false
-          description: P/B ratio (MRQ, numeric)
-          x-description-zh: 市净率 MRQ（数字类型）
-          x-description-zh-hk: 市淨率 MRQ（數字類型）
-        - name: └ salesgrowthyoy
-          type: number
-          required: false
-          description: Revenue growth YoY (%)
-          x-description-zh: 营收同比增速（%）
-          x-description-zh-hk: 營收同比增速（%）
-        - name: └ industry
+          description: Indicator values for this stock.
+          x-description-zh: 该股票的指标值。
+          x-description-zh-hk: 該股票的指標值。
+        - name: └ ∟ key
           type: string
           required: false
-          description: Industry classification
-          x-description-zh: 行业分类
-          x-description-zh-hk: 行業分類
+          description: Indicator key, carrying the `filter_` prefix (e.g. `filter_pettm`).
+          x-description-zh: 指标键名，带 `filter_` 前缀（如 `filter_pettm`）。
+          x-description-zh-hk: 指標鍵名，帶 `filter_` 前綴（如 `filter_pettm`）。
+        - name: └ ∟ name
+          type: string
+          required: false
+          description: Indicator display name.
+          x-description-zh: 指标显示名称。
+          x-description-zh-hk: 指標顯示名稱。
+        - name: └ ∟ value
+          type: string
+          required: false
+          description: Indicator value as a string; empty when unavailable.
+          x-description-zh: 指标值（字符串），无数据时为空。
+          x-description-zh-hk: 指標值（字符串），無數據時為空。
+        - name: └ ∟ unit
+          type: string
+          required: false
+          description: Value unit, e.g. `%`, `亿`.
+          x-description-zh: 数值单位，如 `%`、` 亿`。
+          x-description-zh-hk: 數值單位，如 `%`、` 億`。
       responses:
         '200':
           description: Successful response
@@ -9412,15 +9390,11 @@ paths:
       x-description-zh: |
         获取[选股器](https://longbridge.com/screener) 支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
 
-        接口：`GET /v1/quote/ai/screener/indicators`
-
         :::warning SDK 响应
         `data` 字段为分组结构 `{"groups": [{...}]}`。CLI `screener indicators --format json` 会将其展平为扁平数组以方便使用。
         :::
       x-description-zh-hk: |
         獲取[選股器](https://longbridge.com/screener) 支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
-
-        接口：`GET /v1/quote/ai/screener/indicators`
 
         :::warning SDK 響應
         `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
@@ -9609,12 +9583,8 @@ paths:
 
       x-description-zh: |
         获取平台预设的选股策略列表，含近期平均日涨跌幅和策略内股票。
-
-        接口：`GET /v1/quote/ai/screener/strategies/recommend`
       x-description-zh-hk: |
         獲取平台預設的選股策略列表，含近期平均日漲跌幅和策略內股票。
-
-        接口：`GET /v1/quote/ai/screener/strategies/recommend`
       tags:
         - Screener
       x-parameters:
@@ -9784,12 +9754,8 @@ paths:
 
       x-description-zh: |
         获取当前登录用户创建的自定义选股策略列表。
-
-        接口：`GET /v1/quote/ai/screener/strategies/mine`
       x-description-zh-hk: |
         獲取當前登錄用戶創建的自定義選股策略列表。
-
-        接口：`GET /v1/quote/ai/screener/strategies/mine`
       tags:
         - Screener
       x-parameters:
@@ -9924,12 +9890,8 @@ paths:
         (strategy ID as path parameter)
       x-description-zh: |
         根据策略 ID 获取单个选股策略的完整配置，包含所有指标分组和各指标的筛选范围。
-
-        接口：`GET /v1/quote/ai/screener/strategy/{id}`（策略 ID 为路径参数）
       x-description-zh-hk: |
         根據策略 ID 獲取單個選股策略的完整配置，包含所有指標分組和各指標的篩選範圍。
-
-        接口：`GET /v1/quote/ai/screener/strategy/{id}`（策略 ID 為路徑參數）
       tags:
         - Screener
       x-parameters:
