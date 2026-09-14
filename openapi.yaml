@@ -4087,9 +4087,9 @@ paths:
         - name: klines
           type: object[]
           required: true
-          description: Intraday A/H premium kline data, see [AhPremiumKline](#AhPremiumKline)
-          x-description-zh: Intraday A/H premium kline data, see [AhPremiumKline](#AhPremiumKline)
-          x-description-zh-hk: Intraday A/H premium kline data, see [AhPremiumKline](#AhPremiumKline)
+          description: Intraday A/H premium kline data
+          x-description-zh: Intraday A/H premium kline data
+          x-description-zh-hk: Intraday A/H premium kline data
         - name: └ timestamp
           type: string
           required: false
@@ -4718,9 +4718,9 @@ paths:
         - name: list
           type: object[]
           required: true
-          description: Broker holding detail records, see [BrokerHoldingItem](#BrokerHoldingItem)
-          x-description-zh: 经纪商持仓明细，见 [BrokerHoldingItem](#BrokerHoldingItem)
-          x-description-zh-hk: 經紀商持倉明細，見 [BrokerHoldingItem](#BrokerHoldingItem)
+          description: Broker holding detail records
+          x-description-zh: 经纪商持仓明细，
+          x-description-zh-hk: 經紀商持倉明細，
         - name: parti_number
           type: string
           required: true
@@ -6830,9 +6830,9 @@ paths:
         - name: list
           type: object[]
           required: true
-          description: List of calendar date groups, see [CalendarDateGroup](#CalendarDateGroup)
-          x-description-zh: 日历日期分组列表，见 [CalendarDateGroup](#CalendarDateGroup)
-          x-description-zh-hk: 日曆日期分組列表，見 [CalendarDateGroup](#CalendarDateGroup)
+          description: List of calendar date groups
+          x-description-zh: 日历日期分组列表，
+          x-description-zh-hk: 日曆日期分組列表，
         - name: count
           type: integer
           required: false
@@ -6842,9 +6842,9 @@ paths:
         - name: infos
           type: object[]
           required: true
-          description: List of calendar events, see [CalendarEventInfo](#CalendarEventInfo)
-          x-description-zh: 日历事件列表，见 [CalendarEventInfo](#CalendarEventInfo)
-          x-description-zh-hk: 日曆事件列表，見 [CalendarEventInfo](#CalendarEventInfo)
+          description: List of calendar events
+          x-description-zh: 日历事件列表，
+          x-description-zh-hk: 日曆事件列表，
         - name: id
           type: string
           required: false
@@ -8180,9 +8180,9 @@ paths:
         - name: accounts
           type: object[]
           required: false
-          description: List of financial line items, see [FinancialAccount](#FinancialAccount)
-          x-description-zh: 财务科目列表，见 [FinancialAccount](#FinancialAccount)
-          x-description-zh-hk: 財務科目列表，見 [FinancialAccount](#FinancialAccount)
+          description: List of financial line items
+          x-description-zh: 财务科目列表，
+          x-description-zh-hk: 財務科目列表，
         - name: field
           type: string
           required: true
@@ -8204,9 +8204,9 @@ paths:
         - name: values
           type: object[]
           required: false
-          description: Historical values by period, see [FinancialValue](#FinancialValue)
-          x-description-zh: 按报告期的历史数值，见 [FinancialValue](#FinancialValue)
-          x-description-zh-hk: 按報告期的歷史數值，見 [FinancialValue](#FinancialValue)
+          description: Historical values by period
+          x-description-zh: 按报告期的历史数值，
+          x-description-zh-hk: 按報告期的歷史數值，
         - name: period
           type: string
           required: true
@@ -8460,63 +8460,63 @@ paths:
         - name: fo_revenue
           type: object
           required: false
-          description: Revenue forecast vs actual, see [ForecastMetric](#ForecastMetric)
-          x-description-zh: 营收预测对比，见 [ForecastMetric](#ForecastMetric)
-          x-description-zh-hk: 營收預測對比，見 [ForecastMetric](#ForecastMetric)
+          description: Revenue forecast vs actual
+          x-description-zh: 营收预测对比，
+          x-description-zh-hk: 營收預測對比，
         - name: fo_ebit
           type: object
           required: false
-          description: EBIT forecast vs actual, see [ForecastMetric](#ForecastMetric)
-          x-description-zh: EBIT 预测对比，见 [ForecastMetric](#ForecastMetric)
-          x-description-zh-hk: EBIT 預測對比，見 [ForecastMetric](#ForecastMetric)
+          description: EBIT forecast vs actual
+          x-description-zh: EBIT 预测对比，
+          x-description-zh-hk: EBIT 預測對比，
         - name: fo_eps
           type: object
           required: false
-          description: EPS forecast vs actual, see [ForecastMetric](#ForecastMetric)
-          x-description-zh: EPS 预测对比，见 [ForecastMetric](#ForecastMetric)
-          x-description-zh-hk: EPS 預測對比，見 [ForecastMetric](#ForecastMetric)
+          description: EPS forecast vs actual
+          x-description-zh: EPS 预测对比，
+          x-description-zh-hk: EPS 預測對比，
         - name: fr_revenue
           type: object
           required: false
-          description: Reported revenue, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 营收财务数据，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 營收財務數據，見 [ReportedMetric](#ReportedMetric)
+          description: Reported revenue
+          x-description-zh: 营收财务数据，
+          x-description-zh-hk: 營收財務數據，
         - name: fr_profit
           type: object
           required: false
-          description: Reported net profit, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 净利润财务数据，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 淨利潤財務數據，見 [ReportedMetric](#ReportedMetric)
+          description: Reported net profit
+          x-description-zh: 净利润财务数据，
+          x-description-zh-hk: 淨利潤財務數據，
         - name: fr_operate_cash
           type: object
           required: false
-          description: Operating cash flow, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 经营现金流，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 經營現金流，見 [ReportedMetric](#ReportedMetric)
+          description: Operating cash flow
+          x-description-zh: 经营现金流，
+          x-description-zh-hk: 經營現金流，
         - name: fr_invest_cash
           type: object
           required: false
-          description: Investing cash flow, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 投资现金流，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 投資現金流，見 [ReportedMetric](#ReportedMetric)
+          description: Investing cash flow
+          x-description-zh: 投资现金流，
+          x-description-zh-hk: 投資現金流，
         - name: fr_finance_cash
           type: object
           required: false
-          description: Financing cash flow, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 融资现金流，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 融資現金流，見 [ReportedMetric](#ReportedMetric)
+          description: Financing cash flow
+          x-description-zh: 融资现金流，
+          x-description-zh-hk: 融資現金流，
         - name: fr_total_assets
           type: object
           required: false
-          description: Total assets, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 总资产，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 總資產，見 [ReportedMetric](#ReportedMetric)
+          description: Total assets
+          x-description-zh: 总资产，
+          x-description-zh-hk: 總資產，
         - name: fr_total_liability
           type: object
           required: false
-          description: Total liabilities, see [ReportedMetric](#ReportedMetric)
-          x-description-zh: 总负债，见 [ReportedMetric](#ReportedMetric)
-          x-description-zh-hk: 總負債，見 [ReportedMetric](#ReportedMetric)
+          description: Total liabilities
+          x-description-zh: 总负债，
+          x-description-zh-hk: 總負債，
         - name: fr_roe_ttm
           type: string
           required: false
@@ -8768,9 +8768,9 @@ paths:
         - name: list
           type: object[]
           required: true
-          description: List of consensus forecast periods, see [ConsensusListItem](#ConsensusListItem)
-          x-description-zh: 共识预测期列表，见 [ConsensusListItem](#ConsensusListItem)
-          x-description-zh-hk: 共識預測期列表，見 [ConsensusListItem](#ConsensusListItem)
+          description: List of consensus forecast periods
+          x-description-zh: 共识预测期列表，
+          x-description-zh-hk: 共識預測期列表，
         - name: opt_periods
           type: string[]
           required: false
@@ -8798,9 +8798,9 @@ paths:
         - name: details
           type: object[]
           required: false
-          description: List of financial indicator details, see [ConsensusDetail](#ConsensusDetail)
-          x-description-zh: List of financial indicator details, see [ConsensusDetail](#ConsensusDetail)
-          x-description-zh-hk: List of financial indicator details, see [ConsensusDetail](#ConsensusDetail)
+          description: List of financial indicator details
+          x-description-zh: List of financial indicator details
+          x-description-zh-hk: List of financial indicator details
         - name: key
           type: string
           required: false
@@ -9465,9 +9465,9 @@ paths:
         - name: list
           type: object[]
           required: false
-          description: Time series data points, see [ValuationMetric](#ValuationMetric)
-          x-description-zh: 历史估值数据点列表，见 [ValuationMetric](#ValuationMetric)
-          x-description-zh-hk: 歷史估值數據點列表，見 [ValuationMetric](#ValuationMetric)
+          description: Time series data points
+          x-description-zh: 历史估值数据点列表，
+          x-description-zh-hk: 歷史估值數據點列表，
         - name: list[].date
           type: string
           required: false
@@ -9954,8 +9954,8 @@ paths:
           type: object[]
           required: true
           description: List of peer companies
-          x-description-zh: 同行公司列表，见 [IndustryValuationItem](#IndustryValuationItem)
-          x-description-zh-hk: 同行公司列表，見 [IndustryValuationItem](#IndustryValuationItem)
+          x-description-zh: 同行公司列表，
+          x-description-zh-hk: 同行公司列表，
         - name: └ symbol
           type: string
           required: false
@@ -10599,15 +10599,15 @@ paths:
         - name: top
           type: object
           required: false
-          description: Top-level industry info, see [IndustryPeersTop](#IndustryPeersTop)
-          x-description-zh: 顶层行业信息，见 [IndustryPeersTop](#IndustryPeersTop)
-          x-description-zh-hk: 頂層行業資訊，見 [IndustryPeersTop](#IndustryPeersTop)
+          description: Top-level industry info
+          x-description-zh: 顶层行业信息，
+          x-description-zh-hk: 頂層行業資訊，
         - name: chain
           type: object
           required: false
-          description: Industry hierarchy root node, see [IndustryPeerNode](#IndustryPeerNode)
-          x-description-zh: 行业层级树根节点，见 [IndustryPeerNode](#IndustryPeerNode)
-          x-description-zh-hk: 行業層級樹根節點，見 [IndustryPeerNode](#IndustryPeerNode)
+          description: Industry hierarchy root node
+          x-description-zh: 行业层级树根节点，
+          x-description-zh-hk: 行業層級樹根節點，
         - name: market
           type: string
           required: false
@@ -11144,9 +11144,9 @@ paths:
         - name: professional_list
           type: object[]
           required: true
-          description: List of executive groups, see [ExecutiveGroup](#ExecutiveGroup)
-          x-description-zh: 高管分组列表，见 [ExecutiveGroup](#ExecutiveGroup)
-          x-description-zh-hk: 高管分組列表，見 [ExecutiveGroup](#ExecutiveGroup)
+          description: List of executive groups
+          x-description-zh: 高管分组列表，
+          x-description-zh-hk: 高管分組列表，
         - name: symbol
           type: string
           required: true
@@ -11168,9 +11168,9 @@ paths:
         - name: professionals
           type: object[]
           required: true
-          description: List of executives, see [Executive](#Executive)
-          x-description-zh: 高管列表，见 [Executive](#Executive)
-          x-description-zh-hk: 高管列表，見 [Executive](#Executive)
+          description: List of executives
+          x-description-zh: 高管列表，
+          x-description-zh-hk: 高管列表，
         - name: id
           type: string
           required: false
@@ -11850,9 +11850,9 @@ paths:
         - name: list
           type: object[]
           required: true
-          description: List of operating summary reports, see [OperatingItem](#OperatingItem)
-          x-description-zh: 经营数据报告列表，见 [OperatingItem](#OperatingItem)
-          x-description-zh-hk: 經營數據報告列表，見 [OperatingItem](#OperatingItem)
+          description: List of operating summary reports
+          x-description-zh: 经营数据报告列表，
+          x-description-zh-hk: 經營數據報告列表，
         - name: id
           type: string
           required: false
@@ -11916,9 +11916,9 @@ paths:
         - name: indicators
           type: object[]
           required: false
-          description: Financial indicators, see [OperatingIndicator](#OperatingIndicator)
-          x-description-zh: 财务指标列表，见 [OperatingIndicator](#OperatingIndicator)
-          x-description-zh-hk: 財務指標列表，見 [OperatingIndicator](#OperatingIndicator)
+          description: Financial indicators
+          x-description-zh: 财务指标列表，
+          x-description-zh-hk: 財務指標列表，
         - name: field_name
           type: string
           required: true
@@ -12098,15 +12098,15 @@ paths:
         - name: buyback_history
           type: object[]
           required: false
-          description: Annual buyback history, see [BuybackHistoryItem](#BuybackHistoryItem)
-          x-description-zh: 年度回购历史，见 [BuybackHistoryItem](#BuybackHistoryItem)
-          x-description-zh-hk: 年度回購歷史，見 [BuybackHistoryItem](#BuybackHistoryItem)
+          description: Annual buyback history
+          x-description-zh: 年度回购历史，
+          x-description-zh-hk: 年度回購歷史，
         - name: buyback_ratios
           type: object[]
           required: false
-          description: Buyback ratio history, see [BuybackRatios](#BuybackRatios)
-          x-description-zh: 回购比率历史，见 [BuybackRatios](#BuybackRatios)
-          x-description-zh-hk: 回購比率歷史，見 [BuybackRatios](#BuybackRatios)
+          description: Buyback ratio history
+          x-description-zh: 回购比率历史，
+          x-description-zh-hk: 回購比率歷史，
         - name: recent_buybacks
           type: object
           required: false
@@ -12344,8 +12344,8 @@ paths:
           type: object[]
           required: true
           description: Dividend records
-          x-description-zh: 分红记录列表，见 [DividendItem](#DividendItem)
-          x-description-zh-hk: 股息記錄列表，見 [DividendItem](#DividendItem)
+          x-description-zh: 分红记录列表，
+          x-description-zh-hk: 股息記錄列表，
         - name: └ id
           type: string
           required: false
@@ -12527,8 +12527,8 @@ paths:
           type: object[]
           required: true
           description: List of dividend records
-          x-description-zh: 分红记录列表，见 [DividendItem](#DividendItem)
-          x-description-zh-hk: 分紅記錄列表，見 [DividendItem](#DividendItem)
+          x-description-zh: 分红记录列表，
+          x-description-zh-hk: 分紅記錄列表，
         - name: └ id
           type: string
           required: false
@@ -18443,9 +18443,9 @@ paths:
         - name: lists
           type: object[]
           required: true
-          description: Alert groups per security, see [AlertSymbolGroup](#AlertSymbolGroup)
-          x-description-zh: 按标的分组的提醒列表，见 [AlertSymbolGroup](#AlertSymbolGroup)
-          x-description-zh-hk: 按標的分組的提醒列表，見 [AlertSymbolGroup](#AlertSymbolGroup)
+          description: Alert groups per security
+          x-description-zh: 按标的分组的提醒列表，
+          x-description-zh-hk: 按標的分組的提醒列表，
         - name: symbol
           type: string
           required: true
@@ -18491,9 +18491,9 @@ paths:
         - name: indicators
           type: object[]
           required: false
-          description: Alert indicators, see [AlertItem](#AlertItem)
-          x-description-zh: 股价提醒列表，见 [AlertItem](#AlertItem)
-          x-description-zh-hk: 股價提醒列表，見 [AlertItem](#AlertItem)
+          description: Alert indicators
+          x-description-zh: 股价提醒列表，
+          x-description-zh-hk: 股價提醒列表，
         - name: id
           type: string
           required: true
@@ -21149,15 +21149,15 @@ paths:
         - name: sharelists
           type: object[]
           required: false
-          description: User's own sharelists, see [SharelistInfo](#SharelistInfo)
-          x-description-zh: 用户自建股单列表，见 [SharelistInfo](#SharelistInfo)
-          x-description-zh-hk: 用戶自建股單列表，見 [SharelistInfo](#SharelistInfo)
+          description: User's own sharelists
+          x-description-zh: 用户自建股单列表，
+          x-description-zh-hk: 用戶自建股單列表，
         - name: subscribed_sharelists
           type: object[]
           required: false
-          description: Subscribed sharelists, see [SharelistInfo](#SharelistInfo)
-          x-description-zh: 已订阅股单列表，见 [SharelistInfo](#SharelistInfo)
-          x-description-zh-hk: 已訂閱股單列表，見 [SharelistInfo](#SharelistInfo)
+          description: Subscribed sharelists
+          x-description-zh: 已订阅股单列表，
+          x-description-zh-hk: 已訂閱股單列表，
         - name: tail_mark
           type: string
           required: false
@@ -21221,9 +21221,9 @@ paths:
         - name: stocks
           type: object[]
           required: false
-          description: Constituent stocks, see [SharelistStock](#SharelistStock)
-          x-description-zh: 成份股列表，见 [SharelistStock](#SharelistStock)
-          x-description-zh-hk: 成份股列表，見 [SharelistStock](#SharelistStock)
+          description: Constituent stocks
+          x-description-zh: 成份股列表，
+          x-description-zh-hk: 成份股列表，
         - name: symbol
           type: string
           required: true
@@ -21578,15 +21578,15 @@ paths:
         - name: sharelists
           type: object[]
           required: false
-          description: User's own sharelists, see [SharelistInfo](#SharelistInfo)
-          x-description-zh: 用户自建股单列表，见 [SharelistInfo](#SharelistInfo)
-          x-description-zh-hk: 用戶自建股單列表，見 [SharelistInfo](#SharelistInfo)
+          description: User's own sharelists
+          x-description-zh: 用户自建股单列表，
+          x-description-zh-hk: 用戶自建股單列表，
         - name: subscribed_sharelists
           type: object[]
           required: false
-          description: Subscribed sharelists, see [SharelistInfo](#SharelistInfo)
-          x-description-zh: 已订阅股单列表，见 [SharelistInfo](#SharelistInfo)
-          x-description-zh-hk: 已訂閱股單列表，見 [SharelistInfo](#SharelistInfo)
+          description: Subscribed sharelists
+          x-description-zh: 已订阅股单列表，
+          x-description-zh-hk: 已訂閱股單列表，
         - name: tail_mark
           type: string
           required: false
@@ -21650,9 +21650,9 @@ paths:
         - name: stocks
           type: object[]
           required: false
-          description: Constituent stocks, see [SharelistStock](#SharelistStock)
-          x-description-zh: 成份股列表，见 [SharelistStock](#SharelistStock)
-          x-description-zh-hk: 成份股列表，見 [SharelistStock](#SharelistStock)
+          description: Constituent stocks
+          x-description-zh: 成份股列表，
+          x-description-zh-hk: 成份股列表，
         - name: symbol
           type: string
           required: true
@@ -21916,9 +21916,9 @@ paths:
         - name: stocks
           type: object[]
           required: false
-          description: Constituent stocks, see [SharelistStock](#SharelistStock)
-          x-description-zh: 成分股列表，见 [SharelistStock](#SharelistStock)
-          x-description-zh-hk: 成分股列表，見 [SharelistStock](#SharelistStock)
+          description: Constituent stocks
+          x-description-zh: 成分股列表，
+          x-description-zh-hk: 成分股列表，
         - name: is_self
           type: boolean
           required: false
@@ -24544,9 +24544,9 @@ paths:
         - name: items
           type: object[]
           required: false
-          description: Per-position P&L items, see [ProfitAnalysisItem](#ProfitAnalysisItem)
-          x-description-zh: 逐仓位盈亏列表，见 [ProfitAnalysisItem](#ProfitAnalysisItem)
-          x-description-zh-hk: 逐倉位盈虧列表，見 [ProfitAnalysisItem](#ProfitAnalysisItem)
+          description: Per-position P&L items
+          x-description-zh: 逐仓位盈亏列表，
+          x-description-zh-hk: 逐倉位盈虧列表，
         - name: symbol
           type: string
           required: false
@@ -33409,9 +33409,9 @@ paths:
         - name: plans
           type: object[]
           required: true
-          description: List of DCA plans, see [DcaPlan](#DcaPlan)
-          x-description-zh: 定投计划列表，见 [DcaPlan](#DcaPlan)
-          x-description-zh-hk: 定投計劃列表，見 [DcaPlan](#DcaPlan)
+          description: List of DCA plans
+          x-description-zh: 定投计划列表，
+          x-description-zh-hk: 定投計劃列表，
         - name: └ plan_id
           type: string
           required: true
