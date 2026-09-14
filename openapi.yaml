@@ -18061,21 +18061,53 @@ paths:
       x-subgroup-zh-hk: 對話
       tags:
         - AI Agent
+      x-parameters:
+        - name: agent_id
+          in: path
+          type: string
+          required: true
+          description: Agent UID.
+          x-description-zh: Agent UID。
+          x-description-zh-hk: Agent UID。
+        - name: chat_uid
+          in: path
+          type: string
+          required: true
+          description: Conversation UID of the interrupted run.
+          x-description-zh: 被中断会话的 UID。
+          x-description-zh-hk: 被中斷會話的 UID。
+        - name: message_id
+          in: path
+          type: string
+          required: true
+          description: ID of the interrupted message to continue.
+          x-description-zh: 要继续的被中断消息 ID。
+          x-description-zh-hk: 要繼續的被中斷消息 ID。
+        - name: answers_by_tool_call
+          in: body
+          type: object
+          required: true
+          description: Answers keyed by tool-call ID, providing the information the Agent asked for so the interrupted run can resume.
+          x-description-zh: 按工具调用 ID 组织的回答，提供 Agent 所需信息以恢复被中断的运行。
+          x-description-zh-hk: 按工具調用 ID 組織的回答，提供 Agent 所需信息以恢復被中斷的運行。
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request POST \
-              --url 'https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue' \
-              --header 'Authorization: Bearer <access_token>'
+              --url 'https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"answers_by_tool_call":{}}'
         - lang: Python
           label: Python
           source: |
             import requests
 
             resp = requests.post(
-                "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue",
-                headers={"Authorization": "Bearer <access_token>"},
+                "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"answers_by_tool_call": {}},
             )
             print(resp.json())
         - lang: Python
@@ -18087,8 +18119,9 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
-                        "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"answers_by_tool_call": {}},
                     ) as resp:
                         print(await resp.json())
 
@@ -18096,11 +18129,13 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue", {
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ answers_by_tool_call: {} }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -18111,9 +18146,10 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"answers_by_tool_call\":{}}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -18122,8 +18158,9 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "answers_by_tool_call": {} }))
                     .send()
                     .await?
                     .text()
@@ -18138,8 +18175,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"answers_by_tool_call\":{}}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -18147,7 +18186,44 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations/{chat_uid}/messages/{message_id}/continue\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations/<chat_uid>/messages/<message_id>/continue\", strings.NewReader(`{\"answers_by_tool_call\":{}}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: chat_uid
+          type: string
+          required: true
+          description: Conversation UID.
+          x-description-zh: 会话 UID。
+          x-description-zh-hk: 會話 UID。
+        - name: message_id
+          type: string
+          required: true
+          description: Message ID.
+          x-description-zh: 消息 ID。
+          x-description-zh-hk: 消息 ID。
+        - name: status
+          type: string
+          required: true
+          description: Run status, e.g. `succeeded`, `interrupted`.
+          x-description-zh: 运行状态，如 `succeeded`、`interrupted`。
+          x-description-zh-hk: 運行狀態，如 `succeeded`、`interrupted`。
+        - name: answer
+          type: string
+          required: false
+          description: The Agent's answer text.
+          x-description-zh: Agent 的回答文本。
+          x-description-zh-hk: Agent 的回答文本。
+        - name: references
+          type: array
+          required: false
+          description: Reference sources cited in the answer.
+          x-description-zh: 回答引用的参考来源。
+          x-description-zh-hk: 回答引用的參考來源。
+        - name: elapsed_time
+          type: number
+          required: false
+          description: Elapsed run time in seconds.
+          x-description-zh: 运行耗时（秒）。
+          x-description-zh-hk: 運行耗時（秒）。
       responses:
         '200':
           description: Successful response
@@ -34809,20 +34885,146 @@ paths:
       x-description-zh: 按市场和类别筛选可交易证券列表，主要用于获取符合盘前/盘后延长交易时段条件的证券。`market` 和 `category` 均为必填参数。
       tags:
         - Quote
-      parameters:
+      x-parameters:
         - name: market
           in: query
+          type: string
           required: true
           description: Market code. One of `US`, `HK`.
-          schema:
-            type: string
+          x-description-zh: 市场代码，`US` 或 `HK`。
+          x-description-zh-hk: 市場代碼，`US` 或 `HK`。
         - name: category
           in: query
+          type: string
           required: true
           description: Security category filter for the target trading session (e.g. `overnight` for US overnight-tradable securities).
-          schema:
-            type: string
-            nullable: true
+          x-description-zh: 目标交易时段的证券类别筛选（如 `overnight` 表示美股可夜盘交易证券）。
+          x-description-zh-hk: 目標交易時段的證券類別篩選（如 `overnight` 表示美股可夜盤交易證券）。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/get_security_list?market=<market>&category=<category>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/get_security_list",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"market": "<market>", "category": "<category>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/get_security_list",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"market": "<market>", "category": "<category>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/quote/get_security_list")
+            url.searchParams.set("market", "<market>")
+            url.searchParams.set("category", "<category>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/get_security_list?market=<market>&category=<category>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/get_security_list")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("market", "<market>"), ("category", "<category>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/get_security_list?market=<market>&category=<category>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/get_security_list?market=<market>&category=<category>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: true
+          description: Matched securities.
+          x-description-zh: 匹配的证券列表。
+          x-description-zh-hk: 匹配的證券列表。
+        - name: └ symbol
+          type: string
+          required: true
+          description: Security symbol, e.g. `AAPL.US`.
+          x-description-zh: 证券代码，如 `AAPL.US`。
+          x-description-zh-hk: 證券代碼，如 `AAPL.US`。
+        - name: └ name_cn
+          type: string
+          required: false
+          description: Simplified Chinese name.
+          x-description-zh: 简体中文名称。
+          x-description-zh-hk: 簡體中文名稱。
+        - name: └ name_hk
+          type: string
+          required: false
+          description: Traditional Chinese name.
+          x-description-zh: 繁体中文名称。
+          x-description-zh-hk: 繁體中文名稱。
+        - name: └ name_en
+          type: string
+          required: false
+          description: English name.
+          x-description-zh: 英文名称。
+          x-description-zh-hk: 英文名稱。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -34864,30 +35066,160 @@ paths:
       x-description-zh: 获取指定市场在日期范围内的历史市场温度时间序列，每个数据点包含当日情绪温度、估值和情绪分项评分（均为 0–100 分制）。
       tags:
         - Market
-      parameters:
+      x-parameters:
         - name: market
           in: query
+          type: string
           required: true
-          description: |
-            Market code. One of:
-            - `HK` — Hong Kong
-            - `US` — United States
-            - `CN` — A-shares
-            - `SG` — Singapore
-          schema:
-            type: string
+          description: Market code. One of `HK`, `US`, `CN`, `SG`.
+          x-description-zh: 市场代码，`HK`、`US`、`CN`、`SG` 之一。
+          x-description-zh-hk: 市場代碼，`HK`、`US`、`CN`、`SG` 之一。
         - name: start_date
           in: query
+          type: string
           required: true
           description: Start date in `YYYYMMDD` format (e.g. `20250101`).
-          schema:
-            type: string
+          x-description-zh: 起始日期，`YYYYMMDD` 格式（如 `20250101`）。
+          x-description-zh-hk: 起始日期，`YYYYMMDD` 格式（如 `20250101`）。
         - name: end_date
           in: query
+          type: string
           required: true
           description: End date in `YYYYMMDD` format (e.g. `20250110`).
-          schema:
-            type: string
+          x-description-zh: 结束日期，`YYYYMMDD` 格式（如 `20250110`）。
+          x-description-zh-hk: 結束日期，`YYYYMMDD` 格式（如 `20250110`）。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/history_market_temperature?market=<market>&start_date=<start_date>&end_date=<end_date>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/history_market_temperature",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"market": "<market>", "start_date": "<start_date>", "end_date": "<end_date>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/history_market_temperature",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"market": "<market>", "start_date": "<start_date>", "end_date": "<end_date>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/quote/history_market_temperature")
+            url.searchParams.set("market", "<market>")
+            url.searchParams.set("start_date", "<start_date>")
+            url.searchParams.set("end_date", "<end_date>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/history_market_temperature?market=<market>&start_date=<start_date>&end_date=<end_date>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/history_market_temperature")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("market", "<market>"), ("start_date", "<start_date>"), ("end_date", "<end_date>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/history_market_temperature?market=<market>&start_date=<start_date>&end_date=<end_date>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/history_market_temperature?market=<market>&start_date=<start_date>&end_date=<end_date>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: true
+          description: Market-temperature time series.
+          x-description-zh: 市场温度时间序列。
+          x-description-zh-hk: 市場溫度時間序列。
+        - name: └ timestamp
+          type: string
+          required: true
+          description: Unix timestamp of the data point.
+          x-description-zh: 数据点的 Unix 时间戳。
+          x-description-zh-hk: 數據點的 Unix 時間戳。
+        - name: └ temperature
+          type: integer
+          required: true
+          description: Market temperature (0–100).
+          x-description-zh: 市场温度（0–100）。
+          x-description-zh-hk: 市場溫度（0–100）。
+        - name: └ valuation
+          type: integer
+          required: false
+          description: Valuation score.
+          x-description-zh: 估值分数。
+          x-description-zh-hk: 估值分數。
+        - name: └ sentiment
+          type: integer
+          required: false
+          description: Sentiment score.
+          x-description-zh: 情绪分数。
+          x-description-zh-hk: 情緒分數。
+        - name: type
+          type: string
+          required: false
+          description: Granularity of the series, e.g. `day`.
+          x-description-zh: 序列粒度，如 `day`。
+          x-description-zh-hk: 序列粒度，如 `day`。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -34934,18 +35266,138 @@ paths:
       x-description-zh: 获取指定市场的当前情绪温度快照。评分范围 0–100，数值越高表示市场越乐观。
       tags:
         - Market
-      parameters:
+      x-parameters:
         - name: market
           in: query
+          type: string
           required: true
-          description: |
-            Market code. One of:
-            - `HK` — Hong Kong
-            - `US` — United States
-            - `CN` — A-shares
-            - `SG` — Singapore
-          schema:
-            type: string
+          description: Market code. One of `HK`, `US`, `CN`, `SG`.
+          x-description-zh: 市场代码，`HK`、`US`、`CN`、`SG` 之一。
+          x-description-zh-hk: 市場代碼，`HK`、`US`、`CN`、`SG` 之一。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/market_temperature?market=<market>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/market_temperature",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"market": "<market>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/market_temperature",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"market": "<market>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/quote/market_temperature")
+            url.searchParams.set("market", "<market>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/market_temperature?market=<market>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/market_temperature")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("market", "<market>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/market_temperature?market=<market>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/market_temperature?market=<market>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: temperature
+          type: integer
+          required: true
+          description: Current market temperature (0–100).
+          x-description-zh: 当前市场温度（0–100）。
+          x-description-zh-hk: 當前市場溫度（0–100）。
+        - name: description
+          type: string
+          required: false
+          description: Text description of the current temperature.
+          x-description-zh: 当前温度的文字描述。
+          x-description-zh-hk: 當前溫度的文字描述。
+        - name: valuation
+          type: integer
+          required: false
+          description: Valuation score.
+          x-description-zh: 估值分数。
+          x-description-zh-hk: 估值分數。
+        - name: sentiment
+          type: integer
+          required: false
+          description: Sentiment score.
+          x-description-zh: 情绪分数。
+          x-description-zh-hk: 情緒分數。
+        - name: updated_at
+          type: string
+          required: false
+          description: Update time (Unix timestamp).
+          x-description-zh: 更新时间（Unix 时间戳）。
+          x-description-zh-hk: 更新時間（Unix 時間戳）。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -34986,29 +35438,128 @@ paths:
       x-description-zh: 查询可用的账户结单（日结单或月结单），返回结单日期和文件标识列表，可用于下载接口。
       tags:
         - Account
-      parameters:
+      x-parameters:
         - name: statement_type
           in: query
+          type: integer
           required: false
-          description: 'Statement type: 1 = daily (default), 2 = monthly.'
-          schema:
-            type: integer
-            enum:
-              - 1
-              - 2
-            default: 1
+          description: 'Statement type: `1` = daily (default), `2` = monthly.'
+          x-description-zh: 对账单类型：`1` 日结单（默认），`2` 月结单。
+          x-description-zh-hk: 對賬單類型：`1` 日結單（預設），`2` 月結單。
         - name: page
           in: query
+          type: integer
           required: false
           description: Page number for pagination.
-          schema:
-            type: integer
+          x-description-zh: 分页页码。
+          x-description-zh-hk: 分頁頁碼。
         - name: page_size
           in: query
+          type: integer
           required: false
           description: Number of results per page.
-          schema:
-            type: integer
+          x-description-zh: 每页结果数量。
+          x-description-zh-hk: 每頁結果數量。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/statement/list' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/statement/list",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/statement/list",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/statement/list", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/statement/list"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/statement/list")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/statement/list");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/statement/list\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: date
+          type: string
+          required: true
+          description: Statement date, `YYYYMMDD`.
+          x-description-zh: 对账单日期，`YYYYMMDD`。
+          x-description-zh-hk: 對賬單日期，`YYYYMMDD`。
+        - name: file_key
+          type: string
+          required: true
+          description: File key — pass to Get Statement Download URL to obtain a download link.
+          x-description-zh: 文件 key——传给「获取对账单下载地址」以获取下载链接。
+          x-description-zh-hk: 文件 key——傳給「獲取對賬單下載地址」以獲取下載連結。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -35060,13 +35611,114 @@ paths:
       x-description-zh: 获取指定结单文件的预签名下载地址，返回包含结单全部板块的 JSON 文档。
       tags:
         - Account
-      parameters:
+      x-parameters:
         - name: file_key
           in: query
+          type: string
           required: true
-          description: File key obtained from the list statements endpoint.
-          schema:
-            type: string
+          description: File key obtained from the List Statements endpoint.
+          x-description-zh: 从「查询对账单列表」获取的文件 key。
+          x-description-zh-hk: 從「查詢對賬單列表」獲取的文件 key。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/statement/download?file_key=<file_key>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/statement/download",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"file_key": "<file_key>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/statement/download",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"file_key": "<file_key>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/statement/download")
+            url.searchParams.set("file_key", "<file_key>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/statement/download?file_key=<file_key>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/statement/download")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("file_key", "<file_key>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/statement/download?file_key=<file_key>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/statement/download?file_key=<file_key>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: url
+          type: string
+          required: true
+          description: Time-limited download URL for the statement file.
+          x-description-zh: 对账单文件的限时下载地址。
+          x-description-zh-hk: 對賬單文件的限時下載地址。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -35109,13 +35761,150 @@ paths:
       x-description-zh: 获取指定标的的监管文件或信息披露文件列表，每条记录包含标题、文件名、下载链接和发布时间戳。
       tags:
         - Quote
-      parameters:
+      x-parameters:
         - name: symbol
           in: query
+          type: string
           required: true
           description: Security symbol to query filings for (e.g. `AAPL.US`, `700.HK`).
-          schema:
-            type: string
+          x-description-zh: 要查询公告的证券代码（如 `AAPL.US`、`700.HK`）。
+          x-description-zh-hk: 要查詢公告的證券代碼（如 `AAPL.US`、`700.HK`）。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/filings?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/filings",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/filings",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/quote/filings")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/filings?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/filings")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/filings?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/filings?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: items
+          type: object[]
+          required: true
+          description: Filings for the security.
+          x-description-zh: 该证券的公告列表。
+          x-description-zh-hk: 該證券的公告列表。
+        - name: └ id
+          type: string
+          required: true
+          description: Filing ID.
+          x-description-zh: 公告 ID。
+          x-description-zh-hk: 公告 ID。
+        - name: └ title
+          type: string
+          required: false
+          description: Filing title.
+          x-description-zh: 公告标题。
+          x-description-zh-hk: 公告標題。
+        - name: └ description
+          type: string
+          required: false
+          description: Filing description.
+          x-description-zh: 公告描述。
+          x-description-zh-hk: 公告描述。
+        - name: └ file_name
+          type: string
+          required: false
+          description: File name.
+          x-description-zh: 文件名。
+          x-description-zh-hk: 文件名。
+        - name: └ file_urls
+          type: array
+          required: false
+          description: Source document URLs.
+          x-description-zh: 原始文件地址列表。
+          x-description-zh-hk: 原始文件地址列表。
+        - name: └ publish_at
+          type: string
+          required: false
+          description: Publish time (Unix timestamp).
+          x-description-zh: 发布时间（Unix 时间戳）。
+          x-description-zh-hk: 發布時間（Unix 時間戳）。
       x-codeSamples:
         - lang: Shell
           label: CLI
