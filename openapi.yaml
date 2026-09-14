@@ -28575,6 +28575,12 @@ paths:
           description: Net Cost
           x-description-zh: 成本净值
           x-description-zh-hk: 成本淨值
+        - name: └ ∟ holding_units
+          type: string
+          required: false
+          description: Number of fund units held.
+          x-description-zh: 持有基金份额。
+          x-description-zh-hk: 持有基金份額。
       responses:
         '200':
           description: Successful response
