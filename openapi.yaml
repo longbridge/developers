@@ -2708,15 +2708,15 @@ paths:
       description: |
         Get the full configuration of a single stock screener strategy by strategy ID, including all indicator groups and the filter range for each indicator.
 
-        Endpoint: `GET /v1/quote/ai/screener/strategy/\{id\}` (strategy ID as path parameter)
+        Endpoint: `GET /v1/quote/ai/screener/strategy/{id}` (strategy ID as path parameter)
       x-description-zh: |
         根据策略 ID 获取单个选股策略的完整配置，包含所有指标分组和各指标的筛选范围。
 
-        接口：`GET /v1/quote/ai/screener/strategy/\{id\}`（策略 ID 为路径参数）
+        接口：`GET /v1/quote/ai/screener/strategy/{id}`（策略 ID 为路径参数）
       x-description-zh-hk: |
         根據策略 ID 獲取單個選股策略的完整配置，包含所有指標分組和各指標的篩選範圍。
 
-        接口：`GET /v1/quote/ai/screener/strategy/\{id\}`（策略 ID 為路徑參數）
+        接口：`GET /v1/quote/ai/screener/strategy/{id}`（策略 ID 為路徑參數）
       tags:
         - Screener
       x-parameters:
@@ -19762,10 +19762,10 @@ paths:
       description: |
         Create a new community topic on [Topics](https://longbridge.com/topics). Two content types are supported:
 
-        | Type             | `title`      | `body` format   | Notes                                                                                                                  |
+        | Type | `title` | `body` format | Notes |
         | ---------------- | ------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
-        | `post` (default) | Optional     | Plain text only | Markdown syntax (e.g. `**bold**`, `# heading`) is NOT rendered — it appears as literal characters, similar to a tweet. |
-        | `article`        | **Required** | Markdown        | The server converts Markdown to HTML for display. Supports headers, tables, bold, code blocks, etc.                    |
+        | `post` (default) | Optional | Plain text only | Markdown syntax (e.g. `**bold**`, `# heading`) is NOT rendered — it appears as literal characters, similar to a tweet. |
+        | `article` | **Required** | Markdown | The server converts Markdown to HTML for display. Supports headers, tables, bold, code blocks, etc. |
 
         Only users who have opened a **Longbridge account and hold assets** are allowed to publish community topics and replies via Longbridge Developers API or CLI. Returns `403` otherwise.
 
@@ -19839,7 +19839,7 @@ paths:
           in: body
           type: string
           required: true
-          description: 'Topic body. \n- For `post`: plain text only — Markdown is not rendered.\n- For `article`: Markdown is supported.'
+          description: 'Topic body. - For `post`: plain text only — Markdown is not rendered. - For `article`: Markdown is supported.'
           x-description-zh: 正文。`post` 类型为纯文本，Markdown 不渲染；`article` 类型支持 Markdown。
           x-description-zh-hk: 正文。`post` 類型為純文本，Markdown 不渲染；`article` 類型支持 Markdown。
         - name: topic_type
@@ -19853,9 +19853,9 @@ paths:
           in: body
           type: array
           required: false
-          description: Related security symbols, format `\{symbol\}.\{market\}` (e.g. `["AAPL.US", "700.HK"]`). Maximum 10. **Note:** Symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
-          x-description-zh: 关联标的代码，格式 `\{symbol\}.\{market\}`，如 `["AAPL.US", "700.HK"]`，最多 10 个。**注意：** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联，`tickers` 用于补充正文中未显式提及的标的。
-          x-description-zh-hk: 關聯標的代碼，格式 `\{symbol\}.\{market\}`，如 `["AAPL.US", "700.HK"]`，最多 10 個。**注意：** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯，`tickers` 用於補充正文中未顯式提及的標的。
+          description: Related security symbols, format `{symbol}.{market}` (e.g. `["AAPL.US", "700.HK"]`). Maximum 10. **Note:** Symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+          x-description-zh: 关联标的代码，格式 `{symbol}.{market}`，如 `["AAPL.US", "700.HK"]`，最多 10 个。**注意：** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联，`tickers` 用于补充正文中未显式提及的标的。
+          x-description-zh-hk: 關聯標的代碼，格式 `{symbol}.{market}`，如 `["AAPL.US", "700.HK"]`，最多 10 個。**注意：** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯，`tickers` 用於補充正文中未顯式提及的標的。
         - name: hashtags
           in: body
           type: array
@@ -20724,13 +20724,13 @@ paths:
 
         | Reply # (after 3rd) | Required wait |
         | ------------------- | ------------- |
-        | 4th                 | 3 s           |
-        | 5th                 | 5 s           |
-        | 6th                 | 8 s           |
-        | 7th                 | 13 s          |
-        | 8th                 | 21 s          |
-        | 9th                 | 34 s          |
-        | 10th+               | 55 s (cap)    |
+        | 4th | 3 s |
+        | 5th | 5 s |
+        | 6th | 8 s |
+        | 7th | 13 s |
+        | 8th | 21 s |
+        | 9th | 34 s |
+        | 10th+ | 55 s (cap) |
 
         Exceeding the limit returns `429`.
 
@@ -29486,15 +29486,15 @@ paths:
       description: |
         Submit a grid strategy order. The grid places buy orders as the price falls and sell orders as it rises, within the `[lower_limit_price, upper_limit_price]` band anchored to `submitted_base_price`.
 
-        Before using grid trading you must record the strategy risk-disclosure consent once — see [Submit Strategy Questionnaire](./questionnaire).
+        Before using grid trading you must record the strategy risk-disclosure consent once — see Submit Strategy Questionnaire.
       x-description-zh: |
         提交网格策略订单。网格以 `submitted_base_price` 为基准价，在 `[lower_limit_price, upper_limit_price]` 区间内，价格下跌时挂买单、价格上涨时挂卖单。
 
-        使用网格交易前，你需要先记录一次策略风险揭示的同意确认，详见[提交策略问卷](./questionnaire)。
+        使用网格交易前，你需要先记录一次策略风险揭示的同意确认，详见提交策略问卷。
       x-description-zh-hk: |
         提交網格策略訂單。網格以 `submitted_base_price` 為基準價，在 `[lower_limit_price, upper_limit_price]` 區間內，價格下跌時掛買單、價格上漲時掛賣單。
 
-        使用網格交易前，你需要先記錄一次策略風險揭示的同意確認，詳見[提交策略問卷](./questionnaire)。
+        使用網格交易前，你需要先記錄一次策略風險揭示的同意確認，詳見提交策略問卷。
       x-subgroup: Grid Trading
       x-subgroup-zh: 网格交易
       x-subgroup-zh-hk: 網格交易
@@ -32090,11 +32090,11 @@ paths:
       x-summary-zh: 暂停网格订单
       x-summary-zh-hk: 暫停網格訂單
       description: |
-        Suspend a running grid order. The grid stops triggering new orders but is kept intact, so it can be resumed later with [Restart Grid Order](./restart). Use suspend when you want to pause the strategy without losing its configuration.
+        Suspend a running grid order. The grid stops triggering new orders but is kept intact, so it can be resumed later with Restart Grid Order. Use suspend when you want to pause the strategy without losing its configuration.
       x-description-zh: |
-        暂停运行中的网格订单。网格停止触发新订单，但会保留原有配置，之后可通过[重启网格订单](./restart)恢复运行。当你希望暂停策略但不丢失其配置时，使用暂停操作。
+        暂停运行中的网格订单。网格停止触发新订单，但会保留原有配置，之后可通过重启网格订单恢复运行。当你希望暂停策略但不丢失其配置时，使用暂停操作。
       x-description-zh-hk: |
-        暫停運行中的網格訂單。網格停止觸發新訂單，但會保留原有配置，之後可透過[重啟網格訂單](./restart)恢復運行。當你希望暫停策略但不丟失其配置時，使用暫停操作。
+        暫停運行中的網格訂單。網格停止觸發新訂單，但會保留原有配置，之後可透過重啟網格訂單恢復運行。當你希望暫停策略但不丟失其配置時，使用暫停操作。
       x-subgroup: Grid Trading
       x-subgroup-zh: 网格交易
       x-subgroup-zh-hk: 網格交易
@@ -32233,11 +32233,11 @@ paths:
       x-summary-zh: 重启网格订单
       x-summary-zh-hk: 重啟網格訂單
       description: |
-        Restart a suspended grid order. The grid resumes from its saved configuration and begins triggering orders again. Only a grid previously paused with [Suspend Grid Order](./suspend) can be restarted.
+        Restart a suspended grid order. The grid resumes from its saved configuration and begins triggering orders again. Only a grid previously paused with Suspend Grid Order can be restarted.
       x-description-zh: |
-        重启已暂停的网格订单。网格会从保存的配置恢复，并重新开始触发订单。只有此前通过[暂停网格订单](./suspend)暂停的网格才能被重启。
+        重启已暂停的网格订单。网格会从保存的配置恢复，并重新开始触发订单。只有此前通过暂停网格订单暂停的网格才能被重启。
       x-description-zh-hk: |
-        重啟已暫停的網格訂單。網格會從保存的配置恢復，並重新開始觸發訂單。只有此前透過[暫停網格訂單](./suspend)暫停的網格才能被重啟。
+        重啟已暫停的網格訂單。網格會從保存的配置恢復，並重新開始觸發訂單。只有此前透過暫停網格訂單暫停的網格才能被重啟。
       x-subgroup: Grid Trading
       x-subgroup-zh: 网格交易
       x-subgroup-zh-hk: 網格交易
@@ -32376,11 +32376,11 @@ paths:
       x-summary-zh: 网格标的信息
       x-summary-zh-hk: 網格標的信息
       description: |
-        Fetch the grid-trading information for a security: lot size, last done price, price steps, and authorization status. Use it to build a valid grid rule before calling [Submit Grid Order](./submit). The `channel_info.strategy_granted` field tells you whether the strategy risk-disclosure consent has already been recorded — if it is `false`, submit the [Strategy Questionnaire](./questionnaire) first.
+        Fetch the grid-trading information for a security: lot size, last done price, price steps, and authorization status. Use it to build a valid grid rule before calling Submit Grid Order. The `channel_info.strategy_granted` field tells you whether the strategy risk-disclosure consent has already been recorded — if it is `false`, submit the Strategy Questionnaire first.
       x-description-zh: |
-        获取标的的网格交易信息：每手股数、最新成交价、价格步长以及授权状态。在调用[提交网格订单](./submit)之前，用它来构建合法的网格规则。`channel_info.strategy_granted` 字段告诉你是否已记录策略风险披露同意——若为 `false`，请先提交[策略问卷](./questionnaire)。
+        获取标的的网格交易信息：每手股数、最新成交价、价格步长以及授权状态。在调用提交网格订单之前，用它来构建合法的网格规则。`channel_info.strategy_granted` 字段告诉你是否已记录策略风险披露同意——若为 `false`，请先提交策略问卷。
       x-description-zh-hk: |
-        獲取標的的網格交易信息：每手股數、最新成交價、價格步長以及授權狀態。在調用[提交網格訂單](./submit)之前，用它來構建合法的網格規則。`channel_info.strategy_granted` 欄位告訴你是否已記錄策略風險披露同意——若為 `false`，請先提交[策略問卷](./questionnaire)。
+        獲取標的的網格交易信息：每手股數、最新成交價、價格步長以及授權狀態。在調用提交網格訂單之前，用它來構建合法的網格規則。`channel_info.strategy_granted` 欄位告訴你是否已記錄策略風險披露同意——若為 `false`，請先提交策略問卷。
       x-subgroup: Grid Trading
       x-subgroup-zh: 网格交易
       x-subgroup-zh-hk: 網格交易
