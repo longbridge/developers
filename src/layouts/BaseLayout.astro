@@ -35,7 +35,9 @@ const gtagInit = `window.dataLayer = window.dataLayer||[];\nfunction gtag(){data
 // canonical + hreflang alternates (en / zh-Hans / zh-Hant) + a text/markdown
 // discovery alternate + og/twitter. Computed from the URL + locale.
 const seoHost = import.meta.env.VITE_SITE_HOSTNAME ?? 'https://open.longbridge.com'
-const localePathname = pathname.replace(/\/+$/, '').replace(/^\//, '') // '', 'docs', 'zh-CN/docs/x'
+// build.format:'file' 让 SSG 时 pathname 带 .html(如 /pricing.html),但站点对外
+// 的正规 URL 是干净路径(/pricing),SEO 链接必须先剥掉 .html 再推导。
+const localePathname = pathname.replace(/\.html$/, '').replace(/\/+$/, '').replace(/^\//, '') // '', 'docs', 'zh-CN/docs/x'
 const neutralPath = localePathname.replace(/^zh-CN\/?/, '').replace(/^zh-HK\/?/, '')
 const join = (base: string, p: string) => (p ? `${base}/${p}` : `${base}/`)
 const canonicalUrl = join(seoHost, localePathname)
