@@ -811,90 +811,38 @@ servers:
   - url: https://openapi.longbridge.cn
     description: China mainland
 tags:
-  # ── Canonical taxonomy (mirrors the docs/ module tree). Endpoints are being
-  #    migrated onto these tags; the legacy tags below are removed as each
-  #    module is migrated. Empty tags do not render in the sidebar. ──
   - name: Quote
     x-name-zh: 行情
     x-name-zh-hk: 行情
-    description: Real-time and static market quotes for stocks, options, and warrants.
-  - name: Realtime (WebSocket)
-    x-name-zh: 实时推送
-    x-name-zh-hk: 實時推送
-    description: WebSocket subscribe/unsubscribe and server push for quotes, depth, brokers, trades, candlesticks, and order updates.
-  - name: Watchlist
-    x-name-zh: 自选股
-    x-name-zh-hk: 自選股
-    description: Manage watchlist groups and the securities they contain.
-  - name: Analytics
-    x-name-zh: 分析
-    x-name-zh-hk: 分析
-    description: Fundamentals, valuation, ratings, shareholders, and analyst analytics.
-  - name: Screener
-    x-name-zh: 选股器
-    x-name-zh-hk: 選股器
-    description: Screen securities by indicators, run saved or recommended strategies, and inspect strategy detail.
-  - name: Signals
-    x-name-zh: 策略信号
-    x-name-zh-hk: 策略信號
-    description: Strategy signals and the catalyst facts (anomalies, factors, sources) that trigger them.
-  - name: Trade
-    x-name-zh: 交易与订单
-    x-name-zh-hk: 交易與訂單
-    description: Order lifecycle — submit, modify, cancel, and query orders and executions.
-  - name: Assets
-    x-name-zh: 持仓与资金
-    x-name-zh-hk: 持倉與資金
-    description: Account assets, cash, positions, exchange rates, and profit analysis.
-  - name: Grid
-    x-name-zh: 网格交易
-    x-name-zh-hk: 網格交易
-    description: Automated grid strategy orders.
-  - name: DCA
-    x-name-zh: 定投
-    x-name-zh-hk: 定投
-    description: Dollar-cost-averaging (recurring investment) plans.
-  - name: Alert
-    x-name-zh: 提醒
-    x-name-zh-hk: 提醒
-    description: Price and event alert reminders.
-  - name: Content
-    x-name-zh: 社区与资讯
-    x-name-zh-hk: 社區與資訊
-    description: News, filings, and community topics for a symbol.
+    description: Real-time and static quotes, subscriptions, options, warrants, market analytics, and watchlists.
+  - name: Fundamental
+    x-name-zh: 基本面
+    x-name-zh-hk: 基本面
+    description: Company fundamentals, financials, valuation, ratings, shareholders, and market data.
   - name: Market
     x-name-zh: 市场
     x-name-zh-hk: 市場
-    description: Market status, temperature, calendars, security lists, and rankings.
-  - name: AI
-    x-name-zh: AI
-    x-name-zh-hk: AI
-    description: AI agents and workspaces.
-  # ── Legacy tags (to be removed as endpoints migrate onto the taxonomy above) ──
-  - name: Watchlist Management
-    x-name-zh: 自选股管理
-    description: Manage user watchlist groups (list/create/update/delete) and query the securities contained in each group. Supports adding, removing, or replacing securities within a group.
-  - name: Market Temperature
-    x-name-zh: 市场情绪
-    description: Query the Market Temperature indicator (a fear-gauge-like sentiment thermometer, scored 0–100 where higher means more bullish) across equity markets. Supports fetching the current snapshot and historical time series for sentiment measurement, trend visualization, and comparative analysis.
-  - name: Portfolio & Cash
-    x-name-zh: 持仓与资金
-    description: Provides read access to account asset and cash information, including fund holdings, stock holdings, account cash balance, and cash flow history for portfolio overview, position display, and reconciliation analysis.
-  - name: News & Filings
-    x-name-zh: 新闻与公告
-    description: Query regulatory filings, news articles, and community discussion topics for a given symbol. Suitable for investment research, news monitoring, and content aggregation.
-  - name: Community
-    x-name-zh: 社区互动
-    description: Interact with the Longbridge community. Supports listing your published topics with pagination and type filtering, and creating new topics (long-form articles or short posts) with associated tickers, hashtags, and license settings.
-  - name: Trade Execution & Order Management
-    x-name-zh: 交易与订单管理
-    description: Full order lifecycle management including order detail queries, today's and historical order queries, today's and historical execution reports, order modification, order cancellation, and pre-order maximum purchasable quantity estimation.
-  - name: Grid Trading
-    x-name-zh: 网格交易
-    description: Automated grid strategy orders. Submit, modify, list, and inspect grid orders; query trigger history; suspend, restart, or cancel a running grid; read the per-symbol grid info (lot size, last price, authorization); and record the one-time strategy risk-disclosure consent.
-  - name: Statement
-    x-name-zh: 结单
-    description: Query and download account statements (daily or monthly). Statements contain detailed breakdowns of assets, holdings, trades, fees, and corporate actions.
+    description: Market status, temperature, rankings, and financial calendars.
+  - name: News & Contents
+    x-name-zh: 资讯与社区
+    x-name-zh-hk: 資訊與社區
+    description: News, filings, and community topics and sharelists.
+  - name: Screener
+    x-name-zh: 选股
+    x-name-zh-hk: 選股
+    description: Screen securities by indicators and strategies.
+  - name: Trade
+    x-name-zh: 交易
+    x-name-zh-hk: 交易
+    description: Orders, executions, grid strategies, and account assets.
+  - name: Account
+    x-name-zh: 账户
+    x-name-zh-hk: 帳戶
+    description: Recurring investment (DCA) plans, portfolio, statements, and alert reminders.
+  - name: AI Agent
+    x-name-zh: AI Agent
+    x-name-zh-hk: AI Agent
+    description: AI agents, workspaces, and conversations.
 security:
   - oauth2:
       - openapi
@@ -912,7 +860,7 @@ paths:
       x-description-zh-hk: |
         查詢策略信號，可按標的、策略、催化因子和時間範圍過濾。每條信號代表某個策略對一隻標的的判斷，由一個催化事實（fact）觸發。
       tags:
-        - Signals
+        - Quote
       x-parameters:
         - name: symbol_name
           in: query
@@ -1260,7 +1208,7 @@ paths:
       x-description-zh-hk: |
         按 ID 獲取單條信號，包含 `json_data` 中的完整分析。
       tags:
-        - Signals
+        - Quote
       x-parameters:
         - name: signal_id
           in: path
@@ -1448,7 +1396,7 @@ paths:
       x-description-zh-hk: |
         查詢某隻標的的催化事實（fact）事件——異常檢測、因子讀數、數據來源與自然語言摘要。事實是策略所響應的對象：信號會在 `key_fact_id` 中標明觸發它的事實。
       tags:
-        - Signals
+        - Quote
       x-parameters:
         - name: symbol
           in: query
@@ -1687,7 +1635,7 @@ paths:
       x-description-zh-hk: |
         獲取 ETF 資產配置，按元素類型分組：持倉、地區、資產類別與行業。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -2873,7 +2821,7 @@ paths:
       x-description-zh-hk: |
         獲取美股或港股沽空持倉數據。市場根據代碼後綴自動識別：`.HK` → 港交所沽空數據（每日更新）；其他 → 美股 FINRA 沽空數據（雙月更新）。
       tags:
-        - Analytics
+        - Quote
       x-parameters:
         - name: symbol
           in: query
@@ -3084,7 +3032,7 @@ paths:
       x-description-zh-hk: |
         獲取美股或港股沽空持倉數據。市場根據代碼後綴自動識別：`.HK` → 港交所沽空數據（每日更新）；其他 → 美股 FINRA 沽空數據（雙月更新）。
       tags:
-        - Analytics
+        - Quote
       x-parameters:
         - name: symbol
           in: query
@@ -3295,7 +3243,7 @@ paths:
       x-description-zh-hk: |
         獲取個股每日沽空成交量數據，支持美股（FINRA）和港股（HKEX）。美股數據每兩週更新一次，港股數據每個交易日更新。
       tags:
-        - Analytics
+        - Quote
       x-parameters:
         - name: symbol
           in: query
@@ -3499,7 +3447,7 @@ paths:
       x-description-zh-hk: |
         獲取個股每日沽空成交量數據，支持美股（FINRA）和港股（HKEX）。美股數據每兩週更新一次，港股數據每個交易日更新。
       tags:
-        - Analytics
+        - Quote
       x-parameters:
         - name: symbol
           in: query
@@ -3703,7 +3651,7 @@ paths:
       x-description-zh-hk: |
         獲取 A+H 兩地上市股票的 A/H 溢價比率，對比 A 股和 H 股價格。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -3919,7 +3867,7 @@ paths:
       x-description-zh-hk: |
         獲取兩地上市證券的盤中 A/H 溢價時間序列數據。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -4124,7 +4072,7 @@ paths:
 
         查看港股券商持倉情況，包含主要買賣方和詳細持倉列表。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -4328,7 +4276,7 @@ paths:
 
         獲取某一經紀商在港股上市證券中的每日持倉歷史記錄。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -4517,7 +4465,7 @@ paths:
 
         獲取港股上市證券的完整經紀商持倉詳情列表（所有經紀商及其持倉數量）。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -4766,7 +4714,7 @@ paths:
       x-description-zh-hk: |
         獲取指數或 ETF 的成分股列表，支持排序並顯示漲跌統計。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -5037,7 +4985,7 @@ paths:
       x-description-zh-hk: |
         獲取指定證券的成交統計數據，展示成交量的價格分布。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -5280,7 +5228,7 @@ paths:
       x-description-zh-hk: |
         獲取按月統計的機構評級（買入/持有/賣出）分佈時間線，最新月份在前。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -7511,7 +7459,7 @@ paths:
       x-description-zh-hk: |
         在自選股分組中置頂或取消置頂指定證券，以控制顯示順序。
       tags:
-        - Watchlist
+        - Quote
       x-parameters:
         - name: id
           in: body
@@ -7875,7 +7823,7 @@ paths:
       x-description-zh-hk: |
         獲取任意上市公司的利潤表、資產負債表和現金流量表。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -8159,7 +8107,7 @@ paths:
       x-description-zh-hk: |
         獲取 AI 生成的財報摘要、營收/EBIT/EPS 預測對比（超預期/低於預期），以及關鍵財務指標。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -8497,7 +8445,7 @@ paths:
       x-description-zh-hk: |
         獲取機構共識預測，包括營收、EPS 和淨利潤預測。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -8757,7 +8705,7 @@ paths:
       x-description-zh-hk: |
         獲取 EPS 預測及分析師共識估值。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -8964,7 +8912,7 @@ paths:
       x-description-zh-hk: |
         獲取當前估值指標（市盈率、市凈率、市銷率、股息率）及 5 年歷史區間數據。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -9155,7 +9103,7 @@ paths:
       x-description-zh-hk: |
         獲取歷史估值指標時間序列（市盈率、市淨率、市銷率、股息率）。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -9370,7 +9318,7 @@ paths:
       x-description-zh-hk: |
         對比多隻股票的估值指標（PE/PB/PS/市值/收盤價）。不傳對比股票時，服務端自動選取同行業標的。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -9685,7 +9633,7 @@ paths:
       x-description-zh-hk: |
         獲取同行業內的同類公司估值對比數據。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -9910,7 +9858,7 @@ paths:
       x-description-zh-hk: |
         獲取該證券所在行業的估值分佈直方圖。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -10083,7 +10031,7 @@ paths:
       x-description-zh-hk: |
         按市場和指標獲取行業排行榜。返回的 Counter ID 可直接傳入 `industry_peers` 查詢子行業樹。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: market
           in: query
@@ -10314,7 +10262,7 @@ paths:
       x-description-zh-hk: |
         獲取行業分組的層級子板塊樹，含各節點股票數量、日漲跌幅和年初至今漲跌幅。Counter ID 可從 `industry_rank` 返回結果中獲取。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: counter_id
           in: query
@@ -10523,7 +10471,7 @@ paths:
       x-description-zh-hk: |
         獲取公司基本資料，包括成立年份、員工人數、總部地址和業務描述。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -10861,7 +10809,7 @@ paths:
       x-description-zh-hk: |
         獲取公司關鍵高管列表（CEO、CFO 等）。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -11083,7 +11031,7 @@ paths:
       x-description-zh-hk: |
         獲取指定證券的公司行動歷史，包括拆股、合並、分拆和配股等。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -11325,7 +11273,7 @@ paths:
       x-description-zh-hk: |
         獲取投資關係數據，包括母公司、子公司及主要持股。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -11545,7 +11493,7 @@ paths:
 
         按財報期獲取經營數據及核心財務指標摘要。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -11803,7 +11751,7 @@ paths:
       x-description-zh-hk: |
         獲取股票回購數據，包括歷史回購金額及回購比例。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -12025,7 +11973,7 @@ paths:
       x-description-zh-hk: |
         獲取指定證券的股息歷史及即將公布的股息信息。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -12225,7 +12173,7 @@ paths:
       x-description-zh-hk: |
         獲取詳細分紅資訊，包括宣告日、除息日和派發日。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -12405,7 +12353,7 @@ paths:
       x-description-zh-hk: |
         獲取公司主要機構股東和個人股東信息。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -12612,7 +12560,7 @@ paths:
       x-description-zh-hk: |
         獲取上市公司前 20 大股東（機構、個人、內部人）的持股數據，支持多報告期對比。`object_id` 可傳入 `shareholder_detail` 查看詳情。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -12842,7 +12790,7 @@ paths:
       x-description-zh-hk: |
         獲取單個股東的持倉歷史及交易明細。`object_id` 來自 `shareholder_top` 返回結果。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -13111,7 +13059,7 @@ paths:
       x-description-zh-hk: |
         獲取持有指定證券的基金列表，含持股數量和持股比例。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -13297,7 +13245,7 @@ paths:
       x-description-zh-hk: |
         獲取指定證券的機構分析師評級和一致預期數據。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -13491,7 +13439,7 @@ paths:
       x-description-zh-hk: |
         獲取分析師機構評級快照（評級分佈及平均目標價）。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -13874,7 +13822,7 @@ paths:
       x-description-zh-hk: |
         獲取歷史分析師評級及目標價詳情。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -14152,7 +14100,7 @@ paths:
       x-description-zh-hk: |
         獲取上市公司當前報告期的業務分部收入佔比。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -14339,7 +14287,7 @@ paths:
       x-description-zh-hk: |
         獲取上市公司按報告期的歷史業務分部收入趨勢。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -14559,7 +14507,7 @@ paths:
       x-description-zh-hk: |
         獲取指定宏觀經濟指標的歷史發布數據，包括實際值、預測值、前值和下次發布時間。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: indicator_code
           in: query
@@ -14785,7 +14733,7 @@ paths:
       x-description-zh-hk: |
         列出 Longbridge 支持的宏觀經濟指標，可按國家/地區篩選。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: country
           in: query
@@ -14992,7 +14940,7 @@ paths:
 
         獲取美股公司概覽資訊——簡介、市值、排名標籤和詳情連結。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -15179,7 +15127,7 @@ paths:
 
         獲取美股估值概覽——當前估值指標及歷史區間。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -15381,7 +15329,7 @@ paths:
 
         按報告週期獲取美股財務概覽——損益、資產負債和現金流摘要。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -15664,7 +15612,7 @@ paths:
 
         獲取美股指定財務報表（損益表、資產負債表或現金流量表）。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -15942,7 +15890,7 @@ paths:
 
         獲取美股關鍵財務指標——營收、淨利潤、EPS、利潤率和增長率。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -16168,7 +16116,7 @@ paths:
 
         獲取美股分析師一致預期——營收、EPS 預測及買入/持有/賣出評級。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -16384,7 +16332,7 @@ paths:
 
         獲取美股 ETF 分紅資訊——TTM 股息率、派息頻率及財年明細。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -16565,7 +16513,7 @@ paths:
 
         獲取美股股票分紅歷史——TTM 股息率、派息次數及逐筆分紅記錄。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -16758,7 +16706,7 @@ paths:
 
         列出美股 ETF 的監管文件——招股書、事實說明書和年報。
       tags:
-        - Analytics
+        - Fundamental
       x-parameters:
         - name: symbol
           in: query
@@ -16923,7 +16871,7 @@ paths:
 
         與 [Workspace 下的 Agent](/zh-HK/docs/ai/workspace/agents) 不同，本接口不限定 Workspace：返回所有已發佈且公開分享的 Agent。
       tags:
-        - AI
+        - AI Agent
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -17117,7 +17065,7 @@ paths:
       x-description-zh-hk: |
         獲取當前賬戶加入的全部 Workspace 列表。Workspace 是 Agent 的組織單位，先通過本接口找到目標 Workspace，再用 [Workspace 下的 Agent](/zh-HK/docs/ai/workspace/agents) 查詢其中可用的 Agent。
       tags:
-        - AI
+        - AI Agent
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -17269,7 +17217,7 @@ paths:
       x-description-zh-hk: |
         獲取指定 Workspace 下的 Agent 列表。返回的 `uid` 即 [發起對話](/zh-HK/docs/ai/chat/conversation) 接口路徑中的 Agent 標識；只有 `is_published` 為 `true` 的 Agent 才能發起對話。
       tags:
-        - AI
+        - AI Agent
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -17481,7 +17429,7 @@ paths:
 
         > **如何獲取 Agent 的 UID** 除通過 Workspace 下的 Agent 接口查詢外，也可以直接從 Longbridge 網頁端獲取：打開 Agent 的對話頁，URL 形如 `https://longbridge.com/zh-HK/ai/agents/chatbot/chat`，其中 `chatbot` 即為該 Agent 的 UID。
       tags:
-        - AI
+        - AI Agent
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -17733,7 +17681,7 @@ paths:
 
         與發起對話一致，通過請求頭 `Accept` 選擇阻塞式 / SSE 流式響應。
       tags:
-        - AI
+        - AI Agent
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -17855,7 +17803,7 @@ paths:
       x-description-zh-hk: |
         獲取當前用戶的所有股價提醒，支持按標的篩選。
       tags:
-        - Alert
+        - Account
       x-parameters:
         - name: symbol
           in: query
@@ -18107,7 +18055,7 @@ paths:
       x-description-zh-hk: |
         為指定證券創建股價提醒，當價格高於或低於目標價時觸發通知。
       tags:
-        - Alert
+        - Account
       x-parameters:
         - name: symbol
           in: body
@@ -18275,7 +18223,7 @@ paths:
       x-description-zh-hk: |
         啟用或禁用已有的股價提醒。
       tags:
-        - Alert
+        - Account
       x-parameters:
         - name: id
           in: body
@@ -18423,7 +18371,7 @@ paths:
       x-description-zh-hk: |
         根據 ID 刪除指定的股價提醒。
       tags:
-        - Alert
+        - Account
       x-parameters:
         - name: id
           in: query
@@ -18559,7 +18507,7 @@ paths:
       x-description-zh-hk: |
         獲取指定股票的資訊列表。完整資訊流可瀏覽 [資訊](https://longbridge.com/news)。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -18749,7 +18697,7 @@ paths:
       x-description-zh-hk: |
         獲取指定股票的討論列表。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -18939,7 +18887,7 @@ paths:
       x-description-zh-hk: |
         獲取當前登錄用戶發布的討論列表，支持分頁與類型過濾。可在 [社區](https://longbridge.com/topics)查看。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -19273,7 +19221,7 @@ paths:
 
         > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -19545,7 +19493,7 @@ paths:
       x-description-zh-hk: |
         根據討論 ID 獲取完整詳情，包含正文（Markdown）、作者信息、關聯標的與標籤、互動數據及詳情頁鏈接。可在 [社區](https://longbridge.com/topics)查看。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -19836,7 +19784,7 @@ paths:
 
         每條回覆包含作者信息、正文（純文本）、互動數據及 `reply_to_id` 字段：`"0"` 表示頂層回覆，其他值表示對指定回覆的嵌套回覆。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -20127,7 +20075,7 @@ paths:
 
         > ⚠️ 以上頻率限制規則僅供參考，平台可能隨時進行內部調整。
       tags:
-        - Content
+        - News & Contents
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -20358,7 +20306,7 @@ paths:
       x-description-zh-hk: |
         獲取當前用戶創建的或訂閱的所有社區自選股列表。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: type
           in: query
@@ -20628,7 +20576,7 @@ paths:
       x-description-zh-hk: |
         創建新的社區自選股列表，可選擇預設初始證券。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: description
           in: body
@@ -20782,7 +20730,7 @@ paths:
       x-description-zh-hk: |
         獲取社區熱門股單列表。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: count
           in: query
@@ -21051,7 +20999,7 @@ paths:
       x-description-zh-hk: |
         獲取股單詳情，包括名稱、描述及成分股列表。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: id
           in: path
@@ -21270,7 +21218,7 @@ paths:
       x-description-zh-hk: |
         永久刪除您創建的自選股列表，此操作不可撤銷。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: id
           in: path
@@ -21399,7 +21347,7 @@ paths:
       x-description-zh-hk: |
         向股單中新增一個或多個標的。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: id
           in: path
@@ -21543,7 +21491,7 @@ paths:
       x-description-zh-hk: |
         從股單中移除一個或多個標的。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: id
           in: path
@@ -21684,7 +21632,7 @@ paths:
       x-description-zh-hk: |
         對股單中的標的重新排序。傳入的標的代碼列表即為新順序。
       tags:
-        - Content
+        - News & Contents
       x-parameters:
         - name: id
           in: path
@@ -21830,7 +21778,7 @@ paths:
       x-description-zh-hk: |
         該接口用於獲取用戶每個幣種可用、可取、凍結、待結算金額、在途資金 (基金申購贖回) 信息。
       tags:
-        - Assets
+        - Trade
       x-parameters:
         - name: currency
           in: query
@@ -22099,7 +22047,7 @@ paths:
       x-description-zh-hk: |
         該接口用於獲取資金流入/流出方向、資金類別、資金金額、發生時間、關聯股票代碼和資金流水說明信息。
       tags:
-        - Assets
+        - Trade
       x-parameters:
         - name: start_time
           in: query
@@ -22340,7 +22288,7 @@ paths:
       x-description-zh-hk: |
         該接口用於獲取包括賬戶、基金代碼、持有份額、成本淨值、當前淨值、幣種在內的基金持倉信息。
       tags:
-        - Assets
+        - Trade
       x-parameters:
         - name: symbol
           in: query
@@ -22534,7 +22482,7 @@ paths:
       x-description-zh-hk: |
         該接口用於獲取包括賬戶、股票代碼、持倉股數、可用股數、持倉均價（按賬戶設置計算均價方式）、幣種在內的股票持倉信息。
       tags:
-        - Assets
+        - Trade
       x-parameters:
         - name: symbol
           in: query
@@ -22790,7 +22738,7 @@ paths:
       x-description-zh-hk: |
         獲取賬戶中所有貨幣對的當前外匯匯率。
       tags:
-        - Assets
+        - Account
       x-parameters:
         - name: base
           in: query
@@ -22963,7 +22911,7 @@ paths:
       x-description-zh-hk: |
         該接口用於獲取股票初始保證金比例、維持保證金比例、強平保證金比例。
       tags:
-        - Assets
+        - Trade
       x-parameters:
         - name: symbol
           in: query
@@ -23125,7 +23073,7 @@ paths:
 
         獲取美股賬戶資產概覽——買入力、現金、股票、期權和加密貨幣。
       tags:
-        - Assets
+        - Trade
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -23332,7 +23280,7 @@ paths:
 
         獲取美股賬戶已實現盈虧，按資產類別（股票/期權/加密貨幣）分組。
       tags:
-        - Assets
+        - Trade
       x-parameters:
         - name: currency
           in: query
@@ -23530,7 +23478,7 @@ paths:
       x-description-zh-hk: |
         獲取賬戶盈虧匯總，包含總資產、總盈虧和收益率指標。
       tags:
-        - Assets
+        - Account
       x-parameters:
         - name: start_date
           in: query
@@ -23952,7 +23900,7 @@ paths:
       x-description-zh-hk: |
         獲取按市場分組的盈虧分析（美股、港股、A 股、新加坡股）。
       tags:
-        - Assets
+        - Account
       x-parameters:
         - name: start_date
           in: query
@@ -24139,7 +24087,7 @@ paths:
       x-description-zh-hk: |
         獲取指定證券的詳細盈虧分析，包含交易流水和成本分解。
       tags:
-        - Assets
+        - Account
       x-parameters:
         - name: symbol
           in: query
@@ -24458,7 +24406,7 @@ paths:
       x-description-zh-hk: |
         查詢賬戶資金流水歷史，包含入金、出金、股息和結算等。
       tags:
-        - Assets
+        - Account
       x-parameters:
         - name: symbol
           in: query
@@ -28694,7 +28642,7 @@ paths:
 
         使用網格交易前，你需要先記錄一次策略風險揭示的同意確認，詳見[提交策略問卷](./questionnaire)。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: symbol
           in: body
@@ -29005,7 +28953,7 @@ paths:
       x-description-zh-hk: |
         修改已存在的網格訂單規則。提交的 `grid_trading_rule` 會整體替換原有規則，因此需要傳入完整的規則，而不是僅傳改動的欄位。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: order_id
           in: body
@@ -29308,7 +29256,7 @@ paths:
       x-description-zh-hk: |
         分頁獲取網格訂單列表，可按市場、標的或狀態篩選。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: page
           in: query
@@ -29811,7 +29759,7 @@ paths:
       x-description-zh-hk: |
         按 ID 查詢指定的網格訂單。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: order_ids
           in: body
@@ -30274,7 +30222,7 @@ paths:
       x-description-zh-hk: |
         查詢單個網格訂單的完整詳情，包括網格規則、分頁的成交子訂單（`grid_sub_orders`）以及分頁的生命週期歷史（`grid_order_history`）。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: order_id
           in: query
@@ -30822,7 +30770,7 @@ paths:
 
         > **使用 `grid_order_id` 而非 `order_id`** 該接口使用 `grid_order_id`，而**不是**其他網格接口所用的 `order_id`。此處傳入 `order_id` 將無法定位到網格訂單。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: grid_order_id
           in: query
@@ -31127,7 +31075,7 @@ paths:
       x-description-zh-hk: |
         取消網格訂單。網格會立即停止，不再掛出新的觸發訂單。取消是不可逆的——已取消的網格無法重啟，如需繼續請重新提交新的網格訂單。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: order_id
           in: body
@@ -31267,7 +31215,7 @@ paths:
       x-description-zh-hk: |
         暫停運行中的網格訂單。網格停止觸發新訂單，但會保留原有配置，之後可透過[重啟網格訂單](./restart)恢復運行。當你希望暫停策略但不丟失其配置時，使用暫停操作。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: order_id
           in: body
@@ -31407,7 +31355,7 @@ paths:
       x-description-zh-hk: |
         重啟已暫停的網格訂單。網格會從保存的配置恢復，並重新開始觸發訂單。只有此前透過[暫停網格訂單](./suspend)暫停的網格才能被重啟。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: order_id
           in: body
@@ -31547,7 +31495,7 @@ paths:
       x-description-zh-hk: |
         獲取標的的網格交易信息：每手股數、最新成交價、價格步長以及授權狀態。在調用[提交網格訂單](./submit)之前，用它來構建合法的網格規則。`channel_info.strategy_granted` 欄位告訴你是否已記錄策略風險披露同意——若為 `false`，請先提交[策略問卷](./questionnaire)。
       tags:
-        - Grid
+        - Trade
       x-parameters:
         - name: counter_id
           in: query
@@ -31778,7 +31726,7 @@ paths:
         獲取關注分組
       x-quote-level: basic
       tags:
-        - Watchlist
+        - Quote
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -31970,7 +31918,7 @@ paths:
         創建自選股分組
       x-quote-level: basic
       tags:
-        - Watchlist
+        - Quote
       x-parameters:
         - name: name
           in: body
@@ -32126,7 +32074,7 @@ paths:
         更新自選股分組
       x-quote-level: basic
       tags:
-        - Watchlist
+        - Quote
       x-parameters:
         - name: id
           in: body
@@ -32289,7 +32237,7 @@ paths:
         刪除自選股分組
       x-quote-level: basic
       tags:
-        - Watchlist
+        - Quote
       x-parameters:
         - name: id
           in: query
@@ -32437,7 +32385,7 @@ paths:
 
         獲取當前用戶的所有定投（DCA）計劃。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: status
           in: query
@@ -32742,7 +32690,7 @@ paths:
 
         為指定證券創建新的定投。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: symbol
           in: body
@@ -32931,7 +32879,7 @@ paths:
 
         暫停或恢復已有的定投。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: plan_id
           in: body
@@ -33105,7 +33053,7 @@ paths:
 
         更改現有定投計劃的狀態：暫停、恢復或永久終止。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: plan_id
           in: body
@@ -33256,7 +33204,7 @@ paths:
 
         獲取指定定投的執行歷史，包含交易日期、金額和價格。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: plan_id
           in: query
@@ -33498,7 +33446,7 @@ paths:
 
         獲取定投統計匯總信息，包括總投入金額和盈虧情況。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: symbol
           in: query
@@ -33694,7 +33642,7 @@ paths:
 
         檢查指定標的是否支持定投。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: symbols
           in: body
@@ -33863,7 +33811,7 @@ paths:
 
         根據給定的定投計劃參數，計算下一次預計交易日期。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: symbol
           in: body
@@ -34037,7 +33985,7 @@ paths:
 
         設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
       tags:
-        - DCA
+        - Account
       x-parameters:
         - name: alter_hours
           in: body
@@ -34175,7 +34123,7 @@ paths:
         Both `market` and `category` are required parameters.
       x-description-zh: 按市场和类别筛选可交易证券列表，主要用于获取符合盘前/盘后延长交易时段条件的证券。`market` 和 `category` 均为必填参数。
       tags:
-        - Watchlist Management
+        - Quote
       parameters:
         - name: market
           in: query
@@ -34227,7 +34175,7 @@ paths:
         Each data point contains the daily temperature, valuation, and sentiment scores (all scored 0–100).
       x-description-zh: 获取指定市场在日期范围内的历史市场温度时间序列，每个数据点包含当日情绪温度、估值和情绪分项评分（均为 0–100 分制）。
       tags:
-        - Market Temperature
+        - Market
       parameters:
         - name: market
           in: query
@@ -34294,7 +34242,7 @@ paths:
         Scores range from 0–100; a higher value indicates a more bullish market.
       x-description-zh: 获取指定市场的当前情绪温度快照。评分范围 0–100，数值越高表示市场越乐观。
       tags:
-        - Market Temperature
+        - Market
       parameters:
         - name: market
           in: query
@@ -34343,7 +34291,7 @@ paths:
         dates and file keys that can be used with the download endpoint.
       x-description-zh: 查询可用的账户结单（日结单或月结单），返回结单日期和文件标识列表，可用于下载接口。
       tags:
-        - Statement
+        - Account
       parameters:
         - name: statement_type
           in: query
@@ -34414,7 +34362,7 @@ paths:
         document containing the full statement content with all sections.
       x-description-zh: 获取指定结单文件的预签名下载地址，返回包含结单全部板块的 JSON 文档。
       tags:
-        - Statement
+        - Account
       parameters:
         - name: file_key
           in: query
@@ -34460,7 +34408,7 @@ paths:
         Each filing includes a title, file name, download URLs, and publication timestamp.
       x-description-zh: 获取指定标的的监管文件或信息披露文件列表，每条记录包含标题、文件名、下载链接和发布时间戳。
       tags:
-        - News & Filings
+        - Quote
       parameters:
         - name: symbol
           in: query
