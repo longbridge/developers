@@ -9460,19 +9460,19 @@ paths:
       x-response-properties:
         - name: info
           type: object[]
-          required: true
+          required: false
           description: Asset allocation groups (one per element type)
           x-description-zh: 资产配置分组（每种元素类型一组）
           x-description-zh-hk: 資產配置分組（每種元素類型一組）
         - name: └ report_date
           type: string
-          required: true
+          required: false
           description: Report date, e.g. `20260601`
           x-description-zh: 报告日期，如 `20260601`
           x-description-zh-hk: 報告日期，如 `20260601`
         - name: └ asset_type
-          type: string
-          required: true
+          type: integer
+          required: false
           description: Element type of this group (holdings / regional / asset class / industry)
           x-description-zh: 本组的元素类型（持仓 / 地区 / 资产类别 / 行业）
           x-description-zh-hk: 本組的元素類型（持倉 / 地區 / 資產類別 / 行業）
@@ -9482,38 +9482,62 @@ paths:
           description: Elements in this group
           x-description-zh: 本组的元素列表
           x-description-zh-hk: 本組的元素列表
-        - name: └ └ name
+        - name: └ ∟ name
           type: string
-          required: true
+          required: false
           description: Element name
           x-description-zh: 元素名称
           x-description-zh-hk: 元素名稱
-        - name: └ └ code
+        - name: └ ∟ position_ratio
           type: string
           required: false
-          description: Security code (holdings only), e.g. `NVDA`
-          x-description-zh: 证券代码（仅持仓），如 `NVDA`
-          x-description-zh-hk: 證券代碼（僅持倉），如 `NVDA`
-        - name: └ └ position_ratio
-          type: string
-          required: true
           description: Position ratio, e.g. `0.0861114`
           x-description-zh: 持仓占比，如 `0.0861114`
           x-description-zh-hk: 持倉佔比，如 `0.0861114`
-        - name: └ └ symbol
+        - name: └ ∟ name_locales
           type: string
           required: false
-          description: Security symbol (holdings only), e.g. `NVDA.US`
-          x-description-zh: 证券代码带市场后缀（仅持仓），如 `NVDA.US`
-          x-description-zh-hk: 證券代碼帶市場後綴（僅持倉），如 `NVDA.US`
-        - name: └ └ name_locales_map
+          description: Localized name (raw string; see `name_locales_map` for the locale map).
+          x-description-zh: 本地化名称（原始字符串，语言映射见 `name_locales_map`）。
+          x-description-zh-hk: 本地化名稱（原始字符串，語言映射見 `name_locales_map`）。
+        - name: └ ∟ name_locales_map
           type: object
           required: false
           description: Localized names (locale → name, e.g. `zh-CN` → `英伟达`)
           x-description-zh: 本地化名称（locale → 名称，如 `zh-CN` → `英伟达`）
           x-description-zh-hk: 本地化名稱（locale → 名稱，如 `zh-CN` → `英偉達`）
-        - name: └ └ holding_detail
-          type: object
+        - name: └ ∟ ∟ en
+          type: string
+          required: false
+          description: English name.
+          x-description-zh: 英文名称。
+          x-description-zh-hk: 英文名稱。
+        - name: └ ∟ ∟ zh-CN
+          type: string
+          required: false
+          description: Simplified Chinese name.
+          x-description-zh: 简体中文名称。
+          x-description-zh-hk: 簡體中文名稱。
+        - name: └ ∟ ∟ zh-HK
+          type: string
+          required: false
+          description: Traditional Chinese name.
+          x-description-zh: 繁体中文名称。
+          x-description-zh-hk: 繁體中文名稱。
+        - name: └ ∟ code
+          type: string
+          required: false
+          description: Security code (holdings only), e.g. `NVDA`
+          x-description-zh: 证券代码（仅持仓），如 `NVDA`
+          x-description-zh-hk: 證券代碼（僅持倉），如 `NVDA`
+        - name: └ ∟ symbol
+          type: string
+          required: false
+          description: Security symbol (holdings only), e.g. `NVDA.US`
+          x-description-zh: 证券代码带市场后缀（仅持仓），如 `NVDA.US`
+          x-description-zh-hk: 證券代碼帶市場後綴（僅持倉），如 `NVDA.US`
+        - name: └ ∟ holding_detail
+          type: string
           required: false
           description: Holding detail (holdings only)
           x-description-zh: 持仓明细（仅持仓）
@@ -25373,11 +25397,41 @@ paths:
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/us/stock-info/etf-files?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: files
-          type: USETFFile[]
-          required: true
+          type: object[]
+          required: false
           description: List of ETF regulatory documents
           x-description-zh: ETF 监管文件列表
           x-description-zh-hk: ETF 監管文件列表
+        - name: └ file_name
+          type: string
+          required: false
+          description: File name.
+          x-description-zh: 文件名。
+          x-description-zh-hk: 文件名。
+        - name: └ file_path
+          type: string
+          required: false
+          description: File download path/URL.
+          x-description-zh: 文件下载路径/链接。
+          x-description-zh-hk: 文件下載路徑/連結。
+        - name: └ update_date
+          type: string
+          required: false
+          description: Last update date.
+          x-description-zh: 最后更新日期。
+          x-description-zh-hk: 最後更新日期。
+        - name: └ code
+          type: string
+          required: false
+          description: Ticker code (e.g. `TSLA`)
+          x-description-zh: 股票代码（如 `TSLA`）
+          x-description-zh-hk: 股票代碼（如 `TSLA`）
+        - name: └ format
+          type: string
+          required: false
+          description: File format, e.g. `PDF`.
+          x-description-zh: 文件格式，如 `PDF`。
+          x-description-zh-hk: 文件格式，如 `PDF`。
       responses:
         '200':
           description: Successful response
