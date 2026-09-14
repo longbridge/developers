@@ -10245,66 +10245,54 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/short-positions/hk?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
+        - name: symbol
+          type: string
+          required: false
+          description: Security symbol, e.g. `700.HK`.
+          x-description-zh: 标的代码，如 `700.HK`。
+          x-description-zh-hk: 標的代碼，如 `700.HK`。
+        - name: update_timestamp
+          type: string
+          required: false
+          description: Last update time (Unix seconds).
+          x-description-zh: 最后更新时间（Unix 秒）。
+          x-description-zh-hk: 最後更新時間（Unix 秒）。
         - name: data
           type: object[]
           required: false
-          description: Short position records
-          x-description-zh: 沽空持仓记录
-          x-description-zh-hk: 沽空持倉記錄
+          description: Daily HKEX short-position records.
+          x-description-zh: 港交所每日沽空持仓记录。
+          x-description-zh-hk: 港交所每日沽空持倉記錄。
         - name: └ timestamp
           type: string
           required: false
-          description: Settlement date (RFC 3339, e.g. `2022-03-15T04:00:00Z`)
-          x-description-zh: 结算日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`）
-          x-description-zh-hk: 結算日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`）
-        - name: └ current_shares_short
-          type: string
-          required: false
-          description: Number of shares sold short
-          x-description-zh: 沽空持仓股数
-          x-description-zh-hk: 沽空持倉股數
-        - name: └ avg_daily_share_volume
-          type: string
-          required: false
-          description: Average daily share volume
-          x-description-zh: 日均成交量
-          x-description-zh-hk: 日均成交量
-        - name: └ days_to_cover
-          type: string
-          required: false
-          description: Days to cover (short shares ÷ avg daily vol)
-          x-description-zh: 沽空回补天数
-          x-description-zh-hk: 沽空回補天數
-        - name: └ rate
-          type: string
-          required: false
-          description: Short ratio
-          x-description-zh: 沽空比率
-          x-description-zh-hk: 沽空比率
-        - name: └ close
-          type: string
-          required: false
-          description: Closing price for the day
-          x-description-zh: 当日收盘价
-          x-description-zh-hk: 當日收盤價
+          description: Record date (Unix seconds).
+          x-description-zh: 记录日期（Unix 秒）。
+          x-description-zh-hk: 記錄日期（Unix 秒）。
         - name: └ amount
           type: string
           required: false
-          description: Short selling amount (HKD)
-          x-description-zh: 沽空金额（港元）
-          x-description-zh-hk: 沽空金額（港元）
+          description: Short-sold shares that day.
+          x-description-zh: 当日沽空股数。
+          x-description-zh-hk: 當日沽空股數。
         - name: └ balance
           type: string
           required: false
-          description: Short position balance
-          x-description-zh: 沽空持仓余额
-          x-description-zh-hk: 沽空持倉餘額
+          description: Outstanding short-position value.
+          x-description-zh: 沽空持仓金额。
+          x-description-zh-hk: 沽空持倉金額。
+        - name: └ rate
+          type: string
+          required: false
+          description: Short-position ratio.
+          x-description-zh: 沽空比率。
+          x-description-zh-hk: 沽空比率。
         - name: └ cost
           type: string
           required: false
-          description: Closing price for the day
-          x-description-zh: 当日收盘价
-          x-description-zh-hk: 當日收盤價
+          description: Average short-position price.
+          x-description-zh: 沽空平均价。
+          x-description-zh-hk: 沽空平均價。
       responses:
         '200':
           description: Successful response
@@ -10459,66 +10447,60 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/short-positions/us?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
+        - name: symbol
+          type: string
+          required: false
+          description: Security symbol, e.g. `AAPL.US`.
+          x-description-zh: 标的代码，如 `AAPL.US`。
+          x-description-zh-hk: 標的代碼，如 `AAPL.US`。
         - name: data
           type: object[]
           required: false
-          description: Short position records
-          x-description-zh: 沽空持仓记录
-          x-description-zh-hk: 沽空持倉記錄
+          description: Bi-monthly FINRA short-interest records.
+          x-description-zh: FINRA 双月沽空数据记录。
+          x-description-zh-hk: FINRA 雙月沽空數據記錄。
         - name: └ timestamp
           type: string
           required: false
-          description: Settlement date (RFC 3339, e.g. `2022-03-15T04:00:00Z`)
-          x-description-zh: 结算日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`）
-          x-description-zh-hk: 結算日期（RFC 3339 格式，例如 `2022-03-15T04:00:00Z`）
-        - name: └ current_shares_short
-          type: string
-          required: false
-          description: Number of shares sold short
-          x-description-zh: 沽空持仓股数
-          x-description-zh-hk: 沽空持倉股數
-        - name: └ avg_daily_share_volume
-          type: string
-          required: false
-          description: Average daily share volume
-          x-description-zh: 日均成交量
-          x-description-zh-hk: 日均成交量
-        - name: └ days_to_cover
-          type: string
-          required: false
-          description: Days to cover (short shares ÷ avg daily vol)
-          x-description-zh: 沽空回补天数
-          x-description-zh-hk: 沽空回補天數
+          description: Settlement date (Unix seconds).
+          x-description-zh: 结算日期（Unix 秒）。
+          x-description-zh-hk: 結算日期（Unix 秒）。
         - name: └ rate
           type: string
           required: false
-          description: Short ratio
-          x-description-zh: 沽空比率
-          x-description-zh-hk: 沽空比率
+          description: Short interest as a fraction of float.
+          x-description-zh: 沽空占流通股比率。
+          x-description-zh-hk: 沽空佔流通股比率。
+        - name: └ avg_daily_share_volume
+          type: string
+          required: false
+          description: Average daily share volume.
+          x-description-zh: 日均成交股数。
+          x-description-zh-hk: 日均成交股數。
+        - name: └ current_shares_short
+          type: string
+          required: false
+          description: Current shares sold short.
+          x-description-zh: 当前沽空股数。
+          x-description-zh-hk: 當前沽空股數。
+        - name: └ days_to_cover
+          type: string
+          required: false
+          description: Days to cover (short interest / avg volume).
+          x-description-zh: 回补天数（沽空量 / 日均量）。
+          x-description-zh-hk: 回補天數（沽空量 / 日均量）。
         - name: └ close
           type: string
           required: false
-          description: Closing price for the day
-          x-description-zh: 当日收盘价
-          x-description-zh-hk: 當日收盤價
-        - name: └ amount
-          type: string
+          description: Closing price.
+          x-description-zh: 收盘价。
+          x-description-zh-hk: 收盤價。
+        - name: sources
+          type: integer
           required: false
-          description: Short selling amount (HKD)
-          x-description-zh: 沽空金额（港元）
-          x-description-zh-hk: 沽空金額（港元）
-        - name: └ balance
-          type: string
-          required: false
-          description: Short position balance
-          x-description-zh: 沽空持仓余额
-          x-description-zh-hk: 沽空持倉餘額
-        - name: └ cost
-          type: string
-          required: false
-          description: Closing price for the day
-          x-description-zh: 当日收盘价
-          x-description-zh-hk: 當日收盤價
+          description: Number of contributing data sources.
+          x-description-zh: 数据来源数量。
+          x-description-zh-hk: 數據來源數量。
       responses:
         '200':
           description: Successful response
@@ -10672,60 +10654,54 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/short-trades/hk?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
+        - name: symbol
+          type: string
+          required: false
+          description: Security symbol, e.g. `700.HK`.
+          x-description-zh: 标的代码，如 `700.HK`。
+          x-description-zh-hk: 標的代碼，如 `700.HK`。
         - name: data
           type: object[]
           required: false
-          description: Daily short trade volume records
-          x-description-zh: 每日沽空成交量列表
-          x-description-zh-hk: 每日沽空成交量列表
+          description: Daily HKEX short-sale records.
+          x-description-zh: 港交所每日沽空成交记录。
+          x-description-zh-hk: 港交所每日沽空成交記錄。
         - name: └ timestamp
           type: string
           required: false
-          description: Trading date (RFC 3339, e.g. `2026-05-15T04:00:00Z`)
-          x-description-zh: 交易日期（RFC 3339 格式，例如 `2026-05-15T04:00:00Z`）
-          x-description-zh-hk: 交易日期（RFC 3339 格式，例如 `2026-05-15T04:00:00Z`）
-        - name: └ nus_amount
-          type: string
-          required: false
-          description: NASDAQ short sale volume (shares)
-          x-description-zh: 纳斯达克沽空成交量（股）
-          x-description-zh-hk: 納斯達克沽空成交量（股）
-        - name: └ ny_amount
-          type: string
-          required: false
-          description: NYSE short sale volume (shares)
-          x-description-zh: 纽交所沽空成交量（股）
-          x-description-zh-hk: 紐交所沽空成交量（股）
-        - name: └ total_amount
-          type: string
-          required: false
-          description: Total trading volume for the day
-          x-description-zh: 当日总成交量
-          x-description-zh-hk: 當日總成交量
-        - name: └ rate
-          type: string
-          required: false
-          description: Short ratio (short volume ÷ total volume)
-          x-description-zh: 沽空比率（沽空量 ÷ 总成交量）
-          x-description-zh-hk: 沽空比率（沽空量 ÷ 總成交量）
-        - name: └ close
-          type: string
-          required: false
-          description: Closing price
-          x-description-zh: 当日收盘价
-          x-description-zh-hk: 當日收盤價
+          description: Trade date (Unix seconds).
+          x-description-zh: 成交日期（Unix 秒）。
+          x-description-zh-hk: 成交日期（Unix 秒）。
         - name: └ amount
           type: string
           required: false
-          description: Short sale turnover amount (HKD)
-          x-description-zh: 当日沽空成交金额（港元）
-          x-description-zh-hk: 當日沽空成交金額（港元）
+          description: Short-sale turnover that day.
+          x-description-zh: 当日沽空成交额。
+          x-description-zh-hk: 當日沽空成交額。
         - name: └ balance
           type: string
           required: false
-          description: Short position balance
-          x-description-zh: 沽空持仓余额
-          x-description-zh-hk: 沽空持倉餘額
+          description: Short-sale balance.
+          x-description-zh: 沽空余额。
+          x-description-zh-hk: 沽空餘額。
+        - name: └ close
+          type: string
+          required: false
+          description: Closing price.
+          x-description-zh: 收盘价。
+          x-description-zh-hk: 收盤價。
+        - name: └ rate
+          type: string
+          required: false
+          description: Short-sale ratio.
+          x-description-zh: 沽空比率。
+          x-description-zh-hk: 沽空比率。
+        - name: └ total_amount
+          type: string
+          required: false
+          description: Total market turnover.
+          x-description-zh: 总成交额。
+          x-description-zh-hk: 總成交額。
       responses:
         '200':
           description: Successful response
@@ -10879,60 +10855,60 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/short-trades/us?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
+        - name: symbol
+          type: string
+          required: false
+          description: Security symbol, e.g. `AAPL.US`.
+          x-description-zh: 标的代码，如 `AAPL.US`。
+          x-description-zh-hk: 標的代碼，如 `AAPL.US`。
         - name: data
           type: object[]
           required: false
-          description: Daily short trade volume records
-          x-description-zh: 每日沽空成交量列表
-          x-description-zh-hk: 每日沽空成交量列表
+          description: Daily US short-sale volume records.
+          x-description-zh: 美股每日沽空成交量记录。
+          x-description-zh-hk: 美股每日沽空成交量記錄。
         - name: └ timestamp
           type: string
           required: false
-          description: Trading date (RFC 3339, e.g. `2026-05-15T04:00:00Z`)
-          x-description-zh: 交易日期（RFC 3339 格式，例如 `2026-05-15T04:00:00Z`）
-          x-description-zh-hk: 交易日期（RFC 3339 格式，例如 `2026-05-15T04:00:00Z`）
+          description: Trade date (Unix seconds).
+          x-description-zh: 成交日期（Unix 秒）。
+          x-description-zh-hk: 成交日期（Unix 秒）。
         - name: └ nus_amount
           type: string
           required: false
-          description: NASDAQ short sale volume (shares)
-          x-description-zh: 纳斯达克沽空成交量（股）
-          x-description-zh-hk: 納斯達克沽空成交量（股）
-        - name: └ ny_amount
-          type: string
-          required: false
-          description: NYSE short sale volume (shares)
-          x-description-zh: 纽交所沽空成交量（股）
-          x-description-zh-hk: 紐交所沽空成交量（股）
+          description: Non-exchange (off-exchange) short volume.
+          x-description-zh: 场外沽空量。
+          x-description-zh-hk: 場外沽空量。
         - name: └ total_amount
           type: string
           required: false
-          description: Total trading volume for the day
-          x-description-zh: 当日总成交量
-          x-description-zh-hk: 當日總成交量
-        - name: └ rate
+          description: Total short volume.
+          x-description-zh: 总沽空量。
+          x-description-zh-hk: 總沽空量。
+        - name: └ ny_amount
           type: string
           required: false
-          description: Short ratio (short volume ÷ total volume)
-          x-description-zh: 沽空比率（沽空量 ÷ 总成交量）
-          x-description-zh-hk: 沽空比率（沽空量 ÷ 總成交量）
+          description: NYSE short volume.
+          x-description-zh: 纽交所沽空量。
+          x-description-zh-hk: 紐交所沽空量。
         - name: └ close
           type: string
           required: false
-          description: Closing price
-          x-description-zh: 当日收盘价
-          x-description-zh-hk: 當日收盤價
-        - name: └ amount
+          description: Closing price.
+          x-description-zh: 收盘价。
+          x-description-zh-hk: 收盤價。
+        - name: └ rate
           type: string
           required: false
-          description: Short sale turnover amount (HKD)
-          x-description-zh: 当日沽空成交金额（港元）
-          x-description-zh-hk: 當日沽空成交金額（港元）
-        - name: └ balance
-          type: string
+          description: Short-volume ratio.
+          x-description-zh: 沽空量占比。
+          x-description-zh-hk: 沽空量佔比。
+        - name: sources
+          type: integer
           required: false
-          description: Short position balance
-          x-description-zh: 沽空持仓余额
-          x-description-zh-hk: 沽空持倉餘額
+          description: Number of contributing data sources.
+          x-description-zh: 数据来源数量。
+          x-description-zh-hk: 數據來源數量。
       responses:
         '200':
           description: Successful response
@@ -14027,24 +14003,18 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/option-volume-stats?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
-        - name: symbol
+        - name: c
           type: string
-          required: true
-          description: Security symbol
-          x-description-zh: Security symbol
-          x-description-zh-hk: Security symbol
-        - name: call_volume
-          type: int64
-          required: true
-          description: Total call volume for today
-          x-description-zh: Total call volume for today
-          x-description-zh-hk: Total call volume for today
-        - name: put_volume
-          type: int64
-          required: true
-          description: Total put volume for today
-          x-description-zh: Total put volume for today
-          x-description-zh-hk: Total put volume for today
+          required: false
+          description: Total call option volume.
+          x-description-zh: 看涨期权总成交量。
+          x-description-zh-hk: 看漲期權總成交量。
+        - name: p
+          type: string
+          required: false
+          description: Total put option volume.
+          x-description-zh: 看跌期权总成交量。
+          x-description-zh-hk: 看跌期權總成交量。
       responses:
         '200':
           description: Successful response
@@ -20587,216 +20557,138 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/institution-rating-latest?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
-        - name: latest
-          type: object
-          required: true
-          description: Latest analyst rating snapshot
-          x-description-zh: 最新机构评级快照
-          x-description-zh-hk: 最新機構評級快照
-        - name: latest.evaluate
-          type: object
-          required: true
-          description: Rating distribution
-          x-description-zh: 评级分布
-          x-description-zh-hk: 評級分佈
-        - name: latest.evaluate.buy
-          type: integer
-          required: false
-          description: Buy ratings count
-          x-description-zh: 买入评级数量
-          x-description-zh-hk: 買入評級數量
-        - name: latest.evaluate.hold
-          type: integer
-          required: false
-          description: Hold ratings count
-          x-description-zh: 持有评级数量
-          x-description-zh-hk: 持有評級數量
-        - name: latest.evaluate.sell
-          type: integer
-          required: false
-          description: Sell ratings count
-          x-description-zh: 卖出评级数量
-          x-description-zh-hk: 賣出評級數量
-        - name: latest.evaluate.over
-          type: integer
-          required: false
-          description: Outperform count
-          x-description-zh: 跑赢市场数量
-          x-description-zh-hk: 跑贏市場數量
-        - name: latest.evaluate.under
-          type: integer
-          required: false
-          description: Underperform count
-          x-description-zh: 跑输市场数量
-          x-description-zh-hk: 跑輸市場數量
-        - name: latest.evaluate.no_opinion
-          type: integer
-          required: false
-          description: No opinion count
-          x-description-zh: 无评级数量
-          x-description-zh-hk: 無評級數量
-        - name: latest.evaluate.total
-          type: integer
-          required: false
-          description: Total analyst count
-          x-description-zh: 机构总数
-          x-description-zh-hk: 機構總數
-        - name: latest.evaluate.start_date
-          type: string
-          required: false
-          description: Period start date
-          x-description-zh: 统计周期开始日期
-          x-description-zh-hk: 統計周期開始日期
-        - name: latest.evaluate.end_date
-          type: string
-          required: false
-          description: Period end date
-          x-description-zh: 统计周期结束日期
-          x-description-zh-hk: 統計周期結束日期
-        - name: latest.industry_id
-          type: integer
-          required: false
-          description: Industry ID
-          x-description-zh: 行业 ID
-          x-description-zh-hk: 行業 ID
-        - name: latest.industry_name
-          type: string
-          required: false
-          description: Industry name
-          x-description-zh: 行业名称
-          x-description-zh-hk: 行業名稱
-        - name: latest.industry_rank
-          type: integer
-          required: false
-          description: Rank within industry
-          x-description-zh: 行业内排名
-          x-description-zh-hk: 行業內排名
-        - name: latest.industry_total
-          type: integer
-          required: false
-          description: Total stocks in industry
-          x-description-zh: 行业标的总数
-          x-description-zh-hk: 行業標的總數
-        - name: latest.industry_mean
-          type: integer
-          required: false
-          description: Industry mean rating
-          x-description-zh: 行业平均评分
-          x-description-zh-hk: 行業平均評分
-        - name: latest.industry_median
-          type: integer
-          required: false
-          description: Industry median rating
-          x-description-zh: 行业中位数评分
-          x-description-zh-hk: 行業中位數評分
-        - name: latest.target
+        - name: evaluate
           type: object
           required: false
-          description: Price target range
-          x-description-zh: 目标价区间
-          x-description-zh-hk: 目標價區間
-        - name: latest.target.highest_price
+          description: Analyst rating distribution.
+          x-description-zh: 分析师评级分布。
+          x-description-zh-hk: 分析師評級分佈。
+        - name: └ buy
+          type: integer
+          required: false
+          description: Number of Buy ratings.
+          x-description-zh: 买入评级数。
+          x-description-zh-hk: 買入評級數。
+        - name: └ over
+          type: integer
+          required: false
+          description: Number of Overweight ratings.
+          x-description-zh: 增持评级数。
+          x-description-zh-hk: 增持評級數。
+        - name: └ hold
+          type: integer
+          required: false
+          description: Number of Hold ratings.
+          x-description-zh: 持有评级数。
+          x-description-zh-hk: 持有評級數。
+        - name: └ under
+          type: integer
+          required: false
+          description: Number of Underweight ratings.
+          x-description-zh: 减持评级数。
+          x-description-zh-hk: 減持評級數。
+        - name: └ sell
+          type: integer
+          required: false
+          description: Number of Sell ratings.
+          x-description-zh: 卖出评级数。
+          x-description-zh-hk: 賣出評級數。
+        - name: └ total
+          type: integer
+          required: false
+          description: Total number of ratings.
+          x-description-zh: 评级总数。
+          x-description-zh-hk: 評級總數。
+        - name: └ start_date
           type: string
           required: false
-          description: Highest target price
-          x-description-zh: 最高目标价
-          x-description-zh-hk: 最高目標價
-        - name: latest.target.lowest_price
+          description: Statistics start time (Unix seconds).
+          x-description-zh: 统计起始时间（Unix 秒）。
+          x-description-zh-hk: 統計起始時間（Unix 秒）。
+        - name: └ end_date
           type: string
           required: false
-          description: Lowest target price
-          x-description-zh: 最低目标价
-          x-description-zh-hk: 最低目標價
-        - name: latest.target.prev_close
-          type: string
+          description: Statistics end time (Unix seconds).
+          x-description-zh: 统计结束时间（Unix 秒）。
+          x-description-zh-hk: 統計結束時間（Unix 秒）。
+        - name: └ no_opinion
+          type: integer
           required: false
-          description: Previous close price
-          x-description-zh: 前收盘价
-          x-description-zh-hk: 前收盤價
-        - name: latest.target.start_date
-          type: string
-          required: false
-          description: Period start date
-          x-description-zh: 统计周期开始日期
-          x-description-zh-hk: 統計周期開始日期
-        - name: latest.target.end_date
-          type: string
-          required: false
-          description: Period end date
-          x-description-zh: 统计周期结束日期
-          x-description-zh-hk: 統計周期結束日期
-        - name: summary
+          description: Number of analysts with no opinion.
+          x-description-zh: 无观点的分析师数。
+          x-description-zh-hk: 無觀點的分析師數。
+        - name: target
           type: object
           required: false
-          description: Consensus rating snapshot
-          x-description-zh: 综合评级快照
-          x-description-zh-hk: 綜合評級快照
-        - name: summary.recommend
-          type: object
-          required: false
-          description: Recommendation distribution mapping
-          x-description-zh: 评级分布映射
-          x-description-zh-hk: 綜合評級
-        - name: summary.change
+          description: Target-price consensus.
+          x-description-zh: 目标价一致预期。
+          x-description-zh-hk: 目標價一致預期。
+        - name: └ highest_price
           type: string
           required: false
-          description: Price change value
-          x-description-zh: 价格变动值
-          x-description-zh-hk: 評級變化
-        - name: summary.ccy_symbol
+          description: Highest target price.
+          x-description-zh: 最高目标价。
+          x-description-zh-hk: 最高目標價。
+        - name: └ lowest_price
           type: string
           required: false
-          description: Currency symbol
-          x-description-zh: 货币符号
-          x-description-zh-hk: 貨幣符號
-        - name: summary.evaluate
-          type: object
-          required: false
-          description: Rating distribution counts
-          x-description-zh: 评级分布数量
-          x-description-zh-hk: 評級分佈（同 latest.evaluate）
-        - name: summary.evaluate.buy
-          type: integer
-          required: false
-          description: Buy count
-          x-description-zh: 买入数量
-          x-description-zh-hk: Buy count
-        - name: summary.evaluate.strong_buy
-          type: integer
-          required: false
-          description: Strong buy count
-          x-description-zh: 强力买入数量
-          x-description-zh-hk: Strong buy count
-        - name: summary.evaluate.hold
-          type: integer
-          required: false
-          description: Hold count
-          x-description-zh: 持有数量
-          x-description-zh-hk: Hold count
-        - name: summary.evaluate.sell
-          type: integer
-          required: false
-          description: Sell count
-          x-description-zh: 卖出数量
-          x-description-zh-hk: Sell count
-        - name: summary.evaluate.under
-          type: integer
-          required: false
-          description: Underperform count
-          x-description-zh: 跑输数量
-          x-description-zh-hk: Underperform count
-        - name: summary.target
+          description: Lowest target price.
+          x-description-zh: 最低目标价。
+          x-description-zh-hk: 最低目標價。
+        - name: └ prev_close
           type: string
           required: false
-          description: Consensus average target price
-          x-description-zh: 一致平均目标价
-          x-description-zh-hk: 一致目標價
-        - name: summary.updated_at
+          description: Previous close price.
+          x-description-zh: 前收盘价。
+          x-description-zh-hk: 前收盤價。
+        - name: └ start_date
           type: string
           required: false
-          description: Last update date string
-          x-description-zh: 最后更新日期字符串
-          x-description-zh-hk: 最後更新時間
+          description: Statistics start time (Unix seconds).
+          x-description-zh: 统计起始时间（Unix 秒）。
+          x-description-zh-hk: 統計起始時間（Unix 秒）。
+        - name: └ end_date
+          type: string
+          required: false
+          description: Statistics end time (Unix seconds).
+          x-description-zh: 统计结束时间（Unix 秒）。
+          x-description-zh-hk: 統計結束時間（Unix 秒）。
+        - name: industry_id
+          type: integer
+          required: false
+          description: Industry ID.
+          x-description-zh: 行业 ID。
+          x-description-zh-hk: 行業 ID。
+        - name: industry_name
+          type: string
+          required: false
+          description: Industry name.
+          x-description-zh: 行业名称。
+          x-description-zh-hk: 行業名稱。
+        - name: industry_rank
+          type: integer
+          required: false
+          description: The security's rank within its industry.
+          x-description-zh: 标的在行业内的排名。
+          x-description-zh-hk: 標的在行業內的排名。
+        - name: industry_total
+          type: integer
+          required: false
+          description: Number of securities in the industry.
+          x-description-zh: 行业内标的总数。
+          x-description-zh-hk: 行業內標的總數。
+        - name: industry_mean
+          type: integer
+          required: false
+          description: Industry mean rating rank.
+          x-description-zh: 行业平均评级排名。
+          x-description-zh-hk: 行業平均評級排名。
+        - name: industry_median
+          type: integer
+          required: false
+          description: Industry median rating rank.
+          x-description-zh: 行业评级排名中位数。
+          x-description-zh-hk: 行業評級排名中位數。
       responses:
         '200':
           description: Successful response
