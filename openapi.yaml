@@ -14172,78 +14172,72 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/option-volume-stats/daily?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
-        - name: symbol
-          type: string
-          required: true
-          description: Security symbol
-          x-description-zh: Security symbol
-          x-description-zh-hk: Security symbol
         - name: stats
           type: object[]
           required: true
-          description: Daily volume records
-          x-description-zh: Daily volume records
-          x-description-zh-hk: Daily volume records
+          description: Daily volume records.
+          x-description-zh: 每日成交量记录。
+          x-description-zh-hk: 每日成交量記錄。
         - name: └ symbol
           type: string
           required: true
-          description: Security symbol
-          x-description-zh: Security symbol
-          x-description-zh-hk: Security symbol
-        - name: └ date
+          description: Security symbol, e.g. `AAPL.US`.
+          x-description-zh: 标的代码，如 `AAPL.US`。
+          x-description-zh-hk: 標的代碼，如 `AAPL.US`。
+        - name: └ timestamp
           type: string
           required: true
-          description: Date in `YYYY-MM-DD` format
-          x-description-zh: Date in `YYYY-MM-DD` format
-          x-description-zh-hk: Date in `YYYY-MM-DD` format
-        - name: └ call_volume
-          type: int64
+          description: Record date (Unix seconds).
+          x-description-zh: 记录日期（Unix 秒）。
+          x-description-zh-hk: 記錄日期（Unix 秒）。
+        - name: └ total_call_volume
+          type: string
           required: true
-          description: Call volume on that day
-          x-description-zh: Call volume on that day
-          x-description-zh-hk: Call volume on that day
-        - name: └ put_volume
-          type: int64
+          description: Call volume on that day.
+          x-description-zh: 当日认购成交量。
+          x-description-zh-hk: 當日認購成交量。
+        - name: └ total_put_volume
+          type: string
           required: true
-          description: Put volume on that day
-          x-description-zh: Put volume on that day
-          x-description-zh-hk: Put volume on that day
-        - name: └ call_open_interest
-          type: int64
+          description: Put volume on that day.
+          x-description-zh: 当日认沽成交量。
+          x-description-zh-hk: 當日認沽成交量。
+        - name: └ total_call_open_interest
+          type: string
           required: true
-          description: Call open interest
-          x-description-zh: Call open interest
-          x-description-zh-hk: Call open interest
-        - name: └ put_open_interest
-          type: int64
+          description: Call open interest.
+          x-description-zh: 认购未平仓量。
+          x-description-zh-hk: 認購未平倉量。
+        - name: └ total_put_open_interest
+          type: string
           required: true
-          description: Put open interest
-          x-description-zh: Put open interest
-          x-description-zh-hk: Put open interest
+          description: Put open interest.
+          x-description-zh: 认沽未平仓量。
+          x-description-zh-hk: 認沽未平倉量。
         - name: └ total_volume
-          type: int64
+          type: string
           required: true
-          description: Total options volume
-          x-description-zh: Total options volume
-          x-description-zh-hk: Total options volume
+          description: Total options volume.
+          x-description-zh: 期权总成交量。
+          x-description-zh-hk: 期權總成交量。
         - name: └ total_open_interest
-          type: int64
+          type: string
           required: true
-          description: Total options open interest
-          x-description-zh: Total options open interest
-          x-description-zh-hk: Total options open interest
-        - name: └ pc_vol
-          type: float
+          description: Total options open interest.
+          x-description-zh: 期权总未平仓量。
+          x-description-zh-hk: 期權總未平倉量。
+        - name: └ put_call_volume_ratio
+          type: string
           required: true
-          description: Put/call volume ratio
-          x-description-zh: Put/call volume ratio
-          x-description-zh-hk: Put/call volume ratio
-        - name: └ pc_oi
-          type: float
+          description: Put/call volume ratio.
+          x-description-zh: 认沽/认购成交量比率。
+          x-description-zh-hk: 認沽/認購成交量比率。
+        - name: └ put_call_open_interest_ratio
+          type: string
           required: true
-          description: Put/call open interest ratio
-          x-description-zh: Put/call open interest ratio
-          x-description-zh-hk: Put/call open interest ratio
+          description: Put/call open interest ratio.
+          x-description-zh: 认沽/认购未平仓量比率。
+          x-description-zh-hk: 認沽/認購未平倉量比率。
       responses:
         '200':
           description: Successful response
@@ -17676,7 +17670,7 @@ paths:
           description: Postal code
           x-description-zh: 邮政编码
           x-description-zh-hk: 郵政編碼
-        - name: phone
+        - name: Phone
           type: string
           required: false
           description: Phone number
