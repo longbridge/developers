@@ -1357,12 +1357,6 @@ paths:
           description: Ticker code (e.g. `TSLA`)
           x-description-zh: 股票代码（如 `TSLA`）
           x-description-zh-hk: 股票代碼（如 `TSLA`）
-        - name: └ ∟ counter_id
-          type: string
-          required: false
-          description: Counter ID (e.g. `ST/US/TSLA`)
-          x-description-zh: Counter ID（如 `ST/US/TSLA`）
-          x-description-zh-hk: Counter ID（如 `ST/US/TSLA`）
         - name: └ ∟ name
           type: string
           required: false
@@ -16439,12 +16433,6 @@ paths:
           description: Valuation comparison list
           x-description-zh: 股票估值对比列表
           x-description-zh-hk: 股票估值對比列表
-        - name: └ counter_id
-          type: string
-          required: false
-          description: Counter ID (e.g. `ST/US/AAPL`)
-          x-description-zh: Counter ID（如 `ST/US/AAPL`）
-          x-description-zh-hk: Counter ID（如 `ST/US/AAPL`）
         - name: └ name
           type: string
           required: false
@@ -29531,12 +29519,6 @@ paths:
           description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
           x-description-zh: 订单有效期类型。**可选值：**, `Day` - 当日有效，`GTC` - 撤单前有效，`GTD` - 到期前有效
           x-description-zh-hk: 訂單有效期類型。**可選值：**, `Day` - 當日有效，`GTC` - 撤單前有效，`GTD` - 到期前有效
-        - name: └ ∟ counter_id
-          type: string
-          required: true
-          description: Counter order ID
-          x-description-zh: 对应单 ID
-          x-description-zh-hk: 對應單 ID
         - name: └ ∟ trigger_status
           type: int32
           required: true
@@ -30167,12 +30149,6 @@ paths:
           description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
           x-description-zh: 订单有效期类型。**可选值：**, `Day` - 当日有效，`GTC` - 撤单前有效，`GTD` - 到期前有效
           x-description-zh-hk: 訂單有效期類型。**可選值：**, `Day` - 當日有效，`GTC` - 撤單前有效，`GTD` - 到期前有效
-        - name: └ ∟ counter_id
-          type: string
-          required: true
-          description: Counter order ID
-          x-description-zh: 对应单 ID
-          x-description-zh-hk: 對應單 ID
         - name: └ ∟ trigger_status
           type: int32
           required: true
