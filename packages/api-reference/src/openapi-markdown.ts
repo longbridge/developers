@@ -95,7 +95,13 @@ export function referenceMarkdown(rawYaml: string, locale: Locale): string {
   for (const pg of pages) {
     const title = pickLocale(pg.title, pg.titleZh, pg.titleZhHk, locale)
     const content = pickLocale(pg.content, pg.contentZh, pg.contentZhHk, locale).replace('[[SIGNING_TABS]]', '')
-    md += `## ${title}\n\n${content.trim()}\n\n`
+    // Drop a leading heading in the page body that repeats the page title, so
+    // the title is not rendered twice (e.g. an "Error Codes" page whose content
+    // also opens with `## Error Codes`).
+    const body = content
+      .trim()
+      .replace(/^#{1,6}[ \t]+(.+?)[ \t]*\n+/, (m, h) => (h.trim() === title.trim() ? '' : m))
+    md += `## ${title}\n\n${body}\n\n`
   }
 
   for (const g of groups) {

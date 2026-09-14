@@ -2103,44 +2103,37 @@ paths:
           in: body
           type: string
           required: true
-          description: 'Market: `US`, `HK`, `CN`, `SG`'
-          x-description-zh: 市场：`US`、`HK`、`CN`、`SG`
-          x-description-zh-hk: 市場：`US`、`HK`、`CN`、`SG`
-        - name: strategy_id
-          in: body
-          type: integer
-          required: false
-          description: Strategy ID; use alone or combined with custom conditions
-          x-description-zh: 策略 ID；与自定义条件二选一，或同时使用
-          x-description-zh-hk: 策略 ID；與自定義條件二選一，或同時使用
-        - name: conditions
+          description: Market to screen, e.g. `US`, `HK`, `CN`. When a strategy is used, taken from the strategy.
+          x-description-zh: 选股市场，如 `US`、`HK`、`CN`。使用策略时取自策略。
+          x-description-zh-hk: 選股市場，如 `US`、`HK`、`CN`。使用策略時取自策略。
+        - name: filters
           in: body
           type: array
-          required: false
-          description: Custom filter conditions (Mode B, when strategy_id is omitted)
-          x-description-zh: 自定义筛选条件（模式 B，不传 strategy_id 时使用）
-          x-description-zh-hk: 自定義篩選條件（模式 B，不傳 strategy_id 時使用）
-        - name: show
+          required: true
+          description: 'Filter conditions. Each item is `{ "key": "filter_<indicator>", "min": "<min>", "max": "<max>", "tech_values": {} }` — the indicator key is prefixed with `filter_`.'
+          x-description-zh: '筛选条件。每项为 `{ "key": "filter_<指标>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`——指标 key 带 `filter_` 前缀。'
+          x-description-zh-hk: '篩選條件。每項為 `{ "key": "filter_<指標>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`——指標 key 帶 `filter_` 前綴。'
+        - name: returns
           in: body
           type: array
-          required: false
-          description: Extra indicator keys to include in the response beyond the 7 default columns
-          x-description-zh: 额外需要返回的指标键名，在默认 7 列之外追加
-          x-description-zh-hk: 額外需要返回的指標鍵名，在默認 7 列之外追加
+          required: true
+          description: Indicator keys to return for each match (also prefixed with `filter_`).
+          x-description-zh: 每个匹配项需返回的指标 key 列表（同样带 `filter_` 前缀）。
+          x-description-zh-hk: 每個匹配項需返回的指標 key 列表（同樣帶 `filter_` 前綴）。
         - name: page
           in: body
           type: integer
-          required: false
-          description: 0-based page number, default 0
-          x-description-zh: 页码，从 0 开始，默认 0
-          x-description-zh-hk: 頁碼，從 0 開始，默認 0
+          required: true
+          description: Page number (0-indexed).
+          x-description-zh: 页码（从 0 开始）。
+          x-description-zh-hk: 頁碼（從 0 開始）。
         - name: size
           in: body
           type: integer
-          required: false
-          description: Page size, default 20
-          x-description-zh: 每页条数，默认 20
-          x-description-zh-hk: 每頁條數，默認 20
+          required: true
+          description: Page size.
+          x-description-zh: 每页数量。
+          x-description-zh-hk: 每頁數量。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -2155,7 +2148,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/quote/ai/screener/search' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"market":"<market>"}'
+              --data '{"market":"<market>","filters":[],"returns":[],"page":0,"size":0}'
         - lang: Python
           label: Python
           source: |
@@ -2164,7 +2157,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/quote/ai/screener/search",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"market": "<market>"},
+                json={"market": "<market>", "filters": [], "returns": [], "page": 0, "size": 0},
             )
             print(resp.json())
         - lang: Python
@@ -2178,7 +2171,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/quote/ai/screener/search",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"market": "<market>"},
+                        json={"market": "<market>", "filters": [], "returns": [], "page": 0, "size": 0},
                     ) as resp:
                         print(await resp.json())
 
@@ -2192,7 +2185,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ market: "<market>" }),
+              body: JSON.stringify({ market: "<market>", filters: [], returns: [], page: 0, size: 0 }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -2206,7 +2199,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/quote/ai/screener/search"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"market\":\"<market>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"market\":\"<market>\",\"filters\":[],\"returns\":[],\"page\":0,\"size\":0}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -2217,7 +2210,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/quote/ai/screener/search")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "market": "<market>" }))
+                    .json(&serde_json::json!({ "market": "<market>" , "filters": [] , "returns": [] , "page": 0 , "size": 0 }))
                     .send()
                     .await?
                     .text()
@@ -2235,7 +2228,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ai/screener/search");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"market\":\"<market>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"market\":\"<market>\",\"filters\":[],\"returns\":[],\"page\":0,\"size\":0}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -2243,7 +2236,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/ai/screener/search\", strings.NewReader(`{\"market\":\"<market>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/ai/screener/search\", strings.NewReader(`{\"market\":\"<market>\",\"filters\":[],\"returns\":[],\"page\":0,\"size\":0}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: total
           type: integer
@@ -2870,12 +2863,10 @@ paths:
   /v1/quote/short-positions/hk:
     get:
       operationId: short_positions_hk
-      summary: Short Positions (US & HK)
-      x-summary-zh: 沽空数据（美股 / 港股）
-      x-summary-zh-hk: 沽空數據（美股 / 港股）
+      summary: Short Positions (HK)
+      x-summary-zh: 沽空数据（港股）
+      x-summary-zh-hk: 沽空數據（港股）
       description: |
-        # Short Positions (US & HK)
-
         Get short interest data for US or HK securities. Market is auto-detected from the symbol suffix: `.HK` → HKEX short position data (daily); others → US FINRA short interest data (bi-monthly).
       x-description-zh: |
         获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
@@ -3083,12 +3074,10 @@ paths:
   /v1/quote/short-positions/us:
     get:
       operationId: short_positions_us
-      summary: Short Positions (US & HK)
-      x-summary-zh: 沽空数据（美股 / 港股）
-      x-summary-zh-hk: 沽空數據（美股 / 港股）
+      summary: Short Positions (US)
+      x-summary-zh: 沽空数据（美股）
+      x-summary-zh-hk: 沽空數據（美股）
       description: |
-        # Short Positions (US & HK)
-
         Get short interest data for US or HK securities. Market is auto-detected from the symbol suffix: `.HK` → HKEX short position data (daily); others → US FINRA short interest data (bi-monthly).
       x-description-zh: |
         获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
@@ -3296,9 +3285,9 @@ paths:
   /v1/quote/short-trades/hk:
     get:
       operationId: short_trades_hk
-      summary: Daily Short Sale Volume
-      x-summary-zh: 每日沽空成交量
-      x-summary-zh-hk: 每日沽空成交量
+      summary: Daily Short Sale Volume (HK)
+      x-summary-zh: 每日沽空成交量（港股）
+      x-summary-zh-hk: 每日沽空成交量（港股）
       description: |
         Get daily short sale volume data for a security. Supports US stocks (FINRA/NASDAQ) and HK stocks (HKEX). US data is updated bi-weekly; HK data is updated each trading day.
       x-description-zh: |
@@ -3500,9 +3489,9 @@ paths:
   /v1/quote/short-trades/us:
     get:
       operationId: short_trades_us
-      summary: Daily Short Sale Volume
-      x-summary-zh: 每日沽空成交量
-      x-summary-zh-hk: 每日沽空成交量
+      summary: Daily Short Sale Volume (US)
+      x-summary-zh: 每日沽空成交量（美股）
+      x-summary-zh-hk: 每日沽空成交量（美股）
       description: |
         Get daily short sale volume data for a security. Supports US stocks (FINRA/NASDAQ) and HK stocks (HKEX). US data is updated bi-weekly; HK data is updated each trading day.
       x-description-zh: |
@@ -3720,9 +3709,23 @@ paths:
           in: query
           type: string
           required: true
-          description: H-share symbol of a dual-listed stock, e.g. `939.HK`
-          x-description-zh: A+H 两地上市股票的 H 股代码，例如 `939.HK`
-          x-description-zh-hk: A+H 兩地上市股票的 H 股代碼，例如 `939.HK`
+          description: Security symbol, e.g. `600519.SH` or `000001.SZ`.
+          x-description-zh: 标的代码，如 `600519.SH` 或 `000001.SZ`。
+          x-description-zh-hk: 標的代碼，如 `600519.SH` 或 `000001.SZ`。
+        - name: line_type
+          in: query
+          type: string
+          required: true
+          description: Candlestick period, e.g. `day`, `week`, `month`.
+          x-description-zh: K 线周期，如 `day`、`week`、`month`。
+          x-description-zh-hk: K 線週期，如 `day`、`week`、`month`。
+        - name: line_num
+          in: query
+          type: integer
+          required: true
+          description: Number of candlesticks to return.
+          x-description-zh: 返回的 K 线数量。
+          x-description-zh-hk: 返回的 K 線數量。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -3734,7 +3737,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>' \
+              --url 'https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>&line_type=<line_type>&line_num=<line_num>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -3744,7 +3747,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/quote/ahpremium/klines",
                 headers={"Authorization": "Bearer <access_token>"},
-                params={"symbol": "<symbol>"},
+                params={"symbol": "<symbol>", "line_type": "<line_type>", "line_num": "<line_num>"},
             )
             print(resp.json())
         - lang: Python
@@ -3758,7 +3761,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/quote/ahpremium/klines",
                         headers={"Authorization": "Bearer <access_token>"},
-                        params={"symbol": "<symbol>"},
+                        params={"symbol": "<symbol>", "line_type": "<line_type>", "line_num": "<line_num>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -3768,6 +3771,8 @@ paths:
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/quote/ahpremium/klines")
             url.searchParams.set("symbol", "<symbol>")
+            url.searchParams.set("line_type", "<line_type>")
+            url.searchParams.set("line_num", "<line_num>")
 
             const resp = await fetch(url, {
               method: "GET",
@@ -3784,7 +3789,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>&line_type=<line_type>&line_num=<line_num>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -3797,7 +3802,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/ahpremium/klines")
                     .header("Authorization", "Bearer <access_token>")
-                    .query(&[("symbol", "<symbol>")])
+                    .query(&[("symbol", "<symbol>"), ("line_type", "<line_type>"), ("line_num", "<line_num>")])
                     .send()
                     .await?
                     .text()
@@ -3812,7 +3817,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>&line_type=<line_type>&line_num=<line_num>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -3821,7 +3826,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ahpremium/klines?symbol=<symbol>&line_type=<line_type>&line_num=<line_num>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: klines
           type: object[]
@@ -4125,9 +4130,16 @@ paths:
           in: query
           type: string
           required: true
-          description: HK security symbol, e.g. `700.HK`
-          x-description-zh: 港股证券代码，例如 `700.HK`
-          x-description-zh-hk: 港股證券代碼，例如 `700.HK`
+          description: Security symbol, e.g. `700.HK`.
+          x-description-zh: 标的代码，如 `700.HK`。
+          x-description-zh-hk: 標的代碼，如 `700.HK`。
+        - name: type
+          in: query
+          type: string
+          required: true
+          description: 'Statistics period: `rct_1` (1 day), `rct_5` (5 days), `rct_20` (20 days), `rct_60` (60 days).'
+          x-description-zh: 统计周期：`rct_1`（1 日）、`rct_5`（5 日）、`rct_20`（20 日）、`rct_60`（60 日）。
+          x-description-zh-hk: 統計週期：`rct_1`（1 日）、`rct_5`（5 日）、`rct_20`（20 日）、`rct_60`（60 日）。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -4139,7 +4151,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>' \
+              --url 'https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>&type=<type>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -4149,7 +4161,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/quote/broker-holding",
                 headers={"Authorization": "Bearer <access_token>"},
-                params={"symbol": "<symbol>"},
+                params={"symbol": "<symbol>", "type": "<type>"},
             )
             print(resp.json())
         - lang: Python
@@ -4163,7 +4175,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/quote/broker-holding",
                         headers={"Authorization": "Bearer <access_token>"},
-                        params={"symbol": "<symbol>"},
+                        params={"symbol": "<symbol>", "type": "<type>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -4173,6 +4185,7 @@ paths:
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/quote/broker-holding")
             url.searchParams.set("symbol", "<symbol>")
+            url.searchParams.set("type", "<type>")
 
             const resp = await fetch(url, {
               method: "GET",
@@ -4189,7 +4202,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>&type=<type>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -4202,7 +4215,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/broker-holding")
                     .header("Authorization", "Bearer <access_token>")
-                    .query(&[("symbol", "<symbol>")])
+                    .query(&[("symbol", "<symbol>"), ("type", "<type>")])
                     .send()
                     .await?
                     .text()
@@ -4217,7 +4230,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>&type=<type>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -4226,7 +4239,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/broker-holding?symbol=<symbol>&type=<type>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: buy
           type: object[]
@@ -4321,16 +4334,16 @@ paths:
           in: query
           type: string
           required: true
-          description: HK security symbol, e.g. `700.HK`
-          x-description-zh: 港股代码，例如 `700.HK`
-          x-description-zh-hk: 港股代碼，例如 `700.HK`
-        - name: broker_id
+          description: Security symbol, e.g. `700.HK`.
+          x-description-zh: 标的代码，如 `700.HK`。
+          x-description-zh-hk: 標的代碼，如 `700.HK`。
+        - name: parti_number
           in: query
           type: string
           required: true
-          description: Broker participant ID, e.g. `B01224`
-          x-description-zh: 经纪商参与者 ID，例如 `B01224`
-          x-description-zh-hk: 經紀商參與者 ID，例如 `B01224`
+          description: Broker (participant) number.
+          x-description-zh: 券商（参与者）编号。
+          x-description-zh-hk: 券商（參與者）編號。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -4341,7 +4354,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&broker_id=<broker_id>' \
+              --url 'https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&parti_number=<parti_number>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -4351,7 +4364,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/quote/broker-holding/daily",
                 headers={"Authorization": "Bearer <access_token>"},
-                params={"symbol": "<symbol>", "broker_id": "<broker_id>"},
+                params={"symbol": "<symbol>", "parti_number": "<parti_number>"},
             )
             print(resp.json())
         - lang: Python
@@ -4365,7 +4378,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/quote/broker-holding/daily",
                         headers={"Authorization": "Bearer <access_token>"},
-                        params={"symbol": "<symbol>", "broker_id": "<broker_id>"},
+                        params={"symbol": "<symbol>", "parti_number": "<parti_number>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -4375,7 +4388,7 @@ paths:
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/quote/broker-holding/daily")
             url.searchParams.set("symbol", "<symbol>")
-            url.searchParams.set("broker_id", "<broker_id>")
+            url.searchParams.set("parti_number", "<parti_number>")
 
             const resp = await fetch(url, {
               method: "GET",
@@ -4392,7 +4405,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&broker_id=<broker_id>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&parti_number=<parti_number>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -4405,7 +4418,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/broker-holding/daily")
                     .header("Authorization", "Bearer <access_token>")
-                    .query(&[("symbol", "<symbol>"), ("broker_id", "<broker_id>")])
+                    .query(&[("symbol", "<symbol>"), ("parti_number", "<parti_number>")])
                     .send()
                     .await?
                     .text()
@@ -4420,7 +4433,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&broker_id=<broker_id>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&parti_number=<parti_number>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -4429,7 +4442,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&broker_id=<broker_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/broker-holding/daily?symbol=<symbol>&parti_number=<parti_number>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: list
           type: object[]
@@ -6328,7 +6341,9 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/quote/market/stock-events' \
-              --header 'Authorization: Bearer <access_token>'
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"markets":[],"sort":0,"date":"<date>","limit":0}'
         - lang: Python
           label: Python
           source: |
@@ -6336,7 +6351,8 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/quote/market/stock-events",
-                headers={"Authorization": "Bearer <access_token>"},
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"markets": [], "sort": 0, "date": "<date>", "limit": 0},
             )
             print(resp.json())
         - lang: Python
@@ -6349,7 +6365,8 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/quote/market/stock-events",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"markets": [], "sort": 0, "date": "<date>", "limit": 0},
                     ) as resp:
                         print(await resp.json())
 
@@ -6361,7 +6378,9 @@ paths:
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ markets: [], sort: 0, date: "<date>", limit: 0 }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -6374,7 +6393,8 @@ paths:
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/quote/market/stock-events"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"markets\":[],\"sort\":0,\"date\":\"<date>\",\"limit\":0}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -6385,6 +6405,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/quote/market/stock-events")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "markets": [] , "sort": 0 , "date": "<date>" , "limit": 0 }))
                     .send()
                     .await?
                     .text()
@@ -6399,8 +6420,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/market/stock-events");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"markets\":[],\"sort\":0,\"date\":\"<date>\",\"limit\":0}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -6408,7 +6431,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/market/stock-events\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/market/stock-events\", strings.NewReader(`{\"markets\":[],\"sort\":0,\"date\":\"<date>\",\"limit\":0}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: events
           type: object[]
@@ -6557,27 +6580,34 @@ paths:
       tags:
         - Market
       x-parameters:
-        - name: start
+        - name: date
           in: query
           type: string
           required: true
-          description: Start date, YYYY-MM-DD
-          x-description-zh: 开始日期，格式 YYYY-MM-DD
-          x-description-zh-hk: 開始日期，格式 YYYY-MM-DD
-        - name: end
+          description: Start date, `YYYYMMDD`. Paginate by passing the returned `next_date`.
+          x-description-zh: 起始日期，`YYYYMMDD`。用返回的 `next_date` 翻页。
+          x-description-zh-hk: 起始日期，`YYYYMMDD`。用返回的 `next_date` 翻頁。
+        - name: date_end
           in: query
           type: string
           required: true
-          description: End date, YYYY-MM-DD
-          x-description-zh: 结束日期，格式 YYYY-MM-DD
-          x-description-zh-hk: 結束日期，格式 YYYY-MM-DD
-        - name: market
+          description: End date, `YYYYMMDD`.
+          x-description-zh: 结束日期，`YYYYMMDD`。
+          x-description-zh-hk: 結束日期，`YYYYMMDD`。
+        - name: types[]
+          in: query
+          type: string
+          required: true
+          description: 'Event category: `report`, `dividend`, `split`, `ipo`, `macrodata`, `closed`, `meeting`, `merge`.'
+          x-description-zh: 事件类别：`report`、`dividend`、`split`、`ipo`、`macrodata`、`closed`、`meeting`、`merge`。
+          x-description-zh-hk: 事件類別：`report`、`dividend`、`split`、`ipo`、`macrodata`、`closed`、`meeting`、`merge`。
+        - name: markets[]
           in: query
           type: string
           required: false
-          description: 'Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all.'
-          x-description-zh: 市场筛选：US、HK、SH、SZ，不填则返回所有市场
-          x-description-zh-hk: 市場篩選：US、HK、SH、SZ，不填則返回所有市場
+          description: Market filter, e.g. `US`, `HK`, `CN`. If omitted, all markets.
+          x-description-zh: 市场过滤，如 `US`、`HK`、`CN`。省略则不限市场。
+          x-description-zh-hk: 市場過濾，如 `US`、`HK`、`CN`。省略則不限市場。
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -6589,7 +6619,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/quote/finance_calendar?start=<start>&end=<end>' \
+              --url 'https://openapi.longbridge.com/v1/quote/finance_calendar?date=<date>&date_end=<date_end>&types[]=<types[]>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -6599,7 +6629,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/quote/finance_calendar",
                 headers={"Authorization": "Bearer <access_token>"},
-                params={"start": "<start>", "end": "<end>"},
+                params={"date": "<date>", "date_end": "<date_end>", "types[]": "<types[]>"},
             )
             print(resp.json())
         - lang: Python
@@ -6613,7 +6643,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/quote/finance_calendar",
                         headers={"Authorization": "Bearer <access_token>"},
-                        params={"start": "<start>", "end": "<end>"},
+                        params={"date": "<date>", "date_end": "<date_end>", "types[]": "<types[]>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -6622,8 +6652,9 @@ paths:
           label: Node.js
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/quote/finance_calendar")
-            url.searchParams.set("start", "<start>")
-            url.searchParams.set("end", "<end>")
+            url.searchParams.set("date", "<date>")
+            url.searchParams.set("date_end", "<date_end>")
+            url.searchParams.set("types[]", "<types[]>")
 
             const resp = await fetch(url, {
               method: "GET",
@@ -6640,7 +6671,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/finance_calendar?start=<start>&end=<end>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/finance_calendar?date=<date>&date_end=<date_end>&types[]=<types[]>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -6653,7 +6684,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/finance_calendar")
                     .header("Authorization", "Bearer <access_token>")
-                    .query(&[("start", "<start>"), ("end", "<end>")])
+                    .query(&[("date", "<date>"), ("date_end", "<date_end>"), ("types[]", "<types[]>")])
                     .send()
                     .await?
                     .text()
@@ -6668,7 +6699,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/finance_calendar?start=<start>&end=<end>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/finance_calendar?date=<date>&date_end=<date_end>&types[]=<types[]>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -6677,7 +6708,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/finance_calendar?start=<start>&end=<end>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/finance_calendar?date=<date>&date_end=<date_end>&types[]=<types[]>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: date
           type: string
@@ -6727,7 +6758,7 @@ paths:
           description: Security name
           x-description-zh: 证券名称
           x-description-zh-hk: 證券名稱
-        - name: event_type
+        - name: type
           type: string
           required: false
           description: Event type
@@ -7511,7 +7542,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/watchlist/pinned' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"id":"<id>","symbol":"<symbol>","is_pinned":"<is_pinned>"}'
+              --data '{"id":"<id>","symbol":"<symbol>","is_pinned":false}'
         - lang: Python
           label: Python
           source: |
@@ -7520,7 +7551,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/watchlist/pinned",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"id": "<id>", "symbol": "<symbol>", "is_pinned": "<is_pinned>"},
+                json={"id": "<id>", "symbol": "<symbol>", "is_pinned": False},
             )
             print(resp.json())
         - lang: Python
@@ -7534,7 +7565,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/watchlist/pinned",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"id": "<id>", "symbol": "<symbol>", "is_pinned": "<is_pinned>"},
+                        json={"id": "<id>", "symbol": "<symbol>", "is_pinned": False},
                     ) as resp:
                         print(await resp.json())
 
@@ -7548,7 +7579,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id: "<id>", symbol: "<symbol>", is_pinned: "<is_pinned>" }),
+              body: JSON.stringify({ id: "<id>", symbol: "<symbol>", is_pinned: false }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -7562,7 +7593,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/pinned"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"symbol\":\"<symbol>\",\"is_pinned\":\"<is_pinned>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"symbol\":\"<symbol>\",\"is_pinned\":false}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -7573,7 +7604,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/watchlist/pinned")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "id": "<id>" , "symbol": "<symbol>" , "is_pinned": "<is_pinned>" }))
+                    .json(&serde_json::json!({ "id": "<id>" , "symbol": "<symbol>" , "is_pinned": false }))
                     .send()
                     .await?
                     .text()
@@ -7591,7 +7622,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/pinned");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"symbol\":\"<symbol>\",\"is_pinned\":\"<is_pinned>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"symbol\":\"<symbol>\",\"is_pinned\":false}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -7599,7 +7630,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/watchlist/pinned\", strings.NewReader(`{\"id\":\"<id>\",\"symbol\":\"<symbol>\",\"is_pinned\":\"<is_pinned>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/watchlist/pinned\", strings.NewReader(`{\"id\":\"<id>\",\"symbol\":\"<symbol>\",\"is_pinned\":false}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -18114,7 +18145,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/notify/reminders' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","price":"<price>","direction":"<direction>"}'
+              --data '{"symbol":"<symbol>","price":"<price>","direction":"<direction>","frequency":"<frequency>"}'
         - lang: Python
           label: Python
           source: |
@@ -18123,7 +18154,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/notify/reminders",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "price": "<price>", "direction": "<direction>"},
+                json={"symbol": "<symbol>", "price": "<price>", "direction": "<direction>", "frequency": "<frequency>"},
             )
             print(resp.json())
         - lang: Python
@@ -18137,7 +18168,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/notify/reminders",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "price": "<price>", "direction": "<direction>"},
+                        json={"symbol": "<symbol>", "price": "<price>", "direction": "<direction>", "frequency": "<frequency>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -18151,7 +18182,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", price: "<price>", direction: "<direction>" }),
+              body: JSON.stringify({ symbol: "<symbol>", price: "<price>", direction: "<direction>", frequency: "<frequency>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -18165,7 +18196,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\",\"frequency\":\"<frequency>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -18176,7 +18207,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/notify/reminders")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "price": "<price>" , "direction": "<direction>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "price": "<price>" , "direction": "<direction>" , "frequency": "<frequency>" }))
                     .send()
                     .await?
                     .text()
@@ -18194,7 +18225,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\",\"frequency\":\"<frequency>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -18202,7 +18233,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"price\":\"<price>\",\"direction\":\"<direction>\",\"frequency\":\"<frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: id
           type: int64
@@ -18270,7 +18301,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/notify/reminders' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"id":"<id>","enabled":"<enabled>"}'
+              --data '{"id":0,"enabled":false}'
         - lang: Python
           label: Python
           source: |
@@ -18279,7 +18310,7 @@ paths:
             resp = requests.put(
                 "https://openapi.longbridge.com/v1/notify/reminders",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"id": "<id>", "enabled": "<enabled>"},
+                json={"id": 0, "enabled": False},
             )
             print(resp.json())
         - lang: Python
@@ -18293,7 +18324,7 @@ paths:
                     async with session.put(
                         "https://openapi.longbridge.com/v1/notify/reminders",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"id": "<id>", "enabled": "<enabled>"},
+                        json={"id": 0, "enabled": False},
                     ) as resp:
                         print(await resp.json())
 
@@ -18307,7 +18338,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id: "<id>", enabled: "<enabled>" }),
+              body: JSON.stringify({ id: 0, enabled: false }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -18321,7 +18352,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"enabled\":\"<enabled>\"}"))
+                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":0,\"enabled\":false}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -18332,7 +18363,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::PUT, "https://openapi.longbridge.com/v1/notify/reminders")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "id": "<id>" , "enabled": "<enabled>" }))
+                    .json(&serde_json::json!({ "id": 0 , "enabled": false }))
                     .send()
                     .await?
                     .text()
@@ -18350,7 +18381,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"enabled\":\"<enabled>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":0,\"enabled\":false}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -18358,7 +18389,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"id\":\"<id>\",\"enabled\":\"<enabled>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"id\":0,\"enabled\":false}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -20630,7 +20661,9 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/sharelists' \
-              --header 'Authorization: Bearer <access_token>'
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"description":"<description>","securities":[]}'
         - lang: Python
           label: Python
           source: |
@@ -20638,7 +20671,8 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/sharelists",
-                headers={"Authorization": "Bearer <access_token>"},
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"description": "<description>", "securities": []},
             )
             print(resp.json())
         - lang: Python
@@ -20651,7 +20685,8 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/sharelists",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"description": "<description>", "securities": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -20663,7 +20698,9 @@ paths:
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ description: "<description>", securities: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -20676,7 +20713,8 @@ paths:
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/sharelists"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"description\":\"<description>\",\"securities\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -20687,6 +20725,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/sharelists")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "description": "<description>" , "securities": [] }))
                     .send()
                     .await?
                     .text()
@@ -20701,8 +20740,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"description\":\"<description>\",\"securities\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -20710,7 +20751,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists\", strings.NewReader(`{\"description\":\"<description>\",\"securities\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: id
           type: int64
@@ -21393,7 +21434,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/sharelists/<id>/items' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbols":"<symbols>"}'
+              --data '{"symbols":[]}'
         - lang: Python
           label: Python
           source: |
@@ -21402,7 +21443,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/sharelists/<id>/items",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbols": "<symbols>"},
+                json={"symbols": []},
             )
             print(resp.json())
         - lang: Python
@@ -21416,7 +21457,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/sharelists/<id>/items",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbols": "<symbols>"},
+                        json={"symbols": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -21430,7 +21471,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbols: "<symbols>" }),
+              body: JSON.stringify({ symbols: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -21444,7 +21485,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>/items"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -21455,7 +21496,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/sharelists/<id>/items")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbols": "<symbols>" }))
+                    .json(&serde_json::json!({ "symbols": [] }))
                     .send()
                     .await?
                     .text()
@@ -21473,7 +21514,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>/items");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":\"<symbols>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -21481,7 +21522,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items\", strings.NewReader(`{\"symbols\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -21678,7 +21719,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/sharelists/<id>/items/sort' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbols":"<symbols>"}'
+              --data '{"symbols":[]}'
         - lang: Python
           label: Python
           source: |
@@ -21687,7 +21728,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbols": "<symbols>"},
+                json={"symbols": []},
             )
             print(resp.json())
         - lang: Python
@@ -21701,7 +21742,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbols": "<symbols>"},
+                        json={"symbols": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -21715,7 +21756,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbols: "<symbols>" }),
+              body: JSON.stringify({ symbols: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -21729,7 +21770,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/sharelists/<id>/items/sort"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -21740,7 +21781,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbols": "<symbols>" }))
+                    .json(&serde_json::json!({ "symbols": [] }))
                     .send()
                     .await?
                     .text()
@@ -21758,7 +21799,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/sharelists/<id>/items/sort");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":\"<symbols>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -21766,7 +21807,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items/sort\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/sharelists/<id>/items/sort\", strings.NewReader(`{\"symbols\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -24857,7 +24898,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/trade/order' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","order_type":"<order_type>","submitted_quantity":"<submitted_quantity>","side":"<side>","time_in_force":"<time_in_force>"}'
+              --data '{"symbol":"<symbol>","order_type":"<order_type>","submitted_price":"<submitted_price>","submitted_quantity":"<submitted_quantity>","trigger_price":"<trigger_price>","limit_offset":"<limit_offset>","trailing_amount":"<trailing_amount>","trailing_percent":"<trailing_percent>","expire_date":"<expire_date>","side":"<side>","outside_rth":"<outside_rth>","time_in_force":"<time_in_force>","remark":"<remark>","limit_depth_level":0,"monitor_price":"<monitor_price>","trigger_count":0,"client_request_id":"<client_request_id>","attached_params":{},"attached_params.attached_order_type":"<attached_params.attached_order_type>","attached_params.profit_taker_price":"<attached_params.profit_taker_price>","attached_params.stop_loss_price":"<attached_params.stop_loss_price>","attached_params.time_in_force":"<attached_params.time_in_force>","attached_params.expire_time":0,"attached_params.activate_order_type":"<attached_params.activate_order_type>","attached_params.profit_taker_submit_price":"<attached_params.profit_taker_submit_price>","attached_params.stop_loss_submit_price":"<attached_params.stop_loss_submit_price>","attached_params.activate_rth":"<attached_params.activate_rth>"}'
         - lang: Python
           label: Python
           source: |
@@ -24866,7 +24907,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/trade/order",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "order_type": "<order_type>", "submitted_quantity": "<submitted_quantity>", "side": "<side>", "time_in_force": "<time_in_force>"},
+                json={"symbol": "<symbol>", "order_type": "<order_type>", "submitted_price": "<submitted_price>", "submitted_quantity": "<submitted_quantity>", "trigger_price": "<trigger_price>", "limit_offset": "<limit_offset>", "trailing_amount": "<trailing_amount>", "trailing_percent": "<trailing_percent>", "expire_date": "<expire_date>", "side": "<side>", "outside_rth": "<outside_rth>", "time_in_force": "<time_in_force>", "remark": "<remark>", "limit_depth_level": 0, "monitor_price": "<monitor_price>", "trigger_count": 0, "client_request_id": "<client_request_id>", "attached_params": {}, "attached_params.attached_order_type": "<attached_params.attached_order_type>", "attached_params.profit_taker_price": "<attached_params.profit_taker_price>", "attached_params.stop_loss_price": "<attached_params.stop_loss_price>", "attached_params.time_in_force": "<attached_params.time_in_force>", "attached_params.expire_time": 0, "attached_params.activate_order_type": "<attached_params.activate_order_type>", "attached_params.profit_taker_submit_price": "<attached_params.profit_taker_submit_price>", "attached_params.stop_loss_submit_price": "<attached_params.stop_loss_submit_price>", "attached_params.activate_rth": "<attached_params.activate_rth>"},
             )
             print(resp.json())
         - lang: Python
@@ -24880,7 +24921,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/trade/order",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "order_type": "<order_type>", "submitted_quantity": "<submitted_quantity>", "side": "<side>", "time_in_force": "<time_in_force>"},
+                        json={"symbol": "<symbol>", "order_type": "<order_type>", "submitted_price": "<submitted_price>", "submitted_quantity": "<submitted_quantity>", "trigger_price": "<trigger_price>", "limit_offset": "<limit_offset>", "trailing_amount": "<trailing_amount>", "trailing_percent": "<trailing_percent>", "expire_date": "<expire_date>", "side": "<side>", "outside_rth": "<outside_rth>", "time_in_force": "<time_in_force>", "remark": "<remark>", "limit_depth_level": 0, "monitor_price": "<monitor_price>", "trigger_count": 0, "client_request_id": "<client_request_id>", "attached_params": {}, "attached_params.attached_order_type": "<attached_params.attached_order_type>", "attached_params.profit_taker_price": "<attached_params.profit_taker_price>", "attached_params.stop_loss_price": "<attached_params.stop_loss_price>", "attached_params.time_in_force": "<attached_params.time_in_force>", "attached_params.expire_time": 0, "attached_params.activate_order_type": "<attached_params.activate_order_type>", "attached_params.profit_taker_submit_price": "<attached_params.profit_taker_submit_price>", "attached_params.stop_loss_submit_price": "<attached_params.stop_loss_submit_price>", "attached_params.activate_rth": "<attached_params.activate_rth>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -24894,7 +24935,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", order_type: "<order_type>", submitted_quantity: "<submitted_quantity>", side: "<side>", time_in_force: "<time_in_force>" }),
+              body: JSON.stringify({ symbol: "<symbol>", order_type: "<order_type>", submitted_price: "<submitted_price>", submitted_quantity: "<submitted_quantity>", trigger_price: "<trigger_price>", limit_offset: "<limit_offset>", trailing_amount: "<trailing_amount>", trailing_percent: "<trailing_percent>", expire_date: "<expire_date>", side: "<side>", outside_rth: "<outside_rth>", time_in_force: "<time_in_force>", remark: "<remark>", limit_depth_level: 0, monitor_price: "<monitor_price>", trigger_count: 0, client_request_id: "<client_request_id>", attached_params: {}, attached_params.attached_order_type: "<attached_params.attached_order_type>", attached_params.profit_taker_price: "<attached_params.profit_taker_price>", attached_params.stop_loss_price: "<attached_params.stop_loss_price>", attached_params.time_in_force: "<attached_params.time_in_force>", attached_params.expire_time: 0, attached_params.activate_order_type: "<attached_params.activate_order_type>", attached_params.profit_taker_submit_price: "<attached_params.profit_taker_submit_price>", attached_params.stop_loss_submit_price: "<attached_params.stop_loss_submit_price>", attached_params.activate_rth: "<attached_params.activate_rth>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -24908,7 +24949,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/trade/order"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"order_type\":\"<order_type>\",\"submitted_quantity\":\"<submitted_quantity>\",\"side\":\"<side>\",\"time_in_force\":\"<time_in_force>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"order_type\":\"<order_type>\",\"submitted_price\":\"<submitted_price>\",\"submitted_quantity\":\"<submitted_quantity>\",\"trigger_price\":\"<trigger_price>\",\"limit_offset\":\"<limit_offset>\",\"trailing_amount\":\"<trailing_amount>\",\"trailing_percent\":\"<trailing_percent>\",\"expire_date\":\"<expire_date>\",\"side\":\"<side>\",\"outside_rth\":\"<outside_rth>\",\"time_in_force\":\"<time_in_force>\",\"remark\":\"<remark>\",\"limit_depth_level\":0,\"monitor_price\":\"<monitor_price>\",\"trigger_count\":0,\"client_request_id\":\"<client_request_id>\",\"attached_params\":{},\"attached_params.attached_order_type\":\"<attached_params.attached_order_type>\",\"attached_params.profit_taker_price\":\"<attached_params.profit_taker_price>\",\"attached_params.stop_loss_price\":\"<attached_params.stop_loss_price>\",\"attached_params.time_in_force\":\"<attached_params.time_in_force>\",\"attached_params.expire_time\":0,\"attached_params.activate_order_type\":\"<attached_params.activate_order_type>\",\"attached_params.profit_taker_submit_price\":\"<attached_params.profit_taker_submit_price>\",\"attached_params.stop_loss_submit_price\":\"<attached_params.stop_loss_submit_price>\",\"attached_params.activate_rth\":\"<attached_params.activate_rth>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -24919,7 +24960,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/trade/order")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "order_type": "<order_type>" , "submitted_quantity": "<submitted_quantity>" , "side": "<side>" , "time_in_force": "<time_in_force>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "order_type": "<order_type>" , "submitted_price": "<submitted_price>" , "submitted_quantity": "<submitted_quantity>" , "trigger_price": "<trigger_price>" , "limit_offset": "<limit_offset>" , "trailing_amount": "<trailing_amount>" , "trailing_percent": "<trailing_percent>" , "expire_date": "<expire_date>" , "side": "<side>" , "outside_rth": "<outside_rth>" , "time_in_force": "<time_in_force>" , "remark": "<remark>" , "limit_depth_level": 0 , "monitor_price": "<monitor_price>" , "trigger_count": 0 , "client_request_id": "<client_request_id>" , "attached_params": {} , "attached_params.attached_order_type": "<attached_params.attached_order_type>" , "attached_params.profit_taker_price": "<attached_params.profit_taker_price>" , "attached_params.stop_loss_price": "<attached_params.stop_loss_price>" , "attached_params.time_in_force": "<attached_params.time_in_force>" , "attached_params.expire_time": 0 , "attached_params.activate_order_type": "<attached_params.activate_order_type>" , "attached_params.profit_taker_submit_price": "<attached_params.profit_taker_submit_price>" , "attached_params.stop_loss_submit_price": "<attached_params.stop_loss_submit_price>" , "attached_params.activate_rth": "<attached_params.activate_rth>" }))
                     .send()
                     .await?
                     .text()
@@ -24937,7 +24978,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/trade/order");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"order_type\":\"<order_type>\",\"submitted_quantity\":\"<submitted_quantity>\",\"side\":\"<side>\",\"time_in_force\":\"<time_in_force>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"order_type\":\"<order_type>\",\"submitted_price\":\"<submitted_price>\",\"submitted_quantity\":\"<submitted_quantity>\",\"trigger_price\":\"<trigger_price>\",\"limit_offset\":\"<limit_offset>\",\"trailing_amount\":\"<trailing_amount>\",\"trailing_percent\":\"<trailing_percent>\",\"expire_date\":\"<expire_date>\",\"side\":\"<side>\",\"outside_rth\":\"<outside_rth>\",\"time_in_force\":\"<time_in_force>\",\"remark\":\"<remark>\",\"limit_depth_level\":0,\"monitor_price\":\"<monitor_price>\",\"trigger_count\":0,\"client_request_id\":\"<client_request_id>\",\"attached_params\":{},\"attached_params.attached_order_type\":\"<attached_params.attached_order_type>\",\"attached_params.profit_taker_price\":\"<attached_params.profit_taker_price>\",\"attached_params.stop_loss_price\":\"<attached_params.stop_loss_price>\",\"attached_params.time_in_force\":\"<attached_params.time_in_force>\",\"attached_params.expire_time\":0,\"attached_params.activate_order_type\":\"<attached_params.activate_order_type>\",\"attached_params.profit_taker_submit_price\":\"<attached_params.profit_taker_submit_price>\",\"attached_params.stop_loss_submit_price\":\"<attached_params.stop_loss_submit_price>\",\"attached_params.activate_rth\":\"<attached_params.activate_rth>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -24945,7 +24986,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/trade/order\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"order_type\":\"<order_type>\",\"submitted_quantity\":\"<submitted_quantity>\",\"side\":\"<side>\",\"time_in_force\":\"<time_in_force>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/trade/order\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"order_type\":\"<order_type>\",\"submitted_price\":\"<submitted_price>\",\"submitted_quantity\":\"<submitted_quantity>\",\"trigger_price\":\"<trigger_price>\",\"limit_offset\":\"<limit_offset>\",\"trailing_amount\":\"<trailing_amount>\",\"trailing_percent\":\"<trailing_percent>\",\"expire_date\":\"<expire_date>\",\"side\":\"<side>\",\"outside_rth\":\"<outside_rth>\",\"time_in_force\":\"<time_in_force>\",\"remark\":\"<remark>\",\"limit_depth_level\":0,\"monitor_price\":\"<monitor_price>\",\"trigger_count\":0,\"client_request_id\":\"<client_request_id>\",\"attached_params\":{},\"attached_params.attached_order_type\":\"<attached_params.attached_order_type>\",\"attached_params.profit_taker_price\":\"<attached_params.profit_taker_price>\",\"attached_params.stop_loss_price\":\"<attached_params.stop_loss_price>\",\"attached_params.time_in_force\":\"<attached_params.time_in_force>\",\"attached_params.expire_time\":0,\"attached_params.activate_order_type\":\"<attached_params.activate_order_type>\",\"attached_params.profit_taker_submit_price\":\"<attached_params.profit_taker_submit_price>\",\"attached_params.stop_loss_submit_price\":\"<attached_params.stop_loss_submit_price>\",\"attached_params.activate_rth\":\"<attached_params.activate_rth>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -25179,7 +25220,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/trade/order' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"order_id":"<order_id>","quantity":"<quantity>"}'
+              --data '{"order_id":"<order_id>","quantity":"<quantity>","price":"<price>","trigger_price":"<trigger_price>","limit_offset":"<limit_offset>","trailing_amount":"<trailing_amount>","trailing_percent":"<trailing_percent>","remark":"<remark>","limit_depth_level":0,"monitor_price":"<monitor_price>","trigger_count":0,"attached_params":{},"attached_params.attached_order_type":"<attached_params.attached_order_type>","attached_params.profit_taker_price":"<attached_params.profit_taker_price>","attached_params.stop_loss_price":"<attached_params.stop_loss_price>","attached_params.time_in_force":"<attached_params.time_in_force>","attached_params.expire_time":0,"attached_params.profit_taker_id":0,"attached_params.stop_loss_id":0,"attached_params.cancel_all_attached":false,"attached_params.main_id":0,"attached_params.quantity":"<attached_params.quantity>","attached_params.market_price":"<attached_params.market_price>","attached_params.activate_order_type":"<attached_params.activate_order_type>","attached_params.profit_taker_submit_price":"<attached_params.profit_taker_submit_price>","attached_params.stop_loss_submit_price":"<attached_params.stop_loss_submit_price>","attached_params.activate_rth":"<attached_params.activate_rth>"}'
         - lang: Python
           label: Python
           source: |
@@ -25188,7 +25229,7 @@ paths:
             resp = requests.put(
                 "https://openapi.longbridge.com/v1/trade/order",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"order_id": "<order_id>", "quantity": "<quantity>"},
+                json={"order_id": "<order_id>", "quantity": "<quantity>", "price": "<price>", "trigger_price": "<trigger_price>", "limit_offset": "<limit_offset>", "trailing_amount": "<trailing_amount>", "trailing_percent": "<trailing_percent>", "remark": "<remark>", "limit_depth_level": 0, "monitor_price": "<monitor_price>", "trigger_count": 0, "attached_params": {}, "attached_params.attached_order_type": "<attached_params.attached_order_type>", "attached_params.profit_taker_price": "<attached_params.profit_taker_price>", "attached_params.stop_loss_price": "<attached_params.stop_loss_price>", "attached_params.time_in_force": "<attached_params.time_in_force>", "attached_params.expire_time": 0, "attached_params.profit_taker_id": 0, "attached_params.stop_loss_id": 0, "attached_params.cancel_all_attached": False, "attached_params.main_id": 0, "attached_params.quantity": "<attached_params.quantity>", "attached_params.market_price": "<attached_params.market_price>", "attached_params.activate_order_type": "<attached_params.activate_order_type>", "attached_params.profit_taker_submit_price": "<attached_params.profit_taker_submit_price>", "attached_params.stop_loss_submit_price": "<attached_params.stop_loss_submit_price>", "attached_params.activate_rth": "<attached_params.activate_rth>"},
             )
             print(resp.json())
         - lang: Python
@@ -25202,7 +25243,7 @@ paths:
                     async with session.put(
                         "https://openapi.longbridge.com/v1/trade/order",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"order_id": "<order_id>", "quantity": "<quantity>"},
+                        json={"order_id": "<order_id>", "quantity": "<quantity>", "price": "<price>", "trigger_price": "<trigger_price>", "limit_offset": "<limit_offset>", "trailing_amount": "<trailing_amount>", "trailing_percent": "<trailing_percent>", "remark": "<remark>", "limit_depth_level": 0, "monitor_price": "<monitor_price>", "trigger_count": 0, "attached_params": {}, "attached_params.attached_order_type": "<attached_params.attached_order_type>", "attached_params.profit_taker_price": "<attached_params.profit_taker_price>", "attached_params.stop_loss_price": "<attached_params.stop_loss_price>", "attached_params.time_in_force": "<attached_params.time_in_force>", "attached_params.expire_time": 0, "attached_params.profit_taker_id": 0, "attached_params.stop_loss_id": 0, "attached_params.cancel_all_attached": False, "attached_params.main_id": 0, "attached_params.quantity": "<attached_params.quantity>", "attached_params.market_price": "<attached_params.market_price>", "attached_params.activate_order_type": "<attached_params.activate_order_type>", "attached_params.profit_taker_submit_price": "<attached_params.profit_taker_submit_price>", "attached_params.stop_loss_submit_price": "<attached_params.stop_loss_submit_price>", "attached_params.activate_rth": "<attached_params.activate_rth>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -25216,7 +25257,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ order_id: "<order_id>", quantity: "<quantity>" }),
+              body: JSON.stringify({ order_id: "<order_id>", quantity: "<quantity>", price: "<price>", trigger_price: "<trigger_price>", limit_offset: "<limit_offset>", trailing_amount: "<trailing_amount>", trailing_percent: "<trailing_percent>", remark: "<remark>", limit_depth_level: 0, monitor_price: "<monitor_price>", trigger_count: 0, attached_params: {}, attached_params.attached_order_type: "<attached_params.attached_order_type>", attached_params.profit_taker_price: "<attached_params.profit_taker_price>", attached_params.stop_loss_price: "<attached_params.stop_loss_price>", attached_params.time_in_force: "<attached_params.time_in_force>", attached_params.expire_time: 0, attached_params.profit_taker_id: 0, attached_params.stop_loss_id: 0, attached_params.cancel_all_attached: false, attached_params.main_id: 0, attached_params.quantity: "<attached_params.quantity>", attached_params.market_price: "<attached_params.market_price>", attached_params.activate_order_type: "<attached_params.activate_order_type>", attached_params.profit_taker_submit_price: "<attached_params.profit_taker_submit_price>", attached_params.stop_loss_submit_price: "<attached_params.stop_loss_submit_price>", attached_params.activate_rth: "<attached_params.activate_rth>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -25230,7 +25271,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/trade/order"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\",\"quantity\":\"<quantity>\"}"))
+                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\",\"quantity\":\"<quantity>\",\"price\":\"<price>\",\"trigger_price\":\"<trigger_price>\",\"limit_offset\":\"<limit_offset>\",\"trailing_amount\":\"<trailing_amount>\",\"trailing_percent\":\"<trailing_percent>\",\"remark\":\"<remark>\",\"limit_depth_level\":0,\"monitor_price\":\"<monitor_price>\",\"trigger_count\":0,\"attached_params\":{},\"attached_params.attached_order_type\":\"<attached_params.attached_order_type>\",\"attached_params.profit_taker_price\":\"<attached_params.profit_taker_price>\",\"attached_params.stop_loss_price\":\"<attached_params.stop_loss_price>\",\"attached_params.time_in_force\":\"<attached_params.time_in_force>\",\"attached_params.expire_time\":0,\"attached_params.profit_taker_id\":0,\"attached_params.stop_loss_id\":0,\"attached_params.cancel_all_attached\":false,\"attached_params.main_id\":0,\"attached_params.quantity\":\"<attached_params.quantity>\",\"attached_params.market_price\":\"<attached_params.market_price>\",\"attached_params.activate_order_type\":\"<attached_params.activate_order_type>\",\"attached_params.profit_taker_submit_price\":\"<attached_params.profit_taker_submit_price>\",\"attached_params.stop_loss_submit_price\":\"<attached_params.stop_loss_submit_price>\",\"attached_params.activate_rth\":\"<attached_params.activate_rth>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -25241,7 +25282,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::PUT, "https://openapi.longbridge.com/v1/trade/order")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "order_id": "<order_id>" , "quantity": "<quantity>" }))
+                    .json(&serde_json::json!({ "order_id": "<order_id>" , "quantity": "<quantity>" , "price": "<price>" , "trigger_price": "<trigger_price>" , "limit_offset": "<limit_offset>" , "trailing_amount": "<trailing_amount>" , "trailing_percent": "<trailing_percent>" , "remark": "<remark>" , "limit_depth_level": 0 , "monitor_price": "<monitor_price>" , "trigger_count": 0 , "attached_params": {} , "attached_params.attached_order_type": "<attached_params.attached_order_type>" , "attached_params.profit_taker_price": "<attached_params.profit_taker_price>" , "attached_params.stop_loss_price": "<attached_params.stop_loss_price>" , "attached_params.time_in_force": "<attached_params.time_in_force>" , "attached_params.expire_time": 0 , "attached_params.profit_taker_id": 0 , "attached_params.stop_loss_id": 0 , "attached_params.cancel_all_attached": false , "attached_params.main_id": 0 , "attached_params.quantity": "<attached_params.quantity>" , "attached_params.market_price": "<attached_params.market_price>" , "attached_params.activate_order_type": "<attached_params.activate_order_type>" , "attached_params.profit_taker_submit_price": "<attached_params.profit_taker_submit_price>" , "attached_params.stop_loss_submit_price": "<attached_params.stop_loss_submit_price>" , "attached_params.activate_rth": "<attached_params.activate_rth>" }))
                     .send()
                     .await?
                     .text()
@@ -25259,7 +25300,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/trade/order");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\",\"quantity\":\"<quantity>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\",\"quantity\":\"<quantity>\",\"price\":\"<price>\",\"trigger_price\":\"<trigger_price>\",\"limit_offset\":\"<limit_offset>\",\"trailing_amount\":\"<trailing_amount>\",\"trailing_percent\":\"<trailing_percent>\",\"remark\":\"<remark>\",\"limit_depth_level\":0,\"monitor_price\":\"<monitor_price>\",\"trigger_count\":0,\"attached_params\":{},\"attached_params.attached_order_type\":\"<attached_params.attached_order_type>\",\"attached_params.profit_taker_price\":\"<attached_params.profit_taker_price>\",\"attached_params.stop_loss_price\":\"<attached_params.stop_loss_price>\",\"attached_params.time_in_force\":\"<attached_params.time_in_force>\",\"attached_params.expire_time\":0,\"attached_params.profit_taker_id\":0,\"attached_params.stop_loss_id\":0,\"attached_params.cancel_all_attached\":false,\"attached_params.main_id\":0,\"attached_params.quantity\":\"<attached_params.quantity>\",\"attached_params.market_price\":\"<attached_params.market_price>\",\"attached_params.activate_order_type\":\"<attached_params.activate_order_type>\",\"attached_params.profit_taker_submit_price\":\"<attached_params.profit_taker_submit_price>\",\"attached_params.stop_loss_submit_price\":\"<attached_params.stop_loss_submit_price>\",\"attached_params.activate_rth\":\"<attached_params.activate_rth>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -25267,7 +25308,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/trade/order\", strings.NewReader(`{\"order_id\":\"<order_id>\",\"quantity\":\"<quantity>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/trade/order\", strings.NewReader(`{\"order_id\":\"<order_id>\",\"quantity\":\"<quantity>\",\"price\":\"<price>\",\"trigger_price\":\"<trigger_price>\",\"limit_offset\":\"<limit_offset>\",\"trailing_amount\":\"<trailing_amount>\",\"trailing_percent\":\"<trailing_percent>\",\"remark\":\"<remark>\",\"limit_depth_level\":0,\"monitor_price\":\"<monitor_price>\",\"trigger_count\":0,\"attached_params\":{},\"attached_params.attached_order_type\":\"<attached_params.attached_order_type>\",\"attached_params.profit_taker_price\":\"<attached_params.profit_taker_price>\",\"attached_params.stop_loss_price\":\"<attached_params.stop_loss_price>\",\"attached_params.time_in_force\":\"<attached_params.time_in_force>\",\"attached_params.expire_time\":0,\"attached_params.profit_taker_id\":0,\"attached_params.stop_loss_id\":0,\"attached_params.cancel_all_attached\":false,\"attached_params.main_id\":0,\"attached_params.quantity\":\"<attached_params.quantity>\",\"attached_params.market_price\":\"<attached_params.market_price>\",\"attached_params.activate_order_type\":\"<attached_params.activate_order_type>\",\"attached_params.profit_taker_submit_price\":\"<attached_params.profit_taker_submit_price>\",\"attached_params.stop_loss_submit_price\":\"<attached_params.stop_loss_submit_price>\",\"attached_params.activate_rth\":\"<attached_params.activate_rth>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -27562,7 +27603,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/trade/order/multileg' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"side":"<side>","order_type":"<order_type>","submitted_quantity":"<submitted_quantity>","strategy":"<strategy>","legs":"<legs>","∟ symbol":"<∟ symbol>","∟ ratio_quantity":"<∟ ratio_quantity>"}'
+              --data '{"side":"<side>","order_type":"<order_type>","submitted_price":"<submitted_price>","submitted_quantity":"<submitted_quantity>","strategy":"<strategy>","legs":[],"∟ symbol":"<∟ symbol>","∟ ratio_quantity":"<∟ ratio_quantity>","remark":"<remark>","client_request_id":"<client_request_id>"}'
         - lang: Python
           label: Python
           source: |
@@ -27571,7 +27612,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/trade/order/multileg",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"side": "<side>", "order_type": "<order_type>", "submitted_quantity": "<submitted_quantity>", "strategy": "<strategy>", "legs": "<legs>", "∟ symbol": "<∟ symbol>", "∟ ratio_quantity": "<∟ ratio_quantity>"},
+                json={"side": "<side>", "order_type": "<order_type>", "submitted_price": "<submitted_price>", "submitted_quantity": "<submitted_quantity>", "strategy": "<strategy>", "legs": [], "∟ symbol": "<∟ symbol>", "∟ ratio_quantity": "<∟ ratio_quantity>", "remark": "<remark>", "client_request_id": "<client_request_id>"},
             )
             print(resp.json())
         - lang: Python
@@ -27585,7 +27626,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/trade/order/multileg",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"side": "<side>", "order_type": "<order_type>", "submitted_quantity": "<submitted_quantity>", "strategy": "<strategy>", "legs": "<legs>", "∟ symbol": "<∟ symbol>", "∟ ratio_quantity": "<∟ ratio_quantity>"},
+                        json={"side": "<side>", "order_type": "<order_type>", "submitted_price": "<submitted_price>", "submitted_quantity": "<submitted_quantity>", "strategy": "<strategy>", "legs": [], "∟ symbol": "<∟ symbol>", "∟ ratio_quantity": "<∟ ratio_quantity>", "remark": "<remark>", "client_request_id": "<client_request_id>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -27599,7 +27640,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ side: "<side>", order_type: "<order_type>", submitted_quantity: "<submitted_quantity>", strategy: "<strategy>", legs: "<legs>", ∟ symbol: "<∟ symbol>", ∟ ratio_quantity: "<∟ ratio_quantity>" }),
+              body: JSON.stringify({ side: "<side>", order_type: "<order_type>", submitted_price: "<submitted_price>", submitted_quantity: "<submitted_quantity>", strategy: "<strategy>", legs: [], ∟ symbol: "<∟ symbol>", ∟ ratio_quantity: "<∟ ratio_quantity>", remark: "<remark>", client_request_id: "<client_request_id>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -27613,7 +27654,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/trade/order/multileg"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"side\":\"<side>\",\"order_type\":\"<order_type>\",\"submitted_quantity\":\"<submitted_quantity>\",\"strategy\":\"<strategy>\",\"legs\":\"<legs>\",\"∟ symbol\":\"<∟ symbol>\",\"∟ ratio_quantity\":\"<∟ ratio_quantity>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"side\":\"<side>\",\"order_type\":\"<order_type>\",\"submitted_price\":\"<submitted_price>\",\"submitted_quantity\":\"<submitted_quantity>\",\"strategy\":\"<strategy>\",\"legs\":[],\"∟ symbol\":\"<∟ symbol>\",\"∟ ratio_quantity\":\"<∟ ratio_quantity>\",\"remark\":\"<remark>\",\"client_request_id\":\"<client_request_id>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -27624,7 +27665,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/trade/order/multileg")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "side": "<side>" , "order_type": "<order_type>" , "submitted_quantity": "<submitted_quantity>" , "strategy": "<strategy>" , "legs": "<legs>" , "∟ symbol": "<∟ symbol>" , "∟ ratio_quantity": "<∟ ratio_quantity>" }))
+                    .json(&serde_json::json!({ "side": "<side>" , "order_type": "<order_type>" , "submitted_price": "<submitted_price>" , "submitted_quantity": "<submitted_quantity>" , "strategy": "<strategy>" , "legs": [] , "∟ symbol": "<∟ symbol>" , "∟ ratio_quantity": "<∟ ratio_quantity>" , "remark": "<remark>" , "client_request_id": "<client_request_id>" }))
                     .send()
                     .await?
                     .text()
@@ -27642,7 +27683,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/trade/order/multileg");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"side\":\"<side>\",\"order_type\":\"<order_type>\",\"submitted_quantity\":\"<submitted_quantity>\",\"strategy\":\"<strategy>\",\"legs\":\"<legs>\",\"∟ symbol\":\"<∟ symbol>\",\"∟ ratio_quantity\":\"<∟ ratio_quantity>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"side\":\"<side>\",\"order_type\":\"<order_type>\",\"submitted_price\":\"<submitted_price>\",\"submitted_quantity\":\"<submitted_quantity>\",\"strategy\":\"<strategy>\",\"legs\":[],\"∟ symbol\":\"<∟ symbol>\",\"∟ ratio_quantity\":\"<∟ ratio_quantity>\",\"remark\":\"<remark>\",\"client_request_id\":\"<client_request_id>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -27650,7 +27691,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/trade/order/multileg\", strings.NewReader(`{\"side\":\"<side>\",\"order_type\":\"<order_type>\",\"submitted_quantity\":\"<submitted_quantity>\",\"strategy\":\"<strategy>\",\"legs\":\"<legs>\",\"∟ symbol\":\"<∟ symbol>\",\"∟ ratio_quantity\":\"<∟ ratio_quantity>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/trade/order/multileg\", strings.NewReader(`{\"side\":\"<side>\",\"order_type\":\"<order_type>\",\"submitted_price\":\"<submitted_price>\",\"submitted_quantity\":\"<submitted_quantity>\",\"strategy\":\"<strategy>\",\"legs\":[],\"∟ symbol\":\"<∟ symbol>\",\"∟ ratio_quantity\":\"<∟ ratio_quantity>\",\"remark\":\"<remark>\",\"client_request_id\":\"<client_request_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -28350,7 +28391,9 @@ paths:
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/us/orders/query' \
-              --header 'Authorization: Bearer <access_token>'
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbol":"<symbol>","action":0,"start_at":0,"end_at":0,"query_type":0,"page":0,"limit":0}'
         - lang: Python
           label: Python
           source: |
@@ -28358,7 +28401,8 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/us/orders/query",
-                headers={"Authorization": "Bearer <access_token>"},
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbol": "<symbol>", "action": 0, "start_at": 0, "end_at": 0, "query_type": 0, "page": 0, "limit": 0},
             )
             print(resp.json())
         - lang: Python
@@ -28371,7 +28415,8 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/us/orders/query",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbol": "<symbol>", "action": 0, "start_at": 0, "end_at": 0, "query_type": 0, "page": 0, "limit": 0},
                     ) as resp:
                         print(await resp.json())
 
@@ -28383,7 +28428,9 @@ paths:
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ symbol: "<symbol>", action: 0, start_at: 0, end_at: 0, query_type: 0, page: 0, limit: 0 }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -28396,7 +28443,8 @@ paths:
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/us/orders/query"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"action\":0,\"start_at\":0,\"end_at\":0,\"query_type\":0,\"page\":0,\"limit\":0}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -28407,6 +28455,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/us/orders/query")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "action": 0 , "start_at": 0 , "end_at": 0 , "query_type": 0 , "page": 0 , "limit": 0 }))
                     .send()
                     .await?
                     .text()
@@ -28421,8 +28470,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/orders/query");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"action\":0,\"start_at\":0,\"end_at\":0,\"query_type\":0,\"page\":0,\"limit\":0}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -28430,7 +28481,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/us/orders/query\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/us/orders/query\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"action\":0,\"start_at\":0,\"end_at\":0,\"query_type\":0,\"page\":0,\"limit\":0}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: orders
           type: USOrder[]
@@ -28842,7 +28893,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/gridtrading/submit' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","settlement_currency":"<settlement_currency>","grid_trading_rule":"<grid_trading_rule>","submitted_base_price":"<submitted_base_price>","upper_limit_price":"<upper_limit_price>","lower_limit_price":"<lower_limit_price>","trigger_price_type":"<trigger_price_type>","trigger_quantity":"<trigger_quantity>","upper_limit_quantity":"<upper_limit_quantity>","lower_limit_quantity":"<lower_limit_quantity>","time_in_force":"<time_in_force>"}'
+              --data '{"symbol":"<symbol>","settlement_currency":"<settlement_currency>","grid_trading_rule":{},"submitted_base_price":"<submitted_base_price>","upper_limit_price":"<upper_limit_price>","lower_limit_price":"<lower_limit_price>","trigger_price_type":0,"trigger_spread_up":"<trigger_spread_up>","trigger_spread_down":"<trigger_spread_down>","trigger_percent_up":"<trigger_percent_up>","trigger_percent_down":"<trigger_percent_down>","trigger_quantity":"<trigger_quantity>","upper_limit_quantity":"<upper_limit_quantity>","lower_limit_quantity":"<lower_limit_quantity>","time_in_force":0,"expire_time":0,"upper_limit_event":0,"lower_limit_event":0,"trigger_sell_depth":0,"trigger_buy_depth":0,"grid_order_type_up":"<grid_order_type_up>","grid_order_type_down":"<grid_order_type_down>","multiple_trigger":false,"support_shortsell":false,"rth":0}'
         - lang: Python
           label: Python
           source: |
@@ -28851,7 +28902,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/gridtrading/submit",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "settlement_currency": "<settlement_currency>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+                json={"symbol": "<symbol>", "settlement_currency": "<settlement_currency>", "grid_trading_rule": {}, "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": 0, "trigger_spread_up": "<trigger_spread_up>", "trigger_spread_down": "<trigger_spread_down>", "trigger_percent_up": "<trigger_percent_up>", "trigger_percent_down": "<trigger_percent_down>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": 0, "expire_time": 0, "upper_limit_event": 0, "lower_limit_event": 0, "trigger_sell_depth": 0, "trigger_buy_depth": 0, "grid_order_type_up": "<grid_order_type_up>", "grid_order_type_down": "<grid_order_type_down>", "multiple_trigger": False, "support_shortsell": False, "rth": 0},
             )
             print(resp.json())
         - lang: Python
@@ -28865,7 +28916,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/gridtrading/submit",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "settlement_currency": "<settlement_currency>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+                        json={"symbol": "<symbol>", "settlement_currency": "<settlement_currency>", "grid_trading_rule": {}, "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": 0, "trigger_spread_up": "<trigger_spread_up>", "trigger_spread_down": "<trigger_spread_down>", "trigger_percent_up": "<trigger_percent_up>", "trigger_percent_down": "<trigger_percent_down>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": 0, "expire_time": 0, "upper_limit_event": 0, "lower_limit_event": 0, "trigger_sell_depth": 0, "trigger_buy_depth": 0, "grid_order_type_up": "<grid_order_type_up>", "grid_order_type_down": "<grid_order_type_down>", "multiple_trigger": False, "support_shortsell": False, "rth": 0},
                     ) as resp:
                         print(await resp.json())
 
@@ -28879,7 +28930,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", settlement_currency: "<settlement_currency>", grid_trading_rule: "<grid_trading_rule>", submitted_base_price: "<submitted_base_price>", upper_limit_price: "<upper_limit_price>", lower_limit_price: "<lower_limit_price>", trigger_price_type: "<trigger_price_type>", trigger_quantity: "<trigger_quantity>", upper_limit_quantity: "<upper_limit_quantity>", lower_limit_quantity: "<lower_limit_quantity>", time_in_force: "<time_in_force>" }),
+              body: JSON.stringify({ symbol: "<symbol>", settlement_currency: "<settlement_currency>", grid_trading_rule: {}, submitted_base_price: "<submitted_base_price>", upper_limit_price: "<upper_limit_price>", lower_limit_price: "<lower_limit_price>", trigger_price_type: 0, trigger_spread_up: "<trigger_spread_up>", trigger_spread_down: "<trigger_spread_down>", trigger_percent_up: "<trigger_percent_up>", trigger_percent_down: "<trigger_percent_down>", trigger_quantity: "<trigger_quantity>", upper_limit_quantity: "<upper_limit_quantity>", lower_limit_quantity: "<lower_limit_quantity>", time_in_force: 0, expire_time: 0, upper_limit_event: 0, lower_limit_event: 0, trigger_sell_depth: 0, trigger_buy_depth: 0, grid_order_type_up: "<grid_order_type_up>", grid_order_type_down: "<grid_order_type_down>", multiple_trigger: false, support_shortsell: false, rth: 0 }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -28893,7 +28944,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/submit"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":{},\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":0,\"trigger_spread_up\":\"<trigger_spread_up>\",\"trigger_spread_down\":\"<trigger_spread_down>\",\"trigger_percent_up\":\"<trigger_percent_up>\",\"trigger_percent_down\":\"<trigger_percent_down>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":0,\"expire_time\":0,\"upper_limit_event\":0,\"lower_limit_event\":0,\"trigger_sell_depth\":0,\"trigger_buy_depth\":0,\"grid_order_type_up\":\"<grid_order_type_up>\",\"grid_order_type_down\":\"<grid_order_type_down>\",\"multiple_trigger\":false,\"support_shortsell\":false,\"rth\":0}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -28904,7 +28955,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/submit")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "settlement_currency": "<settlement_currency>" , "grid_trading_rule": "<grid_trading_rule>" , "submitted_base_price": "<submitted_base_price>" , "upper_limit_price": "<upper_limit_price>" , "lower_limit_price": "<lower_limit_price>" , "trigger_price_type": "<trigger_price_type>" , "trigger_quantity": "<trigger_quantity>" , "upper_limit_quantity": "<upper_limit_quantity>" , "lower_limit_quantity": "<lower_limit_quantity>" , "time_in_force": "<time_in_force>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "settlement_currency": "<settlement_currency>" , "grid_trading_rule": {} , "submitted_base_price": "<submitted_base_price>" , "upper_limit_price": "<upper_limit_price>" , "lower_limit_price": "<lower_limit_price>" , "trigger_price_type": 0 , "trigger_spread_up": "<trigger_spread_up>" , "trigger_spread_down": "<trigger_spread_down>" , "trigger_percent_up": "<trigger_percent_up>" , "trigger_percent_down": "<trigger_percent_down>" , "trigger_quantity": "<trigger_quantity>" , "upper_limit_quantity": "<upper_limit_quantity>" , "lower_limit_quantity": "<lower_limit_quantity>" , "time_in_force": 0 , "expire_time": 0 , "upper_limit_event": 0 , "lower_limit_event": 0 , "trigger_sell_depth": 0 , "trigger_buy_depth": 0 , "grid_order_type_up": "<grid_order_type_up>" , "grid_order_type_down": "<grid_order_type_down>" , "multiple_trigger": false , "support_shortsell": false , "rth": 0 }))
                     .send()
                     .await?
                     .text()
@@ -28922,7 +28973,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/submit");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":{},\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":0,\"trigger_spread_up\":\"<trigger_spread_up>\",\"trigger_spread_down\":\"<trigger_spread_down>\",\"trigger_percent_up\":\"<trigger_percent_up>\",\"trigger_percent_down\":\"<trigger_percent_down>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":0,\"expire_time\":0,\"upper_limit_event\":0,\"lower_limit_event\":0,\"trigger_sell_depth\":0,\"trigger_buy_depth\":0,\"grid_order_type_up\":\"<grid_order_type_up>\",\"grid_order_type_down\":\"<grid_order_type_down>\",\"multiple_trigger\":false,\"support_shortsell\":false,\"rth\":0}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -28930,7 +28981,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/submit\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/submit\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"settlement_currency\":\"<settlement_currency>\",\"grid_trading_rule\":{},\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":0,\"trigger_spread_up\":\"<trigger_spread_up>\",\"trigger_spread_down\":\"<trigger_spread_down>\",\"trigger_percent_up\":\"<trigger_percent_up>\",\"trigger_percent_down\":\"<trigger_percent_down>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":0,\"expire_time\":0,\"upper_limit_event\":0,\"lower_limit_event\":0,\"trigger_sell_depth\":0,\"trigger_buy_depth\":0,\"grid_order_type_up\":\"<grid_order_type_up>\",\"grid_order_type_down\":\"<grid_order_type_down>\",\"multiple_trigger\":false,\"support_shortsell\":false,\"rth\":0}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -29146,7 +29197,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/gridtrading/replace' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"order_id":"<order_id>","grid_trading_rule":"<grid_trading_rule>","submitted_base_price":"<submitted_base_price>","upper_limit_price":"<upper_limit_price>","lower_limit_price":"<lower_limit_price>","trigger_price_type":"<trigger_price_type>","trigger_quantity":"<trigger_quantity>","upper_limit_quantity":"<upper_limit_quantity>","lower_limit_quantity":"<lower_limit_quantity>","time_in_force":"<time_in_force>"}'
+              --data '{"order_id":"<order_id>","grid_trading_rule":{},"submitted_base_price":"<submitted_base_price>","upper_limit_price":"<upper_limit_price>","lower_limit_price":"<lower_limit_price>","trigger_price_type":0,"trigger_spread_up":"<trigger_spread_up>","trigger_spread_down":"<trigger_spread_down>","trigger_percent_up":"<trigger_percent_up>","trigger_percent_down":"<trigger_percent_down>","trigger_quantity":"<trigger_quantity>","upper_limit_quantity":"<upper_limit_quantity>","lower_limit_quantity":"<lower_limit_quantity>","time_in_force":0,"expire_time":0,"upper_limit_event":0,"lower_limit_event":0,"trigger_sell_depth":0,"trigger_buy_depth":0,"grid_order_type_up":"<grid_order_type_up>","grid_order_type_down":"<grid_order_type_down>","multiple_trigger":false,"support_shortsell":false,"rth":0}'
         - lang: Python
           label: Python
           source: |
@@ -29155,7 +29206,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/gridtrading/replace",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"order_id": "<order_id>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+                json={"order_id": "<order_id>", "grid_trading_rule": {}, "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": 0, "trigger_spread_up": "<trigger_spread_up>", "trigger_spread_down": "<trigger_spread_down>", "trigger_percent_up": "<trigger_percent_up>", "trigger_percent_down": "<trigger_percent_down>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": 0, "expire_time": 0, "upper_limit_event": 0, "lower_limit_event": 0, "trigger_sell_depth": 0, "trigger_buy_depth": 0, "grid_order_type_up": "<grid_order_type_up>", "grid_order_type_down": "<grid_order_type_down>", "multiple_trigger": False, "support_shortsell": False, "rth": 0},
             )
             print(resp.json())
         - lang: Python
@@ -29169,7 +29220,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/gridtrading/replace",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"order_id": "<order_id>", "grid_trading_rule": "<grid_trading_rule>", "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": "<trigger_price_type>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": "<time_in_force>"},
+                        json={"order_id": "<order_id>", "grid_trading_rule": {}, "submitted_base_price": "<submitted_base_price>", "upper_limit_price": "<upper_limit_price>", "lower_limit_price": "<lower_limit_price>", "trigger_price_type": 0, "trigger_spread_up": "<trigger_spread_up>", "trigger_spread_down": "<trigger_spread_down>", "trigger_percent_up": "<trigger_percent_up>", "trigger_percent_down": "<trigger_percent_down>", "trigger_quantity": "<trigger_quantity>", "upper_limit_quantity": "<upper_limit_quantity>", "lower_limit_quantity": "<lower_limit_quantity>", "time_in_force": 0, "expire_time": 0, "upper_limit_event": 0, "lower_limit_event": 0, "trigger_sell_depth": 0, "trigger_buy_depth": 0, "grid_order_type_up": "<grid_order_type_up>", "grid_order_type_down": "<grid_order_type_down>", "multiple_trigger": False, "support_shortsell": False, "rth": 0},
                     ) as resp:
                         print(await resp.json())
 
@@ -29183,7 +29234,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ order_id: "<order_id>", grid_trading_rule: "<grid_trading_rule>", submitted_base_price: "<submitted_base_price>", upper_limit_price: "<upper_limit_price>", lower_limit_price: "<lower_limit_price>", trigger_price_type: "<trigger_price_type>", trigger_quantity: "<trigger_quantity>", upper_limit_quantity: "<upper_limit_quantity>", lower_limit_quantity: "<lower_limit_quantity>", time_in_force: "<time_in_force>" }),
+              body: JSON.stringify({ order_id: "<order_id>", grid_trading_rule: {}, submitted_base_price: "<submitted_base_price>", upper_limit_price: "<upper_limit_price>", lower_limit_price: "<lower_limit_price>", trigger_price_type: 0, trigger_spread_up: "<trigger_spread_up>", trigger_spread_down: "<trigger_spread_down>", trigger_percent_up: "<trigger_percent_up>", trigger_percent_down: "<trigger_percent_down>", trigger_quantity: "<trigger_quantity>", upper_limit_quantity: "<upper_limit_quantity>", lower_limit_quantity: "<lower_limit_quantity>", time_in_force: 0, expire_time: 0, upper_limit_event: 0, lower_limit_event: 0, trigger_sell_depth: 0, trigger_buy_depth: 0, grid_order_type_up: "<grid_order_type_up>", grid_order_type_down: "<grid_order_type_down>", multiple_trigger: false, support_shortsell: false, rth: 0 }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -29197,7 +29248,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/replace"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_id\":\"<order_id>\",\"grid_trading_rule\":{},\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":0,\"trigger_spread_up\":\"<trigger_spread_up>\",\"trigger_spread_down\":\"<trigger_spread_down>\",\"trigger_percent_up\":\"<trigger_percent_up>\",\"trigger_percent_down\":\"<trigger_percent_down>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":0,\"expire_time\":0,\"upper_limit_event\":0,\"lower_limit_event\":0,\"trigger_sell_depth\":0,\"trigger_buy_depth\":0,\"grid_order_type_up\":\"<grid_order_type_up>\",\"grid_order_type_down\":\"<grid_order_type_down>\",\"multiple_trigger\":false,\"support_shortsell\":false,\"rth\":0}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -29208,7 +29259,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/replace")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "order_id": "<order_id>" , "grid_trading_rule": "<grid_trading_rule>" , "submitted_base_price": "<submitted_base_price>" , "upper_limit_price": "<upper_limit_price>" , "lower_limit_price": "<lower_limit_price>" , "trigger_price_type": "<trigger_price_type>" , "trigger_quantity": "<trigger_quantity>" , "upper_limit_quantity": "<upper_limit_quantity>" , "lower_limit_quantity": "<lower_limit_quantity>" , "time_in_force": "<time_in_force>" }))
+                    .json(&serde_json::json!({ "order_id": "<order_id>" , "grid_trading_rule": {} , "submitted_base_price": "<submitted_base_price>" , "upper_limit_price": "<upper_limit_price>" , "lower_limit_price": "<lower_limit_price>" , "trigger_price_type": 0 , "trigger_spread_up": "<trigger_spread_up>" , "trigger_spread_down": "<trigger_spread_down>" , "trigger_percent_up": "<trigger_percent_up>" , "trigger_percent_down": "<trigger_percent_down>" , "trigger_quantity": "<trigger_quantity>" , "upper_limit_quantity": "<upper_limit_quantity>" , "lower_limit_quantity": "<lower_limit_quantity>" , "time_in_force": 0 , "expire_time": 0 , "upper_limit_event": 0 , "lower_limit_event": 0 , "trigger_sell_depth": 0 , "trigger_buy_depth": 0 , "grid_order_type_up": "<grid_order_type_up>" , "grid_order_type_down": "<grid_order_type_down>" , "multiple_trigger": false , "support_shortsell": false , "rth": 0 }))
                     .send()
                     .await?
                     .text()
@@ -29226,7 +29277,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/replace");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_id\":\"<order_id>\",\"grid_trading_rule\":{},\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":0,\"trigger_spread_up\":\"<trigger_spread_up>\",\"trigger_spread_down\":\"<trigger_spread_down>\",\"trigger_percent_up\":\"<trigger_percent_up>\",\"trigger_percent_down\":\"<trigger_percent_down>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":0,\"expire_time\":0,\"upper_limit_event\":0,\"lower_limit_event\":0,\"trigger_sell_depth\":0,\"trigger_buy_depth\":0,\"grid_order_type_up\":\"<grid_order_type_up>\",\"grid_order_type_down\":\"<grid_order_type_down>\",\"multiple_trigger\":false,\"support_shortsell\":false,\"rth\":0}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -29234,7 +29285,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/replace\", strings.NewReader(`{\"order_id\":\"<order_id>\",\"grid_trading_rule\":\"<grid_trading_rule>\",\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":\"<trigger_price_type>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":\"<time_in_force>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/replace\", strings.NewReader(`{\"order_id\":\"<order_id>\",\"grid_trading_rule\":{},\"submitted_base_price\":\"<submitted_base_price>\",\"upper_limit_price\":\"<upper_limit_price>\",\"lower_limit_price\":\"<lower_limit_price>\",\"trigger_price_type\":0,\"trigger_spread_up\":\"<trigger_spread_up>\",\"trigger_spread_down\":\"<trigger_spread_down>\",\"trigger_percent_up\":\"<trigger_percent_up>\",\"trigger_percent_down\":\"<trigger_percent_down>\",\"trigger_quantity\":\"<trigger_quantity>\",\"upper_limit_quantity\":\"<upper_limit_quantity>\",\"lower_limit_quantity\":\"<lower_limit_quantity>\",\"time_in_force\":0,\"expire_time\":0,\"upper_limit_event\":0,\"lower_limit_event\":0,\"trigger_sell_depth\":0,\"trigger_buy_depth\":0,\"grid_order_type_up\":\"<grid_order_type_up>\",\"grid_order_type_down\":\"<grid_order_type_down>\",\"multiple_trigger\":false,\"support_shortsell\":false,\"rth\":0}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -29789,7 +29840,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/gridtrading/list' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"order_ids":"<order_ids>"}'
+              --data '{"order_ids":[]}'
         - lang: Python
           label: Python
           source: |
@@ -29798,7 +29849,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/gridtrading/list",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"order_ids": "<order_ids>"},
+                json={"order_ids": []},
             )
             print(resp.json())
         - lang: Python
@@ -29812,7 +29863,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/gridtrading/list",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"order_ids": "<order_ids>"},
+                        json={"order_ids": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -29826,7 +29877,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ order_ids: "<order_ids>" }),
+              body: JSON.stringify({ order_ids: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -29840,7 +29891,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/list"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_ids\":\"<order_ids>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"order_ids\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -29851,7 +29902,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/gridtrading/list")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "order_ids": "<order_ids>" }))
+                    .json(&serde_json::json!({ "order_ids": [] }))
                     .send()
                     .await?
                     .text()
@@ -29869,7 +29920,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/list");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_ids\":\"<order_ids>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"order_ids\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -29877,7 +29928,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/list\", strings.NewReader(`{\"order_ids\":\"<order_ids>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/gridtrading/list\", strings.NewReader(`{\"order_ids\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: grid_order
           type: object[]
@@ -31961,7 +32012,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/watchlist/groups' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"name":"<name>"}'
+              --data '{"name":"<name>","securities":[]}'
         - lang: Python
           label: Python
           source: |
@@ -31970,7 +32021,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/watchlist/groups",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"name": "<name>"},
+                json={"name": "<name>", "securities": []},
             )
             print(resp.json())
         - lang: Python
@@ -31984,7 +32035,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/watchlist/groups",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"name": "<name>"},
+                        json={"name": "<name>", "securities": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -31998,7 +32049,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ name: "<name>" }),
+              body: JSON.stringify({ name: "<name>", securities: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -32012,7 +32063,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"name\":\"<name>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"name\":\"<name>\",\"securities\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -32023,7 +32074,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/watchlist/groups")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "name": "<name>" }))
+                    .json(&serde_json::json!({ "name": "<name>" , "securities": [] }))
                     .send()
                     .await?
                     .text()
@@ -32041,7 +32092,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"name\":\"<name>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"name\":\"<name>\",\"securities\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -32049,7 +32100,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"name\":\"<name>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"name\":\"<name>\",\"securities\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: id
           type: integer
@@ -32138,7 +32189,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/watchlist/groups' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"id":"<id>","mode":"<mode>"}'
+              --data '{"id":0,"name":"<name>","securities":[],"mode":"<mode>"}'
         - lang: Python
           label: Python
           source: |
@@ -32147,7 +32198,7 @@ paths:
             resp = requests.put(
                 "https://openapi.longbridge.com/v1/watchlist/groups",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"id": "<id>", "mode": "<mode>"},
+                json={"id": 0, "name": "<name>", "securities": [], "mode": "<mode>"},
             )
             print(resp.json())
         - lang: Python
@@ -32161,7 +32212,7 @@ paths:
                     async with session.put(
                         "https://openapi.longbridge.com/v1/watchlist/groups",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"id": "<id>", "mode": "<mode>"},
+                        json={"id": 0, "name": "<name>", "securities": [], "mode": "<mode>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -32175,7 +32226,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id: "<id>", mode: "<mode>" }),
+              body: JSON.stringify({ id: 0, name: "<name>", securities: [], mode: "<mode>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -32189,7 +32240,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":\"<id>\",\"mode\":\"<mode>\"}"))
+                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":0,\"name\":\"<name>\",\"securities\":[],\"mode\":\"<mode>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -32200,7 +32251,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::PUT, "https://openapi.longbridge.com/v1/watchlist/groups")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "id": "<id>" , "mode": "<mode>" }))
+                    .json(&serde_json::json!({ "id": 0 , "name": "<name>" , "securities": [] , "mode": "<mode>" }))
                     .send()
                     .await?
                     .text()
@@ -32218,7 +32269,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":\"<id>\",\"mode\":\"<mode>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":0,\"name\":\"<name>\",\"securities\":[],\"mode\":\"<mode>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -32226,7 +32277,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"id\":\"<id>\",\"mode\":\"<mode>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"id\":0,\"name\":\"<name>\",\"securities\":[],\"mode\":\"<mode>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -32769,7 +32820,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/dailycoins/create' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","per_invest_amount":"<per_invest_amount>","invest_frequency":"<invest_frequency>","allow_margin_finance":"<allow_margin_finance>"}'
+              --data '{"symbol":"<symbol>","per_invest_amount":"<per_invest_amount>","invest_frequency":"<invest_frequency>","allow_margin_finance":0,"invest_day_of_week":"<invest_day_of_week>","invest_day_of_month":"<invest_day_of_month>"}'
         - lang: Python
           label: Python
           source: |
@@ -32778,7 +32829,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/create",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "allow_margin_finance": "<allow_margin_finance>"},
+                json={"symbol": "<symbol>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "allow_margin_finance": 0, "invest_day_of_week": "<invest_day_of_week>", "invest_day_of_month": "<invest_day_of_month>"},
             )
             print(resp.json())
         - lang: Python
@@ -32792,7 +32843,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/create",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "allow_margin_finance": "<allow_margin_finance>"},
+                        json={"symbol": "<symbol>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "allow_margin_finance": 0, "invest_day_of_week": "<invest_day_of_week>", "invest_day_of_month": "<invest_day_of_month>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -32806,7 +32857,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", per_invest_amount: "<per_invest_amount>", invest_frequency: "<invest_frequency>", allow_margin_finance: "<allow_margin_finance>" }),
+              body: JSON.stringify({ symbol: "<symbol>", per_invest_amount: "<per_invest_amount>", invest_frequency: "<invest_frequency>", allow_margin_finance: 0, invest_day_of_week: "<invest_day_of_week>", invest_day_of_month: "<invest_day_of_month>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -32820,7 +32871,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/create"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":\"<allow_margin_finance>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":0,\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -32831,7 +32882,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/create")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "per_invest_amount": "<per_invest_amount>" , "invest_frequency": "<invest_frequency>" , "allow_margin_finance": "<allow_margin_finance>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "per_invest_amount": "<per_invest_amount>" , "invest_frequency": "<invest_frequency>" , "allow_margin_finance": 0 , "invest_day_of_week": "<invest_day_of_week>" , "invest_day_of_month": "<invest_day_of_month>" }))
                     .send()
                     .await?
                     .text()
@@ -32849,7 +32900,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/create");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":\"<allow_margin_finance>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":0,\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -32857,7 +32908,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/create\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":\"<allow_margin_finance>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/create\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"allow_margin_finance\":0,\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: id
           type: string
@@ -32951,7 +33002,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/dailycoins/update' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"plan_id":"<plan_id>"}'
+              --data '{"plan_id":"<plan_id>","per_invest_amount":"<per_invest_amount>","invest_frequency":"<invest_frequency>","invest_day_of_week":"<invest_day_of_week>","invest_day_of_month":"<invest_day_of_month>"}'
         - lang: Python
           label: Python
           source: |
@@ -32960,7 +33011,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/update",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"plan_id": "<plan_id>"},
+                json={"plan_id": "<plan_id>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "invest_day_of_week": "<invest_day_of_week>", "invest_day_of_month": "<invest_day_of_month>"},
             )
             print(resp.json())
         - lang: Python
@@ -32974,7 +33025,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/update",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"plan_id": "<plan_id>"},
+                        json={"plan_id": "<plan_id>", "per_invest_amount": "<per_invest_amount>", "invest_frequency": "<invest_frequency>", "invest_day_of_week": "<invest_day_of_week>", "invest_day_of_month": "<invest_day_of_month>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -32988,7 +33039,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ plan_id: "<plan_id>" }),
+              body: JSON.stringify({ plan_id: "<plan_id>", per_invest_amount: "<per_invest_amount>", invest_frequency: "<invest_frequency>", invest_day_of_week: "<invest_day_of_week>", invest_day_of_month: "<invest_day_of_month>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -33002,7 +33053,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/update"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"plan_id\":\"<plan_id>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"plan_id\":\"<plan_id>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -33013,7 +33064,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/update")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "plan_id": "<plan_id>" }))
+                    .json(&serde_json::json!({ "plan_id": "<plan_id>" , "per_invest_amount": "<per_invest_amount>" , "invest_frequency": "<invest_frequency>" , "invest_day_of_week": "<invest_day_of_week>" , "invest_day_of_month": "<invest_day_of_month>" }))
                     .send()
                     .await?
                     .text()
@@ -33031,7 +33082,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/update");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"plan_id\":\"<plan_id>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"plan_id\":\"<plan_id>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -33039,7 +33090,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update\", strings.NewReader(`{\"plan_id\":\"<plan_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/update\", strings.NewReader(`{\"plan_id\":\"<plan_id>\",\"per_invest_amount\":\"<per_invest_amount>\",\"invest_frequency\":\"<invest_frequency>\",\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response
@@ -33679,7 +33730,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/dailycoins/batch-check-support' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbols":"<symbols>"}'
+              --data '{"symbols":[]}'
         - lang: Python
           label: Python
           source: |
@@ -33688,7 +33739,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/batch-check-support",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbols": "<symbols>"},
+                json={"symbols": []},
             )
             print(resp.json())
         - lang: Python
@@ -33702,7 +33753,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/batch-check-support",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbols": "<symbols>"},
+                        json={"symbols": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -33716,7 +33767,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbols: "<symbols>" }),
+              body: JSON.stringify({ symbols: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -33730,7 +33781,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/batch-check-support"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":\"<symbols>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbols\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -33741,7 +33792,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/batch-check-support")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbols": "<symbols>" }))
+                    .json(&serde_json::json!({ "symbols": [] }))
                     .send()
                     .await?
                     .text()
@@ -33759,7 +33810,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/batch-check-support");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":\"<symbols>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbols\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -33767,7 +33818,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/batch-check-support\", strings.NewReader(`{\"symbols\":\"<symbols>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/batch-check-support\", strings.NewReader(`{\"symbols\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: infos
           type: object[]
@@ -33869,7 +33920,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/dailycoins/calc-trd-date' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"symbol":"<symbol>","invest_frequency":"<invest_frequency>"}'
+              --data '{"symbol":"<symbol>","invest_frequency":"<invest_frequency>","invest_day_of_week":"<invest_day_of_week>","invest_day_of_month":"<invest_day_of_month>"}'
         - lang: Python
           label: Python
           source: |
@@ -33878,7 +33929,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"symbol": "<symbol>", "invest_frequency": "<invest_frequency>"},
+                json={"symbol": "<symbol>", "invest_frequency": "<invest_frequency>", "invest_day_of_week": "<invest_day_of_week>", "invest_day_of_month": "<invest_day_of_month>"},
             )
             print(resp.json())
         - lang: Python
@@ -33892,7 +33943,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"symbol": "<symbol>", "invest_frequency": "<invest_frequency>"},
+                        json={"symbol": "<symbol>", "invest_frequency": "<invest_frequency>", "invest_day_of_week": "<invest_day_of_week>", "invest_day_of_month": "<invest_day_of_month>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -33906,7 +33957,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ symbol: "<symbol>", invest_frequency: "<invest_frequency>" }),
+              body: JSON.stringify({ symbol: "<symbol>", invest_frequency: "<invest_frequency>", invest_day_of_week: "<invest_day_of_week>", invest_day_of_month: "<invest_day_of_month>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -33920,7 +33971,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/dailycoins/calc-trd-date"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\"}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\",\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -33931,7 +33982,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "symbol": "<symbol>" , "invest_frequency": "<invest_frequency>" }))
+                    .json(&serde_json::json!({ "symbol": "<symbol>" , "invest_frequency": "<invest_frequency>" , "invest_day_of_week": "<invest_day_of_week>" , "invest_day_of_month": "<invest_day_of_month>" }))
                     .send()
                     .await?
                     .text()
@@ -33949,7 +34000,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/dailycoins/calc-trd-date");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\"}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\",\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -33957,7 +34008,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/calc-trd-date\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/dailycoins/calc-trd-date\", strings.NewReader(`{\"symbol\":\"<symbol>\",\"invest_frequency\":\"<invest_frequency>\",\"invest_day_of_week\":\"<invest_day_of_week>\",\"invest_day_of_month\":\"<invest_day_of_month>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: trade_date
           type: string
@@ -34314,7 +34365,9 @@ paths:
           description: 'Statement type: 1 = daily (default), 2 = monthly.'
           schema:
             type: integer
-            enum: [1, 2]
+            enum:
+              - 1
+              - 2
             default: 1
         - name: page
           in: query
@@ -34353,11 +34406,11 @@ paths:
                       description: File key used to request the download URL.
               example:
                 - date: '20260327'
-                  file_key: '/statement_data/data/lb/1/20260327/10000104.json'
+                  file_key: /statement_data/data/lb/1/20260327/10000104.json
                 - date: '20260324'
-                  file_key: '/statement_data/data/lb/1/20260324/10000104.json'
+                  file_key: /statement_data/data/lb/1/20260324/10000104.json
                 - date: '20260323'
-                  file_key: '/statement_data/data/lb/1/20260323/10000104.json'
+                  file_key: /statement_data/data/lb/1/20260323/10000104.json
         default:
           description: Unexpected error
           content:
@@ -34402,7 +34455,7 @@ paths:
                     type: string
                     description: Presigned URL to download the statement JSON.
               example:
-                url: 'https://storage.example.com/statements/abc123xyz456.json?X-Amz-Signature=...'
+                url: https://storage.example.com/statements/abc123xyz456.json?X-Amz-Signature=...
         default:
           description: Unexpected error
           content:
@@ -34426,7 +34479,7 @@ paths:
         - name: symbol
           in: query
           required: true
-          description: 'Security symbol to query filings for (e.g. `AAPL.US`, `700.HK`).'
+          description: Security symbol to query filings for (e.g. `AAPL.US`, `700.HK`).
           schema:
             type: string
       x-codeSamples:
