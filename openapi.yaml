@@ -17233,6 +17233,21 @@ paths:
         與 [Workspace 下的 Agent](/zh-HK/docs/ai/workspace/agents) 不同，本接口不限定 Workspace：返回所有已發佈且公開分享的 Agent。
       tags:
         - AI Agent
+      x-parameters:
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number, starts at 1, default 1
+          x-description-zh: 页码，从 1 开始，默认 1
+          x-description-zh-hk: 頁碼，從 1 開始，默認 1
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Page size, default 20, maximum 50
+          x-description-zh: 每页条数，默认 20，最大 50
+          x-description-zh-hk: 每頁條數，默認 20，最大 50
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -17585,12 +17600,34 @@ paths:
       x-subgroup-zh-hk: 工作空間
       tags:
         - AI Agent
+      x-parameters:
+        - name: workspace_id
+          in: path
+          type: string
+          required: true
+          description: Workspace ID
+          x-description-zh: Workspace ID
+          x-description-zh-hk: Workspace ID
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number, starts at 1, default 1
+          x-description-zh: 页码，从 1 开始，默认 1
+          x-description-zh-hk: 頁碼，從 1 開始，默認 1
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Page size, default 20
+          x-description-zh: 每页数量，默认 20
+          x-description-zh-hk: 每頁數量，默認 20
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents' \
+              --url 'https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -17598,7 +17635,7 @@ paths:
             import requests
 
             resp = requests.get(
-                "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents",
+                "https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents",
                 headers={"Authorization": "Bearer <access_token>"},
             )
             print(resp.json())
@@ -17611,7 +17648,7 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents",
+                        "https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents",
                         headers={"Authorization": "Bearer <access_token>"},
                     ) as resp:
                         print(await resp.json())
@@ -17620,7 +17657,7 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents", {
               method: "GET",
               headers: {
                 "Authorization": "Bearer <access_token>",
@@ -17635,7 +17672,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -17646,7 +17683,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents")
                     .header("Authorization", "Bearer <access_token>")
                     .send()
                     .await?
@@ -17662,7 +17699,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -17671,7 +17708,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/ai/workspaces/{workspace_id}/agents\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/ai/workspaces/<workspace_id>/agents\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: agents
           type: object[]
@@ -17806,21 +17843,53 @@ paths:
       x-subgroup-zh-hk: 對話
       tags:
         - AI Agent
+      x-parameters:
+        - name: agent_id
+          in: path
+          type: string
+          required: true
+          description: UID of the target Agent; must be a published Agent
+          x-description-zh: 目标 Agent 的 UID，需为已发布 Agent
+          x-description-zh-hk: 目標 Agent 的 UID，需為已發佈 Agent
+        - name: query
+          in: body
+          type: string
+          required: true
+          description: The user question; must not be empty
+          x-description-zh: 用户问题，不能为空
+          x-description-zh-hk: 用戶問題，不能為空
+        - name: chat_uid
+          in: body
+          type: string
+          required: false
+          description: Identifier of an existing conversation. Pass it to continue that conversation; omit to start a new one
+          x-description-zh: 已有会话标识。传入则在该会话中继续提问，不传则新建会话
+          x-description-zh-hk: 已有會話標識。傳入則在該會話中繼續提問，不傳則新建會話
+        - name: parent_message_id
+          in: body
+          type: string
+          required: false
+          description: Parent message ID, taken from the `message_id` in the previous response. Pass it when asking a follow-up in an existing conversation to attach the new message after the specified one, keeping the message stream in order. Only valid together with `chat_uid`, and the parent message must belong to that conversation; must not be set for a new conversation
+          x-description-zh: 父消息 ID，取上一轮响应中的 `message_id`。在已有会话中追加提问时传入，将本轮消息挂在指定消息之后，保证消息流顺序。仅在传入 `chat_uid` 时有效，且父消息必须属于该会话；新会话不可传
+          x-description-zh-hk: 父消息 ID，取上一輪響應中的 `message_id`。在已有會話中追加提問時傳入，將本輪消息掛在指定消息之後，保證消息流順序。僅在傳入 `chat_uid` 時有效，且父消息必須屬於該會話；新會話不可傳
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request POST \
-              --url 'https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations' \
-              --header 'Authorization: Bearer <access_token>'
+              --url 'https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"query":"<query>","chat_uid":"<chat_uid>","parent_message_id":"<parent_message_id>"}'
         - lang: Python
           label: Python
           source: |
             import requests
 
             resp = requests.post(
-                "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations",
-                headers={"Authorization": "Bearer <access_token>"},
+                "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"query": "<query>", "chat_uid": "<chat_uid>", "parent_message_id": "<parent_message_id>"},
             )
             print(resp.json())
         - lang: Python
@@ -17832,8 +17901,9 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
-                        "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"query": "<query>", "chat_uid": "<chat_uid>", "parent_message_id": "<parent_message_id>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -17841,11 +17911,13 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations", {
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ query: "<query>", chat_uid: "<chat_uid>", parent_message_id: "<parent_message_id>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -17856,9 +17928,10 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"query\":\"<query>\",\"chat_uid\":\"<chat_uid>\",\"parent_message_id\":\"<parent_message_id>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -17867,8 +17940,9 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "query": "<query>" , "chat_uid": "<chat_uid>" , "parent_message_id": "<parent_message_id>" }))
                     .send()
                     .await?
                     .text()
@@ -17883,8 +17957,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"query\":\"<query>\",\"chat_uid\":\"<chat_uid>\",\"parent_message_id\":\"<parent_message_id>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -17892,7 +17968,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/ai/agents/{agent_id}/conversations\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/ai/agents/<agent_id>/conversations\", strings.NewReader(`{\"query\":\"<query>\",\"chat_uid\":\"<chat_uid>\",\"parent_message_id\":\"<parent_message_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: chat_uid
           type: string
@@ -18978,22 +19054,20 @@ paths:
       x-subgroup-zh-hk: 資訊
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            # latest news for Tesla
-            longbridge news TSLA.US
-            # latest news for Apple
-            longbridge news AAPL.US
-            # latest news for NVDA
-            longbridge news NVDA.US
+      x-parameters:
+        - name: symbol
+          in: path
+          type: string
+          required: true
+          description: Stock symbol, use `ticker.region` format, e.g. `AAPL.US`
+          x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/content/{symbol}/news' \
+              --url 'https://openapi.longbridge.com/v1/content/<symbol>/news' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -19001,7 +19075,7 @@ paths:
             import requests
 
             resp = requests.get(
-                "https://openapi.longbridge.com/v1/content/{symbol}/news",
+                "https://openapi.longbridge.com/v1/content/<symbol>/news",
                 headers={"Authorization": "Bearer <access_token>"},
             )
             print(resp.json())
@@ -19014,7 +19088,7 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        "https://openapi.longbridge.com/v1/content/{symbol}/news",
+                        "https://openapi.longbridge.com/v1/content/<symbol>/news",
                         headers={"Authorization": "Bearer <access_token>"},
                     ) as resp:
                         print(await resp.json())
@@ -19023,7 +19097,7 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/content/{symbol}/news", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/<symbol>/news", {
               method: "GET",
               headers: {
                 "Authorization": "Bearer <access_token>",
@@ -19038,7 +19112,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/content/{symbol}/news"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/<symbol>/news"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -19049,7 +19123,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/{symbol}/news")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/<symbol>/news")
                     .header("Authorization", "Bearer <access_token>")
                     .send()
                     .await?
@@ -19065,7 +19139,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/{symbol}/news");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/<symbol>/news");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -19074,7 +19148,17 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/{symbol}/news\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/<symbol>/news\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # latest news for Tesla
+            longbridge news TSLA.US
+            # latest news for Apple
+            longbridge news AAPL.US
+            # latest news for NVDA
+            longbridge news NVDA.US
       x-response-properties:
         - name: items
           type: object[]
@@ -19171,22 +19255,20 @@ paths:
       x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            # community discussion topics for Tesla
-            longbridge topic TSLA.US
-            # community discussion topics for Apple
-            longbridge topic AAPL.US
-            # community discussion topics for NVDA
-            longbridge topic NVDA.US
+      x-parameters:
+        - name: symbol
+          in: path
+          type: string
+          required: true
+          description: Stock symbol, use `ticker.region` format, e.g. `AAPL.US`
+          x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/content/{symbol}/topics' \
+              --url 'https://openapi.longbridge.com/v1/content/<symbol>/topics' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -19194,7 +19276,7 @@ paths:
             import requests
 
             resp = requests.get(
-                "https://openapi.longbridge.com/v1/content/{symbol}/topics",
+                "https://openapi.longbridge.com/v1/content/<symbol>/topics",
                 headers={"Authorization": "Bearer <access_token>"},
             )
             print(resp.json())
@@ -19207,7 +19289,7 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        "https://openapi.longbridge.com/v1/content/{symbol}/topics",
+                        "https://openapi.longbridge.com/v1/content/<symbol>/topics",
                         headers={"Authorization": "Bearer <access_token>"},
                     ) as resp:
                         print(await resp.json())
@@ -19216,7 +19298,7 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/content/{symbol}/topics", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/<symbol>/topics", {
               method: "GET",
               headers: {
                 "Authorization": "Bearer <access_token>",
@@ -19231,7 +19313,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/content/{symbol}/topics"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/<symbol>/topics"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -19242,7 +19324,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/{symbol}/topics")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/<symbol>/topics")
                     .header("Authorization", "Bearer <access_token>")
                     .send()
                     .await?
@@ -19258,7 +19340,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/{symbol}/topics");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/<symbol>/topics");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -19267,7 +19349,17 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/{symbol}/topics\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/<symbol>/topics\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # community discussion topics for Tesla
+            longbridge topic TSLA.US
+            # community discussion topics for Apple
+            longbridge topic AAPL.US
+            # community discussion topics for NVDA
+            longbridge topic NVDA.US
       x-response-properties:
         - name: items
           type: object[]
@@ -19364,11 +19456,28 @@ paths:
       x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge topic mine
+      x-parameters:
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number (1-based). Defaults to `1`.
+          x-description-zh: 页码，默认 1
+          x-description-zh-hk: 頁碼，默認 1
+        - name: size
+          in: query
+          type: integer
+          required: false
+          description: Number of items per page, range 1–500. Defaults to `50`.
+          x-description-zh: 每页数量，范围 1~500，默认 50
+          x-description-zh-hk: 每頁數量，範圍 1~500，默認 50
+        - name: topic_type
+          in: query
+          type: string
+          required: false
+          description: Filter by type. One of `article` (long-form), `post` (short post). Omit to return all types.
+          x-description-zh: 类型过滤，可选 `article`（长文）、`post`（短帖），不传返回全部
+          x-description-zh-hk: 類型過濾，可選 `article`（長文）、`post`（短帖），不傳返回全部
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -19456,6 +19565,11 @@ paths:
         - lang: Go
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/mine\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic mine
       x-response-properties:
         - name: items
           type: object[]
@@ -19713,21 +19827,51 @@ paths:
       x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            # publish a topic for Tesla
-            longbridge topic create --body "Tesla Q1 earnings analysis" --tickers TSLA.US
-            # publish a topic for Apple
-            longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
+      x-parameters:
+        - name: title
+          in: body
+          type: string
+          required: false
+          description: Topic title. Required when `topic_type` is `article`; optional for `post`.
+          x-description-zh: 标题。`topic_type` 为 `article` 时必填，`post` 时可省略。
+          x-description-zh-hk: 標題。`topic_type` 為 `article` 時必填，`post` 時可省略。
+        - name: body
+          in: body
+          type: string
+          required: true
+          description: 'Topic body. \n- For `post`: plain text only — Markdown is not rendered.\n- For `article`: Markdown is supported.'
+          x-description-zh: 正文。`post` 类型为纯文本，Markdown 不渲染；`article` 类型支持 Markdown。
+          x-description-zh-hk: 正文。`post` 類型為純文本，Markdown 不渲染；`article` 類型支持 Markdown。
+        - name: topic_type
+          in: body
+          type: string
+          required: false
+          description: 'Content type: `post` (plain text, default) or `article` (Markdown).'
+          x-description-zh: 内容类型：`post`（纯文本，默认）或 `article`（Markdown）
+          x-description-zh-hk: 內容類型：`post`（純文本，默認）或 `article`（Markdown）
+        - name: tickers
+          in: body
+          type: array
+          required: false
+          description: Related security symbols, format `\{symbol\}.\{market\}` (e.g. `["AAPL.US", "700.HK"]`). Maximum 10. **Note:** Symbols mentioned in the body (e.g. `700.HK`, `TSLA.US`) are automatically recognized and linked by the platform. Use `tickers` to associate additional symbols not explicitly mentioned in the body.
+          x-description-zh: 关联标的代码，格式 `\{symbol\}.\{market\}`，如 `["AAPL.US", "700.HK"]`，最多 10 个。**注意：** 正文中提到的标的代码（如 `700.HK`、`TSLA.US`）会被平台自动识别并关联，`tickers` 用于补充正文中未显式提及的标的。
+          x-description-zh-hk: 關聯標的代碼，格式 `\{symbol\}.\{market\}`，如 `["AAPL.US", "700.HK"]`，最多 10 個。**注意：** 正文中提到的標的代碼（如 `700.HK`、`TSLA.US`）會被平台自動識別並關聯，`tickers` 用於補充正文中未顯式提及的標的。
+        - name: hashtags
+          in: body
+          type: array
+          required: false
+          description: Hashtag names (e.g. `["earnings", "fed"]`). Maximum 1.
+          x-description-zh: 讨论标签名称列表，如 `["earnings", "fed"]`，最多 1 个
+          x-description-zh-hk: 討論標籤名稱列表，如 `["earnings", "fed"]`，最多 1 個
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request POST \
               --url 'https://openapi.longbridge.com/v1/content/topics' \
-              --header 'Authorization: Bearer <access_token>'
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"title":"<title>","body":"<body>","topic_type":"<topic_type>","tickers":[],"hashtags":[]}'
         - lang: Python
           label: Python
           source: |
@@ -19735,7 +19879,8 @@ paths:
 
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/content/topics",
-                headers={"Authorization": "Bearer <access_token>"},
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"title": "<title>", "body": "<body>", "topic_type": "<topic_type>", "tickers": [], "hashtags": []},
             )
             print(resp.json())
         - lang: Python
@@ -19748,7 +19893,8 @@ paths:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/content/topics",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"title": "<title>", "body": "<body>", "topic_type": "<topic_type>", "tickers": [], "hashtags": []},
                     ) as resp:
                         print(await resp.json())
 
@@ -19760,7 +19906,9 @@ paths:
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ title: "<title>", body: "<body>", topic_type: "<topic_type>", tickers: [], hashtags: [] }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -19773,7 +19921,8 @@ paths:
             var request = HttpRequest.newBuilder()
                     .uri(URI.create("https://openapi.longbridge.com/v1/content/topics"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"title\":\"<title>\",\"body\":\"<body>\",\"topic_type\":\"<topic_type>\",\"tickers\":[],\"hashtags\":[]}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -19784,6 +19933,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/content/topics")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "title": "<title>" , "body": "<body>" , "topic_type": "<topic_type>" , "tickers": [] , "hashtags": [] }))
                     .send()
                     .await?
                     .text()
@@ -19798,8 +19948,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"title\":\"<title>\",\"body\":\"<body>\",\"topic_type\":\"<topic_type>\",\"tickers\":[],\"hashtags\":[]}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -19807,7 +19959,15 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/content/topics\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/content/topics\", strings.NewReader(`{\"title\":\"<title>\",\"body\":\"<body>\",\"topic_type\":\"<topic_type>\",\"tickers\":[],\"hashtags\":[]}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # publish a topic for Tesla
+            longbridge topic create --body "Tesla Q1 earnings analysis" --tickers TSLA.US
+            # publish a topic for Apple
+            longbridge topic create --body "Apple WWDC preview" --tickers AAPL.US
       x-response-properties:
         - name: item
           type: object
@@ -19988,17 +20148,20 @@ paths:
       x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge topic detail 6993508780031016960
+      x-parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Topic ID (e.g. `6993508780031016960`)
+          x-description-zh: 讨论 ID，如 `6993508780031016960`
+          x-description-zh-hk: 討論 ID，如 `6993508780031016960`
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/content/topics/{id}' \
+              --url 'https://openapi.longbridge.com/v1/content/topics/<id>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -20006,7 +20169,7 @@ paths:
             import requests
 
             resp = requests.get(
-                "https://openapi.longbridge.com/v1/content/topics/{id}",
+                "https://openapi.longbridge.com/v1/content/topics/<id>",
                 headers={"Authorization": "Bearer <access_token>"},
             )
             print(resp.json())
@@ -20019,7 +20182,7 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        "https://openapi.longbridge.com/v1/content/topics/{id}",
+                        "https://openapi.longbridge.com/v1/content/topics/<id>",
                         headers={"Authorization": "Bearer <access_token>"},
                     ) as resp:
                         print(await resp.json())
@@ -20028,7 +20191,7 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/{id}", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/<id>", {
               method: "GET",
               headers: {
                 "Authorization": "Bearer <access_token>",
@@ -20043,7 +20206,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/{id}"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/<id>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -20054,7 +20217,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/{id}")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/<id>")
                     .header("Authorization", "Bearer <access_token>")
                     .send()
                     .await?
@@ -20070,7 +20233,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/{id}");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/<id>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -20079,7 +20242,12 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/{id}\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/<id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic detail 6993508780031016960
       x-response-properties:
         - name: item
           type: object
@@ -20282,18 +20450,34 @@ paths:
       x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge topic replies 6993508780031016960
-            longbridge topic replies 6993508780031016960 --page 2 --size 20
+      x-parameters:
+        - name: topic_id
+          in: path
+          type: string
+          required: true
+          description: Topic ID (e.g. `6993508780031016960`)
+          x-description-zh: 讨论 ID，如 `6993508780031016960`
+          x-description-zh-hk: 討論 ID，如 `6993508780031016960`
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number (1-based). Defaults to `1`.
+          x-description-zh: 页码，默认 1
+          x-description-zh-hk: 頁碼，默認 1
+        - name: size
+          in: query
+          type: integer
+          required: false
+          description: Items per page, range 1–50. Defaults to `20`.
+          x-description-zh: 每页数量，范围 1~50，默认 20
+          x-description-zh-hk: 每頁數量，範圍 1~50，默認 20
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments' \
+              --url 'https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -20301,7 +20485,7 @@ paths:
             import requests
 
             resp = requests.get(
-                "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
+                "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments",
                 headers={"Authorization": "Bearer <access_token>"},
             )
             print(resp.json())
@@ -20314,7 +20498,7 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(
-                        "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
+                        "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments",
                         headers={"Authorization": "Bearer <access_token>"},
                     ) as resp:
                         print(await resp.json())
@@ -20323,7 +20507,7 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments", {
               method: "GET",
               headers: {
                 "Authorization": "Bearer <access_token>",
@@ -20338,7 +20522,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -20349,7 +20533,7 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments")
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments")
                     .header("Authorization", "Bearer <access_token>")
                     .send()
                     .await?
@@ -20365,7 +20549,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -20374,7 +20558,13 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic replies 6993508780031016960
+            longbridge topic replies 6993508780031016960 --page 2 --size 20
       x-response-properties:
         - name: items
           type: object[]
@@ -20588,26 +20778,46 @@ paths:
       x-subgroup-zh-hk: 話題
       tags:
         - News & Contents
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
+      x-parameters:
+        - name: topic_id
+          in: path
+          type: string
+          required: true
+          description: Topic ID (e.g. `6993508780031016960`)
+          x-description-zh: 讨论 ID，如 `6993508780031016960`
+          x-description-zh-hk: 討論 ID，如 `6993508780031016960`
+        - name: body
+          in: body
+          type: string
+          required: true
+          description: Reply body. Plain text only — Markdown is not rendered. Symbols mentioned in the body are auto-linked by the platform.
+          x-description-zh: 回复正文，仅支持纯文本。正文中提到的标的代码会被平台自动识别并关联。
+          x-description-zh-hk: 回覆正文，僅支持純文本。正文中提到的標的代碼會被平台自動識別並關聯。
+        - name: reply_to_id
+          in: body
+          type: string
+          required: false
+          description: ID of the reply to nest under. Omit or set to `"0"` for a top-level reply.
+          x-description-zh: 被回复的回复 ID；不填或填 `"0"` 表示发顶层回复，填入有效 ID 则嵌套在该回复下。
+          x-description-zh-hk: 被回覆的回覆 ID；不填或填 `"0"` 表示發頂層回覆，填入有效 ID 則嵌套在該回覆下。
       x-request-examples:
         - lang: Shell
           label: cURL
           source: |
             curl --request POST \
-              --url 'https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments' \
-              --header 'Authorization: Bearer <access_token>'
+              --url 'https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"body":"<body>","reply_to_id":"<reply_to_id>"}'
         - lang: Python
           label: Python
           source: |
             import requests
 
             resp = requests.post(
-                "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
-                headers={"Authorization": "Bearer <access_token>"},
+                "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"body": "<body>", "reply_to_id": "<reply_to_id>"},
             )
             print(resp.json())
         - lang: Python
@@ -20619,8 +20829,9 @@ paths:
             async def main():
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
-                        "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments",
-                        headers={"Authorization": "Bearer <access_token>"},
+                        "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"body": "<body>", "reply_to_id": "<reply_to_id>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -20628,11 +20839,13 @@ paths:
         - lang: JavaScript
           label: Node.js
           source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments", {
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments", {
               method: "POST",
               headers: {
                 "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
               },
+              body: JSON.stringify({ body: "<body>", reply_to_id: "<reply_to_id>" }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -20643,9 +20856,10 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments"))
                     .header("Authorization", "Bearer <access_token>")
-                    .method("POST", HttpRequest.BodyPublishers.noBody())
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"body\":\"<body>\",\"reply_to_id\":\"<reply_to_id>\"}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -20654,8 +20868,9 @@ paths:
           source: |
             let client = reqwest::Client::new();
             let resp = client
-                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments")
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments")
                     .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "body": "<body>" , "reply_to_id": "<reply_to_id>" }))
                     .send()
                     .await?
                     .text()
@@ -20670,8 +20885,10 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"body\":\"<body>\",\"reply_to_id\":\"<reply_to_id>\"}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -20679,7 +20896,12 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/content/topics/{topic_id}/comments\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments\", strings.NewReader(`{\"body\":\"<body>\",\"reply_to_id\":\"<reply_to_id>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic create-reply 6993508780031016960 --body "Great analysis!"
       x-response-properties:
         - name: item
           type: object
