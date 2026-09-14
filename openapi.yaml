@@ -34,7 +34,7 @@ x-pages:
       | ------ | ----- |
       | `Authorization` | `<access_token>` (the access token, not a Bearer token) |
       | `X-Api-Key` | `<app_key>` |
-      | `X-Timestamp` | Current unix time in **milliseconds** |
+      | `X-Timestamp` | Current unix time in **seconds** |
       | `X-Api-Signature` | `HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature=<sig>` |
 
       ## Computing `X-Api-Signature`
@@ -187,7 +187,7 @@ x-pages:
           #!/usr/bin/env bash
           # Requires openssl. Fill in APP_KEY / APP_SECRET / ACCESS_TOKEN.
           METHOD="GET"; REQ_PATH="/v1/dailycoins/query"; QUERY=""; BODY=""
-          TS="$(date +%s)000"
+          TS="$(date +%s)"
           SIGNED_HEADERS="authorization;x-api-key;x-timestamp"
           SIGNED_VALUES="authorization:${ACCESS_TOKEN}
           x-api-key:${APP_KEY}
@@ -210,7 +210,7 @@ x-pages:
           import hashlib, hmac, time
 
           def sign(method, path, query="", body="", *, app_key, app_secret, access_token):
-              ts = str(int(time.time() * 1000))
+              ts = str(int(time.time()))
               signed_headers = "authorization;x-api-key;x-timestamp"
               signed_values = f"authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n"
               canonical = f"{method}|{path}|{query}|{signed_values}|{signed_headers}|"
@@ -230,7 +230,7 @@ x-pages:
           const crypto = require('crypto')
 
           function sign(method, path, query = '', body = '', { appKey, appSecret, accessToken }) {
-            const ts = String(Date.now())
+            const ts = String(Math.floor(Date.now() / 1000))
             const signedHeaders = 'authorization;x-api-key;x-timestamp'
             const signedValues = `authorization:${accessToken}\nx-api-key:${appKey}\nx-timestamp:${ts}\n`
             let canonical = `${method}|${path}|${query}|${signedValues}|${signedHeaders}|`
@@ -261,7 +261,7 @@ x-pages:
 
           static Map<String, String> sign(String method, String path, String query, String body,
                                           String appKey, String appSecret, String accessToken) throws Exception {
-              String ts = String.valueOf(System.currentTimeMillis());
+              String ts = String.valueOf(System.currentTimeMillis() / 1000);
               String signedHeaders = "authorization;x-api-key;x-timestamp";
               String signedValues = "authorization:" + accessToken + "\nx-api-key:" + appKey + "\nx-timestamp:" + ts + "\n";
               String canonical = method + "|" + path + "|" + query + "|" + signedValues + "|" + signedHeaders + "|";
@@ -290,7 +290,7 @@ x-pages:
           fn sign(method: &str, path: &str, query: &str, body: &str,
                   app_key: &str, app_secret: &str, access_token: &str) -> Vec<(String, String)> {
               let ts = std::time::SystemTime::now()
-                  .duration_since(std::time::UNIX_EPOCH).unwrap().as_millis().to_string();
+                  .duration_since(std::time::UNIX_EPOCH).unwrap().as_secs().to_string();
               let signed_headers = "authorization;x-api-key;x-timestamp";
               let signed_values = format!("authorization:{access_token}\nx-api-key:{app_key}\nx-timestamp:{ts}\n");
               let mut canonical = format!("{method}|{path}|{query}|{signed_values}|{signed_headers}|");
@@ -327,7 +327,7 @@ x-pages:
               return to_hex(d, SHA_DIGEST_LENGTH);
           }
 
-          // ts = current unix time in milliseconds (as a string)
+          // ts = current unix time in seconds (as a string)
           std::string signature(const std::string& method, const std::string& path, const std::string& query,
                                 const std::string& body, const std::string& app_key, const std::string& app_secret,
                                 const std::string& access_token, const std::string& ts) {
@@ -345,7 +345,7 @@ x-pages:
           }
       - label: Go
         lang: Go
-        source: "package main\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha1\"\n\t\"crypto/sha256\"\n\t\"encoding/hex\"\n\t\"fmt\"\n\t\"strconv\"\n\t\"time\"\n)\n\nfunc sign(method, path, query, body, appKey, appSecret, accessToken string) map[string]string {\n\tts := strconv.FormatInt(time.Now().UnixMilli(), 10)\n\tsignedHeaders := \"authorization;x-api-key;x-timestamp\"\n\tsignedValues := fmt.Sprintf(\"authorization:%s\\nx-api-key:%s\\nx-timestamp:%s\\n\", accessToken, appKey, ts)\n\tcanonical := fmt.Sprintf(\"%s|%s|%s|%s|%s|\", method, path, query, signedValues, signedHeaders)\n\tif body != \"\" {\n\t\tbh := sha1.Sum([]byte(body))\n\t\tcanonical += hex.EncodeToString(bh[:])\n\t}\n\tch := sha1.Sum([]byte(canonical))\n\tpayload := \"HMAC-SHA256|\" + hex.EncodeToString(ch[:])\n\tmac := hmac.New(sha256.New, []byte(appSecret))\n\tmac.Write([]byte(payload))\n\tsig := hex.EncodeToString(mac.Sum(nil))\n\treturn map[string]string{\n\t\t\"Authorization\":   accessToken,\n\t\t\"X-Api-Key\":       appKey,\n\t\t\"X-Timestamp\":     ts,\n\t\t\"X-Api-Signature\": fmt.Sprintf(\"HMAC-SHA256 SignedHeaders=%s, Signature=%s\", signedHeaders, sig),\n\t}\n}\n"
+        source: "package main\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha1\"\n\t\"crypto/sha256\"\n\t\"encoding/hex\"\n\t\"fmt\"\n\t\"strconv\"\n\t\"time\"\n)\n\nfunc sign(method, path, query, body, appKey, appSecret, accessToken string) map[string]string {\n\tts := strconv.FormatInt(time.Now().Unix(), 10)\n\tsignedHeaders := \"authorization;x-api-key;x-timestamp\"\n\tsignedValues := fmt.Sprintf(\"authorization:%s\\nx-api-key:%s\\nx-timestamp:%s\\n\", accessToken, appKey, ts)\n\tcanonical := fmt.Sprintf(\"%s|%s|%s|%s|%s|\", method, path, query, signedValues, signedHeaders)\n\tif body != \"\" {\n\t\tbh := sha1.Sum([]byte(body))\n\t\tcanonical += hex.EncodeToString(bh[:])\n\t}\n\tch := sha1.Sum([]byte(canonical))\n\tpayload := \"HMAC-SHA256|\" + hex.EncodeToString(ch[:])\n\tmac := hmac.New(sha256.New, []byte(appSecret))\n\tmac.Write([]byte(payload))\n\tsig := hex.EncodeToString(mac.Sum(nil))\n\treturn map[string]string{\n\t\t\"Authorization\":   accessToken,\n\t\t\"X-Api-Key\":       appKey,\n\t\t\"X-Timestamp\":     ts,\n\t\t\"X-Api-Signature\": fmt.Sprintf(\"HMAC-SHA256 SignedHeaders=%s, Signature=%s\", signedHeaders, sig),\n\t}\n}\n"
   - id: overview
     title: Overview
     x-title-zh: 概览
