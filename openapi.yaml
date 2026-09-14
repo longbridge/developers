@@ -952,9 +952,9 @@ paths:
           in: body
           type: array
           required: true
-          description: 'Filter conditions. Each item is `{ "key": "filter_<indicator>", "min": "<min>", "max": "<max>", "tech_values": {} }` — the indicator key is prefixed with `filter_`.'
-          x-description-zh: '筛选条件。每项为 `{ "key": "filter_<指标>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`——指标 key 带 `filter_` 前缀。'
-          x-description-zh-hk: '篩選條件。每項為 `{ "key": "filter_<指標>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`——指標 key 帶 `filter_` 前綴。'
+          description: 'Filter conditions. Each item is `{ "key": "filter_<indicator>", "min": "<min>", "max": "<max>", "tech_values": {} }`.'
+          x-description-zh: '筛选条件。每项为 `{ "key": "filter_<指标>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`。'
+          x-description-zh-hk: '篩選條件。每項為 `{ "key": "filter_<指標>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`。'
         - name: returns
           in: body
           type: array
@@ -1113,9 +1113,9 @@ paths:
         - name: └ ∟ key
           type: string
           required: false
-          description: Indicator key, carrying the `filter_` prefix (e.g. `filter_pettm`).
-          x-description-zh: 指标键名，带 `filter_` 前缀（如 `filter_pettm`）。
-          x-description-zh-hk: 指標鍵名，帶 `filter_` 前綴（如 `filter_pettm`）。
+          description: Indicator key, e.g. `filter_pettm`.
+          x-description-zh: 指标键名，如 `filter_pettm`。
+          x-description-zh-hk: 指標鍵名，如 `filter_pettm`。
         - name: └ ∟ name
           type: string
           required: false
@@ -23200,9 +23200,9 @@ paths:
         - name: └ key
           type: string
           required: false
-          description: Indicator key, carrying the `filter_` prefix (e.g. `filter_pettm`).
-          x-description-zh: 指标键名，带 `filter_` 前缀（如 `filter_pettm`）。
-          x-description-zh-hk: 指標鍵名，帶 `filter_` 前綴（如 `filter_pettm`）。
+          description: Indicator key, e.g. `filter_pettm`.
+          x-description-zh: 指标键名，如 `filter_pettm`。
+          x-description-zh-hk: 指標鍵名，如 `filter_pettm`。
         - name: └ location
           type: integer
           required: false
