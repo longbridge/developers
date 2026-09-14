@@ -834,6 +834,10 @@ tags:
     x-name-zh: 选股器
     x-name-zh-hk: 選股器
     description: Screen securities by indicators, run saved or recommended strategies, and inspect strategy detail.
+  - name: Signals
+    x-name-zh: 策略信号
+    x-name-zh-hk: 策略信號
+    description: Strategy signals and the catalyst facts (anomalies, factors, sources) that trigger them.
   - name: Trade
     x-name-zh: 交易与订单
     x-name-zh-hk: 交易與訂單
@@ -895,6 +899,982 @@ security:
   - oauth2:
       - openapi
 paths:
+  /v1/signals:
+    get:
+      operationId: signals
+      summary: Query Signals
+      x-summary-zh: 查询策略信号
+      x-summary-zh-hk: 查詢策略信號
+      description: |
+        Query strategy signals, filtered by symbol, strategy, catalyst and time range. Each signal is a strategy’s take on a security, triggered by a catalyst fact.
+      x-description-zh: |
+        查询策略信号，可按标的、策略、催化因子和时间范围过滤。每条信号代表某个策略对一只标的的判断，由一个催化事实（fact）触发。
+      x-description-zh-hk: |
+        查詢策略信號，可按標的、策略、催化因子和時間範圍過濾。每條信號代表某個策略對一隻標的的判斷，由一個催化事實（fact）觸發。
+      tags:
+        - Signals
+      x-parameters:
+        - name: symbol_name
+          in: query
+          type: string
+          required: false
+          description: Filter by security symbol, e.g. `AAPL.US` or `700.HK`. If omitted, returns signals for all symbols.
+          x-description-zh: 按标的代码过滤，如 `AAPL.US` 或 `700.HK`。省略则返回全部标的的信号。
+          x-description-zh-hk: 按標的代碼過濾，如 `AAPL.US` 或 `700.HK`。省略則返回全部標的的信號。
+        - name: strategy_id
+          in: query
+          type: string
+          required: false
+          description: Filter by strategy id, e.g. `buffett-value`. Preferred over the deprecated `strategy_name`; takes precedence when both are provided.
+          x-description-zh: 按策略 id 过滤，如 `buffett-value`。优先于已废弃的 `strategy_name`，两者同时提供时以此为准。
+          x-description-zh-hk: 按策略 id 過濾，如 `buffett-value`。優先於已廢棄的 `strategy_name`，兩者同時提供時以此為準。
+        - name: strategy_name
+          in: query
+          type: string
+          required: false
+          description: Filter by strategy name. Deprecated in favour of `strategy_id`. If omitted, returns signals from all strategies.
+          x-description-zh: 按策略名称过滤。已废弃，请改用 `strategy_id`。省略则返回全部策略的信号。
+          x-description-zh-hk: 按策略名稱過濾。已廢棄，請改用 `strategy_id`。省略則返回全部策略的信號。
+        - name: catalyst_name
+          in: query
+          type: string
+          required: false
+          description: Filter by the name of the factor that triggered the signal, e.g. `EARNINGS_RELEASED` or `macd_12_26_9` — the triggering fact’s `factors[].name`, not the display label. If omitted, any catalyst name is returned.
+          x-description-zh: 按触发信号的因子名称过滤，如 `EARNINGS_RELEASED` 或 `macd_12_26_9`——即触发事实的 `factors[].name`，而非展示用标签。省略则不限催化因子名称。
+          x-description-zh-hk: 按觸發信號的因子名稱過濾，如 `EARNINGS_RELEASED` 或 `macd_12_26_9`——即觸發事實的 `factors[].name`，而非展示用標籤。省略則不限催化因子名稱。
+        - name: catalyst_type
+          in: query
+          type: string
+          required: false
+          description: Filter by the catalyst type that triggered the signal, e.g. `News`, `Fundamental`, `Technical`. If omitted, any catalyst type is returned.
+          x-description-zh: 按触发信号的催化类型过滤，如 `News`、`Fundamental`、`Technical`。省略则不限催化类型。
+          x-description-zh-hk: 按觸發信號的催化類型過濾，如 `News`、`Fundamental`、`Technical`。省略則不限催化類型。
+        - name: start_time
+          in: query
+          type: string
+          required: false
+          description: Only return signals created at or after this time. RFC3339 (a Unix timestamp is also accepted). If omitted, no lower bound.
+          x-description-zh: 仅返回创建时间不早于该时刻的信号。RFC3339（也接受 Unix 时间戳）。省略则无下界。
+          x-description-zh-hk: 僅返回建立時間不早於該時刻的信號。RFC3339（也接受 Unix 時間戳）。省略則無下界。
+        - name: end_time
+          in: query
+          type: string
+          required: false
+          description: Only return signals created at or before this time. RFC3339 (a Unix timestamp is also accepted). If omitted, no upper bound.
+          x-description-zh: 仅返回创建时间不晚于该时刻的信号。RFC3339（也接受 Unix 时间戳）。省略则无上界。
+          x-description-zh-hk: 僅返回建立時間不晚於該時刻的信號。RFC3339（也接受 Unix 時間戳）。省略則無上界。
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of results to return. Defaults to 20.
+          x-description-zh: 返回结果的最大数量。默认 20。
+          x-description-zh-hk: 返回結果的最大數量。預設 20。
+        - name: offset
+          in: query
+          type: integer
+          required: false
+          description: Number of results to skip for pagination. Defaults to 0.
+          x-description-zh: 分页跳过的结果数量。默认 0。
+          x-description-zh-hk: 分頁跳過的結果數量。預設 0。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/signals' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/signals",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/signals",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/signals", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/signals"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/signals")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/signals");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/signals\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: signals
+          type: object[]
+          required: true
+          description: Signals on this page
+          x-description-zh: 本页的信号列表
+          x-description-zh-hk: 本頁的信號列表
+        - name: └ id
+          type: string
+          required: true
+          description: Signal ID, e.g. `sign_992_1a00c9425c3_48ab`
+          x-description-zh: 信号 ID，如 `sign_992_1a00c9425c3_48ab`
+          x-description-zh-hk: 信號 ID，如 `sign_992_1a00c9425c3_48ab`
+        - name: └ symbol
+          type: string
+          required: false
+          description: Security symbol, e.g. `992.HK`
+          x-description-zh: 标的代码，如 `992.HK`
+          x-description-zh-hk: 標的代碼，如 `992.HK`
+        - name: └ company_name
+          type: string
+          required: false
+          description: Company name
+          x-description-zh: 公司名称
+          x-description-zh-hk: 公司名稱
+        - name: └ market
+          type: string
+          required: false
+          description: Market the security trades in, e.g. `HK`
+          x-description-zh: 标的所属市场，如 `HK`
+          x-description-zh-hk: 標的所屬市場，如 `HK`
+        - name: └ title
+          type: string
+          required: false
+          description: Signal headline
+          x-description-zh: 信号标题
+          x-description-zh-hk: 信號標題
+        - name: └ summary
+          type: string
+          required: false
+          description: Natural-language summary of the signal, in Markdown
+          x-description-zh: 信号的自然语言摘要（Markdown）
+          x-description-zh-hk: 信號的自然語言摘要（Markdown）
+        - name: └ strategy_id
+          type: string
+          required: false
+          description: Strategy ID that produced the signal
+          x-description-zh: 产生信号的策略 ID
+          x-description-zh-hk: 產生信號的策略 ID
+        - name: └ strategy_name
+          type: string
+          required: false
+          description: Strategy name that produced the signal
+          x-description-zh: 产生信号的策略名称
+          x-description-zh-hk: 產生信號的策略名稱
+        - name: └ recommend_by
+          type: string
+          required: false
+          description: Who recommended the signal; empty for strategy-generated signals
+          x-description-zh: 信号推荐人；策略自动生成时为空
+          x-description-zh-hk: 信號推薦人；策略自動生成時為空
+        - name: └ expression
+          type: string
+          required: false
+          description: Strategy expression, e.g. `992.HK:GROWTH:long`
+          x-description-zh: 策略表达式，如 `992.HK:GROWTH:long`
+          x-description-zh-hk: 策略表達式，如 `992.HK:GROWTH:long`
+        - name: └ key_fact_id
+          type: string
+          required: false
+          description: ID of the fact that triggered the signal
+          x-description-zh: 触发信号的事实 ID
+          x-description-zh-hk: 觸發信號的事實 ID
+        - name: └ key_catalyst
+          type: string
+          required: false
+          description: Display label of the catalyst that triggered the signal, e.g. `Q1 Revenue Surge`
+          x-description-zh: 触发信号的催化剂展示标签，如 `Q1 Revenue Surge`
+          x-description-zh-hk: 觸發信號的催化劑展示標籤，如 `Q1 Revenue Surge`
+        - name: └ analysis_price
+          type: number
+          required: false
+          description: Price the analysis was based on
+          x-description-zh: 分析所依据的价格
+          x-description-zh-hk: 分析所依據的價格
+        - name: └ conservative_price
+          type: number
+          required: false
+          description: Conservative-scenario target price
+          x-description-zh: 保守情景目标价
+          x-description-zh-hk: 保守情景目標價
+        - name: └ benchmark_price
+          type: number
+          required: false
+          description: Benchmark-scenario target price
+          x-description-zh: 基准情景目标价
+          x-description-zh-hk: 基準情景目標價
+        - name: └ optimistic_price
+          type: number
+          required: false
+          description: Optimistic-scenario target price
+          x-description-zh: 乐观情景目标价
+          x-description-zh-hk: 樂觀情景目標價
+        - name: └ outlook
+          type: string
+          required: false
+          description: 'Outlook the strategy takes on the security: `Strong bullish`, `Bullish`, `Neutral`, `Bearish`, `Strong bearish`'
+          x-description-zh: 策略对标的的观点：`Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish`
+          x-description-zh-hk: 策略對標的的觀點：`Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish`
+        - name: └ outlook_desc
+          type: string
+          required: false
+          description: Outlook label localized in the caller’s language
+          x-description-zh: 观点在调用方语言下的本地化标签
+          x-description-zh-hk: 觀點在調用方語言下的本地化標籤
+        - name: └ status
+          type: integer
+          required: false
+          description: 'Lifecycle status: `0` Pending, `1` Active, `2` Deleted, `3` AiFailed, `4` FilteredByManual, `5` AiSubmitFailed'
+          x-description-zh: 生命周期状态：`0` 待发布、`1` 生效中、`2` 已删除、`3` AI 生成失败、`4` 人工过滤、`5` AI 提交失败
+          x-description-zh-hk: 生命週期狀態：`0` 待發布、`1` 生效中、`2` 已刪除、`3` AI 生成失敗、`4` 人工過濾、`5` AI 提交失敗
+        - name: └ json_data
+          type: string
+          required: false
+          description: Full analysis behind the signal as a JSON document (strategy fit scores, valuation scenarios, evidence sources, related fact IDs). Carried verbatim because its shape is strategy-specific.
+          x-description-zh: 信号背后的完整分析（JSON 文档：策略契合评分、估值情景、证据来源、相关事实 ID）。因结构随策略而异，原样透传。
+          x-description-zh-hk: 信號背後的完整分析（JSON 文檔：策略契合評分、估值情景、證據來源、相關事實 ID）。因結構隨策略而異，原樣透傳。
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time (RFC3339)
+          x-description-zh: 创建时间（RFC3339）
+          x-description-zh-hk: 建立時間（RFC3339）
+        - name: └ updated_at
+          type: string
+          required: true
+          description: Last update time (RFC3339)
+          x-description-zh: 最后更新时间（RFC3339）
+          x-description-zh-hk: 最後更新時間（RFC3339）
+        - name: total
+          type: integer
+          required: true
+          description: Total number of signals matching the filters, for paging with `offset`
+          x-description-zh: 符合过滤条件的信号总数，配合 `offset` 分页
+          x-description-zh-hk: 符合過濾條件的信號總數，配合 `offset` 分頁
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  signals:
+                    - id: sign_992_1a00c9425c3_48ab
+                      symbol: 992.HK
+                      company_name: Lenovo Group
+                      market: HK
+                      title: Momentum breakout
+                      summary: RSI crossed above 70 ...
+                      strategy_id: growth-momentum
+                      strategy_name: Growth Momentum
+                      expression: 992.HK:GROWTH:long
+                      key_fact_id: technical_rsi_14_short_1783674041337603409
+                      key_catalyst: RSI Breakout
+                      analysis_price: 10.5
+                      conservative_price: 11
+                      benchmark_price: 12.5
+                      optimistic_price: 14
+                      outlook: Bullish
+                      outlook_desc: 看涨
+                      status: 1
+                      json_data: '{}'
+                      created_at: '2026-06-01T09:30:00Z'
+                      updated_at: '2026-06-01T09:30:00Z'
+                  total: 1
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/signals/{signal_id}:
+    get:
+      operationId: signal
+      summary: Get Signal Detail
+      x-summary-zh: 获取信号详情
+      x-summary-zh-hk: 獲取信號詳情
+      description: |
+        Get one signal by ID, including the full analysis in `json_data`.
+      x-description-zh: |
+        按 ID 获取单条信号，包含 `json_data` 中的完整分析。
+      x-description-zh-hk: |
+        按 ID 獲取單條信號，包含 `json_data` 中的完整分析。
+      tags:
+        - Signals
+      x-parameters:
+        - name: signal_id
+          in: path
+          type: string
+          required: true
+          description: Signal ID, e.g. `sign_992_1a00c9425c3_48ab`.
+          x-description-zh: 信号 ID，如 `sign_992_1a00c9425c3_48ab`。
+          x-description-zh-hk: 信號 ID，如 `sign_992_1a00c9425c3_48ab`。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/signals/<signal_id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/signals/<signal_id>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/signals/<signal_id>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/signals/<signal_id>", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/signals/<signal_id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/signals/<signal_id>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/signals/<signal_id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/signals/<signal_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: signal
+          type: object
+          required: true
+          description: The signal record
+          x-description-zh: 信号记录
+          x-description-zh-hk: 信號記錄
+        - name: └ id
+          type: string
+          required: true
+          description: Signal ID
+          x-description-zh: 信号 ID
+          x-description-zh-hk: 信號 ID
+        - name: └ symbol
+          type: string
+          required: false
+          description: Security symbol
+          x-description-zh: 标的代码
+          x-description-zh-hk: 標的代碼
+        - name: └ title
+          type: string
+          required: false
+          description: Signal headline
+          x-description-zh: 信号标题
+          x-description-zh-hk: 信號標題
+        - name: └ summary
+          type: string
+          required: false
+          description: Natural-language summary (Markdown)
+          x-description-zh: 自然语言摘要（Markdown）
+          x-description-zh-hk: 自然語言摘要（Markdown）
+        - name: └ outlook
+          type: string
+          required: false
+          description: 'Outlook: `Strong bullish`, `Bullish`, `Neutral`, `Bearish`, `Strong bearish`'
+          x-description-zh: 观点：`Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish`
+          x-description-zh-hk: 觀點：`Strong bullish`、`Bullish`、`Neutral`、`Bearish`、`Strong bearish`
+        - name: └ json_data
+          type: string
+          required: false
+          description: Full strategy analysis as a JSON document, carried verbatim
+          x-description-zh: 完整策略分析（JSON 文档），原样透传
+          x-description-zh-hk: 完整策略分析（JSON 文檔），原樣透傳
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time (RFC3339)
+          x-description-zh: 创建时间（RFC3339）
+          x-description-zh-hk: 建立時間（RFC3339）
+        - name: └ updated_at
+          type: string
+          required: true
+          description: Last update time (RFC3339)
+          x-description-zh: 最后更新时间（RFC3339）
+          x-description-zh-hk: 最後更新時間（RFC3339）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  signal:
+                    id: sign_992_1a00c9425c3_48ab
+                    symbol: 992.HK
+                    title: Momentum breakout
+                    summary: RSI crossed above 70 ...
+                    outlook: Bullish
+                    json_data: '{"core_conclusion":{"outlook_enum":2}}'
+                    created_at: '2026-06-01T09:30:00Z'
+                    updated_at: '2026-06-01T09:30:00Z'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/facts/security_facts:
+    get:
+      operationId: security_facts
+      summary: List Security Facts
+      x-summary-zh: 查询标的催化事实
+      x-summary-zh-hk: 查詢標的催化事實
+      description: |
+        List the fact (catalyst) events for one security — anomaly detections, factor readings, data sources and natural-language summaries. Facts are what strategies react to: a signal names the fact that triggered it in `key_fact_id`.
+      x-description-zh: |
+        查询某只标的的催化事实（fact）事件——异常检测、因子读数、数据来源与自然语言摘要。事实是策略所响应的对象：信号会在 `key_fact_id` 中标明触发它的事实。
+      x-description-zh-hk: |
+        查詢某隻標的的催化事實（fact）事件——異常檢測、因子讀數、數據來源與自然語言摘要。事實是策略所響應的對象：信號會在 `key_fact_id` 中標明觸發它的事實。
+      tags:
+        - Signals
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: true
+          description: The security to query, e.g. `AAPL.US` or `700.HK`. Required.
+          x-description-zh: 要查询的标的，如 `AAPL.US` 或 `700.HK`。必填。
+          x-description-zh-hk: 要查詢的標的，如 `AAPL.US` 或 `700.HK`。必填。
+        - name: begin_time
+          in: query
+          type: string
+          required: false
+          description: Start of the query window (RFC3339). If omitted, includes the earliest available data.
+          x-description-zh: 查询窗口起点（RFC3339）。省略则包含最早可用数据。
+          x-description-zh-hk: 查詢窗口起點（RFC3339）。省略則包含最早可用數據。
+        - name: end_time
+          in: query
+          type: string
+          required: false
+          description: End of the query window (RFC3339). If omitted, returns the latest data.
+          x-description-zh: 查询窗口终点（RFC3339）。省略则返回最新数据。
+          x-description-zh-hk: 查詢窗口終點（RFC3339）。省略則返回最新數據。
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum number of facts to return. When more facts fall inside the range, only the latest `limit` are returned. Defaults to 100.
+          x-description-zh: 返回事实的最大数量。区间内事实更多时，仅返回最新的 `limit` 条。默认 100。
+          x-description-zh-hk: 返回事實的最大數量。區間內事實更多時，僅返回最新的 `limit` 條。預設 100。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/facts/security_facts?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/facts/security_facts",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/facts/security_facts",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/facts/security_facts")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/facts/security_facts?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/facts/security_facts")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/facts/security_facts?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/facts/security_facts?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: facts
+          type: object[]
+          required: true
+          description: Fact (catalyst) events for the security
+          x-description-zh: 标的的催化事实事件
+          x-description-zh-hk: 標的的催化事實事件
+        - name: └ fact_id
+          type: string
+          required: false
+          description: Fact ID, e.g. `technical_rsi_14_short_1783674041337603409`
+          x-description-zh: 事实 ID，如 `technical_rsi_14_short_1783674041337603409`
+          x-description-zh-hk: 事實 ID，如 `technical_rsi_14_short_1783674041337603409`
+        - name: └ fact_type
+          type: string
+          required: false
+          description: 'Kind of fact: `News`, `Fundamental`, `Technical`'
+          x-description-zh: 事实类型：`News`、`Fundamental`、`Technical`
+          x-description-zh-hk: 事實類型：`News`、`Fundamental`、`Technical`
+        - name: └ direction
+          type: string
+          required: false
+          description: 'Side the fact points to: `long`, `short`, `neutral`'
+          x-description-zh: 事实方向：`long`、`short`、`neutral`
+          x-description-zh-hk: 事實方向：`long`、`short`、`neutral`
+        - name: └ occur_time
+          type: string
+          required: true
+          description: When the fact occurred (RFC3339)
+          x-description-zh: 事实发生时间（RFC3339）
+          x-description-zh-hk: 事實發生時間（RFC3339）
+        - name: └ symbols_info
+          type: object[]
+          required: false
+          description: Securities the fact is about (`symbol`, `security_name`)
+          x-description-zh: 事实涉及的标的（`symbol`、`security_name`）
+          x-description-zh-hk: 事實涉及的標的（`symbol`、`security_name`）
+        - name: └ factors
+          type: object[]
+          required: false
+          description: Factors that contributed to the fact (`name`, `factor_groups`, `long_short_direction`, `trigger_condition`, `anomaly_detection`)
+          x-description-zh: 构成该事实的因子（`name`、`factor_groups`、`long_short_direction`、`trigger_condition`、`anomaly_detection`）
+          x-description-zh-hk: 構成該事實的因子（`name`、`factor_groups`、`long_short_direction`、`trigger_condition`、`anomaly_detection`）
+        - name: └ data_source
+          type: object[]
+          required: false
+          description: Where the fact came from (`source_name`, `type`, `url`, `icon`)
+          x-description-zh: 事实来源（`source_name`、`type`、`url`、`icon`）
+          x-description-zh-hk: 事實來源（`source_name`、`type`、`url`、`icon`）
+        - name: └ nl_info
+          type: object
+          required: false
+          description: Natural-language rendering of the fact (`title`, `sub_title`, `summary`, `invest_anal`, `eli_explain`)
+          x-description-zh: 事实的自然语言呈现（`title`、`sub_title`、`summary`、`invest_anal`、`eli_explain`）
+          x-description-zh-hk: 事實的自然語言呈現（`title`、`sub_title`、`summary`、`invest_anal`、`eli_explain`）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  facts:
+                    - fact_id: technical_rsi_14_short_1783674041337603409
+                      fact_type: Technical
+                      direction: short
+                      occur_time: '2026-06-01T00:00:00Z'
+                      symbols_info:
+                        - symbol: AAPL.US
+                          security_name: Apple
+                      factors:
+                        - name: rsi_14
+                          factor_groups:
+                            - MOMENTUM
+                          long_short_direction: short
+                          trigger_condition: RSI > 70
+                          anomaly_detection:
+                            anomaly_result: ''
+                            significance_level: ''
+                            test_method: ''
+                            thresholds:
+                              low: ''
+                              medium: ''
+                              high: ''
+                      data_source:
+                        - source_name: Nasdaq
+                          type: Technical
+                          url: ''
+                          icon: ''
+                      nl_info:
+                        title: RSI overbought
+                        sub_title: ''
+                        summary: '[]'
+                        invest_anal: '[]'
+                        eli_explain: '[]'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/etf-asset-allocation:
+    get:
+      operationId: etf_asset_allocation
+      summary: ETF Asset Allocation
+      x-summary-zh: ETF 资产配置
+      x-summary-zh-hk: ETF 資產配置
+      description: |
+        Get ETF asset allocation, grouped by element type: holdings, regional, asset class and industry.
+      x-description-zh: |
+        获取 ETF 资产配置，按元素类型分组：持仓、地区、资产类别与行业。
+      x-description-zh-hk: |
+        獲取 ETF 資產配置，按元素類型分組：持倉、地區、資產類別與行業。
+      tags:
+        - Analytics
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: true
+          description: ETF symbol, e.g. `QQQ.US`.
+          x-description-zh: ETF 代码，如 `QQQ.US`。
+          x-description-zh-hk: ETF 代碼，如 `QQQ.US`。
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/quote/etf-asset-allocation?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/quote/etf-asset-allocation",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/quote/etf-asset-allocation",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/quote/etf-asset-allocation")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/etf-asset-allocation?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/etf-asset-allocation")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/etf-asset-allocation?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/etf-asset-allocation?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: info
+          type: object[]
+          required: true
+          description: Asset allocation groups (one per element type)
+          x-description-zh: 资产配置分组（每种元素类型一组）
+          x-description-zh-hk: 資產配置分組（每種元素類型一組）
+        - name: └ report_date
+          type: string
+          required: true
+          description: Report date, e.g. `20260601`
+          x-description-zh: 报告日期，如 `20260601`
+          x-description-zh-hk: 報告日期，如 `20260601`
+        - name: └ asset_type
+          type: string
+          required: true
+          description: Element type of this group (holdings / regional / asset class / industry)
+          x-description-zh: 本组的元素类型（持仓 / 地区 / 资产类别 / 行业）
+          x-description-zh-hk: 本組的元素類型（持倉 / 地區 / 資產類別 / 行業）
+        - name: └ lists
+          type: object[]
+          required: false
+          description: Elements in this group
+          x-description-zh: 本组的元素列表
+          x-description-zh-hk: 本組的元素列表
+        - name: └ └ name
+          type: string
+          required: true
+          description: Element name
+          x-description-zh: 元素名称
+          x-description-zh-hk: 元素名稱
+        - name: └ └ code
+          type: string
+          required: false
+          description: Security code (holdings only), e.g. `NVDA`
+          x-description-zh: 证券代码（仅持仓），如 `NVDA`
+          x-description-zh-hk: 證券代碼（僅持倉），如 `NVDA`
+        - name: └ └ position_ratio
+          type: string
+          required: true
+          description: Position ratio, e.g. `0.0861114`
+          x-description-zh: 持仓占比，如 `0.0861114`
+          x-description-zh-hk: 持倉佔比，如 `0.0861114`
+        - name: └ └ symbol
+          type: string
+          required: false
+          description: Security symbol (holdings only), e.g. `NVDA.US`
+          x-description-zh: 证券代码带市场后缀（仅持仓），如 `NVDA.US`
+          x-description-zh-hk: 證券代碼帶市場後綴（僅持倉），如 `NVDA.US`
+        - name: └ └ name_locales_map
+          type: object
+          required: false
+          description: Localized names (locale → name, e.g. `zh-CN` → `英伟达`)
+          x-description-zh: 本地化名称（locale → 名称，如 `zh-CN` → `英伟达`）
+          x-description-zh-hk: 本地化名稱（locale → 名稱，如 `zh-CN` → `英偉達`）
+        - name: └ └ holding_detail
+          type: object
+          required: false
+          description: Holding detail (holdings only)
+          x-description-zh: 持仓明细（仅持仓）
+          x-description-zh-hk: 持倉明細（僅持倉）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  info:
+                    - report_date: '20260601'
+                      asset_type: holdings
+                      lists:
+                        - name: NVIDIA
+                          code: NVDA
+                          position_ratio: '0.0861114'
+                          symbol: NVDA.US
+                          name_locales_map:
+                            zh-CN: 英伟达
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/quote/ai/screener/indicators:
     get:
       operationId: screener_indicators
