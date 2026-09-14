@@ -10238,9 +10238,9 @@ paths:
         - name: └ ∟ key
           type: string
           required: false
-          description: Indicator key (no `filter_` prefix)
-          x-description-zh: 指标键值（不含 `filter_` 前缀）
-          x-description-zh-hk: 指標鍵值（不含 `filter_` 前綴）
+          description: Indicator key, e.g. `filter_pettm`.
+          x-description-zh: 指标键名，如 `filter_pettm`。
+          x-description-zh-hk: 指標鍵名，如 `filter_pettm`。
         - name: └ ∟ min
           type: string
           required: false
