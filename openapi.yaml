@@ -1092,12 +1092,12 @@ paths:
           description: Matched stock list.
           x-description-zh: 匹配的股票列表。
           x-description-zh-hk: 匹配的股票列表。
-        - name: └ counter_id
+        - name: └ symbol
           type: string
           required: false
-          description: Internal security identifier, e.g. `ST/US/WXT`.
-          x-description-zh: 内部标的标识，如 `ST/US/WXT`。
-          x-description-zh-hk: 內部標的標識，如 `ST/US/WXT`。
+          description: Security symbol, e.g. `WXT.US`.
+          x-description-zh: 标的代码，如 `WXT.US`。
+          x-description-zh-hk: 標的代碼，如 `WXT.US`。
         - name: └ name
           type: string
           required: false
@@ -18104,12 +18104,12 @@ paths:
           description: Industry name
           x-description-zh: 行业名称
           x-description-zh-hk: 行業名稱
-        - name: └ ∟ counter_id
+        - name: └ ∟ symbol
           type: string
           required: false
-          description: Industry counter ID (`BK/MARKET/ID` format), usable in `industry_peers`
-          x-description-zh: 行业唯一标识（`BK/市场/ID` 格式），可直接传入 `industry_peers`
-          x-description-zh-hk: 行業唯一標識（`BK/市場/ID` 格式），可直接傳入 `industry_peers`
+          description: Industry symbol, usable as `symbol` in `industry_peers` (e.g. `IN20245.HK`).
+          x-description-zh: 行业标识，可作为 `symbol` 传入 `industry_peers`（如 `IN20245.HK`）。
+          x-description-zh-hk: 行業標識，可作為 `symbol` 傳入 `industry_peers`（如 `IN20245.HK`）。
         - name: └ ∟ chg
           type: string
           required: false
@@ -18322,12 +18322,12 @@ paths:
           description: Market code
           x-description-zh: 市场代码
           x-description-zh-hk: 市場代碼
-        - name: counter_id
+        - name: symbol
           type: string
           required: false
-          description: Sector counter ID (present on root node; empty string on child nodes)
-          x-description-zh: 板块唯一标识（根节点有值，子节点为空字符串）
-          x-description-zh-hk: 板塊唯一標識（根節點有值，子節點為空字串）
+          description: Sector symbol (present on the root node; empty string on child nodes).
+          x-description-zh: 板块标识（根节点上有值，子节点为空字符串）。
+          x-description-zh-hk: 板塊標識（根節點上有值，子節點為空字符串）。
         - name: stock_num
           type: integer
           required: false
@@ -29881,18 +29881,6 @@ paths:
           description: Element type of this group (holdings / regional / asset class / industry)
           x-description-zh: 本组的元素类型（持仓 / 地区 / 资产类别 / 行业）
           x-description-zh-hk: 本組的元素類型（持倉 / 地區 / 資產類別 / 行業）
-        - name: └ ∟ profit_max_counter_id
-          type: string
-          required: false
-          description: Internal ID of the max-profit security.
-          x-description-zh: 最大盈利标的内部标识。
-          x-description-zh-hk: 最大盈利標的內部標識。
-        - name: └ ∟ loss_max_counter_id
-          type: string
-          required: false
-          description: Internal ID of the max-loss security.
-          x-description-zh: 最大亏损标的内部标识。
-          x-description-zh-hk: 最大虧損標的內部標識。
         - name: └ ∟ profit_max_symbol
           type: string
           required: false
