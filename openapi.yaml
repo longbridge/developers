@@ -18189,13 +18189,13 @@ paths:
       tags:
         - Fundamental
       x-parameters:
-        - name: counter_id
+        - name: symbol
           in: query
           type: string
           required: true
-          description: Industry unique identifier (BK/MARKET/ID format) from `industry_rank`
-          x-description-zh: 行业唯一标识（BK/市场/ID 格式），来源于 `industry_rank`
-          x-description-zh-hk: 行業唯一標識（BK/市場/ID 格式），來源於 `industry_rank`
+          description: Industry symbol, e.g. `IN20245.HK`.
+          x-description-zh: 行业标识，如 `IN20245.HK`。
+          x-description-zh-hk: 行業標識，如 `IN20245.HK`。
         - name: market
           in: query
           type: string
@@ -33457,13 +33457,13 @@ paths:
       tags:
         - Trade
       x-parameters:
-        - name: counter_id
+        - name: symbol
           in: query
           type: string
           required: true
-          description: 'Security symbol, `ticker.region` format, example: `700.HK`'
-          x-description-zh: 'Security symbol, `ticker.region` format, example: `700.HK`'
-          x-description-zh-hk: 'Security symbol, `ticker.region` format, example: `700.HK`'
+          description: Security symbol in `ticker.region` format, e.g. `700.HK`.
+          x-description-zh: 标的代码，`ticker.region` 格式，如 `700.HK`。
+          x-description-zh-hk: 標的代碼，`ticker.region` 格式，如 `700.HK`。
       x-codeSamples:
         - lang: Shell
           label: CLI
