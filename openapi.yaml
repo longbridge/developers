@@ -922,22 +922,10 @@ paths:
       x-summary-zh-hk: 選股篩選
       description: |
         Filter stocks by strategy ID or custom indicator conditions, with pagination support.
-
-        :::warning Note on JSON output format
-        Each `items[]` entry carries its metrics inside a nested `indicators[]` array (not flat top-level fields). Indicator `key` values carry the `filter_` prefix (e.g. `filter_pettm`), and every `value` is returned as a string.
-        :::
       x-description-zh: |
         按策略 ID 或自定义指标条件筛选股票，支持分页。
-
-        :::warning JSON 输出格式说明
-        每个 `items[]` 元素的指标值都在嵌套的 `indicators[]` 数组里（并非扁平的顶层字段）。指标 `key` 带 `filter_` 前缀（如 `filter_pettm`），每个 `value` 都以字符串返回。
-        :::
       x-description-zh-hk: |
         按策略 ID 或自定義指標條件篩選股票，支持分頁。
-
-        :::warning JSON 輸出格式說明
-        每個 `items[]` 元素的指標值都在嵌套的 `indicators[]` 數組裡（並非扁平的頂層字段）。指標 `key` 帶 `filter_` 前綴（如 `filter_pettm`），每個 `value` 都以字符串返回。
-        :::
       tags:
         - Screener
       x-parameters:
@@ -959,9 +947,9 @@ paths:
           in: body
           type: array
           required: true
-          description: Indicator keys to return for each match (also prefixed with `filter_`).
-          x-description-zh: 每个匹配项需返回的指标 key 列表（同样带 `filter_` 前缀）。
-          x-description-zh-hk: 每個匹配項需返回的指標 key 列表（同樣帶 `filter_` 前綴）。
+          description: Indicator keys to return for each match, e.g. `filter_pettm`.
+          x-description-zh: 每个匹配项需返回的指标 key 列表，如 `filter_pettm`。
+          x-description-zh-hk: 每個匹配項需返回的指標 key 列表，如 `filter_pettm`。
         - name: page
           in: body
           type: integer
@@ -9575,22 +9563,10 @@ paths:
       x-summary-zh-hk: 選股指標
       description: |
         Get all indicator definitions supported by the [stock screener](https://longbridge.com/screener), including keys, names, units, and available ranges. Use these to build custom filter conditions.
-
-        :::warning SDK response
-        The `data` field contains a grouped structure `{"groups": [{...}]}`. The CLI `screener indicators --format json` flattens this to a flat array for convenience.
-        :::
       x-description-zh: |
         获取[选股器](https://longbridge.com/screener) 支持的所有指标定义，包含键值、名称、单位和可用范围，可用于构建自定义筛选条件。
-
-        :::warning SDK 响应
-        `data` 字段为分组结构 `{"groups": [{...}]}`。CLI `screener indicators --format json` 会将其展平为扁平数组以方便使用。
-        :::
       x-description-zh-hk: |
         獲取[選股器](https://longbridge.com/screener) 支持的所有指標定義，包含鍵值、名稱、單位和可用範圍，可用於構建自定義篩選條件。
-
-        :::warning SDK 響應
-        `data` 字段為分組結構 `{"groups": [{...}]}`。CLI `screener indicators --format json` 會將其展平為扁平數組以方便使用。
-        :::
       tags:
         - Screener
       x-codeSamples:
@@ -9719,9 +9695,9 @@ paths:
         - name: └ ∟ key
           type: string
           required: false
-          description: Indicator key for building filter conditions (no `filter_` prefix)
-          x-description-zh: 指标键值，用于构建筛选条件（不含 `filter_` 前缀）
-          x-description-zh-hk: 指標鍵值，用於構建篩選條件（不含 `filter_` 前綴）
+          description: Indicator key, e.g. `filter_pettm`.
+          x-description-zh: 指标键名，如 `filter_pettm`。
+          x-description-zh-hk: 指標鍵名，如 `filter_pettm`。
         - name: └ ∟ name
           type: string
           required: false
