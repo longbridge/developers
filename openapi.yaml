@@ -969,7 +969,7 @@ paths:
           label: CLI
           source: |
             longbridge screener search --strategy-id 42
-            longbridge screener search --market HK --filter filter_marketcap:100:1000
+            longbridge screener search --market HK --filter marketcap:100:1000
       x-request-examples:
         - lang: Shell
           label: cURL
