@@ -1,0 +1,22 @@
+---
+// Localized path-based route: /<locale>/docs/api/<operationId>.
+import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
+import type { Locale } from '@longbridge/openapi-utils'
+import { endpointList } from '@longbridge/openapi-api-reference/markdown'
+import rawYaml from '../../../../../openapi.yaml?raw'
+
+export function getStaticPaths() {
+  const ops = endpointList(rawYaml)
+  return (['zh-CN', 'zh-HK'] as const).flatMap((locale) =>
+    ops.map((e) => ({
+      params: { locale, op: e.operationId },
+      props: { summary: e.summary },
+    }))
+  )
+}
+
+const { summary } = Astro.props as { summary: string }
+const locale = Astro.params.locale as Locale
+---
+
+<ApiReferenceLayout title={`${summary} · API Reference`} locale={locale} />

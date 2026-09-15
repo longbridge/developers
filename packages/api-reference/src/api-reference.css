@@ -5,6 +5,11 @@
  * Syntax highlight classes: .hl-k .hl-s .hl-n .hl-b .hl-cmd .hl-flag .hl-punct .hl-comment
  */
 
+/* Quote-permission card + `:::` callout boxes — ported 1:1 from docs so they
+   render identically in the reference. */
+@import './QuotePermission.css';
+@import './callout.css';
+
 /* ── Root layout ─────────────────────────────────────────────────────────── */
 
 .api-reference-page {
@@ -121,7 +126,6 @@
 
 /* ── Method badges (nav + detail) ────────────────────────────────────────── */
 
-.nav-method,
 .ep-method-badge {
   display: inline-block;
   padding: 1px 5px;
@@ -131,6 +135,24 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   flex-shrink: 0;
+}
+
+/* Sidebar method badge — fixed width so GET/POST/PUT/DELETE all align, and
+   subtle enough to sit next to the docs-style item text. */
+.nav-method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  margin-right: 8px;
+  padding: 2px 0;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .method-get    { background: #dcfce7; color: #166534; }
@@ -607,4 +629,383 @@
   :root:not([data-theme="light"]) .card-header {
     background: #16202d;
   }
+}
+
+/* ── CLI block (docs-style terminal card) ────────────────────────────────── */
+
+.ep-cli-card {
+  position: relative;
+  margin: 16px 0 20px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  background: #0d1117;
+  overflow: hidden;
+}
+.ep-cli-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+  background: #161b22;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom-right-radius: 6px;
+}
+.ep-cli-pre {
+  margin: 0;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e6edf3;
+}
+.ep-cli-pre code { white-space: pre; }
+
+/* "SDK method parameters." note under the Parameters heading */
+.section-note {
+  margin: -4px 0 12px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ── Docs-style single-column endpoint detail ────────────────────────────── */
+
+.api-main--docs {
+  display: block;
+}
+.api-content--docs {
+  max-width: 900px;
+  min-width: 0;
+}
+
+/* Section headings like docs (not the small uppercase labels) */
+.api-main--docs .section-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--lb-fg-1, #1f2937);
+  margin: 32px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+}
+
+/* Parameters / schema tables — mirror docs `.docs-content table` */
+.api-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.api-param-table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.api-param-table th,
+.api-param-table td {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  padding: 8px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+.api-param-table th {
+  background: var(--lb-bg-2, #f8fafc);
+  color: var(--lb-fg-2, #64748b);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.api-param-table tbody tr:nth-child(2n) {
+  background: var(--lb-bg-2, #f8fafc);
+}
+.api-param-table td code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+.api-param-table .param-type {
+  color: var(--lb-fg-2, #64748b);
+  font-size: 13px;
+}
+.api-param-table .param-required.is-required {
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 12px;
+}
+.api-param-table .param-required.is-optional {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Code examples flow in the single column (not sticky right rail) */
+.api-main--docs .code-panel {
+  position: static;
+  top: auto;
+  max-width: 100%;
+}
+.api-section--code {
+  margin-top: 8px;
+}
+
+/* ── Docs-model: content + right TOC grid ────────────────────────────────── */
+.api-doc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: 3rem;
+  align-items: start;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+@media (max-width: 1024px) {
+  .api-doc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* Let the grid track cap the content width (matches docs .docs-inner) */
+.api-doc-layout .api-content--docs {
+  max-width: none;
+}
+@media (max-width: 1100px) {
+  .api-doc-layout {
+    grid-template-columns: 1fr;
+  }
+  .api-toc {
+    display: none;
+  }
+}
+
+.section-subtitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+  margin: 24px 0 10px;
+}
+
+/* On this page TOC */
+.api-toc {
+  position: sticky;
+  top: calc(var(--lb-nav-height, 64px) + 40px);
+  font-size: 13px;
+}
+.api-toc-title {
+  font-weight: 600;
+  color: var(--lb-fg-2, #64748b);
+  margin: 0 0 10px;
+}
+.api-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+}
+.api-toc-list li {
+  margin: 0;
+}
+.api-toc-list a {
+  display: block;
+  padding: 4px 0 4px 14px;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  color: var(--lb-fg-2, #64748b);
+  text-decoration: none;
+}
+.api-toc-list a:hover {
+  color: var(--lb-brand, #16a34a);
+}
+.api-toc-list li.is-sub a {
+  padding-left: 26px;
+  font-size: 12px;
+}
+.error-code-note {
+  color: var(--lb-fg-2, #64748b);
+  font-size: 14px;
+}
+
+/* ── Docs-style LIGHT code (tabs + single) ───────────────────────────────── */
+.code-tabs {
+  margin: 8px 0 4px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f6f8fa;
+}
+.code-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  background: #fff;
+}
+.code-tabs-list {
+  display: flex;
+  overflow-x: auto;
+}
+.code-tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.code-tab.is-active {
+  color: var(--lb-fg-1, #1f2937);
+  border-bottom-color: var(--lb-brand, #16a34a);
+  font-weight: 600;
+}
+.code-tabs-copy {
+  flex: none;
+  margin-right: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+.code-tabs-body {
+  overflow-x: auto;
+}
+.code-tabs .code-pre {
+  margin: 0;
+  padding: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #24292e;
+  background: #f6f8fa;
+}
+/* github-light token colors (shared by CodeTabs and x-page markdown code) */
+.code-tabs .hl-k,
+.code-tabs .hl-b,
+.api-page-md .hl-k,
+.api-page-md .hl-b {
+  color: #d73a49;
+}
+.code-tabs .hl-s,
+.api-page-md .hl-s {
+  color: #032f62;
+}
+.code-tabs .hl-n,
+.api-page-md .hl-n {
+  color: #005cc5;
+}
+.code-tabs .hl-cmd,
+.api-page-md .hl-cmd {
+  color: #6f42c1;
+}
+.code-tabs .hl-flag,
+.api-page-md .hl-flag {
+  color: #e36209;
+}
+.code-tabs .hl-punct,
+.api-page-md .hl-punct {
+  color: #24292e;
+}
+.code-tabs .hl-comment,
+.api-page-md .hl-comment {
+  color: #6a737d;
+  font-style: italic;
+}
+
+:root[data-theme="dark"] .code-tabs,
+:root[data-theme="dark"] .code-tabs .code-pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-theme="dark"] .code-tabs-bar {
+  background: #161b22;
+}
+
+/* Field-name column in parameter/response tables: plain monospace, no inline-
+   code background pill (docs param tables show names without a background). */
+.docs-content .api-fields td code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.92em;
+  color: inherit;
+}
+
+/* Page-item icon shares the same fixed column width as the method badge so all
+   sidebar item text (pages + endpoints) aligns to one left edge. */
+.nav-page-icon {
+  width: 42px;
+  margin-right: 8px;
+}
+
+/* Markdown code blocks inside x-pages — styled like the CodeTabs card (light,
+   rounded, bordered) instead of bare text. */
+.api-page-md pre {
+  margin: 16px 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: #f6f8fa;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #24292e;
+}
+.api-page-md pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+/* Inline code inside x-page prose */
+.api-page-md :not(pre) > code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] .api-page-md pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-theme="dark"] .api-page-md :not(pre) > code {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Copy button injected into x-page markdown code blocks */
+.api-page-md pre .page-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.api-page-md pre:hover .page-copy-btn {
+  opacity: 1;
+}
+:root[data-theme="dark"] .api-page-md pre .page-copy-btn {
+  background: #161b22;
+  color: #9ca3af;
+}
+
+/* Push the slim DocFooter to the bottom on short pages (e.g. the intro) instead
+   of letting it float up right under the content. Scoped to the reference. */
+[data-lbus-component="api-reference"] .docs-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+}
+[data-lbus-component="api-reference"] .docs-main {
+  flex: 1 0 auto;
 }

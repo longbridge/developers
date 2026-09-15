@@ -15,16 +15,16 @@ longbridge industry-rank --market US
 ```
 
 ```
-| rank | name                                    | counter_id      | chg    | indicator |
+| rank | name                                    | symbol      | chg    | indicator |
 |------|-----------------------------------------|-----------------|--------|-----------|
-| 1    | Semiconductors                          | BK/US/IN00258   | +3.82% | ...       |
-| 2    | Software - Infrastructure               | BK/US/IN00305   | +2.91% | ...       |
-| 3    | Biotechnology                           | BK/US/IN00043   | +2.54% | ...       |
-| 4    | Electronic Components                   | BK/US/IN00099   | +1.98% | ...       |
-| 5    | Asset Management                        | BK/US/IN00033   | +1.73% | ...       |
+| 1    | Semiconductors                          | IN00258.US   | +3.82% | ...       |
+| 2    | Software - Infrastructure               | IN00305.US   | +2.91% | ...       |
+| 3    | Biotechnology                           | IN00043.US   | +2.54% | ...       |
+| 4    | Electronic Components                   | IN00099.US   | +1.98% | ...       |
+| 5    | Asset Management                        | IN00033.US   | +1.73% | ...       |
 ```
 
-The `counter_id` column (e.g. `BK/US/IN00258`) can be passed directly to [`industry-peers`](./industry-peers) to explore the competitive tree within that sector.
+The `symbol` column (e.g. `IN00258.US`) can be passed directly to [`industry-peers`](./industry-peers) to explore the competitive tree within that sector.
 
 ## Examples
 
@@ -51,8 +51,8 @@ longbridge industry-rank --market CN --indicator revenue-growth
 ### Then drill into a sector
 
 ```bash
-# Get the counter_id from industry-rank, then explore its sub-sectors
-longbridge industry-peers BK/US/IN00258
+# Get the symbol from industry-rank, then explore its sub-sectors
+longbridge industry-peers IN00258.US
 ```
 
 ## Options
