@@ -29881,18 +29881,6 @@ paths:
           description: Element type of this group (holdings / regional / asset class / industry)
           x-description-zh: 本组的元素类型（持仓 / 地区 / 资产类别 / 行业）
           x-description-zh-hk: 本組的元素類型（持倉 / 地區 / 資產類別 / 行業）
-        - name: └ ∟ profit_max_symbol
-          type: string
-          required: false
-          description: Symbol of the max-profit security.
-          x-description-zh: 最大盈利标的代码。
-          x-description-zh-hk: 最大盈利標的代碼。
-        - name: └ ∟ loss_max_symbol
-          type: string
-          required: false
-          description: Symbol of the max-loss security.
-          x-description-zh: 最大亏损标的代码。
-          x-description-zh-hk: 最大虧損標的代碼。
         - name: └ ipo_subscription
           type: integer
           required: false
