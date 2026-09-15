@@ -940,9 +940,9 @@ paths:
           in: body
           type: array
           required: true
-          description: 'Filter conditions. Each item is `{ "key": "filter_<indicator>", "min": "<min>", "max": "<max>", "tech_values": {} }`.'
-          x-description-zh: '筛选条件。每项为 `{ "key": "filter_<指标>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`。'
-          x-description-zh-hk: '篩選條件。每項為 `{ "key": "filter_<指標>", "min": "<最小>", "max": "<最大>", "tech_values": {} }`。'
+          description: 'Filter conditions. Each item is `{ "key": "filter_pettm", "min": "10", "max": "30", "tech_values": {} }`.'
+          x-description-zh: '筛选条件。每项为 `{ "key": "filter_pettm", "min": "10", "max": "30", "tech_values": {} }`。'
+          x-description-zh-hk: '篩選條件。每項為 `{ "key": "filter_pettm", "min": "10", "max": "30", "tech_values": {} }`。'
         - name: returns
           in: body
           type: array
