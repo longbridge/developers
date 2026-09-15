@@ -1419,7 +1419,7 @@ paths:
                   events:
                     - stock:
                         code: TSLA
-                        counter_id: ST/US/TSLA
+                        symbol: TSLA.US
                         name: 特斯拉
                         change: '-0.0388'
                         last_done: '404.110'
@@ -17239,7 +17239,7 @@ paths:
                 message: success
                 data:
                   list:
-                    - counter_id: ST/US/AAPL
+                    - symbol: AAPL.US
                       name: Apple Inc.
                       currency: USD
                       market_value: '3241500000000'
@@ -17262,7 +17262,7 @@ paths:
                           pe: '41.49'
                           pb: '35.64'
                           ps: '6.60'
-                    - counter_id: ST/US/MSFT
+                    - symbol: MSFT.US
                       name: Microsoft
                       currency: USD
                       market_value: '3085000000000'
@@ -18158,7 +18158,7 @@ paths:
                   items:
                     - lists:
                         - name: Technology
-                          counter_id: BK/US/IN00258
+                          symbol: IN00258.US
                           chg: '0.0231'
                           leading_name: NVIDIA
                           leading_ticker: NVDA.US
@@ -18214,7 +18214,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/quote/industries/peers?counter_id=<counter_id>&market=<market>' \
+              --url 'https://openapi.longbridge.com/v1/quote/industries/peers?symbol=<symbol>&market=<market>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -18224,7 +18224,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/quote/industries/peers",
                 headers={"Authorization": "Bearer <access_token>"},
-                params={"counter_id": "<counter_id>", "market": "<market>"},
+                params={"symbol": "<symbol>", "market": "<market>"},
             )
             print(resp.json())
         - lang: Python
@@ -18238,7 +18238,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/quote/industries/peers",
                         headers={"Authorization": "Bearer <access_token>"},
-                        params={"counter_id": "<counter_id>", "market": "<market>"},
+                        params={"symbol": "<symbol>", "market": "<market>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -18247,7 +18247,7 @@ paths:
           label: Node.js
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/quote/industries/peers")
-            url.searchParams.set("counter_id", "<counter_id>")
+            url.searchParams.set("symbol", "<symbol>")
             url.searchParams.set("market", "<market>")
 
             const resp = await fetch(url, {
@@ -18265,7 +18265,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/industries/peers?counter_id=<counter_id>&market=<market>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/industries/peers?symbol=<symbol>&market=<market>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -18278,7 +18278,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/industries/peers")
                     .header("Authorization", "Bearer <access_token>")
-                    .query(&[("counter_id", "<counter_id>"), ("market", "<market>")])
+                    .query(&[("symbol", "<symbol>"), ("market", "<market>")])
                     .send()
                     .await?
                     .text()
@@ -18293,7 +18293,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/industries/peers?counter_id=<counter_id>&market=<market>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/industries/peers?symbol=<symbol>&market=<market>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -18302,7 +18302,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/industries/peers?counter_id=<counter_id>&market=<market>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/industries/peers?symbol=<symbol>&market=<market>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: top
           type: object
@@ -18366,13 +18366,13 @@ paths:
                     market: US
                   chain:
                     name: Technology
-                    counter_id: BK/US/IN00258
+                    symbol: IN00258.US
                     stock_num: 542
                     chg: '0.0231'
                     ytd_chg: '0.0875'
                     next:
                       - name: 在线消费电子产品零售
-                        counter_id: ''
+                        symbol: ''
                         stock_num: 4
                         chg: '0.0268'
                         ytd_chg: '-0.1869'
@@ -33475,7 +33475,7 @@ paths:
           label: cURL
           source: |
             curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>' \
+              --url 'https://openapi.longbridge.com/v1/orders/info?symbol=<symbol>' \
               --header 'Authorization: Bearer <access_token>'
         - lang: Python
           label: Python
@@ -33485,7 +33485,7 @@ paths:
             resp = requests.get(
                 "https://openapi.longbridge.com/v1/orders/info",
                 headers={"Authorization": "Bearer <access_token>"},
-                params={"counter_id": "<counter_id>"},
+                params={"symbol": "<symbol>"},
             )
             print(resp.json())
         - lang: Python
@@ -33499,7 +33499,7 @@ paths:
                     async with session.get(
                         "https://openapi.longbridge.com/v1/orders/info",
                         headers={"Authorization": "Bearer <access_token>"},
-                        params={"counter_id": "<counter_id>"},
+                        params={"symbol": "<symbol>"},
                     ) as resp:
                         print(await resp.json())
 
@@ -33508,7 +33508,7 @@ paths:
           label: Node.js
           source: |
             const url = new URL("https://openapi.longbridge.com/v1/orders/info")
-            url.searchParams.set("counter_id", "<counter_id>")
+            url.searchParams.set("symbol", "<symbol>")
 
             const resp = await fetch(url, {
               method: "GET",
@@ -33525,7 +33525,7 @@ paths:
 
             var client = HttpClient.newHttpClient();
             var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>"))
+                    .uri(URI.create("https://openapi.longbridge.com/v1/orders/info?symbol=<symbol>"))
                     .header("Authorization", "Bearer <access_token>")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
@@ -33538,7 +33538,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/orders/info")
                     .header("Authorization", "Bearer <access_token>")
-                    .query(&[("counter_id", "<counter_id>")])
+                    .query(&[("symbol", "<symbol>")])
                     .send()
                     .await?
                     .text()
@@ -33553,7 +33553,7 @@ paths:
                 CURL *curl = curl_easy_init();
                 struct curl_slist *headers = NULL;
                 headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/orders/info?symbol=<symbol>");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
@@ -33562,7 +33562,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/orders/info?counter_id=<counter_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/orders/info?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: last_done
           type: string
