@@ -4,8 +4,8 @@ export const locale = {
   // Nav
   'nav.features': '功能',
   'nav.pricing': '定價',
-  'nav.docs': '文件',
-  'nav.searchDocs': '搜尋文件…',
+  'nav.docs': '文檔',
+  'nav.searchDocs': '搜尋文檔…',
   'nav.getStarted': '立即開始',
   'nav.dashboard': '控制台',
   'nav.connectAi': '連接 AI',
@@ -16,7 +16,7 @@ export const locale = {
   'nav.theme.dark': '深色',
   'nav.theme.system': '跟隨系統',
   // Search
-  'search.placeholder': '搜尋文件…',
+  'search.placeholder': '搜尋文檔…',
   'search.button': '搜尋',
   'search.empty': '無法找到相關結果',
   // Sidebar (not in legacy JSON — using defaults)
@@ -64,6 +64,6 @@ export const locale = {
   'api.intro.hint': '點選側邊欄中的任意介面，查看參數說明、程式碼範例和回應範例。',
   'api.param.required': '必填',
   'api.param.optional': '可選',
-  'api.fallback': '本規範中未定義請求體欄位。',
+  'api.fallback': '此接口無需請求參數。',
   'api.pathCopy': '複製路徑',
 } as const

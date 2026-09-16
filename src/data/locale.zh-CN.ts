@@ -64,6 +64,6 @@ export const locale = {
   'api.intro.hint': '点击侧边栏中的任意接口，查看参数说明、代码示例和响应示例。',
   'api.param.required': '必填',
   'api.param.optional': '可选',
-  'api.fallback': '本规范中未定义请求体字段。',
+  'api.fallback': '此接口无需请求参数。',
   'api.pathCopy': '复制路径',
 } as const

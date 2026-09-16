@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-按市場和指標獲取行業排行榜。返回的 Counter ID 可直接傳入 `industry_peers` 查詢子行業樹。
+按市場和指標獲取行業排行榜。返回的 Symbol 可直接傳入 `industry_peers` 查詢子行業樹。
 
 <CliCommand>
 longbridge industry-rank --market US
@@ -203,7 +203,7 @@ func main() {
         "lists": [
           {
             "name": "Technology",
-            "counter_id": "BK/US/IN00258",
+            "symbol": "IN00258.US",
             "chg": "0.0231",
             "leading_name": "NVIDIA",
             "leading_ticker": "NVDA.US",
@@ -236,7 +236,7 @@ func main() {
 | items | object[] | 否 | 排行分組列表 |
 | ∟ lists | object[] | 否 | 行業條目列表 |
 | ∟ ∟ name | string | 否 | 行業名稱 |
-| ∟ ∟ counter_id | string | 否 | 行業唯一標識（`BK/市場/ID` 格式），可直接傳入 `industry_peers` |
+| ∟ ∟ symbol | string | 否 | 行業標識，可直接傳入 `industry_peers` |
 | ∟ ∟ chg | string | 否 | 當日漲跌幅（小數） |
 | ∟ ∟ leading_name | string | 否 | 漲幅領先個股名稱 |
 | ∟ ∟ leading_ticker | string | 否 | 漲幅領先個股代碼 |

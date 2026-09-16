@@ -13,11 +13,15 @@ const LOCALES: { value: Locale; label: string }[] = [
 ]
 
 function buildUrl(currentLocale: Locale, targetLocale: Locale, currentPath: string): string {
+  // `currentPath` may include a `?query` (e.g. the API reference's `?page=`) —
+  // keep it so switching locale preserves the exact view.
+  const qIdx = currentPath.indexOf('?')
+  const search = qIdx >= 0 ? currentPath.slice(qIdx) : ''
   // Strip current locale prefix to get bare path.
-  // `currentPath` can carry a `.html` suffix (build format:'file' → Astro.url
+  // The path can carry a `.html` suffix (build format:'file' → Astro.url
   // pathname is `…/overview.html`); drop it so the switched-locale link points
   // at the clean URL, not the 404 `.html` file.
-  let barePath = currentPath.replace(/(?:index)?\.html$/, '')
+  let barePath = (qIdx >= 0 ? currentPath.slice(0, qIdx) : currentPath).replace(/(?:index)?\.html$/, '')
   if (currentLocale !== 'en') {
     const prefix = `/${currentLocale}`
     if (barePath.startsWith(prefix + '/')) {
@@ -30,14 +34,14 @@ function buildUrl(currentLocale: Locale, targetLocale: Locale, currentPath: stri
 
   // For English, use bare path (no prefix)
   if (targetLocale === 'en') {
-    return barePath
+    return (barePath === '/' ? '/' : barePath) + search
   }
 
   // For zh-CN or zh-HK, prepend locale
   if (barePath === '/') {
-    return `/${targetLocale}`
+    return `/${targetLocale}${search}`
   }
-  return `/${targetLocale}${barePath}`
+  return `/${targetLocale}${barePath}${search}`
 }
 
 function GlobeIcon() {
@@ -62,10 +66,18 @@ function GlobeIcon() {
 
 export default function LanguageSwitcher({ currentLocale, currentPath }: Props) {
   const [open, setOpen] = useState(false)
+  // `currentPath` is the server-rendered path; on pages that navigate
+  // client-side (the API reference pushes `/docs/api/<op>` URLs) it goes stale.
+  // Read the live URL when the menu opens so switching locale keeps the same
+  // endpoint instead of dropping back to the section root.
+  const [livePath, setLivePath] = useState(currentPath)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!open) return
+    if (typeof window !== 'undefined') {
+      setLivePath(window.location.pathname + window.location.search)
+    }
     function handleMouseDown(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false)
@@ -102,7 +114,7 @@ export default function LanguageSwitcher({ currentLocale, currentPath }: Props) 
           {LOCALES.map(({ value, label }) => (
             <li key={value} role="option" aria-selected={value === currentLocale}>
               <a
-                href={buildUrl(currentLocale, value, currentPath)}
+                href={buildUrl(currentLocale, value, livePath)}
                 onClick={() => setOpen(false)}
                 className={
                   value === currentLocale

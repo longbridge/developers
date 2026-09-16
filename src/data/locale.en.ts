@@ -65,6 +65,6 @@ export const locale = {
   'api.intro.hint': 'Click any endpoint in the sidebar to view parameters, code samples, and example responses.',
   'api.param.required': 'Required',
   'api.param.optional': 'Optional',
-  'api.fallback': 'No request body fields defined in this spec.',
+  'api.fallback': 'This endpoint takes no request parameters.',
   'api.pathCopy': 'Copy path',
 } as const
