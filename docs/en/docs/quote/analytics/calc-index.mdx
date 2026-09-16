@@ -281,12 +281,11 @@ func main() {
 | ∟ conversion_ratio         | string   | Conversion ratio                                                                          |
 | ∟ balance_point            | string   | Breakeven point                                                                           |
 | ∟ open_interest            | int64    | Open interest                                                                             |
-| ∟ delta                    | string   | Delta                                                                                     |
-| ∟ gamma                    | string   | Gamma                                                                                     |
-| ∟ theta                    | string   | Theta. Raw value needs to be divided by 100 to get the standard per-share per-day value   |
-| ∟ vega                     | string   | Vega. Raw value needs to be divided by 100 to get the standard per-share per-1%-IV value  |
-| ∟ rho                      | string   | Rho. Raw value needs to be divided by 100 to get the standard per-share per-1%-rate value |
-
+| ∟ delta                    | string   | Delta. Measures the expected change in option price for a $1 move in the underlying asset price. |
+| ∟ gamma                    | string   | Gamma. Measures the expected change in Delta for a $1 move in the underlying asset price. |
+| ∟ theta                    | string   | Theta. Measures the expected change in option price as one day passes; the raw value has been divided by 365 to convert to a daily value, representing the impact of one day's time decay on the option price. |
+| ∟ vega                     | string   | Vega. Measures the expected change in option price when implied volatility (IV) moves by 1 (i.e., 100%); divides the raw value by 100 to get the expected price change per 1% move in IV. |
+| ∟ rho                      | string   | Rho. Measures the expected change in option price when the risk-free interest rate moves by 1 (i.e., 100%); divides the raw value by 100 to get the expected price change per 1% move in the interest rate. |
 ### Protobuf
 
 ```protobuf

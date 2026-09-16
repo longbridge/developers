@@ -267,12 +267,11 @@ func main() {
 | ∟ conversion_ratio         | string   | 换股比率                                     |
 | ∟ balance_point            | string   | 打和点                                       |
 | ∟ open_interest            | int64    | 未平仓数                                     |
-| ∟ delta                    | string   | Delta                                        |
-| ∟ gamma                    | string   | Gamma                                        |
-| ∟ theta                    | string   | Theta，原始值需除以 100 得到标准的每股每天值    |
-| ∟ vega                     | string   | Vega，原始值需除以 100 得到标准的每股每 1% IV 值 |
-| ∟ rho                      | string   | Rho，原始值需除以 100 得到标准的每股每 1% 利率值  |
-
+| ∟ delta                    | string   | Delta 值。衡量标的价格变动 $1 时，期权价格的预期变动量。 |
+| ∟ gamma                    | string   | Gamma 值。衡量标的价格变动 $1 时，Delta 的预期变动量。 |
+| ∟ theta                    | string   | Theta 值。衡量时间流逝一天时，期权价格的预期变动量；原始计算值已除以 365 换算为每日值，即每天的时间损耗对期权价格的影响。 |
+| ∟ vega                     | string   | Vega 值。衡量隐含波动率（IV）变动 1（即 100%）时，期权价格的预期变动量；如需衡量 IV 变动 1% 时的期权价格变动量，将原始值除以 100。 |
+| ∟ rho                      | string   | Rho 值。衡量无风险利率变动 1（即 100%）时，期权价格的预期变动量；如需衡量利率变动 1% 时的期权价格变动量，将原始值除以 100。 |
 ### Protobuf
 
 ```protobuf

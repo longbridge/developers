@@ -267,12 +267,11 @@ func main() {
 | ∟ conversion_ratio         | string   | 換股比率                                     |
 | ∟ balance_point            | string   | 打和點                                       |
 | ∟ open_interest            | int64    | 未平倉數                                     |
-| ∟ delta                    | string   | Delta                                        |
-| ∟ gamma                    | string   | Gamma                                        |
-| ∟ theta                    | string   | Theta，原始值需除以 100 得到標準的每股每天值    |
-| ∟ vega                     | string   | Vega，原始值需除以 100 得到標準的每股每 1% IV 值 |
-| ∟ rho                      | string   | Rho，原始值需除以 100 得到標準的每股每 1% 利率值  |
-
+| ∟ delta                    | string   | Delta 值。衡量標的價格變動 $1 時，期權價格的預期變動量。 |
+| ∟ gamma                    | string   | Gamma 值。衡量標的價格變動 $1 時，Delta 的預期變動量。 |
+| ∟ theta                    | string   | Theta 值。衡量時間流逝一天時，期權價格的預期變動量；原始計算值已除以 365 換算為每日值，即每天的時間損耗對期權價格的影響。 |
+| ∟ vega                     | string   | Vega 值。衡量隱含波動率（IV）變動 1（即 100%）時，期權價格的預期變動量；如需衡量 IV 變動 1% 時的期權價格變動量，將原始值除以 100。 |
+| ∟ rho                      | string   | Rho 值。衡量無風險利率變動 1（即 100%）時，期權價格的預期變動量；如需衡量利率變動 1% 時的期權價格變動量，將原始值除以 100。 |
 ### Protobuf
 
 ```protobuf
