@@ -2273,157 +2273,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    put:
-      operationId: update_alert
-      summary: Update Alert
-      x-summary-zh: 更新股价提醒
-      x-summary-zh-hk: 更新股價提醒
-      description: |
-        Enable or disable an existing price alert. First call `list` to obtain the full `AlertItem`, set `item.enabled` to `True` or `False`, then call `update(item)`.
-      x-description-zh: |
-        启用或禁用已有的股价提醒。先通过 `list` 获取完整的 `AlertItem`，修改 `item.enabled` 后调用 `update(item)`。
-      x-description-zh-hk: |
-        啟用或禁用已有的股價提醒。
-      x-subgroup: Alerts
-      x-subgroup-zh: 股价提醒
-      x-subgroup-zh-hk: 股價提醒
-      tags:
-        - Account
-      x-parameters:
-        - name: id
-          in: body
-          type: integer
-          required: true
-          description: Alert ID (path parameter)
-          x-description-zh: 提醒 ID（路径参数）
-          x-description-zh-hk: 提醒 ID（路徑參數）
-        - name: enabled
-          in: body
-          type: boolean
-          required: true
-          description: 'New enabled state: `true` to enable, `false` to disable — set on the `AlertItem` before calling `update`'
-          x-description-zh: 设为 `true` 启用，`false` 禁用
-          x-description-zh-hk: 設為 `true` 啟用，`false` 禁用
-      x-codeSamples:
-        - lang: Shell
-          label: CLI
-          source: |
-            # Enable an alert
-            longbridge alert enable 486469
-            # Disable an alert
-            longbridge alert disable 486469
-      x-request-examples:
-        - lang: Shell
-          label: cURL
-          source: |
-            curl --request PUT \
-              --url 'https://openapi.longbridge.com/v1/notify/reminders' \
-              --header 'Authorization: Bearer <access_token>' \
-              --header 'Content-Type: application/json' \
-              --data '{"id":0,"enabled":false}'
-        - lang: Python
-          label: Python
-          source: |
-            import requests
-
-            resp = requests.put(
-                "https://openapi.longbridge.com/v1/notify/reminders",
-                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"id": 0, "enabled": False},
-            )
-            print(resp.json())
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            import aiohttp
-
-            async def main():
-                async with aiohttp.ClientSession() as session:
-                    async with session.put(
-                        "https://openapi.longbridge.com/v1/notify/reminders",
-                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"id": 0, "enabled": False},
-                    ) as resp:
-                        print(await resp.json())
-
-            asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const resp = await fetch("https://openapi.longbridge.com/v1/notify/reminders", {
-              method: "PUT",
-              headers: {
-                "Authorization": "Bearer <access_token>",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ id: 0, enabled: false }),
-            })
-            console.log(await resp.json())
-        - lang: Java
-          label: Java
-          source: |
-            import java.net.URI;
-            import java.net.http.*;
-
-            var client = HttpClient.newHttpClient();
-            var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/notify/reminders"))
-                    .header("Authorization", "Bearer <access_token>")
-                    .header("Content-Type", "application/json")
-                    .method("PUT", HttpRequest.BodyPublishers.ofString("{\"id\":0,\"enabled\":false}"))
-                    .build();
-            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(resp.body());
-        - lang: Rust
-          label: Rust
-          source: |
-            let client = reqwest::Client::new();
-            let resp = client
-                    .request(reqwest::Method::PUT, "https://openapi.longbridge.com/v1/notify/reminders")
-                    .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "id": 0 , "enabled": false }))
-                    .send()
-                    .await?
-                    .text()
-                    .await?;
-            println!("{resp}");
-        - lang: C++
-          label: C++
-          source: |
-            #include <curl/curl.h>
-
-            int main() {
-                CURL *curl = curl_easy_init();
-                struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                headers = curl_slist_append(headers, "Content-Type: application/json");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/notify/reminders");
-                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"id\":0,\"enabled\":false}");
-                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-                curl_easy_perform(curl);
-                curl_easy_cleanup(curl);
-                return 0;
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/notify/reminders\", strings.NewReader(`{\"id\":0,\"enabled\":false}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data: {}
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
     get:
       operationId: list_alerts
       summary: List Alerts
@@ -3880,12 +3729,6 @@ paths:
           description: Industry code (for industry sharelists)
           x-description-zh: 行业代码（行业股单适用）
           x-description-zh-hk: 行業代碼（行業股單適用）
-        - name: stocks
-          type: object[]
-          required: false
-          description: Constituent stocks
-          x-description-zh: 成份股列表，见 SharelistStock
-          x-description-zh-hk: 成份股列表，見 SharelistStock
         - name: symbol
           type: string
           required: true
@@ -10193,12 +10036,6 @@ paths:
           description: Target market
           x-description-zh: 目标市场
           x-description-zh-hk: 目標市場
-        - name: type
-          type: string
-          required: false
-          description: Strategy type
-          x-description-zh: 策略类型
-          x-description-zh-hk: 策略類型
         - name: filter
           type: object
           required: false
@@ -12335,12 +12172,6 @@ paths:
           description: Total number of matching stocks.
           x-description-zh: 满足条件的股票总数。
           x-description-zh-hk: 滿足條件的股票總數。
-        - name: stocks
-          type: object[]
-          required: false
-          description: List of constituent stocks
-          x-description-zh: 成分股列表，
-          x-description-zh-hk: 成分股列表，
         - name: └ symbol
           type: string
           required: false
@@ -16768,78 +16599,162 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/valuation/detail?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
+        - name: overview
+          type: object
+          required: true
+          description: 'Current-valuation summary'
+          x-description-zh: '当前估值概览'
+          x-description-zh-hk: '當前估值概覽'
+        - name: overview.metrics
+          type: object
+          required: false
+          description: 'Metrics map keyed by indicator (pe/pb/ps)'
+          x-description-zh: '按指标（pe/pb/ps）分组的指标映射'
+          x-description-zh-hk: '按指標（pe/pb/ps）分組的指標映射'
+        - name: overview.metrics.pe
+          type: object
+          required: false
+          description: 'Metric block for the requested indicator'
+          x-description-zh: '所请求指标的数据块'
+          x-description-zh-hk: '所請求指標的數據塊'
+        - name: overview.metrics.pe.metric
+          type: string
+          required: false
+          description: 'Current value, e.g. 14.85x'
+          x-description-zh: '当前值，如 14.85x'
+          x-description-zh-hk: '當前值，如 14.85x'
+        - name: overview.metrics.pe.industry_median
+          type: string
+          required: false
+          description: 'Industry median'
+          x-description-zh: '行业中位数'
+          x-description-zh-hk: '行業中位數'
+        - name: overview.metrics.pe.desc
+          type: string
+          required: false
+          description: 'Human-readable summary'
+          x-description-zh: '可读描述'
+          x-description-zh-hk: '可讀描述'
+        - name: overview.indicator
+          type: string
+          required: false
+          description: 'Requested indicator key'
+          x-description-zh: '请求的指标键'
+          x-description-zh-hk: '請求的指標鍵'
+        - name: overview.range
+          type: integer
+          required: false
+          description: 'Lookback range in years'
+          x-description-zh: '回溯年数'
+          x-description-zh-hk: '回溯年數'
+        - name: overview.date
+          type: string
+          required: false
+          description: 'As-of date'
+          x-description-zh: '数据日期'
+          x-description-zh-hk: '數據日期'
+        - name: overview.ccy_symbol
+          type: string
+          required: false
+          description: 'Currency symbol'
+          x-description-zh: '货币符号'
+          x-description-zh-hk: '貨幣符號'
         - name: history
           type: object
           required: true
-          description: Valuation history data
-          x-description-zh: Valuation history data
-          x-description-zh-hk: Valuation history data
-        - name: history.metrics
-          type: object
-          required: false
-          description: Valuation metrics
-          x-description-zh: Valuation metrics
-          x-description-zh-hk: Valuation metrics
+          description: 'Historical time series'
+          x-description-zh: '历史时间序列'
+          x-description-zh-hk: '歷史時間序列'
         - name: history.metrics.pe
           type: object
           required: false
-          description: P/E ratio history
-          x-description-zh: P/E ratio history
-          x-description-zh-hk: P/E ratio history
-        - name: history.metrics.pb
-          type: object
-          required: false
-          description: P/B ratio history
-          x-description-zh: P/B ratio history
-          x-description-zh-hk: P/B ratio history
-        - name: history.metrics.ps
-          type: object
-          required: false
-          description: P/S ratio history
-          x-description-zh: P/S ratio history
-          x-description-zh-hk: P/S ratio history
-        - name: desc
+          description: 'History block for the indicator'
+          x-description-zh: '该指标的历史数据块'
+          x-description-zh-hk: '該指標的歷史數據塊'
+        - name: history.metrics.pe.low
           type: string
           required: false
-          description: Description of current valuation
-          x-description-zh: Description of current valuation
-          x-description-zh-hk: Description of current valuation
-        - name: high
+          description: 'Historical low'
+          x-description-zh: '历史低值'
+          x-description-zh-hk: '歷史低值'
+        - name: history.metrics.pe.median
           type: string
           required: false
-          description: Historical high value
-          x-description-zh: Historical high value
-          x-description-zh-hk: Historical high value
-        - name: low
+          description: 'Historical median'
+          x-description-zh: '历史中位数'
+          x-description-zh-hk: '歷史中位數'
+        - name: history.metrics.pe.high
           type: string
           required: false
-          description: Historical low value
-          x-description-zh: Historical low value
-          x-description-zh-hk: Historical low value
-        - name: median
-          type: string
-          required: false
-          description: Median value
-          x-description-zh: Median value
-          x-description-zh-hk: Median value
-        - name: list
+          description: 'Historical high'
+          x-description-zh: '历史高值'
+          x-description-zh-hk: '歷史高值'
+        - name: history.metrics.pe.list
           type: object[]
           required: false
-          description: Time series data points
-          x-description-zh: 历史估值数据点列表，
-          x-description-zh-hk: 歷史估值數據點列表，
-        - name: list[].date
+          description: 'Time-series points'
+          x-description-zh: '历史数据点列表'
+          x-description-zh-hk: '歷史數據點列表'
+        - name: history.metrics.pe.list[].timestamp
           type: string
           required: false
-          description: Date (YYYY-MM-DD)
-          x-description-zh: 日期（YYYY-MM-DD）
-          x-description-zh-hk: 日期（YYYY-MM-DD）
-        - name: list[].value
+          description: 'Unix seconds (string)'
+          x-description-zh: 'Unix 秒（字符串）'
+          x-description-zh-hk: 'Unix 秒（字串）'
+        - name: history.metrics.pe.list[].value
           type: string
           required: false
-          description: Valuation value
-          x-description-zh: Valuation value
-          x-description-zh-hk: Valuation value
+          description: 'Value at this point'
+          x-description-zh: '该点数值'
+          x-description-zh-hk: '該點數值'
+        - name: peers
+          type: object
+          required: false
+          description: 'Industry peers comparison'
+          x-description-zh: '行业可比公司'
+          x-description-zh-hk: '行業可比公司'
+        - name: peers.pe.industry_median
+          type: string
+          required: false
+          description: 'Peer-group median'
+          x-description-zh: '同业中位数'
+          x-description-zh-hk: '同業中位數'
+        - name: peers.pe.list
+          type: object[]
+          required: false
+          description: 'Peer companies'
+          x-description-zh: '同业公司列表'
+          x-description-zh-hk: '同業公司列表'
+        - name: peers.pe.list[].symbol
+          type: string
+          required: false
+          description: 'Security symbol, e.g. 9626.HK'
+          x-description-zh: '标的代码，如 9626.HK'
+          x-description-zh-hk: '標的代碼，如 9626.HK'
+        - name: peers.pe.list[].name
+          type: string
+          required: false
+          description: 'Security name'
+          x-description-zh: '标的名称'
+          x-description-zh-hk: '標的名稱'
+        - name: peers.pe.list[].value
+          type: string
+          required: false
+          description: 'Metric value'
+          x-description-zh: '指标值'
+          x-description-zh-hk: '指標值'
+        - name: layouts
+          type: object
+          required: false
+          description: 'Distribution buckets for charting'
+          x-description-zh: '用于绘图的分布分组'
+          x-description-zh-hk: '用於繪圖的分佈分組'
+        - name: symbols
+          type: object
+          required: false
+          description: 'Map keyed by symbol -> { name, market_cap }'
+          x-description-zh: '以 symbol 为键的映射 -> { name, market_cap }'
+          x-description-zh-hk: '以 symbol 為鍵的映射 -> { name, market_cap }'
       responses:
         '200':
           description: Successful response
@@ -21319,203 +21234,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/quote/ratings:
-    get:
-      operationId: ratings
-      summary: Analyst Ratings
-      x-summary-zh: 分析师评级
-      x-summary-zh-hk: 分析師評級
-      description: |
-        Get analyst institution ratings and consensus data for a security.
-      x-description-zh: |
-        获取指定证券的机构分析师评级和一致预期数据。
-      x-description-zh-hk: |
-        獲取指定證券的機構分析師評級和一致預期數據。
-      x-subgroup: Fundamentals
-      x-subgroup-zh: 基本面数据
-      x-subgroup-zh-hk: 基本面數據
-      tags:
-        - Fundamental
-      x-parameters:
-        - name: symbol
-          in: query
-          type: string
-          required: true
-          description: Security symbol, e.g. `AAPL.US`
-          x-description-zh: 证券代码，例如 `AAPL.US`
-          x-description-zh-hk: 證券代碼，例如 `AAPL.US`
-      x-request-examples:
-        - lang: Shell
-          label: cURL
-          source: |
-            curl --request GET \
-              --url 'https://openapi.longbridge.com/v1/quote/ratings?symbol=<symbol>' \
-              --header 'Authorization: Bearer <access_token>'
-        - lang: Python
-          label: Python
-          source: |
-            import requests
-
-            resp = requests.get(
-                "https://openapi.longbridge.com/v1/quote/ratings",
-                headers={"Authorization": "Bearer <access_token>"},
-                params={"symbol": "<symbol>"},
-            )
-            print(resp.json())
-        - lang: Python
-          label: Python (async)
-          source: |
-            import asyncio
-            import aiohttp
-
-            async def main():
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(
-                        "https://openapi.longbridge.com/v1/quote/ratings",
-                        headers={"Authorization": "Bearer <access_token>"},
-                        params={"symbol": "<symbol>"},
-                    ) as resp:
-                        print(await resp.json())
-
-            asyncio.run(main())
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const url = new URL("https://openapi.longbridge.com/v1/quote/ratings")
-            url.searchParams.set("symbol", "<symbol>")
-
-            const resp = await fetch(url, {
-              method: "GET",
-              headers: {
-                "Authorization": "Bearer <access_token>",
-              },
-            })
-            console.log(await resp.json())
-        - lang: Java
-          label: Java
-          source: |
-            import java.net.URI;
-            import java.net.http.*;
-
-            var client = HttpClient.newHttpClient();
-            var request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/ratings?symbol=<symbol>"))
-                    .header("Authorization", "Bearer <access_token>")
-                    .method("GET", HttpRequest.BodyPublishers.noBody())
-                    .build();
-            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(resp.body());
-        - lang: Rust
-          label: Rust
-          source: |
-            let client = reqwest::Client::new();
-            let resp = client
-                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/quote/ratings")
-                    .header("Authorization", "Bearer <access_token>")
-                    .query(&[("symbol", "<symbol>")])
-                    .send()
-                    .await?
-                    .text()
-                    .await?;
-            println!("{resp}");
-        - lang: C++
-          label: C++
-          source: |
-            #include <curl/curl.h>
-
-            int main() {
-                CURL *curl = curl_easy_init();
-                struct curl_slist *headers = NULL;
-                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
-                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/ratings?symbol=<symbol>");
-                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
-                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-                curl_easy_perform(curl);
-                curl_easy_cleanup(curl);
-                return 0;
-            }
-        - lang: Go
-          label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/quote/ratings?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
-      x-response-properties:
-        - name: industry_name
-          type: string
-          required: false
-          description: Industry name
-          x-description-zh: 行业名称
-          x-description-zh-hk: 行業名稱
-        - name: industry_rank
-          type: integer
-          required: false
-          description: Rank within industry
-          x-description-zh: 行业内排名
-          x-description-zh-hk: 行業內排名
-        - name: multi_letter
-          type: string
-          required: false
-          description: Rating letter grade
-          x-description-zh: 评级字母等级
-          x-description-zh-hk: 評級字母等級
-        - name: multi_score
-          type: string
-          required: false
-          description: Composite score
-          x-description-zh: 综合评分
-          x-description-zh-hk: 綜合評分
-        - name: multi_score_change
-          type: integer
-          required: false
-          description: Score change vs previous period
-          x-description-zh: 评分变化
-          x-description-zh-hk: 評分變化
-        - name: report_period_txt
-          type: string
-          required: false
-          description: Report period description
-          x-description-zh: 报告期描述
-          x-description-zh-hk: 報告期描述
-        - name: scale_txt_name
-          type: string
-          required: false
-          description: Rating scale name
-          x-description-zh: 评级量表名称
-          x-description-zh-hk: 評級量表名稱
-        - name: style_txt_name
-          type: string
-          required: false
-          description: Rating style name
-          x-description-zh: 评级风格名称
-          x-description-zh-hk: 評級風格名稱
-        - name: ratings_json
-          type: string
-          required: false
-          description: Raw rating detail JSON
-          x-description-zh: 原始评级详情 JSON
-          x-description-zh-hk: 原始評級詳情 JSON
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              example:
-                code: 0
-                message: success
-                data:
-                  industry_name: Technology Hardware, Storage and Peripherals
-                  industry_rank: 2
-                  multi_letter: B
-                  multi_score: '0.32'
-                  multi_score_change: -1
-                  scale_txt_name: Large
-                  style_txt_name: Blend
-                  report_period_txt: Rating based on Fiscal Year 2026 s.a.
-                  ratings_json: '[]'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
   /v1/quote/institution-rating-latest:
     get:
       operationId: institution_rating
@@ -23230,9 +22948,9 @@ paths:
         - name: └ id
           type: string
           required: false
-          description: ID of the newly created alert
-          x-description-zh: 新创建提醒的 ID
-          x-description-zh-hk: 新創建提醒的 ID
+          description: 'Sharelist item ID'
+          x-description-zh: '自选列表项 ID'
+          x-description-zh-hk: '自選列表項 ID'
         - name: ccy_symbol
           type: string
           required: false
@@ -27692,12 +27410,6 @@ paths:
           description: Industry code
           x-description-zh: 行业代码
           x-description-zh-hk: 行業代碼
-        - name: stocks
-          type: object[]
-          required: false
-          description: Constituent stocks
-          x-description-zh: 成分股列表，
-          x-description-zh-hk: 成分股列表，
         - name: is_self
           type: boolean
           required: false
