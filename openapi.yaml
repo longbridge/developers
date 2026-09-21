@@ -5387,154 +5387,147 @@ paths:
           description: The grid rule. Fields below.
           x-description-zh: 网格规则，字段见下方。
           x-description-zh-hk: 網格規則，欄位見下方。
-        - name: submitted_base_price
+        - name: grid_trading_rule.submitted_base_price
           in: body
           type: string
           required: true
           description: Base price the grid is anchored to
           x-description-zh: 网格锚定的基准价
           x-description-zh-hk: 網格錨定的基準價
-        - name: upper_limit_price
+        - name: grid_trading_rule.upper_limit_price
           in: body
           type: string
           required: true
           description: Upper price bound
           x-description-zh: 价格上边界
           x-description-zh-hk: 價格上邊界
-        - name: lower_limit_price
+        - name: grid_trading_rule.lower_limit_price
           in: body
           type: string
           required: true
           description: Lower price bound
           x-description-zh: 价格下边界
           x-description-zh-hk: 價格下邊界
-        - name: trigger_price_type
+        - name: grid_trading_rule.trigger_price_type
           in: body
           type: integer
           required: true
           description: How trigger thresholds are interpreted. **Enum Value:**, `1` - spread (absolute), `2` - percent
           x-description-zh: 触发阈值的解释方式。**可选值：**, `1` - spread（绝对价差）, `2` - percent（百分比）
           x-description-zh-hk: 觸發閾值的解釋方式。**可選值：**, `1` - spread（絕對價差）, `2` - percent（百分比）
-        - name: trigger_spread_up
+        - name: grid_trading_rule.trigger_spread_up
           in: body
           type: string
           required: false
           description: Upward trigger spread, required when `trigger_price_type` is `1`
           x-description-zh: 上涨触发价差，`trigger_price_type` 为 `1` 时必填
           x-description-zh-hk: 上漲觸發價差，`trigger_price_type` 為 `1` 時必填
-        - name: trigger_spread_down
+        - name: grid_trading_rule.trigger_spread_down
           in: body
           type: string
           required: false
           description: Downward trigger spread, required when `trigger_price_type` is `1`
           x-description-zh: 下跌触发价差，`trigger_price_type` 为 `1` 时必填
           x-description-zh-hk: 下跌觸發價差，`trigger_price_type` 為 `1` 時必填
-        - name: trigger_percent_up
+        - name: grid_trading_rule.trigger_percent_up
           in: body
           type: string
           required: false
           description: Upward trigger percent, required when `trigger_price_type` is `2`
           x-description-zh: 上涨触发百分比，`trigger_price_type` 为 `2` 时必填
           x-description-zh-hk: 上漲觸發百分比，`trigger_price_type` 為 `2` 時必填
-        - name: trigger_percent_down
+        - name: grid_trading_rule.trigger_percent_down
           in: body
           type: string
           required: false
           description: Downward trigger percent, required when `trigger_price_type` is `2`
           x-description-zh: 下跌触发百分比，`trigger_price_type` 为 `2` 时必填
           x-description-zh-hk: 下跌觸發百分比，`trigger_price_type` 為 `2` 時必填
-        - name: trigger_quantity
+        - name: grid_trading_rule.trigger_buy_quantity
           in: body
           type: string
           required: true
-          description: Quantity per trigger
-          x-description-zh: 每次触发的数量
-          x-description-zh-hk: 每次觸發的數量
-        - name: upper_limit_quantity
+          description: 'Buy quantity per trigger'
+          x-description-zh: '每次触发买入数量'
+          x-description-zh-hk: '每次觸發買入數量'
+        - name: grid_trading_rule.trigger_sell_quantity
           in: body
           type: string
           required: true
-          description: Quantity handled when the upper bound is reached
-          x-description-zh: 达到上边界时处理的数量
-          x-description-zh-hk: 達到上邊界時處理的數量
-        - name: lower_limit_quantity
-          in: body
-          type: string
-          required: true
-          description: Quantity handled when the lower bound is reached
-          x-description-zh: 达到下边界时处理的数量
-          x-description-zh-hk: 達到下邊界時處理的數量
-        - name: time_in_force
+          description: 'Sell quantity per trigger'
+          x-description-zh: '每次触发卖出数量'
+          x-description-zh-hk: '每次觸發賣出數量'
+        - name: grid_trading_rule.time_in_force
           in: body
           type: integer
           required: true
           description: Time in force. **Enum Value:**, `0` - Day, `1` - GTC (Good-Til-Canceled), `6` - GTD (Good-Til-Date)
           x-description-zh: 订单有效期。**可选值：**, `0` - Day（当日有效）, `1` - GTC（撤单前有效）, `6` - GTD（到期前有效）
           x-description-zh-hk: 訂單有效期。**可選值：**, `0` - Day（當日有效）, `1` - GTC（撤單前有效）, `6` - GTD（到期前有效）
-        - name: expire_time
+        - name: grid_trading_rule.expire_time
           in: body
           type: integer
           required: false
           description: Expiry time (Unix timestamp, in seconds), required when `time_in_force` is `6` (GTD)
           x-description-zh: 到期时间（Unix 时间戳，单位秒），`time_in_force` 为 `6`（GTD）时必填
           x-description-zh-hk: 到期時間（Unix 時間戳，單位秒），`time_in_force` 為 `6`（GTD）時必填
-        - name: upper_limit_event
+        - name: grid_trading_rule.upper_limit_event
           in: body
           type: integer
           required: false
           description: Action when the upper bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
           x-description-zh: 达到上边界时的动作。**可选值：**, `1` - ignore（继续运行）, `2` - 按最新价平仓
           x-description-zh-hk: 達到上邊界時的動作。**可選值：**, `1` - ignore（繼續運行）, `2` - 按最新價平倉
-        - name: lower_limit_event
+        - name: grid_trading_rule.lower_limit_event
           in: body
           type: integer
           required: false
           description: Action when the lower bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
           x-description-zh: 达到下边界时的动作。**可选值：**, `1` - ignore（继续运行）, `2` - 按最新价平仓
           x-description-zh-hk: 達到下邊界時的動作。**可選值：**, `1` - ignore（繼續運行）, `2` - 按最新價平倉
-        - name: trigger_sell_depth
+        - name: grid_trading_rule.trigger_sell_depth
           in: body
           type: integer
           required: false
           description: Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up` instead of a depth level
           x-description-zh: 卖盘盘口档位（-5 ~ 5）。`0` 表示改用 `grid_order_type_up` 而非档位
           x-description-zh-hk: 賣盤盤口檔位（-5 ~ 5）。`0` 表示改用 `grid_order_type_up` 而非檔位
-        - name: trigger_buy_depth
+        - name: grid_trading_rule.trigger_buy_depth
           in: body
           type: integer
           required: false
           description: Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down` instead of a depth level
           x-description-zh: 买盘盘口档位（-5 ~ 5）。`0` 表示改用 `grid_order_type_down` 而非档位
           x-description-zh-hk: 買盤盤口檔位（-5 ~ 5）。`0` 表示改用 `grid_order_type_down` 而非檔位
-        - name: grid_order_type_up
+        - name: grid_trading_rule.grid_order_type_up
           in: body
           type: string
           required: false
           description: Sell-side order type when `trigger_sell_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
           x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖盘订单类型。**可选值：**, `GMO` / `GLO` / `GTG`'
           x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣盤訂單類型。**可選值：**, `GMO` / `GLO` / `GTG`'
-        - name: grid_order_type_down
+        - name: grid_trading_rule.grid_order_type_down
           in: body
           type: string
           required: false
           description: Buy-side order type when `trigger_buy_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
           x-description-zh: '`trigger_buy_depth` 为 `0` 时的买盘订单类型。**可选值：**, `GMO` / `GLO` / `GTG`'
           x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買盤訂單類型。**可選值：**, `GMO` / `GLO` / `GTG`'
-        - name: multiple_trigger
+        - name: grid_trading_rule.multiple_trigger
           in: body
           type: boolean
           required: false
           description: Whether a single grid level may trigger multiple times
           x-description-zh: 单个网格档位是否允许多次触发
           x-description-zh-hk: 單個網格檔位是否允許多次觸發
-        - name: support_shortsell
+        - name: grid_trading_rule.support_shortsell
           in: body
           type: boolean
           required: false
           description: Whether short selling is allowed
           x-description-zh: 是否允许卖空
           x-description-zh-hk: 是否允許賣空
-        - name: rth
+        - name: grid_trading_rule.rth
           in: body
           type: integer
           required: false
@@ -5694,154 +5687,147 @@ paths:
           description: The full grid rule to apply. Fields below.
           x-description-zh: 要应用的完整网格规则，字段见下。
           x-description-zh-hk: 要應用的完整網格規則，欄位見下。
-        - name: submitted_base_price
+        - name: grid_trading_rule.submitted_base_price
           in: body
           type: string
           required: true
           description: Base price the grid is anchored to
           x-description-zh: 网格锚定的基准价
           x-description-zh-hk: 網格錨定的基準價
-        - name: upper_limit_price
+        - name: grid_trading_rule.upper_limit_price
           in: body
           type: string
           required: true
           description: Upper price bound
           x-description-zh: 价格上边界
           x-description-zh-hk: 價格上邊界
-        - name: lower_limit_price
+        - name: grid_trading_rule.lower_limit_price
           in: body
           type: string
           required: true
           description: Lower price bound
           x-description-zh: 价格下边界
           x-description-zh-hk: 價格下邊界
-        - name: trigger_price_type
+        - name: grid_trading_rule.trigger_price_type
           in: body
           type: integer
           required: true
           description: How trigger thresholds are interpreted. **Enum Value:**, `1` - spread (absolute), `2` - percent
           x-description-zh: 触发阈值的计算方式。**可选值：**, `1` - 价差（绝对值）, `2` - 百分比
           x-description-zh-hk: 觸發閾值的計算方式。**可選值：**, `1` - 價差（絕對值）, `2` - 百分比
-        - name: trigger_spread_up
+        - name: grid_trading_rule.trigger_spread_up
           in: body
           type: string
           required: false
           description: Upward trigger spread, required when `trigger_price_type` is `1`
           x-description-zh: 向上触发价差，`trigger_price_type` 为 `1` 时必填
           x-description-zh-hk: 向上觸發價差，`trigger_price_type` 為 `1` 時必填
-        - name: trigger_spread_down
+        - name: grid_trading_rule.trigger_spread_down
           in: body
           type: string
           required: false
           description: Downward trigger spread, required when `trigger_price_type` is `1`
           x-description-zh: 向下触发价差，`trigger_price_type` 为 `1` 时必填
           x-description-zh-hk: 向下觸發價差，`trigger_price_type` 為 `1` 時必填
-        - name: trigger_percent_up
+        - name: grid_trading_rule.trigger_percent_up
           in: body
           type: string
           required: false
           description: Upward trigger percent, required when `trigger_price_type` is `2`
           x-description-zh: 向上触发百分比，`trigger_price_type` 为 `2` 时必填
           x-description-zh-hk: 向上觸發百分比，`trigger_price_type` 為 `2` 時必填
-        - name: trigger_percent_down
+        - name: grid_trading_rule.trigger_percent_down
           in: body
           type: string
           required: false
           description: Downward trigger percent, required when `trigger_price_type` is `2`
           x-description-zh: 向下触发百分比，`trigger_price_type` 为 `2` 时必填
           x-description-zh-hk: 向下觸發百分比，`trigger_price_type` 為 `2` 時必填
-        - name: trigger_quantity
+        - name: grid_trading_rule.trigger_buy_quantity
           in: body
           type: string
           required: true
-          description: Quantity per trigger
-          x-description-zh: 每次触发的数量
-          x-description-zh-hk: 每次觸發的數量
-        - name: upper_limit_quantity
+          description: 'Buy quantity per trigger'
+          x-description-zh: '每次触发买入数量'
+          x-description-zh-hk: '每次觸發買入數量'
+        - name: grid_trading_rule.trigger_sell_quantity
           in: body
           type: string
           required: true
-          description: Quantity handled when the upper bound is reached
-          x-description-zh: 到达上边界时处理的数量
-          x-description-zh-hk: 到達上邊界時處理的數量
-        - name: lower_limit_quantity
-          in: body
-          type: string
-          required: true
-          description: Quantity handled when the lower bound is reached
-          x-description-zh: 到达下边界时处理的数量
-          x-description-zh-hk: 到達下邊界時處理的數量
-        - name: time_in_force
+          description: 'Sell quantity per trigger'
+          x-description-zh: '每次触发卖出数量'
+          x-description-zh-hk: '每次觸發賣出數量'
+        - name: grid_trading_rule.time_in_force
           in: body
           type: integer
           required: true
           description: Time in force. **Enum Value:**, `0` - Day, `1` - GTC (Good-Til-Canceled), `6` - GTD (Good-Til-Date)
           x-description-zh: 订单有效期类型。**可选值：**, `0` - 当日有效，`1` - GTC（撤单前有效）, `6` - GTD（到期前有效）
           x-description-zh-hk: 訂單有效期類型。**可選值：**, `0` - 當日有效，`1` - GTC（撤單前有效）, `6` - GTD（到期前有效）
-        - name: expire_time
+        - name: grid_trading_rule.expire_time
           in: body
           type: integer
           required: false
           description: Expiry time (Unix timestamp, in seconds), required when `time_in_force` is `6` (GTD)
           x-description-zh: 到期时间（Unix 时间戳，单位秒），`time_in_force` 为 `6`（GTD）时必填
           x-description-zh-hk: 到期時間（Unix 時間戳，單位秒），`time_in_force` 為 `6`（GTD）時必填
-        - name: upper_limit_event
+        - name: grid_trading_rule.upper_limit_event
           in: body
           type: integer
           required: false
           description: Action when the upper bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
           x-description-zh: 到达上边界时的动作。**可选值：**, `1` - 忽略（保持运行）, `2` - 以最新价平仓
           x-description-zh-hk: 到達上邊界時的動作。**可選值：**, `1` - 忽略（保持運行）, `2` - 以最新價平倉
-        - name: lower_limit_event
+        - name: grid_trading_rule.lower_limit_event
           in: body
           type: integer
           required: false
           description: Action when the lower bound is reached. **Enum Value:**, `1` - ignore (keep running), `2` - close position at last price
           x-description-zh: 到达下边界时的动作。**可选值：**, `1` - 忽略（保持运行）, `2` - 以最新价平仓
           x-description-zh-hk: 到達下邊界時的動作。**可選值：**, `1` - 忽略（保持運行）, `2` - 以最新價平倉
-        - name: trigger_sell_depth
+        - name: grid_trading_rule.trigger_sell_depth
           in: body
           type: integer
           required: false
           description: Sell-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_up` instead of a depth level
           x-description-zh: 卖方向盘口档位（-5 ~ 5）。为 `0` 时使用 `grid_order_type_up` 而非档位
           x-description-zh-hk: 賣方向盤口檔位（-5 ~ 5）。為 `0` 時使用 `grid_order_type_up` 而非檔位
-        - name: trigger_buy_depth
+        - name: grid_trading_rule.trigger_buy_depth
           in: body
           type: integer
           required: false
           description: Buy-side order-book depth (-5 ~ 5). `0` = use `grid_order_type_down` instead of a depth level
           x-description-zh: 买方向盘口档位（-5 ~ 5）。为 `0` 时使用 `grid_order_type_down` 而非档位
           x-description-zh-hk: 買方向盤口檔位（-5 ~ 5）。為 `0` 時使用 `grid_order_type_down` 而非檔位
-        - name: grid_order_type_up
+        - name: grid_trading_rule.grid_order_type_up
           in: body
           type: string
           required: false
           description: Sell-side order type when `trigger_sell_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
           x-description-zh: '`trigger_sell_depth` 为 `0` 时的卖方向订单类型。**可选值：**, `GMO` / `GLO` / `GTG`'
           x-description-zh-hk: '`trigger_sell_depth` 為 `0` 時的賣方向訂單類型。**可選值：**, `GMO` / `GLO` / `GTG`'
-        - name: grid_order_type_down
+        - name: grid_trading_rule.grid_order_type_down
           in: body
           type: string
           required: false
           description: Buy-side order type when `trigger_buy_depth` is `0`. **Enum Value:**, `GMO` / `GLO` / `GTG`
           x-description-zh: '`trigger_buy_depth` 为 `0` 时的买方向订单类型。**可选值：**, `GMO` / `GLO` / `GTG`'
           x-description-zh-hk: '`trigger_buy_depth` 為 `0` 時的買方向訂單類型。**可選值：**, `GMO` / `GLO` / `GTG`'
-        - name: multiple_trigger
+        - name: grid_trading_rule.multiple_trigger
           in: body
           type: boolean
           required: false
           description: Whether a single grid level may trigger multiple times
           x-description-zh: 单个网格档位是否可多次触发
           x-description-zh-hk: 單個網格檔位是否可多次觸發
-        - name: support_shortsell
+        - name: grid_trading_rule.support_shortsell
           in: body
           type: boolean
           required: false
           description: Whether short selling is allowed
           x-description-zh: 是否允许卖空
           x-description-zh-hk: 是否允許賣空
-        - name: rth
+        - name: grid_trading_rule.rth
           in: body
           type: integer
           required: false
