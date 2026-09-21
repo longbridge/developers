@@ -1064,22 +1064,96 @@
   color: #fff;
   background: var(--lb-brand, #16a34a);
 }
-.ep-urlbar-copypage {
+/* Split "copy page" dropdown */
+.ep-copypage {
   flex: none;
-  padding: 4px 10px;
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+.ep-copypage-main,
+.ep-copypage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  color: var(--lb-fg-2, #64748b);
+  color: var(--lb-fg-1, #1f2937);
   background: #fff;
   border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
-  border-radius: 6px;
   cursor: pointer;
+}
+.ep-copypage-main {
+  padding: 4px 10px;
+  border-radius: 6px 0 0 6px;
+}
+.ep-copypage-toggle {
+  padding: 4px 7px;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  font-size: 11px;
+}
+.ep-copypage-main:hover,
+.ep-copypage-toggle:hover {
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ep-copypage-ic {
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+}
+.ep-copypage-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 208px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ep-copypage-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: left;
+}
+.ep-copypage-item:hover {
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ep-copypage-item svg {
+  flex: none;
+  color: var(--lb-fg-2, #64748b);
 }
 :root[data-theme='dark'] .ep-urlbar {
   background: #161b22;
 }
 :root[data-theme='dark'] .ep-urlbar-env,
-:root[data-theme='dark'] .ep-urlbar-copypage {
+:root[data-theme='dark'] .ep-copypage-main,
+:root[data-theme='dark'] .ep-copypage-toggle,
+:root[data-theme='dark'] .ep-copypage-menu {
   background: #0d1117;
+  color: var(--lb-fg-1, #e6edf3);
+}
+:root[data-theme='dark'] .ep-copypage-item {
+  color: #e6edf3;
+}
+:root[data-theme='dark'] .ep-copypage-main:hover,
+:root[data-theme='dark'] .ep-copypage-toggle:hover,
+:root[data-theme='dark'] .ep-copypage-item:hover {
+  background: #161b22;
 }
 
 /* ── Right rail: Request + Response panels ───────────────────────────────── */
@@ -1180,6 +1254,19 @@
 :root[data-theme='dark'] .api-rail-tab {
   background: #161b22;
 }
+/* Full-bleed console: unlike prose docs pages, the API reference is a 3-column
+   app. Drop the docs layout's centering gutters so the nav sits flush-left and
+   the content region fills the space right of it (no big empty left margin). */
+@media (min-width: 1024px) {
+  [data-lbus-component='api-reference'].docs-layout {
+    padding-left: 0;
+  }
+}
+[data-lbus-component='api-reference'] .docs-inner {
+  max-width: 88rem;
+  margin: 0;
+}
+
 /* three-column widths — only when the right rail is present */
 [data-lbus-component='api-reference'] .docs-main.has-rail {
   display: grid;
