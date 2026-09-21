@@ -3847,11 +3847,11 @@ paths:
           x-description-zh-hk: 股單 ID
         - name: symbols
           in: body
-          type: array
+          type: string
           required: true
-          description: Security symbols to add
-          x-description-zh: 待添加的标的代码
-          x-description-zh-hk: 待新增的標的代碼
+          description: 'Comma-separated security symbols, e.g. `AAPL.US,700.HK` (NOT a JSON array)'
+          x-description-zh: '逗号分隔的证券代码,如 `AAPL.US,700.HK`(不是 JSON 数组)'
+          x-description-zh-hk: '逗號分隔的證券代碼,如 `AAPL.US,700.HK`(不是 JSON 陣列)'
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -4138,11 +4138,11 @@ paths:
           x-description-zh-hk: 股單 ID
         - name: symbols
           in: body
-          type: array
+          type: string
           required: true
-          description: Security symbols in the desired order
-          x-description-zh: 按期望顺序排列的标的代码
-          x-description-zh-hk: 按期望順序排列的標的代碼
+          description: 'Comma-separated security symbols, e.g. `AAPL.US,700.HK` (NOT a JSON array)'
+          x-description-zh: '逗号分隔的证券代码,如 `AAPL.US,700.HK`(不是 JSON 数组)'
+          x-description-zh-hk: '逗號分隔的證券代碼,如 `AAPL.US,700.HK`(不是 JSON 陣列)'
       x-codeSamples:
         - lang: Shell
           label: CLI
