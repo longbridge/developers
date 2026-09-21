@@ -1171,6 +1171,17 @@
   border-radius: 10px;
   background: #f6f8fa;
   padding: 12px;
+  min-width: 0;
+}
+/* Keep code from widening the 22rem rail — it scrolls inside its own box. */
+.api-rail-card .code-tabs,
+.api-rail-card .code-tabs-body,
+.api-rail-card .code-pre {
+  min-width: 0;
+  max-width: 100%;
+}
+.api-rail-card .code-pre {
+  overflow-x: auto;
 }
 .api-rail-head {
   display: flex;
@@ -1195,6 +1206,51 @@
 }
 .api-rail-tokenform {
   margin-bottom: 10px;
+}
+/* The TryIt AuthorizationForm/ParametersForm reference legacy `--vp-c-*` tokens
+   that don't exist on this site, so its inputs fall back to raw browser styling.
+   Re-style them here with the site's `--lb-*` tokens for a coherent look. */
+.api-rail .tryit-base-form {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08)) !important;
+  background: var(--lb-bg-1, #fff);
+}
+.api-rail .tryit-form-header {
+  padding: 10px 12px;
+}
+.api-rail .tryit-form-header h2 {
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-rail .tryit-input {
+  width: 100%;
+  padding: 6px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.12));
+  background: var(--lb-bg-1, #fff);
+  color: var(--lb-fg-1, #1f2937);
+  font-size: 12.5px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.api-rail .tryit-input:focus {
+  border-color: var(--lb-brand, #16a34a);
+}
+.api-rail .tryit-input::placeholder {
+  color: var(--lb-fg-3, #9ca3af);
+}
+.api-rail .tryit-form-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.api-rail .tryit-form-content.tryit-collapsed {
+  max-height: 0;
+}
+:root[data-theme='dark'] .api-rail .tryit-base-form,
+:root[data-theme='dark'] .api-rail .tryit-input {
+  background: #0d1117;
+  color: #e6edf3;
 }
 .api-rail-params {
   margin-top: 10px;

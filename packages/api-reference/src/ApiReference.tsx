@@ -649,8 +649,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   )
 
   // ── Search ────────────────────────────────────────────────────────────────
-  const [query, setQuery] = useState('')
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  // The nav filter is driven by the global header search; no in-sidebar box.
+  const [query] = useState('')
   const rootRef = useRef<HTMLDivElement>(null)
 
   // Add a copy button to each x-page markdown code block (rendered as raw HTML,
@@ -850,16 +850,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         data-lbus-component="sidebar"
         className="fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-[color:var(--lb-stroke)] bg-[var(--lbus-c-bg)] px-6 py-6 lg:sticky lg:top-[60px] lg:z-auto lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:translate-x-0"
         aria-label="API navigation">
-        <div className="sidebar-search">
-          <input
-            ref={searchInputRef}
-            className="search-input"
-            type="text"
-            placeholder={t(locale, 'api.search')}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
         <nav aria-label="API navigation">
           {/* Static pages — a bare (header-less) group, like docs Overview/Getting Started */}
           {pages.length > 0 && (

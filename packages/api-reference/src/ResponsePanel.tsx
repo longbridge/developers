@@ -1,7 +1,7 @@
 /**
  * ResponsePanel — right-rail bottom card: status tabs (200/400/401/403/408)
  * showing documented example bodies; when a live TryIt response arrives it is
- * routed to its status tab and flagged 实测.
+ * routed to its status tab and flagged 实测。
  */
 import { useEffect, useState } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
