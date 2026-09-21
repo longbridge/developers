@@ -20,7 +20,7 @@ export function SDK({ description, children }: SDKProps) {
           {children && <div>{children}</div>}
         </div>
         <div>
-          <img className="h-[244px]" src="/assets/sdk.svg" alt="" />
+          <img className="h-[244px]" src="/_docs/sdk.svg" alt="" />
         </div>
       </div>
     </div>

@@ -20,12 +20,12 @@ const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longportapp.com'
 
 export default defineConfig({
   site: SITE,
-  // `assets: 'assets'` (default is `_astro`) so hashed CSS/JS land in /assets/ —
-  // the path the production nginx already serves (_assets.conf, matching the
-  // legacy VitePress output). Without this, /_astro/* has no nginx rule, falls
-  // to the catch-all, and every stylesheet/script 404s. public/assets/sdk.svg
-  // coexists (unique name, no clash with content-hashed files).
-  build: { format: 'file', assets: 'assets' },
+  // nginx 下线后由 CDN + OSS 直接承载，两项都随之改变：
+  // - format:'directory' 让每条路由产出 `foo/index.html`，配合 OSS 静态网站托管的
+  //   「子目录首页 + 文件404规则=Index」，/foo 直接 200 且地址栏不变，CDN 侧零改写规则。
+  // - assets:'_docs' 把本站的 hash 资源独立成命名空间。旧的 /assets/ 是四个项目共用的，
+  //   谁也不敢清理；分开之后 /assets/ 成为纯退役区，可在切流观察期后整目录删除。
+  build: { format: 'directory', assets: '_docs' },
   integrations: [
     react(),
     mdx(),
