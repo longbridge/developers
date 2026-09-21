@@ -3400,10 +3400,24 @@ paths:
       tags:
         - News & Contents
       x-parameters:
+        - name: name
+          in: body
+          type: string
+          required: true
+          description: 'Sharelist name (required)'
+          x-description-zh: '股单名称(必填)'
+          x-description-zh-hk: '股單名稱(必填)'
+        - name: cover
+          in: body
+          type: string
+          required: true
+          description: 'Cover image URL (required)'
+          x-description-zh: '封面图 URL(必填)'
+          x-description-zh-hk: '封面圖 URL(必填)'
         - name: description
           in: body
           type: string
-          required: false
+          required: true
           description: Description
           x-description-zh: 描述
           x-description-zh-hk: 描述
