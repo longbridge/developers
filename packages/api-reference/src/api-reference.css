@@ -1009,3 +1009,75 @@
 [data-lbus-component="api-reference"] .docs-main {
   flex: 1 0 auto;
 }
+
+/* ── Endpoint URL bar (method + URL + env toggle + copy page) ────────────── */
+.ep-urlbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 20px;
+  padding: 8px 10px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  background: var(--lb-bg-2, #f8fafc);
+}
+.ep-urlbar-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+  background: none;
+  border: none;
+  padding: 0;
+}
+.ep-urlbar-icon {
+  flex: none;
+  padding: 2px 6px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ep-urlbar-env {
+  flex: none;
+  display: inline-flex;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+.ep-env-seg {
+  padding: 3px 12px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.ep-env-seg.is-active {
+  color: #fff;
+  background: var(--lb-brand, #16a34a);
+}
+.ep-urlbar-copypage {
+  flex: none;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+:root[data-theme='dark'] .ep-urlbar {
+  background: #161b22;
+}
+:root[data-theme='dark'] .ep-urlbar-env,
+:root[data-theme='dark'] .ep-urlbar-copypage {
+  background: #0d1117;
+}
