@@ -367,3 +367,35 @@ export function buildResponseExample(ep: EndpointItem): string | null {
   }
   return null
 }
+
+/**
+ * Canonical gateway error envelopes per HTTP status, observed live against the
+ * OpenAPI gateway. Applied uniformly to every endpoint's Response panel so each
+ * status tab shows a real-shaped body without hand-authoring per endpoint.
+ */
+export const STANDARD_ERROR_EXAMPLES: Record<number, { code: number; message: string }> = {
+  400: { code: 400, message: 'request invalid' },
+  401: { code: 401004, message: 'token invalid' },
+  403: { code: 403, message: 'This API is only available to authorized users.' },
+  408: { code: 408, message: 'internal server timeout' },
+}
+
+export interface ResponseExample {
+  status: number
+  body: string
+}
+
+/**
+ * Per-status response examples for an endpoint's Response panel:
+ * 200 = the endpoint's real success example (falls back to a bare success
+ * envelope); 4xx = the standard gateway error envelope for that status.
+ */
+export function endpointResponseExamples(ep: EndpointItem): ResponseExample[] {
+  const ok = buildResponseExample(ep) ?? JSON.stringify({ code: 0, message: 'success', data: {} }, null, 2)
+  const out: ResponseExample[] = [{ status: 200, body: ok }]
+  for (const status of [400, 401, 403, 408]) {
+    const e = STANDARD_ERROR_EXAMPLES[status]
+    out.push({ status, body: JSON.stringify({ code: e.code, message: e.message, data: null }, null, 2) })
+  }
+  return out
+}
