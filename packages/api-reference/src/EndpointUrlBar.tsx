@@ -3,7 +3,7 @@
  * a copy-URL button and a copy-page (Markdown) button. Mirrors the reference
  * design's URL row.
  */
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
 import { useEnv } from './EnvContext'
 

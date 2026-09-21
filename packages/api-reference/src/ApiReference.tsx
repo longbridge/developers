@@ -10,7 +10,6 @@ import type { Locale } from '@longbridge/openapi-utils'
 import {
   parseSpec,
   localizeDocLinks,
-  formatPath,
   epId,
   buildCurl,
   buildResponseExample,
@@ -774,7 +773,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       })),
     [activeEndpoint]
   )
-  const epRespJson = useMemo(() => (activeEndpoint ? buildResponseExample(activeEndpoint) : null), [activeEndpoint])
 
   const epCodeBlocks = useMemo<CodeBlock[]>(
     () => (activeEndpoint ? buildCodeBlocks(activeEndpoint, serverUrl, locale) : []),
@@ -792,8 +790,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   }, [activeEndpoint, locale, localePrefix])
 
   const epCli = useMemo(() => cliSample(activeEndpoint), [activeEndpoint])
-
-  const epPathSegs = useMemo(() => (activeEndpoint ? formatPath(activeEndpoint.path) : []), [activeEndpoint])
 
   const epTag = useMemo<string>(() => {
     if (!activeEndpoint) return ''
@@ -816,39 +812,17 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     }
   }, [activePg, locale, localePrefix])
 
-  // ── Copy path ─────────────────────────────────────────────────────────────
-  const [pathCopied, setPathCopied] = useState(false)
   // Live TryIt response for the right-rail Response panel; cleared per endpoint.
   const [liveResp, setLiveResp] = useState<ApiResponse | null>(null)
   useEffect(() => {
     setLiveResp(null)
   }, [activeOp])
-  function copyPath() {
-    if (!activeEndpoint) return
-    navigator.clipboard.writeText(activeEndpoint.path).then(() => {
-      setPathCopied(true)
-      setTimeout(() => setPathCopied(false), 1800)
-    })
-  }
 
   // ── Render ────────────────────────────────────────────────────────────────
 
   const showIntro = !activeOp && !activePage
   const showPage = !!activePg
   const showEndpoint = !!activeEndpoint
-
-  // On-this-page TOC entries for the active endpoint.
-  const tocItems = isDocsModel
-    ? [
-        { id: 'request', label: L.request[locale], sub: false },
-        ...(hasParams ? [{ id: 'parameters', label: L.parameters[locale], sub: true }] : []),
-        ...(epReqExamples.length ? [{ id: 'request-example', label: L.requestExample[locale], sub: true }] : []),
-        { id: 'response', label: L.response[locale], sub: false },
-        ...(epRespProps.length ? [{ id: 'response-properties', label: L.responseProps[locale], sub: true }] : []),
-        ...(epRespJson ? [{ id: 'response-json', label: L.responseJson[locale], sub: true }] : []),
-        { id: 'error-code', label: L.errorCode[locale], sub: false },
-      ]
-    : []
 
   // Breadcrumb trail (Home is prepended by DocsBreadcrumb).
   const crumbs: { text: string; href?: string }[] =

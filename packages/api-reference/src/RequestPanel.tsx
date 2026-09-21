@@ -3,7 +3,7 @@
  * collapsible 设置 Token (AuthorizationForm), an editable parameters form and a
  * 发送 button that fires a real signed request against the selected environment.
  */
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
 import {
   AuthorizationForm,
@@ -79,7 +79,7 @@ export function RequestPanel({
       else res = await client.get(finalPath, query)
       onResponse(res)
     } catch (err) {
-      onResponse({ status: 0, response: { code: -1, message: err instanceof Error ? err.message : String(err), data: null } } as ApiResponse)
+      onResponse({ status: 0, statusText: 'Error', response: { code: -1, msg: err instanceof Error ? err.message : String(err), data: null } })
     } finally {
       setSending(false)
     }

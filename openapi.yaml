@@ -1454,15 +1454,15 @@ paths:
           type: string
           required: true
           description: 'Operation mode: `add` (pin to top) or `remove` (unpin)'
-          x-description-zh: '操作模式:`add`(置顶)或 `remove`(取消置顶)'
-          x-description-zh-hk: '操作模式:`add`(置頂)或 `remove`(取消置頂)'
+          x-description-zh: '操作模式:`add`(置顶) 或 `remove`(取消置顶)'
+          x-description-zh-hk: '操作模式:`add`(置頂) 或 `remove`(取消置頂)'
         - name: securities
           in: body
           type: array
           required: true
           description: 'Security symbols to pin/unpin, e.g. `["AAPL.US", "700.HK"]` (must already be in the watchlist)'
-          x-description-zh: '要置顶/取消的证券代码,如 `["AAPL.US", "700.HK"]`(须已在自选中)'
-          x-description-zh-hk: '要置頂/取消的證券代碼,如 `["AAPL.US", "700.HK"]`(須已在自選中)'
+          x-description-zh: '要置顶/取消的证券代码，如 `["AAPL.US", "700.HK"]`(须已在自选中)'
+          x-description-zh-hk: '要置頂/取消的證券代碼，如 `["AAPL.US", "700.HK"]`(須已在自選中)'
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -3398,8 +3398,8 @@ paths:
           type: string
           required: true
           description: 'Sharelist name (required)'
-          x-description-zh: '股单名称(必填)'
-          x-description-zh-hk: '股單名稱(必填)'
+          x-description-zh: '股单名称 (必填)'
+          x-description-zh-hk: '股單名稱 (必填)'
         - name: cover
           in: body
           type: string
@@ -3843,8 +3843,8 @@ paths:
           type: string
           required: true
           description: 'Comma-separated security symbols, e.g. `AAPL.US,700.HK` (NOT a JSON array)'
-          x-description-zh: '逗号分隔的证券代码,如 `AAPL.US,700.HK`(不是 JSON 数组)'
-          x-description-zh-hk: '逗號分隔的證券代碼,如 `AAPL.US,700.HK`(不是 JSON 陣列)'
+          x-description-zh: '逗号分隔的证券代码，如 `AAPL.US,700.HK`(不是 JSON 数组)'
+          x-description-zh-hk: '逗號分隔的證券代碼，如 `AAPL.US,700.HK`(不是 JSON 陣列)'
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -4134,8 +4134,8 @@ paths:
           type: string
           required: true
           description: 'Comma-separated security symbols, e.g. `AAPL.US,700.HK` (NOT a JSON array)'
-          x-description-zh: '逗号分隔的证券代码,如 `AAPL.US,700.HK`(不是 JSON 数组)'
-          x-description-zh-hk: '逗號分隔的證券代碼,如 `AAPL.US,700.HK`(不是 JSON 陣列)'
+          x-description-zh: '逗号分隔的证券代码，如 `AAPL.US,700.HK`(不是 JSON 数组)'
+          x-description-zh-hk: '逗號分隔的證券代碼，如 `AAPL.US,700.HK`(不是 JSON 陣列)'
       x-codeSamples:
         - lang: Shell
           label: CLI

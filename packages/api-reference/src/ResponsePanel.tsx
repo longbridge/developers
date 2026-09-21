@@ -3,7 +3,7 @@
  * showing documented example bodies; when a live TryIt response arrives it is
  * routed to its status tab and flagged 实测.
  */
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
 import type { ApiResponse } from '@longbridge/openapi-tryit'
 import { highlightCode } from './CodeSample'
