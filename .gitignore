@@ -52,10 +52,11 @@ docs/.vitepress/data/mcp-tools.json
 .data/
 docs/.vitepress/.temp/
 
-# Stray submodule directories
-longbridge-terminal/
-openapi/
-openapi-go/
+# Stray submodule directories（锚定到仓库根：不加前导 / 会匹配任意层级，
+# 曾误伤 public/longbridge/longbridge-terminal/ 这类正常产物目录）
+/longbridge-terminal/
+/openapi/
+/openapi-go/
 
 # opencli artifacts
 dist-diff/
