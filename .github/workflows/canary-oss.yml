@@ -1,0 +1,111 @@
+# nginx 下线验证专用：把本分支产物发到 openapi 专用 OSS 桶，
+# 由 https://open-canary.longbridge.xyz 直接承载（纯 OSS，前面不挂 CDN）。
+#
+# 刻意不复用 canary.yml：那条流水线的上传目标是 lb-assets/github/canary/open.longbridge.com/...，
+# 而本分支的产物是目录索引形态（foo/index.html）。旧 nginx 取的是扁平 key（foo.html）且全链路无 --delete，
+# 传进去不会报错，而是让现有 open.longbridge.xyz 静默冻结在上一次构建。
+#
+# 切流合并 main 时本文件并入 canary.yml。
+name: Deploy Canary (OSS bucket)
+
+on:
+  push:
+    branches:
+      - feat/nginx_decommission
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  OSS_BUCKET: oss://lb-openapi-canary
+  OSS_ENDPOINT: oss-cn-hongkong.aliyuncs.com
+  SITE_HOSTNAME: https://open-canary.longbridge.xyz
+
+jobs:
+  deploy_canary_oss:
+    name: build and deploy to lb-openapi-canary
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install ossutil
+        run: |
+          wget -q https://github.com/aliyun/ossutil/releases/download/v1.7.17/ossutil-v1.7.17-linux-amd64.zip
+          unzip -q ossutil-v1.7.17-linux-amd64.zip
+          cp ./ossutil-v1.7.17-linux-amd64/ossutil ${{github.workspace}}/ossutil
+          chmod +x ${{github.workspace}}/ossutil
+          ${{github.workspace}}/ossutil --version
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependency
+        run: bun install --frozen-lockfile
+
+      - name: Build canary
+        run: bun run build:canary
+        env:
+          # 覆盖 build:canary 的默认站点域名，让 canonical / sitemap / llms.txt
+          # 都指向验证域名，验证时点链接不会跳出环境
+          VITE_SITE_HOSTNAME: ${{ env.SITE_HOSTNAME }}
+          VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
+          NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
+
+      - name: Sanity check dist shape
+        run: |
+          set -e
+          echo "--- 目录索引形态抽查 ---"
+          test -f dist/index.html                              || { echo "缺 dist/index.html"; exit 1; }
+          test -f dist/docs/getting-started/index.html         || { echo "缺 docs/getting-started/index.html（format:directory 未生效？）"; exit 1; }
+          test -f dist/longbridge/longbridge-terminal/install  || { echo "缺 longbridge/longbridge-terminal/install"; exit 1; }
+          test -d dist/_docs                                   || { echo "缺 _docs/（assets 命名空间未生效？）"; exit 1; }
+          echo "--- .md 端点是否仍为扁平文件 ---"
+          ls dist/docs/getting-started.md
+          echo "--- 不应再有扁平 HTML ---"
+          test ! -f dist/docs/getting-started.html || { echo "仍存在扁平 docs/getting-started.html"; exit 1; }
+          echo "✓ 产物形态符合预期"
+
+      - name: Upload to Aliyun OSS (lb-openapi-canary)
+        env:
+          # 优先用按桶授权的专用 AK；没配就回退到现有的 FE_LB_ASSET_*。
+          # 后者是配 lb-assets(杭州)用的，对香港的 lb-openapi-canary 有没有写权限取决于
+          # 其 RAM 策略是按桶还是账号级——跑一次就知道，失败会是 AccessDenied。
+          AK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID || secrets.FE_LB_ASSET_ACCESS_KEY_ID }}
+          SK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_SECRET || secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }}
+        run: |
+          set -e
+          OSS="${{github.workspace}}/ossutil"
+          BASE="-u -r -j 10 -e $OSS_ENDPOINT -i $AK -k $SK"
+          echo "--- 写权限预检 ---"
+          echo ok > /tmp/_probe.txt
+          if ! $OSS cp /tmp/_probe.txt $OSS_BUCKET/.ci-probe -f -e $OSS_ENDPOINT -i $AK -k $SK; then
+            echo "::error::当前 AK 无法写入 $OSS_BUCKET。该桶在 hongkong，而 FE_LB_ASSET_* 是配 lb-assets(hangzhou)的。"
+            echo "::error::请发一把可写该桶的 AK，存为 FE_LB_OPENAPI_ACCESS_KEY_ID / FE_LB_OPENAPI_ACCESS_KEY_SECRET。"
+            exit 1
+          fi
+          $OSS rm $OSS_BUCKET/.ci-probe -f -e $OSS_ENDPOINT -i $AK -k $SK || true
+          echo "✓ 写权限正常"
+          # 桶根即站点根，不带任何前缀
+          $OSS cp ./dist/ $OSS_BUCKET/ $BASE --exclude "*.html" --exclude "*.md" --exclude "*.txt" --exclude "*.zip" --meta=Cache-Control:max-age=31536000
+          $OSS cp ./dist/ $OSS_BUCKET/ $BASE --include "*.zip" --meta "Cache-Control:no-cache#Content-type:application/zip;charset=utf-8"
+          $OSS cp ./dist/ $OSS_BUCKET/ $BASE --include "*.md"  --meta "Cache-Control:no-cache#Content-type:text/markdown;charset=utf-8"
+          $OSS cp ./dist/ $OSS_BUCKET/ $BASE --include "*.txt" --meta "Cache-Control:no-cache#Content-type:text/plain;charset=utf-8"
+          $OSS cp ./dist/ $OSS_BUCKET/ $BASE --include "*.html" --meta "Cache-Control:no-cache#Content-type:text/html;charset=utf-8"
+
+      - name: Summary
+        run: |
+          echo "### Canary OSS 部署完成" >> $GITHUB_STEP_SUMMARY
+          echo "- 桶: \`lb-openapi-canary\` (hongkong)" >> $GITHUB_STEP_SUMMARY
+          echo "- 验证地址: $SITE_HOSTNAME" >> $GITHUB_STEP_SUMMARY
+          echo "- commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
