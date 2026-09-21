@@ -43,6 +43,25 @@ export default defineConfig({
     prebuildSkills(),
   ],
   vite: {
+    // Dev proxies for the API Reference TryIt debugger: one prefix per
+    // environment so the 生产/测试 toggle can hit either backend without CORS.
+    // In production the client talks to the real domains directly.
+    server: {
+      proxy: {
+        '/api-prod': {
+          target: 'https://openapi.longbridge.com',
+          changeOrigin: true,
+          secure: true,
+          rewrite: (p: string) => p.replace(/^\/api-prod/, ''),
+        },
+        '/api-test': {
+          target: 'https://openapi.longbridge.xyz',
+          changeOrigin: true,
+          secure: true,
+          rewrite: (p: string) => p.replace(/^\/api-test/, ''),
+        },
+      },
+    },
     plugins: [
       tailwind(),
       // Rename mdx frontmatter `layout:` → `docs_layout:` so astro-mdx
