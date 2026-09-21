@@ -1449,27 +1449,20 @@ paths:
       tags:
         - Quote
       x-parameters:
-        - name: id
+        - name: mode
           in: body
           type: string
           required: true
-          description: Watchlist group ID
-          x-description-zh: Watchlist group ID
-          x-description-zh-hk: Watchlist group ID
-        - name: symbol
+          description: 'Operation mode: `add` (pin to top) or `remove` (unpin)'
+          x-description-zh: '操作模式:`add`(置顶)或 `remove`(取消置顶)'
+          x-description-zh-hk: '操作模式:`add`(置頂)或 `remove`(取消置頂)'
+        - name: securities
           in: body
-          type: string
+          type: array
           required: true
-          description: Security symbol to pin or unpin, e.g. `AAPL.US`
-          x-description-zh: Security symbol to pin or unpin, e.g. `AAPL.US`
-          x-description-zh-hk: Security symbol to pin or unpin, e.g. `AAPL.US`
-        - name: is_pinned
-          in: body
-          type: boolean
-          required: true
-          description: Set to `true` to pin the security, `false` to unpin it
-          x-description-zh: Set to `true` to pin the security, `false` to unpin it
-          x-description-zh-hk: Set to `true` to pin the security, `false` to unpin it
+          description: 'Security symbols to pin/unpin, e.g. `["AAPL.US", "700.HK"]` (must already be in the watchlist)'
+          x-description-zh: '要置顶/取消的证券代码,如 `["AAPL.US", "700.HK"]`(须已在自选中)'
+          x-description-zh-hk: '要置頂/取消的證券代碼,如 `["AAPL.US", "700.HK"]`(須已在自選中)'
       x-request-examples:
         - lang: Shell
           label: cURL
