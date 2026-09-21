@@ -9,7 +9,9 @@ export const GET: APIRoute = async ({ site }) => {
   const lines = enEntries.map((entry) => {
     const url = resolveUrl(entry)
     const title = entry.data.title ?? url
-    return `- [${title}](${site}${url.replace(/^\//, '')})`
+    // 输出 .md 直链：nginx 下线后不再支持 Accept: text/markdown 内容协商，
+    // crawler 只能靠显式后缀拿到 markdown 版本。
+    return `- [${title}](${site}${url.replace(/^\//, '')}.md)`
   })
 
   const header = '# Longbridge Developers\n\n## Docs\n\n'
