@@ -1180,16 +1180,15 @@
 :root[data-theme='dark'] .api-rail-tab {
   background: #161b22;
 }
-/* three-column widths */
-.api-reference-page .docs-main,
-[data-lbus-component='api-reference'] .docs-main {
+/* three-column widths — only when the right rail is present */
+[data-lbus-component='api-reference'] .docs-main.has-rail {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 22rem;
   gap: 2rem;
   align-items: start;
 }
 @media (max-width: 1280px) {
-  [data-lbus-component='api-reference'] .docs-main {
+  [data-lbus-component='api-reference'] .docs-main.has-rail {
     grid-template-columns: 1fr;
   }
   .api-rail {

@@ -14,6 +14,7 @@ import {
   epId,
   buildCurl,
   buildResponseExample,
+  endpointResponseExamples,
   pickLocale,
   PAGE_ICONS,
   type EndpointItem,
@@ -26,6 +27,11 @@ import {
 } from './openapi-loader'
 import { CodePanel, CodeTabs, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
+import { EnvProvider } from './EnvContext'
+import { EndpointUrlBar } from './EndpointUrlBar'
+import { RequestPanel } from './RequestPanel'
+import { ResponsePanel } from './ResponsePanel'
+import type { ApiResponse } from '@longbridge/openapi-tryit'
 import { CliCommand } from '@longbridge/openapi-ui'
 import MarkdownIt from 'markdown-it'
 import container from 'markdown-it-container'
@@ -131,6 +137,13 @@ const L = {
     'zh-HK': '示例使用 OAuth（Bearer）。如用 API Key 鑑權，請對請求簽名 —— 見',
   },
   authLink: { en: 'Authentication', 'zh-CN': '鉴权', 'zh-HK': '鑑權' },
+  authorization: { en: 'Authorization', 'zh-CN': '鉴权', 'zh-HK': '鑑權' },
+  authorizationDesc: {
+    en: 'Access token issued for the account, sent as `Authorization: Bearer <access_token>`.',
+    'zh-CN': '账户签发的 access token，通过 `Authorization: Bearer <access_token>` 发送。',
+    'zh-HK': '帳戶簽發的 access token，通過 `Authorization: Bearer <access_token>` 發送。',
+  },
+  permission: { en: 'Permission', 'zh-CN': '权限', 'zh-HK': '權限' },
 } as const
 
 type RowVM = { name: string; type: string; required: boolean; description: string }
@@ -805,6 +818,11 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
   // ── Copy path ─────────────────────────────────────────────────────────────
   const [pathCopied, setPathCopied] = useState(false)
+  // Live TryIt response for the right-rail Response panel; cleared per endpoint.
+  const [liveResp, setLiveResp] = useState<ApiResponse | null>(null)
+  useEffect(() => {
+    setLiveResp(null)
+  }, [activeOp])
   function copyPath() {
     if (!activeEndpoint) return
     navigator.clipboard.writeText(activeEndpoint.path).then(() => {
@@ -851,6 +869,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         : []
 
   return (
+    <EnvProvider>
     <div ref={rootRef} data-lbus-component="api-reference" className="docs-layout">
       {/* ── Sidebar (docs sidebar DOM) ── */}
       <aside
@@ -916,7 +935,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
       <div className="docs-body">
         <div className="docs-inner">
-          <div className="docs-main">
+          <div className={`docs-main${showEndpoint && isDocsModel ? ' has-rail' : ''}`}>
             <article className="docs-content">
               <DocsBreadcrumb items={crumbs} locale={locale} />
               {/* ── Intro (nothing selected) ── */}
@@ -978,37 +997,53 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                     )}
                   </h1>
 
-                  {/* Path + method badge */}
-                  <div className="ep-path">
-                    <span className={`ep-method-badge method-${activeEndpoint.method.toLowerCase()}`}>
-                      {activeEndpoint.method}
-                    </span>
-                    <span className="ep-path-text">
-                      {epPathSegs.map((seg, i) => (
-                        <span key={i} className={seg.isParam ? 'path-param' : 'path-static'}>
-                          {seg.text}
-                        </span>
-                      ))}
-                    </span>
-                    <button
-                      type="button"
-                      className="path-copy-btn"
-                      title={t(locale, 'api.pathCopy')}
-                      onClick={copyPath}>
-                      {pathCopied ? '✓' : t(locale, 'api.pathCopy')}
-                    </button>
-                  </div>
+                  {/* URL bar: method + full URL + env toggle + copy page */}
+                  <EndpointUrlBar
+                    method={activeEndpoint.method}
+                    path={activeEndpoint.path}
+                    localePrefix={localePrefix}
+                    operationId={activeEndpoint.operation.operationId}
+                    locale={locale}
+                  />
 
-                  {/* Quote permission badge */}
+                  {/* Authorization */}
+                  <section className="api-section">
+                    <h2>{L.authorization[locale]}</h2>
+                    <table className="api-fields">
+                      <thead>
+                        <tr>
+                          <th>{L.name[locale]}</th>
+                          <th>{L.type[locale]}</th>
+                          <th>{L.required[locale]}</th>
+                          <th>{L.description[locale]}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <code>Authorization</code>
+                          </td>
+                          <td>string · header</td>
+                          <td>{t(locale, 'api.param.required')}</td>
+                          <td>{L.authorizationDesc[locale]}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+
+                  {/* Permission (quote permission) */}
                   {(activeEndpoint.operation['x-quote-command'] ||
                     activeEndpoint.operation['x-quote-level'] ||
                     activeEndpoint.operation['x-quote-market']) && (
-                    <QuotePermission
-                      command={activeEndpoint.operation['x-quote-command']}
-                      level={activeEndpoint.operation['x-quote-level']}
-                      market={activeEndpoint.operation['x-quote-market']}
-                      locale={locale}
-                    />
+                    <section className="api-section">
+                      <h2>{L.permission[locale]}</h2>
+                      <QuotePermission
+                        command={activeEndpoint.operation['x-quote-command']}
+                        level={activeEndpoint.operation['x-quote-level']}
+                        market={activeEndpoint.operation['x-quote-market']}
+                        locale={locale}
+                      />
+                    </section>
                   )}
 
                   {/* Prose description */}
@@ -1045,21 +1080,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                         </div>
                       )}
 
-                      {epReqExamples.length > 0 && (
-                        <section id="request-example" className="api-section">
-                          <h3>{L.requestExample[locale]}</h3>
-                          <CodeTabs
-                            blocks={epReqExamples}
-                            labelCopy={t(locale, 'api.copy')}
-                            labelCopied={t(locale, 'api.copied')}
-                          />
-                          <p className="error-code-note">
-                            {L.apiKeyNoteBody[locale]}
-                            <a href={`${localePrefix}/docs/api?page=authentication`}>{L.authLink[locale]}</a>
-                            {locale === 'en' ? '.' : '。'}
-                          </p>
-                        </section>
-                      )}
+                      {/* Request Example + Response JSON now render in the right rail. */}
 
                       {/* ── Response ── */}
                       <h2 id="response">{L.response[locale]}</h2>
@@ -1068,17 +1089,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                         <section id="response-properties" className="api-section">
                           <h3>{L.responseProps[locale]}</h3>
                           <ParamTable rows={epRespProps} locale={locale} />
-                        </section>
-                      )}
-
-                      {epRespJson && (
-                        <section id="response-json" className="api-section">
-                          <h3>{L.responseJson[locale]}</h3>
-                          <CodeTabs
-                            blocks={[{ lang: 'json', code: epRespJson, label: 'JSON' }]}
-                            labelCopy={t(locale, 'api.copy')}
-                            labelCopied={t(locale, 'api.copied')}
-                          />
                         </section>
                       )}
 
@@ -1119,25 +1129,24 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               )}
             </article>
 
-            {/* On this page TOC (docs TOC DOM) */}
-            {showEndpoint && isDocsModel && tocItems.length > 0 && (
-              <aside className="docs-toc text-[0.85rem]" data-lbus-component="toc" aria-label="Table of contents">
-                <nav>
-                  <p className="text-xs font-semibold uppercase tracking-[0.05em] text-[color:var(--lbus-c-text)] mb-3 mt-0">
-                    {L.onThisPage[locale]}
-                  </p>
-                  <ul className="list-none p-0 m-0 flex flex-col gap-1" role="list">
-                    {tocItems.map((it) => (
-                      <li key={it.id} className={it.sub ? 'pl-3' : ''}>
-                        <a
-                          href={`#${it.id}`}
-                          className="block py-[0.15rem] text-[color:var(--lb-fg-2)] no-underline hover:text-[color:var(--lb-brand)]">
-                          {it.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
+            {/* Right rail: Request + Response panels (TryIt debugger) */}
+            {showEndpoint && isDocsModel && activeEndpoint && (
+              <aside className="api-rail" data-lbus-component="api-rail">
+                <RequestPanel
+                  method={activeEndpoint.method}
+                  path={activeEndpoint.path}
+                  xparams={activeEndpoint.operation['x-parameters'] ?? []}
+                  blocks={epReqExamples}
+                  locale={locale}
+                  onResponse={setLiveResp}
+                  labelCopy={t(locale, 'api.copy')}
+                  labelCopied={t(locale, 'api.copied')}
+                />
+                <ResponsePanel
+                  examples={endpointResponseExamples(activeEndpoint)}
+                  live={liveResp}
+                  locale={locale}
+                />
               </aside>
             )}
           </div>
@@ -1145,5 +1154,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         </div>
       </div>
     </div>
+    </EnvProvider>
   )
 }
