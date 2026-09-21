@@ -11159,6 +11159,13 @@ paths:
           description: HK-side symbol of a dual-listed stock, e.g. `939.HK`
           x-description-zh: 两地上市股票的港股代码，例如 `939.HK`
           x-description-zh-hk: 兩地上市股票的港股代碼，例如 `939.HK`
+        - name: days
+          in: query
+          type: integer
+          required: true
+          description: 'Number of intraday trading days to return, e.g. `1`'
+          x-description-zh: '返回的日内交易日数量，例如 `1`'
+          x-description-zh-hk: '返回的日內交易日數量，例如 `1`'
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -22673,48 +22680,96 @@ paths:
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v2/quote/macrodata/{indicator_id}\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
-        - name: list
-          type: MacroeconomicIndicator[]
+        - name: indicator
+          type: object
           required: true
-          description: Indicator list
-          x-description-zh: Indicator list
-          x-description-zh-hk: Indicator list
-        - name: count
-          type: int
-          required: true
-          description: Total number of matching indicators
-          x-description-zh: Total number of matching indicators
-          x-description-zh-hk: Total number of matching indicators
-        - name: indicator_code
+          description: 'Indicator detail'
+          x-description-zh: '指标详情'
+          x-description-zh-hk: '指標詳情'
+        - name: indicator.indicator_id
+          type: integer
+          required: false
+          description: 'Indicator ID'
+          x-description-zh: '指标 ID'
+          x-description-zh-hk: '指標 ID'
+        - name: indicator.indicator_name
           type: string
-          required: true
-          description: Indicator code (use as input to `macroeconomic`)
-          x-description-zh: Indicator code (use as input to `macroeconomic`)
-          x-description-zh-hk: Indicator code (use as input to `macroeconomic`)
-        - name: country
+          required: false
+          description: 'Indicator name'
+          x-description-zh: '指标名称'
+          x-description-zh-hk: '指標名稱'
+        - name: indicator.unit
           type: string
-          required: true
-          description: Country name
-          x-description-zh: Country name
-          x-description-zh-hk: Country name
-        - name: periodicity
+          required: false
+          description: 'Value unit'
+          x-description-zh: '数值单位'
+          x-description-zh-hk: '數值單位'
+        - name: indicator.description
           type: string
-          required: true
-          description: Release periodicity (e.g. `Monthly`, `Quarterly`)
-          x-description-zh: Release periodicity (e.g. `Monthly`, `Quarterly`)
-          x-description-zh-hk: Release periodicity (e.g. `Monthly`, `Quarterly`)
-        - name: describe
+          required: false
+          description: 'Indicator description'
+          x-description-zh: '指标描述'
+          x-description-zh-hk: '指標描述'
+        - name: indicator.market
           type: string
-          required: true
-          description: Indicator description
-          x-description-zh: Indicator description
-          x-description-zh-hk: Indicator description
-        - name: importance
-          type: int
-          required: true
-          description: Importance level (1 = Low, 2 = Medium, 3 = High)
-          x-description-zh: Importance level (1 = Low, 2 = Medium, 3 = High)
-          x-description-zh-hk: Importance level (1 = Low, 2 = Medium, 3 = High)
+          required: false
+          description: 'Market / country code'
+          x-description-zh: '市场/国家代码'
+          x-description-zh-hk: '市場/國家代碼'
+        - name: indicator.frequence
+          type: string
+          required: false
+          description: 'Release frequency, e.g. `day`, `month`'
+          x-description-zh: '发布频率，如 `day`、`month`'
+          x-description-zh-hk: '發佈頻率，如 `day`、`month`'
+        - name: indicator.importance
+          type: integer
+          required: false
+          description: 'Importance level (1 = Low, 2 = Medium, 3 = High)'
+          x-description-zh: '重要程度（1=低，2=中，3=高）'
+          x-description-zh-hk: '重要程度（1=低，2=中，3=高）'
+        - name: indicator.indicator_data
+          type: object[]
+          required: false
+          description: 'Time-series data points'
+          x-description-zh: '时间序列数据点'
+          x-description-zh-hk: '時間序列數據點'
+        - name: indicator.indicator_data[].actual_data
+          type: string
+          required: false
+          description: 'Actual value'
+          x-description-zh: '实际值'
+          x-description-zh-hk: '實際值'
+        - name: indicator.indicator_data[].previous_data
+          type: string
+          required: false
+          description: 'Previous value'
+          x-description-zh: '前值'
+          x-description-zh-hk: '前值'
+        - name: indicator.indicator_data[].estimated_data
+          type: string
+          required: false
+          description: 'Forecast value'
+          x-description-zh: '预期值'
+          x-description-zh-hk: '預期值'
+        - name: indicator.indicator_data[].published_time
+          type: string
+          required: false
+          description: 'Publish time (ISO 8601)'
+          x-description-zh: '发布时间（ISO 8601）'
+          x-description-zh-hk: '發佈時間（ISO 8601）'
+        - name: indicator.indicator_data[].observation_date
+          type: string
+          required: false
+          description: 'Observation date (YYYY-MM-DD)'
+          x-description-zh: '观测日期（YYYY-MM-DD）'
+          x-description-zh-hk: '觀測日期（YYYY-MM-DD）'
+        - name: total
+          type: integer
+          required: false
+          description: 'Total number of matching indicators'
+          x-description-zh: '匹配的指标总数'
+          x-description-zh-hk: '匹配的指標總數'
       responses:
         '200':
           description: Successful response
