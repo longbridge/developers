@@ -1081,3 +1081,119 @@
 :root[data-theme='dark'] .ep-urlbar-copypage {
   background: #0d1117;
 }
+
+/* ── Right rail: Request + Response panels ───────────────────────────────── */
+.api-rail {
+  position: sticky;
+  top: calc(var(--lb-nav-height, 64px) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - var(--lb-nav-height, 64px) - 40px);
+  overflow-y: auto;
+}
+.api-rail-card {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 10px;
+  background: #f6f8fa;
+  padding: 12px;
+}
+.api-rail-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.api-rail-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-rail-tokenbtn {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.api-rail-tokenform {
+  margin-bottom: 10px;
+}
+.api-rail-params {
+  margin-top: 10px;
+}
+.api-rail-send {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--lb-brand, #16a34a);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.api-rail-send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.api-rail-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.api-rail-tab {
+  padding: 3px 10px;
+  font-size: 12px;
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+.api-rail-tab.is-active {
+  color: #fff;
+  background: var(--lb-fg-1, #1f2937);
+  border-color: var(--lb-fg-1, #1f2937);
+}
+.api-rail-tab.is-err.is-active {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+.api-rail-live {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.15);
+  color: #15803d;
+}
+:root[data-theme='dark'] .api-rail-card {
+  background: #0d1117;
+}
+:root[data-theme='dark'] .api-rail-tokenbtn,
+:root[data-theme='dark'] .api-rail-tab {
+  background: #161b22;
+}
+/* three-column widths */
+.api-reference-page .docs-main,
+[data-lbus-component='api-reference'] .docs-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 1280px) {
+  [data-lbus-component='api-reference'] .docs-main {
+    grid-template-columns: 1fr;
+  }
+  .api-rail {
+    position: static;
+    max-height: none;
+  }
+}
