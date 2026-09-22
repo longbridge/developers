@@ -1206,14 +1206,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.static_info(["700.HK", "AAPL.US"])
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.MultiSecurityRequest(symbol=["700.HK", "AAPL.US"])
+                body = send_request(ws, cmd=10, body=req.SerializeToString())
+                resp = quote_pb2.SecurityStaticInfoResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.staticInfo(["700.HK", "AAPL.US"])
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = MultiSecurityRequest.encode({ symbol: ["700.HK", "AAPL.US"] }).finish()
+                const respBody = await sendRequest(ws, 10, body)
+                const resp = SecurityStaticInfoResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1267,14 +1277,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.quote(["700.HK", "AAPL.US"])
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.MultiSecurityRequest(symbol=["700.HK", "AAPL.US"])
+                body = send_request(ws, cmd=11, body=req.SerializeToString())
+                resp = quote_pb2.SecurityQuoteResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.quote(["700.HK", "AAPL.US"])
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = MultiSecurityRequest.encode({ symbol: ["700.HK", "AAPL.US"] }).finish()
+                const respBody = await sendRequest(ws, 11, body)
+                const resp = SecurityQuoteResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1328,14 +1348,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.option_quote(["AAPL220429P162500.US"])
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.MultiSecurityRequest(symbol=["AAPL220429P162500.US"])
+                body = send_request(ws, cmd=12, body=req.SerializeToString())
+                resp = quote_pb2.OptionQuoteResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.optionQuote(["AAPL220429P162500.US"])
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = MultiSecurityRequest.encode({ symbol: ["AAPL220429P162500.US"] }).finish()
+                const respBody = await sendRequest(ws, 12, body)
+                const resp = OptionQuoteResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1389,14 +1419,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.warrant_quote(["66642.HK"])
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.MultiSecurityRequest(symbol=["66642.HK"])
+                body = send_request(ws, cmd=13, body=req.SerializeToString())
+                resp = quote_pb2.WarrantQuoteResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.warrantQuote(["66642.HK"])
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = MultiSecurityRequest.encode({ symbol: ["66642.HK"] }).finish()
+                const respBody = await sendRequest(ws, 13, body)
+                const resp = WarrantQuoteResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1456,14 +1496,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.depth("700.HK")
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.SecurityRequest(symbol="700.HK")
+                body = send_request(ws, cmd=14, body=req.SerializeToString())
+                resp = quote_pb2.SecurityDepthResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.depth("700.HK")
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityRequest.encode({ symbol: "700.HK" }).finish()
+                const respBody = await sendRequest(ws, 14, body)
+                const resp = SecurityDepthResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1523,14 +1573,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.brokers("700.HK")
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.SecurityRequest(symbol="700.HK")
+                body = send_request(ws, cmd=15, body=req.SerializeToString())
+                resp = quote_pb2.SecurityBrokersResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.brokers("700.HK")
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityRequest.encode({ symbol: "700.HK" }).finish()
+                const respBody = await sendRequest(ws, 15, body)
+                const resp = SecurityBrokersResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1593,14 +1653,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.participants()
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # empty request body
+                body = send_request(ws, cmd=16, body=b"")
+                resp = quote_pb2.ParticipantBrokerIdsResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.participants()
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // empty request body
+                const respBody = await sendRequest(ws, 16, new Uint8Array())
+                const resp = ParticipantBrokerIdsResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1660,14 +1730,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.trades("700.HK", 10)
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.SecurityTradeRequest(symbol="700.HK", count=10)
+                body = send_request(ws, cmd=17, body=req.SerializeToString())
+                resp = quote_pb2.SecurityTradeResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.trades("700.HK", 10)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityTradeRequest.encode({ symbol: "700.HK", count: 10 }).finish()
+                const respBody = await sendRequest(ws, 17, body)
+                const resp = SecurityTradeResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1723,14 +1803,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.intraday("700.HK")
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.SecurityIntradayRequest(symbol="700.HK")
+                body = send_request(ws, cmd=18, body=req.SerializeToString())
+                resp = quote_pb2.SecurityIntradayResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.intraday("700.HK")
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityIntradayRequest.encode({ symbol: "700.HK" }).finish()
+                const respBody = await sendRequest(ws, 18, body)
+                const resp = SecurityIntradayResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1798,17 +1888,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                from longbridge.openapi import Period, AdjustType
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                resp = ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)
+                req = quote_pb2.SecurityCandlestickRequest(symbol="700.HK", period=1000, count=10, adjust_type=0)
+                body = send_request(ws, cmd=19, body=req.SerializeToString())
+                resp = quote_pb2.SecurityCandlestickResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const { Period, AdjustType } = require("longbridge")
-                const resp = await ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityCandlestickRequest.encode({ symbol: "700.HK", period: 1000, count: 10, adjust_type: 0 }).finish()
+                const respBody = await sendRequest(ws, 19, body)
+                const resp = SecurityCandlestickResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1861,14 +1958,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.option_chain_expiry_date_list("AAPL.US")
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.SecurityRequest(symbol="AAPL.US")
+                body = send_request(ws, cmd=20, body=req.SerializeToString())
+                resp = quote_pb2.OptionChainDateListResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.optionChainExpiryDateList("AAPL.US")
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityRequest.encode({ symbol: "AAPL.US" }).finish()
+                const respBody = await sendRequest(ws, 20, body)
+                const resp = OptionChainDateListResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1923,14 +2030,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.option_chain_info_by_date("AAPL.US", date(2022, 4, 29))
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.OptionChainDateStrikeInfoRequest(symbol="AAPL.US", expiry_date="20220429")
+                body = send_request(ws, cmd=21, body=req.SerializeToString())
+                resp = quote_pb2.OptionChainDateStrikeInfoResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.optionChainInfoByDate("AAPL.US", new NaiveDate(2022, 4, 29))
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = OptionChainDateStrikeInfoRequest.encode({ symbol: "AAPL.US", expiry_date: "20220429" }).finish()
+                const respBody = await sendRequest(ws, 21, body)
+                const resp = OptionChainDateStrikeInfoResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -1993,14 +2110,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.warrant_issuers()
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # empty request body
+                body = send_request(ws, cmd=22, body=b"")
+                resp = quote_pb2.IssuerInfoResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.warrantIssuers()
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // empty request body
+                const respBody = await sendRequest(ws, 22, new Uint8Array())
+                const resp = IssuerInfoResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2061,14 +2188,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.warrant_list("700.HK", WarrantSortBy.LastDone, SortOrderType.Ascending)
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.WarrantFilterListRequest(symbol="700.HK", filter_config=quote_pb2.FilterConfig(sort_by=1, sort_order=0, sort_offset=0, sort_count=20), language=1)
+                body = send_request(ws, cmd=23, body=req.SerializeToString())
+                resp = quote_pb2.WarrantFilterListResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.warrantList("700.HK", WarrantSortBy.LastDone, SortOrderType.Ascending)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = WarrantFilterListRequest.encode({ symbol: "700.HK", filter_config: { sort_by: 1, sort_order: 0, sort_offset: 0, sort_count: 20 }, language: 1 }).finish()
+                const respBody = await sendRequest(ws, 23, body)
+                const resp = WarrantFilterListResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2126,14 +2263,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.capital_flow("700.HK")
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.CapitalFlowIntradayRequest(symbol="700.HK")
+                body = send_request(ws, cmd=24, body=req.SerializeToString())
+                resp = quote_pb2.CapitalFlowIntradayResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.capitalFlow("700.HK")
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = CapitalFlowIntradayRequest.encode({ symbol: "700.HK" }).finish()
+                const respBody = await sendRequest(ws, 24, body)
+                const resp = CapitalFlowIntradayResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2195,14 +2342,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.capital_distribution("700.HK")
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = quote_pb2.SecurityRequest(symbol="700.HK")
+                body = send_request(ws, cmd=25, body=req.SerializeToString())
+                resp = quote_pb2.CapitalDistributionResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.capitalDistribution("700.HK")
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityRequest.encode({ symbol: "700.HK" }).finish()
+                const respBody = await sendRequest(ws, 25, body)
+                const resp = CapitalDistributionResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2260,17 +2417,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                from longbridge.openapi import CalcIndex
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                resp = ctx.calc_indexes(["700.HK"], [CalcIndex.LastDone, CalcIndex.ChangeRate])
+                req = quote_pb2.SecurityCalcQuoteRequest(symbols=["700.HK"], calc_index=[1, 4])
+                body = send_request(ws, cmd=26, body=req.SerializeToString())
+                resp = quote_pb2.SecurityCalcQuoteResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const { CalcIndex } = require("longbridge")
-                const resp = await ctx.calcIndexes(["700.HK"], [CalcIndex.LastDone, CalcIndex.ChangeRate])
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityCalcQuoteRequest.encode({ symbols: ["700.HK"], calc_index: [1, 4] }).finish()
+                const respBody = await sendRequest(ws, 26, body)
+                const resp = SecurityCalcQuoteResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2342,19 +2506,26 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                from longbridge.openapi import Period, AdjustType
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                resp = ctx.history_candlesticks_by_offset(
-                    "700.HK", Period.Day, AdjustType.NoAdjust, True, 10)
+                req = quote_pb2.SecurityHistoryCandlestickRequest(symbol="700.HK", period=1000, adjust_type=0, query_type=1,
+                    offset_request=quote_pb2.SecurityHistoryCandlestickRequest.OffsetQuery(direction=1, count=10))
+                body = send_request(ws, cmd=27, body=req.SerializeToString())
+                resp = quote_pb2.SecurityCandlestickResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const { Period, AdjustType } = require("longbridge")
-                const resp = await ctx.historyCandlesticksByOffset(
-                  "700.HK", Period.Day, AdjustType.NoAdjust, true, 10)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SecurityHistoryCandlestickRequest.encode({ symbol: "700.HK", period: 1000, adjust_type: 0, query_type: 1,
+                  offset_request: { direction: 1, count: 10 } }).finish()
+                const respBody = await sendRequest(ws, 27, body)
+                const resp = SecurityCandlestickResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2423,14 +2594,24 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                resp = ctx.subscriptions()
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # empty request body
+                body = send_request(ws, cmd=5, body=b"")
+                resp = quote_pb2.SubscriptionResponse()
+                resp.ParseFromString(body)
                 print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const resp = await ctx.subscriptions()
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // empty request body
+                const respBody = await sendRequest(ws, 5, new Uint8Array())
+                const resp = SubscriptionResponse.decode(respBody)
                 console.log(resp)
           x-response-example: |
             {
@@ -2491,18 +2672,25 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                from longbridge.openapi import SubType
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                ctx.set_on_quote(lambda symbol, event: print(symbol, event))
-                ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Quote], is_first_push=True)
+                req = quote_pb2.SubscribeRequest(symbol=["700.HK", "AAPL.US"], sub_type=[1], is_first_push=True)
+                body = send_request(ws, cmd=6, body=req.SerializeToString())
+                resp = quote_pb2.SubscriptionResponse()
+                resp.ParseFromString(body)
+                print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const { SubType } = require("longbridge")
-                ctx.setOnQuote((event) => console.log(event))
-                await ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Quote], true)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = SubscribeRequest.encode({ symbol: ["700.HK", "AAPL.US"], sub_type: [1], is_first_push: true }).finish()
+                const respBody = await sendRequest(ws, 6, body)
+                const resp = SubscriptionResponse.decode(respBody)
+                console.log(resp)
           x-response-example: |
             {
               "sub_list": [
@@ -2559,16 +2747,20 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                from longbridge.openapi import SubType
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote])
+                req = quote_pb2.UnsubscribeRequest(symbol=["700.HK", "AAPL.US"], sub_type=[1], unsub_all=False)
+                body = send_request(ws, cmd=7, body=req.SerializeToString())
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const { SubType } = require("longbridge")
-                await ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote], false)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = UnsubscribeRequest.encode({ symbol: ["700.HK", "AAPL.US"], sub_type: [1], unsub_all: false }).finish()
+                const respBody = await sendRequest(ws, 7, body)
           x-response-example: |
             {}
     - name: Quote · Push (WebSocket)
@@ -2639,15 +2831,23 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                ctx.set_on_quote(lambda symbol, event: print(symbol, event))
-                ctx.subscribe(["700.HK"], [SubType.Quote], is_first_push=True)
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # After subscribing, push packets arrive with cmd=101. Decode the body:
+                push = quote_pb2.PushQuote()
+                push.ParseFromString(push_body)
+                print(push)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                ctx.setOnQuote((event) => console.log(event))
-                await ctx.subscribe(["700.HK"], [SubType.Quote], true)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // After subscribing, push packets arrive with cmd=101. Decode the body:
+                const push = PushQuote.decode(pushBody)
+                console.log(push)
           x-response-example: |
             {
               "symbol": "AAPL.US",
@@ -2705,15 +2905,23 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                ctx.set_on_depth(lambda symbol, event: print(symbol, event))
-                ctx.subscribe(["700.HK"], [SubType.Depth], is_first_push=True)
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # After subscribing, push packets arrive with cmd=102. Decode the body:
+                push = quote_pb2.PushDepth()
+                push.ParseFromString(push_body)
+                print(push)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                ctx.setOnDepth((event) => console.log(event))
-                await ctx.subscribe(["700.HK"], [SubType.Depth], true)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // After subscribing, push packets arrive with cmd=102. Decode the body:
+                const push = PushDepth.decode(pushBody)
+                console.log(push)
           x-response-example: |
             {
               "symbol": "700.HK",
@@ -2764,15 +2972,23 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                ctx.set_on_brokers(lambda symbol, event: print(symbol, event))
-                ctx.subscribe(["700.HK"], [SubType.Brokers], is_first_push=True)
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # After subscribing, push packets arrive with cmd=103. Decode the body:
+                push = quote_pb2.PushBrokers()
+                push.ParseFromString(push_body)
+                print(push)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                ctx.setOnBrokers((event) => console.log(event))
-                await ctx.subscribe(["700.HK"], [SubType.Brokers], true)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // After subscribing, push packets arrive with cmd=103. Decode the body:
+                const push = PushBrokers.decode(pushBody)
+                console.log(push)
           x-response-example: |
             {
               "symbol": "700.HK",
@@ -2820,15 +3036,23 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                ctx.set_on_trades(lambda symbol, event: print(symbol, event))
-                ctx.subscribe(["700.HK"], [SubType.Trade])
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # After subscribing, push packets arrive with cmd=104. Decode the body:
+                push = quote_pb2.PushTrade()
+                push.ParseFromString(push_body)
+                print(push)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                ctx.setOnTrades((event) => console.log(event))
-                await ctx.subscribe(["700.HK"], [SubType.Trade], false)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // After subscribing, push packets arrive with cmd=104. Decode the body:
+                const push = PushTrade.decode(pushBody)
+                console.log(push)
           x-response-example: |
             {
               "symbol": "700.HK",
@@ -2875,18 +3099,23 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: QuoteContext (see Subscribe)
-                from longbridge.openapi import Period
+                # Prereqs: an authed quote WebSocket `ws` and generated `quote_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                ctx.set_on_candlestick(lambda symbol, event: print(symbol, event))
-                ctx.subscribe_candlesticks("700.HK", Period.Min_1)
+                # After subscribing, push packets arrive with cmd=105. Decode the body:
+                push = quote_pb2.PushCandlestick()
+                push.ParseFromString(push_body)
+                print(push)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: QuoteContext
-                const { Period } = require("longbridge")
-                ctx.setOnCandlestick((event) => console.log(event))
-                await ctx.subscribeCandlesticks("700.HK", Period.Min_1)
+                // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // After subscribing, push packets arrive with cmd=105. Decode the body:
+                const push = PushCandlestick.decode(pushBody)
+                console.log(push)
           x-response-example: |
             {
               "symbol": "700.HK",
@@ -2949,15 +3178,25 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: TradeContext
-                ctx.set_on_order_changed(lambda event: print(event))
-                ctx.subscribe(["private"])
+                # Prereqs: an authed trade-gateway WebSocket `ws` and generated `trade_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = trade_pb2.Sub(topics=["private"])
+                body = send_request(ws, cmd=16, body=req.SerializeToString())
+                resp = trade_pb2.SubResponse()
+                resp.ParseFromString(body)
+                print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: TradeContext
-                ctx.setOnOrderChanged((event) => console.log(event))
-                await ctx.subscribe(["private"])
+                // Prereqs: authed trade-gateway WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = Sub.encode({ topics: ["private"] }).finish()
+                const respBody = await sendRequest(ws, 16, body)
+                const resp = SubResponse.decode(respBody)
+                console.log(resp)
           x-response-example: |
             {
               "success": ["private"],
@@ -3010,13 +3249,25 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: TradeContext
-                ctx.unsubscribe(["private"])
+                # Prereqs: an authed trade-gateway WebSocket `ws` and generated `trade_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                req = trade_pb2.Unsub(topics=["private"])
+                body = send_request(ws, cmd=17, body=req.SerializeToString())
+                resp = trade_pb2.UnsubResponse()
+                resp.ParseFromString(body)
+                print(resp)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: TradeContext
-                await ctx.unsubscribe(["private"])
+                // Prereqs: authed trade-gateway WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                const body = Unsub.encode({ topics: ["private"] }).finish()
+                const respBody = await sendRequest(ws, 17, body)
+                const resp = UnsubResponse.decode(respBody)
+                console.log(resp)
           x-response-example: |
             {
               "current": []
@@ -3070,15 +3321,23 @@ x-websocket:
             - lang: Python
               label: Python
               source: |
-                # ctx: TradeContext
-                ctx.set_on_order_changed(lambda event: print(event))
-                ctx.subscribe(["private"])
+                # Prereqs: an authed trade-gateway WebSocket `ws` and generated `trade_pb2`.
+                # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
+                #   send_request(ws, cmd, body) -> response_body   (bytes)
+
+                # After subscribing, push packets arrive with cmd=18. Decode the body:
+                push = trade_pb2.()
+                push.ParseFromString(push_body)
+                print(push)
             - lang: JavaScript
               label: Node.js
               source: |
-                // ctx: TradeContext
-                ctx.setOnOrderChanged((event) => console.log(event))
-                await ctx.subscribe(["private"])
+                // Prereqs: authed trade-gateway WebSocket `ws` + protobufjs types from the .proto.
+                // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
+
+                // After subscribing, push packets arrive with cmd=18. Decode the body:
+                const push = .decode(pushBody)
+                console.log(push)
           x-response-example: |
             {
               "event": "order_changed_lb",
