@@ -14,7 +14,7 @@ import {
   type ParameterRow,
   type ApiResponse,
 } from '@longbridge/openapi-tryit'
-import { CodeTabs } from './CodeSample'
+import { CodeDropdown } from './CodeSample'
 import type { CodeBlock, XParameter } from './openapi-loader'
 import { useEnv, type AuthMode } from './EnvContext'
 import { signedCodeBlocks } from './signing-samples'
@@ -153,7 +153,7 @@ export function RequestPanel({
           )}
         </div>
       )}
-      {shownBlocks.length > 0 && <CodeTabs blocks={shownBlocks} labelCopy={labelCopy} labelCopied={labelCopied} />}
+      {shownBlocks.length > 0 && <CodeDropdown blocks={shownBlocks} labelCopy={labelCopy} labelCopied={labelCopied} />}
       {paramRows.length > 0 && (
         <div className="api-rail-params">
           <ParametersForm parameters={paramRows} onChange={setValues} />

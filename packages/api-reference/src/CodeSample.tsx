@@ -153,5 +153,52 @@ export function CodeTabs({ blocks, labelCopy, labelCopied }: CodeTabsProps) {
   )
 }
 
+// ── CodeDropdown ──────────────────────────────────────────────────────────────
+// Same light code card, but the language is picked from a <select> instead of a
+// tab strip — for narrow columns (the right rail) where 8 tabs would overflow.
+
+export function CodeDropdown({ blocks, labelCopy, labelCopied }: CodeTabsProps) {
+  const [active, setActive] = React.useState(0)
+  const [copied, setCopied] = React.useState(false)
+  if (!blocks.length) return null
+  const block = blocks[Math.min(active, blocks.length - 1)]
+
+  function copy() {
+    navigator.clipboard
+      .writeText(block.code)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 1800)
+      })
+      .catch(() => {})
+  }
+
+  return (
+    <div data-lbus-component="code-dropdown" className="code-tabs">
+      <div className="code-tabs-bar">
+        <select
+          className="code-lang-select"
+          aria-label="language"
+          value={active}
+          onChange={(e) => setActive(Number(e.target.value))}>
+          {blocks.map((b, i) => (
+            <option key={b.label} value={i}>
+              {b.label}
+            </option>
+          ))}
+        </select>
+        <button type="button" className="code-tabs-copy" onClick={copy}>
+          {copied ? labelCopied : labelCopy}
+        </button>
+      </div>
+      <div className="code-tabs-body">
+        <pre className="code-pre">
+          <code dangerouslySetInnerHTML={{ __html: highlightCode(block.code, block.lang) }} />
+        </pre>
+      </div>
+    </div>
+  )
+}
+
 // React import needed for useState
 import React from 'react'

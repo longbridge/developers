@@ -857,6 +857,24 @@
   border-bottom-color: var(--lb-brand, #16a34a);
   font-weight: 600;
 }
+.code-lang-select {
+  margin: 6px 8px;
+  padding: 4px 26px 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+:root[data-theme='dark'] .code-lang-select {
+  color: #e6edf3;
+}
 .code-tabs-copy {
   flex: none;
   margin-right: 8px;
