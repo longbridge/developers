@@ -489,22 +489,22 @@ function WsSidebarGroup({
   onSelect: (id: string) => void
   locale: Locale
 }) {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const label = pickLocale(group.name, group.nameZh, group.nameZhHk, locale)
   return (
-    <li data-lbus-component="sidebar-group" className="list-none">
+    <li data-lbus-component="sidebar-subgroup" className="list-none">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg px-2 py-1 text-[14px] leading-6">
-        <span className="flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)] group-hover:text-[color:var(--lb-brand)]">
+        className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg pl-3 pr-2 py-1 text-[13px] leading-6">
+        <span className="flex-1 min-w-0 truncate font-semibold text-[color:var(--lb-fg-2)] group-hover:text-[color:var(--lb-brand)]">
           {label}
         </span>
         <Caret open={open} />
       </button>
       {open && (
-        <ul className="list-none py-0 m-0 flex flex-col gap-[2px]" role="list">
+        <ul className="list-none py-0 m-0 pl-2 flex flex-col gap-[2px]" role="list">
           {group.commands.map((c) => {
             const active = activeWs === c.id
             return (
@@ -1075,7 +1075,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               })}
             </ul>
           )}
-          {/* Tag groups — each a collapsible section separated by a divider */}
+          {/* Tag groups — each a collapsible section separated by a divider. WS
+              command groups are merged into the tag they belong to (x-tag). */}
           {filteredGroups.map((g) => (
             <div key={g.name} className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
               <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
@@ -1086,17 +1087,26 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   locale={locale}
                   forceOpen={!!query.trim()}
                 />
+                {wsGroups
+                  .filter((w) => w.tag === g.name)
+                  .map((wg) => (
+                    <WsSidebarGroup key={wg.name} group={wg} activeWs={activeWs} onSelect={selectWs} locale={locale} />
+                  ))}
               </ul>
             </div>
           ))}
-          {/* WebSocket functions — grouped like the HTTP endpoint groups */}
-          {wsGroups.map((wg) => (
-            <div key={wg.name} className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
+          {/* WS groups whose tag has no matching HTTP group (fallback) */}
+          {wsGroups.filter((w) => !filteredGroups.some((g) => g.name === w.tag)).length > 0 && (
+            <div className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
               <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
-                <WsSidebarGroup group={wg} activeWs={activeWs} onSelect={selectWs} locale={locale} />
+                {wsGroups
+                  .filter((w) => !filteredGroups.some((g) => g.name === w.tag))
+                  .map((wg) => (
+                    <WsSidebarGroup key={wg.name} group={wg} activeWs={activeWs} onSelect={selectWs} locale={locale} />
+                  ))}
               </ul>
             </div>
-          ))}
+          )}
         </nav>
       </aside>
 

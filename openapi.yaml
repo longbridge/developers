@@ -1156,9 +1156,10 @@ x-pages:
       | 500         | 500000 | internal error         | 服务内部错误，请联系客户经理进行处理         |
 x-websocket:
   groups:
-    - name: Quote · Pull (WebSocket)
-      x-name-zh: 行情 · 拉取 (WebSocket)
-      x-name-zh-hk: 行情 · 拉取 (WebSocket)
+    - name: Pull (WebSocket)
+      x-name-zh: 拉取 (WebSocket)
+      x-name-zh-hk: 拉取 (WebSocket)
+      x-tag: Quote
       commands:
         - id: ws-static
           name: Static Info
@@ -4336,9 +4337,10 @@ x-websocket:
               description: "Trade session"
               x-description-zh: "交易时段"
               x-description-zh-hk: "交易時段"
-    - name: Quote · Subscription (WebSocket)
-      x-name-zh: 行情 · 订阅 (WebSocket)
-      x-name-zh-hk: 行情 · 訂閱 (WebSocket)
+    - name: Subscription (WebSocket)
+      x-name-zh: 订阅 (WebSocket)
+      x-name-zh-hk: 訂閱 (WebSocket)
+      x-tag: Quote
       commands:
         - id: ws-subscription
           name: Get Subscriptions
@@ -4643,9 +4645,10 @@ x-websocket:
               description: "Is unsubscribe all; empty symbol unsubscribes all, otherwise all types of these symbols"
               x-description-zh: "是否全部取消；symbol 为空时取消所有订阅，否则取消这些标的的所有类型订阅"
               x-description-zh-hk: "是否全部取消；symbol 為空時取消所有訂閱，否則取消這些標的的所有類型訂閱"
-    - name: Quote · Push (WebSocket)
-      x-name-zh: 行情 · 推送 (WebSocket)
-      x-name-zh-hk: 行情 · 推送 (WebSocket)
+    - name: Push (WebSocket)
+      x-name-zh: 推送 (WebSocket)
+      x-name-zh-hk: 推送 (WebSocket)
+      x-tag: Quote
       commands:
         - id: ws-push-quote
           name: Push · Quote
@@ -5367,9 +5370,10 @@ x-websocket:
               description: "Trade session, see TradeSession"
               x-description-zh: "交易时段，详见 TradeSession"
               x-description-zh-hk: "交易時段，詳見 TradeSession"
-    - name: Trade (WebSocket)
-      x-name-zh: 交易 (WebSocket)
-      x-name-zh-hk: 交易 (WebSocket)
+    - name: Notification (WebSocket)
+      x-name-zh: 推送 (WebSocket)
+      x-name-zh-hk: 推送 (WebSocket)
+      x-tag: Trade
       commands:
         - id: ws-trade-sub
           name: Subscribe (Trade)

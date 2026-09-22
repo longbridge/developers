@@ -167,6 +167,8 @@ export interface WsGroupData {
   name: string
   nameZh?: string
   nameZhHk?: string
+  /** HTTP tag this WS group is filed under (so it merges into that tag's nav group). */
+  tag?: string
   commands: WsCommandItem[]
 }
 
@@ -294,6 +296,7 @@ export function parseSpec(rawYaml: string): {
         name: g.name ?? 'WebSocket',
         nameZh: g['x-name-zh'],
         nameZhHk: g['x-name-zh-hk'],
+        tag: g['x-tag'],
         commands: (g.commands ?? []).map(mapWsCommand),
       }))
   }
