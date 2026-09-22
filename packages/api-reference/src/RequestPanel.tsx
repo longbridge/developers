@@ -16,12 +16,15 @@ import {
 import { CodeTabs } from './CodeSample'
 import type { CodeBlock, XParameter } from './openapi-loader'
 import { useEnv } from './EnvContext'
+import { signedCodeBlocks } from './signing-samples'
 
 const L = {
   request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
   setToken: { en: 'Set Token', 'zh-CN': '设置 Token', 'zh-HK': '設置 Token' },
   send: { en: 'Send', 'zh-CN': '发送', 'zh-HK': '發送' },
   sending: { en: 'Sending…', 'zh-CN': '发送中…', 'zh-HK': '發送中…' },
+  sign: { en: 'Signed', 'zh-CN': '签名', 'zh-HK': '簽名' },
+  oauth: { en: 'OAuth', 'zh-CN': 'OAuth', 'zh-HK': 'OAuth' },
 } as const
 
 export interface RequestPanelProps {
@@ -45,7 +48,7 @@ export function RequestPanel({
   labelCopy,
   labelCopied,
 }: RequestPanelProps) {
-  const { baseUrl } = useEnv()
+  const { baseUrl, displayBaseUrl, authMode, setAuthMode } = useEnv()
   const { authData, setAuthData, autoFilled } = useAuthorization()
   const [showToken, setShowToken] = useState(false)
   const [sending, setSending] = useState(false)
@@ -54,6 +57,13 @@ export function RequestPanel({
   const paramRows = useMemo<ParameterRow[]>(
     () => xparams.map((p) => ({ name: p.name, type: p.type ?? 'string', description: p.description, required: p.required })),
     [xparams]
+  )
+
+  // OAuth mode shows the authored Bearer samples; Signed mode shows generated
+  // HMAC-signed samples (cURL / Python / Node.js) for this endpoint.
+  const shownBlocks = useMemo<CodeBlock[]>(
+    () => (authMode === 'oauth' ? blocks : signedCodeBlocks(method, path, displayBaseUrl)),
+    [authMode, blocks, method, path, displayBaseUrl]
   )
 
   const send = async () => {
@@ -89,6 +99,20 @@ export function RequestPanel({
     <section className="api-rail-card" data-lbus-component="request-panel">
       <div className="api-rail-head">
         <span className="api-rail-title">{L.request[locale]}</span>
+        <div className="api-rail-authseg" role="tablist" aria-label="auth mode">
+          <button
+            type="button"
+            className={`api-rail-authtab${authMode === 'sign' ? ' is-active' : ''}`}
+            onClick={() => setAuthMode('sign')}>
+            {L.sign[locale]}
+          </button>
+          <button
+            type="button"
+            className={`api-rail-authtab${authMode === 'oauth' ? ' is-active' : ''}`}
+            onClick={() => setAuthMode('oauth')}>
+            {L.oauth[locale]}
+          </button>
+        </div>
         <button type="button" className="api-rail-tokenbtn" onClick={() => setShowToken((v) => !v)}>
           🔑 {L.setToken[locale]}
         </button>
@@ -98,7 +122,7 @@ export function RequestPanel({
           <AuthorizationForm authData={authData} autoFilled={autoFilled} onChange={setAuthData} />
         </div>
       )}
-      {blocks.length > 0 && <CodeTabs blocks={blocks} labelCopy={labelCopy} labelCopied={labelCopied} />}
+      {shownBlocks.length > 0 && <CodeTabs blocks={shownBlocks} labelCopy={labelCopy} labelCopied={labelCopied} />}
       {paramRows.length > 0 && (
         <div className="api-rail-params">
           <ParametersForm parameters={paramRows} onChange={setValues} />

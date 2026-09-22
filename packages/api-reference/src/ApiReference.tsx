@@ -27,6 +27,7 @@ import {
 import { CodePanel, CodeTabs, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
 import { EnvProvider } from './EnvContext'
+import { AuthTable } from './AuthTable'
 import { EndpointUrlBar } from './EndpointUrlBar'
 import { RequestPanel } from './RequestPanel'
 import { ResponsePanel } from './ResponsePanel'
@@ -970,29 +971,10 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                     locale={locale}
                   />
 
-                  {/* Authorization */}
+                  {/* Authorization — dual method (Signed / OAuth) driven by the rail toggle */}
                   <section className="api-section">
                     <h2>{L.authorization[locale]}</h2>
-                    <table className="api-fields">
-                      <thead>
-                        <tr>
-                          <th>{L.name[locale]}</th>
-                          <th>{L.type[locale]}</th>
-                          <th>{L.required[locale]}</th>
-                          <th>{L.description[locale]}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <code>Authorization</code>
-                          </td>
-                          <td>string · header</td>
-                          <td>{t(locale, 'api.param.required')}</td>
-                          <td>{L.authorizationDesc[locale]}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <AuthTable locale={locale} />
                   </section>
 
                   {/* Permission (quote permission) */}

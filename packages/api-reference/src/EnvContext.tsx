@@ -9,6 +9,8 @@
 import React, { createContext, useContext, useState, useCallback } from 'react'
 
 export type ApiEnv = 'prod' | 'test'
+/** Auth scheme: `sign` = App Key + Secret HMAC signing; `oauth` = Bearer token. */
+export type AuthMode = 'sign' | 'oauth'
 
 const DISPLAY: Record<ApiEnv, string> = {
   prod: 'https://openapi.longbridge.com',
@@ -20,12 +22,19 @@ const DEV_PROXY: Record<ApiEnv, string> = {
 }
 
 const STORAGE_KEY = 'lb-apiref-env'
+const AUTH_KEY = 'lb-apiref-auth-mode'
 const isDev = typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV
 
 function initialEnv(): ApiEnv {
   if (typeof window === 'undefined') return 'prod'
   const v = window.localStorage.getItem(STORAGE_KEY)
   return v === 'test' ? 'test' : 'prod'
+}
+
+function initialAuthMode(): AuthMode {
+  if (typeof window === 'undefined') return 'sign'
+  const v = window.localStorage.getItem(AUTH_KEY)
+  return v === 'oauth' ? 'oauth' : 'sign'
 }
 
 interface EnvCtx {
@@ -35,6 +44,9 @@ interface EnvCtx {
   displayBaseUrl: string
   /** What TryIt calls: dev proxy prefix, or real domain in prod builds. */
   baseUrl: string
+  /** Auth scheme selected in the token panel; drives auth table + code samples. */
+  authMode: AuthMode
+  setAuthMode: (m: AuthMode) => void
 }
 
 const Ctx = createContext<EnvCtx | null>(null)
@@ -45,11 +57,18 @@ export function EnvProvider({ children }: { children: React.ReactNode }) {
     setEnvState(e)
     if (typeof window !== 'undefined') window.localStorage.setItem(STORAGE_KEY, e)
   }, [])
+  const [authMode, setAuthModeState] = useState<AuthMode>(initialAuthMode)
+  const setAuthMode = useCallback((m: AuthMode) => {
+    setAuthModeState(m)
+    if (typeof window !== 'undefined') window.localStorage.setItem(AUTH_KEY, m)
+  }, [])
   const value: EnvCtx = {
     env,
     setEnv,
     displayBaseUrl: DISPLAY[env],
     baseUrl: isDev ? DEV_PROXY[env] : DISPLAY[env],
+    authMode,
+    setAuthMode,
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
