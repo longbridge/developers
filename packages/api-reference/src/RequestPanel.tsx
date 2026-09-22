@@ -17,7 +17,7 @@ import {
 import { CodeTabs } from './CodeSample'
 import type { CodeBlock, XParameter } from './openapi-loader'
 import { useEnv, type AuthMode } from './EnvContext'
-import { signedCodeBlocks, oauthCodeBlocks } from './signing-samples'
+import { signedCodeBlocks } from './signing-samples'
 
 const L = {
   request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
@@ -33,6 +33,8 @@ export interface RequestPanelProps {
   method: string
   path: string
   xparams: XParameter[]
+  /** Authored OAuth (Bearer) samples from the spec, shown in OAuth mode. */
+  oauthBlocks: CodeBlock[]
   locale: Locale
   onResponse: (r: ApiResponse) => void
   labelCopy: string
@@ -43,6 +45,7 @@ export function RequestPanel({
   method,
   path,
   xparams,
+  oauthBlocks,
   locale,
   onResponse,
   labelCopy,
@@ -59,14 +62,11 @@ export function RequestPanel({
     [xparams]
   )
 
-  // Both modes expose the same language set (cURL / Python / Node.js), generated
-  // client-side so the code always matches the selected auth scheme.
+  // Both modes expose the same 8 languages: OAuth shows the authored Bearer
+  // samples from the spec; Signed shows client-generated HMAC-signed samples.
   const shownBlocks = useMemo<CodeBlock[]>(
-    () =>
-      authMode === 'oauth'
-        ? oauthCodeBlocks(method, path, displayBaseUrl)
-        : signedCodeBlocks(method, path, displayBaseUrl),
-    [authMode, method, path, displayBaseUrl]
+    () => (authMode === 'oauth' ? oauthBlocks : signedCodeBlocks(method, path, displayBaseUrl)),
+    [authMode, oauthBlocks, method, path, displayBaseUrl]
   )
 
   const send = async () => {
