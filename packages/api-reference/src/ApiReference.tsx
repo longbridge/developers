@@ -532,6 +532,9 @@ const L_WS = {
   callExample: { en: 'Call Example', 'zh-CN': '调用示例', 'zh-HK': '調用示例' },
   responseExample: { en: 'Response Example', 'zh-CN': '响应示例', 'zh-HK': '響應示例' },
   pushExample: { en: 'Push Example', 'zh-CN': '推送示例', 'zh-HK': '推送示例' },
+  reqParams: { en: 'Request Parameters', 'zh-CN': '请求参数', 'zh-HK': '請求參數' },
+  respFields: { en: 'Response Fields', 'zh-CN': '响应字段', 'zh-HK': '響應字段' },
+  pushFields: { en: 'Push Fields', 'zh-CN': '推送字段', 'zh-HK': '推送字段' },
 } as const
 
 function wsBlocks(cmd: WsCommandItem): CodeBlock[] {
@@ -555,6 +558,18 @@ function WsDetail({ cmd, locale, localePrefix }: { cmd: WsCommandItem; locale: L
         </code>
       </div>
       {desc && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: renderMd(desc, localePrefix) }} />}
+      {cmd.fields && cmd.fields.length > 0 && (
+        <section className="api-section">
+          <h2>{L_WS.reqParams[locale]}</h2>
+          <ParamTable rows={rowsFrom(cmd.fields, locale)} locale={locale} />
+        </section>
+      )}
+      {cmd.responseFields && cmd.responseFields.length > 0 && (
+        <section className="api-section">
+          <h2>{(cmd.direction === 'push' ? L_WS.pushFields : L_WS.respFields)[locale]}</h2>
+          <ParamTable rows={rowsFrom(cmd.responseFields, locale)} locale={locale} />
+        </section>
+      )}
     </>
   )
 }

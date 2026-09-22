@@ -1231,6 +1231,116 @@ x-websocket:
                 { "symbol": "700.HK", "name_cn": "腾讯控股", "name_en": "TENCENT", "exchange": "SEHK", "currency": "HKD", "lot_size": 100, "total_shares": 9612464038, "eps": "28.4394", "board": "HKEquity" }
               ]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string[]"
+              required: true
+              description: "Security code list, in ticker.region format; max 500 symbols per request"
+              x-description-zh: "标的代码列表，使用 ticker.region 格式；每次请求上限 500 个"
+              x-description-zh-hk: "標的代碼列表，使用 ticker.region 格式；每次請求上限 500 個"
+          x-response-fields:
+            - name: "secu_static_info"
+              type: "object[]"
+              required: false
+              description: "Securities Basic Information"
+              x-description-zh: "标的基础数据列表"
+              x-description-zh-hk: "標的基礎數據列表"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ name_cn"
+              type: "string"
+              required: false
+              description: "Security name (zh-CN)"
+              x-description-zh: "中文简体标的名称"
+              x-description-zh-hk: "中文簡體標的名稱"
+            - name: "└ name_en"
+              type: "string"
+              required: false
+              description: "Security name (en)"
+              x-description-zh: "英文标的名称"
+              x-description-zh-hk: "英文標的名稱"
+            - name: "└ name_hk"
+              type: "string"
+              required: false
+              description: "Security name (zh-HK)"
+              x-description-zh: "中文繁体标的名称"
+              x-description-zh-hk: "中文繁體標的名稱"
+            - name: "└ exchange"
+              type: "string"
+              required: false
+              description: "Exchange which the security belongs to"
+              x-description-zh: "标的所属交易所"
+              x-description-zh-hk: "標的所屬交易所"
+            - name: "└ currency"
+              type: "string"
+              required: false
+              description: "Trading currency (CNY/USD/SGD/HKD)"
+              x-description-zh: "交易币种 (CNY/USD/SGD/HKD)"
+              x-description-zh-hk: "交易幣種 (CNY/USD/SGD/HKD)"
+            - name: "└ lot_size"
+              type: "int32"
+              required: false
+              description: "Lot size"
+              x-description-zh: "每手股数"
+              x-description-zh-hk: "每手股數"
+            - name: "└ total_shares"
+              type: "int64"
+              required: false
+              description: "Total shares"
+              x-description-zh: "总股本"
+              x-description-zh-hk: "總股本"
+            - name: "└ circulating_shares"
+              type: "int64"
+              required: false
+              description: "Circulating shares"
+              x-description-zh: "流通股本"
+              x-description-zh-hk: "流通股本"
+            - name: "└ hk_shares"
+              type: "int64"
+              required: false
+              description: "HK shares (only HK stocks)"
+              x-description-zh: "港股股本 (仅港股)"
+              x-description-zh-hk: "港股股本 (僅港股)"
+            - name: "└ eps"
+              type: "string"
+              required: false
+              description: "Earnings per share"
+              x-description-zh: "每股盈利"
+              x-description-zh-hk: "每股盈利"
+            - name: "└ eps_ttm"
+              type: "string"
+              required: false
+              description: "Earnings per share (TTM)"
+              x-description-zh: "每股盈利 (TTM)"
+              x-description-zh-hk: "每股盈利 (TTM)"
+            - name: "└ bps"
+              type: "string"
+              required: false
+              description: "Net assets per share"
+              x-description-zh: "每股净资产"
+              x-description-zh-hk: "每股淨資產"
+            - name: "└ dividend_yield"
+              type: "string"
+              required: false
+              description: "Dividend yield"
+              x-description-zh: "股息"
+              x-description-zh-hk: "股息"
+            - name: "└ stock_derivatives"
+              type: "int32[]"
+              required: false
+              description: "Types of supported derivatives (1-Option, 2-Warrant)"
+              x-description-zh: "可提供的衍生品行情类型 (1-期权，2-轮证)"
+              x-description-zh-hk: "可提供的衍生品行情類型 (1-期權，2-輪證)"
+            - name: "└ board"
+              type: "string"
+              required: false
+              description: "The board to which the security belongs"
+              x-description-zh: "标的所属板块"
+              x-description-zh-hk: "標的所屬板塊"
         - id: ws-quote
           name: Quotes
           x-name-zh: 实时报价
@@ -1302,6 +1412,224 @@ x-websocket:
                 { "symbol": "700.HK", "last_done": "338.000", "prev_close": "334.800", "open": "340.600", "high": "340.600", "low": "333.000", "timestamp": 1651115955, "volume": 7310881, "turnover": "2461463161.000" }
               ]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string[]"
+              required: true
+              description: "Security code list, in ticker.region format; max 500 symbols per request"
+              x-description-zh: "标的代码列表，使用 ticker.region 格式；每次请求上限 500 个"
+              x-description-zh-hk: "標的代碼列表，使用 ticker.region 格式；每次請求上限 500 個"
+          x-response-fields:
+            - name: "secu_quote"
+              type: "object[]"
+              required: false
+              description: "Securities quote"
+              x-description-zh: "标的实时行情数据列表"
+              x-description-zh-hk: "標的實時行情數據列表"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: "└ prev_close"
+              type: "string"
+              required: false
+              description: "Yesterday's close"
+              x-description-zh: "昨收价"
+              x-description-zh-hk: "昨收價"
+            - name: "└ open"
+              type: "string"
+              required: false
+              description: "Open"
+              x-description-zh: "开盘价"
+              x-description-zh-hk: "開盤價"
+            - name: "└ high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: "└ low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "└ trade_status"
+              type: "int32"
+              required: false
+              description: "Security trading status"
+              x-description-zh: "标的交易状态"
+              x-description-zh-hk: "標的交易狀態"
+            - name: "└ pre_market_quote"
+              type: "object"
+              required: false
+              description: "Quote of US pre market"
+              x-description-zh: "美股盘前交易行情"
+              x-description-zh-hk: "美股盤前交易行情"
+            - name: " └ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: " └ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: " └ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: " └ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: " └ high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: " └ low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: " └ prev_close"
+              type: "string"
+              required: false
+              description: "Close of the last trade session"
+              x-description-zh: "上一个交易阶段的收盘价"
+              x-description-zh-hk: "上一個交易階段的收盤價"
+            - name: "└ post_market_quote"
+              type: "object"
+              required: false
+              description: "Quote of US post market"
+              x-description-zh: "美股盘后交易行情"
+              x-description-zh-hk: "美股盤後交易行情"
+            - name: " └ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: " └ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: " └ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: " └ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: " └ high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: " └ low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: " └ prev_close"
+              type: "string"
+              required: false
+              description: "Close of the last trade session"
+              x-description-zh: "上一个交易阶段的收盘价"
+              x-description-zh-hk: "上一個交易階段的收盤價"
+            - name: "└ over_night_quote"
+              type: "object"
+              required: false
+              description: "Quote of US overnight market; requires enable_overnight, returns null otherwise (US stocks only)"
+              x-description-zh: "美股夜盘交易行情；需开启 enable_overnight 参数，否则返回 null（仅支持美股）"
+              x-description-zh-hk: "美股夜盤交易行情；需開啟 enable_overnight 參數，否則返回 null（僅支援美股）"
+            - name: " └ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: " └ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: " └ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: " └ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: " └ high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: " └ low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: " └ prev_close"
+              type: "string"
+              required: false
+              description: "Close of the last trade session"
+              x-description-zh: "上一个交易阶段的收盘价"
+              x-description-zh-hk: "上一個交易階段的收盤價"
         - id: ws-option-quote
           name: Option Quotes
           x-name-zh: 期权实时报价
@@ -1373,6 +1701,146 @@ x-websocket:
                 { "symbol": "AAPL220429P162500.US", "last_done": "7.78", "prev_close": "4.13", "timestamp": 1651003200, "volume": 3082, "turnover": "1813434.00", "option_extend": { "implied_volatility": "0.592", "open_interest": 11463, "expiry_date": "20220429", "strike_price": "162.50", "contract_type": "A", "direction": "P", "underlying_symbol": "AAPL.US" } }
               ]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string[]"
+              required: true
+              description: "Security code list. obtain the symbol of the options through the optionchain API, for example: [BABA230120C160000.US]. Max 500 symbols per request"
+              x-description-zh: "标的代码列表，通过期权链接口获取期权标的的 symbol，例如：[BABA230120C160000.US]。每次请求上限 500 个"
+              x-description-zh-hk: "標的代碼列表，通過期權鏈接口獲取期權標的的 symbol，例如：[BABA230120C160000.US]。每次請求上限 500 個"
+          x-response-fields:
+            - name: "secu_quote"
+              type: "object[]"
+              required: false
+              description: "Options quote"
+              x-description-zh: "期权标的行情数据列表"
+              x-description-zh-hk: "期權標的行情數據列表"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: "└ prev_close"
+              type: "string"
+              required: false
+              description: "Yesterday's close"
+              x-description-zh: "昨收价"
+              x-description-zh-hk: "昨收價"
+            - name: "└ open"
+              type: "string"
+              required: false
+              description: "Open"
+              x-description-zh: "开盘价"
+              x-description-zh-hk: "開盤價"
+            - name: "└ high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: "└ low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "└ trade_status"
+              type: "int32"
+              required: false
+              description: "Security trading status, see TradeStatus"
+              x-description-zh: "标的交易状态，详见 TradeStatus"
+              x-description-zh-hk: "標的交易狀態，詳見 TradeStatus"
+            - name: "└ option_extend"
+              type: "object"
+              required: false
+              description: "Option extend quote"
+              x-description-zh: "期权扩展行情"
+              x-description-zh-hk: "期權擴展行情"
+            - name: " └ implied_volatility"
+              type: "string"
+              required: false
+              description: "Implied volatility"
+              x-description-zh: "隐含波动率"
+              x-description-zh-hk: "隱含波動率"
+            - name: " └ open_interest"
+              type: "int64"
+              required: false
+              description: "Number of open positions"
+              x-description-zh: "未平仓数"
+              x-description-zh-hk: "未平倉數"
+            - name: " └ expiry_date"
+              type: "string"
+              required: false
+              description: "Expiry date, in YYMMDD format"
+              x-description-zh: "到期日，使用 YYMMDD 格式"
+              x-description-zh-hk: "到期日，使用 YYMMDD 格式"
+            - name: " └ strike_price"
+              type: "string"
+              required: false
+              description: "Strike price"
+              x-description-zh: "行权价"
+              x-description-zh-hk: "行權價"
+            - name: " └ contract_multiplier"
+              type: "string"
+              required: false
+              description: "Contract multiplier"
+              x-description-zh: "合约乘数"
+              x-description-zh-hk: "合約乘數"
+            - name: " └ contract_type"
+              type: "string"
+              required: false
+              description: "Option type: A - American, U - Europe"
+              x-description-zh: "期权类型：A - 美式，U - 欧式"
+              x-description-zh-hk: "期權類型：A - 美式，U - 歐式"
+            - name: " └ contract_size"
+              type: "string"
+              required: false
+              description: "Contract size"
+              x-description-zh: "合约规模"
+              x-description-zh-hk: "合約規模"
+            - name: " └ direction"
+              type: "string"
+              required: false
+              description: "Direction: P - put, C - call"
+              x-description-zh: "方向：P - put，C - call"
+              x-description-zh-hk: "方向：P - put，C - call"
+            - name: " └ historical_volatility"
+              type: "string"
+              required: false
+              description: "Underlying security historical volatility of the option"
+              x-description-zh: "对应正股的历史波动率"
+              x-description-zh-hk: "對應正股的歷史波動率"
+            - name: " └ underlying_symbol"
+              type: "string"
+              required: false
+              description: "Underlying security symbol of the option"
+              x-description-zh: "对应的正股标的代码"
+              x-description-zh-hk: "對應的正股標的代碼"
         - id: ws-warrant-quote
           name: Warrant Quotes
           x-name-zh: 权证实时报价
@@ -1444,6 +1912,158 @@ x-websocket:
                 { "symbol": "66642.HK", "last_done": "0.345", "prev_close": "0.365", "timestamp": 1651130421, "volume": 200000, "turnover": "69000.000", "warrant_extend": { "implied_volatility": "0.319", "expiry_date": "20220830", "category": "Bear", "strike_price": "23200.000", "underlying_symbol": "HSI.HK" } }
               ]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string[]"
+              required: true
+              description: "Security code list, in ticker.region format, for example: [13447.HK]. Max 500 symbols per request"
+              x-description-zh: "标的代码列表，使用 ticker.region 格式，例如：[13447.HK]。每次请求上限 500 个"
+              x-description-zh-hk: "標的代碼列表，使用 ticker.region 格式，例如：[13447.HK]。每次請求上限 500 個"
+          x-response-fields:
+            - name: "secu_quote"
+              type: "object[]"
+              required: false
+              description: "Warrants quote"
+              x-description-zh: "期权标的行情数据列表"
+              x-description-zh-hk: "期權標的行情數據列表"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: "└ prev_close"
+              type: "string"
+              required: false
+              description: "Yesterday's close"
+              x-description-zh: "昨收价"
+              x-description-zh-hk: "昨收價"
+            - name: "└ open"
+              type: "string"
+              required: false
+              description: "Open"
+              x-description-zh: "开盘价"
+              x-description-zh-hk: "開盤價"
+            - name: "└ high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: "└ low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "└ trade_status"
+              type: "int32"
+              required: false
+              description: "Security trading status, see TradeStatus"
+              x-description-zh: "标的交易状态，详见 TradeStatus"
+              x-description-zh-hk: "標的交易狀態，詳見 TradeStatus"
+            - name: "└ warrant_extend"
+              type: "object"
+              required: false
+              description: "Warrant extend quote"
+              x-description-zh: "轮证扩展行情"
+              x-description-zh-hk: "輪證擴展行情"
+            - name: " └ implied_volatility"
+              type: "string"
+              required: false
+              description: "Implied volatility"
+              x-description-zh: "引申波幅"
+              x-description-zh-hk: "引申波幅"
+            - name: " └ expiry_date"
+              type: "string"
+              required: false
+              description: "Expiry date, in YYMMDD format"
+              x-description-zh: "到期日，使用 YYMMDD 格式"
+              x-description-zh-hk: "到期日，使用 YYMMDD 格式"
+            - name: " └ last_trade_date"
+              type: "string"
+              required: false
+              description: "Last tradable date, in YYMMDD format"
+              x-description-zh: "最后交易日，使用 YYMMDD 格式"
+              x-description-zh-hk: "最後交易日，使用 YYMMDD 格式"
+            - name: " └ outstanding_ratio"
+              type: "string"
+              required: false
+              description: "Outstanding ratio"
+              x-description-zh: "街货比"
+              x-description-zh-hk: "街貨比"
+            - name: " └ outstanding_qty"
+              type: "int64"
+              required: false
+              description: "Outstanding quantity"
+              x-description-zh: "街货量"
+              x-description-zh-hk: "街貨量"
+            - name: " └ conversion_ratio"
+              type: "string"
+              required: false
+              description: "Conversion ratio"
+              x-description-zh: "换股比率"
+              x-description-zh-hk: "換股比率"
+            - name: " └ category"
+              type: "string"
+              required: false
+              description: "Warrant type: Call, Put, Bull, Bear, Inline"
+              x-description-zh: "轮证类型：Call 认购证，Put 认沽证，Bull 牛证，Bear 熊证，Inline 界内证"
+              x-description-zh-hk: "輪證類型：Call 認購證，Put 認沽證，Bull 牛證，Bear 熊證，Inline 界內證"
+            - name: " └ strike_price"
+              type: "string"
+              required: false
+              description: "Strike price"
+              x-description-zh: "行权价"
+              x-description-zh-hk: "行權價"
+            - name: " └ upper_strike_price"
+              type: "string"
+              required: false
+              description: "Upper bound price"
+              x-description-zh: "上限价"
+              x-description-zh-hk: "上限價"
+            - name: " └ lower_strike_price"
+              type: "string"
+              required: false
+              description: "Lower bound price"
+              x-description-zh: "下限价"
+              x-description-zh-hk: "下限價"
+            - name: " └ call_price"
+              type: "string"
+              required: false
+              description: "Call price"
+              x-description-zh: "收回价"
+              x-description-zh-hk: "收回價"
+            - name: " └ underlying_symbol"
+              type: "string"
+              required: false
+              description: "Underlying security symbol of the option"
+              x-description-zh: "对应的正股标的代码"
+              x-description-zh-hk: "對應的正股標的代碼"
         - id: ws-pull-depth
           name: Depth
           x-name-zh: 盘口
@@ -1521,6 +2141,80 @@ x-websocket:
               "ask": [{ "position": 1, "price": "335.000", "volume": 500, "order_num": 1 }],
               "bid": [{ "position": 1, "price": "334.800", "volume": 69400, "order_num": 13 }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, e.g. 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "ask"
+              type: "object[]"
+              required: false
+              description: "Ask depth"
+              x-description-zh: "卖盘"
+              x-description-zh-hk: "賣盤"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Price"
+              x-description-zh: "价格"
+              x-description-zh-hk: "價格"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "挂单量"
+              x-description-zh-hk: "掛單量"
+            - name: "└ order_num"
+              type: "int64"
+              required: false
+              description: "Number of orders"
+              x-description-zh: "订单数量"
+              x-description-zh-hk: "訂單數量"
+            - name: "bid"
+              type: "object[]"
+              required: false
+              description: "Bid depth"
+              x-description-zh: "买盘"
+              x-description-zh-hk: "買盤"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Price"
+              x-description-zh: "价格"
+              x-description-zh-hk: "價格"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "挂单量"
+              x-description-zh-hk: "掛單量"
+            - name: "└ order_num"
+              type: "int64"
+              required: false
+              description: "Number of orders"
+              x-description-zh: "订单数量"
+              x-description-zh-hk: "訂單數量"
         - id: ws-pull-brokers
           name: Broker Queue
           x-name-zh: 经纪队列
@@ -1598,6 +2292,56 @@ x-websocket:
               "ask_brokers": [{ "position": 1, "broker_ids": [7358, 9057, 9028, 7364] }],
               "bid_brokers": [{ "position": 1, "broker_ids": [6996, 5465, 8026, 8304, 4978] }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, e.g. 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "ask_brokers"
+              type: "object[]"
+              required: false
+              description: "Ask brokers"
+              x-description-zh: "卖盘经纪队列"
+              x-description-zh-hk: "賣盤經紀隊列"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ broker_ids"
+              type: "int32[]"
+              required: false
+              description: "Broker IDs, obtained through the Get Broker IDs API"
+              x-description-zh: "券商席位 ID，通过获取券商席位 ID 接口获取"
+              x-description-zh-hk: "券商席位 ID，通過獲取券商席位 ID 接口獲取"
+            - name: "bid_brokers"
+              type: "object[]"
+              required: false
+              description: "Bid brokers"
+              x-description-zh: "买盘经纪队列"
+              x-description-zh-hk: "買盤經紀隊列"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ broker_ids"
+              type: "int32[]"
+              required: false
+              description: "Broker IDs, obtained through the Get Broker IDs API"
+              x-description-zh: "券商席位 ID，通过获取券商席位 ID 接口获取"
+              x-description-zh-hk: "券商席位 ID，通過獲取券商席位 ID 接口獲取"
         - id: ws-broker-ids
           name: Broker IDs
           x-name-zh: 经纪商席位
@@ -1678,6 +2422,37 @@ x-websocket:
                 { "broker_ids": [7738, 7739], "participant_name_cn": "华兴金融 (香港)", "participant_name_en": "China Renaissance(HK)", "participant_name_hk": "華興金融 (香港)" }
               ]
             }
+          x-response-fields:
+            - name: "participant_broker_numbers"
+              type: "object[]"
+              required: false
+              description: "participant data"
+              x-description-zh: "券商席位"
+              x-description-zh-hk: "券商席位"
+            - name: "└ broker_ids"
+              type: "int32[]"
+              required: false
+              description: "broker IDs"
+              x-description-zh: "券商对应的多个席位 ID"
+              x-description-zh-hk: "券商對應的多個席位 ID"
+            - name: "└ participant_name_cn"
+              type: "string"
+              required: false
+              description: "participant name (zh-CN)"
+              x-description-zh: "券商名称 (简)"
+              x-description-zh-hk: "券商名稱 (简)"
+            - name: "└ participant_name_en"
+              type: "string"
+              required: false
+              description: "participant name (en)"
+              x-description-zh: "券商名称 (英)"
+              x-description-zh-hk: "券商名稱 (英)"
+            - name: "└ participant_name_hk"
+              type: "string"
+              required: false
+              description: "participant name (zh-HK)"
+              x-description-zh: "券商名称 (繁)"
+              x-description-zh-hk: "券商名稱 (繁)"
         - id: ws-pull-trade
           name: Trades
           x-name-zh: 成交明细
@@ -1754,6 +2529,68 @@ x-websocket:
               "symbol": "AAPL.US",
               "trades": [{ "price": "158.760", "volume": 1, "timestamp": 1651103979, "trade_type": "I", "direction": 0, "trade_session": 2 }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, e.g. 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+            - name: "count"
+              type: "int32"
+              required: true
+              description: "Count of trades; max 1000 per request"
+              x-description-zh: "请求的逐笔明细数量；最大 1000"
+              x-description-zh-hk: "請求的逐筆明細數量；最大 1000"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "trades"
+              type: "object[]"
+              required: false
+              description: "Trades data"
+              x-description-zh: "逐笔明细数据"
+              x-description-zh-hk: "逐筆明細數據"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Price"
+              x-description-zh: "价格"
+              x-description-zh-hk: "價格"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of trading"
+              x-description-zh: "成交时间"
+              x-description-zh-hk: "成交時間"
+            - name: "└ trade_type"
+              type: "string"
+              required: false
+              description: "Trade type"
+              x-description-zh: "交易类型说明"
+              x-description-zh-hk: "交易類型說明"
+            - name: "└ direction"
+              type: "int32"
+              required: false
+              description: "Trade direction (0-neutral, 1-down, 2-up)"
+              x-description-zh: "交易方向 (0-neutral, 1-down, 2-up)"
+              x-description-zh-hk: "交易方向 (0-neutral, 1-down, 2-up)"
+            - name: "└ trade_session"
+              type: "int32"
+              required: false
+              description: "Trade session"
+              x-description-zh: "交易时段"
+              x-description-zh-hk: "交易時段"
         - id: ws-intraday
           name: Intraday
           x-name-zh: 分时
@@ -1827,6 +2664,56 @@ x-websocket:
               "symbol": "700.HK",
               "lines": [{ "price": "330.400", "timestamp": 1651023000, "volume": 375870, "turnover": "123949699.000", "avg_price": "329.767470" }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, e.g. 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, e.g. AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "lines"
+              type: "object[]"
+              required: false
+              description: "Intraday line data"
+              x-description-zh: "分时数据"
+              x-description-zh-hk: "分時數據"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Close price of the minute"
+              x-description-zh: "当前分钟的收盘价格"
+              x-description-zh-hk: "當前分鐘的收盤價格"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Start time stamp of the minute"
+              x-description-zh: "当前分钟的开始时间"
+              x-description-zh-hk: "當前分鐘的開始時間"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交额"
+            - name: "└ avg_price"
+              type: "string"
+              required: false
+              description: "Average price"
+              x-description-zh: "均价"
+              x-description-zh-hk: "均價"
         - id: ws-pull-candlestick
           name: Candlesticks
           x-name-zh: K 线
@@ -1912,6 +2799,98 @@ x-websocket:
               "symbol": "700.HK",
               "candlesticks": [{ "close": "362.000", "open": "364.600", "low": "361.600", "high": "368.800", "volume": 10853604, "turnover": "3954556819.000", "timestamp": 1650384000 }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, e.g. 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+            - name: "period"
+              type: "int32"
+              required: true
+              description: "Candlestick period"
+              x-description-zh: "K 线周期"
+              x-description-zh-hk: "K 線週期"
+            - name: "count"
+              type: "int32"
+              required: true
+              description: "Count of candlestick; max 1000"
+              x-description-zh: "数据数量；最大 1000"
+              x-description-zh-hk: "數據數量；最大 1000"
+            - name: "adjust_type"
+              type: "int32"
+              required: true
+              description: "Adjustment type"
+              x-description-zh: "复权类型"
+              x-description-zh-hk: "復權類型"
+            - name: "trade_session"
+              type: "int32"
+              required: false
+              description: "Trading session, 0: intraday, 100: All (pre, intraday, post, overnight)"
+              x-description-zh: "交易时段，0: 盘中，100: 所有（盘前，盘中，盘后，夜盘）"
+              x-description-zh-hk: "交易時段，0: 盤中，100: 所有延長時段（盤前，盤中，盤後，夜盤）"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, e.g. AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "candlesticks"
+              type: "object[]"
+              required: false
+              description: "Candlestick data"
+              x-description-zh: "K 线数据"
+              x-description-zh-hk: "K 線數據"
+            - name: "└ close"
+              type: "string"
+              required: false
+              description: "Close price"
+              x-description-zh: "当前周期收盘价"
+              x-description-zh-hk: "當前周期收盤價"
+            - name: "└ open"
+              type: "string"
+              required: false
+              description: "Open price"
+              x-description-zh: "当前周期开盘价"
+              x-description-zh-hk: "當前周期開盤價"
+            - name: "└ low"
+              type: "string"
+              required: false
+              description: "Low price"
+              x-description-zh: "当前周期最低价"
+              x-description-zh-hk: "當前周期最低價"
+            - name: "└ high"
+              type: "string"
+              required: false
+              description: "High price"
+              x-description-zh: "当前周期最高价"
+              x-description-zh-hk: "當前周期最高價"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "当前周期成交量"
+              x-description-zh-hk: "當前周期成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "当前周期成交额"
+              x-description-zh-hk: "當前周期成交額"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Timestamp"
+              x-description-zh: "当前周期的时间戳"
+              x-description-zh-hk: "當前周期的時間戳"
+            - name: "└ trade_session"
+              type: "int32"
+              required: false
+              description: "Trade session"
+              x-description-zh: "交易时段"
+              x-description-zh-hk: "交易時段"
         - id: ws-optionchain-date
           name: Option Chain Expiry Dates
           x-name-zh: 期权链到期日
@@ -1981,6 +2960,20 @@ x-websocket:
             {
               "expiry_date": ["20220422", "20220429", "20220506"]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, for example: 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+          x-response-fields:
+            - name: "expiry_date"
+              type: "string[]"
+              required: false
+              description: "option chain expiry dates list, in YYMMDD format"
+              x-description-zh: "标的对应的期权链到期日列表，使用 YYMMDD 格式"
+              x-description-zh-hk: "標的對應的期權鏈到期日列表，使用 YYMMDD 格式"
         - id: ws-optionchain-strike
           name: Option Chain Info
           x-name-zh: 期权链行权价
@@ -2055,6 +3048,50 @@ x-websocket:
                 { "price": "100", "call_symbol": "AAPL220429C100000.US", "put_symbol": "AAPL220429P100000.US", "standard": true }
               ]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, for example: 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+            - name: "expiry_date"
+              type: "string"
+              required: true
+              description: "Option expiry date, in YYMMDD format, for example: 20220429, obtained by Option Expiry Date API"
+              x-description-zh: "期权到期日，使用 YYMMDD 格式，例如：20220429，通过期权到期日接口获取"
+              x-description-zh-hk: "期權到期日，使用 YYMMDD 格式，例如：20220429，通過期權到期日接口獲取"
+          x-response-fields:
+            - name: "strike_price_info"
+              type: "object[]"
+              required: false
+              description: "Option security info"
+              x-description-zh: "到期日期权标的列表"
+              x-description-zh-hk: "到期日期權標的列表"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Strike price"
+              x-description-zh: "行权价"
+              x-description-zh-hk: "行權價"
+            - name: "└ call_symbol"
+              type: "string"
+              required: false
+              description: "Security code of call option"
+              x-description-zh: "CALL 期权标的代码"
+              x-description-zh-hk: "CALL 期權標的代碼"
+            - name: "└ put_symbol"
+              type: "string"
+              required: false
+              description: "Security code of put option"
+              x-description-zh: "PUT 期权标的代码"
+              x-description-zh-hk: "PUT 期權標的代碼"
+            - name: "└ standard"
+              type: "bool"
+              required: false
+              description: "Is standard"
+              x-description-zh: "是否标准期权"
+              x-description-zh-hk: "是否標準期權"
         - id: ws-issuers
           name: Warrant Issuers
           x-name-zh: 权证发行商
@@ -2133,6 +3170,37 @@ x-websocket:
             {
               "issuer_info": [{ "id": 15, "name_cn": "瑞银", "name_en": "UB", "name_hk": "瑞銀" }]
             }
+          x-response-fields:
+            - name: "issuer_info"
+              type: "object[]"
+              required: false
+              description: "Issuer information"
+              x-description-zh: "发行机构信息"
+              x-description-zh-hk: "發行機構信息"
+            - name: "└ id"
+              type: "int32"
+              required: false
+              description: "Issuer ID"
+              x-description-zh: "机构 ID"
+              x-description-zh-hk: "機構 ID"
+            - name: "└ name_cn"
+              type: "string"
+              required: false
+              description: "Issuer Name (zh-CN)"
+              x-description-zh: "机构名称 (简)"
+              x-description-zh-hk: "機構名稱 (简)"
+            - name: "└ name_en"
+              type: "string"
+              required: false
+              description: "Issuer Name (en)"
+              x-description-zh: "机构名称 (英)"
+              x-description-zh-hk: "機構名稱 (英)"
+            - name: "└ name_hk"
+              type: "string"
+              required: false
+              description: "Issuer Name (zh-HK)"
+              x-description-zh: "机构名称 (繁)"
+              x-description-zh-hk: "機構名稱 (繁)"
         - id: ws-warrant-filter
           name: Warrant Screener
           x-name-zh: 权证筛选
@@ -2214,6 +3282,236 @@ x-websocket:
               ],
               "total_count": 1197
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, for example: 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+            - name: "filter_config"
+              type: "object"
+              required: true
+              description: "Filter conditions"
+              x-description-zh: "筛选条件"
+              x-description-zh-hk: "篩選條件"
+            - name: "└ sort_by"
+              type: "int32"
+              required: true
+              description: "Which data to sort by, for example: 0, see the OrderSequence field of the response data"
+              x-description-zh: "根据哪一项数据进行排序，例如：0，序号见响应数据 OrderSequence 字段"
+              x-description-zh-hk: "根據哪一項數據進行排序，例如：0，序號見響應數據 OrderSequence 字段"
+            - name: "└ sort_order"
+              type: "int32"
+              required: true
+              description: "Order: 0 - Ascending, 1 - Descending"
+              x-description-zh: "升降顺序：0 - 升序，1 - 降序"
+              x-description-zh-hk: "升降順序：0 - 升序，1 - 降序"
+            - name: "└ sort_offset"
+              type: "int32"
+              required: true
+              description: "The first data offset of paging, for example: 0"
+              x-description-zh: "分页的第一条数据偏移量，例如 0"
+              x-description-zh-hk: "分頁的第一條數據偏移量，例如 0"
+            - name: "└ sort_count"
+              type: "int32"
+              required: true
+              description: "Number of items per page, for example: 20, no pagination when filling in 0"
+              x-description-zh: "分页的每一页数量，例如 20，填 0 时不分页"
+              x-description-zh-hk: "分頁的每一頁數量，例如 20，填 0 時不分頁"
+            - name: "└ type"
+              type: "int32[]"
+              required: false
+              description: "Filter warrant type: 0 Call, 1 Put, 2 Bull, 3 Bear, 4 Inline"
+              x-description-zh: "筛选轮证类型：0 认购，1 认沽，2 牛证，3 熊证，4 界内证"
+              x-description-zh-hk: "篩選輪證類型：0 認購，1 認沽，2 牛證，3 熊證，4 界內證"
+            - name: "└ issuer"
+              type: "int32[]"
+              required: false
+              description: "Filter issuer example: [12,14], obtain Issuer ID through API"
+              x-description-zh: "筛选发行商，例如：[12,14]，发行商 ID 通过接口获取"
+              x-description-zh-hk: "篩選發行商，例如：[12,14]，發行商 ID 通過接口獲取"
+            - name: "└ expiry_date"
+              type: "int32[]"
+              required: false
+              description: "Filter expiry date: 1 <3 months, 2 3-6 months, 3 6-12 months, 4 >12 months"
+              x-description-zh: "筛选轮证过期时间：1 低于 3 个月，2 3-6 个月，3 6-12 个月，4 大于 12 个月"
+              x-description-zh-hk: "篩選輪證過期時間：1 低於 3 個月，2 3-6 個月，3 6-12 個月，4 大於 12 個月"
+            - name: "└ price_type"
+              type: "int32[]"
+              required: false
+              description: "Filter in/out of bounds: 1 In bounds, 2 Out bounds"
+              x-description-zh: "筛选价内价外：1 价内，2 价外"
+              x-description-zh-hk: "篩選價內價外：1 價內，2 價外"
+            - name: "└ status"
+              type: "int32[]"
+              required: false
+              description: "Filter status: 2 Suspend trading, 3 Prepare List, 4 Normal"
+              x-description-zh: "筛选状态：2 终止交易，3 等待上市，4 正常"
+              x-description-zh-hk: "篩選狀態：2 終止交易，3 等待上市，4 正常"
+            - name: "language"
+              type: "int32"
+              required: true
+              description: "Language: 0 zh-CN, 1 en, 2 zh-HK"
+              x-description-zh: "响应的语言：0 简体，1 English, 2 繁体"
+              x-description-zh-hk: "響應的語言：0 簡體，1 English, 2 繁体"
+          x-response-fields:
+            - name: "warrant_list"
+              type: "object[]"
+              required: false
+              description: "Filtered warrant data list"
+              x-description-zh: "涡轮筛选数据列表"
+              x-description-zh-hk: "渦輪篩選數據列表"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ name"
+              type: "string"
+              required: false
+              description: "Security name"
+              x-description-zh: "标的名称"
+              x-description-zh-hk: "標的名稱"
+            - name: "└ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: "└ change_rate"
+              type: "string"
+              required: false
+              description: "Quote change rate"
+              x-description-zh: "涨跌幅"
+              x-description-zh-hk: "漲跌幅"
+            - name: "└ change_val"
+              type: "string"
+              required: false
+              description: "Quote change"
+              x-description-zh: "涨跌额"
+              x-description-zh-hk: "漲跌額"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "└ expiry_date"
+              type: "string"
+              required: false
+              description: "Expiry date, in YYMMDD format"
+              x-description-zh: "到期日，使用 YYMMDD 格式"
+              x-description-zh-hk: "到期日，使用 YYMMDD 格式"
+            - name: "└ strike_price"
+              type: "string"
+              required: false
+              description: "Strike price"
+              x-description-zh: "行权价"
+              x-description-zh-hk: "行權價"
+            - name: "└ upper_strike_price"
+              type: "string"
+              required: false
+              description: "Upper bound price"
+              x-description-zh: "上限价"
+              x-description-zh-hk: "上限價"
+            - name: "└ lower_strike_price"
+              type: "string"
+              required: false
+              description: "Lower bound price"
+              x-description-zh: "下限价"
+              x-description-zh-hk: "下限價"
+            - name: "└ outstanding_qty"
+              type: "string"
+              required: false
+              description: "Outstanding quantity"
+              x-description-zh: "街货量"
+              x-description-zh-hk: "街貨量"
+            - name: "└ outstanding_ratio"
+              type: "string"
+              required: false
+              description: "Outstanding ratio"
+              x-description-zh: "街货比"
+              x-description-zh-hk: "街貨比"
+            - name: "└ premium"
+              type: "string"
+              required: false
+              description: "Premium"
+              x-description-zh: "溢价率"
+              x-description-zh-hk: "溢價率"
+            - name: "└ itm_otm"
+              type: "string"
+              required: false
+              description: "In/out of the bound"
+              x-description-zh: "价内/价外"
+              x-description-zh-hk: "價內/價外"
+            - name: "└ implied_volatility"
+              type: "string"
+              required: false
+              description: "Implied volatility"
+              x-description-zh: "引伸波幅"
+              x-description-zh-hk: "引伸波幅"
+            - name: "└ delta"
+              type: "string"
+              required: false
+              description: "Greek value Delta"
+              x-description-zh: "对冲值"
+              x-description-zh-hk: "對沖值"
+            - name: "└ call_price"
+              type: "string"
+              required: false
+              description: "Call price"
+              x-description-zh: "收回价"
+              x-description-zh-hk: "收回價"
+            - name: "└ to_call_price"
+              type: "string"
+              required: false
+              description: "Price interval from the call price"
+              x-description-zh: "距收回价"
+              x-description-zh-hk: "距收回價"
+            - name: "└ effective_leverage"
+              type: "string"
+              required: false
+              description: "Effective leverage"
+              x-description-zh: "有效杠杆"
+              x-description-zh-hk: "有效槓桿"
+            - name: "└ leverage_ratio"
+              type: "string"
+              required: false
+              description: "Leverage ratio"
+              x-description-zh: "杠杆比率"
+              x-description-zh-hk: "槓桿比率"
+            - name: "└ conversion_ratio"
+              type: "string"
+              required: false
+              description: "Conversion ratio"
+              x-description-zh: "换股比率"
+              x-description-zh-hk: "換股比率"
+            - name: "└ balance_point"
+              type: "string"
+              required: false
+              description: "Breakeven point"
+              x-description-zh: "打和点"
+              x-description-zh-hk: "打和點"
+            - name: "└ status"
+              type: "int32"
+              required: false
+              description: "Status: 2 Suspend trading, 3 Prepare List, 4 Normal"
+              x-description-zh: "状态：2 终止交易，3 等待上市，4 正常交易"
+              x-description-zh-hk: "狀態：2 終止交易，3 等待上市，4 正常"
+            - name: "total_count"
+              type: "int32"
+              required: false
+              description: "Total number of eligible"
+              x-description-zh: "符合条件的轮证总数量"
+              x-description-zh-hk: "符合條件的輪證總數量"
         - id: ws-capital-flow
           name: Capital Flow (Intraday)
           x-name-zh: 资金流向 (分时)
@@ -2287,6 +3585,38 @@ x-websocket:
               "symbol": "700.HK",
               "capital_flow_lines": [{ "inflow": "-310255860.000", "timestamp": "1655106960" }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, for example: 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "capital_flow_lines"
+              type: "object[]"
+              required: false
+              description: "Capital flow data"
+              x-description-zh: "资金流向数据"
+              x-description-zh-hk: "資金流向數據"
+            - name: "└ inflow"
+              type: "string"
+              required: false
+              description: "Inflow capital data"
+              x-description-zh: "净流入"
+              x-description-zh-hk: "淨流入"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Start time stamp of the minute"
+              x-description-zh: "分钟开始时间戳"
+              x-description-zh-hk: "分鐘開始時間戳"
         - id: ws-capital-dist
           name: Capital Distribution
           x-name-zh: 资金分布
@@ -2368,6 +3698,74 @@ x-websocket:
               "capital_in": { "large": "935389700.000", "medium": "2056032380.000", "small": "828715920.000" },
               "capital_out": { "large": "1175331560.000", "medium": "2271829740.000", "small": "751648940.000" }
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, for example: 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "timestamp"
+              type: "int64"
+              required: false
+              description: "Data update time"
+              x-description-zh: "数据更新时间戳"
+              x-description-zh-hk: "數據更新時間戳"
+            - name: "capital_in"
+              type: "object[]"
+              required: false
+              description: "Inflow capital data"
+              x-description-zh: "流入资金"
+              x-description-zh-hk: "流入資金"
+            - name: "└ large"
+              type: "string"
+              required: false
+              description: "large order"
+              x-description-zh: "大单"
+              x-description-zh-hk: "大單"
+            - name: "└ medium"
+              type: "string"
+              required: false
+              description: "medium order"
+              x-description-zh: "中单"
+              x-description-zh-hk: "中單"
+            - name: "└ small"
+              type: "string"
+              required: false
+              description: "small order"
+              x-description-zh: "小单"
+              x-description-zh-hk: "小單"
+            - name: "capital_out"
+              type: "object[]"
+              required: false
+              description: "Outflow capital data"
+              x-description-zh: "流出资金"
+              x-description-zh-hk: "流出資金"
+            - name: "└ large"
+              type: "string"
+              required: false
+              description: "large order"
+              x-description-zh: "大单"
+              x-description-zh-hk: "大單"
+            - name: "└ medium"
+              type: "string"
+              required: false
+              description: "medium order"
+              x-description-zh: "中单"
+              x-description-zh-hk: "中單"
+            - name: "└ small"
+              type: "string"
+              required: false
+              description: "small order"
+              x-description-zh: "小单"
+              x-description-zh-hk: "小單"
         - id: ws-calc-index
           name: Calc Indexes
           x-name-zh: 计算指标
@@ -2442,6 +3840,272 @@ x-websocket:
                 { "symbol": "AAPL.US", "last_done": "131.880", "change_val": "-5.2500", "change_rate": "-3.83", "volume": "122207099", "turnover": "16269088361.000" }
               ]
             }
+          x-fields:
+            - name: "symbols"
+              type: "string[]"
+              required: true
+              description: "Security code list, in ticker.region format, for example: [700.HK]. Max 500 symbols per request"
+              x-description-zh: "标的代码列表，使用 ticker.region 格式，例如：[700.HK]。每次请求上限 500 个"
+              x-description-zh-hk: "標的代碼列表，使用 ticker.region 格式，例如：[700.HK]。每次請求上限 500 個"
+            - name: "calc_index"
+              type: "int32[]"
+              required: true
+              description: "Calc indexes, for example: [1,2,3], see CalcIndex"
+              x-description-zh: "计算指标，例如：[1,2,3]，详见 CalcIndex"
+              x-description-zh-hk: "計算指標，例如：[1,2,3]，詳見 CalcIndex"
+          x-response-fields:
+            - name: "security_calc_index"
+              type: "object[]"
+              required: false
+              description: "Security Index Data"
+              x-description-zh: "标的指标数据"
+              x-description-zh-hk: "標的指標數據"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: "└ change_val"
+              type: "string"
+              required: false
+              description: "Change value"
+              x-description-zh: "涨跌额"
+              x-description-zh-hk: "漲跌額"
+            - name: "└ change_rate"
+              type: "string"
+              required: false
+              description: "Change ratio (ratio field, excludes %)"
+              x-description-zh: "涨跌幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "漲跌幅 (返回百分比數據，不包含%符號)"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "└ ytd_change_rate"
+              type: "string"
+              required: false
+              description: "Year-to-date change ratio (ratio field, excludes %)"
+              x-description-zh: "年初至今涨幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "年初至今漲幅 (返回百分比數據，不包含%符號)"
+            - name: "└ turnover_rate"
+              type: "string"
+              required: false
+              description: "Turnover rate (ratio field, excludes %)"
+              x-description-zh: "换手率 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "換手率 (返回百分比數據，不包含%符號)"
+            - name: "└ total_market_value"
+              type: "string"
+              required: false
+              description: "Total market value"
+              x-description-zh: "总市值"
+              x-description-zh-hk: "總市值"
+            - name: "└ capital_flow"
+              type: "string"
+              required: false
+              description: "Capital flow"
+              x-description-zh: "流入资金"
+              x-description-zh-hk: "流入資金"
+            - name: "└ amplitude"
+              type: "string"
+              required: false
+              description: "Amplitude (ratio field, excludes %)"
+              x-description-zh: "振幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "振幅 (返回百分比數據，不包含%符號)"
+            - name: "└ volume_ratio"
+              type: "string"
+              required: false
+              description: "Volume ratio"
+              x-description-zh: "量比"
+              x-description-zh-hk: "量比"
+            - name: "└ pe_ttm_ratio"
+              type: "string"
+              required: false
+              description: "PE (TTM)"
+              x-description-zh: "市盈率 (TTM)"
+              x-description-zh-hk: "市盈率 (TTM)"
+            - name: "└ pb_ratio"
+              type: "string"
+              required: false
+              description: "PB"
+              x-description-zh: "市净率"
+              x-description-zh-hk: "市淨率"
+            - name: "└ dividend_ratio_ttm"
+              type: "string"
+              required: false
+              description: "Dividend ratio (TTM)"
+              x-description-zh: "股息率 (TTM)"
+              x-description-zh-hk: "股息率 (TTM)"
+            - name: "└ five_day_change_rate"
+              type: "string"
+              required: false
+              description: "Five days change ratio (ratio field, excludes %)"
+              x-description-zh: "五日涨幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "五日漲幅 (返回百分比數據，不包含%符號)"
+            - name: "└ ten_day_change_rate"
+              type: "string"
+              required: false
+              description: "Ten days change ratio (ratio field, excludes %)"
+              x-description-zh: "十日涨幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "十日漲幅 (返回百分比數據，不包含%符號)"
+            - name: "└ half_year_change_rate"
+              type: "string"
+              required: false
+              description: "Half year change ratio (ratio field, excludes %)"
+              x-description-zh: "半年涨幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "半年漲幅 (返回百分比數據，不包含%符號)"
+            - name: "└ five_minutes_change_rate"
+              type: "string"
+              required: false
+              description: "Five minutes change ratio (ratio field, excludes %)"
+              x-description-zh: "五分钟涨幅 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "五分鐘漲幅 (返回百分比數據，不包含%符號)"
+            - name: "└ expiry_date"
+              type: "string"
+              required: false
+              description: "Expiry date"
+              x-description-zh: "到期日"
+              x-description-zh-hk: "到期日"
+            - name: "└ strike_price"
+              type: "string"
+              required: false
+              description: "Strike price"
+              x-description-zh: "行权价"
+              x-description-zh-hk: "行權價"
+            - name: "└ upper_strike_price"
+              type: "string"
+              required: false
+              description: "Upper bound price"
+              x-description-zh: "上限价"
+              x-description-zh-hk: "上限價"
+            - name: "└ lower_strike_price"
+              type: "string"
+              required: false
+              description: "Lower bound price"
+              x-description-zh: "下限价"
+              x-description-zh-hk: "下限價"
+            - name: "└ outstanding_qty"
+              type: "int64"
+              required: false
+              description: "Outstanding quantity"
+              x-description-zh: "街货量"
+              x-description-zh-hk: "街貨量"
+            - name: "└ outstanding_ratio"
+              type: "string"
+              required: false
+              description: "Outstanding ratio (ratio field, excludes %)"
+              x-description-zh: "街货比 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "街貨比 (返回百分比數據，不包含%符號)"
+            - name: "└ premium"
+              type: "string"
+              required: false
+              description: "Premium (ratio field, excludes %)"
+              x-description-zh: "溢价率 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "溢價率 (返回百分比數據，不包含%符號)"
+            - name: "└ itm_otm"
+              type: "string"
+              required: false
+              description: "In/out of the bound (ratio field, excludes %)"
+              x-description-zh: "价内/价外 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "價內/價外 (返回百分比數據，不包含%符號)"
+            - name: "└ implied_volatility"
+              type: "string"
+              required: false
+              description: "Implied volatility (ratio field, excludes %)"
+              x-description-zh: "隐含波动率 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "隱含波動率 (返回百分比數據，不包含%符號)"
+            - name: "└ warrant_delta"
+              type: "string"
+              required: false
+              description: "Warrant delta"
+              x-description-zh: "对冲值"
+              x-description-zh-hk: "對沖值"
+            - name: "└ call_price"
+              type: "string"
+              required: false
+              description: "Call price"
+              x-description-zh: "收回价"
+              x-description-zh-hk: "收回價"
+            - name: "└ to_call_price"
+              type: "string"
+              required: false
+              description: "Price interval from the call price (ratio field, excludes %)"
+              x-description-zh: "距收回价 (返回百分比数据，不包含%符号)"
+              x-description-zh-hk: "距收回價 (返回百分比數據，不包含%符號)"
+            - name: "└ effective_leverage"
+              type: "string"
+              required: false
+              description: "Effective leverage"
+              x-description-zh: "有效杠杆"
+              x-description-zh-hk: "有效槓桿"
+            - name: "└ leverage_ratio"
+              type: "string"
+              required: false
+              description: "Leverage ratio"
+              x-description-zh: "杠杆比率"
+              x-description-zh-hk: "槓桿比率"
+            - name: "└ conversion_ratio"
+              type: "string"
+              required: false
+              description: "Conversion ratio"
+              x-description-zh: "换股比率"
+              x-description-zh-hk: "換股比率"
+            - name: "└ balance_point"
+              type: "string"
+              required: false
+              description: "Breakeven point"
+              x-description-zh: "打和点"
+              x-description-zh-hk: "打和點"
+            - name: "└ open_interest"
+              type: "int64"
+              required: false
+              description: "Open interest"
+              x-description-zh: "未平仓数"
+              x-description-zh-hk: "未平倉數"
+            - name: "└ delta"
+              type: "string"
+              required: false
+              description: "Delta"
+              x-description-zh: "Delta"
+              x-description-zh-hk: "Delta"
+            - name: "└ gamma"
+              type: "string"
+              required: false
+              description: "Gamma"
+              x-description-zh: "Gamma"
+              x-description-zh-hk: "Gamma"
+            - name: "└ theta"
+              type: "string"
+              required: false
+              description: "Theta. Raw value divided by 100 for standard per-share per-day value"
+              x-description-zh: "Theta，原始值需除以 100 得到标准的每股每天值"
+              x-description-zh-hk: "Theta，原始值需除以 100 得到標準的每股每天值"
+            - name: "└ vega"
+              type: "string"
+              required: false
+              description: "Vega. Raw value divided by 100 for standard per-share per-1%-IV value"
+              x-description-zh: "Vega，原始值需除以 100 得到标准的每股每 1% IV 值"
+              x-description-zh-hk: "Vega，原始值需除以 100 得到標準的每股每 1% IV 值"
+            - name: "└ rho"
+              type: "string"
+              required: false
+              description: "Rho. Raw value divided by 100 for standard per-share per-1%-rate value"
+              x-description-zh: "Rho，原始值需除以 100 得到标准的每股每 1% 利率值"
+              x-description-zh-hk: "Rho，原始值需除以 100 得到標準的每股每 1% 利率值"
         - id: ws-history-candlestick
           name: History Candlesticks
           x-name-zh: 历史 K 线
@@ -2532,6 +4196,146 @@ x-websocket:
               "symbol": "700.HK",
               "candlesticks": [{ "close": "362.000", "open": "364.600", "low": "361.600", "high": "368.800", "volume": 10853604, "turnover": "3954556819.000", "timestamp": 1650384000 }]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string"
+              required: true
+              description: "Security code, in ticker.region format, e.g. 700.HK"
+              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
+              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
+            - name: "period"
+              type: "int32"
+              required: true
+              description: "Candlestick period"
+              x-description-zh: "K 线周期"
+              x-description-zh-hk: "K 線周期"
+            - name: "adjust_type"
+              type: "int32"
+              required: true
+              description: "Adjustment type"
+              x-description-zh: "复权类型"
+              x-description-zh-hk: "複權類型"
+            - name: "query_type"
+              type: "int32"
+              required: true
+              description: "Type of query (1-by offset, 2-by date)"
+              x-description-zh: "查询方式 (1-按偏移查询，2-按日期区间查询)"
+              x-description-zh-hk: "查詢方式 (1-按偏移查詢，2-按日期區間查詢)"
+            - name: "date_request"
+              type: "object"
+              required: false
+              description: "Required when querying by date"
+              x-description-zh: "按日期查询时必填"
+              x-description-zh-hk: "按日期查詢時必填"
+            - name: "└ start_date"
+              type: "string"
+              required: false
+              description: "Date of query begin, in YYYYMMDD format"
+              x-description-zh: "开始日期，格式为 YYYYMMDD"
+              x-description-zh-hk: "開始日期，格式為 YYYYMMDD"
+            - name: "└ end_date"
+              type: "string"
+              required: false
+              description: "Date of query end, in YYYYMMDD format"
+              x-description-zh: "结束日期，格式为 YYYYMMDD"
+              x-description-zh-hk: "結束日期，格式為 YYYYMMDD"
+            - name: "offset_request"
+              type: "object"
+              required: false
+              description: "Required when querying by offset"
+              x-description-zh: "按偏移查询时必填"
+              x-description-zh-hk: "按偏移查詢時必填"
+            - name: "└ direction"
+              type: "int32"
+              required: true
+              description: "Query direction (0-historical, 1-latest)"
+              x-description-zh: "查询方向 (0-向历史，1-向最新)"
+              x-description-zh-hk: "查詢方嚮 (0-向曆史，1-向最新)"
+            - name: "└ date"
+              type: "string"
+              required: false
+              description: "Query date, in YYYYMMDD format; default latest trading day"
+              x-description-zh: "查询日期，格式为 YYYYMMDD；为空时使用最新交易日"
+              x-description-zh-hk: "查詢日期，格式為 YYYYMMDD；為空時使用最新交易日"
+            - name: "└ minute"
+              type: "string"
+              required: false
+              description: "Query time, in HHMM format; only valid for minute-level data"
+              x-description-zh: "查询时间，格式为 HHMM；仅在查询分钟级别 K 线时有效"
+              x-description-zh-hk: "查詢時間，格式為 HHMM；僅在查詢分鍾級別 K 線時有效"
+            - name: "└ count"
+              type: "int32"
+              required: false
+              description: "Count of candlestick, range [1,1000]; default 10"
+              x-description-zh: "查询数量，范围 [1,1000]；默认 10"
+              x-description-zh-hk: "查詢數量，範圍 [1,1000]；默認 10"
+            - name: "trade_session"
+              type: "int32"
+              required: false
+              description: "Trading session, 0: intraday, 100: All (pre, intraday, post, overnight)"
+              x-description-zh: "交易时段，0: 盘中，100: 所有延长时段（盘前，盘中，盘后，夜盘）"
+              x-description-zh-hk: "交易時段，0: 盤中，100: 所有延長時段（盤前，盤中，盤後，夜盤）"
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, e.g. AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "candlesticks"
+              type: "object[]"
+              required: false
+              description: "Candlestick data"
+              x-description-zh: "K 线数据"
+              x-description-zh-hk: "K 線數據"
+            - name: "└ close"
+              type: "string"
+              required: false
+              description: "Close price"
+              x-description-zh: "当前周期收盘价"
+              x-description-zh-hk: "當前周期收盤價"
+            - name: "└ open"
+              type: "string"
+              required: false
+              description: "Open price"
+              x-description-zh: "当前周期开盘价"
+              x-description-zh-hk: "當前周期開盤價"
+            - name: "└ low"
+              type: "string"
+              required: false
+              description: "Low price"
+              x-description-zh: "当前周期最低价"
+              x-description-zh-hk: "當前周期最低價"
+            - name: "└ high"
+              type: "string"
+              required: false
+              description: "High price"
+              x-description-zh: "当前周期最高价"
+              x-description-zh-hk: "當前周期最高價"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "当前周期成交量"
+              x-description-zh-hk: "當前周期成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "当前周期成交额"
+              x-description-zh-hk: "當前周期成交額"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Timestamp"
+              x-description-zh: "当前周期的时间戳"
+              x-description-zh-hk: "當前周期的時間戳"
+            - name: "└ trade_session"
+              type: "int32"
+              required: false
+              description: "Trade session"
+              x-description-zh: "交易时段"
+              x-description-zh-hk: "交易時段"
     - name: Quote · Subscription (WebSocket)
       x-name-zh: 行情 · 订阅 (WebSocket)
       x-name-zh-hk: 行情 · 訂閱 (WebSocket)
@@ -2620,6 +4424,25 @@ x-websocket:
                 { "symbol": "AAPL.US", "sub_type": [2] }
               ]
             }
+          x-response-fields:
+            - name: "sub_list"
+              type: "object[]"
+              required: false
+              description: "Subscribed data"
+              x-description-zh: "订阅的数据"
+              x-description-zh-hk: "訂閱的數據"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ sub_type"
+              type: "int32[]"
+              required: false
+              description: "Subscription type, see SubType"
+              x-description-zh: "订阅的数据类型，详见 SubType"
+              x-description-zh-hk: "訂閱的數據類型，詳見 SubType"
         - id: ws-subscribe
           name: Subscribe
           x-name-zh: 订阅行情
@@ -2698,6 +4521,44 @@ x-websocket:
                 { "symbol": "AAPL.US", "sub_type": [2] }
               ]
             }
+          x-fields:
+            - name: "symbol"
+              type: "string[]"
+              required: true
+              description: "Security code list, for example: [700.HK]. Max 500 symbols per request; max 500 subscriptions per user"
+              x-description-zh: "订阅的标的代码，例如：[700.HK]。每次请求最多 500 个，每个用户最多同时订阅 500 个"
+              x-description-zh-hk: "訂閱的標的代碼，例如：[700.HK]。每次請求最多 500 個，每個用戶最多同時訂閱 500 個"
+            - name: "sub_type"
+              type: "int32[]"
+              required: true
+              description: "Subscription type, for example: [1,2], see SubType"
+              x-description-zh: "订阅的数据类型，例如：[1,2]，详见 SubType"
+              x-description-zh-hk: "訂閱的數據類型，例如：[1,2]，詳見 SubType"
+            - name: "is_first_push"
+              type: "bool"
+              required: true
+              description: "Whether to perform a data push immediately after subscribing (trade not supported)"
+              x-description-zh: "订阅后是否立刻进行一次数据推送（trade 不支持）"
+              x-description-zh-hk: "訂閱後是否立刻進行一次數據推送（trade 不支持）"
+          x-response-fields:
+            - name: "sub_list"
+              type: "object[]"
+              required: false
+              description: "Subscription list"
+              x-description-zh: "订阅的数据"
+              x-description-zh-hk: "訂閱的數據"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Security code"
+              x-description-zh: "标的代码"
+              x-description-zh-hk: "標的代碼"
+            - name: "└ sub_type"
+              type: "int32[]"
+              required: false
+              description: "Subscription type, see SubType"
+              x-description-zh: "订阅的数据类型，详见 SubType"
+              x-description-zh-hk: "訂閱的數據類型，詳見 SubType"
         - id: ws-unsubscribe
           name: Unsubscribe
           x-name-zh: 取消订阅
@@ -2763,6 +4624,25 @@ x-websocket:
                 const respBody = await sendRequest(ws, 7, body)
           x-response-example: |
             {}
+          x-fields:
+            - name: "symbol"
+              type: "string[]"
+              required: true
+              description: "Security code list, for example: [700.HK]. Max 500 symbols per request"
+              x-description-zh: "订阅的标的代码，例如：[700.HK]。每次请求最多 500 个"
+              x-description-zh-hk: "訂閱的標的代碼，例如：[700.HK]。每次請求最多 500 個"
+            - name: "sub_type"
+              type: "int32[]"
+              required: true
+              description: "Subscription type list, for example: [1,2], see SubType"
+              x-description-zh: "订阅的数据类型，例如：[1,2]，详见 SubType"
+              x-description-zh-hk: "訂閱的數據類型，例如：[1,2]，詳見 SubType"
+            - name: "unsub_all"
+              type: "bool"
+              required: true
+              description: "Is unsubscribe all; empty symbol unsubscribes all, otherwise all types of these symbols"
+              x-description-zh: "是否全部取消；symbol 为空时取消所有订阅，否则取消这些标的的所有类型订阅"
+              x-description-zh-hk: "是否全部取消；symbol 為空時取消所有訂閱，否則取消這些標的的所有類型訂閱"
     - name: Quote · Push (WebSocket)
       x-name-zh: 行情 · 推送 (WebSocket)
       x-name-zh-hk: 行情 · 推送 (WebSocket)
@@ -2862,6 +4742,91 @@ x-websocket:
               "trade_status": 0,
               "trade_session": 0
             }
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, for example: AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "sequence"
+              type: "int64"
+              required: false
+              description: "Sequence number"
+              x-description-zh: "序列号"
+              x-description-zh-hk: "序列號"
+            - name: "last_done"
+              type: "string"
+              required: false
+              description: "Latest price"
+              x-description-zh: "最新价"
+              x-description-zh-hk: "最新價"
+            - name: "open"
+              type: "string"
+              required: false
+              description: "Open"
+              x-description-zh: "开盘价"
+              x-description-zh-hk: "開盤價"
+            - name: "high"
+              type: "string"
+              required: false
+              description: "High"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: "low"
+              type: "string"
+              required: false
+              description: "Low"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: "timestamp"
+              type: "int64"
+              required: false
+              description: "Time of latest price"
+              x-description-zh: "最新成交的时间戳"
+              x-description-zh-hk: "最新成交的時間戳"
+            - name: "volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "trade_status"
+              type: "int32"
+              required: false
+              description: "Security trading status, see TradeStatus"
+              x-description-zh: "交易状态，详见 TradeStatus"
+              x-description-zh-hk: "交易狀態，詳見 TradeStatus"
+            - name: "trade_session"
+              type: "int32"
+              required: false
+              description: "Trade session, see TradeSession"
+              x-description-zh: "交易时段，详见 TradeSession"
+              x-description-zh-hk: "交易時段，詳見 TradeSession"
+            - name: "current_volume"
+              type: "int32"
+              required: false
+              description: "Increase volume between pushes"
+              x-description-zh: "两次推送之间增加的成交量"
+              x-description-zh-hk: "兩次推送之間增加的成交量"
+            - name: "current_turnover"
+              type: "string"
+              required: false
+              description: "Increase turnover between pushes"
+              x-description-zh: "两次推送之间增加的成交额"
+              x-description-zh-hk: "兩次推送之間增加的成交額"
+            - name: "tag"
+              type: "int32"
+              required: false
+              description: "Price tag: 0 real-time quote, 1 revised data after market close"
+              x-description-zh: "价格数据标签：0 实时行情，1 收盘后的修正数据"
+              x-description-zh-hk: "價格數據標籤：0 實時行情，1 收盤後的修正數據"
         - id: ws-push-depth
           name: Push · Depth
           x-name-zh: 推送 · 盘口
@@ -2929,6 +4894,79 @@ x-websocket:
               "ask": [{ "position": 1, "price": "335.000", "volume": 500, "order_num": 1 }],
               "bid": [{ "position": 1, "price": "334.800", "volume": 69400, "order_num": 13 }]
             }
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, for example: AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "sequence"
+              type: "int64"
+              required: false
+              description: "Sequence number"
+              x-description-zh: "序列号"
+              x-description-zh-hk: "序列號"
+            - name: "ask"
+              type: "object[]"
+              required: false
+              description: "Ask depth"
+              x-description-zh: "卖盘"
+              x-description-zh-hk: "賣盤"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Price"
+              x-description-zh: "价格"
+              x-description-zh-hk: "價格"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "挂单量"
+              x-description-zh-hk: "掛單量"
+            - name: "└ order_num"
+              type: "int64"
+              required: false
+              description: "Number of orders"
+              x-description-zh: "订单数量"
+              x-description-zh-hk: "訂單數量"
+            - name: "bid"
+              type: "object[]"
+              required: false
+              description: "Bid depth"
+              x-description-zh: "买盘"
+              x-description-zh-hk: "買盤"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Price"
+              x-description-zh: "价格"
+              x-description-zh-hk: "價格"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "挂单量"
+              x-description-zh-hk: "掛單量"
+            - name: "└ order_num"
+              type: "int64"
+              required: false
+              description: "Number of orders"
+              x-description-zh: "订单数量"
+              x-description-zh-hk: "訂單數量"
         - id: ws-push-brokers
           name: Push · Brokers
           x-name-zh: 推送 · 经纪队列
@@ -2996,6 +5034,55 @@ x-websocket:
               "ask_brokers": [{ "position": 1, "broker_ids": [7358, 9057, 9028, 7364] }],
               "bid_brokers": [{ "position": 1, "broker_ids": [6996, 5465, 8026, 8304, 4978] }]
             }
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, for example: AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "sequence"
+              type: "int64"
+              required: false
+              description: "Sequence number"
+              x-description-zh: "序列号"
+              x-description-zh-hk: "序列號"
+            - name: "ask_brokers"
+              type: "object[]"
+              required: false
+              description: "Ask brokers"
+              x-description-zh: "卖盘经纪队列"
+              x-description-zh-hk: "賣盤經紀隊列"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ broker_ids"
+              type: "int32[]"
+              required: false
+              description: "Broker ID"
+              x-description-zh: "券商席位 Id"
+              x-description-zh-hk: "券商席位 Id"
+            - name: "bid_brokers"
+              type: "object[]"
+              required: false
+              description: "Bid brokers"
+              x-description-zh: "买盘经纪队列"
+              x-description-zh-hk: "買盤經紀隊列"
+            - name: "└ position"
+              type: "int32"
+              required: false
+              description: "Position"
+              x-description-zh: "档位"
+              x-description-zh-hk: "檔位"
+            - name: "└ broker_ids"
+              type: "int32[]"
+              required: false
+              description: "Broker ID"
+              x-description-zh: "券商席位 Id"
+              x-description-zh-hk: "券商席位 Id"
         - id: ws-push-trade
           name: Push · Trades
           x-name-zh: 推送 · 成交
@@ -3059,6 +5146,61 @@ x-websocket:
               "sequence": 160808750000000,
               "trade": [{ "price": "158.760", "volume": 1, "timestamp": 1651103979, "trade_type": "I", "direction": 0, "trade_session": 2 }]
             }
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, for example: AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "sequence"
+              type: "int64"
+              required: false
+              description: "Sequence number"
+              x-description-zh: "序列号"
+              x-description-zh-hk: "序列號"
+            - name: "trades"
+              type: "object[]"
+              required: false
+              description: "Trades data"
+              x-description-zh: "逐笔明细数据"
+              x-description-zh-hk: "逐筆明細數據"
+            - name: "└ price"
+              type: "string"
+              required: false
+              description: "Price"
+              x-description-zh: "价格"
+              x-description-zh-hk: "價格"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Time of trading"
+              x-description-zh: "成交时间"
+              x-description-zh-hk: "成交時間"
+            - name: "└ trade_type"
+              type: "string"
+              required: false
+              description: "Trade type"
+              x-description-zh: "交易类型说明"
+              x-description-zh-hk: "交易類型說明"
+            - name: "└ direction"
+              type: "int32"
+              required: false
+              description: "Trade direction: 0 neutral, 1 down, 2 up"
+              x-description-zh: "交易方向：0 neutral, 1 down, 2 up"
+              x-description-zh-hk: "交易方向：0 neutral, 1 down, 2 up"
+            - name: "└ trade_session"
+              type: "int32"
+              required: false
+              description: "Trade session, see TradeSession"
+              x-description-zh: "交易时段，详见 TradeSession"
+              x-description-zh-hk: "交易時段，詳見 TradeSession"
         - id: ws-push-candlestick
           name: Push · Candlestick
           x-name-zh: 推送 · K 线
@@ -3122,6 +5264,73 @@ x-websocket:
               "period": 1,
               "candlestick": { "close": "162.500", "open": "160.000", "high": "163.000", "low": "159.800", "volume": 123456, "turnover": "19987654.000", "timestamp": 1651103700, "trade_session": 0 }
             }
+          x-response-fields:
+            - name: "symbol"
+              type: "string"
+              required: false
+              description: "Security code, for example: AAPL.US"
+              x-description-zh: "标的代码，例如：AAPL.US"
+              x-description-zh-hk: "標的代碼，例如：AAPL.US"
+            - name: "period"
+              type: "int32"
+              required: false
+              description: "Candlestick period, see Period"
+              x-description-zh: "K 线周期，详见 Period"
+              x-description-zh-hk: "K 線週期，詳見 Period"
+            - name: "candlestick"
+              type: "object"
+              required: false
+              description: "Candlestick data"
+              x-description-zh: "K 线数据"
+              x-description-zh-hk: "K 線數據"
+            - name: "└ close"
+              type: "string"
+              required: false
+              description: "Close price"
+              x-description-zh: "收盘价"
+              x-description-zh-hk: "收盤價"
+            - name: "└ open"
+              type: "string"
+              required: false
+              description: "Open price"
+              x-description-zh: "开盘价"
+              x-description-zh-hk: "開盤價"
+            - name: "└ high"
+              type: "string"
+              required: false
+              description: "High price"
+              x-description-zh: "最高价"
+              x-description-zh-hk: "最高價"
+            - name: "└ low"
+              type: "string"
+              required: false
+              description: "Low price"
+              x-description-zh: "最低价"
+              x-description-zh-hk: "最低價"
+            - name: "└ volume"
+              type: "int64"
+              required: false
+              description: "Volume"
+              x-description-zh: "成交量"
+              x-description-zh-hk: "成交量"
+            - name: "└ turnover"
+              type: "string"
+              required: false
+              description: "Turnover"
+              x-description-zh: "成交额"
+              x-description-zh-hk: "成交額"
+            - name: "└ timestamp"
+              type: "int64"
+              required: false
+              description: "Candlestick time (Unix timestamp)"
+              x-description-zh: "K 线时间（Unix 时间戳）"
+              x-description-zh-hk: "K 線時間（Unix 時間戳）"
+            - name: "└ trade_session"
+              type: "int32"
+              required: false
+              description: "Trade session, see TradeSession"
+              x-description-zh: "交易时段，详见 TradeSession"
+              x-description-zh-hk: "交易時段，詳見 TradeSession"
     - name: Trade (WebSocket)
       x-name-zh: 交易 (WebSocket)
       x-name-zh-hk: 交易 (WebSocket)
@@ -3203,6 +5412,44 @@ x-websocket:
               "fail": [],
               "current": ["private"]
             }
+          x-fields:
+            - name: "topics"
+              type: "string[]"
+              required: false
+              description: "Topics to subscribe"
+              x-description-zh: "要订阅的 topic"
+              x-description-zh-hk: "要訂閱的 topic"
+          x-response-fields:
+            - name: "success"
+              type: "string[]"
+              required: false
+              description: "Success topics"
+              x-description-zh: "订阅成功"
+              x-description-zh-hk: "訂閱成功"
+            - name: "fail"
+              type: "object[]"
+              required: false
+              description: "Failed topics"
+              x-description-zh: "订阅失败"
+              x-description-zh-hk: "訂閱失敗"
+            - name: "└ topic"
+              type: "string"
+              required: false
+              description: "Topic"
+              x-description-zh: "topic"
+              x-description-zh-hk: "topic"
+            - name: "└ reason"
+              type: "string"
+              required: false
+              description: "Failure reason"
+              x-description-zh: "失败原因"
+              x-description-zh-hk: "失敗原因"
+            - name: "current"
+              type: "string[]"
+              required: false
+              description: "Current subscriptions after subscribe"
+              x-description-zh: "当前订阅"
+              x-description-zh-hk: "目前訂閱"
         - id: ws-trade-unsub
           name: Cancel Subscribe (Trade)
           x-name-zh: 取消订阅交易推送
@@ -3272,6 +5519,20 @@ x-websocket:
             {
               "current": []
             }
+          x-fields:
+            - name: "topics"
+              type: "string[]"
+              required: false
+              description: "Topics to unsubscribe"
+              x-description-zh: "要取消订阅的 topic"
+              x-description-zh-hk: "要取消訂閱的 topic"
+          x-response-fields:
+            - name: "current"
+              type: "string[]"
+              required: false
+              description: "Current subscriptions after cancel subscribe"
+              x-description-zh: "当前订阅"
+              x-description-zh-hk: "目前訂閱"
         - id: ws-trade-notify
           name: Notification (Trade)
           x-name-zh: 交易通知推送
@@ -3357,6 +5618,259 @@ x-websocket:
                 "updated_at": "1562761893"
               }
             }
+          x-response-fields:
+            - name: "topic"
+              type: "string"
+              required: false
+              description: "Topic"
+              x-description-zh: "topic"
+              x-description-zh-hk: "topic"
+            - name: "content_type"
+              type: "int32"
+              required: false
+              description: "Content type (JSON/PROTO)"
+              x-description-zh: "内容类型 (JSON/PROTO)"
+              x-description-zh-hk: "內容類型 (JSON/PROTO)"
+            - name: "dispatch_type"
+              type: "int32"
+              required: false
+              description: "Dispatch type"
+              x-description-zh: "分发类型"
+              x-description-zh-hk: "分發類型"
+            - name: "data"
+              type: "bytes"
+              required: false
+              description: "Payload data (order-changed)"
+              x-description-zh: "推送数据（订单变更）"
+              x-description-zh-hk: "推播數據（訂單變更）"
+            - name: "└ side"
+              type: "string"
+              required: false
+              description: "Order side (Buy/Sell)"
+              x-description-zh: "买卖方向 (Buy/Sell)"
+              x-description-zh-hk: "買賣方向 (Buy/Sell)"
+            - name: "└ stock_name"
+              type: "string"
+              required: false
+              description: "Stock name"
+              x-description-zh: "公司名称"
+              x-description-zh-hk: "公司名稱"
+            - name: "└ submitted_quantity"
+              type: "string"
+              required: false
+              description: "Submitted quantity"
+              x-description-zh: "委托数量"
+              x-description-zh-hk: "委托數量"
+            - name: "└ symbol"
+              type: "string"
+              required: false
+              description: "Order symbol"
+              x-description-zh: "订单标的"
+              x-description-zh-hk: "訂單標的"
+            - name: "└ order_type"
+              type: "string"
+              required: false
+              description: "Order type"
+              x-description-zh: "订单类型"
+              x-description-zh-hk: "訂單類型"
+            - name: "└ submitted_price"
+              type: "string"
+              required: false
+              description: "Submitted price"
+              x-description-zh: "委托价格"
+              x-description-zh-hk: "委托價格"
+            - name: "└ executed_quantity"
+              type: "string"
+              required: false
+              description: "Executed quantity"
+              x-description-zh: "成交数量"
+              x-description-zh-hk: "成交數量"
+            - name: "└ executed_price"
+              type: "string"
+              required: false
+              description: "Executed price"
+              x-description-zh: "成交价格"
+              x-description-zh-hk: "成交價格"
+            - name: "└ order_id"
+              type: "string"
+              required: false
+              description: "Order id"
+              x-description-zh: "订单 id"
+              x-description-zh-hk: "訂單 id"
+            - name: "└ currency"
+              type: "string"
+              required: false
+              description: "Currency"
+              x-description-zh: "结算货币"
+              x-description-zh-hk: "結算貨幣"
+            - name: "└ status"
+              type: "string"
+              required: false
+              description: "Order status"
+              x-description-zh: "订单状态"
+              x-description-zh-hk: "訂單狀態"
+            - name: "└ submitted_at"
+              type: "string"
+              required: false
+              description: "Submitted time (timestamp, second)"
+              x-description-zh: "下单时间，格式为时间戳 (秒)"
+              x-description-zh-hk: "下單時間，格式為時間戳 (秒)"
+            - name: "└ updated_at"
+              type: "string"
+              required: false
+              description: "Last updated time"
+              x-description-zh: "最近更新时间"
+              x-description-zh-hk: "最近更新時間"
+            - name: "└ trigger_price"
+              type: "string"
+              required: false
+              description: "LIT / MIT order trigger price"
+              x-description-zh: "触发价格"
+              x-description-zh-hk: "觸發價格"
+            - name: "└ msg"
+              type: "string"
+              required: false
+              description: "Rejected message or remark"
+              x-description-zh: "拒绝理由，备注信息"
+              x-description-zh-hk: "拒絕理由，備注信息"
+            - name: "└ tag"
+              type: "string"
+              required: false
+              description: "Order tag (Normal/GTC/Grey)"
+              x-description-zh: "订单标记 (Normal/GTC/Grey)"
+              x-description-zh-hk: "訂單標記 (Normal/GTC/Grey)"
+            - name: "└ trigger_status"
+              type: "string"
+              required: false
+              description: "Conditional order trigger status"
+              x-description-zh: "条件单触发状态"
+              x-description-zh-hk: "條件單觸發狀態"
+            - name: "└ trigger_at"
+              type: "string"
+              required: false
+              description: "Conditional order trigger time (timestamp, second)"
+              x-description-zh: "触发时间"
+              x-description-zh-hk: "觸發時間"
+            - name: "└ trailing_amount"
+              type: "string"
+              required: false
+              description: "TSLPAMT order trailing amount"
+              x-description-zh: "条件单跟踪金额"
+              x-description-zh-hk: "條件單跟蹤金額"
+            - name: "└ trailing_percent"
+              type: "string"
+              required: false
+              description: "TSLPPCT order trailing percent"
+              x-description-zh: "条件单跟踪涨跌幅"
+              x-description-zh-hk: "條件單跟蹤漲跌幅"
+            - name: "└ limit_offset"
+              type: "string"
+              required: false
+              description: "TSLPAMT / TSLPPCT order limit offset amount"
+              x-description-zh: "指定价差"
+              x-description-zh-hk: "指定價差"
+            - name: "└ account_no"
+              type: "string"
+              required: false
+              description: "Account no"
+              x-description-zh: "用户端账号"
+              x-description-zh-hk: "用戶端賬號"
+            - name: "└ remark"
+              type: "string"
+              required: false
+              description: "Remark message"
+              x-description-zh: "备注"
+              x-description-zh-hk: "備注"
+            - name: "└ last_share"
+              type: "string"
+              required: false
+              description: "Last share"
+              x-description-zh: "最新成交数量"
+              x-description-zh-hk: "最新成交數量"
+            - name: "└ last_price"
+              type: "string"
+              required: false
+              description: "Last price"
+              x-description-zh: "最新成交价格"
+              x-description-zh-hk: "最新成交價格"
+            - name: "└ multi_leg"
+              type: "object"
+              required: false
+              description: "Multi-leg strategy information, only pushed for multi-leg option combination orders"
+              x-description-zh: "多腿策略信息，仅多腿期权组合订单推送"
+              x-description-zh-hk: "多腿策略信息，僅多腿期權組合訂單推送"
+            - name: " └ strategy"
+              type: "string"
+              required: false
+              description: "Multi-leg strategy"
+              x-description-zh: "多腿策略"
+              x-description-zh-hk: "多腿策略"
+            - name: " └ strategy_name"
+              type: "string"
+              required: false
+              description: "Strategy name"
+              x-description-zh: "策略名称"
+              x-description-zh-hk: "策略名稱"
+            - name: " └ multileg_id"
+              type: "string"
+              required: false
+              description: "Multi-leg combination ID"
+              x-description-zh: "多腿组合 ID"
+              x-description-zh-hk: "多腿組合 ID"
+            - name: " └ code"
+              type: "string"
+              required: false
+              description: "Multi-leg combination code"
+              x-description-zh: "多腿组合代码"
+              x-description-zh-hk: "多腿組合代碼"
+            - name: " └ legs"
+              type: "object[]"
+              required: false
+              description: "Legs of the combination order"
+              x-description-zh: "组合订单的各腿"
+              x-description-zh-hk: "組合訂單的各腿"
+            - name: "  └ symbol"
+              type: "string"
+              required: false
+              description: "Option symbol, use ticker.region format"
+              x-description-zh: "期权 symbol，使用 ticker.region 格式"
+              x-description-zh-hk: "期權 symbol，使用 ticker.region 格式"
+            - name: "  └ side"
+              type: "string"
+              required: false
+              description: "Order side (Buy/Sell)"
+              x-description-zh: "买卖方向 (Buy/Sell)"
+              x-description-zh-hk: "買賣方向 (Buy/Sell)"
+            - name: "  └ position"
+              type: "string"
+              required: false
+              description: "Position direction (LONG/SHORT)"
+              x-description-zh: "持仓方向 (LONG/SHORT)"
+              x-description-zh-hk: "持倉方向 (LONG/SHORT)"
+            - name: "  └ ratio_quantity"
+              type: "string"
+              required: false
+              description: "Leg ratio quantity"
+              x-description-zh: "该腿比例数量"
+              x-description-zh-hk: "該腿比例數量"
+            - name: "  └ strike_price"
+              type: "string"
+              required: false
+              description: "Strike price"
+              x-description-zh: "行权价"
+              x-description-zh-hk: "行權價"
+            - name: "  └ expire_date"
+              type: "string"
+              required: false
+              description: "Option expiry date, format YYYYMMDD"
+              x-description-zh: "期权到期日，格式：YYYYMMDD"
+              x-description-zh-hk: "期權到期日，格式：YYYYMMDD"
+            - name: "  └ contract_direction"
+              type: "string"
+              required: false
+              description: "Contract type (C=Call/P=Put)"
+              x-description-zh: "合约类型 (C=看涨/P=看跌)"
+              x-description-zh-hk: "合約類型 (C=看漲/P=看跌)"
 servers:
   - url: https://openapi.longbridge.com
     description: Global

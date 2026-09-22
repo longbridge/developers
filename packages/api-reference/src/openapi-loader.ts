@@ -158,6 +158,7 @@ export interface WsCommandItem {
   descriptionZh?: string
   descriptionZhHk?: string
   fields?: XParameter[]
+  responseFields?: XParameter[]
   requestExamples: CodeSample[]
   responseExample?: string
 }
@@ -276,6 +277,7 @@ export function parseSpec(rawYaml: string): {
     descriptionZh: c['x-description-zh'],
     descriptionZhHk: c['x-description-zh-hk'],
     fields: c['x-fields'],
+    responseFields: c['x-response-fields'],
     requestExamples: c['x-request-examples'] ?? [],
     responseExample: c['x-response-example'],
   })
