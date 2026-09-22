@@ -145,6 +145,30 @@ export interface PathSeg {
   isParam: boolean
 }
 
+// ── WebSocket commands (x-websocket) ─────────────────────────────────────────
+
+export interface WsCommandItem {
+  id: string
+  name: string
+  nameZh?: string
+  nameZhHk?: string
+  cmd?: number
+  direction: 'request' | 'push'
+  description: string
+  descriptionZh?: string
+  descriptionZhHk?: string
+  fields?: XParameter[]
+  requestExamples: CodeSample[]
+  responseExample?: string
+}
+
+export interface WsGroupData {
+  name: string
+  nameZh?: string
+  nameZhHk?: string
+  commands: WsCommandItem[]
+}
+
 export const PAGE_ICONS: Record<string, string> = {
   lock: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
   activity: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
@@ -154,7 +178,12 @@ export const PAGE_ICONS: Record<string, string> = {
 
 // ── Spec parsing ──────────────────────────────────────────────────────────────
 
-export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageItem[]; serverUrl: string } {
+export function parseSpec(rawYaml: string): {
+  groups: TagGroup[]
+  pages: PageItem[]
+  wsGroup: WsGroupData | null
+  serverUrl: string
+} {
   const parsed = load(rawYaml) as any
   const serverUrl: string = parsed.servers?.[0]?.url ?? ''
   const methods = ['get', 'post', 'put', 'delete', 'patch', 'websocket']
@@ -236,6 +265,29 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
     codeTabs: p['x-code-tabs'],
   }))
 
+  const rawWs = parsed['x-websocket'] as any
+  const wsGroup: WsGroupData | null = rawWs
+    ? {
+        name: rawWs.name ?? 'WebSocket',
+        nameZh: rawWs['x-name-zh'],
+        nameZhHk: rawWs['x-name-zh-hk'],
+        commands: (rawWs.commands ?? []).map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          nameZh: c['x-name-zh'],
+          nameZhHk: c['x-name-zh-hk'],
+          cmd: c.cmd,
+          direction: c.direction === 'push' ? 'push' : 'request',
+          description: c.description ?? '',
+          descriptionZh: c['x-description-zh'],
+          descriptionZhHk: c['x-description-zh-hk'],
+          fields: c['x-fields'],
+          requestExamples: c['x-request-examples'] ?? [],
+          responseExample: c['x-response-example'],
+        })),
+      }
+    : null
+
   return {
     groups: ordered
       .filter((x) => byTag[x])
@@ -244,6 +296,7 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
         return { name: x, nameZh: tagZhMap[x], nameZhHk: tagZhHkMap[x], endpoints: flat, subgroups }
       }),
     pages,
+    wsGroup,
     serverUrl,
   }
 }

@@ -1174,6 +1174,37 @@
   background: #161b22;
 }
 
+/* WebSocket command detail view */
+.ws-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 20px;
+}
+.ws-cmd,
+.ws-dir {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--lb-fg-2, #64748b);
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ws-response {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #0d1117;
+  color: #e2e8f0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+:root[data-theme='dark'] .ws-cmd,
+:root[data-theme='dark'] .ws-dir {
+  background: #161b22;
+}
+
 .api-auth-note {
   margin: 0 0 10px;
   font-size: 13px;

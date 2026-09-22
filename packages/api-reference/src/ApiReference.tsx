@@ -23,8 +23,10 @@ import {
   type XParameter,
   type TagGroup,
   type SubGroup,
+  type WsGroupData,
+  type WsCommandItem,
 } from './openapi-loader'
-import { CodePanel, CodeTabs, highlightCode } from './CodeSample'
+import { CodePanel, CodeTabs, CodeDropdown, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
 import { EnvProvider } from './EnvContext'
 import { AuthTable } from './AuthTable'
@@ -474,29 +476,21 @@ function ApiSidebarGroup({
   )
 }
 
-// WebSocket quote functions — shown as a sidebar group alongside the HTTP
-// endpoint groups. Each name matches an H2 heading on the real-time-data page,
-// so slugify(name) equals that heading's id and selecting the item scrolls to
-// its "implementation" section.
-interface WsCommand {
-  en: string
-  zh: string
-  zhHk: string
-}
-const WS_COMMANDS: WsCommand[] = [
-  { en: 'Subscribe quotes', zh: '订阅行情', zhHk: '訂閱行情' },
-  { en: 'Unsubscribe', zh: '取消订阅', zhHk: '取消訂閱' },
-  { en: 'Get subscription info', zh: '获取订阅信息', zhHk: '獲取訂閱信息' },
-  { en: 'Real-time price (cmd 101)', zh: '实时价格订阅 (cmd 101)', zhHk: '實時價格訂閱 (cmd 101)' },
-  { en: 'Real-time depth (cmd 102)', zh: '实时盘口订阅 (cmd 102)', zhHk: '實時盤口訂閱 (cmd 102)' },
-  { en: 'Real-time brokers (cmd 103)', zh: '实时经纪队列订阅 (cmd 103)', zhHk: '實時經紀隊列訂閱 (cmd 103)' },
-  { en: 'Real-time trades (cmd 104)', zh: '实时成交明细订阅 (cmd 104)', zhHk: '實時成交明細訂閱 (cmd 104)' },
-  { en: 'Candlestick (K-line)', zh: 'K 线', zhHk: 'K 線' },
-]
-
-function WsSidebarGroup({ locale, onSelect }: { locale: Locale; onSelect: (c: WsCommand) => void }) {
+// WebSocket quote functions — a sidebar group alongside the HTTP endpoint
+// groups. Each command opens its own detail view (?ws=<id>).
+function WsSidebarGroup({
+  group,
+  activeWs,
+  onSelect,
+  locale,
+}: {
+  group: WsGroupData
+  activeWs: string | null
+  onSelect: (id: string) => void
+  locale: Locale
+}) {
   const [open, setOpen] = useState(true)
-  const label = pickLocale('Quote Push (WebSocket)', '行情推送 (WebSocket)', '行情推送 (WebSocket)', locale)
+  const label = pickLocale(group.name, group.nameZh, group.nameZhHk, locale)
   return (
     <li data-lbus-component="sidebar-group" className="list-none">
       <button
@@ -511,20 +505,81 @@ function WsSidebarGroup({ locale, onSelect }: { locale: Locale; onSelect: (c: Ws
       </button>
       {open && (
         <ul className="list-none py-0 m-0 flex flex-col gap-[2px]" role="list">
-          {WS_COMMANDS.map((c) => (
-            <li key={c.en} className="list-none">
-              <button
-                type="button"
-                onClick={() => onSelect(c)}
-                className={`${NAV_LEAF} ${NAV_LEAF_IDLE}`}>
-                <span className="nav-method method-ws">WS</span>
-                <span className="flex-1 min-w-0 truncate">{pickLocale(c.en, c.zh, c.zhHk, locale)}</span>
-              </button>
-            </li>
-          ))}
+          {group.commands.map((c) => {
+            const active = activeWs === c.id
+            return (
+              <li key={c.id} className="list-none">
+                <button
+                  type="button"
+                  onClick={() => onSelect(c.id)}
+                  aria-current={active ? 'page' : undefined}
+                  className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
+                  <span className="nav-method method-ws">WS</span>
+                  <span className="flex-1 min-w-0 truncate">{pickLocale(c.name, c.nameZh, c.nameZhHk, locale)}</span>
+                </button>
+              </li>
+            )
+          })}
         </ul>
       )}
     </li>
+  )
+}
+
+const L_WS = {
+  request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
+  push: { en: 'Push', 'zh-CN': '推送', 'zh-HK': '推送' },
+  callExample: { en: 'Call Example', 'zh-CN': '调用示例', 'zh-HK': '調用示例' },
+  responseExample: { en: 'Response Example', 'zh-CN': '响应示例', 'zh-HK': '響應示例' },
+  pushExample: { en: 'Push Example', 'zh-CN': '推送示例', 'zh-HK': '推送示例' },
+} as const
+
+/** WebSocket command detail view — title, WS/cmd badge, description, call
+ *  example (multi-language) and a response/push JSON example. */
+function WsDetail({
+  cmd,
+  locale,
+  localePrefix,
+  labelCopy,
+  labelCopied,
+}: {
+  cmd: WsCommandItem
+  locale: Locale
+  localePrefix: string
+  labelCopy: string
+  labelCopied: string
+}) {
+  const title = pickLocale(cmd.name, cmd.nameZh, cmd.nameZhHk, locale)
+  const desc = pickLocale(cmd.description, cmd.descriptionZh, cmd.descriptionZhHk, locale)
+  const blocks: CodeBlock[] = cmd.requestExamples.map((s) => ({
+    lang: s.lang.toLowerCase(),
+    code: s.source,
+    label: s.label,
+  }))
+  return (
+    <>
+      <h1 className="ep-title">{title}</h1>
+      <div className="ws-badges">
+        <span className="ep-method-badge method-ws">WS</span>
+        {cmd.cmd != null && <span className="ws-cmd">cmd {cmd.cmd}</span>}
+        <span className="ws-dir">{(cmd.direction === 'push' ? L_WS.push : L_WS.request)[locale]}</span>
+      </div>
+      {desc && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: renderMd(desc, localePrefix) }} />}
+      {blocks.length > 0 && (
+        <>
+          <h2>{L_WS.callExample[locale]}</h2>
+          <CodeDropdown blocks={blocks} labelCopy={labelCopy} labelCopied={labelCopied} />
+        </>
+      )}
+      {cmd.responseExample && (
+        <>
+          <h2>{(cmd.direction === 'push' ? L_WS.pushExample : L_WS.responseExample)[locale]}</h2>
+          <pre className="code-pre ws-response">
+            <code dangerouslySetInnerHTML={{ __html: highlightCode(cmd.responseExample.trim(), 'json') }} />
+          </pre>
+        </>
+      )}
+    </>
   )
 }
 
@@ -680,25 +735,26 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const localePrefix = LOCALE_PREFIX[locale] ?? ''
 
   // Parse spec once
-  const { groups, pages, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
+  const { groups, pages, wsGroup, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
 
   // ── URL state ─────────────────────────────────────────────────────────────
   // Canonical URLs are path-based: `/docs/api/<operationId>` (locale-prefixed).
   // The legacy `?op=` / `?page=` query form is still honored for old links.
   const apiBase = `${localePrefix}/docs/api`
   const getRoute = () => {
-    if (typeof window === 'undefined') return { op: null, page: null }
+    if (typeof window === 'undefined') return { op: null, page: null, ws: null }
     const path = window.location.pathname.replace(/\/+$/, '')
     if (path.startsWith(apiBase + '/')) {
       const seg = path.slice(apiBase.length + 1)
-      if (seg && !seg.includes('/')) return { op: decodeURIComponent(seg), page: null }
+      if (seg && !seg.includes('/')) return { op: decodeURIComponent(seg), page: null, ws: null }
     }
     const p = new URLSearchParams(window.location.search)
-    return { op: p.get('op'), page: p.get('page') }
+    return { op: p.get('op'), page: p.get('page'), ws: p.get('ws') }
   }
 
   const [activeOp, setActiveOp] = useState<string | null>(() => getRoute().op)
   const [activePage, setActivePage] = useState<string | null>(() => getRoute().page)
+  const [activeWs, setActiveWs] = useState<string | null>(() => getRoute().ws)
 
   // Listen for popstate
   useEffect(() => {
@@ -706,6 +762,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       const q = getRoute()
       setActiveOp(q.op)
       setActivePage(q.page)
+      setActiveWs(q.ws)
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
@@ -718,6 +775,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       window.history.pushState({}, '', `${apiBase}/${id}`)
       setActiveOp(id)
       setActivePage(null)
+      setActiveWs(null)
     },
     [apiBase]
   )
@@ -728,6 +786,18 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       window.history.pushState({}, '', `${apiBase}?page=${id}`)
       setActivePage(id)
       setActiveOp(null)
+      setActiveWs(null)
+    },
+    [apiBase]
+  )
+
+  // Navigate to a WebSocket command → /docs/api?ws=<id>
+  const selectWs = useCallback(
+    (id: string) => {
+      window.history.pushState({}, '', `${apiBase}?ws=${id}`)
+      setActiveWs(id)
+      setActiveOp(null)
+      setActivePage(null)
     },
     [apiBase]
   )
@@ -898,25 +968,10 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     }
   }, [activePg, locale, localePrefix])
 
-  const scrollToSection = useCallback((id: string) => {
-    if (typeof document === 'undefined') return
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      window.history.replaceState({}, '', `${window.location.pathname}${window.location.search}#${id}`)
-    }
-  }, [])
-
-  // Selecting a WebSocket function opens the real-time-data page and scrolls to
-  // that command's section (its "implementation").
-  const goWs = useCallback(
-    (c: WsCommand) => {
-      const id = slugify(pickLocale(c.en, c.zh, c.zhHk, locale))
-      const already = activePage === 'real-time-data'
-      if (!already) selectPage('real-time-data')
-      window.setTimeout(() => scrollToSection(id), already ? 0 : 260)
-    },
-    [activePage, locale, selectPage, scrollToSection]
+  // The active WebSocket command (detail view), if any.
+  const activeWsCmd = useMemo<WsCommandItem | null>(
+    () => (activeWs && wsGroup ? wsGroup.commands.find((c) => c.id === activeWs) ?? null : null),
+    [activeWs, wsGroup]
   )
 
   // Live TryIt response for the right-rail Response panel; cleared per endpoint.
@@ -927,27 +982,33 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
   // ── Render ────────────────────────────────────────────────────────────────
 
-  const showIntro = !activeOp && !activePage
-  const showPage = !!activePg
-  const showEndpoint = !!activeEndpoint
+  const showWs = !!activeWsCmd
+  const showIntro = !activeOp && !activePage && !showWs
+  const showPage = !!activePg && !showWs
+  const showEndpoint = !!activeEndpoint && !showWs
 
   // Breadcrumb trail (Home is prepended by DocsBreadcrumb).
   const crumbs: { text: string; href?: string }[] =
-    showEndpoint && activeEndpoint
+    showWs && activeWsCmd && wsGroup
       ? [
-          ...(epTag ? [{ text: epTag }] : []),
-          {
-            text: pickLocale(
-              activeEndpoint.operation.summary,
-              activeEndpoint.operation['x-summary-zh'],
-              activeEndpoint.operation['x-summary-zh-hk'],
-              locale
-            ),
-          },
+          { text: pickLocale(wsGroup.name, wsGroup.nameZh, wsGroup.nameZhHk, locale) },
+          { text: pickLocale(activeWsCmd.name, activeWsCmd.nameZh, activeWsCmd.nameZhHk, locale) },
         ]
-      : activePg
-        ? [{ text: pickLocale(activePg.title, activePg.titleZh, activePg.titleZhHk, locale) }]
-        : []
+      : showEndpoint && activeEndpoint
+        ? [
+            ...(epTag ? [{ text: epTag }] : []),
+            {
+              text: pickLocale(
+                activeEndpoint.operation.summary,
+                activeEndpoint.operation['x-summary-zh'],
+                activeEndpoint.operation['x-summary-zh-hk'],
+                locale
+              ),
+            },
+          ]
+        : activePg
+          ? [{ text: pickLocale(activePg.title, activePg.titleZh, activePg.titleZhHk, locale) }]
+          : []
 
   return (
     <EnvProvider>
@@ -1002,11 +1063,13 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
             </div>
           ))}
           {/* WebSocket quote functions — grouped like the HTTP endpoint groups */}
-          <div className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
-            <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
-              <WsSidebarGroup locale={locale} onSelect={goWs} />
-            </ul>
-          </div>
+          {wsGroup && wsGroup.commands.length > 0 && (
+            <div className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
+              <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
+                <WsSidebarGroup group={wsGroup} activeWs={activeWs} onSelect={selectWs} locale={locale} />
+              </ul>
+            </div>
+          )}
         </nav>
       </aside>
 
@@ -1015,6 +1078,16 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
           <div className={`docs-main${showEndpoint && isDocsModel ? ' has-rail' : ''}`}>
             <article className="docs-content">
               <DocsBreadcrumb items={crumbs} locale={locale} />
+              {/* ── WebSocket command detail ── */}
+              {showWs && activeWsCmd && (
+                <WsDetail
+                  cmd={activeWsCmd}
+                  locale={locale}
+                  localePrefix={localePrefix}
+                  labelCopy={t(locale, 'api.copy')}
+                  labelCopied={t(locale, 'api.copied')}
+                />
+              )}
               {/* ── Intro (nothing selected) ── */}
               {showIntro && (
                 <div className="intro-content">
