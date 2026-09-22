@@ -474,6 +474,60 @@ function ApiSidebarGroup({
   )
 }
 
+// WebSocket quote functions — shown as a sidebar group alongside the HTTP
+// endpoint groups. Each name matches an H2 heading on the real-time-data page,
+// so slugify(name) equals that heading's id and selecting the item scrolls to
+// its "implementation" section.
+interface WsCommand {
+  en: string
+  zh: string
+  zhHk: string
+}
+const WS_COMMANDS: WsCommand[] = [
+  { en: 'Subscribe quotes', zh: '订阅行情', zhHk: '訂閱行情' },
+  { en: 'Unsubscribe', zh: '取消订阅', zhHk: '取消訂閱' },
+  { en: 'Get subscription info', zh: '获取订阅信息', zhHk: '獲取訂閱信息' },
+  { en: 'Real-time price (cmd 101)', zh: '实时价格订阅 (cmd 101)', zhHk: '實時價格訂閱 (cmd 101)' },
+  { en: 'Real-time depth (cmd 102)', zh: '实时盘口订阅 (cmd 102)', zhHk: '實時盤口訂閱 (cmd 102)' },
+  { en: 'Real-time brokers (cmd 103)', zh: '实时经纪队列订阅 (cmd 103)', zhHk: '實時經紀隊列訂閱 (cmd 103)' },
+  { en: 'Real-time trades (cmd 104)', zh: '实时成交明细订阅 (cmd 104)', zhHk: '實時成交明細訂閱 (cmd 104)' },
+  { en: 'Candlestick (K-line)', zh: 'K 线', zhHk: 'K 線' },
+]
+
+function WsSidebarGroup({ locale, onSelect }: { locale: Locale; onSelect: (c: WsCommand) => void }) {
+  const [open, setOpen] = useState(true)
+  const label = pickLocale('Quote Push (WebSocket)', '行情推送 (WebSocket)', '行情推送 (WebSocket)', locale)
+  return (
+    <li data-lbus-component="sidebar-group" className="list-none">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg px-2 py-1 text-[14px] leading-6">
+        <span className="flex-1 min-w-0 truncate font-bold text-[color:var(--lb-fg-1)] group-hover:text-[color:var(--lb-brand)]">
+          {label}
+        </span>
+        <Caret open={open} />
+      </button>
+      {open && (
+        <ul className="list-none py-0 m-0 flex flex-col gap-[2px]" role="list">
+          {WS_COMMANDS.map((c) => (
+            <li key={c.en} className="list-none">
+              <button
+                type="button"
+                onClick={() => onSelect(c)}
+                className={`${NAV_LEAF} ${NAV_LEAF_IDLE}`}>
+                <span className="nav-method method-ws">WS</span>
+                <span className="flex-1 min-w-0 truncate">{pickLocale(c.en, c.zh, c.zhHk, locale)}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  )
+}
+
 function buildSections(ep: EndpointItem, locale: Locale): Section[] {
   const sections: Section[] = []
 
@@ -844,25 +898,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     }
   }, [activePg, locale, localePrefix])
 
-  // H2 sections of the active page → sidebar sub-nav (anchor links). Ids match
-  // the heading-id rule above so clicking scrolls to the section.
-  const pageSections = useMemo<{ id: string; label: string }[]>(() => {
-    if (!activePg) return []
-    const raw = pickLocale(activePg.content, activePg.contentZh, activePg.contentZhHk, locale)
-    const seen: Record<string, number> = {}
-    const out: { id: string; label: string }[] = []
-    for (const line of raw.split('\n')) {
-      const m = /^##\s+(.+?)\s*$/.exec(line)
-      if (!m) continue
-      const label = m[1].replace(/[`*_~]/g, '')
-      let id = slugify(m[1])
-      if (seen[id]) id = `${id}-${seen[id]++}`
-      else seen[id] = 1
-      out.push({ id, label })
-    }
-    return out
-  }, [activePg, locale])
-
   const scrollToSection = useCallback((id: string) => {
     if (typeof document === 'undefined') return
     const el = document.getElementById(id)
@@ -871,6 +906,18 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       window.history.replaceState({}, '', `${window.location.pathname}${window.location.search}#${id}`)
     }
   }, [])
+
+  // Selecting a WebSocket function opens the real-time-data page and scrolls to
+  // that command's section (its "implementation").
+  const goWs = useCallback(
+    (c: WsCommand) => {
+      const id = slugify(pickLocale(c.en, c.zh, c.zhHk, locale))
+      const already = activePage === 'real-time-data'
+      if (!already) selectPage('real-time-data')
+      window.setTimeout(() => scrollToSection(id), already ? 0 : 260)
+    },
+    [activePage, locale, selectPage, scrollToSection]
+  )
 
   // Live TryIt response for the right-rail Response panel; cleared per endpoint.
   const [liveResp, setLiveResp] = useState<ApiResponse | null>(null)
@@ -935,20 +982,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                         {pickLocale(pg.title, pg.titleZh, pg.titleZhHk, locale)}
                       </span>
                     </button>
-                    {active && pageSections.length > 0 && (
-                      <ul className="api-page-sections list-none p-0 m-0" role="list">
-                        {pageSections.map((s) => (
-                          <li key={s.id} className="list-none">
-                            <button
-                              type="button"
-                              className="api-page-section-link"
-                              onClick={() => scrollToSection(s.id)}>
-                              {s.label}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </li>
                 )
               })}
@@ -968,6 +1001,12 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               </ul>
             </div>
           ))}
+          {/* WebSocket quote functions — grouped like the HTTP endpoint groups */}
+          <div className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
+            <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
+              <WsSidebarGroup locale={locale} onSelect={goWs} />
+            </ul>
+          </div>
         </nav>
       </aside>
 
