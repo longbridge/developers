@@ -4715,7 +4715,11 @@ x-websocket:
                 # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
                 #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                # After subscribing, push packets arrive with cmd=101. Decode the body:
+                # 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                req = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[1], is_first_push=True)
+                send_request(ws, cmd=6, body=req.SerializeToString())
+
+                # 2) Push packets arrive with cmd=101. Decode the body:
                 push = quote_pb2.PushQuote()
                 push.ParseFromString(push_body)
                 print(push)
@@ -4725,7 +4729,11 @@ x-websocket:
                 // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
                 // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
 
-                // After subscribing, push packets arrive with cmd=101. Decode the body:
+                // 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                const body = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [1], is_first_push: true }).finish()
+                await sendRequest(ws, 6, body)
+
+                // 2) Push packets arrive with cmd=101. Decode the body:
                 const push = PushQuote.decode(pushBody)
                 console.log(push)
           x-response-example: |
@@ -4874,7 +4882,11 @@ x-websocket:
                 # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
                 #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                # After subscribing, push packets arrive with cmd=102. Decode the body:
+                # 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                req = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[2], is_first_push=True)
+                send_request(ws, cmd=6, body=req.SerializeToString())
+
+                # 2) Push packets arrive with cmd=102. Decode the body:
                 push = quote_pb2.PushDepth()
                 push.ParseFromString(push_body)
                 print(push)
@@ -4884,7 +4896,11 @@ x-websocket:
                 // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
                 // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
 
-                // After subscribing, push packets arrive with cmd=102. Decode the body:
+                // 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                const body = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [2], is_first_push: true }).finish()
+                await sendRequest(ws, 6, body)
+
+                // 2) Push packets arrive with cmd=102. Decode the body:
                 const push = PushDepth.decode(pushBody)
                 console.log(push)
           x-response-example: |
@@ -5014,7 +5030,11 @@ x-websocket:
                 # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
                 #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                # After subscribing, push packets arrive with cmd=103. Decode the body:
+                # 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                req = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[3], is_first_push=True)
+                send_request(ws, cmd=6, body=req.SerializeToString())
+
+                # 2) Push packets arrive with cmd=103. Decode the body:
                 push = quote_pb2.PushBrokers()
                 push.ParseFromString(push_body)
                 print(push)
@@ -5024,7 +5044,11 @@ x-websocket:
                 // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
                 // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
 
-                // After subscribing, push packets arrive with cmd=103. Decode the body:
+                // 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                const body = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [3], is_first_push: true }).finish()
+                await sendRequest(ws, 6, body)
+
+                // 2) Push packets arrive with cmd=103. Decode the body:
                 const push = PushBrokers.decode(pushBody)
                 console.log(push)
           x-response-example: |
@@ -5127,7 +5151,11 @@ x-websocket:
                 # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
                 #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                # After subscribing, push packets arrive with cmd=104. Decode the body:
+                # 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                req = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[4], is_first_push=True)
+                send_request(ws, cmd=6, body=req.SerializeToString())
+
+                # 2) Push packets arrive with cmd=104. Decode the body:
                 push = quote_pb2.PushTrade()
                 push.ParseFromString(push_body)
                 print(push)
@@ -5137,7 +5165,11 @@ x-websocket:
                 // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
                 // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
 
-                // After subscribing, push packets arrive with cmd=104. Decode the body:
+                // 1) Subscribe first (cmd 6) with the matching SubType to start the feed:
+                const body = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [4], is_first_push: true }).finish()
+                await sendRequest(ws, 6, body)
+
+                // 2) Push packets arrive with cmd=104. Decode the body:
                 const push = PushTrade.decode(pushBody)
                 console.log(push)
           x-response-example: |
@@ -5245,7 +5277,9 @@ x-websocket:
                 # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
                 #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                # After subscribing, push packets arrive with cmd=105. Decode the body:
+                # 1) Subscribe candlesticks first (see "Candlestick (K-line)"), then read pushes.
+
+                # 2) Push packets arrive with cmd=105. Decode the body:
                 push = quote_pb2.PushCandlestick()
                 push.ParseFromString(push_body)
                 print(push)
@@ -5255,7 +5289,9 @@ x-websocket:
                 // Prereqs: authed quote WebSocket `ws` + protobufjs types from the .proto.
                 // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
 
-                // After subscribing, push packets arrive with cmd=105. Decode the body:
+                // 1) Subscribe candlesticks first (see "Candlestick (K-line)"), then read pushes.
+
+                // 2) Push packets arrive with cmd=105. Decode the body:
                 const push = PushCandlestick.decode(pushBody)
                 console.log(push)
           x-response-example: |
@@ -5586,7 +5622,9 @@ x-websocket:
                 # See "Real-Time Market Data" for the OTP auth handshake and packet framing:
                 #   send_request(ws, cmd, body) -> response_body   (bytes)
 
-                # After subscribing, push packets arrive with cmd=18. Decode the body:
+                # 1) Subscribe the "private" topic first (cmd 16), then read pushes.
+
+                # 2) Push packets arrive with cmd=18. Decode the body:
                 push = trade_pb2.()
                 push.ParseFromString(push_body)
                 print(push)
@@ -5596,7 +5634,9 @@ x-websocket:
                 // Prereqs: authed trade-gateway WebSocket `ws` + protobufjs types from the .proto.
                 // See "Real-Time Market Data" for auth + sendRequest(ws, cmd, body) -> Uint8Array.
 
-                // After subscribing, push packets arrive with cmd=18. Decode the body:
+                // 1) Subscribe the "private" topic first (cmd 16), then read pushes.
+
+                // 2) Push packets arrive with cmd=18. Decode the body:
                 const push = .decode(pushBody)
                 console.log(push)
           x-response-example: |
