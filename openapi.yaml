@@ -1155,676 +1155,1949 @@ x-pages:
       | 429         | 429002 | api request is limited | 接口访问过于频繁，请稍后再试             |
       | 500         | 500000 | internal error         | 服务内部错误，请联系客户经理进行处理         |
 x-websocket:
-  name: Quote Push (WebSocket)
-  x-name-zh: 行情推送 (WebSocket)
-  x-name-zh-hk: 行情推送 (WebSocket)
-  commands:
-    - id: ws-subscribe
-      name: Subscribe
-      x-name-zh: 订阅行情
-      x-name-zh-hk: 訂閱行情
-      cmd: 6
-      direction: request
-      description: |
-        Subscribe real-time feeds for a list of securities. Business command `6`. `SubType`: `1` Quote · `2` Depth · `3` Brokers · `4` Trade. `is_first_push` pushes a snapshot right after subscribing (not for Trade). Max 500 symbols per request, 500 subscriptions per user.
+  groups:
+    - name: Quote · Pull (WebSocket)
+      x-name-zh: 行情 · 拉取 (WebSocket)
+      x-name-zh-hk: 行情 · 拉取 (WebSocket)
+      commands:
+        - id: ws-static
+          name: Static Info
+          x-name-zh: 标的基础信息
+          x-name-zh-hk: 標的基礎信息
+          cmd: 10
+          direction: request
+          description: |
+            Basic information for a list of securities.
 
-        ```protobuf
-        message SubscribeRequest {
-          repeated string symbol = 1;
-          repeated SubType sub_type = 2;
-          bool is_first_push = 3;
-        }
-        ```
-      x-description-zh: |
-        为一组标的订阅实时行情。业务命令 `6`。`SubType`:`1` 报价 · `2` 盘口 · `3` 经纪队列 · `4` 成交。`is_first_push` 表示订阅后立即推送一次快照 (成交不支持)。单次最多 500 个标的，每用户最多 500 个订阅。
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message SubscribeRequest {
-          repeated string symbol = 1;
-          repeated SubType sub_type = 2;
-          bool is_first_push = 3;
-        }
-        ```
-      x-description-zh-hk: |
-        為一組標的訂閱實時行情。業務命令 `6`。`SubType`:`1` 報價 · `2` 盤口 · `3` 經紀隊列 · `4` 成交。`is_first_push` 表示訂閱後立即推送一次快照 (成交不支持)。單次最多 500 個標的，每用戶最多 500 個訂閱。
+            message SecurityStaticInfoResponse {
+              repeated StaticInfo secu_static_info = 1;
+            }
+            ```
+          x-description-zh: |
+            获取一组标的的基础信息。
 
-        ```protobuf
-        message SubscribeRequest {
-          repeated string symbol = 1;
-          repeated SubType sub_type = 2;
-          bool is_first_push = 3;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import QuoteContext, Config, SubType, PushQuote
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-            config = Config.from_env()  # LONGBRIDGE_APP_KEY / _SECRET / _ACCESS_TOKEN
-            ctx = QuoteContext(config)
-            ctx.set_on_quote(lambda symbol, event: print(symbol, event))
-            ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Quote], is_first_push=True)
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Config, QuoteContext, SubType } = require("longbridge")
+            message SecurityStaticInfoResponse {
+              repeated StaticInfo secu_static_info = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取一組標的的基礎信息。
 
-            const config = Config.fromEnv()
-            const ctx = await QuoteContext.new(config)
-            ctx.setOnQuote((event) => console.log(event))
-            await ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Quote], true)
-        - lang: Rust
-          label: Rust
-          source: |
-            use longbridge::{quote::SubFlags, Config, QuoteContext};
-            use std::sync::Arc;
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-            let config = Arc::new(Config::from_env()?);
-            let (ctx, mut rx) = QuoteContext::try_new(config).await?;
-            ctx.subscribe(["700.HK", "AAPL.US"], SubFlags::QUOTE, true).await?;
-            while let Some(event) = rx.recv().await { println!("{:?}", event); }
-        - lang: Go
-          label: Go
-          source: |
-            config, _ := config.New()
-            qctx, _ := quote.NewFromCfg(config)
-            qctx.OnQuote(func(e *quote.PushQuote) { fmt.Println(e.Symbol, e) })
-            qctx.Subscribe(context.Background(), []string{"700.HK", "AAPL.US"}, []quote.SubType{quote.SubTypeQuote}, true)
-      x-response-example: |
-        {
-          "sub_list": [
-            { "symbol": "700.HK", "sub_type": [1, 2, 3] },
-            { "symbol": "AAPL.US", "sub_type": [2] }
-          ]
-        }
-    - id: ws-unsubscribe
-      name: Unsubscribe
-      x-name-zh: 取消订阅
-      x-name-zh-hk: 取消訂閱
-      cmd: 7
-      direction: request
-      description: |
-        Unsubscribe feeds. Business command `7`. With `symbol` empty and `unsub_all` true, all subscriptions are dropped; with `symbol` set, all subscriptions of those symbols are dropped. The response body is empty.
+            message SecurityStaticInfoResponse {
+              repeated StaticInfo secu_static_info = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.static_info(["700.HK", "AAPL.US"])
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.staticInfo(["700.HK", "AAPL.US"])
+                console.log(resp)
+          x-response-example: |
+            {
+              "secu_static_info": [
+                { "symbol": "700.HK", "name_cn": "腾讯控股", "name_en": "TENCENT", "exchange": "SEHK", "currency": "HKD", "lot_size": 100, "total_shares": 9612464038, "eps": "28.4394", "board": "HKEquity" }
+              ]
+            }
+        - id: ws-quote
+          name: Quotes
+          x-name-zh: 实时报价
+          x-name-zh-hk: 實時報價
+          cmd: 11
+          direction: request
+          description: |
+            Real-time quote for a list of securities.
 
-        ```protobuf
-        message UnsubscribeRequest {
-          repeated string symbol = 1;
-          repeated SubType sub_type = 2;
-          bool unsub_all = 3;
-        }
-        ```
-      x-description-zh: |
-        取消订阅。业务命令 `7`。`symbol` 为空且 `unsub_all` 为 true 时取消全部订阅;`symbol` 非空时取消这些标的的全部订阅。响应体为空。
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message UnsubscribeRequest {
-          repeated string symbol = 1;
-          repeated SubType sub_type = 2;
-          bool unsub_all = 3;
-        }
-        ```
-      x-description-zh-hk: |
-        取消訂閱。業務命令 `7`。`symbol` 為空且 `unsub_all` 為 true 時取消全部訂閱;`symbol` 非空時取消這些標的的全部訂閱。響應體為空。
+            message SecurityQuoteResponse {
+              repeated SecurityQuote secu_quote = 1;
+            }
+            ```
+          x-description-zh: |
+            获取一组标的的实时报价。
 
-        ```protobuf
-        message UnsubscribeRequest {
-          repeated string symbol = 1;
-          repeated SubType sub_type = 2;
-          bool unsub_all = 3;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote])
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            await ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote], false)
-        - lang: Rust
-          label: Rust
-          source: |
-            ctx.unsubscribe(["700.HK", "AAPL.US"], SubFlags::QUOTE).await?;
-        - lang: Go
-          label: Go
-          source: |
-            qctx.Unsubscribe(context.Background(), []string{"700.HK"}, []quote.SubType{quote.SubTypeQuote}, false)
-      x-response-example: |
-        {}
-    - id: ws-subscription
-      name: Subscription info
-      x-name-zh: 获取订阅信息
-      x-name-zh-hk: 獲取訂閱信息
-      cmd: 5
-      direction: request
-      description: |
-        Query the connection's current subscriptions. Business command `5`. The request body is empty; the response returns each subscribed symbol and its `sub_type` list.
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message SubscriptionResponse {
-          repeated SubTypeList sub_list = 1;
-        }
-        message SubTypeList {
-          string symbol = 1;
-          repeated SubType sub_type = 2;
-        }
-        ```
-      x-description-zh: |
-        查询当前连接的订阅情况。业务命令 `5`。请求体为空,响应返回每个已订阅标的及其 `sub_type` 列表。
+            message SecurityQuoteResponse {
+              repeated SecurityQuote secu_quote = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取一組標的的實時報價。
 
-        ```protobuf
-        message SubscriptionResponse {
-          repeated SubTypeList sub_list = 1;
-        }
-        message SubTypeList {
-          string symbol = 1;
-          repeated SubType sub_type = 2;
-        }
-        ```
-      x-description-zh-hk: |
-        查詢當前連接的訂閱情況。業務命令 `5`。請求體為空,響應返回每個已訂閱標的及其 `sub_type` 列表。
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message SubscriptionResponse {
-          repeated SubTypeList sub_list = 1;
-        }
-        message SubTypeList {
-          string symbol = 1;
-          repeated SubType sub_type = 2;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            resp = ctx.subscriptions()
-            print(resp)
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const resp = await ctx.subscriptions()
-            console.log(resp)
-        - lang: Rust
-          label: Rust
-          source: |
-            let resp = ctx.subscriptions().await?;
-            println!("{:?}", resp);
-        - lang: Go
-          label: Go
-          source: |
-            resp, _ := qctx.Subscriptions(context.Background())
-            fmt.Println(resp)
-      x-response-example: |
-        {
-          "sub_list": [
-            { "symbol": "700.HK", "sub_type": [1, 2, 3] },
-            { "symbol": "AAPL.US", "sub_type": [2] }
-          ]
-        }
-    - id: ws-push-quote
-      name: Real-time price
-      x-name-zh: 实时价格订阅
-      x-name-zh-hk: 實時價格訂閱
-      cmd: 101
-      direction: push
-      description: |
-        Pushed after subscribing with `SubType.Quote` (business command `101`): the latest price for each subscribed symbol, on every update.
+            message SecurityQuoteResponse {
+              repeated SecurityQuote secu_quote = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.quote(["700.HK", "AAPL.US"])
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.quote(["700.HK", "AAPL.US"])
+                console.log(resp)
+          x-response-example: |
+            {
+              "secu_quote": [
+                { "symbol": "700.HK", "last_done": "338.000", "prev_close": "334.800", "open": "340.600", "high": "340.600", "low": "333.000", "timestamp": 1651115955, "volume": 7310881, "turnover": "2461463161.000" }
+              ]
+            }
+        - id: ws-option-quote
+          name: Option Quotes
+          x-name-zh: 期权实时报价
+          x-name-zh-hk: 期權實時報價
+          cmd: 12
+          direction: request
+          description: |
+            Real-time quote for option securities.
 
-        ```protobuf
-        message PushQuote {
-          string symbol = 1;
-          int64 sequence = 2;
-          string last_done = 3;
-          string open = 4;
-          string high = 5;
-          string low = 6;
-          int64 timestamp = 7;
-          int64 volume = 8;
-          string turnover = 9;
-          TradeStatus trade_status = 10;
-          TradeSession trade_session = 11;
-        }
-        ```
-      x-description-zh: |
-        以 `SubType.Quote` 订阅后推送(业务命令 `101`):每个已订阅标的的最新价格，每次更新推送。
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message PushQuote {
-          string symbol = 1;
-          int64 sequence = 2;
-          string last_done = 3;
-          string open = 4;
-          string high = 5;
-          string low = 6;
-          int64 timestamp = 7;
-          int64 volume = 8;
-          string turnover = 9;
-          TradeStatus trade_status = 10;
-          TradeSession trade_session = 11;
-        }
-        ```
-      x-description-zh-hk: |
-        以 `SubType.Quote` 訂閱後推送(業務命令 `101`):每個已訂閱標的的最新價格，每次更新推送。
+            message OptionQuoteResponse {
+              repeated OptionQuote secu_quote = 1;
+            }
+            ```
+          x-description-zh: |
+            获取期权标的的实时报价。
 
-        ```protobuf
-        message PushQuote {
-          string symbol = 1;
-          int64 sequence = 2;
-          string last_done = 3;
-          string open = 4;
-          string high = 5;
-          string low = 6;
-          int64 timestamp = 7;
-          int64 volume = 8;
-          string turnover = 9;
-          TradeStatus trade_status = 10;
-          TradeSession trade_session = 11;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            ctx.set_on_quote(lambda symbol, event: print(symbol, event))
-            ctx.subscribe(["700.HK"], [SubType.Quote], is_first_push=True)
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            ctx.setOnQuote((event) => console.log(event))
-            await ctx.subscribe(["700.HK"], [SubType.Quote], true)
-        - lang: Rust
-          label: Rust
-          source: |
-            ctx.subscribe(["700.HK"], SubFlags::QUOTE, true).await?;
-        - lang: Go
-          label: Go
-          source: |
-            qctx.OnQuote(func(e *quote.PushQuote) { fmt.Println(e) })
-            qctx.Subscribe(context.Background(), []string{"700.HK"}, []quote.SubType{quote.SubTypeQuote}, true)
-      x-response-example: |
-        {
-          "symbol": "AAPL.US",
-          "sequence": 160808750000000,
-          "last_done": "156.570",
-          "open": "155.910",
-          "high": "159.790",
-          "low": "155.380",
-          "timestamp": 1651089600,
-          "volume": 88063191,
-          "turnover": "13865092584.000",
-          "trade_status": 0,
-          "trade_session": 0
-        }
-    - id: ws-push-depth
-      name: Real-time depth
-      x-name-zh: 实时盘口订阅
-      x-name-zh-hk: 實時盤口訂閱
-      cmd: 102
-      direction: push
-      description: |
-        Pushed after subscribing with `SubType.Depth` (business command `102`): the order-book depth (bid/ask levels) for subscribed symbols.
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message PushDepth {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Depth ask = 3;
-          repeated Depth bid = 4;
-        }
-        message Depth {
-          int32 position = 1;
-          string price = 2;
-          int64 volume = 3;
-          int64 order_num = 4;
-        }
-        ```
-      x-description-zh: |
-        以 `SubType.Depth` 订阅后推送(业务命令 `102`):已订阅标的的盘口深度 (买卖档位)。
+            message OptionQuoteResponse {
+              repeated OptionQuote secu_quote = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取期權標的的實時報價。
 
-        ```protobuf
-        message PushDepth {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Depth ask = 3;
-          repeated Depth bid = 4;
-        }
-        message Depth {
-          int32 position = 1;
-          string price = 2;
-          int64 volume = 3;
-          int64 order_num = 4;
-        }
-        ```
-      x-description-zh-hk: |
-        以 `SubType.Depth` 訂閱後推送(業務命令 `102`):已訂閱標的的盤口深度 (買賣檔位)。
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message PushDepth {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Depth ask = 3;
-          repeated Depth bid = 4;
-        }
-        message Depth {
-          int32 position = 1;
-          string price = 2;
-          int64 volume = 3;
-          int64 order_num = 4;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            ctx.set_on_depth(lambda symbol, event: print(symbol, event))
-            ctx.subscribe(["700.HK"], [SubType.Depth], is_first_push=True)
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            ctx.setOnDepth((event) => console.log(event))
-            await ctx.subscribe(["700.HK"], [SubType.Depth], true)
-        - lang: Rust
-          label: Rust
-          source: |
-            ctx.subscribe(["700.HK"], SubFlags::DEPTH, true).await?;
-        - lang: Go
-          label: Go
-          source: |
-            qctx.OnDepth(func(e *quote.PushDepth) { fmt.Println(e) })
-            qctx.Subscribe(context.Background(), []string{"700.HK"}, []quote.SubType{quote.SubTypeDepth}, true)
-      x-response-example: |
-        {
-          "symbol": "700.HK",
-          "sequence": 160808750000000,
-          "ask": [
-            { "position": 1, "price": "335.000", "volume": 500, "order_num": 1 },
-            { "position": 2, "price": "335.200", "volume": 400, "order_num": 1 }
-          ],
-          "bid": [
-            { "position": 1, "price": "334.800", "volume": 69400, "order_num": 13 },
-            { "position": 2, "price": "334.600", "volume": 266600, "order_num": 27 }
-          ]
-        }
-    - id: ws-push-brokers
-      name: Real-time brokers
-      x-name-zh: 实时经纪队列订阅
-      x-name-zh-hk: 實時經紀隊列訂閱
-      cmd: 103
-      direction: push
-      description: |
-        Pushed after subscribing with `SubType.Brokers` (business command `103`): the broker queue for subscribed symbols. Requires an HK/SG data-center account (US accounts get a region-restriction error).
+            message OptionQuoteResponse {
+              repeated OptionQuote secu_quote = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.option_quote(["AAPL220429P162500.US"])
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.optionQuote(["AAPL220429P162500.US"])
+                console.log(resp)
+          x-response-example: |
+            {
+              "secu_quote": [
+                { "symbol": "AAPL220429P162500.US", "last_done": "7.78", "prev_close": "4.13", "timestamp": 1651003200, "volume": 3082, "turnover": "1813434.00", "option_extend": { "implied_volatility": "0.592", "open_interest": 11463, "expiry_date": "20220429", "strike_price": "162.50", "contract_type": "A", "direction": "P", "underlying_symbol": "AAPL.US" } }
+              ]
+            }
+        - id: ws-warrant-quote
+          name: Warrant Quotes
+          x-name-zh: 权证实时报价
+          x-name-zh-hk: 權證實時報價
+          cmd: 13
+          direction: request
+          description: |
+            Real-time quote for warrant securities.
 
-        ```protobuf
-        message PushBrokers {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Brokers ask_brokers = 3;
-          repeated Brokers bid_brokers = 4;
-        }
-        message Brokers {
-          int32 position = 1;
-          repeated int32 broker_ids = 2;
-        }
-        ```
-      x-description-zh: |
-        以 `SubType.Brokers` 订阅后推送(业务命令 `103`):已订阅标的的经纪队列。需 HK/SG 数据中心账户 (美国账户会返回区域限制错误)。
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message PushBrokers {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Brokers ask_brokers = 3;
-          repeated Brokers bid_brokers = 4;
-        }
-        message Brokers {
-          int32 position = 1;
-          repeated int32 broker_ids = 2;
-        }
-        ```
-      x-description-zh-hk: |
-        以 `SubType.Brokers` 訂閱後推送(業務命令 `103`):已訂閱標的的經紀隊列。需 HK/SG 數據中心賬戶 (美國賬戶會返回區域限制錯誤)。
+            message WarrantQuoteResponse {
+              repeated WarrantQuote secu_quote = 2;
+            }
+            ```
+          x-description-zh: |
+            获取权证标的的实时报价。
 
-        ```protobuf
-        message PushBrokers {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Brokers ask_brokers = 3;
-          repeated Brokers bid_brokers = 4;
-        }
-        message Brokers {
-          int32 position = 1;
-          repeated int32 broker_ids = 2;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            ctx.set_on_brokers(lambda symbol, event: print(symbol, event))
-            ctx.subscribe(["700.HK"], [SubType.Brokers], is_first_push=True)
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            ctx.setOnBrokers((event) => console.log(event))
-            await ctx.subscribe(["700.HK"], [SubType.Brokers], true)
-        - lang: Rust
-          label: Rust
-          source: |
-            ctx.subscribe(["700.HK"], SubFlags::BROKER, true).await?;
-        - lang: Go
-          label: Go
-          source: |
-            qctx.OnBrokers(func(e *quote.PushBrokers) { fmt.Println(e) })
-            qctx.Subscribe(context.Background(), []string{"700.HK"}, []quote.SubType{quote.SubTypeBrokers}, true)
-      x-response-example: |
-        {
-          "symbol": "700.HK",
-          "sequence": 160808750000000,
-          "ask_brokers": [
-            { "position": 1, "broker_ids": [7358, 9057, 9028, 7364] }
-          ],
-          "bid_brokers": [
-            { "position": 1, "broker_ids": [6996, 5465, 8026, 8304, 4978] }
-          ]
-        }
-    - id: ws-push-trade
-      name: Real-time trades
-      x-name-zh: 实时成交明细订阅
-      x-name-zh-hk: 實時成交明細訂閱
-      cmd: 104
-      direction: push
-      description: |
-        Pushed after subscribing with `SubType.Trade` (business command `104`): tick-by-tick trade details for subscribed symbols. `direction`: `0` neutral · `1` down · `2` up. (`is_first_push` is not supported for Trade.)
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message PushTrade {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Trade trade = 3;
-        }
-        message Trade {
-          string price = 1;
-          int64 volume = 2;
-          int64 timestamp = 3;
-          string trade_type = 4;
-          int32 direction = 5;
-          TradeSession trade_session = 6;
-        }
-        ```
-      x-description-zh: |
-        以 `SubType.Trade` 订阅后推送(业务命令 `104`):已订阅标的的逐笔成交明细。`direction`:`0` 中性 · `1` 向下 · `2` 向上。(成交不支持 `is_first_push`。)
+            message WarrantQuoteResponse {
+              repeated WarrantQuote secu_quote = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取權證標的的實時報價。
 
-        ```protobuf
-        message PushTrade {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Trade trade = 3;
-        }
-        message Trade {
-          string price = 1;
-          int64 volume = 2;
-          int64 timestamp = 3;
-          string trade_type = 4;
-          int32 direction = 5;
-          TradeSession trade_session = 6;
-        }
-        ```
-      x-description-zh-hk: |
-        以 `SubType.Trade` 訂閱後推送(業務命令 `104`):已訂閱標的的逐筆成交明細。`direction`:`0` 中性 · `1` 向下 · `2` 向上。(成交不支持 `is_first_push`。)
+            ```protobuf
+            message MultiSecurityRequest {
+              repeated string symbol = 1;
+            }
 
-        ```protobuf
-        message PushTrade {
-          string symbol = 1;
-          int64 sequence = 2;
-          repeated Trade trade = 3;
-        }
-        message Trade {
-          string price = 1;
-          int64 volume = 2;
-          int64 timestamp = 3;
-          string trade_type = 4;
-          int32 direction = 5;
-          TradeSession trade_session = 6;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            ctx.set_on_trades(lambda symbol, event: print(symbol, event))
-            ctx.subscribe(["700.HK"], [SubType.Trade])
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            ctx.setOnTrades((event) => console.log(event))
-            await ctx.subscribe(["700.HK"], [SubType.Trade], false)
-        - lang: Rust
-          label: Rust
-          source: |
-            ctx.subscribe(["700.HK"], SubFlags::TRADE, false).await?;
-        - lang: Go
-          label: Go
-          source: |
-            qctx.OnTrade(func(e *quote.PushTrade) { fmt.Println(e) })
-            qctx.Subscribe(context.Background(), []string{"700.HK"}, []quote.SubType{quote.SubTypeTrade}, false)
-      x-response-example: |
-        {
-          "symbol": "700.HK",
-          "sequence": 160808750000000,
-          "trade": [
-            { "price": "158.760", "volume": 1, "timestamp": 1651103979, "trade_type": "I", "direction": 0, "trade_session": 2 },
-            { "price": "158.800", "volume": 1, "timestamp": 1651103995, "trade_type": "I", "direction": 0, "trade_session": 2 }
-          ]
-        }
-    - id: ws-push-candlestick
-      name: Candlestick (K-line)
-      x-name-zh: K 线
-      x-name-zh-hk: K 線
-      cmd: 105
-      direction: push
-      description: |
-        Candlestick updates (business command `105`). Subscribed with a dedicated method (`subscribe_candlesticks`, not `SubType`); the server pushes bar updates on each current-candle update (Realtime) or on period close (Confirmed). `Period`: `1` 1-min · `5` 5-min · `15` 15-min · `60` 60-min · `1000` day · `2000` week · `3000` month, etc.
+            message WarrantQuoteResponse {
+              repeated WarrantQuote secu_quote = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.warrant_quote(["66642.HK"])
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.warrantQuote(["66642.HK"])
+                console.log(resp)
+          x-response-example: |
+            {
+              "secu_quote": [
+                { "symbol": "66642.HK", "last_done": "0.345", "prev_close": "0.365", "timestamp": 1651130421, "volume": 200000, "turnover": "69000.000", "warrant_extend": { "implied_volatility": "0.319", "expiry_date": "20220830", "category": "Bear", "strike_price": "23200.000", "underlying_symbol": "HSI.HK" } }
+              ]
+            }
+        - id: ws-pull-depth
+          name: Depth
+          x-name-zh: 盘口
+          x-name-zh-hk: 盤口
+          cmd: 14
+          direction: request
+          description: |
+            Order-book depth (bid/ask levels) for a security.
 
-        ```protobuf
-        message PushCandlestick {
-          string symbol = 1;
-          Period period = 2;
-          Candlestick candlestick = 3;
-        }
-        message Candlestick {
-          string close = 1;
-          string open = 2;
-          string high = 3;
-          string low = 4;
-          int64 volume = 5;
-          string turnover = 6;
-          int64 timestamp = 7;
-          TradeSession trade_session = 8;
-        }
-        ```
-      x-description-zh: |
-        K 线更新(业务命令 `105`)。通过专用方法订阅(`subscribe_candlesticks`,不走 `SubType`);服务端在当前 K 线更新时(实时模式)或周期收盘时(确认模式)推送。`Period`:`1` 1 分钟 · `5` 5 分钟 · `15` 15 分钟 · `60` 60 分钟 · `1000` 日 · `2000` 周 · `3000` 月 等。
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
 
-        ```protobuf
-        message PushCandlestick {
-          string symbol = 1;
-          Period period = 2;
-          Candlestick candlestick = 3;
-        }
-        message Candlestick {
-          string close = 1;
-          string open = 2;
-          string high = 3;
-          string low = 4;
-          int64 volume = 5;
-          string turnover = 6;
-          int64 timestamp = 7;
-          TradeSession trade_session = 8;
-        }
-        ```
-      x-description-zh-hk: |
-        K 線更新(業務命令 `105`)。透過專用方法訂閱(`subscribe_candlesticks`,不走 `SubType`);服務端在當前 K 線更新時(實時模式)或週期收盤時(確認模式)推送。`Period`:`1` 1 分鐘 · `5` 5 分鐘 · `15` 15 分鐘 · `60` 60 分鐘 · `1000` 日 · `2000` 週 · `3000` 月 等。
+            message SecurityDepthResponse {
+              string symbol = 1;
+              repeated Depth ask = 2;
+              repeated Depth bid = 3;
+            }
+            ```
+          x-description-zh: |
+            获取标的的盘口深度(买卖档位)。
 
-        ```protobuf
-        message PushCandlestick {
-          string symbol = 1;
-          Period period = 2;
-          Candlestick candlestick = 3;
-        }
-        message Candlestick {
-          string close = 1;
-          string open = 2;
-          string high = 3;
-          string low = 4;
-          int64 volume = 5;
-          string turnover = 6;
-          int64 timestamp = 7;
-          TradeSession trade_session = 8;
-        }
-        ```
-      x-request-examples:
-        - lang: Python
-          label: Python
-          source: |
-            from longbridge.openapi import Period
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
 
-            ctx.set_on_candlestick(lambda symbol, event: print(symbol, event))
-            ctx.subscribe_candlesticks("700.HK", Period.Min_1)
-        - lang: JavaScript
-          label: Node.js
-          source: |
-            const { Period } = require("longbridge")
+            message SecurityDepthResponse {
+              string symbol = 1;
+              repeated Depth ask = 2;
+              repeated Depth bid = 3;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的盤口深度(買賣檔位)。
 
-            ctx.setOnCandlestick((event) => console.log(event))
-            await ctx.subscribeCandlesticks("700.HK", Period.Min_1)
-        - lang: Rust
-          label: Rust
-          source: |
-            use longbridge::quote::Period;
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
 
-            ctx.subscribe_candlesticks("700.HK", Period::Min_1).await?;
-        - lang: Go
-          label: Go
-          source: |
-            qctx.OnCandlestick(func(e *quote.PushCandlestick) { fmt.Println(e) })
-            qctx.SubscribeCandlesticks(context.Background(), "700.HK", quote.PeriodMin1)
-      x-response-example: |
-        {
-          "symbol": "700.HK",
-          "period": 1,
-          "candlestick": {
-            "close": "162.500",
-            "open": "160.000",
-            "high": "163.000",
-            "low": "159.800",
-            "volume": 123456,
-            "turnover": "19987654.000",
-            "timestamp": 1651103700,
-            "trade_session": 0
-          }
-        }
+            message SecurityDepthResponse {
+              string symbol = 1;
+              repeated Depth ask = 2;
+              repeated Depth bid = 3;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.depth("700.HK")
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.depth("700.HK")
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "ask": [{ "position": 1, "price": "335.000", "volume": 500, "order_num": 1 }],
+              "bid": [{ "position": 1, "price": "334.800", "volume": 69400, "order_num": 13 }]
+            }
+        - id: ws-pull-brokers
+          name: Broker Queue
+          x-name-zh: 经纪队列
+          x-name-zh-hk: 經紀隊列
+          cmd: 15
+          direction: request
+          description: |
+            Broker queue for a security (HK).
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message SecurityBrokersResponse {
+              string symbol = 1;
+              repeated Brokers ask_brokers = 2;
+              repeated Brokers bid_brokers = 3;
+            }
+            ```
+          x-description-zh: |
+            获取标的的经纪队列(港股)。
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message SecurityBrokersResponse {
+              string symbol = 1;
+              repeated Brokers ask_brokers = 2;
+              repeated Brokers bid_brokers = 3;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的經紀隊列(港股)。
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message SecurityBrokersResponse {
+              string symbol = 1;
+              repeated Brokers ask_brokers = 2;
+              repeated Brokers bid_brokers = 3;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.brokers("700.HK")
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.brokers("700.HK")
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "ask_brokers": [{ "position": 1, "broker_ids": [7358, 9057, 9028, 7364] }],
+              "bid_brokers": [{ "position": 1, "broker_ids": [6996, 5465, 8026, 8304, 4978] }]
+            }
+        - id: ws-broker-ids
+          name: Broker IDs
+          x-name-zh: 经纪商席位
+          x-name-zh-hk: 經紀商席位
+          cmd: 16
+          direction: request
+          description: |
+            The full participant / broker ID list.
+
+            ```protobuf
+            message ParticipantBrokerIdsResponse {
+              repeated ParticipantInfo participant_broker_numbers = 1;
+            }
+
+            message ParticipantInfo {
+              repeated int32 broker_ids = 1;
+              string participant_name_cn = 2;
+              string participant_name_en = 3;
+              string participant_name_hk = 4;
+            }
+            ```
+          x-description-zh: |
+            获取全部经纪商(参与者)席位信息。
+
+            ```protobuf
+            message ParticipantBrokerIdsResponse {
+              repeated ParticipantInfo participant_broker_numbers = 1;
+            }
+
+            message ParticipantInfo {
+              repeated int32 broker_ids = 1;
+              string participant_name_cn = 2;
+              string participant_name_en = 3;
+              string participant_name_hk = 4;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取全部經紀商(參與者)席位信息。
+
+            ```protobuf
+            message ParticipantBrokerIdsResponse {
+              repeated ParticipantInfo participant_broker_numbers = 1;
+            }
+
+            message ParticipantInfo {
+              repeated int32 broker_ids = 1;
+              string participant_name_cn = 2;
+              string participant_name_en = 3;
+              string participant_name_hk = 4;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.participants()
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.participants()
+                console.log(resp)
+          x-response-example: |
+            {
+              "participant_broker_numbers": [
+                { "broker_ids": [7738, 7739], "participant_name_cn": "华兴金融 (香港)", "participant_name_en": "China Renaissance(HK)", "participant_name_hk": "華興金融 (香港)" }
+              ]
+            }
+        - id: ws-pull-trade
+          name: Trades
+          x-name-zh: 成交明细
+          x-name-zh-hk: 成交明細
+          cmd: 17
+          direction: request
+          description: |
+            Recent trade ticks for a security.
+
+            ```protobuf
+            message SecurityTradeRequest {
+              string symbol = 1;
+              int32 count = 2;
+            }
+
+            message SecurityTradeResponse {
+              string symbol = 1;
+              repeated Trade trades = 2;
+            }
+            ```
+          x-description-zh: |
+            获取标的的近期逐笔成交。
+
+            ```protobuf
+            message SecurityTradeRequest {
+              string symbol = 1;
+              int32 count = 2;
+            }
+
+            message SecurityTradeResponse {
+              string symbol = 1;
+              repeated Trade trades = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的近期逐筆成交。
+
+            ```protobuf
+            message SecurityTradeRequest {
+              string symbol = 1;
+              int32 count = 2;
+            }
+
+            message SecurityTradeResponse {
+              string symbol = 1;
+              repeated Trade trades = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.trades("700.HK", 10)
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.trades("700.HK", 10)
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "AAPL.US",
+              "trades": [{ "price": "158.760", "volume": 1, "timestamp": 1651103979, "trade_type": "I", "direction": 0, "trade_session": 2 }]
+            }
+        - id: ws-intraday
+          name: Intraday
+          x-name-zh: 分时
+          x-name-zh-hk: 分時
+          cmd: 18
+          direction: request
+          description: |
+            Intraday time-line for a security.
+
+            ```protobuf
+            message SecurityIntradayRequest {
+              string symbol = 1;
+            }
+
+            message SecurityIntradayResponse {
+              string symbol = 1;
+              repeated Line lines = 2;
+            }
+            ```
+          x-description-zh: |
+            获取标的的分时走势。
+
+            ```protobuf
+            message SecurityIntradayRequest {
+              string symbol = 1;
+            }
+
+            message SecurityIntradayResponse {
+              string symbol = 1;
+              repeated Line lines = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的分時走勢。
+
+            ```protobuf
+            message SecurityIntradayRequest {
+              string symbol = 1;
+            }
+
+            message SecurityIntradayResponse {
+              string symbol = 1;
+              repeated Line lines = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.intraday("700.HK")
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.intraday("700.HK")
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "lines": [{ "price": "330.400", "timestamp": 1651023000, "volume": 375870, "turnover": "123949699.000", "avg_price": "329.767470" }]
+            }
+        - id: ws-pull-candlestick
+          name: Candlesticks
+          x-name-zh: K 线
+          x-name-zh-hk: K 線
+          cmd: 19
+          direction: request
+          description: |
+            Candlestick bars for a security.
+
+            ```protobuf
+            message SecurityCandlestickRequest {
+              string symbol = 1;
+              Period period = 2;
+              int32 count = 3;
+              AdjustType adjust_type = 4;
+              int32 trade_session = 5;
+            }
+
+            message SecurityCandlestickResponse {
+              string symbol = 1;
+              repeated Candlestick candlesticks = 2;
+            }
+            ```
+          x-description-zh: |
+            获取标的的 K 线。
+
+            ```protobuf
+            message SecurityCandlestickRequest {
+              string symbol = 1;
+              Period period = 2;
+              int32 count = 3;
+              AdjustType adjust_type = 4;
+              int32 trade_session = 5;
+            }
+
+            message SecurityCandlestickResponse {
+              string symbol = 1;
+              repeated Candlestick candlesticks = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的 K 線。
+
+            ```protobuf
+            message SecurityCandlestickRequest {
+              string symbol = 1;
+              Period period = 2;
+              int32 count = 3;
+              AdjustType adjust_type = 4;
+              int32 trade_session = 5;
+            }
+
+            message SecurityCandlestickResponse {
+              string symbol = 1;
+              repeated Candlestick candlesticks = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                from longbridge.openapi import Period, AdjustType
+
+                resp = ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const { Period, AdjustType } = require("longbridge")
+                const resp = await ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "candlesticks": [{ "close": "362.000", "open": "364.600", "low": "361.600", "high": "368.800", "volume": 10853604, "turnover": "3954556819.000", "timestamp": 1650384000 }]
+            }
+        - id: ws-optionchain-date
+          name: Option Chain Expiry Dates
+          x-name-zh: 期权链到期日
+          x-name-zh-hk: 期權鏈到期日
+          cmd: 20
+          direction: request
+          description: |
+            Expiry date list of an option chain.
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message OptionChainDateListResponse {
+              repeated string expiry_date = 1;
+            }
+            ```
+          x-description-zh: |
+            获取期权链的到期日列表。
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message OptionChainDateListResponse {
+              repeated string expiry_date = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取期權鏈的到期日列表。
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message OptionChainDateListResponse {
+              repeated string expiry_date = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.option_chain_expiry_date_list("AAPL.US")
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.optionChainExpiryDateList("AAPL.US")
+                console.log(resp)
+          x-response-example: |
+            {
+              "expiry_date": ["20220422", "20220429", "20220506"]
+            }
+        - id: ws-optionchain-strike
+          name: Option Chain Info
+          x-name-zh: 期权链行权价
+          x-name-zh-hk: 期權鏈行權價
+          cmd: 21
+          direction: request
+          description: |
+            Option chain strike info for a given expiry date.
+
+            ```protobuf
+            message OptionChainDateStrikeInfoRequest {
+              string symbol = 1;
+              string expiry_date = 2;
+            }
+
+            message OptionChainDateStrikeInfoResponse {
+              repeated StrikePriceInfo strike_price_info = 1;
+            }
+            ```
+          x-description-zh: |
+            获取指定到期日的期权链行权价信息。
+
+            ```protobuf
+            message OptionChainDateStrikeInfoRequest {
+              string symbol = 1;
+              string expiry_date = 2;
+            }
+
+            message OptionChainDateStrikeInfoResponse {
+              repeated StrikePriceInfo strike_price_info = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取指定到期日的期權鏈行權價信息。
+
+            ```protobuf
+            message OptionChainDateStrikeInfoRequest {
+              string symbol = 1;
+              string expiry_date = 2;
+            }
+
+            message OptionChainDateStrikeInfoResponse {
+              repeated StrikePriceInfo strike_price_info = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.option_chain_info_by_date("AAPL.US", date(2022, 4, 29))
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.optionChainInfoByDate("AAPL.US", new NaiveDate(2022, 4, 29))
+                console.log(resp)
+          x-response-example: |
+            {
+              "strike_price_info": [
+                { "price": "100", "call_symbol": "AAPL220429C100000.US", "put_symbol": "AAPL220429P100000.US", "standard": true }
+              ]
+            }
+        - id: ws-issuers
+          name: Warrant Issuers
+          x-name-zh: 权证发行商
+          x-name-zh-hk: 權證發行商
+          cmd: 22
+          direction: request
+          description: |
+            The warrant issuer ID list.
+
+            ```protobuf
+            message IssuerInfoResponse {
+              repeated IssuerInfo issuer_info = 1;
+            }
+
+            message IssuerInfo {
+              int32 id = 1;
+              string name_cn = 2;
+              string name_en = 3;
+              string name_hk = 4;
+            }
+            ```
+          x-description-zh: |
+            获取权证发行商 ID 列表。
+
+            ```protobuf
+            message IssuerInfoResponse {
+              repeated IssuerInfo issuer_info = 1;
+            }
+
+            message IssuerInfo {
+              int32 id = 1;
+              string name_cn = 2;
+              string name_en = 3;
+              string name_hk = 4;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取權證發行商 ID 列表。
+
+            ```protobuf
+            message IssuerInfoResponse {
+              repeated IssuerInfo issuer_info = 1;
+            }
+
+            message IssuerInfo {
+              int32 id = 1;
+              string name_cn = 2;
+              string name_en = 3;
+              string name_hk = 4;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.warrant_issuers()
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.warrantIssuers()
+                console.log(resp)
+          x-response-example: |
+            {
+              "issuer_info": [{ "id": 15, "name_cn": "瑞银", "name_en": "UB", "name_hk": "瑞銀" }]
+            }
+        - id: ws-warrant-filter
+          name: Warrant Screener
+          x-name-zh: 权证筛选
+          x-name-zh-hk: 權證篩選
+          cmd: 23
+          direction: request
+          description: |
+            Filtered warrant list by config.
+
+            ```protobuf
+            message WarrantFilterListRequest {
+              string symbol = 1;
+              FilterConfig filter_config = 2;
+              int32 language = 3;
+            }
+
+            message WarrantFilterListResponse {
+              repeated FilterWarrant warrant_list = 1;
+              int32 total_count = 2;
+            }
+            ```
+          x-description-zh: |
+            按条件筛选权证列表。
+
+            ```protobuf
+            message WarrantFilterListRequest {
+              string symbol = 1;
+              FilterConfig filter_config = 2;
+              int32 language = 3;
+            }
+
+            message WarrantFilterListResponse {
+              repeated FilterWarrant warrant_list = 1;
+              int32 total_count = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            按條件篩選權證列表。
+
+            ```protobuf
+            message WarrantFilterListRequest {
+              string symbol = 1;
+              FilterConfig filter_config = 2;
+              int32 language = 3;
+            }
+
+            message WarrantFilterListResponse {
+              repeated FilterWarrant warrant_list = 1;
+              int32 total_count = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.warrant_list("700.HK", WarrantSortBy.LastDone, SortOrderType.Ascending)
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.warrantList("700.HK", WarrantSortBy.LastDone, SortOrderType.Ascending)
+                console.log(resp)
+          x-response-example: |
+            {
+              "warrant_list": [
+                { "symbol": "13157.HK", "name": "MBTENCT@EP2207A", "last_done": "2.26", "change_rate": "-0.0216", "expiry_date": "20220705", "strike_price": "442.233", "status": 4 }
+              ],
+              "total_count": 1197
+            }
+        - id: ws-capital-flow
+          name: Capital Flow (Intraday)
+          x-name-zh: 资金流向 (分时)
+          x-name-zh-hk: 資金流向 (分時)
+          cmd: 24
+          direction: request
+          description: |
+            Intraday capital flow for a security.
+
+            ```protobuf
+            message CapitalFlowIntradayRequest {
+              string symbol = 1;
+            }
+
+            message CapitalFlowIntradayResponse {
+              string symbol = 1;
+              repeated CapitalFlowLine capital_flow_lines = 2;
+            }
+            ```
+          x-description-zh: |
+            获取标的的分时资金流向。
+
+            ```protobuf
+            message CapitalFlowIntradayRequest {
+              string symbol = 1;
+            }
+
+            message CapitalFlowIntradayResponse {
+              string symbol = 1;
+              repeated CapitalFlowLine capital_flow_lines = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的分時資金流向。
+
+            ```protobuf
+            message CapitalFlowIntradayRequest {
+              string symbol = 1;
+            }
+
+            message CapitalFlowIntradayResponse {
+              string symbol = 1;
+              repeated CapitalFlowLine capital_flow_lines = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.capital_flow("700.HK")
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.capitalFlow("700.HK")
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "capital_flow_lines": [{ "inflow": "-310255860.000", "timestamp": "1655106960" }]
+            }
+        - id: ws-capital-dist
+          name: Capital Distribution
+          x-name-zh: 资金分布
+          x-name-zh-hk: 資金分佈
+          cmd: 25
+          direction: request
+          description: |
+            Capital in/out distribution for a security.
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message CapitalDistributionResponse {
+              string symbol = 1;
+              int64 timestamp = 2;
+              CapitalDistribution capital_in = 3;
+              CapitalDistribution capital_out = 4;
+            }
+            ```
+          x-description-zh: |
+            获取标的的资金流入/流出分布。
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message CapitalDistributionResponse {
+              string symbol = 1;
+              int64 timestamp = 2;
+              CapitalDistribution capital_in = 3;
+              CapitalDistribution capital_out = 4;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的資金流入/流出分佈。
+
+            ```protobuf
+            message SecurityRequest {
+              string symbol = 1;
+            }
+
+            message CapitalDistributionResponse {
+              string symbol = 1;
+              int64 timestamp = 2;
+              CapitalDistribution capital_in = 3;
+              CapitalDistribution capital_out = 4;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.capital_distribution("700.HK")
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.capitalDistribution("700.HK")
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "timestamp": "1655107800",
+              "capital_in": { "large": "935389700.000", "medium": "2056032380.000", "small": "828715920.000" },
+              "capital_out": { "large": "1175331560.000", "medium": "2271829740.000", "small": "751648940.000" }
+            }
+        - id: ws-calc-index
+          name: Calc Indexes
+          x-name-zh: 计算指标
+          x-name-zh-hk: 計算指標
+          cmd: 26
+          direction: request
+          description: |
+            Computed indicators for securities (PE, PB, amplitude, greeks …).
+
+            ```protobuf
+            message SecurityCalcQuoteRequest {
+              repeated string symbols = 1;
+              repeated CalcIndex calc_index = 2;
+            }
+
+            message SecurityCalcQuoteResponse {
+              repeated SecurityCalcIndex security_calc_index = 1;
+            }
+            ```
+          x-description-zh: |
+            获取标的的计算指标(市盈率、市净率、振幅、希腊值等)。
+
+            ```protobuf
+            message SecurityCalcQuoteRequest {
+              repeated string symbols = 1;
+              repeated CalcIndex calc_index = 2;
+            }
+
+            message SecurityCalcQuoteResponse {
+              repeated SecurityCalcIndex security_calc_index = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            獲取標的的計算指標(市盈率、市淨率、振幅、希臘值等)。
+
+            ```protobuf
+            message SecurityCalcQuoteRequest {
+              repeated string symbols = 1;
+              repeated CalcIndex calc_index = 2;
+            }
+
+            message SecurityCalcQuoteResponse {
+              repeated SecurityCalcIndex security_calc_index = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                from longbridge.openapi import CalcIndex
+
+                resp = ctx.calc_indexes(["700.HK"], [CalcIndex.LastDone, CalcIndex.ChangeRate])
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const { CalcIndex } = require("longbridge")
+                const resp = await ctx.calcIndexes(["700.HK"], [CalcIndex.LastDone, CalcIndex.ChangeRate])
+                console.log(resp)
+          x-response-example: |
+            {
+              "security_calc_index": [
+                { "symbol": "AAPL.US", "last_done": "131.880", "change_val": "-5.2500", "change_rate": "-3.83", "volume": "122207099", "turnover": "16269088361.000" }
+              ]
+            }
+        - id: ws-history-candlestick
+          name: History Candlesticks
+          x-name-zh: 历史 K 线
+          x-name-zh-hk: 歷史 K 線
+          cmd: 27
+          direction: request
+          description: |
+            Historical candlestick bars by offset or date range.
+
+            ```protobuf
+            message SecurityHistoryCandlestickRequest {
+              string symbol = 1;
+              Period period = 2;
+              AdjustType adjust_type = 3;
+              HistoryCandlestickQueryType query_type = 4;
+              OffsetQuery offset_request = 5;
+              DateQuery date_request = 6;
+            }
+
+            message SecurityCandlestickResponse {
+              string symbol = 1;
+              repeated Candlestick candlesticks = 2;
+            }
+            ```
+          x-description-zh: |
+            按偏移或日期区间获取历史 K 线。
+
+            ```protobuf
+            message SecurityHistoryCandlestickRequest {
+              string symbol = 1;
+              Period period = 2;
+              AdjustType adjust_type = 3;
+              HistoryCandlestickQueryType query_type = 4;
+              OffsetQuery offset_request = 5;
+              DateQuery date_request = 6;
+            }
+
+            message SecurityCandlestickResponse {
+              string symbol = 1;
+              repeated Candlestick candlesticks = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            按偏移或日期區間獲取歷史 K 線。
+
+            ```protobuf
+            message SecurityHistoryCandlestickRequest {
+              string symbol = 1;
+              Period period = 2;
+              AdjustType adjust_type = 3;
+              HistoryCandlestickQueryType query_type = 4;
+              OffsetQuery offset_request = 5;
+              DateQuery date_request = 6;
+            }
+
+            message SecurityCandlestickResponse {
+              string symbol = 1;
+              repeated Candlestick candlesticks = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                from longbridge.openapi import Period, AdjustType
+
+                resp = ctx.history_candlesticks_by_offset(
+                    "700.HK", Period.Day, AdjustType.NoAdjust, True, 10)
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const { Period, AdjustType } = require("longbridge")
+                const resp = await ctx.historyCandlesticksByOffset(
+                  "700.HK", Period.Day, AdjustType.NoAdjust, true, 10)
+                console.log(resp)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "candlesticks": [{ "close": "362.000", "open": "364.600", "low": "361.600", "high": "368.800", "volume": 10853604, "turnover": "3954556819.000", "timestamp": 1650384000 }]
+            }
+    - name: Quote · Subscription (WebSocket)
+      x-name-zh: 行情 · 订阅 (WebSocket)
+      x-name-zh-hk: 行情 · 訂閱 (WebSocket)
+      commands:
+        - id: ws-subscription
+          name: Get Subscriptions
+          x-name-zh: 获取订阅信息
+          x-name-zh-hk: 獲取訂閱信息
+          cmd: 5
+          direction: request
+          description: |
+            Query the connection's current subscriptions. Empty request; the response returns each subscribed symbol and its sub_type list.
+
+            ```protobuf
+            message SubscriptionRequest {
+            }
+
+            message SubscriptionResponse {
+              repeated SubTypeList sub_list = 1;
+            }
+
+            message SubTypeList {
+              string symbol = 1;
+              repeated SubType sub_type = 2;
+            }
+            ```
+          x-description-zh: |
+            查询当前连接的订阅情况。请求体为空,响应返回每个已订阅标的及其 sub_type 列表。
+
+            ```protobuf
+            message SubscriptionRequest {
+            }
+
+            message SubscriptionResponse {
+              repeated SubTypeList sub_list = 1;
+            }
+
+            message SubTypeList {
+              string symbol = 1;
+              repeated SubType sub_type = 2;
+            }
+            ```
+          x-description-zh-hk: |
+            查詢當前連接的訂閱情況。請求體為空,響應返回每個已訂閱標的及其 sub_type 列表。
+
+            ```protobuf
+            message SubscriptionRequest {
+            }
+
+            message SubscriptionResponse {
+              repeated SubTypeList sub_list = 1;
+            }
+
+            message SubTypeList {
+              string symbol = 1;
+              repeated SubType sub_type = 2;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                resp = ctx.subscriptions()
+                print(resp)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const resp = await ctx.subscriptions()
+                console.log(resp)
+          x-response-example: |
+            {
+              "sub_list": [
+                { "symbol": "700.HK", "sub_type": [1, 2, 3] },
+                { "symbol": "AAPL.US", "sub_type": [2] }
+              ]
+            }
+        - id: ws-subscribe
+          name: Subscribe
+          x-name-zh: 订阅行情
+          x-name-zh-hk: 訂閱行情
+          cmd: 6
+          direction: request
+          description: |
+            Subscribe real-time feeds. SubType: 1 Quote, 2 Depth, 3 Brokers, 4 Trade. is_first_push pushes a snapshot right after subscribing (not for Trade). Max 500 symbols/request, 500 subscriptions/user.
+
+            ```protobuf
+            message SubscribeRequest {
+              repeated string symbol = 1;
+              repeated SubType sub_type = 2;
+              bool is_first_push = 3;
+            }
+
+            message SubscriptionResponse {
+              repeated SubTypeList sub_list = 1;
+            }
+            ```
+          x-description-zh: |
+            订阅实时行情。SubType:1 报价、2 盘口、3 经纪队列、4 成交。is_first_push 表示订阅后立即推送一次快照 (成交不支持)。单次最多 500 标的，每用户最多 500 订阅。
+
+            ```protobuf
+            message SubscribeRequest {
+              repeated string symbol = 1;
+              repeated SubType sub_type = 2;
+              bool is_first_push = 3;
+            }
+
+            message SubscriptionResponse {
+              repeated SubTypeList sub_list = 1;
+            }
+            ```
+          x-description-zh-hk: |
+            訂閱實時行情。SubType:1 報價、2 盤口、3 經紀隊列、4 成交。is_first_push 表示訂閱後立即推送一次快照 (成交不支持)。單次最多 500 標的，每用戶最多 500 訂閱。
+
+            ```protobuf
+            message SubscribeRequest {
+              repeated string symbol = 1;
+              repeated SubType sub_type = 2;
+              bool is_first_push = 3;
+            }
+
+            message SubscriptionResponse {
+              repeated SubTypeList sub_list = 1;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                from longbridge.openapi import SubType
+
+                ctx.set_on_quote(lambda symbol, event: print(symbol, event))
+                ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Quote], is_first_push=True)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const { SubType } = require("longbridge")
+                ctx.setOnQuote((event) => console.log(event))
+                await ctx.subscribe(["700.HK", "AAPL.US"], [SubType.Quote], true)
+          x-response-example: |
+            {
+              "sub_list": [
+                { "symbol": "700.HK", "sub_type": [1, 2, 3] },
+                { "symbol": "AAPL.US", "sub_type": [2] }
+              ]
+            }
+        - id: ws-unsubscribe
+          name: Unsubscribe
+          x-name-zh: 取消订阅
+          x-name-zh-hk: 取消訂閱
+          cmd: 7
+          direction: request
+          description: |
+            Unsubscribe feeds. Empty symbol + unsub_all drops everything; a set symbol drops all subscriptions of those symbols. Empty response.
+
+            ```protobuf
+            message UnsubscribeRequest {
+              repeated string symbol = 1;
+              repeated SubType sub_type = 2;
+              bool unsub_all = 3;
+            }
+
+            message UnsubscribeResponse {
+            }
+            ```
+          x-description-zh: |
+            取消订阅。symbol 为空且 unsub_all 为 true 取消全部;symbol 非空取消这些标的的全部订阅。响应体为空。
+
+            ```protobuf
+            message UnsubscribeRequest {
+              repeated string symbol = 1;
+              repeated SubType sub_type = 2;
+              bool unsub_all = 3;
+            }
+
+            message UnsubscribeResponse {
+            }
+            ```
+          x-description-zh-hk: |
+            取消訂閱。symbol 為空且 unsub_all 為 true 取消全部;symbol 非空取消這些標的的全部訂閱。響應體為空。
+
+            ```protobuf
+            message UnsubscribeRequest {
+              repeated string symbol = 1;
+              repeated SubType sub_type = 2;
+              bool unsub_all = 3;
+            }
+
+            message UnsubscribeResponse {
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                from longbridge.openapi import SubType
+
+                ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote])
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const { SubType } = require("longbridge")
+                await ctx.unsubscribe(["700.HK", "AAPL.US"], [SubType.Quote], false)
+          x-response-example: |
+            {}
+    - name: Quote · Push (WebSocket)
+      x-name-zh: 行情 · 推送 (WebSocket)
+      x-name-zh-hk: 行情 · 推送 (WebSocket)
+      commands:
+        - id: ws-push-quote
+          name: Push · Quote
+          x-name-zh: 推送 · 报价
+          x-name-zh-hk: 推送 · 報價
+          cmd: 101
+          direction: push
+          description: |
+            Pushed after subscribing with SubType.Quote: the latest price on every update.
+
+            ```protobuf
+            message PushQuote {
+              string symbol = 1;
+              int64 sequence = 2;
+              string last_done = 3;
+              string open = 4;
+              string high = 5;
+              string low = 6;
+              int64 timestamp = 7;
+              int64 volume = 8;
+              string turnover = 9;
+              TradeStatus trade_status = 10;
+              TradeSession trade_session = 11;
+            }
+            ```
+          x-description-zh: |
+            以 SubType.Quote 订阅后推送:每次更新推送最新价格。
+
+            ```protobuf
+            message PushQuote {
+              string symbol = 1;
+              int64 sequence = 2;
+              string last_done = 3;
+              string open = 4;
+              string high = 5;
+              string low = 6;
+              int64 timestamp = 7;
+              int64 volume = 8;
+              string turnover = 9;
+              TradeStatus trade_status = 10;
+              TradeSession trade_session = 11;
+            }
+            ```
+          x-description-zh-hk: |
+            以 SubType.Quote 訂閱後推送:每次更新推送最新價格。
+
+            ```protobuf
+            message PushQuote {
+              string symbol = 1;
+              int64 sequence = 2;
+              string last_done = 3;
+              string open = 4;
+              string high = 5;
+              string low = 6;
+              int64 timestamp = 7;
+              int64 volume = 8;
+              string turnover = 9;
+              TradeStatus trade_status = 10;
+              TradeSession trade_session = 11;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                ctx.set_on_quote(lambda symbol, event: print(symbol, event))
+                ctx.subscribe(["700.HK"], [SubType.Quote], is_first_push=True)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                ctx.setOnQuote((event) => console.log(event))
+                await ctx.subscribe(["700.HK"], [SubType.Quote], true)
+          x-response-example: |
+            {
+              "symbol": "AAPL.US",
+              "sequence": 160808750000000,
+              "last_done": "156.570",
+              "open": "155.910",
+              "high": "159.790",
+              "low": "155.380",
+              "timestamp": 1651089600,
+              "volume": 88063191,
+              "turnover": "13865092584.000",
+              "trade_status": 0,
+              "trade_session": 0
+            }
+        - id: ws-push-depth
+          name: Push · Depth
+          x-name-zh: 推送 · 盘口
+          x-name-zh-hk: 推送 · 盤口
+          cmd: 102
+          direction: push
+          description: |
+            Pushed after subscribing with SubType.Depth: order-book depth updates.
+
+            ```protobuf
+            message PushDepth {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Depth ask = 3;
+              repeated Depth bid = 4;
+            }
+            ```
+          x-description-zh: |
+            以 SubType.Depth 订阅后推送:盘口深度更新。
+
+            ```protobuf
+            message PushDepth {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Depth ask = 3;
+              repeated Depth bid = 4;
+            }
+            ```
+          x-description-zh-hk: |
+            以 SubType.Depth 訂閱後推送:盤口深度更新。
+
+            ```protobuf
+            message PushDepth {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Depth ask = 3;
+              repeated Depth bid = 4;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                ctx.set_on_depth(lambda symbol, event: print(symbol, event))
+                ctx.subscribe(["700.HK"], [SubType.Depth], is_first_push=True)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                ctx.setOnDepth((event) => console.log(event))
+                await ctx.subscribe(["700.HK"], [SubType.Depth], true)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "sequence": 160808750000000,
+              "ask": [{ "position": 1, "price": "335.000", "volume": 500, "order_num": 1 }],
+              "bid": [{ "position": 1, "price": "334.800", "volume": 69400, "order_num": 13 }]
+            }
+        - id: ws-push-brokers
+          name: Push · Brokers
+          x-name-zh: 推送 · 经纪队列
+          x-name-zh-hk: 推送 · 經紀隊列
+          cmd: 103
+          direction: push
+          description: |
+            Pushed after subscribing with SubType.Brokers: broker queue updates (HK/SG account required).
+
+            ```protobuf
+            message PushBrokers {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Brokers ask_brokers = 3;
+              repeated Brokers bid_brokers = 4;
+            }
+            ```
+          x-description-zh: |
+            以 SubType.Brokers 订阅后推送:经纪队列更新 (需 HK/SG 账户)。
+
+            ```protobuf
+            message PushBrokers {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Brokers ask_brokers = 3;
+              repeated Brokers bid_brokers = 4;
+            }
+            ```
+          x-description-zh-hk: |
+            以 SubType.Brokers 訂閱後推送:經紀隊列更新 (需 HK/SG 賬戶)。
+
+            ```protobuf
+            message PushBrokers {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Brokers ask_brokers = 3;
+              repeated Brokers bid_brokers = 4;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                ctx.set_on_brokers(lambda symbol, event: print(symbol, event))
+                ctx.subscribe(["700.HK"], [SubType.Brokers], is_first_push=True)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                ctx.setOnBrokers((event) => console.log(event))
+                await ctx.subscribe(["700.HK"], [SubType.Brokers], true)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "sequence": 160808750000000,
+              "ask_brokers": [{ "position": 1, "broker_ids": [7358, 9057, 9028, 7364] }],
+              "bid_brokers": [{ "position": 1, "broker_ids": [6996, 5465, 8026, 8304, 4978] }]
+            }
+        - id: ws-push-trade
+          name: Push · Trades
+          x-name-zh: 推送 · 成交
+          x-name-zh-hk: 推送 · 成交
+          cmd: 104
+          direction: push
+          description: |
+            Pushed after subscribing with SubType.Trade: tick-by-tick trades. direction: 0 neutral, 1 down, 2 up. (is_first_push not supported.)
+
+            ```protobuf
+            message PushTrade {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Trade trade = 3;
+            }
+            ```
+          x-description-zh: |
+            以 SubType.Trade 订阅后推送:逐笔成交。direction:0 中性、1 向下、2 向上。(不支持 is_first_push。)
+
+            ```protobuf
+            message PushTrade {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Trade trade = 3;
+            }
+            ```
+          x-description-zh-hk: |
+            以 SubType.Trade 訂閱後推送:逐筆成交。direction:0 中性、1 向下、2 向上。(不支持 is_first_push。)
+
+            ```protobuf
+            message PushTrade {
+              string symbol = 1;
+              int64 sequence = 2;
+              repeated Trade trade = 3;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                ctx.set_on_trades(lambda symbol, event: print(symbol, event))
+                ctx.subscribe(["700.HK"], [SubType.Trade])
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                ctx.setOnTrades((event) => console.log(event))
+                await ctx.subscribe(["700.HK"], [SubType.Trade], false)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "sequence": 160808750000000,
+              "trade": [{ "price": "158.760", "volume": 1, "timestamp": 1651103979, "trade_type": "I", "direction": 0, "trade_session": 2 }]
+            }
+        - id: ws-push-candlestick
+          name: Push · Candlestick
+          x-name-zh: 推送 · K 线
+          x-name-zh-hk: 推送 · K 線
+          cmd: 105
+          direction: push
+          description: |
+            Candlestick updates. Subscribed with subscribe_candlesticks (not SubType); pushed on each current-candle update or on period close.
+
+            ```protobuf
+            message PushCandlestick {
+              string symbol = 1;
+              Period period = 2;
+              Candlestick candlestick = 3;
+            }
+            ```
+          x-description-zh: |
+            K 线更新。用 subscribe_candlesticks 订阅(不走 SubType);当前 K 线更新或周期收盘时推送。
+
+            ```protobuf
+            message PushCandlestick {
+              string symbol = 1;
+              Period period = 2;
+              Candlestick candlestick = 3;
+            }
+            ```
+          x-description-zh-hk: |
+            K 線更新。用 subscribe_candlesticks 訂閱(不走 SubType);當前 K 線更新或週期收盤時推送。
+
+            ```protobuf
+            message PushCandlestick {
+              string symbol = 1;
+              Period period = 2;
+              Candlestick candlestick = 3;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: QuoteContext (see Subscribe)
+                from longbridge.openapi import Period
+
+                ctx.set_on_candlestick(lambda symbol, event: print(symbol, event))
+                ctx.subscribe_candlesticks("700.HK", Period.Min_1)
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: QuoteContext
+                const { Period } = require("longbridge")
+                ctx.setOnCandlestick((event) => console.log(event))
+                await ctx.subscribeCandlesticks("700.HK", Period.Min_1)
+          x-response-example: |
+            {
+              "symbol": "700.HK",
+              "period": 1,
+              "candlestick": { "close": "162.500", "open": "160.000", "high": "163.000", "low": "159.800", "volume": 123456, "turnover": "19987654.000", "timestamp": 1651103700, "trade_session": 0 }
+            }
+    - name: Trade (WebSocket)
+      x-name-zh: 交易 (WebSocket)
+      x-name-zh-hk: 交易 (WebSocket)
+      commands:
+        - id: ws-trade-sub
+          name: Subscribe (Trade)
+          x-name-zh: 订阅交易推送
+          x-name-zh-hk: 訂閱交易推送
+          cmd: 16
+          direction: request
+          description: |
+            Subscribe trade-gateway topics. Topic `private` delivers order/execution notifications. The response reports success / fail / current topics.
+
+            ```protobuf
+            message Sub {
+              repeated string topics = 1;
+            }
+
+            message SubResponse {
+              repeated string success = 1;
+              repeated Fail fail = 2;
+              repeated string current = 3;
+            }
+            ```
+          x-description-zh: |
+            订阅交易网关主题。主题 `private` 推送订单/成交通知。响应返回成功/失败/当前订阅主题。
+
+            ```protobuf
+            message Sub {
+              repeated string topics = 1;
+            }
+
+            message SubResponse {
+              repeated string success = 1;
+              repeated Fail fail = 2;
+              repeated string current = 3;
+            }
+            ```
+          x-description-zh-hk: |
+            訂閱交易閘道主題。主題 `private` 推送訂單/成交通知。響應返回成功/失敗/當前訂閱主題。
+
+            ```protobuf
+            message Sub {
+              repeated string topics = 1;
+            }
+
+            message SubResponse {
+              repeated string success = 1;
+              repeated Fail fail = 2;
+              repeated string current = 3;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: TradeContext
+                ctx.set_on_order_changed(lambda event: print(event))
+                ctx.subscribe(["private"])
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: TradeContext
+                ctx.setOnOrderChanged((event) => console.log(event))
+                await ctx.subscribe(["private"])
+          x-response-example: |
+            {
+              "success": ["private"],
+              "fail": [],
+              "current": ["private"]
+            }
+        - id: ws-trade-unsub
+          name: Cancel Subscribe (Trade)
+          x-name-zh: 取消订阅交易推送
+          x-name-zh-hk: 取消訂閱交易推送
+          cmd: 17
+          direction: request
+          description: |
+            Unsubscribe trade-gateway topics. The response returns the remaining subscribed topics.
+
+            ```protobuf
+            message Unsub {
+              repeated string topics = 1;
+            }
+
+            message UnsubResponse {
+              repeated string current = 3;
+            }
+            ```
+          x-description-zh: |
+            取消订阅交易网关主题。响应返回剩余订阅的主题。
+
+            ```protobuf
+            message Unsub {
+              repeated string topics = 1;
+            }
+
+            message UnsubResponse {
+              repeated string current = 3;
+            }
+            ```
+          x-description-zh-hk: |
+            取消訂閱交易閘道主題。響應返回剩餘訂閱的主題。
+
+            ```protobuf
+            message Unsub {
+              repeated string topics = 1;
+            }
+
+            message UnsubResponse {
+              repeated string current = 3;
+            }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: TradeContext
+                ctx.unsubscribe(["private"])
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: TradeContext
+                await ctx.unsubscribe(["private"])
+          x-response-example: |
+            {
+              "current": []
+            }
+        - id: ws-trade-notify
+          name: Notification (Trade)
+          x-name-zh: 交易通知推送
+          x-name-zh-hk: 交易通知推送
+          cmd: 18
+          direction: push
+          description: |
+            Order/execution push on the `private` topic. The Notification wrapper carries a JSON payload (event `order_changed_lb`; grid orders use `gridtrading_order`).
+
+            ```protobuf
+            message Notification {
+              string topic = 1;
+              ContentType content_type = 2;
+              DispatchType dispatch_type = 3;
+              bytes data = 4;
+            }
+
+            enum ContentType { CONTENT_UNDEFINED = 0; CONTENT_JSON = 1; CONTENT_PROTO = 2; }
+            ```
+          x-description-zh: |
+            `private` 主题上的订单/成交推送。Notification 外层携带 JSON 负载(事件 `order_changed_lb`;网格订单为 `gridtrading_order`)。
+
+            ```protobuf
+            message Notification {
+              string topic = 1;
+              ContentType content_type = 2;
+              DispatchType dispatch_type = 3;
+              bytes data = 4;
+            }
+
+            enum ContentType { CONTENT_UNDEFINED = 0; CONTENT_JSON = 1; CONTENT_PROTO = 2; }
+            ```
+          x-description-zh-hk: |
+            `private` 主題上的訂單/成交推送。Notification 外層攜帶 JSON 負載(事件 `order_changed_lb`;網格訂單為 `gridtrading_order`)。
+
+            ```protobuf
+            message Notification {
+              string topic = 1;
+              ContentType content_type = 2;
+              DispatchType dispatch_type = 3;
+              bytes data = 4;
+            }
+
+            enum ContentType { CONTENT_UNDEFINED = 0; CONTENT_JSON = 1; CONTENT_PROTO = 2; }
+            ```
+          x-request-examples:
+            - lang: Python
+              label: Python
+              source: |
+                # ctx: TradeContext
+                ctx.set_on_order_changed(lambda event: print(event))
+                ctx.subscribe(["private"])
+            - lang: JavaScript
+              label: Node.js
+              source: |
+                // ctx: TradeContext
+                ctx.setOnOrderChanged((event) => console.log(event))
+                await ctx.subscribe(["private"])
+          x-response-example: |
+            {
+              "event": "order_changed_lb",
+              "data": {
+                "side": "Buy",
+                "stock_name": "Tencent Holdings Ltd.",
+                "submitted_quantity": "1000",
+                "symbol": "700.HK",
+                "order_type": "LO",
+                "submitted_price": "213.2",
+                "executed_quantity": "1000",
+                "executed_price": "213.2",
+                "order_id": "27",
+                "currency": "HKD",
+                "status": "NewStatus",
+                "submitted_at": "1562761893",
+                "updated_at": "1562761893"
+              }
+            }
 servers:
   - url: https://openapi.longbridge.com
     description: Global

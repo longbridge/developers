@@ -181,7 +181,7 @@ export const PAGE_ICONS: Record<string, string> = {
 export function parseSpec(rawYaml: string): {
   groups: TagGroup[]
   pages: PageItem[]
-  wsGroup: WsGroupData | null
+  wsGroups: WsGroupData[]
   serverUrl: string
 } {
   const parsed = load(rawYaml) as any
@@ -265,28 +265,36 @@ export function parseSpec(rawYaml: string): {
     codeTabs: p['x-code-tabs'],
   }))
 
+  const mapWsCommand = (c: any): WsCommandItem => ({
+    id: c.id,
+    name: c.name,
+    nameZh: c['x-name-zh'],
+    nameZhHk: c['x-name-zh-hk'],
+    cmd: c.cmd,
+    direction: c.direction === 'push' ? 'push' : 'request',
+    description: c.description ?? '',
+    descriptionZh: c['x-description-zh'],
+    descriptionZhHk: c['x-description-zh-hk'],
+    fields: c['x-fields'],
+    requestExamples: c['x-request-examples'] ?? [],
+    responseExample: c['x-response-example'],
+  })
+
+  // x-websocket supports either a list of groups (`groups:`) or a single group
+  // (`commands:` directly). Normalize to an array of groups.
   const rawWs = parsed['x-websocket'] as any
-  const wsGroup: WsGroupData | null = rawWs
-    ? {
-        name: rawWs.name ?? 'WebSocket',
-        nameZh: rawWs['x-name-zh'],
-        nameZhHk: rawWs['x-name-zh-hk'],
-        commands: (rawWs.commands ?? []).map((c: any) => ({
-          id: c.id,
-          name: c.name,
-          nameZh: c['x-name-zh'],
-          nameZhHk: c['x-name-zh-hk'],
-          cmd: c.cmd,
-          direction: c.direction === 'push' ? 'push' : 'request',
-          description: c.description ?? '',
-          descriptionZh: c['x-description-zh'],
-          descriptionZhHk: c['x-description-zh-hk'],
-          fields: c['x-fields'],
-          requestExamples: c['x-request-examples'] ?? [],
-          responseExample: c['x-response-example'],
-        })),
-      }
-    : null
+  let wsGroups: WsGroupData[] = []
+  if (rawWs) {
+    const rawGroups: any[] = rawWs.groups ?? [{ name: rawWs.name, 'x-name-zh': rawWs['x-name-zh'], 'x-name-zh-hk': rawWs['x-name-zh-hk'], commands: rawWs.commands }]
+    wsGroups = rawGroups
+      .filter((g) => (g.commands ?? []).length > 0)
+      .map((g) => ({
+        name: g.name ?? 'WebSocket',
+        nameZh: g['x-name-zh'],
+        nameZhHk: g['x-name-zh-hk'],
+        commands: (g.commands ?? []).map(mapWsCommand),
+      }))
+  }
 
   return {
     groups: ordered
@@ -296,7 +304,7 @@ export function parseSpec(rawYaml: string): {
         return { name: x, nameZh: tagZhMap[x], nameZhHk: tagZhHkMap[x], endpoints: flat, subgroups }
       }),
     pages,
-    wsGroup,
+    wsGroups,
     serverUrl,
   }
 }

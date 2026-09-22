@@ -534,52 +534,56 @@ const L_WS = {
   pushExample: { en: 'Push Example', 'zh-CN': '推送示例', 'zh-HK': '推送示例' },
 } as const
 
-/** WebSocket command detail view — title, WS/cmd badge, description, call
- *  example (multi-language) and a response/push JSON example. */
-function WsDetail({
-  cmd,
-  locale,
-  localePrefix,
-  labelCopy,
-  labelCopied,
-}: {
-  cmd: WsCommandItem
-  locale: Locale
-  localePrefix: string
-  labelCopy: string
-  labelCopied: string
-}) {
+function wsBlocks(cmd: WsCommandItem): CodeBlock[] {
+  return cmd.requestExamples.map((s) => ({ lang: s.lang.toLowerCase(), code: s.source, label: s.label }))
+}
+
+/** WebSocket command — center column (mirrors the endpoint detail: title, a
+ *  method/URL-style bar, then description). Call example + response live in the
+ *  right rail (WsRail), exactly like an HTTP endpoint. */
+function WsDetail({ cmd, locale, localePrefix }: { cmd: WsCommandItem; locale: Locale; localePrefix: string }) {
   const title = pickLocale(cmd.name, cmd.nameZh, cmd.nameZhHk, locale)
   const desc = pickLocale(cmd.description, cmd.descriptionZh, cmd.descriptionZhHk, locale)
-  const blocks: CodeBlock[] = cmd.requestExamples.map((s) => ({
-    lang: s.lang.toLowerCase(),
-    code: s.source,
-    label: s.label,
-  }))
   return (
     <>
       <h1 className="ep-title">{title}</h1>
-      <div className="ws-badges">
+      <div className="ep-urlbar" data-lbus-component="ws-bar">
         <span className="ep-method-badge method-ws">WS</span>
-        {cmd.cmd != null && <span className="ws-cmd">cmd {cmd.cmd}</span>}
-        <span className="ws-dir">{(cmd.direction === 'push' ? L_WS.push : L_WS.request)[locale]}</span>
+        <code className="ep-urlbar-url">
+          {(cmd.direction === 'push' ? L_WS.push : L_WS.request)[locale]}
+          {cmd.cmd != null ? ` · cmd ${cmd.cmd}` : ''}
+        </code>
       </div>
       {desc && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: renderMd(desc, localePrefix) }} />}
+    </>
+  )
+}
+
+/** WebSocket command — right rail: call example (SDK, language dropdown) + a
+ *  response/push JSON card. Mirrors the endpoint rail (RequestPanel/ResponsePanel). */
+function WsRail({ cmd, locale, labelCopy, labelCopied }: { cmd: WsCommandItem; locale: Locale; labelCopy: string; labelCopied: string }) {
+  const blocks = wsBlocks(cmd)
+  return (
+    <aside className="api-rail" data-lbus-component="ws-rail">
       {blocks.length > 0 && (
-        <>
-          <h2>{L_WS.callExample[locale]}</h2>
+        <section className="api-rail-card">
+          <div className="api-rail-head">
+            <span className="api-rail-title">{L_WS.callExample[locale]}</span>
+          </div>
           <CodeDropdown blocks={blocks} labelCopy={labelCopy} labelCopied={labelCopied} />
-        </>
+        </section>
       )}
       {cmd.responseExample && (
-        <>
-          <h2>{(cmd.direction === 'push' ? L_WS.pushExample : L_WS.responseExample)[locale]}</h2>
+        <section className="api-rail-card">
+          <div className="api-rail-head">
+            <span className="api-rail-title">{(cmd.direction === 'push' ? L_WS.pushExample : L_WS.responseExample)[locale]}</span>
+          </div>
           <pre className="code-pre ws-response">
             <code dangerouslySetInnerHTML={{ __html: highlightCode(cmd.responseExample.trim(), 'json') }} />
           </pre>
-        </>
+        </section>
       )}
-    </>
+    </aside>
   )
 }
 
@@ -735,7 +739,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const localePrefix = LOCALE_PREFIX[locale] ?? ''
 
   // Parse spec once
-  const { groups, pages, wsGroup, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
+  const { groups, pages, wsGroups, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
 
   // ── URL state ─────────────────────────────────────────────────────────────
   // Canonical URLs are path-based: `/docs/api/<operationId>` (locale-prefixed).
@@ -968,11 +972,19 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     }
   }, [activePg, locale, localePrefix])
 
-  // The active WebSocket command (detail view), if any.
-  const activeWsCmd = useMemo<WsCommandItem | null>(
-    () => (activeWs && wsGroup ? wsGroup.commands.find((c) => c.id === activeWs) ?? null : null),
-    [activeWs, wsGroup]
-  )
+  // The active WebSocket command (detail view) + its group, if any.
+  const activeWsCmd = useMemo<WsCommandItem | null>(() => {
+    if (!activeWs) return null
+    for (const g of wsGroups) {
+      const c = g.commands.find((x) => x.id === activeWs)
+      if (c) return c
+    }
+    return null
+  }, [activeWs, wsGroups])
+  const activeWsGroup = useMemo<WsGroupData | null>(() => {
+    if (!activeWs) return null
+    return wsGroups.find((g) => g.commands.some((c) => c.id === activeWs)) ?? null
+  }, [activeWs, wsGroups])
 
   // Live TryIt response for the right-rail Response panel; cleared per endpoint.
   const [liveResp, setLiveResp] = useState<ApiResponse | null>(null)
@@ -989,9 +1001,9 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
 
   // Breadcrumb trail (Home is prepended by DocsBreadcrumb).
   const crumbs: { text: string; href?: string }[] =
-    showWs && activeWsCmd && wsGroup
+    showWs && activeWsCmd && activeWsGroup
       ? [
-          { text: pickLocale(wsGroup.name, wsGroup.nameZh, wsGroup.nameZhHk, locale) },
+          { text: pickLocale(activeWsGroup.name, activeWsGroup.nameZh, activeWsGroup.nameZhHk, locale) },
           { text: pickLocale(activeWsCmd.name, activeWsCmd.nameZh, activeWsCmd.nameZhHk, locale) },
         ]
       : showEndpoint && activeEndpoint
@@ -1062,31 +1074,25 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               </ul>
             </div>
           ))}
-          {/* WebSocket quote functions — grouped like the HTTP endpoint groups */}
-          {wsGroup && wsGroup.commands.length > 0 && (
-            <div className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
+          {/* WebSocket functions — grouped like the HTTP endpoint groups */}
+          {wsGroups.map((wg) => (
+            <div key={wg.name} className="border-t border-[color:var(--app-card-stroke)] mt-[10px] pt-[10px]">
               <ul className="list-none p-0 m-0 flex flex-col gap-[2px]" role="list">
-                <WsSidebarGroup group={wsGroup} activeWs={activeWs} onSelect={selectWs} locale={locale} />
+                <WsSidebarGroup group={wg} activeWs={activeWs} onSelect={selectWs} locale={locale} />
               </ul>
             </div>
-          )}
+          ))}
         </nav>
       </aside>
 
       <div className="docs-body">
         <div className="docs-inner">
-          <div className={`docs-main${showEndpoint && isDocsModel ? ' has-rail' : ''}`}>
+          <div className={`docs-main${(showEndpoint && isDocsModel) || showWs ? ' has-rail' : ''}`}>
             <article className="docs-content">
               <DocsBreadcrumb items={crumbs} locale={locale} />
-              {/* ── WebSocket command detail ── */}
+              {/* ── WebSocket command detail (center) ── */}
               {showWs && activeWsCmd && (
-                <WsDetail
-                  cmd={activeWsCmd}
-                  locale={locale}
-                  localePrefix={localePrefix}
-                  labelCopy={t(locale, 'api.copy')}
-                  labelCopied={t(locale, 'api.copied')}
-                />
+                <WsDetail cmd={activeWsCmd} locale={locale} localePrefix={localePrefix} />
               )}
               {/* ── Intro (nothing selected) ── */}
               {showIntro && (
@@ -1259,6 +1265,16 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                 </>
               )}
             </article>
+
+            {/* Right rail: WebSocket call example + response/push */}
+            {showWs && activeWsCmd && (
+              <WsRail
+                cmd={activeWsCmd}
+                locale={locale}
+                labelCopy={t(locale, 'api.copy')}
+                labelCopied={t(locale, 'api.copied')}
+              />
+            )}
 
             {/* Right rail: Request + Response panels (TryIt debugger) */}
             {showEndpoint && isDocsModel && activeEndpoint && (
