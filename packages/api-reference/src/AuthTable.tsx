@@ -13,9 +13,9 @@ const L = {
   required: { en: 'Required', 'zh-CN': '必填', 'zh-HK': '必填' },
   description: { en: 'Description', 'zh-CN': '说明', 'zh-HK': '說明' },
   authToken: {
-    en: 'Account access token, sent as the raw token (no `Bearer` prefix).',
-    'zh-CN': '账户签发的 access token，直接作为原始 token 发送 (不带 `Bearer` 前缀)。',
-    'zh-HK': '賬戶簽發的 access token，直接作為原始 token 發送 (不帶 `Bearer` 前綴)。',
+    en: 'Access token for this request — passed as the raw token (no `Bearer` prefix) and included in the signature calculation.',
+    'zh-CN': '本请求的 access token，作为原始 token 传入 (不带 `Bearer` 前缀)，并参与签名计算。',
+    'zh-HK': '本請求的 access token，作為原始 token 傳入 (不帶 `Bearer` 前綴)，並參與簽名計算。',
   },
   apiKey: {
     en: 'Your App Key.',
@@ -33,9 +33,9 @@ const L = {
     'zh-HK': 'HMAC-SHA256 簽名。格式:`HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature=<sig>`。',
   },
   bearer: {
-    en: 'Account access token, sent as `Authorization: Bearer <access_token>`.',
-    'zh-CN': '账户签发的 access token，通过 `Authorization: Bearer <access_token>` 发送。',
-    'zh-HK': '賬戶簽發的 access token，通過 `Authorization: Bearer <access_token>` 發送。',
+    en: 'Access token for this request — sent as `Authorization: Bearer <access_token>`, no signature required.',
+    'zh-CN': '本请求的 access token，以 `Authorization: Bearer <access_token>` 发送，无需签名。',
+    'zh-HK': '本請求的 access token，以 `Authorization: Bearer <access_token>` 發送，無需簽名。',
   },
   signNote: {
     en: 'Signed mode: every request is signed with your App Key/Secret. Header set:',

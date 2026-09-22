@@ -1,7 +1,8 @@
 /**
- * RequestPanel — right-rail top card: language-tabbed code example, a
- * collapsible 设置 Token (AuthorizationForm), an editable parameters form and a
- * 发送 button that fires a real signed request against the selected environment.
+ * RequestPanel — right-rail top card: an auth-mode dropdown (Signed / OAuth), a
+ * language-tabbed code example that follows the mode, a collapsible 设置 Token
+ * form whose fields also follow the mode, an editable parameters form and a 发送
+ * button that fires a real request (signed or Bearer) against the environment.
  */
 import { useMemo, useState } from 'react'
 import type { Locale } from '@longbridge/openapi-utils'
@@ -15,23 +16,23 @@ import {
 } from '@longbridge/openapi-tryit'
 import { CodeTabs } from './CodeSample'
 import type { CodeBlock, XParameter } from './openapi-loader'
-import { useEnv } from './EnvContext'
-import { signedCodeBlocks } from './signing-samples'
+import { useEnv, type AuthMode } from './EnvContext'
+import { signedCodeBlocks, oauthCodeBlocks } from './signing-samples'
 
 const L = {
   request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
   setToken: { en: 'Set Token', 'zh-CN': '设置 Token', 'zh-HK': '設置 Token' },
   send: { en: 'Send', 'zh-CN': '发送', 'zh-HK': '發送' },
   sending: { en: 'Sending…', 'zh-CN': '发送中…', 'zh-HK': '發送中…' },
-  sign: { en: 'Signed', 'zh-CN': '签名', 'zh-HK': '簽名' },
-  oauth: { en: 'OAuth', 'zh-CN': 'OAuth', 'zh-HK': 'OAuth' },
+  sign: { en: 'Signed (App Key)', 'zh-CN': '签名 (App Key)', 'zh-HK': '簽名 (App Key)' },
+  oauth: { en: 'OAuth (Bearer)', 'zh-CN': 'OAuth (Bearer)', 'zh-HK': 'OAuth (Bearer)' },
+  accessToken: { en: 'Access Token', 'zh-CN': 'Access Token', 'zh-HK': 'Access Token' },
 } as const
 
 export interface RequestPanelProps {
   method: string
   path: string
   xparams: XParameter[]
-  blocks: CodeBlock[]
   locale: Locale
   onResponse: (r: ApiResponse) => void
   labelCopy: string
@@ -42,7 +43,6 @@ export function RequestPanel({
   method,
   path,
   xparams,
-  blocks,
   locale,
   onResponse,
   labelCopy,
@@ -59,11 +59,14 @@ export function RequestPanel({
     [xparams]
   )
 
-  // OAuth mode shows the authored Bearer samples; Signed mode shows generated
-  // HMAC-signed samples (cURL / Python / Node.js) for this endpoint.
+  // Both modes expose the same language set (cURL / Python / Node.js), generated
+  // client-side so the code always matches the selected auth scheme.
   const shownBlocks = useMemo<CodeBlock[]>(
-    () => (authMode === 'oauth' ? blocks : signedCodeBlocks(method, path, displayBaseUrl)),
-    [authMode, blocks, method, path, displayBaseUrl]
+    () =>
+      authMode === 'oauth'
+        ? oauthCodeBlocks(method, path, displayBaseUrl)
+        : signedCodeBlocks(method, path, displayBaseUrl),
+    [authMode, method, path, displayBaseUrl]
   )
 
   const send = async () => {
@@ -80,8 +83,29 @@ export function RequestPanel({
         else query[p.name] = v
       }
       finalPath = finalPath.replace(/\{[^}]+\}/g, '1')
-      const client = createQuickRequest(authData.appKey, authData.accessToken, authData.appSecret, { baseUrl })
       const m = method.toLowerCase()
+
+      if (authMode === 'oauth') {
+        // Raw Bearer request — no signing.
+        const qs = new URLSearchParams(
+          Object.entries(query).map(([k, v]) => [k, String(v)])
+        ).toString()
+        const hasBody = m === 'post' || m === 'put' || m === 'patch'
+        const url = `${baseUrl}${finalPath}${qs ? `?${qs}` : ''}`
+        const res = await fetch(url, {
+          method: method.toUpperCase(),
+          headers: {
+            Authorization: `Bearer ${authData.accessToken}`,
+            ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
+          },
+          body: hasBody ? JSON.stringify(body) : undefined,
+        })
+        const json = await res.json().catch(() => ({ code: -1, msg: 'non-JSON response', data: null }))
+        onResponse({ status: res.status, statusText: res.statusText, response: json })
+        return
+      }
+
+      const client = createQuickRequest(authData.appKey, authData.accessToken, authData.appSecret, { baseUrl })
       let res: ApiResponse
       if (m === 'post') res = await client.post(finalPath, body)
       else if (m === 'put') res = await client.put(finalPath, body)
@@ -99,27 +123,34 @@ export function RequestPanel({
     <section className="api-rail-card" data-lbus-component="request-panel">
       <div className="api-rail-head">
         <span className="api-rail-title">{L.request[locale]}</span>
-        <div className="api-rail-authseg" role="tablist" aria-label="auth mode">
-          <button
-            type="button"
-            className={`api-rail-authtab${authMode === 'sign' ? ' is-active' : ''}`}
-            onClick={() => setAuthMode('sign')}>
-            {L.sign[locale]}
-          </button>
-          <button
-            type="button"
-            className={`api-rail-authtab${authMode === 'oauth' ? ' is-active' : ''}`}
-            onClick={() => setAuthMode('oauth')}>
-            {L.oauth[locale]}
-          </button>
-        </div>
+        <select
+          className="api-rail-authselect"
+          aria-label="auth mode"
+          value={authMode}
+          onChange={(e) => setAuthMode(e.target.value as AuthMode)}>
+          <option value="sign">{L.sign[locale]}</option>
+          <option value="oauth">{L.oauth[locale]}</option>
+        </select>
         <button type="button" className="api-rail-tokenbtn" onClick={() => setShowToken((v) => !v)}>
           🔑 {L.setToken[locale]}
         </button>
       </div>
       {showToken && (
         <div className="api-rail-tokenform">
-          <AuthorizationForm authData={authData} autoFilled={autoFilled} onChange={setAuthData} />
+          {authMode === 'sign' ? (
+            <AuthorizationForm authData={authData} autoFilled={autoFilled} onChange={setAuthData} />
+          ) : (
+            <div className="api-rail-oauthform">
+              <label className="api-rail-oauthlabel">{L.accessToken[locale]}</label>
+              <input
+                className="tryit-input"
+                type="password"
+                value={authData.accessToken}
+                placeholder={L.accessToken[locale]}
+                onChange={(e) => setAuthData({ ...authData, accessToken: e.target.value })}
+              />
+            </div>
+          )}
         </div>
       )}
       {shownBlocks.length > 0 && <CodeTabs blocks={shownBlocks} labelCopy={labelCopy} labelCopied={labelCopied} />}

@@ -131,3 +131,68 @@ export function signedCodeBlocks(method: string, path: string, base: string): Co
     { lang: 'javascript', label: 'Node.js', code: nodeSample(m, path, base, withBody) },
   ]
 }
+
+// ── OAuth (Bearer) samples — same language set as the signed ones ──────────────
+
+function curlOauth(method: string, path: string, base: string, withBody: boolean): string {
+  const q = `?<query>` // shown as a placeholder; users replace or drop it
+  return (
+    `curl --request ${method} \\\n` +
+    `  --url '${base}${path}${withBody ? '' : q}' \\\n` +
+    `  --header 'Authorization: Bearer <access_token>'` +
+    (withBody
+      ? ` \\\n  --header 'Content-Type: application/json' \\\n  --data '{}'`
+      : '')
+  )
+}
+
+function pythonOauth(method: string, path: string, base: string, withBody: boolean): string {
+  const lower = method.toLowerCase()
+  if (withBody) {
+    return (
+      `import requests\n\n` +
+      `resp = requests.${lower === 'delete' ? 'delete' : lower}(\n` +
+      `    "${base}${path}",\n` +
+      `    headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},\n` +
+      `    json={},\n` +
+      `)\n` +
+      `print(resp.json())`
+    )
+  }
+  return (
+    `import requests\n\n` +
+    `resp = requests.${lower}(\n` +
+    `    "${base}${path}",\n` +
+    `    headers={"Authorization": "Bearer <access_token>"},\n` +
+    `    params={},\n` +
+    `)\n` +
+    `print(resp.json())`
+  )
+}
+
+function nodeOauth(method: string, path: string, base: string, withBody: boolean): string {
+  return (
+    `const headers = {\n` +
+    `  "Authorization": "Bearer <access_token>",\n` +
+    (withBody ? `  "Content-Type": "application/json",\n` : ``) +
+    `}\n` +
+    `fetch("${base}${path}", {\n` +
+    `  method: "${method}",\n` +
+    `  headers,\n` +
+    (withBody ? `  body: JSON.stringify({}),\n` : ``) +
+    `})\n` +
+    `  .then((r) => r.json())\n` +
+    `  .then(console.log)`
+  )
+}
+
+/** OAuth (Bearer) request samples — same language set as signedCodeBlocks. */
+export function oauthCodeBlocks(method: string, path: string, base: string): CodeBlock[] {
+  const m = method.toUpperCase()
+  const withBody = hasBodyMethod(m)
+  return [
+    { lang: 'shell', label: 'cURL', code: curlOauth(m, path, base, withBody) },
+    { lang: 'python', label: 'Python', code: pythonOauth(m, path, base, withBody) },
+    { lang: 'javascript', label: 'Node.js', code: nodeOauth(m, path, base, withBody) },
+  ]
+}

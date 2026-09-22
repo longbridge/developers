@@ -765,15 +765,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     () => rowsFrom(activeEndpoint?.operation['x-response-properties'], locale),
     [activeEndpoint, locale]
   )
-  const epReqExamples = useMemo<CodeBlock[]>(
-    () =>
-      (activeEndpoint?.operation['x-request-examples'] ?? []).map((s) => ({
-        lang: s.lang.toLowerCase(),
-        code: s.source,
-        label: s.label,
-      })),
-    [activeEndpoint]
-  )
 
   const epCodeBlocks = useMemo<CodeBlock[]>(
     () => (activeEndpoint ? buildCodeBlocks(activeEndpoint, serverUrl, locale) : []),
@@ -1082,7 +1073,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   method={activeEndpoint.method}
                   path={activeEndpoint.path}
                   xparams={activeEndpoint.operation['x-parameters'] ?? []}
-                  blocks={epReqExamples}
                   locale={locale}
                   onResponse={setLiveResp}
                   labelCopy={t(locale, 'api.copy')}

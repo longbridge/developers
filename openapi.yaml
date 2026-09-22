@@ -706,9 +706,9 @@ x-pages:
 
       历史接口 `/v1/token/refresh` 属于旧方案兼容路径，不建议新接入继续采用。新接入请统一使用 OAuth 2.0 token endpoint。
   - id: real-time-data
-    title: Real-Time Market Data
-    x-title-zh: 实时行情
-    x-title-zh-hk: 實時行情
+    title: Real-Time Data (WebSocket)
+    x-title-zh: 实时行情 (WebSocket)
+    x-title-zh-hk: 實時行情 (WebSocket)
     x-icon: activity
     content: |
       > **Note:** Real-time market data is **not** part of this HTTP REST API. Quotes, depth, broker queues and trade ticks are delivered over a persistent **WebSocket / TCP** connection to a dedicated gateway. This page documents that protocol end-to-end — you do not need to leave it.

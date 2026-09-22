@@ -1189,6 +1189,19 @@
 .api-rail-card .code-pre {
   overflow-x: auto;
 }
+/* Response JSON: dark editor-style box so the syntax colors read clearly
+   (the bare `.code-pre` light-on-light was faint). */
+[data-lbus-component='response-panel'] .code-pre {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #0d1117;
+  color: #e2e8f0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  max-height: 420px;
+  overflow: auto;
+}
 .api-rail-head {
   display: flex;
   align-items: center;
@@ -1200,25 +1213,33 @@
   font-weight: 600;
   color: var(--lb-fg-1, #1f2937);
 }
-.api-rail-authseg {
+.api-rail-authselect {
   margin-left: auto;
-  display: inline-flex;
-  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
-  border-radius: 999px;
-  overflow: hidden;
-  background: #fff;
-}
-.api-rail-authtab {
-  padding: 3px 10px;
+  padding: 3px 24px 3px 10px;
   font-size: 12px;
-  color: var(--lb-fg-2, #64748b);
-  background: transparent;
-  border: none;
+  color: var(--lb-fg-1, #1f2937);
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
-.api-rail-authtab.is-active {
-  color: #fff;
-  background: var(--lb-brand, #16a34a);
+.api-rail-oauthform {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 12px;
+  background: var(--lb-bg-1, #fff);
+}
+.api-rail-oauthlabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--lb-fg-2, #64748b);
 }
 .api-rail-tokenbtn {
   font-size: 12px;
@@ -1332,9 +1353,13 @@
   background: #0d1117;
 }
 :root[data-theme='dark'] .api-rail-tokenbtn,
-:root[data-theme='dark'] .api-rail-authseg,
+:root[data-theme='dark'] .api-rail-authselect,
+:root[data-theme='dark'] .api-rail-oauthform,
 :root[data-theme='dark'] .api-rail-tab {
   background: #161b22;
+}
+:root[data-theme='dark'] .api-rail-authselect {
+  color: #e6edf3;
 }
 /* The API reference is a 3-column console. Instead of the docs pages' asymmetric
    header-aligned gutter (which left a big empty left margin), center the whole
@@ -1342,8 +1367,7 @@
    and let the content region fill that centered width. */
 @media (min-width: 1024px) {
   [data-lbus-component='api-reference'].docs-layout {
-    max-width: 1600px;
-    margin-inline: auto;
+    max-width: none;
     padding-left: 0;
   }
 }
@@ -1352,10 +1376,11 @@
   margin: 0;
 }
 
-/* three-column widths — only when the right rail is present */
+/* three-column widths — only when the right rail is present. Full-bleed: the
+   center fills, the rail takes a generous fixed width so nothing looks empty. */
 [data-lbus-component='api-reference'] .docs-main.has-rail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 22rem;
+  grid-template-columns: minmax(0, 1fr) 30rem;
   gap: 2rem;
   align-items: start;
 }
