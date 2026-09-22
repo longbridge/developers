@@ -708,73 +708,368 @@ x-pages:
   - id: real-time-data
     title: Real-Time Market Data
     x-title-zh: 实时行情
+    x-title-zh-hk: 實時行情
     x-icon: activity
     content: |
-      > **Note:** Real-time market data is **not** part of this HTTP REST API. Quotes, price feeds, order book depth, broker queues, and trade ticks are delivered via **WebSocket / TCP long connection** through a dedicated quote gateway — see the [Socket Feed](/docs/socket/hosts) documentation.
+      > **Note:** Real-time market data is **not** part of this HTTP REST API. Quotes, depth, broker queues and trade ticks are delivered over a persistent **WebSocket / TCP** connection to a dedicated gateway. This page documents that protocol end-to-end — you do not need to leave it.
 
       ## Overview
 
-      The HTTP REST API (documented on this page) covers trading operations, account management, and historical/snapshot data queries. Real-time streaming data — all market quote subscriptions and push feeds — is a separate system:
+      The HTTP REST API on this site covers trading, account management and historical/snapshot queries. Real-time streaming is a separate, connection-oriented protocol:
 
-      | Data Type | Access Method |
-      |-----------|---------------|
-      | Trading orders, account info, watchlist | HTTP REST API (this page) |
-      | Real-time quotes, depth, trade ticks | WebSocket / TCP Socket Feed |
+      | Data | Access |
+      |------|--------|
+      | Orders, account, watchlist, snapshots | HTTP REST (this reference) |
+      | Real-time quote / depth / brokers / trades | WebSocket or TCP gateway |
 
-      ## Connecting to the Quote Gateway
+      > The official SDKs (Rust/Python/Node.js/Java/C++/Go) implement this whole protocol — connect, auth, heartbeat, subscribe and decode — for you: https://open.longbridge.com/sdk . The reference below is for building a client by hand.
 
-      Connect to Longbridge's quote gateway directly via WebSocket or TCP:
+      ## Gateway hosts
 
-      **WebSocket:** `wss://openapi-quote.longbridge.com`
+      | Feed | Region | WebSocket | TCP |
+      |------|--------|-----------|-----|
+      | Quote | Global | `wss://openapi-quote.longbridge.com` | `openapi-quote.longbridge.com:2020` |
+      | Quote | Mainland China | `wss://openapi-quote.longbridge.cn` | `openapi-quote.longbridge.cn:2020` |
+      | Trade | Global | `wss://openapi-trade.longbridge.com` | `openapi-trade.longbridge.com:2020` |
+      | Trade | Mainland China | `wss://openapi-trade.longbridge.cn` | `openapi-trade.longbridge.cn:2020` |
 
-      **TCP:** `openapi-quote.longbridge.com:2020`
+      Payloads are Protobuf and integers are **big-endian**. The TCP port is `2020` for every host.
 
-      > Mainland China users: `wss://openapi-quote.longbridge.cn` / `openapi-quote.longbridge.cn:2020`
+      ## 1. Get a connection OTP
 
-      ## Subscribing to Market Data
+      A socket connection authenticates with a one-time password (OTP) fetched from the REST API:
 
-      After connecting, authenticate with your API credentials, then send a subscribe command specifying symbols and subscription types (price, depth, broker queue, trade ticks). The server will then push real-time data as it arrives.
+      ```
+      GET /v1/socket/token
+      Authorization: <access_token>
+      ```
 
-      The SDK handles connection lifecycle and subscriptions automatically — for most integrations the SDK is the recommended approach: https://open.longbridge.com/sdk
+      Response `data`:
 
-      ## Further Reading
+      | Field | Type | Meaning |
+      |-------|------|---------|
+      | `otp` | string | One-time password, used as the auth token below |
+      | `limit` | int | Max concurrent connections |
+      | `online` | int | Current online connections |
 
-      - [Socket Feed endpoints](/docs/socket/hosts)
-      - [Subscribe to market data](/docs/socket/subscribe_quote)
-      - [Protocol overview](/docs/socket/protocol/overview)
+      ```json
+      { "code": 0, "message": "", "data": { "otp": "xxxxxxxx", "online": 1, "limit": 10 } }
+      ```
+
+      The OTP is single-use — it is consumed the moment you auth.
+
+      ## 2. Handshake
+
+      The handshake negotiates three fixed values: protocol `version` = `1`, `codec` = `1` (Protobuf) and `platform` = `9` (OpenAPI).
+
+      - **WebSocket** — pass them as query params: `wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
+      - **TCP** — send a 2-byte handshake: `ver` (4 bits), `codec` (4 bits), `platform` (4 bits), `reserve` (4 bits), e.g. bytes `0b00010001 0b00001001`.
+
+      ## 3. Packet framing
+
+      Every packet begins with a 1-byte header:
+
+      | Bits | Field | Meaning |
+      |------|-------|---------|
+      | 4 | `type` | `1` request · `2` response · `3` push |
+      | 1 | `verify` | `1` = nonce + signature present |
+      | 1 | `gzip` | `1` = body is gzip-compressed |
+      | 2 | `reserve` | — |
+
+      **Request** (`type=1`): `cmd_code` (1B) · `request_id` (4B uint32, unique per connection) · `timeout` (2B ms, ≤ 60000) · `body_len` (3B) · `body` (protobuf) · then `nonce` (8B) + `signature` (16B) when `verify=1`.
+
+      **Response** (`type=2`): `cmd_code` (1B) · `request_id` (4B, matches the request) · `status` (1B) · `body_len` (3B) · `body` · (`nonce` + `signature` when `verify=1`).
+
+      **Push** (`type=3`): `cmd_code` (1B) · `body_len` (3B) · `body` · (`nonce` + `signature` when `verify=1`). No `request_id` / `status`.
+
+      Response `status`: `0` OK · `1` server timeout (408) · `3` bad request (400) · `5` unauthenticated (401) · `7` server error (500). `body_len` maxes out at 16 MB.
+
+      ## 4. Control commands
+
+      Connection-level `cmd_code`s:
+
+      | Code | Command | Purpose |
+      |------|---------|---------|
+      | `0` | Close | Server-sent push right before it closes the connection |
+      | `1` | Heartbeat | Keep-alive; echo the body back (`Heartbeat { int64 timestamp }`) |
+      | `2` | Auth | First packet after the handshake |
+      | `3` | Reconnect | Re-auth with a session id, no new OTP required |
+
+      **Auth** — send `cmd_code=2` with `AuthRequest { string token = 1 }`, where `token` is the OTP from step 1. The server replies `AuthResponse { string session_id = 1; int64 expires = 2 }`. Keep `session_id` to `Reconnect` (`ReconnectRequest { string session_id }`) without fetching a new OTP.
+
+      Close reason codes (`Close.Code`): `0` HeartbeatTimeout · `1` ServerError · `2` ServerShutdown · `3` UnpackError · `4` AuthError · `5` SessExpired · `6` ConnectDuplicate.
+
+      Protobuf: https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto
+
+      ## 5. Subscribe to quotes
+
+      After auth, send the subscribe command; the server then streams the matching pushes:
+
+      | Code | Direction | Message |
+      |------|-----------|---------|
+      | `6` | request / response | Subscribe |
+      | `101` | push | Real-time quote / price |
+      | `102` | push | Real-time depth |
+      | `103` | push | Real-time brokers |
+      | `104` | push | Real-time trades |
+
+      Subscribe request body (Protobuf; JSON shown for illustration only):
+
+      ```json
+      { "symbol": ["700.HK", "AAPL.US"], "sub_type": [1, 2], "is_first_push": true }
+      ```
+
+      | Field | Type | Meaning |
+      |-------|------|---------|
+      | `symbol` | string[] | Securities to subscribe to |
+      | `sub_type` | int[] | Subscription types (quote, depth, brokers, trades …) |
+      | `is_first_push` | bool | Push a full snapshot immediately on subscribe |
+
+      Typical sequence: handshake → auth (`cmd 2`) → subscribe (`cmd 6`, a `request_id` you pick) → subscribe response (`cmd 6`, same `request_id`) → the server pushes `cmd 101` / `102` / `103` / `104` as data updates.
+
+      ## Reference implementation
+
+      Prefer the SDK: https://open.longbridge.com/sdk . To parse the protocol by hand, see the Go reference implementation: https://github.com/longbridge/openapi-protocol/tree/main/go
     x-content-zh: |
-      > **注意：** 实时行情数据**不**属于本 HTTP REST API 的范围。报价、价格推送、盘口、经纪队列及成交明细通过专用行情网关以 **WebSocket / TCP 长连接**方式推送，详见 [Socket 实时推送](/docs/socket/hosts) 文档。
+      > **注意:** 实时行情**不**属于本 HTTP REST API。报价、盘口、经纪队列与成交明细通过与专用网关保持的 **WebSocket / TCP** 长连接推送。本页完整记录该协议，无需跳转其他文档。
 
       ## 概述
 
-      本 HTTP REST API（即本页面记录的接口）涵盖交易操作、账户管理及历史/快照数据查询。实时流式数据——所有行情订阅与推送——属于独立的系统：
+      本站 HTTP REST API 覆盖交易、账户管理及历史/快照查询;实时流式数据是一套独立的、面向连接的协议:
 
-      | 数据类型 | 接入方式 |
-      |----------|----------|
-      | 交易委托、账户信息、自选股 | HTTP REST API（本页） |
-      | 实时报价、盘口、成交明细 | WebSocket / TCP Socket Feed |
+      | 数据 | 接入方式 |
+      |------|----------|
+      | 委托、账户、自选股、快照 | HTTP REST(本参考) |
+      | 实时报价 / 盘口 / 经纪队列 / 成交 | WebSocket 或 TCP 网关 |
 
-      ## 连接行情网关
+      > 官方 SDK(Rust/Python/Node.js/Java/C++/Go)已完整实现该协议,包括连接、鉴权、心跳、订阅与解码:https://open.longbridge.com/sdk。下面的参考适用于手写客户端。
 
-      通过 WebSocket 或 TCP 直连 Longbridge 行情网关：
+      ## 网关地址
 
-      **WebSocket：** `wss://openapi-quote.longbridge.com`
+      | 类型 | 区域 | WebSocket | TCP |
+      |------|------|-----------|-----|
+      | 行情 | 全球 | `wss://openapi-quote.longbridge.com` | `openapi-quote.longbridge.com:2020` |
+      | 行情 | 中国大陆 | `wss://openapi-quote.longbridge.cn` | `openapi-quote.longbridge.cn:2020` |
+      | 交易 | 全球 | `wss://openapi-trade.longbridge.com` | `openapi-trade.longbridge.com:2020` |
+      | 交易 | 中国大陆 | `wss://openapi-trade.longbridge.cn` | `openapi-trade.longbridge.cn:2020` |
 
-      **TCP：** `openapi-quote.longbridge.com:2020`
+      载荷为 Protobuf,整数为**大端序**。所有主机的 TCP 端口均为 `2020`。
 
-      > 中国大陆用户：`wss://openapi-quote.longbridge.cn` / `openapi-quote.longbridge.cn:2020`
+      ## 1. 获取连接 OTP
 
-      ## 订阅行情
+      Socket 连接使用一次性密码(OTP)鉴权,OTP 从 REST API 获取:
 
-      连接后，使用 API 凭证完成鉴权，然后发送订阅指令，指定标的和订阅类型（价格、盘口、经纪队列、成交明细）。服务端将实时推送订阅的行情数据。
+      ```
+      GET /v1/socket/token
+      Authorization: <access_token>
+      ```
 
-      SDK 已完整实现连接生命周期管理与订阅功能，推荐大多数接入场景直接使用 SDK：https://open.longbridge.com/sdk
+      响应 `data`:
 
-      ## 相关文档
+      | 字段 | 类型 | 含义 |
+      |------|------|------|
+      | `otp` | string | 一次性密码,用作下面的鉴权 token |
+      | `limit` | int | 最大并发连接数 |
+      | `online` | int | 当前在线连接数 |
 
-      - [Socket 实时推送接入地址](/docs/socket/hosts)
-      - [订阅行情推送](/docs/socket/subscribe_quote)
-      - [协议概览](/docs/socket/protocol/overview)
+      ```json
+      { "code": 0, "message": "", "data": { "otp": "xxxxxxxx", "online": 1, "limit": 10 } }
+      ```
+
+      OTP 为一次性使用,鉴权后即失效。
+
+      ## 2. 握手
+
+      握手协商三个固定值:协议 `version` = `1`、`codec` = `1`(Protobuf)、`platform` = `9`(OpenAPI)。
+
+      - **WebSocket** — 作为查询参数传入:`wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
+      - **TCP** — 发送 2 字节握手:`ver`(4 位)、`codec`(4 位)、`platform`(4 位)、`reserve`(4 位),例如字节 `0b00010001 0b00001001`。
+
+      ## 3. 报文结构
+
+      每个报文以 1 字节头部开始:
+
+      | 位 | 字段 | 含义 |
+      |----|------|------|
+      | 4 | `type` | `1` 请求 · `2` 响应 · `3` 推送 |
+      | 1 | `verify` | `1` = 含 nonce + 签名 |
+      | 1 | `gzip` | `1` = body 经 gzip 压缩 |
+      | 2 | `reserve` | — |
+
+      **请求**(`type=1`):`cmd_code`(1B)· `request_id`(4B uint32，连接内唯一)· `timeout`(2B 毫秒，≤ 60000)· `body_len`(3B)· `body`(protobuf)· 当 `verify=1` 时追加 `nonce`(8B)+ `signature`(16B)。
+
+      **响应**(`type=2`):`cmd_code`(1B)· `request_id`(4B，与请求一致)· `status`(1B)· `body_len`(3B)· `body` ·(`verify=1` 时含 `nonce` + `signature`)。
+
+      **推送**(`type=3`):`cmd_code`(1B)· `body_len`(3B)· `body` ·(`verify=1` 时含 `nonce` + `signature`)。无 `request_id` / `status`。
+
+      响应 `status`:`0` 成功 · `1` 服务端超时 (408)· `3` 请求错误 (400)· `5` 未鉴权 (401)· `7` 服务端错误 (500)。`body_len` 上限 16 MB。
+
+      ## 4. 控制命令
+
+      连接级 `cmd_code`:
+
+      | 命令码 | 命令 | 用途 |
+      |--------|------|------|
+      | `0` | Close | 服务端在关闭连接前推送 |
+      | `1` | Heartbeat | 心跳保活;原样回显 body(`Heartbeat { int64 timestamp }`) |
+      | `2` | Auth | 握手后的第一个报文 |
+      | `3` | Reconnect | 用 session 重新鉴权,无需新 OTP |
+
+      **鉴权** — 发送 `cmd_code=2`,body 为 `AuthRequest { string token = 1 }`,其中 `token` 为第 1 步的 OTP。服务端返回 `AuthResponse { string session_id = 1; int64 expires = 2 }`。保存 `session_id` 可用 `Reconnect`(`ReconnectRequest { string session_id }`)重连,无需重新获取 OTP。
+
+      关闭原因码(`Close.Code`):`0` 心跳超时 · `1` 服务端错误 · `2` 服务端关闭 · `3` 解包错误 · `4` 鉴权错误 · `5` 会话过期 · `6` 连接重复。
+
+      Protobuf:https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto
+
+      ## 5. 订阅行情
+
+      鉴权后发送订阅命令,服务端随即推送对应数据:
+
+      | 命令码 | 方向 | 消息 |
+      |--------|------|------|
+      | `6` | 请求 / 响应 | 订阅 |
+      | `101` | 推送 | 实时报价 / 价格 |
+      | `102` | 推送 | 实时盘口 |
+      | `103` | 推送 | 实时经纪队列 |
+      | `104` | 推送 | 实时成交 |
+
+      订阅请求 body(Protobuf;此处 JSON 仅作示意):
+
+      ```json
+      { "symbol": ["700.HK", "AAPL.US"], "sub_type": [1, 2], "is_first_push": true }
+      ```
+
+      | 字段 | 类型 | 含义 |
+      |------|------|------|
+      | `symbol` | string[] | 要订阅的标的 |
+      | `sub_type` | int[] | 订阅类型(报价、盘口、经纪队列、成交等) |
+      | `is_first_push` | bool | 订阅后立即推送一次全量快照 |
+
+      典型流程:握手 → 鉴权 (`cmd 2`)→ 订阅 (`cmd 6`,自选 `request_id`)→ 订阅响应 (`cmd 6`,相同 `request_id`)→ 服务端随数据更新推送 `cmd 101` / `102` / `103` / `104`。
+
+      ## 参考实现
+
+      推荐使用 SDK:https://open.longbridge.com/sdk。如需手写解析协议，参考 Go 实现:https://github.com/longbridge/openapi-protocol/tree/main/go
+    x-content-zh-hk: |
+      > **注意:** 實時行情**不**屬於本 HTTP REST API。報價、盤口、經紀隊列與成交明細透過與專用閘道保持的 **WebSocket / TCP** 長連接推送。本頁完整記錄該協議，無需跳轉其他文件。
+
+      ## 概述
+
+      本站 HTTP REST API 涵蓋交易、賬戶管理及歷史/快照查詢;實時流式資料是一套獨立的、面向連接的協議:
+
+      | 資料 | 接入方式 |
+      |------|----------|
+      | 委託、賬戶、自選股、快照 | HTTP REST(本參考) |
+      | 實時報價 / 盤口 / 經紀隊列 / 成交 | WebSocket 或 TCP 閘道 |
+
+      > 官方 SDK(Rust/Python/Node.js/Java/C++/Go)已完整實現該協議,包括連接、鑑權、心跳、訂閱與解碼:https://open.longbridge.com/sdk。下面的參考適用於手寫客戶端。
+
+      ## 閘道地址
+
+      | 類型 | 區域 | WebSocket | TCP |
+      |------|------|-----------|-----|
+      | 行情 | 全球 | `wss://openapi-quote.longbridge.com` | `openapi-quote.longbridge.com:2020` |
+      | 行情 | 中國大陸 | `wss://openapi-quote.longbridge.cn` | `openapi-quote.longbridge.cn:2020` |
+      | 交易 | 全球 | `wss://openapi-trade.longbridge.com` | `openapi-trade.longbridge.com:2020` |
+      | 交易 | 中國大陸 | `wss://openapi-trade.longbridge.cn` | `openapi-trade.longbridge.cn:2020` |
+
+      載荷為 Protobuf,整數為**大端序**。所有主機的 TCP 端口均為 `2020`。
+
+      ## 1. 獲取連接 OTP
+
+      Socket 連接使用一次性密碼(OTP)鑑權,OTP 從 REST API 獲取:
+
+      ```
+      GET /v1/socket/token
+      Authorization: <access_token>
+      ```
+
+      響應 `data`:
+
+      | 欄位 | 類型 | 含義 |
+      |------|------|------|
+      | `otp` | string | 一次性密碼,用作下面的鑑權 token |
+      | `limit` | int | 最大並發連接數 |
+      | `online` | int | 當前線上連接數 |
+
+      ```json
+      { "code": 0, "message": "", "data": { "otp": "xxxxxxxx", "online": 1, "limit": 10 } }
+      ```
+
+      OTP 為一次性使用,鑑權後即失效。
+
+      ## 2. 握手
+
+      握手協商三個固定值:協議 `version` = `1`、`codec` = `1`(Protobuf)、`platform` = `9`(OpenAPI)。
+
+      - **WebSocket** — 作為查詢參數傳入:`wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
+      - **TCP** — 發送 2 位元組握手:`ver`(4 位)、`codec`(4 位)、`platform`(4 位)、`reserve`(4 位),例如位元組 `0b00010001 0b00001001`。
+
+      ## 3. 報文結構
+
+      每個報文以 1 位元組頭部開始:
+
+      | 位 | 欄位 | 含義 |
+      |----|------|------|
+      | 4 | `type` | `1` 請求 · `2` 響應 · `3` 推送 |
+      | 1 | `verify` | `1` = 含 nonce + 簽名 |
+      | 1 | `gzip` | `1` = body 經 gzip 壓縮 |
+      | 2 | `reserve` | — |
+
+      **請求**(`type=1`):`cmd_code`(1B)· `request_id`(4B uint32，連接內唯一)· `timeout`(2B 毫秒，≤ 60000)· `body_len`(3B)· `body`(protobuf)· 當 `verify=1` 時追加 `nonce`(8B)+ `signature`(16B)。
+
+      **響應**(`type=2`):`cmd_code`(1B)· `request_id`(4B，與請求一致)· `status`(1B)· `body_len`(3B)· `body` ·(`verify=1` 時含 `nonce` + `signature`)。
+
+      **推送**(`type=3`):`cmd_code`(1B)· `body_len`(3B)· `body` ·(`verify=1` 時含 `nonce` + `signature`)。無 `request_id` / `status`。
+
+      響應 `status`:`0` 成功 · `1` 服務端超時 (408)· `3` 請求錯誤 (400)· `5` 未鑑權 (401)· `7` 服務端錯誤 (500)。`body_len` 上限 16 MB。
+
+      ## 4. 控制命令
+
+      連接級 `cmd_code`:
+
+      | 命令碼 | 命令 | 用途 |
+      |--------|------|------|
+      | `0` | Close | 服務端在關閉連接前推送 |
+      | `1` | Heartbeat | 心跳保活;原樣回顯 body(`Heartbeat { int64 timestamp }`) |
+      | `2` | Auth | 握手後的第一個報文 |
+      | `3` | Reconnect | 用 session 重新鑑權,無需新 OTP |
+
+      **鑑權** — 發送 `cmd_code=2`,body 為 `AuthRequest { string token = 1 }`,其中 `token` 為第 1 步的 OTP。服務端返回 `AuthResponse { string session_id = 1; int64 expires = 2 }`。保存 `session_id` 可用 `Reconnect`(`ReconnectRequest { string session_id }`)重連,無需重新獲取 OTP。
+
+      關閉原因碼(`Close.Code`):`0` 心跳超時 · `1` 服務端錯誤 · `2` 服務端關閉 · `3` 解包錯誤 · `4` 鑑權錯誤 · `5` 會話過期 · `6` 連接重複。
+
+      Protobuf:https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto
+
+      ## 5. 訂閱行情
+
+      鑑權後發送訂閱命令,服務端隨即推送對應資料:
+
+      | 命令碼 | 方向 | 消息 |
+      |--------|------|------|
+      | `6` | 請求 / 響應 | 訂閱 |
+      | `101` | 推送 | 實時報價 / 價格 |
+      | `102` | 推送 | 實時盤口 |
+      | `103` | 推送 | 實時經紀隊列 |
+      | `104` | 推送 | 實時成交 |
+
+      訂閱請求 body(Protobuf;此處 JSON 僅作示意):
+
+      ```json
+      { "symbol": ["700.HK", "AAPL.US"], "sub_type": [1, 2], "is_first_push": true }
+      ```
+
+      | 欄位 | 類型 | 含義 |
+      |------|------|------|
+      | `symbol` | string[] | 要訂閱的標的 |
+      | `sub_type` | int[] | 訂閱類型(報價、盤口、經紀隊列、成交等) |
+      | `is_first_push` | bool | 訂閱後立即推送一次全量快照 |
+
+      典型流程:握手 → 鑑權 (`cmd 2`)→ 訂閱 (`cmd 6`,自選 `request_id`)→ 訂閱響應 (`cmd 6`,相同 `request_id`)→ 服務端隨資料更新推送 `cmd 101` / `102` / `103` / `104`。
+
+      ## 參考實現
+
+      推薦使用 SDK:https://open.longbridge.com/sdk。如需手寫解析協議，參考 Go 實現:https://github.com/longbridge/openapi-protocol/tree/main/go
   - id: error-codes
     title: Error Codes
     x-title-zh: 错误码
