@@ -801,19 +801,9 @@ x-pages:
 
       Protobuf: https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto
 
-      ## 5. Subscribe to quotes
+      ## Subscribe quotes
 
-      After auth, send the subscribe command; the server then streams the matching pushes:
-
-      | Code | Direction | Message |
-      |------|-----------|---------|
-      | `6` | request / response | Subscribe |
-      | `101` | push | Real-time quote / price |
-      | `102` | push | Real-time depth |
-      | `103` | push | Real-time brokers |
-      | `104` | push | Real-time trades |
-
-      Subscribe request body (Protobuf; JSON shown for illustration only):
+      After auth, send the subscribe command (`cmd 6`). Request body (Protobuf; JSON shown for illustration only):
 
       ```json
       { "symbol": ["700.HK", "AAPL.US"], "sub_type": [1, 2], "is_first_push": true }
@@ -822,10 +812,38 @@ x-pages:
       | Field | Type | Meaning |
       |-------|------|---------|
       | `symbol` | string[] | Securities to subscribe to |
-      | `sub_type` | int[] | Subscription types (quote, depth, brokers, trades …) |
+      | `sub_type` | int[] | Subscription types (price, depth, brokers, trades, candlestick …) |
       | `is_first_push` | bool | Push a full snapshot immediately on subscribe |
 
-      Typical sequence: handshake → auth (`cmd 2`) → subscribe (`cmd 6`, a `request_id` you pick) → subscribe response (`cmd 6`, same `request_id`) → the server pushes `cmd 101` / `102` / `103` / `104` as data updates.
+      Sequence: handshake → auth (`cmd 2`) → subscribe (`cmd 6`, a `request_id` you pick) → subscribe response (`cmd 6`, same `request_id`) → the server pushes the feeds below as data updates.
+
+      ## Unsubscribe
+
+      Send the unsubscribe command on the same connection with the symbols and `sub_type`s to drop. See the `Unsubscribe` message in the [quote protobuf](https://github.com/longbridge/openapi-protobufs/tree/main/quote).
+
+      ## Get subscription info
+
+      Query the connection's current subscriptions (each symbol and its `sub_type`s) — the `Subscription` message in the quote protobuf.
+
+      ## Real-time price (cmd 101)
+
+      Push of the latest price / quote for each subscribed symbol, emitted after subscribe and on every update.
+
+      ## Real-time depth (cmd 102)
+
+      Push of order-book depth (bid/ask levels) for subscribed symbols.
+
+      ## Real-time brokers (cmd 103)
+
+      Push of the broker queue for subscribed symbols (HK market).
+
+      ## Real-time trades (cmd 104)
+
+      Push of tick-by-tick trade details for subscribed symbols.
+
+      ## Candlestick (K-line)
+
+      Subscribe candlestick updates via the corresponding `sub_type`; the server pushes bar updates as they form. See the candlestick message in the quote protobuf.
 
       ## Reference implementation
 
@@ -921,19 +939,9 @@ x-pages:
 
       Protobuf:https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto
 
-      ## 5. 订阅行情
+      ## 订阅行情
 
-      鉴权后发送订阅命令,服务端随即推送对应数据:
-
-      | 命令码 | 方向 | 消息 |
-      |--------|------|------|
-      | `6` | 请求 / 响应 | 订阅 |
-      | `101` | 推送 | 实时报价 / 价格 |
-      | `102` | 推送 | 实时盘口 |
-      | `103` | 推送 | 实时经纪队列 |
-      | `104` | 推送 | 实时成交 |
-
-      订阅请求 body(Protobuf;此处 JSON 仅作示意):
+      鉴权后发送订阅命令(`cmd 6`)。订阅请求 body(Protobuf;此处 JSON 仅作示意):
 
       ```json
       { "symbol": ["700.HK", "AAPL.US"], "sub_type": [1, 2], "is_first_push": true }
@@ -942,10 +950,38 @@ x-pages:
       | 字段 | 类型 | 含义 |
       |------|------|------|
       | `symbol` | string[] | 要订阅的标的 |
-      | `sub_type` | int[] | 订阅类型(报价、盘口、经纪队列、成交等) |
+      | `sub_type` | int[] | 订阅类型(价格、盘口、经纪队列、成交、K 线等) |
       | `is_first_push` | bool | 订阅后立即推送一次全量快照 |
 
-      典型流程:握手 → 鉴权 (`cmd 2`)→ 订阅 (`cmd 6`,自选 `request_id`)→ 订阅响应 (`cmd 6`,相同 `request_id`)→ 服务端随数据更新推送 `cmd 101` / `102` / `103` / `104`。
+      流程:握手 → 鉴权 (`cmd 2`)→ 订阅 (`cmd 6`,自选 `request_id`)→ 订阅响应 (`cmd 6`,相同 `request_id`)→ 服务端随数据更新推送下列各类行情。
+
+      ## 取消订阅
+
+      在同一连接上发送取消订阅命令,携带要取消的标的与 `sub_type`。详见 [行情 protobuf](https://github.com/longbridge/openapi-protobufs/tree/main/quote) 中的 `Unsubscribe` 消息。
+
+      ## 获取订阅信息
+
+      查询当前连接的订阅情况(各标的及其 `sub_type`),对应行情 protobuf 中的 `Subscription` 消息。
+
+      ## 实时价格订阅 (cmd 101)
+
+      推送每个已订阅标的的最新价格 / 报价,订阅后即推,之后每次更新推送。
+
+      ## 实时盘口订阅 (cmd 102)
+
+      推送已订阅标的的盘口深度(买卖档位)。
+
+      ## 实时经纪队列订阅 (cmd 103)
+
+      推送已订阅标的的经纪队列(港股市场)。
+
+      ## 实时成交明细订阅 (cmd 104)
+
+      推送已订阅标的的逐笔成交明细。
+
+      ## K 线
+
+      通过对应的 `sub_type` 订阅 K 线更新;服务端在 K 线形成时推送更新。详见行情 protobuf 中的 K 线消息。
 
       ## 参考实现
 
@@ -1041,19 +1077,9 @@ x-pages:
 
       Protobuf:https://github.com/longbridge/openapi-protobufs/blob/main/control/control.proto
 
-      ## 5. 訂閱行情
+      ## 訂閱行情
 
-      鑑權後發送訂閱命令,服務端隨即推送對應資料:
-
-      | 命令碼 | 方向 | 消息 |
-      |--------|------|------|
-      | `6` | 請求 / 響應 | 訂閱 |
-      | `101` | 推送 | 實時報價 / 價格 |
-      | `102` | 推送 | 實時盤口 |
-      | `103` | 推送 | 實時經紀隊列 |
-      | `104` | 推送 | 實時成交 |
-
-      訂閱請求 body(Protobuf;此處 JSON 僅作示意):
+      鑑權後發送訂閱命令(`cmd 6`)。訂閱請求 body(Protobuf;此處 JSON 僅作示意):
 
       ```json
       { "symbol": ["700.HK", "AAPL.US"], "sub_type": [1, 2], "is_first_push": true }
@@ -1062,10 +1088,38 @@ x-pages:
       | 欄位 | 類型 | 含義 |
       |------|------|------|
       | `symbol` | string[] | 要訂閱的標的 |
-      | `sub_type` | int[] | 訂閱類型(報價、盤口、經紀隊列、成交等) |
+      | `sub_type` | int[] | 訂閱類型(價格、盤口、經紀隊列、成交、K 線等) |
       | `is_first_push` | bool | 訂閱後立即推送一次全量快照 |
 
-      典型流程:握手 → 鑑權 (`cmd 2`)→ 訂閱 (`cmd 6`,自選 `request_id`)→ 訂閱響應 (`cmd 6`,相同 `request_id`)→ 服務端隨資料更新推送 `cmd 101` / `102` / `103` / `104`。
+      流程:握手 → 鑑權 (`cmd 2`)→ 訂閱 (`cmd 6`,自選 `request_id`)→ 訂閱響應 (`cmd 6`,相同 `request_id`)→ 服務端隨資料更新推送下列各類行情。
+
+      ## 取消訂閱
+
+      在同一連接上發送取消訂閱命令,攜帶要取消的標的與 `sub_type`。詳見 [行情 protobuf](https://github.com/longbridge/openapi-protobufs/tree/main/quote) 中的 `Unsubscribe` 消息。
+
+      ## 獲取訂閱信息
+
+      查詢當前連接的訂閱情況(各標的及其 `sub_type`),對應行情 protobuf 中的 `Subscription` 消息。
+
+      ## 實時價格訂閱 (cmd 101)
+
+      推送每個已訂閱標的的最新價格 / 報價,訂閱後即推,之後每次更新推送。
+
+      ## 實時盤口訂閱 (cmd 102)
+
+      推送已訂閱標的的盤口深度(買賣檔位)。
+
+      ## 實時經紀隊列訂閱 (cmd 103)
+
+      推送已訂閱標的的經紀隊列(港股市場)。
+
+      ## 實時成交明細訂閱 (cmd 104)
+
+      推送已訂閱標的的逐筆成交明細。
+
+      ## K 線
+
+      通過對應的 `sub_type` 訂閱 K 線更新;服務端在 K 線形成時推送更新。詳見行情 protobuf 中的 K 線消息。
 
       ## 參考實現
 

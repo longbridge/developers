@@ -66,6 +66,35 @@ for (const type of CALLOUT_TYPES) {
   })
 }
 
+// Slug for heading anchors — keeps unicode letters/digits (so Chinese headings
+// get stable ids), strips inline markdown marks. Shared by the heading-id rule
+// and the sidebar section extractor so their ids match.
+export function slugify(s: string): string {
+  return (
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/[`*_~]/g, '')
+      .replace(/[^\p{L}\p{N}]+/gu, '-')
+      .replace(/^-+|-+$/g, '') || 'section'
+  )
+}
+
+// Give every heading a stable `id` so sidebar section links can scroll to it.
+_md.core.ruler.push('heading_ids', (state) => {
+  const seen: Record<string, number> = {}
+  const tokens = state.tokens
+  for (let i = 0; i < tokens.length; i++) {
+    if (tokens[i].type !== 'heading_open') continue
+    const inline = tokens[i + 1]
+    const text = inline && inline.content ? inline.content : ''
+    let slug = slugify(text)
+    if (seen[slug]) slug = `${slug}-${seen[slug]++}`
+    else seen[slug] = 1
+    tokens[i].attrSet('id', slug)
+  }
+})
+
 // Patch link_open to add target="_blank" for external links
 const _defLinkOpen = _md.renderer.rules.link_open
 _md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
@@ -815,6 +844,34 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     }
   }, [activePg, locale, localePrefix])
 
+  // H2 sections of the active page → sidebar sub-nav (anchor links). Ids match
+  // the heading-id rule above so clicking scrolls to the section.
+  const pageSections = useMemo<{ id: string; label: string }[]>(() => {
+    if (!activePg) return []
+    const raw = pickLocale(activePg.content, activePg.contentZh, activePg.contentZhHk, locale)
+    const seen: Record<string, number> = {}
+    const out: { id: string; label: string }[] = []
+    for (const line of raw.split('\n')) {
+      const m = /^##\s+(.+?)\s*$/.exec(line)
+      if (!m) continue
+      const label = m[1].replace(/[`*_~]/g, '')
+      let id = slugify(m[1])
+      if (seen[id]) id = `${id}-${seen[id]++}`
+      else seen[id] = 1
+      out.push({ id, label })
+    }
+    return out
+  }, [activePg, locale])
+
+  const scrollToSection = useCallback((id: string) => {
+    if (typeof document === 'undefined') return
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      window.history.replaceState({}, '', `${window.location.pathname}${window.location.search}#${id}`)
+    }
+  }, [])
+
   // Live TryIt response for the right-rail Response panel; cleared per endpoint.
   const [liveResp, setLiveResp] = useState<ApiResponse | null>(null)
   useEffect(() => {
@@ -878,6 +935,20 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                         {pickLocale(pg.title, pg.titleZh, pg.titleZhHk, locale)}
                       </span>
                     </button>
+                    {active && pageSections.length > 0 && (
+                      <ul className="api-page-sections list-none p-0 m-0" role="list">
+                        {pageSections.map((s) => (
+                          <li key={s.id} className="list-none">
+                            <button
+                              type="button"
+                              className="api-page-section-link"
+                              onClick={() => scrollToSection(s.id)}>
+                              {s.label}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 )
               })}

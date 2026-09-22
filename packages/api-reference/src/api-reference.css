@@ -1174,6 +1174,39 @@
   background: #161b22;
 }
 
+/* Sidebar per-page section sub-nav (H2 anchors of the active static page) */
+.api-page-sections {
+  margin: 2px 0 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-left: 1px solid var(--lb-c-divider, #e2e8f0);
+  margin-left: 14px;
+  padding-left: 8px;
+}
+.api-page-section-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.api-page-section-link:hover {
+  color: var(--lb-fg-1, #1f2937);
+  background: var(--lb-bg-2, #f1f5f9);
+}
+:root[data-theme='dark'] .api-page-section-link:hover {
+  background: #161b22;
+}
+
 .api-auth-note {
   margin: 0 0 10px;
   font-size: 13px;
