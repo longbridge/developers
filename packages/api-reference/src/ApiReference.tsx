@@ -602,6 +602,139 @@ function WsRail({ cmd, locale, labelCopy, labelCopied }: { cmd: WsCommandItem; l
   )
 }
 
+const L_INTRO = {
+  overview: { en: 'Overview', 'zh-CN': '概览', 'zh-HK': '概覽' },
+  overviewBody: {
+    en: 'This reference covers the Longbridge HTTP REST API (trading, accounts, market data, fundamentals, screener, news, watchlists, AI) and the WebSocket quote & trade feeds — generated from the OpenAPI spec, with request/response fields, live examples and an in-page debugger.',
+    'zh-CN': '本参考涵盖 Longbridge HTTP REST API(交易、账户、行情、基本面、选股、资讯、自选股、AI) 与 WebSocket 行情/交易推送——由 OpenAPI 规范生成，含请求/响应字段、示例与在线调试器。',
+    'zh-HK': '本參考涵蓋 Longbridge HTTP REST API(交易、賬戶、行情、基本面、選股、資訊、自選股、AI) 與 WebSocket 行情/交易推送——由 OpenAPI 規範生成，含請求/響應欄位、示例與在線調試器。',
+  },
+  baseUrls: { en: 'Base URLs', 'zh-CN': '接入地址', 'zh-HK': '接入地址' },
+  prod: { en: 'Production', 'zh-CN': '生产', 'zh-HK': '生產' },
+  test: { en: 'Test', 'zh-CN': '测试', 'zh-HK': '測試' },
+  auth: { en: 'Authentication', 'zh-CN': '鉴权', 'zh-HK': '鑑權' },
+  authBody: {
+    en: 'REST requests are signed with your App Key / Secret / Access Token (HMAC-SHA256). Get your keys from the OpenAPI dashboard, or use OAuth 2.0.',
+    'zh-CN': 'REST 请求使用 App Key / Secret / Access Token 进行 HMAC-SHA256 签名。在 OpenAPI 后台获取密钥，或使用 OAuth 2.0。',
+    'zh-HK': 'REST 請求使用 App Key / Secret / Access Token 進行 HMAC-SHA256 簽名。在 OpenAPI 後台獲取密鑰，或使用 OAuth 2.0。',
+  },
+  gettingStarted: { en: 'Getting Started', 'zh-CN': '快速开始', 'zh-HK': '快速開始' },
+  dashboard: { en: 'Get API keys', 'zh-CN': '获取密钥', 'zh-HK': '獲取密鑰' },
+  browse: { en: 'Browse by category', 'zh-CN': '按分类浏览', 'zh-HK': '按分類瀏覽' },
+  endpoints: { en: 'endpoints', 'zh-CN': '个接口', 'zh-HK': '個接口' },
+  commands: { en: 'commands', 'zh-CN': '个命令', 'zh-HK': '個命令' },
+  websocket: { en: 'WebSocket feeds', 'zh-CN': 'WebSocket 推送', 'zh-HK': 'WebSocket 推送' },
+  pages: { en: 'Guides', 'zh-CN': '指南', 'zh-HK': '指南' },
+} as const
+
+function groupEndpointCount(g: TagGroup): number {
+  return g.endpoints.length + g.subgroups.reduce((n, s) => n + s.endpoints.length, 0)
+}
+function firstEndpointId(g: TagGroup): string | null {
+  const ep = g.endpoints[0] ?? g.subgroups.flatMap((s) => s.endpoints)[0]
+  return ep ? epId(ep) : null
+}
+
+/** Rich landing page shown when no endpoint/page is selected. */
+function IntroPanel({
+  groups,
+  pages,
+  wsGroups,
+  locale,
+  localePrefix,
+  onEndpoint,
+  onPage,
+  onWs,
+}: {
+  groups: TagGroup[]
+  pages: PageItem[]
+  wsGroups: WsGroupData[]
+  locale: Locale
+  localePrefix: string
+  onEndpoint: (id: string) => void
+  onPage: (id: string) => void
+  onWs: (id: string) => void
+}) {
+  const wsTotal = wsGroups.reduce((n, g) => n + g.commands.length, 0)
+  const firstWs = wsGroups[0]?.commands[0]?.id
+  return (
+    <div className="intro-content">
+      <h1 className="intro-title">{t(locale, 'api.intro.title')}</h1>
+      <p className="intro-desc">{L_INTRO.overviewBody[locale]}</p>
+
+      <section className="intro-section">
+        <h2 className="intro-h2">{L_INTRO.baseUrls[locale]}</h2>
+        <div className="intro-urls">
+          <div className="intro-url">
+            <span className="intro-url-tag">{L_INTRO.prod[locale]}</span>
+            <code>https://openapi.longbridge.com</code>
+          </div>
+          <div className="intro-url">
+            <span className="intro-url-tag intro-url-tag--test">{L_INTRO.test[locale]}</span>
+            <code>https://openapi.longbridge.xyz</code>
+          </div>
+        </div>
+      </section>
+
+      <section className="intro-section">
+        <h2 className="intro-h2">{L_INTRO.auth[locale]}</h2>
+        <p className="intro-desc">{L_INTRO.authBody[locale]}</p>
+        <div className="intro-links">
+          <a className="intro-link" href={`${localePrefix}/docs/getting-started`} data-astro-reload>
+            {L_INTRO.gettingStarted[locale]} →
+          </a>
+          <a className="intro-link" href="https://open.longbridge.com/dashboard/tokens" target="_blank" rel="noopener noreferrer">
+            {L_INTRO.dashboard[locale]} →
+          </a>
+        </div>
+      </section>
+
+      <section className="intro-section">
+        <h2 className="intro-h2">{L_INTRO.browse[locale]}</h2>
+        <div className="intro-cards">
+          {groups.map((g) => {
+            const id = firstEndpointId(g)
+            return (
+              <button
+                key={g.name}
+                type="button"
+                className="intro-cat-card"
+                disabled={!id}
+                onClick={() => id && onEndpoint(id)}>
+                <span className="intro-cat-name">{pickLocale(g.name, g.nameZh, g.nameZhHk, locale)}</span>
+                <span className="intro-cat-count">
+                  {groupEndpointCount(g)} {L_INTRO.endpoints[locale]}
+                </span>
+              </button>
+            )
+          })}
+          {wsTotal > 0 && firstWs && (
+            <button type="button" className="intro-cat-card intro-cat-card--ws" onClick={() => onWs(firstWs)}>
+              <span className="intro-cat-name">{L_INTRO.websocket[locale]}</span>
+              <span className="intro-cat-count">
+                {wsTotal} {L_INTRO.commands[locale]}
+              </span>
+            </button>
+          )}
+        </div>
+      </section>
+
+      {pages.length > 0 && (
+        <section className="intro-section">
+          <h2 className="intro-h2">{L_INTRO.pages[locale]}</h2>
+          <div className="intro-links">
+            {pages.map((p) => (
+              <button key={p.id} type="button" className="intro-link" onClick={() => onPage(p.id)}>
+                {pickLocale(p.title, p.titleZh, p.titleZhHk, locale)} →
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  )
+}
+
 function buildSections(ep: EndpointItem, locale: Locale): Section[] {
   const sections: Section[] = []
 
@@ -1121,21 +1254,16 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               )}
               {/* ── Intro (nothing selected) ── */}
               {showIntro && (
-                <div className="intro-content">
-                  <h2 className="intro-title">{t(locale, 'api.intro.title')}</h2>
-                  <p className="intro-desc">{t(locale, 'api.intro.desc')}</p>
-                  <div className="intro-cards">
-                    <div className="intro-card">
-                      <strong className="intro-card-title">{t(locale, 'api.intro.httpTitle')}</strong>
-                      <p className="intro-card-desc">{t(locale, 'api.intro.httpDesc')}</p>
-                    </div>
-                    <div className="intro-card">
-                      <strong className="intro-card-title">{t(locale, 'api.intro.wsTitle')}</strong>
-                      <p className="intro-card-desc">{t(locale, 'api.intro.wsDesc')}</p>
-                    </div>
-                  </div>
-                  <p className="intro-hint">{t(locale, 'api.intro.hint')}</p>
-                </div>
+                <IntroPanel
+                  groups={groups}
+                  pages={pages}
+                  wsGroups={wsGroups}
+                  locale={locale}
+                  localePrefix={localePrefix}
+                  onEndpoint={selectEndpoint}
+                  onPage={selectPage}
+                  onWs={selectWs}
+                />
               )}
 
               {/* ── Page content ── */}

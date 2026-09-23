@@ -194,7 +194,7 @@
 /* ── Intro panel ─────────────────────────────────────────────────────────── */
 
 .intro-content {
-  max-width: 660px;
+  max-width: 900px;
 }
 
 .intro-title {
@@ -207,44 +207,117 @@
 .intro-desc {
   font-size: 15px;
   color: var(--lb-c-text-2, #476582);
-  margin: 0 0 28px;
+  margin: 0 0 12px;
   line-height: 1.7;
 }
 
-.intro-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 28px;
+.intro-section {
+  margin: 28px 0 0;
 }
-
-.intro-card {
-  padding: 20px;
-  border: 1px solid var(--lb-c-divider, #e2e8f0);
-  border-radius: 8px;
-  background: var(--lb-c-bg-soft, #f9fafb);
-}
-
-.intro-card-title {
-  display: block;
-  font-size: 14px;
+.intro-h2 {
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 0 0 12px;
   color: var(--lb-c-text-1, #213547);
 }
 
-.intro-card-desc {
+/* Base URLs */
+.intro-urls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.intro-url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--lb-c-divider, #e2e8f0);
+  border-radius: 8px;
+  background: var(--lb-bg-2, #f8fafc);
+}
+.intro-url code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
-  color: var(--lb-c-text-2, #476582);
-  margin: 0;
-  line-height: 1.6;
+  color: var(--lb-fg-1, #1f2937);
+}
+.intro-url-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.14);
+  color: #15803d;
+}
+.intro-url-tag--test {
+  background: rgba(100, 116, 139, 0.16);
+  color: #475569;
 }
 
-.intro-hint {
-  font-size: 13px;
-  color: var(--lb-c-text-3, #94a3b8);
+/* Quick links */
+.intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.intro-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lb-brand, #16a34a);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: left;
+}
+.intro-link:hover {
+  text-decoration: underline;
+}
+
+/* Category cards */
+.intro-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
   margin: 0;
-  font-style: italic;
+}
+.intro-cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--lb-c-divider, #e2e8f0);
+  border-radius: 10px;
+  background: var(--lb-c-bg-soft, #f9fafb);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.intro-cat-card:hover:not(:disabled) {
+  border-color: var(--lb-brand, #16a34a);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.intro-cat-card:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.intro-cat-card--ws {
+  border-style: dashed;
+}
+.intro-cat-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-c-text-1, #213547);
+}
+.intro-cat-count {
+  font-size: 12px;
+  color: var(--lb-c-text-3, #94a3b8);
+}
+:root[data-theme='dark'] .intro-url,
+:root[data-theme='dark'] .intro-cat-card {
+  background: #161b22;
+  border-color: #30363d;
 }
 
 /* ── Endpoint header ─────────────────────────────────────────────────────── */
