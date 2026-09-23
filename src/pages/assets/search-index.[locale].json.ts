@@ -14,6 +14,8 @@ import type { APIRoute } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import { getCollection, render } from 'astro:content'
 import { resolveUrl, resolveLocale, currentRegion, includedInRegion } from '@longbridge/openapi-utils'
+import { parseSpec, pickLocale, epId } from '@longbridge/openapi-api-reference'
+import rawApiYaml from '../../../openapi.yaml?raw'
 
 export function getStaticPaths() {
   return [
@@ -97,6 +99,66 @@ export const GET: APIRoute = async ({ params }) => {
     }
     // Final section (only meaningful when we've seen headings or an intro)
     if (sawFirstHeading || buf.some((l) => l.trim())) flush()
+  }
+
+  // ── API Reference (openapi.yaml): endpoints, static pages, WebSocket cmds ──
+  // The reference is client-rendered from openapi.yaml, so its content is absent
+  // from the built HTML — index it here so the header search can find it.
+  try {
+    const prefix = locale === 'en' ? '' : `/${locale}`
+    const { groups, pages, wsGroups } = parseSpec(rawApiYaml)
+    for (const g of groups) {
+      const gname = pickLocale(g.name, g.nameZh, g.nameZhHk, locale)
+      const eps = [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)]
+      for (const ep of eps) {
+        const title = pickLocale(
+          ep.operation.summary,
+          ep.operation['x-summary-zh'],
+          ep.operation['x-summary-zh-hk'],
+          locale
+        )
+        const desc = pickLocale(
+          ep.operation.description,
+          ep.operation['x-description-zh'],
+          ep.operation['x-description-zh-hk'],
+          locale
+        )
+        sections.push({
+          id: `api::${epId(ep)}`,
+          url: `${prefix}/docs/api/${epId(ep)}`,
+          title: title || epId(ep),
+          headings: [gname, title || epId(ep)].filter(Boolean),
+          body: stripMarkdown(desc || '').slice(0, MAX_SECTION_BODY),
+        })
+      }
+    }
+    for (const p of pages) {
+      const title = pickLocale(p.title, p.titleZh, p.titleZhHk, locale)
+      const content = pickLocale(p.content, p.contentZh, p.contentZhHk, locale)
+      sections.push({
+        id: `api-page::${p.id}`,
+        url: `${prefix}/docs/api?page=${p.id}`,
+        title: title || p.id,
+        headings: [title || p.id],
+        body: stripMarkdown(content || '').slice(0, MAX_SECTION_BODY),
+      })
+    }
+    for (const wg of wsGroups) {
+      const gname = pickLocale(wg.name, wg.nameZh, wg.nameZhHk, locale)
+      for (const c of wg.commands) {
+        const title = pickLocale(c.name, c.nameZh, c.nameZhHk, locale)
+        const desc = pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale)
+        sections.push({
+          id: `api-ws::${c.id}`,
+          url: `${prefix}/docs/api?ws=${c.id}`,
+          title: title || c.id,
+          headings: [gname, title || c.id].filter(Boolean),
+          body: stripMarkdown(desc || '').slice(0, MAX_SECTION_BODY),
+        })
+      }
+    }
+  } catch (err) {
+    console.error('search-index: failed to index API reference', err)
   }
 
   return new Response(JSON.stringify({ locale, sections }, null, 0), {
