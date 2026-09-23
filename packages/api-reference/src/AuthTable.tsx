@@ -54,13 +54,9 @@ const L = {
   },
 } as const
 
-// Per-locale anchor of the "OAuth 2.0 (Recommended)" heading in Getting Started.
-// autocorrect-disable (these slugs must NOT get CJK/Latin spacing)
-const OAUTH_ANCHOR: Record<Locale, string> = {
-  en: 'method-1-oauth-20-recommended-',
-  'zh-CN': '方式一oauth-20推荐-',
-  'zh-HK': '方式一oauth-20推薦-',
-}
+// Stable ASCII anchor of the "OAuth 2.0 (Recommended)" heading in Getting
+// Started (defined via `{#oauth-2-0}` in getting-started.mdx, all locales).
+const OAUTH_ANCHOR = 'oauth-2-0'
 // autocorrect-enable
 
 // Render `[text](url)` links, `**bold**` and inline `` `code` `` in descriptions.
@@ -100,7 +96,7 @@ export function AuthTable({ locale }: { locale: Locale }) {
         {authMode === 'oauth' && (
           <>
             {' '}
-            <a href={`${prefix}/docs/getting-started#${OAUTH_ANCHOR[locale]}`} className="api-auth-link">
+            <a href={`${prefix}/docs/getting-started#${OAUTH_ANCHOR}`} className="api-auth-link">
               {L.oauthDoc[locale]}
             </a>
           </>
