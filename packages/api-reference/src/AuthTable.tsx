@@ -47,6 +47,11 @@ const L = {
     'zh-CN': 'OAuth 方式：先通过 OAuth 2.0 流程获取 access token，再用 Bearer 方式直接携带 (无需签名)。',
     'zh-HK': 'OAuth 方式：先通過 OAuth 2.0 流程獲取 access token，再用 Bearer 方式直接攜帶 (無需簽名)。',
   },
+  agentAuth: {
+    en: 'How to obtain the token → Agent Auth',
+    'zh-CN': '如何获取该 token → Agent 授权',
+    'zh-HK': '如何獲取該 token → Agent 授權',
+  },
 } as const
 
 // Render `[text](url)` links, `**bold**` and inline `` `code` `` in descriptions.
@@ -78,9 +83,20 @@ export function AuthTable({ locale }: { locale: Locale }) {
           { name: 'X-Api-Signature', desc: L.signature[locale] },
         ]
 
+  const prefix = locale === 'en' ? '' : `/${locale}`
   return (
     <>
-      <p className="api-auth-note">{(authMode === 'oauth' ? L.oauthNote : L.signNote)[locale]}</p>
+      <p className="api-auth-note">
+        {(authMode === 'oauth' ? L.oauthNote : L.signNote)[locale]}
+        {authMode === 'oauth' && (
+          <>
+            {' '}
+            <a href={`${prefix}/docs/agent-auth`} className="api-auth-link">
+              {L.agentAuth[locale]}
+            </a>
+          </>
+        )}
+      </p>
       <table className="api-fields">
         <thead>
           <tr>
