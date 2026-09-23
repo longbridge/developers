@@ -69,6 +69,24 @@ export function RequestPanel({
     [authMode, oauthBlocks, method, path, displayBaseUrl]
   )
 
+  // Substitute what the user typed (token + params) into the code so the
+  // displayed/copied sample reflects their input instead of `<placeholders>`.
+  const filledBlocks = useMemo<CodeBlock[]>(() => {
+    const sub = (code: string): string => {
+      let out = code
+      if (authData.appKey) out = out.split('<app_key>').join(authData.appKey)
+      if (authData.appSecret) out = out.split('<app_secret>').join(authData.appSecret)
+      if (authData.accessToken) out = out.split('<access_token>').join(authData.accessToken)
+      for (const p of xparams) {
+        const v = values[p.name]
+        if (v === undefined || v === '') continue
+        out = out.split(`<${p.name}>`).join(String(v))
+      }
+      return out
+    }
+    return shownBlocks.map((b) => ({ ...b, code: sub(b.code) }))
+  }, [shownBlocks, authData, values, xparams])
+
   const send = async () => {
     setSending(true)
     try {
@@ -100,8 +118,16 @@ export function RequestPanel({
           },
           body: hasBody ? JSON.stringify(body) : undefined,
         })
-        const json = await res.json().catch(() => ({ code: -1, msg: 'non-JSON response', data: null }))
-        onResponse({ status: res.status, statusText: res.statusText, response: json })
+        // Read as text first so a non-JSON body (proxy/HTML error, empty 204) is
+        // surfaced instead of a generic "non-JSON response".
+        const text = await res.text()
+        let json: unknown
+        try {
+          json = text ? JSON.parse(text) : { code: res.status, msg: `HTTP ${res.status} ${res.statusText}`, data: null }
+        } catch {
+          json = { code: res.status, msg: text.slice(0, 800), data: null }
+        }
+        onResponse({ status: res.status, statusText: res.statusText, response: json as ApiResponse['response'] })
         return
       }
 
@@ -153,7 +179,7 @@ export function RequestPanel({
           )}
         </div>
       )}
-      {shownBlocks.length > 0 && <CodeDropdown blocks={shownBlocks} labelCopy={labelCopy} labelCopied={labelCopied} />}
+      {filledBlocks.length > 0 && <CodeDropdown blocks={filledBlocks} labelCopy={labelCopy} labelCopied={labelCopied} />}
       {paramRows.length > 0 && (
         <div className="api-rail-params">
           <ParametersForm parameters={paramRows} onChange={setValues} />
