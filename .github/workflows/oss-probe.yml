@@ -1,0 +1,57 @@
+# 一次性诊断用：确认 CI 的 AK 到底能看到/写到哪些 bucket。
+# 不构建、不上传产物,跑完即知结果。问题定位完可以删掉这个文件。
+name: OSS Permission Probe
+
+on:
+  # workflow_dispatch 的手动按钮只在默认分支上才出现,这个文件还在特性分支,
+  # 所以额外挂一个 push 触发:改动本文件即重跑,不用把探针合进 main。
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/nginx_decommission
+    paths:
+      - '.github/workflows/oss-probe.yml'
+
+jobs:
+  probe:
+    name: probe
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install ossutil
+        run: |
+          wget -q https://github.com/aliyun/ossutil/releases/download/v1.7.17/ossutil-v1.7.17-linux-amd64.zip
+          unzip -q ossutil-v1.7.17-linux-amd64.zip
+          cp ./ossutil-v1.7.17-linux-amd64/ossutil "${{ github.workspace }}/ossutil"
+          chmod +x "${{ github.workspace }}/ossutil"
+
+      # 只比较是否为空串,输出的是 SET/EMPTY 字面量,密钥本身不进日志
+      - name: Secret 存在性自检
+        run: |
+          echo "FE_LB_ASSET_ACCESS_KEY_ID     : ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID     == '' && 'EMPTY' || 'SET' }}"
+          echo "FE_LB_ASSET_ACCESS_KEY_SECRET : ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET == '' && 'EMPTY' || 'SET' }}"
+          echo "FE_LB_OPENAPI_ACCESS_KEY_ID   : ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID   == '' && 'EMPTY' || 'SET' }}"
+          echo "CLOUDFLARE_API_TOKEN          : ${{ secrets.CLOUDFLARE_API_TOKEN          == '' && 'EMPTY' || 'SET' }}"
+
+      - name: 探测 AK 可见的 bucket 与目标桶权限
+        env:
+          AK: ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }}
+          SK: ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }}
+        run: |
+          OSS="${{ github.workspace }}/ossutil"
+          HK=oss-cn-hongkong.aliyuncs.com
+
+          echo "===== 1) ListBuckets（账号下所有桶,region 无关）====="
+          $OSS ls -e "$HK" -i "$AK" -k "$SK" 2>&1 | tail -60 || true
+
+          echo
+          echo "===== 2) stat lb-openapi-canary ====="
+          $OSS stat oss://lb-openapi-canary -e "$HK" -i "$AK" -k "$SK" 2>&1 | tail -20 || true
+
+          echo
+          echo "===== 3) 写权限探测 ====="
+          echo probe > /tmp/.ci-probe
+          if $OSS cp /tmp/.ci-probe oss://lb-openapi-canary/.ci-probe -f -e "$HK" -i "$AK" -k "$SK" 2>&1 | tail -20; then
+            echo "写入成功,清理探针文件"
+            $OSS rm oss://lb-openapi-canary/.ci-probe -f -e "$HK" -i "$AK" -k "$SK" >/dev/null 2>&1 || true
+          fi
