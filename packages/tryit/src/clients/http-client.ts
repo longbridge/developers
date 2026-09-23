@@ -47,10 +47,11 @@ export interface RequestOptions {
 // ==================== 工具函数 ====================
 
 /**
- * 生成时间戳
+ * 生成时间戳 —— 整数秒 (Unix epoch)。网关要求整数秒;带小数会导致
+ * 签名/时间戳校验失败。
  */
 function getTimestamp(): string {
-  return (Date.now() / 1000).toString()
+  return Math.floor(Date.now() / 1000).toString()
 }
 
 /**
