@@ -39,8 +39,10 @@ function curlSample(method: string, path: string, base: string, withBody: boolea
     bodyLines +
     `TS=$(date +%s)\n` +
     `SIGNED_HEADERS='authorization;x-api-key;x-timestamp'\n` +
-    `SIGNED_VALUES=$(printf 'authorization:%s\\nx-api-key:%s\\nx-timestamp:%s\\n' "$ACCESS_TOKEN" "$APP_KEY" "$TS")\n` +
-    `CANON="${method}|${path}|$QUERY|$SIGNED_VALUES|$SIGNED_HEADERS|"\n` +
+    `# Build the canonical string in ONE printf — the newline after x-timestamp\n` +
+    `# (before the final |) must be kept; a separate $(...) would strip it and the\n` +
+    `# signature would be invalid.\n` +
+    `CANON=$(printf '%s|%s|%s|authorization:%s\\nx-api-key:%s\\nx-timestamp:%s\\n|%s|' "${method}" "${path}" "$QUERY" "$ACCESS_TOKEN" "$APP_KEY" "$TS" "$SIGNED_HEADERS")\n` +
     bodyHash +
     `PAYLOAD="HMAC-SHA256|$(printf '%s' "$CANON" | openssl dgst -sha1 | awk '{print $2}')"\n` +
     `SIG=$(printf '%s' "$PAYLOAD" | openssl dgst -sha256 -hmac "$APP_SECRET" | awk '{print $2}')\n\n` +
