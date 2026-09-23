@@ -18,6 +18,62 @@ import { prebuildSkills } from './src/integrations/prebuild-skills'
 const REGION = process.env['VITE_REGION'] ?? 'global'
 const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longportapp.com'
 
+// Dev-only reverse proxy for the TryIt debugger. Vite's built-in http-proxy
+// returns 502 for these HTTPS upstreams under bun, so forward with fetch (which
+// works). `/api-prod` → production gateway, `/api-test` → staging gateway.
+function apiDevProxy() {
+  const TARGETS: Record<string, string> = {
+    '/api-prod': 'https://openapi.longbridge.com',
+    '/api-test': 'https://openapi.longbridge.xyz',
+    // Legacy default prefix used by <TryIt> when no baseUrl is passed.
+    '/api': 'https://openapi.longbridge.com',
+  }
+  return {
+    name: 'lb-api-dev-proxy',
+    apply: 'serve' as const,
+    configureServer(server: { middlewares: { use: (fn: (req: any, res: any, next: () => void) => void) => void } }) {
+      // Dev only: corporate networks MITM these HTTPS upstreams with a cert the
+      // dev process doesn't trust, so outbound fetch fails. Skip verification —
+      // this never runs in a production build (apply: 'serve').
+      process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+      server.middlewares.use(async (req: any, res: any, next: () => void) => {
+        const url: string = req.url ?? ''
+        const prefix = Object.keys(TARGETS).find((p) => url === p || url.startsWith(p + '/'))
+        if (!prefix) return next()
+        const target = TARGETS[prefix]
+        const path = url.slice(prefix.length) || '/'
+        try {
+          const chunks: Buffer[] = []
+          for await (const c of req) chunks.push(c as Buffer)
+          const method: string = (req.method ?? 'GET').toUpperCase()
+          const headers: Record<string, string> = {}
+          for (const [k, v] of Object.entries(req.headers)) {
+            if (k === 'host' || k === 'connection' || k === 'content-length') continue
+            if (typeof v === 'string') headers[k] = v
+          }
+          const upstream = await fetch(target + path, {
+            method,
+            headers,
+            body: method === 'GET' || method === 'HEAD' || chunks.length === 0 ? undefined : Buffer.concat(chunks),
+          })
+          res.statusCode = upstream.status
+          upstream.headers.forEach((value: string, key: string) => {
+            const k = key.toLowerCase()
+            // Body is already decoded by fetch — don't forward encoding/length.
+            if (k === 'content-encoding' || k === 'content-length' || k === 'transfer-encoding') return
+            res.setHeader(key, value)
+          })
+          res.end(Buffer.from(await upstream.arrayBuffer()))
+        } catch (err) {
+          res.statusCode = 502
+          res.setHeader('content-type', 'application/json; charset=utf-8')
+          res.end(JSON.stringify({ code: -1, msg: `dev proxy error: ${err instanceof Error ? err.message : String(err)}`, data: null }))
+        }
+      })
+    },
+  }
+}
+
 export default defineConfig({
   site: SITE,
   // `assets: 'assets'` (default is `_astro`) so hashed CSS/JS land in /assets/ —
@@ -44,6 +100,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [
+      // Dev proxy for the API Reference TryIt debugger: one prefix per
+      // environment so the 生产/测试 toggle can hit either backend without CORS.
+      // Implemented with fetch (not Vite's http-proxy, which 502s under bun for
+      // these HTTPS upstreams). Dev only — prod talks to the real domains.
+      apiDevProxy(),
       tailwind(),
       // Rename mdx frontmatter `layout:` → `docs_layout:` so astro-mdx
       // doesn't try to resolve values like "api-reference" as module

@@ -4,6 +4,7 @@
  * Ported 1:1 from ApiReference.vue (chunks A + B).
  */
 import { load } from 'js-yaml'
+import type { Locale } from '@longbridge/openapi-utils'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -13,6 +14,7 @@ export interface Parameter {
   required?: boolean
   description?: string
   'x-description-zh'?: string
+  'x-description-zh-hk'?: string
   schema?: { type?: string }
 }
 
@@ -27,8 +29,21 @@ export interface ParamRow {
 export interface Section {
   key: string
   title: string
+  note?: string
   params: ParamRow[]
   fallback?: boolean
+}
+
+/** A documented HTTP parameter, split by location. */
+export interface XParameter {
+  name: string
+  /** Where the parameter goes in the HTTP request. */
+  in?: 'path' | 'query' | 'body'
+  type?: string
+  required?: boolean
+  description?: string
+  'x-description-zh'?: string
+  'x-description-zh-hk'?: string
 }
 
 export interface CodeSample {
@@ -41,9 +56,19 @@ export interface Operation {
   operationId: string
   summary: string
   'x-summary-zh'?: string
+  'x-summary-zh-hk'?: string
   description?: string
   'x-description-zh'?: string
+  'x-description-zh-hk'?: string
   'x-quote-command'?: string
+  'x-quote-level'?: string
+  'x-quote-market'?: string
+  'x-subgroup'?: string
+  'x-subgroup-zh'?: string
+  'x-subgroup-zh-hk'?: string
+  'x-parameters'?: XParameter[]
+  'x-response-properties'?: XParameter[]
+  'x-request-examples'?: CodeSample[]
   tags?: string[]
   parameters?: Parameter[]
   'x-codeSamples'?: CodeSample[]
@@ -83,15 +108,30 @@ export interface PageItem {
   id: string
   title: string
   titleZh?: string
+  titleZhHk?: string
   content: string
   contentZh?: string
+  contentZhHk?: string
   icon?: string
+  /** Optional multi-language code tabs, injected where `[[SIGNING_TABS]]` appears. */
+  codeTabs?: CodeSample[]
+}
+
+export interface SubGroup {
+  name: string
+  nameZh?: string
+  nameZhHk?: string
+  endpoints: EndpointItem[]
 }
 
 export interface TagGroup {
   name: string
   nameZh?: string
+  nameZhHk?: string
+  /** Endpoints not assigned to any subgroup (flat groups render these directly). */
   endpoints: EndpointItem[]
+  /** Ordered docs subsections; empty for flat groups. */
+  subgroups: SubGroup[]
 }
 
 export interface CodeBlock {
@@ -105,6 +145,33 @@ export interface PathSeg {
   isParam: boolean
 }
 
+// ── WebSocket commands (x-websocket) ─────────────────────────────────────────
+
+export interface WsCommandItem {
+  id: string
+  name: string
+  nameZh?: string
+  nameZhHk?: string
+  cmd?: number
+  direction: 'request' | 'push'
+  description: string
+  descriptionZh?: string
+  descriptionZhHk?: string
+  fields?: XParameter[]
+  responseFields?: XParameter[]
+  requestExamples: CodeSample[]
+  responseExample?: string
+}
+
+export interface WsGroupData {
+  name: string
+  nameZh?: string
+  nameZhHk?: string
+  /** HTTP tag this WS group is filed under (so it merges into that tag's nav group). */
+  tag?: string
+  commands: WsCommandItem[]
+}
+
 export const PAGE_ICONS: Record<string, string> = {
   lock: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
   activity: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
@@ -114,10 +181,15 @@ export const PAGE_ICONS: Record<string, string> = {
 
 // ── Spec parsing ──────────────────────────────────────────────────────────────
 
-export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageItem[]; serverUrl: string } {
+export function parseSpec(rawYaml: string): {
+  groups: TagGroup[]
+  pages: PageItem[]
+  wsGroups: WsGroupData[]
+  serverUrl: string
+} {
   const parsed = load(rawYaml) as any
   const serverUrl: string = parsed.servers?.[0]?.url ?? ''
-  const methods = ['get', 'post', 'put', 'delete', 'patch']
+  const methods = ['get', 'post', 'put', 'delete', 'patch', 'websocket']
   const byTag: Record<string, EndpointItem[]> = {}
 
   for (const [path, pathItem] of Object.entries((parsed.paths ?? {}) as Record<string, any>)) {
@@ -134,27 +206,129 @@ export function parseSpec(rawYaml: string): { groups: TagGroup[]; pages: PageIte
 
   const specTagObjs: any[] = (parsed.tags ?? []) as any[]
   const tagZhMap: Record<string, string> = {}
+  const tagZhHkMap: Record<string, string> = {}
+  // tag name → ordered subgroup definitions from the tag's `x-subgroups`.
+  const tagSubOrder: Record<string, Array<{ name: string; nameZh?: string; nameZhHk?: string }>> = {}
   for (const t of specTagObjs) {
     if (t['x-name-zh']) tagZhMap[t.name] = t['x-name-zh']
+    if (t['x-name-zh-hk']) tagZhHkMap[t.name] = t['x-name-zh-hk']
+    if (Array.isArray(t['x-subgroups'])) {
+      tagSubOrder[t.name] = t['x-subgroups'].map((s: any) => ({
+        name: s.name,
+        nameZh: s['x-name-zh'],
+        nameZhHk: s['x-name-zh-hk'],
+      }))
+    }
   }
   const specTags: string[] = specTagObjs.map((x: any) => x.name)
   const ordered = [...specTags, ...Object.keys(byTag).filter((x) => !specTags.includes(x))]
+
+  // Partition a tag's endpoints into ordered subgroups (by op x-subgroup) plus
+  // the leftover flat endpoints (ops without a subgroup).
+  const buildSubgroups = (
+    tag: string,
+    eps: EndpointItem[]
+  ): { subgroups: SubGroup[]; flat: EndpointItem[] } => {
+    const order = tagSubOrder[tag] ?? []
+    const flat: EndpointItem[] = []
+    const bySub: Record<string, EndpointItem[]> = {}
+    for (const ep of eps) {
+      const key = ep.operation['x-subgroup']
+      if (key) (bySub[key] ??= []).push(ep)
+      else flat.push(ep)
+    }
+    const seen = new Set<string>()
+    const subgroups: SubGroup[] = []
+    const push = (name: string, nameZh?: string, nameZhHk?: string) => {
+      if (seen.has(name) || !bySub[name]?.length) return
+      seen.add(name)
+      const z = bySub[name][0].operation
+      subgroups.push({
+        name,
+        nameZh: nameZh ?? z['x-subgroup-zh'],
+        nameZhHk: nameZhHk ?? z['x-subgroup-zh-hk'],
+        endpoints: bySub[name],
+      })
+    }
+    for (const s of order) push(s.name, s.nameZh, s.nameZhHk)
+    for (const name of Object.keys(bySub)) push(name) // any subgroup not listed in order
+    return { subgroups, flat }
+  }
 
   const rawPages: any[] = (parsed['x-pages'] ?? []) as any[]
   const pages: PageItem[] = rawPages.map((p: any) => ({
     id: p.id,
     title: p.title,
     titleZh: p['x-title-zh'],
+    titleZhHk: p['x-title-zh-hk'],
     content: p.content ?? '',
     contentZh: p['x-content-zh'],
+    contentZhHk: p['x-content-zh-hk'],
     icon: p['x-icon'],
+    codeTabs: p['x-code-tabs'],
   }))
 
+  const mapWsCommand = (c: any): WsCommandItem => ({
+    id: c.id,
+    name: c.name,
+    nameZh: c['x-name-zh'],
+    nameZhHk: c['x-name-zh-hk'],
+    cmd: c.cmd,
+    direction: c.direction === 'push' ? 'push' : 'request',
+    description: c.description ?? '',
+    descriptionZh: c['x-description-zh'],
+    descriptionZhHk: c['x-description-zh-hk'],
+    fields: c['x-fields'],
+    responseFields: c['x-response-fields'],
+    requestExamples: c['x-request-examples'] ?? [],
+    responseExample: c['x-response-example'],
+  })
+
+  // x-websocket supports either a list of groups (`groups:`) or a single group
+  // (`commands:` directly). Normalize to an array of groups.
+  const rawWs = parsed['x-websocket'] as any
+  let wsGroups: WsGroupData[] = []
+  if (rawWs) {
+    const rawGroups: any[] = rawWs.groups ?? [{ name: rawWs.name, 'x-name-zh': rawWs['x-name-zh'], 'x-name-zh-hk': rawWs['x-name-zh-hk'], commands: rawWs.commands }]
+    wsGroups = rawGroups
+      .filter((g) => (g.commands ?? []).length > 0)
+      .map((g) => ({
+        name: g.name ?? 'WebSocket',
+        nameZh: g['x-name-zh'],
+        nameZhHk: g['x-name-zh-hk'],
+        tag: g['x-tag'],
+        commands: (g.commands ?? []).map(mapWsCommand),
+      }))
+  }
+
   return {
-    groups: ordered.filter((x) => byTag[x]).map((x) => ({ name: x, nameZh: tagZhMap[x], endpoints: byTag[x] })),
+    groups: ordered
+      .filter((x) => byTag[x])
+      .map((x) => {
+        const { subgroups, flat } = buildSubgroups(x, byTag[x])
+        return { name: x, nameZh: tagZhMap[x], nameZhHk: tagZhHkMap[x], endpoints: flat, subgroups }
+      }),
     pages,
+    wsGroups,
     serverUrl,
   }
+}
+
+/**
+ * Resolve a localized string with fallback:
+ *   zh-HK → zh-hk ?? zh ?? en
+ *   zh-CN → zh ?? en
+ *   en    → en
+ */
+export function pickLocale(
+  en: string | undefined,
+  zh: string | undefined,
+  zhHk: string | undefined,
+  locale: Locale
+): string {
+  if (locale === 'zh-HK') return zhHk ?? zh ?? en ?? ''
+  if (locale === 'zh-CN') return zh ?? en ?? ''
+  return en ?? ''
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -196,25 +370,39 @@ export function epId(ep: EndpointItem): string {
 }
 
 export function buildCurl(ep: EndpointItem, serverUrl: string): string {
-  const lines: string[] = [
-    `curl --request ${ep.method} \\`,
-    `  --url '${serverUrl}${ep.path}' \\`,
-    `  --header 'Authorization: Bearer <token>'`,
-  ]
-  const schema = ep.operation.requestBody?.content?.['application/json']?.schema
-  if (schema?.properties && ['POST', 'PUT', 'PATCH'].includes(ep.method)) {
-    const required: string[] = schema.required ?? []
-    const body: Record<string, any> = {}
-    for (const [k, v] of Object.entries(schema.properties as Record<string, any>)) {
-      if (required.includes(k)) {
-        body[k] = (v as any).type === 'integer' ? 0 : `<${k}>`
+  const isBody = ['POST', 'PUT', 'PATCH'].includes(ep.method)
+  const xp = ep.operation['x-parameters']
+  let url = `${serverUrl}${ep.path}`
+  const body: Record<string, any> = {}
+
+  if (xp?.length) {
+    // Real HTTP call derived from the documented parameters.
+    const required = xp.filter((p) => p.required)
+    if (isBody) {
+      for (const p of required) body[p.name] = p.type === 'integer' ? 0 : `<${p.name}>`
+    } else if (required.length) {
+      url += '?' + required.map((p) => `${p.name}=<${p.name}>`).join('&')
+    }
+  } else {
+    // Fallback: derive the body from the requestBody JSON schema (legacy ops).
+    const schema = ep.operation.requestBody?.content?.['application/json']?.schema
+    if (schema?.properties && isBody) {
+      const required: string[] = schema.required ?? []
+      for (const [k, v] of Object.entries(schema.properties as Record<string, any>)) {
+        if (required.includes(k)) body[k] = (v as any).type === 'integer' ? 0 : `<${k}>`
       }
     }
-    if (Object.keys(body).length) {
-      lines[lines.length - 1] += ' \\'
-      lines.push(`  --header 'Content-Type: application/json' \\`)
-      lines.push(`  --data '${JSON.stringify(body)}'`)
-    }
+  }
+
+  const lines: string[] = [
+    `curl --request ${ep.method} \\`,
+    `  --url '${url}' \\`,
+    `  --header 'Authorization: Bearer <token>'`,
+  ]
+  if (Object.keys(body).length) {
+    lines[lines.length - 1] += ' \\'
+    lines.push(`  --header 'Content-Type: application/json' \\`)
+    lines.push(`  --data '${JSON.stringify(body)}'`)
   }
   return lines.join('\n')
 }
@@ -244,4 +432,36 @@ export function buildResponseExample(ep: EndpointItem): string | null {
     return JSON.stringify(obj, null, 2)
   }
   return null
+}
+
+/**
+ * Canonical gateway error envelopes per HTTP status, observed live against the
+ * OpenAPI gateway. Applied uniformly to every endpoint's Response panel so each
+ * status tab shows a real-shaped body without hand-authoring per endpoint.
+ */
+export const STANDARD_ERROR_EXAMPLES: Record<number, { code: number; message: string }> = {
+  400: { code: 400, message: 'request invalid' },
+  401: { code: 401004, message: 'token invalid' },
+  403: { code: 403, message: 'This API is only available to authorized users.' },
+  408: { code: 408, message: 'internal server timeout' },
+}
+
+export interface ResponseExample {
+  status: number
+  body: string
+}
+
+/**
+ * Per-status response examples for an endpoint's Response panel:
+ * 200 = the endpoint's real success example (falls back to a bare success
+ * envelope); 4xx = the standard gateway error envelope for that status.
+ */
+export function endpointResponseExamples(ep: EndpointItem): ResponseExample[] {
+  const ok = buildResponseExample(ep) ?? JSON.stringify({ code: 0, message: 'success', data: {} }, null, 2)
+  const out: ResponseExample[] = [{ status: 200, body: ok }]
+  for (const status of [400, 401, 403, 408]) {
+    const e = STANDARD_ERROR_EXAMPLES[status]
+    out.push({ status, body: JSON.stringify({ code: e.code, message: e.message, data: null }, null, 2) })
+  }
+  return out
 }

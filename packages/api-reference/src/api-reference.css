@@ -5,6 +5,11 @@
  * Syntax highlight classes: .hl-k .hl-s .hl-n .hl-b .hl-cmd .hl-flag .hl-punct .hl-comment
  */
 
+/* Quote-permission card + `:::` callout boxes — ported 1:1 from docs so they
+   render identically in the reference. */
+@import './QuotePermission.css';
+@import './callout.css';
+
 /* ── Root layout ─────────────────────────────────────────────────────────── */
 
 .api-reference-page {
@@ -121,7 +126,6 @@
 
 /* ── Method badges (nav + detail) ────────────────────────────────────────── */
 
-.nav-method,
 .ep-method-badge {
   display: inline-block;
   padding: 1px 5px;
@@ -131,6 +135,24 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   flex-shrink: 0;
+}
+
+/* Sidebar method badge — fixed width so GET/POST/PUT/DELETE all align, and
+   subtle enough to sit next to the docs-style item text. */
+.nav-method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  margin-right: 8px;
+  padding: 2px 0;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .method-get    { background: #dcfce7; color: #166534; }
@@ -172,7 +194,7 @@
 /* ── Intro panel ─────────────────────────────────────────────────────────── */
 
 .intro-content {
-  max-width: 660px;
+  max-width: 900px;
 }
 
 .intro-title {
@@ -185,44 +207,117 @@
 .intro-desc {
   font-size: 15px;
   color: var(--lb-c-text-2, #476582);
-  margin: 0 0 28px;
+  margin: 0 0 12px;
   line-height: 1.7;
 }
 
-.intro-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 28px;
+.intro-section {
+  margin: 28px 0 0;
 }
-
-.intro-card {
-  padding: 20px;
-  border: 1px solid var(--lb-c-divider, #e2e8f0);
-  border-radius: 8px;
-  background: var(--lb-c-bg-soft, #f9fafb);
-}
-
-.intro-card-title {
-  display: block;
-  font-size: 14px;
+.intro-h2 {
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 0 0 12px;
   color: var(--lb-c-text-1, #213547);
 }
 
-.intro-card-desc {
+/* Base URLs */
+.intro-urls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.intro-url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--lb-c-divider, #e2e8f0);
+  border-radius: 8px;
+  background: var(--lb-bg-2, #f8fafc);
+}
+.intro-url code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
-  color: var(--lb-c-text-2, #476582);
-  margin: 0;
-  line-height: 1.6;
+  color: var(--lb-fg-1, #1f2937);
+}
+.intro-url-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.14);
+  color: #15803d;
+}
+.intro-url-tag--test {
+  background: rgba(100, 116, 139, 0.16);
+  color: #475569;
 }
 
-.intro-hint {
-  font-size: 13px;
-  color: var(--lb-c-text-3, #94a3b8);
+/* Quick links */
+.intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.intro-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lb-brand, #16a34a);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: left;
+}
+.intro-link:hover {
+  text-decoration: underline;
+}
+
+/* Category cards */
+.intro-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
   margin: 0;
-  font-style: italic;
+}
+.intro-cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--lb-c-divider, #e2e8f0);
+  border-radius: 10px;
+  background: var(--lb-c-bg-soft, #f9fafb);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.intro-cat-card:hover:not(:disabled) {
+  border-color: var(--lb-brand, #16a34a);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.intro-cat-card:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.intro-cat-card--ws {
+  border-style: dashed;
+}
+.intro-cat-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-c-text-1, #213547);
+}
+.intro-cat-count {
+  font-size: 12px;
+  color: var(--lb-c-text-3, #94a3b8);
+}
+:root[data-theme='dark'] .intro-url,
+:root[data-theme='dark'] .intro-cat-card {
+  background: #161b22;
+  border-color: #30363d;
 }
 
 /* ── Endpoint header ─────────────────────────────────────────────────────── */
@@ -606,5 +701,825 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .card-header {
     background: #16202d;
+  }
+}
+
+/* ── CLI block (docs-style terminal card) ────────────────────────────────── */
+
+.ep-cli-card {
+  position: relative;
+  margin: 16px 0 20px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  background: #0d1117;
+  overflow: hidden;
+}
+.ep-cli-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+  background: #161b22;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom-right-radius: 6px;
+}
+.ep-cli-pre {
+  margin: 0;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e6edf3;
+}
+.ep-cli-pre code { white-space: pre; }
+
+/* "SDK method parameters." note under the Parameters heading */
+.section-note {
+  margin: -4px 0 12px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ── Docs-style single-column endpoint detail ────────────────────────────── */
+
+.api-main--docs {
+  display: block;
+}
+.api-content--docs {
+  max-width: 900px;
+  min-width: 0;
+}
+
+/* Section headings like docs (not the small uppercase labels) */
+.api-main--docs .section-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--lb-fg-1, #1f2937);
+  margin: 32px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+}
+
+/* Parameters / schema tables — mirror docs `.docs-content table` */
+.api-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.api-param-table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.api-param-table th,
+.api-param-table td {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  padding: 8px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+.api-param-table th {
+  background: var(--lb-bg-2, #f8fafc);
+  color: var(--lb-fg-2, #64748b);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.api-param-table tbody tr:nth-child(2n) {
+  background: var(--lb-bg-2, #f8fafc);
+}
+.api-param-table td code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+.api-param-table .param-type {
+  color: var(--lb-fg-2, #64748b);
+  font-size: 13px;
+}
+.api-param-table .param-required.is-required {
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 12px;
+}
+.api-param-table .param-required.is-optional {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Code examples flow in the single column (not sticky right rail) */
+.api-main--docs .code-panel {
+  position: static;
+  top: auto;
+  max-width: 100%;
+}
+.api-section--code {
+  margin-top: 8px;
+}
+
+/* ── Docs-model: content + right TOC grid ────────────────────────────────── */
+.api-doc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: 3rem;
+  align-items: start;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+@media (max-width: 1024px) {
+  .api-doc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* Let the grid track cap the content width (matches docs .docs-inner) */
+.api-doc-layout .api-content--docs {
+  max-width: none;
+}
+@media (max-width: 1100px) {
+  .api-doc-layout {
+    grid-template-columns: 1fr;
+  }
+  .api-toc {
+    display: none;
+  }
+}
+
+.section-subtitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+  margin: 24px 0 10px;
+}
+
+/* On this page TOC */
+.api-toc {
+  position: sticky;
+  top: calc(var(--lb-nav-height, 64px) + 40px);
+  font-size: 13px;
+}
+.api-toc-title {
+  font-weight: 600;
+  color: var(--lb-fg-2, #64748b);
+  margin: 0 0 10px;
+}
+.api-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+}
+.api-toc-list li {
+  margin: 0;
+}
+.api-toc-list a {
+  display: block;
+  padding: 4px 0 4px 14px;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  color: var(--lb-fg-2, #64748b);
+  text-decoration: none;
+}
+.api-toc-list a:hover {
+  color: var(--lb-brand, #16a34a);
+}
+.api-toc-list li.is-sub a {
+  padding-left: 26px;
+  font-size: 12px;
+}
+.error-code-note {
+  color: var(--lb-fg-2, #64748b);
+  font-size: 14px;
+}
+
+/* ── Docs-style LIGHT code (tabs + single) ───────────────────────────────── */
+.code-tabs {
+  margin: 8px 0 4px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f6f8fa;
+}
+.code-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  background: #fff;
+}
+.code-tabs-list {
+  display: flex;
+  overflow-x: auto;
+}
+.code-tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.code-tab.is-active {
+  color: var(--lb-fg-1, #1f2937);
+  border-bottom-color: var(--lb-brand, #16a34a);
+  font-weight: 600;
+}
+.code-lang-select {
+  margin: 6px 8px;
+  padding: 4px 26px 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+:root[data-theme='dark'] .code-lang-select {
+  color: #e6edf3;
+}
+.code-tabs-copy {
+  flex: none;
+  margin-right: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+.code-tabs-body {
+  overflow-x: auto;
+}
+.code-tabs .code-pre {
+  margin: 0;
+  padding: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #24292e;
+  background: #f6f8fa;
+}
+/* github-light token colors (shared by CodeTabs and x-page markdown code) */
+.code-tabs .hl-k,
+.code-tabs .hl-b,
+.api-page-md .hl-k,
+.api-page-md .hl-b {
+  color: #d73a49;
+}
+.code-tabs .hl-s,
+.api-page-md .hl-s {
+  color: #032f62;
+}
+.code-tabs .hl-n,
+.api-page-md .hl-n {
+  color: #005cc5;
+}
+.code-tabs .hl-cmd,
+.api-page-md .hl-cmd {
+  color: #6f42c1;
+}
+.code-tabs .hl-flag,
+.api-page-md .hl-flag {
+  color: #e36209;
+}
+.code-tabs .hl-punct,
+.api-page-md .hl-punct {
+  color: #24292e;
+}
+.code-tabs .hl-comment,
+.api-page-md .hl-comment {
+  color: #6a737d;
+  font-style: italic;
+}
+
+:root[data-theme="dark"] .code-tabs,
+:root[data-theme="dark"] .code-tabs .code-pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-theme="dark"] .code-tabs-bar {
+  background: #161b22;
+}
+
+/* Field-name column in parameter/response tables: plain monospace, no inline-
+   code background pill (docs param tables show names without a background). */
+.docs-content .api-fields td code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.92em;
+  color: inherit;
+}
+
+/* Page-item icon shares the same fixed column width as the method badge so all
+   sidebar item text (pages + endpoints) aligns to one left edge. */
+.nav-page-icon {
+  width: 42px;
+  margin-right: 8px;
+}
+
+/* Markdown code blocks inside x-pages — styled like the CodeTabs card (light,
+   rounded, bordered) instead of bare text. */
+.api-page-md pre {
+  margin: 16px 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: #f6f8fa;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #24292e;
+}
+.api-page-md pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+/* Inline code inside x-page prose */
+.api-page-md :not(pre) > code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] .api-page-md pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-theme="dark"] .api-page-md :not(pre) > code {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Copy button injected into x-page markdown code blocks */
+.api-page-md pre .page-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.api-page-md pre:hover .page-copy-btn {
+  opacity: 1;
+}
+:root[data-theme="dark"] .api-page-md pre .page-copy-btn {
+  background: #161b22;
+  color: #9ca3af;
+}
+
+/* Push the slim DocFooter to the bottom on short pages (e.g. the intro) instead
+   of letting it float up right under the content. Scoped to the reference. */
+[data-lbus-component="api-reference"] .docs-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+}
+[data-lbus-component="api-reference"] .docs-main {
+  flex: 1 0 auto;
+}
+
+/* ── Endpoint URL bar (method + URL + env toggle + copy page) ────────────── */
+.ep-urlbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 20px;
+  padding: 8px 10px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 8px;
+  background: var(--lb-bg-2, #f8fafc);
+}
+.ep-urlbar-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+  background: none;
+  border: none;
+  padding: 0;
+}
+.ep-urlbar-icon {
+  flex: none;
+  padding: 2px 6px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ep-urlbar-env {
+  flex: none;
+  display: inline-flex;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+.ep-env-seg {
+  padding: 3px 12px;
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.ep-env-seg.is-active {
+  color: #fff;
+  background: var(--lb-brand, #16a34a);
+}
+/* Split "copy page" dropdown */
+.ep-copypage {
+  flex: none;
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+.ep-copypage-main,
+.ep-copypage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--lb-fg-1, #1f2937);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  cursor: pointer;
+}
+.ep-copypage-main {
+  padding: 4px 10px;
+  border-radius: 6px 0 0 6px;
+}
+.ep-copypage-toggle {
+  padding: 4px 7px;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  font-size: 11px;
+}
+.ep-copypage-main:hover,
+.ep-copypage-toggle:hover {
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ep-copypage-ic {
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+}
+.ep-copypage-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 208px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ep-copypage-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: left;
+}
+.ep-copypage-item:hover {
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ep-copypage-item svg {
+  flex: none;
+  color: var(--lb-fg-2, #64748b);
+}
+:root[data-theme='dark'] .ep-urlbar {
+  background: #161b22;
+}
+:root[data-theme='dark'] .ep-urlbar-env,
+:root[data-theme='dark'] .ep-copypage-main,
+:root[data-theme='dark'] .ep-copypage-toggle,
+:root[data-theme='dark'] .ep-copypage-menu {
+  background: #0d1117;
+  color: var(--lb-fg-1, #e6edf3);
+}
+:root[data-theme='dark'] .ep-copypage-item {
+  color: #e6edf3;
+}
+:root[data-theme='dark'] .ep-copypage-main:hover,
+:root[data-theme='dark'] .ep-copypage-toggle:hover,
+:root[data-theme='dark'] .ep-copypage-item:hover {
+  background: #161b22;
+}
+
+/* WebSocket command detail view */
+.ws-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 20px;
+}
+.ws-cmd,
+.ws-dir {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--lb-fg-2, #64748b);
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ws-response {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #0d1117;
+  color: #e2e8f0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+:root[data-theme='dark'] .ws-cmd,
+:root[data-theme='dark'] .ws-dir {
+  background: #161b22;
+}
+
+.api-auth-note {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+}
+.api-auth-link {
+  color: var(--lb-brand, #16a34a);
+  text-decoration: none;
+  font-weight: 500;
+}
+.api-auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Right rail: Request + Response panels ───────────────────────────────── */
+.api-rail {
+  position: sticky;
+  top: calc(var(--lb-nav-height, 64px) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - var(--lb-nav-height, 64px) - 40px);
+  overflow-y: auto;
+}
+.api-rail-card {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 10px;
+  background: #f6f8fa;
+  padding: 12px;
+  min-width: 0;
+}
+/* Keep code from widening the 22rem rail — it scrolls inside its own box. */
+.api-rail-card .code-tabs,
+.api-rail-card .code-tabs-body,
+.api-rail-card .code-pre {
+  min-width: 0;
+  max-width: 100%;
+}
+.api-rail-card .code-pre {
+  overflow-x: auto;
+}
+/* Response JSON: dark editor-style box so the syntax colors read clearly
+   (the bare `.code-pre` light-on-light was faint). */
+[data-lbus-component='response-panel'] .code-pre {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #0d1117;
+  color: #e2e8f0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  max-height: 420px;
+  overflow: auto;
+}
+.api-rail-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.api-rail-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-rail-authselect {
+  margin-left: auto;
+  padding: 3px 24px 3px 10px;
+  font-size: 12px;
+  color: var(--lb-fg-1, #1f2937);
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.api-rail-oauthform {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 12px;
+  background: var(--lb-bg-1, #fff);
+}
+.api-rail-oauthlabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--lb-fg-2, #64748b);
+}
+.api-rail-tokenbtn {
+  font-size: 12px;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.api-rail-tokenform {
+  margin-bottom: 10px;
+}
+/* The TryIt AuthorizationForm/ParametersForm reference legacy `--vp-c-*` tokens
+   that don't exist on this site, so its inputs fall back to raw browser styling.
+   Re-style them here with the site's `--lb-*` tokens for a coherent look. */
+.api-rail .tryit-base-form {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08)) !important;
+  background: var(--lb-bg-1, #fff);
+}
+.api-rail .tryit-form-header {
+  padding: 10px 12px;
+}
+.api-rail .tryit-form-header h2 {
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-rail .tryit-input {
+  width: 100%;
+  padding: 6px 9px;
+  border-radius: 6px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.12));
+  background: var(--lb-bg-1, #fff);
+  color: var(--lb-fg-1, #1f2937);
+  font-size: 12.5px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.api-rail .tryit-input:focus {
+  border-color: var(--lb-brand, #16a34a);
+}
+.api-rail .tryit-input::placeholder {
+  color: var(--lb-fg-3, #9ca3af);
+}
+.api-rail .tryit-form-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.api-rail .tryit-form-content.tryit-collapsed {
+  max-height: 0;
+}
+:root[data-theme='dark'] .api-rail .tryit-base-form,
+:root[data-theme='dark'] .api-rail .tryit-input {
+  background: #0d1117;
+  color: #e6edf3;
+}
+.api-rail-params {
+  margin-top: 10px;
+}
+.api-rail-send {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--lb-brand, #16a34a);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.api-rail-send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.api-rail-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.api-rail-tab {
+  padding: 3px 10px;
+  font-size: 12px;
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--lb-fg-2, #64748b);
+  background: #fff;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: 6px;
+  cursor: pointer;
+}
+.api-rail-tab.is-active {
+  color: #fff;
+  background: var(--lb-fg-1, #1f2937);
+  border-color: var(--lb-fg-1, #1f2937);
+}
+.api-rail-tab.is-err.is-active {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+.api-rail-live {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.15);
+  color: #15803d;
+}
+:root[data-theme='dark'] .api-rail-card {
+  background: #0d1117;
+}
+:root[data-theme='dark'] .api-rail-tokenbtn,
+:root[data-theme='dark'] .api-rail-authselect,
+:root[data-theme='dark'] .api-rail-oauthform,
+:root[data-theme='dark'] .api-rail-tab {
+  background: #161b22;
+}
+:root[data-theme='dark'] .api-rail-authselect {
+  color: #e6edf3;
+}
+/* The API reference is a 3-column console. Instead of the docs pages' asymmetric
+   header-aligned gutter (which left a big empty left margin), center the whole
+   app block (nav + content + rail) at a fixed max width with equal side gutters,
+   and let the content region fill that centered width. */
+@media (min-width: 1024px) {
+  [data-lbus-component='api-reference'].docs-layout {
+    max-width: none;
+    padding-left: 0;
+  }
+}
+[data-lbus-component='api-reference'] .docs-inner {
+  max-width: none;
+  margin: 0;
+}
+
+/* three-column widths — only when the right rail is present. Full-bleed: the
+   center fills, the rail takes a generous fixed width so nothing looks empty. */
+[data-lbus-component='api-reference'] .docs-main.has-rail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30rem;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 1280px) {
+  [data-lbus-component='api-reference'] .docs-main.has-rail {
+    grid-template-columns: 1fr;
+  }
+  .api-rail {
+    position: static;
+    max-height: none;
   }
 }
