@@ -25,6 +25,8 @@ function apiDevProxy() {
   const TARGETS: Record<string, string> = {
     '/api-prod': 'https://openapi.longbridge.com',
     '/api-test': 'https://openapi.longbridge.xyz',
+    // Legacy default prefix used by <TryIt> when no baseUrl is passed.
+    '/api': 'https://openapi.longbridge.com',
   }
   return {
     name: 'lb-api-dev-proxy',
