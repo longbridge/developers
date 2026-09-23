@@ -83,15 +83,28 @@ jobs:
           # 其 RAM 策略是按桶还是账号级——跑一次就知道，失败会是 AccessDenied。
           AK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID || secrets.FE_LB_ASSET_ACCESS_KEY_ID }}
           SK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_SECRET || secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }}
+          # 只暴露"用了哪一把"，不暴露值；失败时据此判断是凭证没填还是策略没给
+          HAS_OPENAPI_AK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID != '' && 'yes' || 'no' }}
+          CRED_SOURCE: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID != '' && 'FE_LB_OPENAPI_*' || 'FE_LB_ASSET_*（回退）' }}
         run: |
           set -e
           OSS="${{github.workspace}}/ossutil"
           BASE="-u -r -j 10 -e $OSS_ENDPOINT -i $AK -k $SK"
+          echo "--- 凭证来源 ---"
+          echo "  FE_LB_OPENAPI_ACCESS_KEY_ID 已配置: $HAS_OPENAPI_AK"
+          echo "  本次实际使用: $CRED_SOURCE"
+          echo "  AccessKeyId 长度: ${#AK}"
+
           echo "--- 写权限预检 ---"
           echo ok > /tmp/_probe.txt
           if ! $OSS cp /tmp/_probe.txt $OSS_BUCKET/.ci-probe -f -e $OSS_ENDPOINT -i $AK -k $SK; then
-            echo "::error::当前 AK 无法写入 $OSS_BUCKET。该桶在 hongkong，而 FE_LB_ASSET_* 是配 lb-assets(hangzhou)的。"
-            echo "::error::请发一把可写该桶的 AK，存为 FE_LB_OPENAPI_ACCESS_KEY_ID / FE_LB_OPENAPI_ACCESS_KEY_SECRET。"
+            echo "::error::$CRED_SOURCE 这把 AK 无法写入 $OSS_BUCKET（region: $OSS_ENDPOINT）。"
+            if [ "$HAS_OPENAPI_AK" = "no" ]; then
+              echo "::error::当前走的是回退凭证。若运维是给另一把 AK（如写 whale-assets 那把）放的权，"
+              echo "::error::需要把那把的值填进 Secret FE_LB_OPENAPI_ACCESS_KEY_ID / FE_LB_OPENAPI_ACCESS_KEY_SECRET。"
+            else
+              echo "::error::已在用专用 AK 仍被拒，说明该 AK 的 RAM 策略里没有本桶，或本桶不属于该 AK 所在账号。"
+            fi
             exit 1
           fi
           $OSS rm $OSS_BUCKET/.ci-probe -f -e $OSS_ENDPOINT -i $AK -k $SK || true
