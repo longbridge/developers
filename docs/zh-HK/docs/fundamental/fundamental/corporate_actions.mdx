@@ -17,7 +17,7 @@ longbridge corp-action TSLA.US
 longbridge corp-action AAPL.US
 </CliCommand>
 
-<SDKLinks module="fundamental" klass="FundamentalContext" method="corporate_actions" />
+<SDKLinks module="fundamental" klass="FundamentalContext" method="corp_action" />
 
 
 ## Parameters
@@ -42,7 +42,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
-resp = ctx.corporate_actions("AAPL.US")
+resp = ctx.corp_action("AAPL.US")
 print(resp)
 ```
 
@@ -58,7 +58,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
 
-    resp = await ctx.corporate_actions("AAPL.US")
+    resp = await ctx.corp_action("AAPL.US")
     print(resp)
 
 if __name__ == "__main__":
@@ -77,7 +77,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.corporate_actions('AAPL.US')
+  const resp = await ctx.corpAction('AAPL.US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -95,7 +95,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getCorporateActions("AAPL.US").get();
+            var resp = ctx.getCorpAction("AAPL.US").get();
             System.out.println(resp);
         }
     }
@@ -114,7 +114,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.corporate_actions("AAPL.US").await?;
+    let resp = ctx.corp_action("AAPL.US").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -137,7 +137,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             FundamentalContext ctx = FundamentalContext::create(config);
-            ctx.corporate_actions("AAPL.US", [](auto resp) {
+            ctx.corp_action("AAPL.US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
