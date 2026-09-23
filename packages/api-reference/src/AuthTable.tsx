@@ -96,7 +96,10 @@ export function AuthTable({ locale }: { locale: Locale }) {
         {authMode === 'oauth' && (
           <>
             {' '}
-            <a href={`${prefix}/docs/getting-started#${OAUTH_ANCHOR}`} className="api-auth-link">
+            <a
+              href={`${prefix}/docs/getting-started#${OAUTH_ANCHOR}`}
+              className="api-auth-link"
+              data-astro-reload>
               {L.oauthDoc[locale]}
             </a>
           </>
