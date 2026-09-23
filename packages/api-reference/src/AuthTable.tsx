@@ -13,9 +13,9 @@ const L = {
   required: { en: 'Required', 'zh-CN': '必填', 'zh-HK': '必填' },
   description: { en: 'Description', 'zh-CN': '说明', 'zh-HK': '說明' },
   authToken: {
-    en: 'Access token for this request — passed as the raw token (no `Bearer` prefix) and included in the signature calculation.',
-    'zh-CN': '本请求的 access token，作为原始 token 传入 (不带 `Bearer` 前缀)，并参与签名计算。',
-    'zh-HK': '本請求的 access token，作為原始 token 傳入 (不帶 `Bearer` 前綴)，並參與簽名計算。',
+    en: 'The account Access Token from the [OpenAPI dashboard](https://open.longbridge.com/dashboard/tokens) — passed as the raw token (no `Bearer` prefix) and included in the signature calculation.',
+    'zh-CN': '[OpenAPI 后台](https://open.longbridge.com/dashboard/tokens) 上的账户 Access Token，作为原始 token 传入 (不带 `Bearer` 前缀)，并参与签名计算。',
+    'zh-HK': '[OpenAPI 後台](https://open.longbridge.com/dashboard/tokens) 上的賬戶 Access Token，作為原始 token 傳入 (不帶 `Bearer` 前綴)，並參與簽名計算。',
   },
   apiKey: {
     en: 'Your App Key.',
@@ -49,9 +49,13 @@ const L = {
   },
 } as const
 
-// Bold `**x**` and inline `` `code` `` so the descriptions render richly.
+// Render `[text](url)` links, `**bold**` and inline `` `code` `` in descriptions.
 function rich(text: string): string {
   return text
+    .replace(
+      /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+    )
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
 }
