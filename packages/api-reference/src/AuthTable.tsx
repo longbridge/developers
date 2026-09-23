@@ -33,9 +33,9 @@ const L = {
     'zh-HK': 'HMAC-SHA256 簽名。格式:`HMAC-SHA256 SignedHeaders=authorization;x-api-key;x-timestamp, Signature=<sig>`。',
   },
   bearer: {
-    en: 'Access token for this request — sent as `Authorization: Bearer <access_token>`, no signature required.',
-    'zh-CN': '本请求的 access token，以 `Authorization: Bearer <access_token>` 发送，无需签名。',
-    'zh-HK': '本請求的 access token，以 `Authorization: Bearer <access_token>` 發送，無需簽名。',
+    en: 'The access token obtained after completing the OAuth 2.0 authorization flow (the OAuth token endpoint), sent as `Authorization: Bearer <access_token>`. No signature required.',
+    'zh-CN': '完成 OAuth 2.0 授权流程 (OAuth token 端点) 后获取的 access token，通过 `Authorization: Bearer <access_token>` 发送，无需签名。',
+    'zh-HK': '完成 OAuth 2.0 授權流程 (OAuth token 端點) 後獲取的 access token，通過 `Authorization: Bearer <access_token>` 發送，無需簽名。',
   },
   signNote: {
     en: 'Signed mode: every request is signed with your App Key/Secret. Header set:',
@@ -43,9 +43,9 @@ const L = {
     'zh-HK': '簽名方式：每個請求用 App Key / Secret 簽名。請求頭如下：',
   },
   oauthNote: {
-    en: 'OAuth mode: pass the access token directly as a Bearer credential.',
-    'zh-CN': 'OAuth 方式：直接用 Bearer 方式携带 access token。',
-    'zh-HK': 'OAuth 方式：直接用 Bearer 方式攜帶 access token。',
+    en: 'OAuth mode: obtain an access token via the OAuth 2.0 flow, then pass it directly as a Bearer credential (no signing).',
+    'zh-CN': 'OAuth 方式：先通过 OAuth 2.0 流程获取 access token，再用 Bearer 方式直接携带 (无需签名)。',
+    'zh-HK': 'OAuth 方式：先通過 OAuth 2.0 流程獲取 access token，再用 Bearer 方式直接攜帶 (無需簽名)。',
   },
 } as const
 
