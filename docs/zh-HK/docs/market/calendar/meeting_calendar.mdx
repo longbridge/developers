@@ -1,6 +1,6 @@
 ---
 slug: /market/calendar/meeting-calendar
-title: Meeting Calendar
+title: 股東大會日曆
 sidebar_position: 6
 language_tabs: false
 toc_footers: []
@@ -10,23 +10,23 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Browse upcoming shareholder meetings and company events.
+瀏覽即將到來的股東大會和公司事件。
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 
 ## Parameters
 
-> **SDK method parameters.**
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start | string | YES | Start date, YYYY-MM-DD |
-| end | string | YES | End date, YYYY-MM-DD |
-| market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
-| count | integer | NO | Max events per page; server default when omitted |
-| offset | integer | NO | Number of events to skip from the start of the window |
-| next | CalendarPageDirection | NO | Page direction from the `next_date` cursor: `Later` or `Earlier` |
+| start | string | YES | 開始日期，格式 YYYY-MM-DD |
+| end | string | YES | 結束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
+| count | integer | NO | 每頁最大事件數，省略時使用伺服器預設值 |
+| offset | integer | NO | 從視窗起始跳過的事件數 |
+| next | CalendarPageDirection | NO | 從 `next_date` 游標翻頁的方向：`Later` 或 `Earlier` |
 
 ## Request Example
 
@@ -153,5 +153,5 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | CalendarEventsResponse |
-| 400    | Bad request | None   |
+| 200    | 成功     | CalendarEventsResponse |
+| 400    | 請求錯誤 | None   |

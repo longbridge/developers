@@ -1,7 +1,7 @@
 ---
-slug: /market/calendar/meeting-calendar
-title: Meeting Calendar
-sidebar_position: 6
+slug: /market/calendar/merge-calendar
+title: 併購日曆
+sidebar_position: 7
 language_tabs: false
 toc_footers: []
 includes: []
@@ -10,23 +10,23 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Browse upcoming shareholder meetings and company events.
+瀏覽即將到來的併購（M&A）與合併事件。
 
 <SDKLinks module="calendar" klass="CalendarContext" method="finance_calendar" />
 
 
 ## Parameters
 
-> **SDK method parameters.**
+> **SDK 方法參數。**
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| start | string | YES | Start date, YYYY-MM-DD |
-| end | string | YES | End date, YYYY-MM-DD |
-| market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
-| count | integer | NO | Max events per page; server default when omitted |
-| offset | integer | NO | Number of events to skip from the start of the window |
-| next | CalendarPageDirection | NO | Page direction from the `next_date` cursor: `Later` or `Earlier` |
+| start | string | YES | 開始日期，格式 YYYY-MM-DD |
+| end | string | YES | 結束日期，格式 YYYY-MM-DD |
+| market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
+| count | integer | NO | 每頁最大事件數，省略時使用伺服器預設值 |
+| offset | integer | NO | 從視窗起始跳過的事件數 |
+| next | CalendarPageDirection | NO | 從 `next_date` 游標翻頁的方向：`Later` 或 `Earlier` |
 
 ## Request Example
 
@@ -40,7 +40,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = CalendarContext(config)
 
-resp = ctx.finance_calendar(CalendarCategory.Meeting, "2024-01-01", "2024-03-31")
+resp = ctx.finance_calendar(CalendarCategory.Merge, "2024-01-01", "2024-03-31")
 print(resp)
 ```
 
@@ -55,7 +55,7 @@ async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncCalendarContext.create(config)
-    resp = await ctx.finance_calendar(CalendarCategory.Meeting, "2024-01-01", "2024-03-31")
+    resp = await ctx.finance_calendar(CalendarCategory.Merge, "2024-01-01", "2024-03-31")
     print(resp)
 
 if __name__ == "__main__":
@@ -72,7 +72,7 @@ async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => console.log('Open:', url))
   const config = Config.fromOAuth(oauth)
   const ctx = CalendarContext.new(config)
-  const resp = await ctx.financeCalendar(CalendarCategory.Meeting, '2024-01-01', '2024-03-31')
+  const resp = await ctx.financeCalendar(CalendarCategory.Merge, '2024-01-01', '2024-03-31')
   console.log(resp)
 }
 main().catch(console.error)
@@ -90,7 +90,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              CalendarContext ctx = CalendarContext.create(config)) {
-            var resp = ctx.financeCalendar(CalendarCategory.Meeting, "2024-01-01", "2024-03-31", null).get();
+            var resp = ctx.financeCalendar(CalendarCategory.Merge, "2024-01-01", "2024-03-31", null).get();
             System.out.println(resp);
         }
     }
@@ -109,7 +109,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.finance_calendar(CalendarCategory::Meeting, "2024-01-01", "2024-03-31", None, None, None, None).await?;
+    let resp = ctx.finance_calendar(CalendarCategory::Merge, "2024-01-01", "2024-03-31", None, None, None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -137,7 +137,7 @@ func main() {
     conf, _ := config.New(config.WithOAuthClient(o))
     c, _ := calendar.NewFromCfg(conf)
     defer c.Close()
-    resp, err := c.FinanceCalendar(context.Background(), "Meeting", "2024-01-01", "2024-03-31", nil)
+    resp, err := c.FinanceCalendar(context.Background(), "Merge", "2024-01-01", "2024-03-31", nil)
     if err != nil { log.Fatal(err) }
     fmt.Printf("%+v\n", resp)
 }
@@ -153,5 +153,5 @@ func main() {
 
 | Status | Description | Schema |
 | ------ | ----------- | ------ |
-| 200    | Success     | CalendarEventsResponse |
-| 400    | Bad request | None   |
+| 200    | 成功     | CalendarEventsResponse |
+| 400    | 請求錯誤 | None   |
