@@ -1210,14 +1210,6 @@
   font-size: 13px;
   color: var(--lb-fg-2, #64748b);
 }
-.api-auth-link {
-  color: var(--lb-brand, #16a34a);
-  text-decoration: none;
-  font-weight: 500;
-}
-.api-auth-link:hover {
-  text-decoration: underline;
-}
 
 /* ── Right rail: Request + Response panels ───────────────────────────────── */
 .api-rail {
