@@ -29,6 +29,9 @@ longbridge finance-calendar report --market US
 | start | string | YES | 开始日期，格式 YYYY-MM-DD |
 | end | string | YES | 结束日期，格式 YYYY-MM-DD |
 | market | string | NO | 市场筛选：US、HK、SH、SZ，不填则返回所有市场 |
+| count | integer | NO | 每页最大事件数，省略时使用服务端默认值 |
+| offset | integer | NO | 从窗口起始跳过的事件数 |
+| next | CalendarPageDirection | NO | 从 `next_date` 游标翻页的方向：`Later` 或 `Earlier` |
 
 ## Request Example
 
@@ -36,13 +39,13 @@ longbridge finance-calendar report --market US
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import CalendarContext, Config, OAuthBuilder
+from longbridge.openapi import CalendarContext, CalendarCategory, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = CalendarContext(config)
 
-resp = ctx.earnings_calendar("AAPL.US")
+resp = ctx.finance_calendar(CalendarCategory.Report, "2024-01-01", "2024-03-31")
 print(resp)
 ```
 
@@ -51,14 +54,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncCalendarContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncCalendarContext, CalendarCategory, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncCalendarContext.create(config)
 
-    resp = await ctx.earnings_calendar("AAPL.US")
+    resp = await ctx.finance_calendar(CalendarCategory.Report, "2024-01-01", "2024-03-31")
     print(resp)
 
 if __name__ == "__main__":
@@ -69,7 +72,7 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, CalendarContext, OAuth } = require('longbridge')
+const { Config, CalendarContext, CalendarCategory, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
@@ -77,7 +80,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = CalendarContext.new(config)
-  const resp = await ctx.earnings_calendar('AAPL.US')
+  const resp = await ctx.financeCalendar(CalendarCategory.Report, '2024-01-01', '2024-03-31')
   console.log(resp)
 }
 main().catch(console.error)
@@ -95,7 +98,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              CalendarContext ctx = CalendarContext.create(config)) {
-            var resp = ctx.getEarningsCalendar("AAPL.US").get();
+            var resp = ctx.financeCalendar(CalendarCategory.Report, "2024-01-01", "2024-03-31", null).get();
             System.out.println(resp);
         }
     }
@@ -107,14 +110,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, calendar::CalendarContext, Config};
+use longbridge::{oauth::OAuthBuilder, calendar::{CalendarContext, CalendarCategory}, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.earnings_calendar("AAPL.US").await?;
+    let resp = ctx.finance_calendar(CalendarCategory::Report, "2024-01-01", "2024-03-31", None, None, None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -137,7 +140,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             CalendarContext ctx = CalendarContext::create(config);
-            ctx.earnings_calendar("AAPL.US", [](auto resp) {
+            ctx.finance_calendar(CalendarCategory::Report, "2024-01-01", "2024-03-31", "", std::nullopt, std::nullopt, std::nullopt, [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -176,7 +179,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.EarningsCalendar(context.Background(), "AAPL.US")
+	resp, err := c.FinanceCalendar(context.Background(), "Report", "2024-01-01", "2024-03-31", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

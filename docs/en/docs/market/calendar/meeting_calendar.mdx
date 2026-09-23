@@ -24,6 +24,9 @@ Browse upcoming shareholder meetings and company events.
 | start | string | YES | Start date, YYYY-MM-DD |
 | end | string | YES | End date, YYYY-MM-DD |
 | market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
+| count | integer | NO | Max events per page; server default when omitted |
+| offset | integer | NO | Number of events to skip from the start of the window |
+| next | CalendarPageDirection | NO | Page direction from the `next_date` cursor: `Later` or `Earlier` |
 
 ## Request Example
 
@@ -106,7 +109,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.finance_calendar(CalendarCategory::Meeting, "2024-01-01", "2024-03-31", None).await?;
+    let resp = ctx.finance_calendar(CalendarCategory::Meeting, "2024-01-01", "2024-03-31", None, None, None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
