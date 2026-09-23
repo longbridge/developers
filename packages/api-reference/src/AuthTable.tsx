@@ -47,7 +47,21 @@ const L = {
     'zh-CN': 'OAuth 方式：先通过 OAuth 2.0 流程获取 access token，再用 Bearer 方式直接携带 (无需签名)。',
     'zh-HK': 'OAuth 方式：先通過 OAuth 2.0 流程獲取 access token，再用 Bearer 方式直接攜帶 (無需簽名)。',
   },
+  oauthDoc: {
+    en: 'How to get an OAuth token → Getting Started',
+    'zh-CN': '如何获取 OAuth token → 快速开始',
+    'zh-HK': '如何獲取 OAuth token → 快速開始',
+  },
 } as const
+
+// Per-locale anchor of the "OAuth 2.0 (Recommended)" heading in Getting Started.
+// autocorrect-disable (these slugs must NOT get CJK/Latin spacing)
+const OAUTH_ANCHOR: Record<Locale, string> = {
+  en: 'method-1-oauth-20-recommended-',
+  'zh-CN': '方式一oauth-20推荐-',
+  'zh-HK': '方式一oauth-20推薦-',
+}
+// autocorrect-enable
 
 // Render `[text](url)` links, `**bold**` and inline `` `code` `` in descriptions.
 function rich(text: string): string {
@@ -78,9 +92,20 @@ export function AuthTable({ locale }: { locale: Locale }) {
           { name: 'X-Api-Signature', desc: L.signature[locale] },
         ]
 
+  const prefix = locale === 'en' ? '' : `/${locale}`
   return (
     <>
-      <p className="api-auth-note">{(authMode === 'oauth' ? L.oauthNote : L.signNote)[locale]}</p>
+      <p className="api-auth-note">
+        {(authMode === 'oauth' ? L.oauthNote : L.signNote)[locale]}
+        {authMode === 'oauth' && (
+          <>
+            {' '}
+            <a href={`${prefix}/docs/getting-started#${OAUTH_ANCHOR[locale]}`} className="api-auth-link">
+              {L.oauthDoc[locale]}
+            </a>
+          </>
+        )}
+      </p>
       <table className="api-fields">
         <thead>
           <tr>
