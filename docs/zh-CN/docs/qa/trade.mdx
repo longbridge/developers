@@ -53,3 +53,13 @@ sidebar_position: 2
 用模拟账户调用这些接口会返回错误，而不是空结果——请勿将该失败理解为“此账户没有委托”。
 
 如果需要模拟环境，请改用 AP 账户。数据中心只决定账户归属，并不限制 API 连通性。AP 模拟账户同样可以交易美股，并通过通用交易接口（`today_orders`、`history_orders`、`account_balance`、`stock_positions` 等）读取数据。模拟账户支持的范围见 Q4。
+
+## Q11: 如何平仓？
+
+平台没有专门的平仓接口，下单请求里也没有开仓、平仓标记。平仓就是提交一笔与持仓方向相反的普通订单：
+
+1. 用该标的调用 `stock_positions`，读取 `available_quantity`（不是 `quantity`）。为 `0` 说明没有可平仓位。
+2. 正数是多头，提交 `Sell` 订单；负数是空头，提交 `Buy` 订单回补。数量取绝对值。
+3. 盘中用市价单（`MO`）。美股盘前、盘后不接受市价单，改用最新价提交限价单（`LO`），并把 `outside_rth` 设为 `ANY_TIME`。传入唯一的 `client_request_id`，避免重试时把仓位平两遍。
+
+提交数量超过 `available_quantity` 时，多出的部分会变成反向开仓。各语言 SDK 的完整可运行示例见[平仓](/zh-CN/docs/trade/order/close_position)。

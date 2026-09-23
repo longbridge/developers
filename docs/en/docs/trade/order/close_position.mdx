@@ -1,0 +1,523 @@
+---
+slug: close_position
+sidebar_position: 9
+title: Close a position
+---
+
+Closes an existing position by submitting a regular order in the opposite direction. There is no dedicated close-position API, and the [Submit Order](./submit) request has no open/close flag: a long position is closed with a `Sell` order, a short position is covered with a `Buy` order. The sign of the position quantity is the only thing that decides the direction.
+
+## Prerequisites
+
+- A live or paper account with trading permission.
+- An OAuth client ID. See [Get Started](/docs/getting-started).
+- The SDK for your language installed. The example below uses both `TradeContext` (positions, orders) and `QuoteContext` (trading session, last price).
+
+## Steps
+
+### 1. Read the position
+
+Call [Stock Positions](../asset/stock) with the symbol you want to close and read `available_quantity`, not `quantity`. `available_quantity` already excludes shares frozen by pending orders or same-day settlement rules, so it is the amount you can actually close right now.
+
+**Expected result:** a `StockPosition` for the symbol. If it is missing or `available_quantity` is `0`, there is nothing to close and you should stop.
+
+### 2. Decide side and quantity from the sign
+
+| `available_quantity` | Position | Order `side` | Order quantity |
+| -------------------- | -------- | ------------ | -------------- |
+| Greater than `0`     | Long     | `Sell`       | `available_quantity` |
+| Less than `0`        | Short    | `Buy`        | `abs(available_quantity)` |
+
+**Expected result:** an order side and a positive quantity. The same rule applies to stocks, ETFs, warrants and option contracts.
+
+### 3. Pick the order type and submit
+
+Use a market order during regular trading hours so the position is closed at once. US pre-market and after-hours sessions do not accept market orders, so switch to a limit order at the latest price and allow the order to run outside regular hours.
+
+| Market            | Session                         | `order_type` | `submitted_price` | `outside_rth` |
+| ----------------- | ------------------------------- | ------------ | ----------------- | ------------- |
+| HK / CN / SG      | Any                             | `MO`         | Not required      | Not required  |
+| US                | Regular hours                   | `MO`         | Not required      | Not required  |
+| US                | Pre-market / after-hours        | `LO`         | Latest `last_done` | `ANY_TIME`   |
+| US                | Overnight                       | `LO`         | Latest `last_done` | `OVERNIGHT`  |
+
+Use [Trading Session](/docs/market/trade-session) to find the regular-hours window and compare it with the current US Eastern time. If `last_done` is missing or `0`, stop instead of submitting a limit order without a price.
+
+Always pass a unique `client_request_id`. A close order is exactly the kind of request that gets retried after a timeout, and the idempotency key keeps a retry from closing the position twice.
+
+**Expected result:** [Submit Order](./submit) returns an `order_id`. Track it with [Today Orders](./today_orders) or the [trade push](/docs/trade/trade-push) channel.
+
+## Complete example
+
+<Tabs groupId="programming-language">
+  <TabItem value="python" label="Python" default>
+
+```python
+from datetime import datetime
+from uuid import uuid4
+from zoneinfo import ZoneInfo
+
+from longbridge.openapi import (
+    Config, OAuthBuilder, QuoteContext, TradeContext,
+    Market, TradeSession, OrderType, OrderSide, OutsideRTH, TimeInForceType,
+)
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+quote_ctx = QuoteContext(config)
+trade_ctx = TradeContext(config)
+
+
+def us_in_regular_session() -> bool:
+    now = datetime.now(ZoneInfo("America/New_York")).time()
+    for market in quote_ctx.trading_session():
+        if market.market != Market.US:
+            continue
+        for session in market.trade_sessions:
+            if session.trade_session == TradeSession.Intraday:
+                return session.begin_time <= now < session.end_time
+    return False
+
+
+def close_position(symbol: str) -> str:
+    # Step 1: read the position
+    resp = trade_ctx.stock_positions([symbol])
+    position = next(
+        (p for ch in resp.channels for p in ch.positions if p.symbol == symbol),
+        None,
+    )
+    if position is None or position.available_quantity == 0:
+        raise RuntimeError(f"{symbol}: nothing to close")
+
+    # Step 2: opposite side, absolute quantity
+    side = OrderSide.Sell if position.available_quantity > 0 else OrderSide.Buy
+    quantity = abs(position.available_quantity)
+
+    # Step 3: market order in regular hours, limit order outside US regular hours
+    order_type, price, outside_rth = OrderType.MO, None, None
+    if symbol.endswith(".US") and not us_in_regular_session():
+        quote = quote_ctx.quote([symbol])[0]
+        if quote.last_done == 0:
+            raise RuntimeError(f"{symbol}: no last price, cannot close outside regular hours")
+        order_type, price, outside_rth = OrderType.LO, quote.last_done, OutsideRTH.AnyTime
+
+    resp = trade_ctx.submit_order(
+        symbol,
+        order_type,
+        side,
+        quantity,
+        TimeInForceType.Day,
+        submitted_price=price,
+        outside_rth=outside_rth,
+        client_request_id=f"close-{symbol}-{uuid4().hex}",
+        remark="close position",
+    )
+    return resp.order_id
+
+
+print(close_position("TSLA.US"))
+```
+
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+
+```javascript
+const {
+  Config, OAuth, QuoteContext, TradeContext,
+  Market, TradeSession, OrderType, OrderSide, OutsideRTH, TimeInForceType,
+} = require('longbridge')
+
+async function usInRegularSession(quoteCtx) {
+  const [hour, minute] = new Date()
+    .toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false })
+    .split(':')
+    .map(Number)
+  const now = hour * 60 + minute
+  for (const market of await quoteCtx.tradingSession()) {
+    if (market.market !== Market.US) continue
+    for (const session of market.tradeSessions) {
+      if (session.tradeSession === TradeSession.Intraday) {
+        const begin = session.beginTime.hour * 60 + session.beginTime.minute
+        const end = session.endTime.hour * 60 + session.endTime.minute
+        return now >= begin && now < end
+      }
+    }
+  }
+  return false
+}
+
+async function closePosition(quoteCtx, tradeCtx, symbol) {
+  // Step 1: read the position
+  const resp = await tradeCtx.stockPositions([symbol])
+  const position = resp.channels
+    .flatMap((ch) => ch.positions)
+    .find((p) => p.symbol === symbol)
+  if (!position || position.availableQuantity.isZero()) {
+    throw new Error(`${symbol}: nothing to close`)
+  }
+
+  // Step 2: opposite side, absolute quantity
+  const side = position.availableQuantity.isPositive() ? OrderSide.Sell : OrderSide.Buy
+  const quantity = position.availableQuantity.abs()
+
+  // Step 3: market order in regular hours, limit order outside US regular hours
+  let orderType = OrderType.MO
+  let submittedPrice
+  let outsideRth
+  if (symbol.endsWith('.US') && !(await usInRegularSession(quoteCtx))) {
+    const [quote] = await quoteCtx.quote([symbol])
+    if (quote.lastDone.isZero()) {
+      throw new Error(`${symbol}: no last price, cannot close outside regular hours`)
+    }
+    orderType = OrderType.LO
+    submittedPrice = quote.lastDone
+    outsideRth = OutsideRTH.AnyTime
+  }
+
+  const order = await tradeCtx.submitOrder({
+    symbol,
+    orderType,
+    side,
+    submittedQuantity: quantity,
+    timeInForce: TimeInForceType.Day,
+    submittedPrice,
+    outsideRth,
+    clientRequestId: `close-${symbol}-${Date.now()}`,
+    remark: 'close position',
+  })
+  return order.orderId
+}
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const quoteCtx = QuoteContext.new(config)
+  const tradeCtx = TradeContext.new(config)
+  console.log(await closePosition(quoteCtx, tradeCtx, 'TSLA.US'))
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+// Cargo.toml: longbridge, tokio, rust_decimal, time, chrono, chrono-tz, uuid (v4), anyhow
+use std::sync::Arc;
+
+use chrono::Timelike;
+use longbridge::{
+    oauth::OAuthBuilder,
+    quote::{QuoteContext, TradeSession},
+    trade::{
+        GetStockPositionsOptions, OrderSide, OrderType, OutsideRTH, SubmitOrderOptions,
+        TimeInForceType, TradeContext,
+    },
+    Config, Market,
+};
+use rust_decimal::Decimal;
+
+async fn us_in_regular_session(quote_ctx: &QuoteContext) -> anyhow::Result<bool> {
+    let now = chrono::Utc::now().with_timezone(&chrono_tz::America::New_York);
+    let now = time::Time::from_hms(now.hour() as u8, now.minute() as u8, 0)?;
+    for market in quote_ctx.trading_session().await? {
+        if market.market != Market::US {
+            continue;
+        }
+        if let Some(session) = market
+            .trade_sessions
+            .iter()
+            .find(|s| s.trade_session == TradeSession::Intraday)
+        {
+            return Ok(session.begin_time <= now && now < session.end_time);
+        }
+    }
+    Ok(false)
+}
+
+async fn close_position(
+    quote_ctx: &QuoteContext,
+    trade_ctx: &TradeContext,
+    symbol: &str,
+) -> anyhow::Result<String> {
+    // Step 1: read the position
+    let positions = trade_ctx
+        .stock_positions(GetStockPositionsOptions::new().symbols([symbol]))
+        .await?;
+    let available = positions
+        .channels
+        .iter()
+        .flat_map(|ch| ch.positions.iter())
+        .find(|p| p.symbol == symbol)
+        .map(|p| p.available_quantity)
+        .unwrap_or_default();
+    if available.is_zero() {
+        anyhow::bail!("{symbol}: nothing to close");
+    }
+
+    // Step 2: opposite side, absolute quantity
+    let side = if available.is_sign_positive() { OrderSide::Sell } else { OrderSide::Buy };
+    let quantity = available.abs();
+
+    // Step 3: market order in regular hours, limit order outside US regular hours
+    let mut opts = SubmitOrderOptions::new(symbol, OrderType::MO, side, quantity, TimeInForceType::Day);
+    if symbol.ends_with(".US") && !us_in_regular_session(quote_ctx).await? {
+        let quote = quote_ctx.quote([symbol]).await?.remove(0);
+        if quote.last_done == Decimal::ZERO {
+            anyhow::bail!("{symbol}: no last price, cannot close outside regular hours");
+        }
+        opts = SubmitOrderOptions::new(symbol, OrderType::LO, side, quantity, TimeInForceType::Day)
+            .submitted_price(quote.last_done)
+            .outside_rth(OutsideRTH::AnyTime);
+    }
+    let opts = opts
+        .client_request_id(format!("close-{symbol}-{}", uuid::Uuid::new_v4()))
+        .remark("close position");
+
+    Ok(trade_ctx.submit_order(opts).await?.order_id)
+}
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let oauth = OAuthBuilder::new("your-client-id")
+        .build(|url| println!("Open this URL to authorize: {url}"))
+        .await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (quote_ctx, _) = QuoteContext::new(config.clone());
+    let (trade_ctx, _) = TradeContext::new(config);
+    let order_id = close_position(&quote_ctx, &trade_ctx, "TSLA.US").await?;
+    println!("order_id: {order_id}");
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"strings"
+	"time"
+
+	openapi "github.com/longbridge/openapi-go"
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/quote"
+	"github.com/longbridge/openapi-go/trade"
+	"github.com/shopspring/decimal"
+)
+
+func usInRegularSession(ctx context.Context, qctx *quote.QuoteContext) (bool, error) {
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		return false, err
+	}
+	now := time.Now().In(loc)
+	hhmm := int32(now.Hour()*100 + now.Minute())
+	sessions, err := qctx.TradingSession(ctx)
+	if err != nil {
+		return false, err
+	}
+	for _, market := range sessions {
+		if market.Market != openapi.MarketUS {
+			continue
+		}
+		for _, s := range market.TradeSession {
+			if s.TradeSession == quote.TradeSessionNormal {
+				return hhmm >= s.BegTime && hhmm < s.EndTime, nil
+			}
+		}
+	}
+	return false, nil
+}
+
+func closePosition(ctx context.Context, qctx *quote.QuoteContext, tctx *trade.TradeContext, symbol string) (string, error) {
+	// Step 1: read the position
+	channels, err := tctx.StockPositions(ctx, []string{symbol})
+	if err != nil {
+		return "", err
+	}
+	available := decimal.Zero
+	for _, ch := range channels {
+		for _, p := range ch.Positions {
+			if p.Symbol == symbol {
+				if available, err = decimal.NewFromString(p.AvailableQuantity); err != nil {
+					return "", err
+				}
+			}
+		}
+	}
+	if available.IsZero() {
+		return "", fmt.Errorf("%s: nothing to close", symbol)
+	}
+
+	// Step 2: opposite side, absolute quantity
+	side := trade.OrderSideSell
+	if available.IsNegative() {
+		side = trade.OrderSideBuy
+	}
+	quantity := available.Abs()
+
+	// Step 3: market order in regular hours, limit order outside US regular hours
+	order := &trade.SubmitOrder{
+		Symbol:            symbol,
+		OrderType:         trade.OrderTypeMO,
+		Side:              side,
+		SubmittedQuantity: uint64(quantity.IntPart()),
+		TimeInForce:       trade.TimeTypeDay,
+		Remark:            "close position",
+	}
+	if strings.HasSuffix(symbol, ".US") {
+		regular, err := usInRegularSession(ctx, qctx)
+		if err != nil {
+			return "", err
+		}
+		if !regular {
+			quotes, err := qctx.Quote(ctx, []string{symbol})
+			if err != nil {
+				return "", err
+			}
+			if len(quotes) == 0 || quotes[0].LastDone == nil || quotes[0].LastDone.IsZero() {
+				return "", fmt.Errorf("%s: no last price, cannot close outside regular hours", symbol)
+			}
+			order.OrderType = trade.OrderTypeLO
+			order.SubmittedPrice = *quotes[0].LastDone
+			order.OutsideRTH = trade.OutsideRTHAny
+		}
+	}
+	return tctx.SubmitOrder(ctx, order)
+}
+
+func main() {
+	ctx := context.Background()
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(ctx); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	qctx, err := quote.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer qctx.Close()
+	tctx, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tctx.Close()
+
+	orderID, err := closePosition(ctx, qctx, tctx, "TSLA.US")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("order_id:", orderID)
+}
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.quote.*;
+import com.longbridge.trade.*;
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.UUID;
+
+class Main {
+    static boolean usInRegularSession(QuoteContext quoteCtx) throws Exception {
+        LocalTime now = ZonedDateTime.now(ZoneId.of("America/New_York")).toLocalTime();
+        for (MarketTradingSession market : quoteCtx.getTradingSession().get()) {
+            if (market.getMarket() != Market.US) continue;
+            for (TradingSessionInfo session : market.getTradeSessions()) {
+                if (session.getTradeSession() == TradeSession.Intraday) {
+                    return !now.isBefore(session.getBeginTime()) && now.isBefore(session.getEndTime());
+                }
+            }
+        }
+        return false;
+    }
+
+    static String closePosition(QuoteContext quoteCtx, TradeContext tradeCtx, String symbol) throws Exception {
+        // Step 1: read the position
+        StockPositionsResponse resp = tradeCtx
+            .getStockPositions(new GetStockPositionsOptions().setSymbols(new String[] { symbol }))
+            .get();
+        StockPosition position = Arrays.stream(resp.getChannels())
+            .flatMap(ch -> Arrays.stream(ch.getPositions()))
+            .filter(p -> p.getSymbol().equals(symbol))
+            .findFirst()
+            .orElse(null);
+        if (position == null || position.getAvailableQuantity().signum() == 0) {
+            throw new IllegalStateException(symbol + ": nothing to close");
+        }
+
+        // Step 2: opposite side, absolute quantity
+        OrderSide side = position.getAvailableQuantity().signum() > 0 ? OrderSide.Sell : OrderSide.Buy;
+        BigDecimal quantity = position.getAvailableQuantity().abs();
+
+        // Step 3: market order in regular hours, limit order outside US regular hours
+        SubmitOrderOptions opts = new SubmitOrderOptions(symbol, OrderType.MO, side, quantity, TimeInForceType.Day);
+        if (symbol.endsWith(".US") && !usInRegularSession(quoteCtx)) {
+            SecurityQuote quote = quoteCtx.getQuote(new String[] { symbol }).get()[0];
+            if (quote.getLastDone().signum() == 0) {
+                throw new IllegalStateException(symbol + ": no last price, cannot close outside regular hours");
+            }
+            opts = new SubmitOrderOptions(symbol, OrderType.LO, side, quantity, TimeInForceType.Day)
+                .setSubmittedPrice(quote.getLastDone())
+                .setOutsideRth(OutsideRTH.AnyTime);
+        }
+        opts.setClientRequestId("close-" + symbol + "-" + UUID.randomUUID())
+            .setRemark("close position");
+
+        return tradeCtx.submitOrder(opts).get().orderId;
+    }
+
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id")
+                 .build(url -> System.out.println("Open this URL to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             QuoteContext quoteCtx = QuoteContext.create(config);
+             TradeContext tradeCtx = TradeContext.create(config)) {
+            System.out.println("order_id: " + closePosition(quoteCtx, tradeCtx, "TSLA.US"));
+        }
+    }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Expected result
+
+The function returns the `order_id` of the closing order. Once it fills, [Stock Positions](../asset/stock) reports `available_quantity` of `0` for the symbol, and the fill shows up in [Today Executions](../execution/today_executions).
+
+## Notes
+
+- **There is no close-only protection.** If the quantity exceeds the position, the excess opens a position in the opposite direction (a margin account will go short). Always cap the quantity at `available_quantity` from a fresh call, never at a cached number.
+- **Read the position right before you submit.** Pending orders, partial fills and same-day buys all change `available_quantity`.
+- **Cross-check with the estimate API.** [Estimate Maximum Purchase Quantity](./estimate_available_buy_limit) accepts `side=Sell` and returns the largest quantity the account can sell.
+- **Partial close.** Multiply `available_quantity` by the ratio you want, then round down to the lot size from [Static Info](/docs/quote/pull/static). Odd lots on the HK market need `order_type=ODD`.
+- **Multi-leg option positions.** Close them with [Submit Multi-leg Order](./submit_multileg) using the opposite `side` and the same leg ratios.
+- **Idempotency.** Retry with the same `client_request_id` after a timeout. The server returns the original order for 10 minutes instead of creating a second one.
+
+## Related
+
+- [Submit Order](./submit)
+- [Stock Positions](../asset/stock)
+- [Trading Session](/docs/market/trade-session)
+- [Q&A: How do I close a position?](/docs/qa/trade#q11-how-do-i-close-a-position)

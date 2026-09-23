@@ -69,7 +69,7 @@ longbridge quote TSLA.US NVDA.US 700.HK
 pip install longbridge
 ```
 
-**MCP for AI assistants** — in ChatGPT web, desktop, or mobile, open the [Longbridge ChatGPT App](https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef) or search `longbridge` in Apps, authorize, then use `@longbridge` in the message box.
+**MCP for AI assistants** — in ChatGPT web, desktop, or mobile, open the [Longbridge ChatGPT App](https://chatgpt.com/plugins/longbridge) or search `longbridge` in Apps, authorize, then use `@longbridge` in the message box.
 
 For other MCP clients, add Longbridge as a remote MCP server:
 

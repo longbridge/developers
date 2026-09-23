@@ -74,8 +74,8 @@ export default function Footer({ locale }: Props) {
           <h5 className="text-[12px] font-semibold uppercase tracking-[0.96px] mb-[14px] mt-0 text-[color:var(--lb-fg-3)]">{t(locale, 'footer.integrations')}</h5>
           <ul className="list-none p-0 m-0 flex flex-col gap-[10px]">
             <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/mcp')}>MCP</a></li>
-            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef" target="_blank" rel="noreferrer">ChatGPT App</a></li>
-            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://claude.ai/directory/connectors/longbridge" target="_blank" rel="noreferrer">Claude Connector</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://chatgpt.com/plugins/longbridge" target="_blank" rel="noreferrer">ChatGPT App</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://claude.ai/directory/longbridge" target="_blank" rel="noreferrer">Claude Connector</a></li>
           </ul>
         </div>
 
