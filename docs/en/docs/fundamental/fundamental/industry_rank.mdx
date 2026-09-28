@@ -10,7 +10,7 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the industry ranking list by market and indicator. The returned Counter ID can be passed directly to `industry_peers` to explore the sub-sector hierarchy.
+Get the industry ranking list by market and indicator. The returned Symbol can be passed directly to `industry_peers` to explore the sub-sector hierarchy.
 
 <CliCommand>
 longbridge industry-rank --market US
@@ -203,7 +203,7 @@ func main() {
         "lists": [
           {
             "name": "Technology",
-            "counter_id": "BK/US/IN00258",
+            "symbol": "IN00258.US",
             "chg": "0.0231",
             "leading_name": "NVIDIA",
             "leading_ticker": "NVDA.US",
@@ -236,7 +236,7 @@ func main() {
 | items | object[] | false | Ranked group list |
 | ∟ lists | object[] | false | Industry item list |
 | ∟ ∟ name | string | false | Industry name |
-| ∟ ∟ counter_id | string | false | Industry counter ID (`BK/MARKET/ID` format), usable in `industry_peers` |
+| ∟ ∟ symbol | string | false | Industry symbol (`BK/MARKET/ID` format), usable in `industry_peers` |
 | ∟ ∟ chg | string | false | Daily change (decimal) |
 | ∟ ∟ leading_name | string | false | Leading stock name |
 | ∟ ∟ leading_ticker | string | false | Leading stock ticker |

@@ -14,6 +14,8 @@ import type { APIRoute } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import { getCollection, render } from 'astro:content'
 import { resolveUrl, resolveLocale, currentRegion, includedInRegion } from '@longbridge/openapi-utils'
+import { parseSpec, pickLocale, epId } from '@longbridge/openapi-api-reference'
+import rawApiYaml from '../../../openapi.yaml?raw'
 
 export function getStaticPaths() {
   return [
@@ -23,12 +25,38 @@ export function getStaticPaths() {
   ]
 }
 
+/** Result category, so the header search can label API / CLI / MCP / Docs hits.
+ *  (SDK usage lives inline in guide pages, so it folds into 'docs'.) */
+export type SearchType = 'api' | 'cli' | 'mcp' | 'docs'
+
 interface Section {
   id: string
   url: string
   title: string
   headings: string[]
   body: string
+  type: SearchType
+  /** Searchable slug — the endpoint/page/ws id, or a doc URL's last path
+   *  segment — so typing part of the URL finds the page. */
+  slug: string
+}
+
+/** Last meaningful path segment of a URL (drops #hash and query), decoded. */
+function urlSlug(url: string): string {
+  const path = url.split(/[#?]/)[0]
+  const seg = path.split('/').filter(Boolean).pop() ?? ''
+  try {
+    return decodeURIComponent(seg)
+  } catch {
+    return seg
+  }
+}
+
+/** Category of a docs-collection entry, derived from its URL path. */
+function docType(url: string): SearchType {
+  if (url.includes('/docs/cli')) return 'cli'
+  if (url.includes('/docs/mcp')) return 'mcp'
+  return 'docs'
 }
 
 const MAX_SECTION_BODY = 2000
@@ -78,6 +106,8 @@ export const GET: APIRoute = async ({ params }) => {
         title: docTitle,
         headings: path,
         body,
+        type: docType(url),
+        slug: urlSlug(href),
       })
     }
 
@@ -99,11 +129,89 @@ export const GET: APIRoute = async ({ params }) => {
     if (sawFirstHeading || buf.some((l) => l.trim())) flush()
   }
 
+  // ── API Reference (openapi.yaml): endpoints, static pages, WebSocket cmds ──
+  // The reference is client-rendered from openapi.yaml, so its content is absent
+  // from the built HTML — index it here so the header search can find it.
+  try {
+    const prefix = locale === 'en' ? '' : `/${locale}`
+    const { groups, pages, wsGroups } = parseSpec(rawApiYaml)
+    for (const g of groups) {
+      const gname = pickLocale(g.name, g.nameZh, g.nameZhHk, locale)
+      const eps = [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)]
+      for (const ep of eps) {
+        const title = pickLocale(
+          ep.operation.summary,
+          ep.operation['x-summary-zh'],
+          ep.operation['x-summary-zh-hk'],
+          locale
+        )
+        const desc = pickLocale(
+          ep.operation.description,
+          ep.operation['x-description-zh'],
+          ep.operation['x-description-zh-hk'],
+          locale
+        )
+        // Fold parameter and response-field names into the body so an endpoint
+        // is findable by the fields it takes/returns, not just its prose.
+        const fieldNames = [
+          ...(ep.operation['x-parameters'] ?? ep.operation.parameters ?? []),
+          ...(ep.operation['x-response-properties'] ?? []),
+        ]
+          .map((p) => p.name)
+          .filter(Boolean)
+          .join(' ')
+        const body = `${stripMarkdown(desc || '')} ${fieldNames}`.trim().slice(0, MAX_SECTION_BODY)
+        sections.push({
+          id: `api::${epId(ep)}`,
+          url: `${prefix}/docs/api/${epId(ep)}`,
+          title: title || epId(ep),
+          headings: [gname, title || epId(ep)].filter(Boolean),
+          body,
+          type: 'api',
+          slug: epId(ep),
+        })
+      }
+    }
+    for (const p of pages) {
+      const title = pickLocale(p.title, p.titleZh, p.titleZhHk, locale)
+      const content = pickLocale(p.content, p.contentZh, p.contentZhHk, locale)
+      sections.push({
+        id: `api-page::${p.id}`,
+        url: `${prefix}/docs/api?page=${p.id}`,
+        title: title || p.id,
+        headings: [title || p.id],
+        body: stripMarkdown(content || '').slice(0, MAX_SECTION_BODY),
+        type: 'api',
+        slug: p.id,
+      })
+    }
+    for (const wg of wsGroups) {
+      const gname = pickLocale(wg.name, wg.nameZh, wg.nameZhHk, locale)
+      for (const c of wg.commands) {
+        const title = pickLocale(c.name, c.nameZh, c.nameZhHk, locale)
+        const desc = pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale)
+        sections.push({
+          id: `api-ws::${c.id}`,
+          url: `${prefix}/docs/api?ws=${c.id}`,
+          title: title || c.id,
+          headings: [gname, title || c.id].filter(Boolean),
+          body: stripMarkdown(desc || '').slice(0, MAX_SECTION_BODY),
+          type: 'api',
+          slug: c.id,
+        })
+      }
+    }
+  } catch (err) {
+    console.error('search-index: failed to index API reference', err)
+  }
+
   return new Response(JSON.stringify({ locale, sections }, null, 0), {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      // Long cache — index is content-hash-invalidated by build
-      'Cache-Control': 'public, max-age=3600',
+      // The URL is not content-hashed, so it must not be cached hard: a long
+      // max-age would serve a stale index (missing newly-indexed pages/fields)
+      // for up to an hour after a deploy. `no-cache` = store but revalidate.
+      'Cache-Control': 'no-cache',
     },
   })
 }

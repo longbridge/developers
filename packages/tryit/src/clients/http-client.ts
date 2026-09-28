@@ -21,6 +21,15 @@ export interface ApiConfig {
 export interface ApiResponse<T = any> {
   status: number
   statusText: string
+  /**
+   * 客户端侧失败（网络/CORS/DNS/缺少 App Secret 等），并非服务器返回的 HTTP 状态。
+   * 为 true 时 UI 应展示可读的失败提示，而非把异常当作 JSON 渲染。
+   */
+  networkError?: boolean
+  /** 面向用户的可读失败提示（networkError 为 true 时使用） */
+  errorMessage?: string
+  /** 原始异常详情，作为次要信息（可折叠）展示 */
+  errorDetail?: string
   response: {
     /** 业务状态码，0 表示成功 */
     code: number
@@ -44,13 +53,28 @@ export interface RequestOptions {
   timeout?: number
 }
 
+// ==================== 错误类型 ====================
+
+/**
+ * App Secret 缺失时抛出。UI 可通过 `err instanceof MissingAppSecretError`
+ * 或 `err.code === 'MISSING_APP_SECRET'` 识别并展示友好提示。
+ */
+export class MissingAppSecretError extends Error {
+  readonly code = 'MISSING_APP_SECRET'
+  constructor(message = 'Enter your App Secret to sign this request.') {
+    super(message)
+    this.name = 'MissingAppSecretError'
+  }
+}
+
 // ==================== 工具函数 ====================
 
 /**
- * 生成时间戳
+ * 生成时间戳 —— 整数秒 (Unix epoch)。网关要求整数秒;带小数会导致
+ * 签名/时间戳校验失败。
  */
 function getTimestamp(): string {
-  return (Date.now() / 1000).toString()
+  return Math.floor(Date.now() / 1000).toString()
 }
 
 /**
@@ -89,8 +113,12 @@ async function generateSignature(
 
   const signStr = `HMAC-SHA256|${canonicalHashHex}`
 
-  // 确保密钥是有效的字符串格式
-  const normalizedSecret = secret?.trim() || 'unknown'
+  // App Secret 缺失时，不能用占位符签名（会产生令人困惑的签名校验失败）。
+  // 明确抛出可识别的错误，供 UI 展示可读提示。
+  const normalizedSecret = secret?.trim()
+  if (!normalizedSecret) {
+    throw new MissingAppSecretError()
+  }
 
   const secretKey = await crypto.subtle.importKey(
     'raw',

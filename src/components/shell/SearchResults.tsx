@@ -1,12 +1,28 @@
 import type { Locale } from '@longbridge/openapi-utils'
 import { t } from '@longbridge/openapi-utils'
 
+export type SearchType = 'api' | 'cli' | 'mcp' | 'docs'
+
 export interface SearchHit {
   id: string
   url: string
   title: string
   headings: string[]
+  type: SearchType
   matchedTerms: string[]
+}
+
+const TYPE_LABEL: Record<SearchType, Record<Locale, string>> = {
+  api: { en: 'API', 'zh-CN': 'API', 'zh-HK': 'API' },
+  cli: { en: 'CLI', 'zh-CN': 'CLI', 'zh-HK': 'CLI' },
+  mcp: { en: 'MCP', 'zh-CN': 'MCP', 'zh-HK': 'MCP' },
+  docs: { en: 'Docs', 'zh-CN': '文档', 'zh-HK': '文檔' },
+}
+const TYPE_STYLE: Record<SearchType, { background: string; color: string }> = {
+  api: { background: 'rgba(0,184,184,0.12)', color: '#00807f' },
+  cli: { background: 'rgba(90,116,255,0.12)', color: '#4a5fd0' },
+  mcp: { background: 'rgba(255,145,40,0.14)', color: '#b45309' },
+  docs: { background: 'var(--lb-bg-2)', color: 'var(--lb-fg-2)' },
 }
 
 interface Props {
@@ -72,6 +88,12 @@ export default function SearchResults({
                   )}
                 </span>
               ))}
+            </span>
+            <span
+              className="ml-auto shrink-0 text-[11px] font-semibold leading-none px-1.5 py-1 rounded"
+              style={TYPE_STYLE[hit.type]}
+            >
+              {TYPE_LABEL[hit.type][locale]}
             </span>
           </button>
         </li>

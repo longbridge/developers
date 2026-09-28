@@ -86,6 +86,35 @@ export function ResponseView({ result }: ResponseViewProps) {
 
   if (!result) return null
 
+  // Client-side failure (network/CORS/DNS, timeout, missing App Secret) — show a
+  // readable failure state, not a pretty-printed exception.
+  if (result.networkError) {
+    const message = result.errorMessage || "Couldn't send the request. Check your connection and try again."
+    return (
+      <div
+        className="w-full rounded-xl p-4 flex flex-col gap-2"
+        style={{ backgroundColor: 'var(--vp-c-bg-soft)', border: '1px solid var(--vp-c-border)' }}
+        role="alert"
+      >
+        <div className="flex items-center space-x-2">
+          <div className={`w-3.5 h-3.5 rounded-full ${getStatusIconClass(result.status)}`} />
+          <div className="text-sm font-semibold" style={{ color: 'var(--vp-c-text-1)' }}>
+            Request failed
+          </div>
+        </div>
+        <p className="text-sm m-0" style={{ color: 'var(--vp-c-text-2)' }}>
+          {message}
+        </p>
+        {result.errorDetail && (
+          <details className="text-xs" style={{ color: 'var(--vp-c-text-3)' }}>
+            <summary className="cursor-pointer select-none">Details</summary>
+            <pre className="mt-2 whitespace-pre-wrap font-mono break-words m-0">{result.errorDetail}</pre>
+          </details>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div
       className="w-full rounded-xl p-0.5"
@@ -106,9 +135,9 @@ export function ResponseView({ result }: ResponseViewProps) {
           {/* Download */}
           <button
             onClick={downloadResponse}
-            className="h-7 w-7 flex items-center justify-center cursor-pointer rounded-md transition-all duration-200 hover:scale-110"
+            className="h-7 w-7 flex items-center justify-center cursor-pointer rounded-md transition-opacity duration-200 hover:opacity-70"
             style={{ backgroundColor: 'transparent' }}
-            title="download"
+            title="Download"
           >
             <svg
               className="w-4 h-4"
@@ -125,15 +154,15 @@ export function ResponseView({ result }: ResponseViewProps) {
           {/* Copy */}
           <button
             onClick={copyResponse}
-            className="h-7 w-7 flex items-center justify-center rounded-md transition-all duration-200 hover:scale-110"
+            className="h-7 w-7 flex items-center justify-center cursor-pointer rounded-md transition-opacity duration-200 hover:opacity-70"
             title={copySuccess ? 'Copied' : 'Copy'}
           >
             {copySuccess ? (
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ color: 'var(--vp-c-success-1)' }}>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ color: 'var(--lb-brand, #00b8b8)' }}>
                 <path d="M15 4.5L7.5 12L3 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             ) : (
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ color: 'var(--vp-c-text-2)' }}>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ color: 'var(--lb-fg-2, #6c6e75)' }}>
                 <path
                   d="M14.25 5.25H7.25C6.14543 5.25 5.25 6.14543 5.25 7.25V14.25C5.25 15.3546 6.14543 16.25 7.25 16.25H14.25C15.3546 16.25 16.25 15.3546 16.25 14.25V7.25C16.25 6.14543 15.3546 5.25 14.25 5.25Z"
                   stroke="currentColor"

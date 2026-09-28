@@ -6,4 +6,5 @@ export const nav: NavItem[] = [
   { text: 'CLI', link: '/zh-CN/docs/cli', activeMatch: '^/zh-CN/docs/cli' },
   { text: 'MCP', link: '/zh-CN/docs/mcp', activeMatch: '^/zh-CN/docs/mcp' },
   { text: '文档', link: '/zh-CN/docs', activeMatch: '^/zh-CN/docs(?!/cli)(?!/api)(?!/mcp)' },
+  { text: 'API 文档', link: '/zh-CN/docs/api', activeMatch: '^/zh-CN/docs/api' },
 ]
