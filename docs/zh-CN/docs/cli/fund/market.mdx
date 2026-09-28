@@ -1,0 +1,101 @@
+---
+title: 'market data'
+sidebar_label: 'market data'
+sidebar_position: 1
+---
+
+# longbridge fund（行情数据）
+
+在终端浏览基金目录与单只基金的行情数据——热销榜、可筛选的基金列表，以及单只基金的详情、分析、走势、收益、业绩、净值（NAV）与持仓。
+
+每只基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）标识，而非股票 symbol。可从 `longbridge fund hot` 或 `longbridge fund list` 获取,再作为位置参数传给其他命令。
+
+## 基本用法
+
+```bash
+# 热销基金——获取 counter_id 的好起点
+longbridge fund hot
+```
+
+```
+| Counter ID          | Name                          | Currency | Earning Rate | Risk Level |
+|---------------------|-------------------------------|----------|--------------|------------|
+| UT/FD/HK0000384492  | Allianz Income and Growth     | USD      | 12.34%       | Medium     |
+| UT/FD/KYG3861F1019  | JPMorgan Global Bond          | USD      | 4.21%        | Low        |
+```
+
+## 示例
+
+### 发现基金
+
+```bash
+# 热销基金列表
+longbridge fund hot
+# 完整基金列表,可用快捷筛选 id 与收益率区间收窄
+longbridge fund list
+longbridge fund list --quick-id 1 --quick-id 2 --time-interval 1m --time-interval 1y
+# 可传给 list 的筛选选项
+longbridge fund filters
+```
+
+### 基金详情与分析
+
+```bash
+# 基金档案:名称、ISIN、风险等级、管理人、费用……
+longbridge fund detail UT/FD/HK0000384492
+# 分析(一级)与更深入的二级拆解;--period 选择周期
+longbridge fund analysis UT/FD/HK0000384492
+longbridge fund analysis-detail UT/FD/HK0000384492 --period 3
+# 走势图数据
+longbridge fund trend UT/FD/HK0000384492
+```
+
+### 收益与业绩
+
+```bash
+# 年度 / 季度收益(分页)
+longbridge fund annual-returns UT/FD/HK0000384492 --page 1 --size 20
+longbridge fund quarterly-returns UT/FD/HK0000384492
+# 业绩数据,以及同类比较
+longbridge fund performance UT/FD/HK0000384492
+longbridge fund performance-comparison UT/FD/HK0000384492 --period 3
+```
+
+### 净值（NAV）
+
+```bash
+# 最新净值
+longbridge fund nav UT/FD/HK0000384492
+# 历史净值——分页,或按相对时间区间
+longbridge fund nav-history UT/FD/HK0000384492 --page 1 --size 30
+longbridge fund nav-range UT/FD/HK0000384492 --month-before 6
+longbridge fund nav-range UT/FD/HK0000384492 --year-before 1
+```
+
+### 持仓
+
+```bash
+# 基金前十大持仓(--scene 选择拆解口径)
+longbridge fund holdings UT/FD/HK0000384492
+# 反向查询:哪些基金持有某只股票
+longbridge fund stock-holdings UT/FD/HK0000384492 --limit 20
+```
+
+任意命令加 `--format json` 可输出机器可读格式。
+
+## 选项
+
+| 选项 | 命令 | 说明 | 默认 |
+| ---- | ---- | ---- | ---- |
+| `--quick-id` | `list` | 快捷筛选 id(可重复) | — |
+| `--time-interval` | `list` | 收益率区间,如 `1m` `3m` `1y`(可重复) | — |
+| `--period` | `analysis`、`analysis-detail`、`trend`、`performance-comparison` | 分析 / 比较周期 | — |
+| `--page` / `--size` | `annual-returns`、`quarterly-returns`、`nav-history` | 页码与每页条数 | — |
+| `--month-before` / `--year-before` | `nav-range` | 相对当前的净值时间窗 | — |
+| `--scene` | `holdings` | 持仓拆解口径 | — |
+| `--limit` | `stock-holdings` | 返回股票数量上限 | — |
+| `--format` | 全部 | 输出格式:`table` \| `json` | `table` |
+
+## 要求
+
+这些是行情数据命令,无需账户权限。基金以 `counter_id` 寻址,可从 `fund hot` / `fund list` 获取。查看你的持仓与订单,见 [我的持仓](/zh-CN/docs/cli/fund/positions) 与 [订单与交易](/zh-CN/docs/cli/fund/orders)。

@@ -1,0 +1,74 @@
+---
+title: 'positions'
+sidebar_label: 'positions'
+sidebar_position: 2
+---
+
+# longbridge fund（持倉）
+
+查看你的基金持倉——持倉總覽、單隻持倉詳情,及其業績、累計收益、淨值歷史與分紅。
+
+基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）標識。這些命令讀取你的賬戶,需要登錄。
+
+## 基本用法
+
+```bash
+# 你持有的每隻基金總覽
+longbridge fund positions
+```
+
+```
+| Counter ID          | Name                        | Currency | Holding Units | Cost NAV | Current NAV | Holding Profit |
+|---------------------|-----------------------------|----------|---------------|----------|-------------|----------------|
+| UT/FD/HK0000384492  | Allianz Income and Growth   | USD      | 1250.00       | 9.812    | 10.431      | +773.75        |
+```
+
+## 示例
+
+### 持倉總覽
+
+```bash
+longbridge fund positions
+# 限定到某個子賬戶
+longbridge fund positions --account-channel lb --aaid 123456
+```
+
+### 單隻持倉
+
+```bash
+# 單隻持有基金的詳情,可選日期區間
+longbridge fund position UT/FD/HK0000384492
+longbridge fund position UT/FD/HK0000384492 --start 2026-01-01 --end 2026-06-30
+```
+
+### 持有基金的業績、收益、淨值與分紅
+
+```bash
+# 持有基金的業績數據
+longbridge fund position-performance UT/FD/HK0000384492
+# 累計收益序列(分頁、日期區間)
+longbridge fund position-profits UT/FD/HK0000384492 --start 2026-01-01 --end 2026-06-30 --page 1 --size 30
+# 相對時間窗內的淨值歷史
+longbridge fund position-nav UT/FD/HK0000384492 --month-before 6
+longbridge fund position-nav UT/FD/HK0000384492 --year-before 1
+# 分紅記錄
+longbridge fund position-dividends UT/FD/HK0000384492 --currency USD --page 1 --size 20
+```
+
+任意命令加 `--format json` 可輸出機器可讀格式。
+
+## 選項
+
+| 選項 | 命令 | 說明 | 默認 |
+| ---- | ---- | ---- | ---- |
+| `--account-channel` | `positions`、`position` | 賬戶渠道 | — |
+| `--aaid` | `positions`、`position` | 子賬戶 id | — |
+| `--start` / `--end` | `position`、`position-profits`、`position-dividends` | 日期區間(`YYYY-MM-DD` 或 RFC 3339) | — |
+| `--month-before` / `--year-before` | `position-nav` | 相對當前的淨值時間窗 | — |
+| `--currency` | `position-dividends` | 幣種篩選(如 `HKD`、`USD`) | — |
+| `--page` / `--size` | `position-profits`、`position-dividends` | 頁碼與每頁條數 | — |
+| `--format` | 全部 | 輸出格式:`table` \| `json` | `table` |
+
+## 要求
+
+需要 OAuth 賬戶權限——先運行 `longbridge auth login`。基金以 `counter_id` 尋址(來自 [`fund hot` / `fund list`](/zh-HK/docs/cli/fund/market))。下單或撤單見 [訂單與交易](/zh-HK/docs/cli/fund/orders)。
