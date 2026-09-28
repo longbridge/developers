@@ -8176,7 +8176,11 @@ x-websocket:
           cmd: 105
           direction: push
           description: |
-            Candlestick updates. Subscribed with subscribe_candlesticks (not SubType); pushed on each current-candle update or on period close.
+            Real-time candlestick (K-line) data push for subscribed securities. The callback fires whenever the current candlestick updates (Realtime mode) or when a candlestick period closes (Confirmed mode).
+
+            :::tip
+            This page covers the **push** API (`subscribe_candlesticks`). To pull historical candlestick data on demand, see [Candlestick - Pull](/quote/stocks/candlestick).
+            :::
 
             ```protobuf
             message PushCandlestick {
@@ -8186,7 +8190,11 @@ x-websocket:
             }
             ```
           x-description-zh: |
-            K 线更新。用 subscribe_candlesticks 订阅(不走 SubType);当前 K 线更新或周期收盘时推送。
+            已订阅标的的实时 K 线数据推送。回调在当前 K 线更新时触发（Realtime 模式）或在一根 K 线周期结束时触发（Confirmed 模式）。
+
+            :::tip
+            本页介绍的是**推送** API（`subscribe_candlesticks`）。如需按需拉取历史 K 线数据，请参见 [K 线 - 拉取](/quote/stocks/candlestick)。
+            :::
 
             ```protobuf
             message PushCandlestick {
@@ -8196,7 +8204,11 @@ x-websocket:
             }
             ```
           x-description-zh-hk: |
-            K 線更新。用 subscribe_candlesticks 訂閱(不走 SubType);當前 K 線更新或週期收盤時推送。
+            訂閱的標的的實時 K 線數據推送。回調在當前 K 線更新時觸發（Realtime 模式）或在一根 K 線週期結束時觸發（Confirmed 模式）。
+
+            :::tip
+            本頁介紹的是**推送** API（`subscribe_candlesticks`）。如需按需拉取歷史 K 線數據，請參見 [K 線 - 拉取](/quote/stocks/candlestick)。
+            :::
 
             ```protobuf
             message PushCandlestick {
