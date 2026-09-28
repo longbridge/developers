@@ -1042,6 +1042,7 @@ x-websocket:
       x-tag: Quote
       commands:
         - id: ws-static
+          x-quote-command: static
           x-subgroup: Stocks
           name: Static Info
           x-name-zh: 标的基础信息
@@ -1345,6 +1346,7 @@ x-websocket:
               x-description-zh: "标的所属板块"
               x-description-zh-hk: "標的所屬板塊"
         - id: ws-quote
+          x-quote-command: quote
           x-subgroup: Stocks
           name: Quotes
           x-name-zh: 实时报价
@@ -1756,6 +1758,7 @@ x-websocket:
               x-description-zh: "上一个交易阶段的收盘价"
               x-description-zh-hk: "上一個交易階段的收盤價"
         - id: ws-option-quote
+          x-quote-command: option
           x-subgroup: Options
           name: Option Quotes
           x-name-zh: 期权实时报价
@@ -2095,6 +2098,7 @@ x-websocket:
               x-description-zh: "对应的正股标的代码"
               x-description-zh-hk: "對應的正股標的代碼"
         - id: ws-warrant-quote
+          x-quote-command: warrant
           x-subgroup: Warrants
           x-subgroup-zh: 轮证
           x-subgroup-zh-hk: 輪證
@@ -2446,6 +2450,7 @@ x-websocket:
               x-description-zh: "对应的正股标的代码"
               x-description-zh-hk: "對應的正股標的代碼"
         - id: ws-pull-depth
+          x-quote-command: depth
           x-subgroup: Stocks
           name: Depth
           x-name-zh: 盘口
@@ -2723,6 +2728,7 @@ x-websocket:
               x-description-zh: "订单数量"
               x-description-zh-hk: "訂單數量"
         - id: ws-pull-brokers
+          x-quote-command: brokers
           x-subgroup: Stocks
           name: Broker Queue
           x-name-zh: 经纪队列
@@ -3224,6 +3230,7 @@ x-websocket:
               x-description-zh: "券商名称 (繁)"
               x-description-zh-hk: "券商名稱 (繁)"
         - id: ws-pull-trade
+          x-quote-command: trades
           x-subgroup: Stocks
           name: Trades
           x-name-zh: 成交明细
@@ -3483,6 +3490,7 @@ x-websocket:
               x-description-zh: "交易时段"
               x-description-zh-hk: "交易時段"
         - id: ws-intraday
+          x-quote-command: intraday
           x-subgroup: Stocks
           name: Intraday
           x-name-zh: 分时
@@ -3726,6 +3734,7 @@ x-websocket:
               x-description-zh: "均价"
               x-description-zh-hk: "均價"
         - id: ws-pull-candlestick
+          x-quote-command: kline
           x-subgroup: Stocks
           name: Candlesticks
           x-name-zh: K 线
@@ -4459,6 +4468,7 @@ x-websocket:
               x-description-zh: "是否标准期权"
               x-description-zh-hk: "是否標準期權"
         - id: ws-issuers
+          x-quote-command: warrant
           x-subgroup: Warrants
           x-subgroup-zh: 轮证
           x-subgroup-zh-hk: 輪證
@@ -4687,6 +4697,7 @@ x-websocket:
               x-description-zh: "机构名称 (繁)"
               x-description-zh-hk: "機構名稱 (繁)"
         - id: ws-warrant-filter
+          x-quote-command: warrant
           x-subgroup: Warrants
           x-subgroup-zh: 轮证
           x-subgroup-zh-hk: 輪證
@@ -5120,6 +5131,7 @@ x-websocket:
               x-description-zh: "符合条件的轮证总数量"
               x-description-zh-hk: "符合條件的輪證總數量"
         - id: ws-capital-flow
+          x-quote-command: capital
           x-subgroup: Analytics
           name: Capital Flow (Intraday)
           x-name-zh: 资金流向 (分时)
@@ -5342,6 +5354,7 @@ x-websocket:
               x-description-zh: "分钟开始时间戳"
               x-description-zh-hk: "分鐘開始時間戳"
         - id: ws-capital-dist
+          x-quote-command: capital
           x-subgroup: Analytics
           name: Capital Distribution
           x-name-zh: 资金分布
@@ -5611,6 +5624,7 @@ x-websocket:
               x-description-zh: "小单"
               x-description-zh-hk: "小單"
         - id: ws-calc-index
+          x-quote-command: calc-index
           x-subgroup: Analytics
           name: Calc Indexes
           x-name-zh: 计算指标
@@ -6070,6 +6084,7 @@ x-websocket:
               x-description-zh: "Rho，原始值需除以 100 得到标准的每股每 1% 利率值"
               x-description-zh-hk: "Rho，原始值需除以 100 得到標準的每股每 1% 利率值"
         - id: ws-history-candlestick
+          x-quote-command: kline
           x-subgroup: Stocks
           name: History Candlesticks
           x-name-zh: 历史 K 线
@@ -6428,6 +6443,7 @@ x-websocket:
       x-tag: Quote
       commands:
         - id: ws-subscription
+          x-quote-command: subscriptions
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -6655,6 +6671,7 @@ x-websocket:
               x-description-zh: "订阅的数据类型，详见 SubType"
               x-description-zh-hk: "訂閱的數據類型，詳見 SubType"
         - id: ws-subscribe
+          x-quote-command: subscriptions
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -6897,6 +6914,7 @@ x-websocket:
               x-description-zh: "订阅的数据类型，详见 SubType"
               x-description-zh-hk: "訂閱的數據類型，詳見 SubType"
         - id: ws-unsubscribe
+          x-quote-command: subscriptions
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -7093,6 +7111,7 @@ x-websocket:
       x-tag: Quote
       commands:
         - id: ws-push-quote
+          x-quote-command: quote
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -7395,6 +7414,7 @@ x-websocket:
               x-description-zh: "价格数据标签：0 实时行情，1 收盘后的修正数据"
               x-description-zh-hk: "價格數據標籤：0 實時行情，1 收盤後的修正數據"
         - id: ws-push-depth
+          x-quote-command: depth
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -7671,6 +7691,7 @@ x-websocket:
               x-description-zh: "订单数量"
               x-description-zh-hk: "訂單數量"
         - id: ws-push-brokers
+          x-quote-command: brokers
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -7942,6 +7963,7 @@ x-websocket:
               x-description-zh: "券商席位 Id"
               x-description-zh-hk: "券商席位 Id"
         - id: ws-push-trade
+          x-quote-command: trades
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
@@ -8191,6 +8213,7 @@ x-websocket:
               x-description-zh: "交易时段，详见 TradeSession"
               x-description-zh-hk: "交易時段，詳見 TradeSession"
         - id: ws-push-candlestick
+          x-quote-command: candlesticks
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱

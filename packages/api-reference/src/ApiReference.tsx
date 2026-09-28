@@ -719,6 +719,12 @@ function WsDetail({ cmd, locale, localePrefix }: { cmd: WsCommandItem; locale: L
         </code>
       </div>
       {desc && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: renderMd(desc, localePrefix) }} />}
+      {cmd.quoteCommand && (
+        <section className="api-section">
+          <h2>{L.permission[locale]}</h2>
+          <QuotePermission command={cmd.quoteCommand} locale={locale} />
+        </section>
+      )}
       {cmd.fields && cmd.fields.length > 0 && (
         <section className="api-section">
           <h2>{L_WS.reqParams[locale]}</h2>

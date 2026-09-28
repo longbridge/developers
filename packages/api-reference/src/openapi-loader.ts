@@ -167,6 +167,8 @@ export interface WsCommandItem {
   subgroup?: string
   subgroupZh?: string
   subgroupZhHk?: string
+  /** Quote-permission command key (quote-permissions.yaml), for the permission card. */
+  quoteCommand?: string
 }
 
 export interface WsGroupData {
@@ -317,6 +319,7 @@ export function parseSpec(rawYaml: string): {
     subgroup: c['x-subgroup'],
     subgroupZh: c['x-subgroup-zh'],
     subgroupZhHk: c['x-subgroup-zh-hk'],
+    quoteCommand: c['x-quote-command'],
   })
 
   // x-websocket supports either a list of groups (`groups:`) or a single group
