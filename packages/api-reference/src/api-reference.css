@@ -1477,10 +1477,18 @@
 }
 
 /* Standalone content pages (no rail) have no TOC column — the host `.docs-main`
-   otherwise reserves a 14rem TOC track, squeezing the article. Let content fill
-   the full width so wide tables/protocol layouts have room. */
+   otherwise reserves a 14rem TOC track, squeezing the article. Give the column
+   the full track so the centered content below can use it. */
 [data-lbus-component='api-reference'] .docs-main:not(.has-rail) {
   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Content column: capped to a comfortable measure and horizontally centered
+   within its track — on every page (standalone content pages and the 1fr cell
+   beside a right rail). */
+[data-lbus-component='api-reference'] .docs-content {
+  max-width: 64rem;
+  margin-inline: auto;
 }
 
 
