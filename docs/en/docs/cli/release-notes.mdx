@@ -10,7 +10,6 @@ sidebar_icon: newspaper
 ### [v0.29.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.29.0)
 
 - **New `fund` command group — Hong Kong mutual funds** — `longbridge fund` brings the mutual-fund channel to the terminal: browse the catalog (`hot`, `list`, `filters`), read a fund's `detail`, `analysis` / `analysis-detail`, `trend`, `annual-returns` / `quarterly-returns`, `performance` / `performance-comparison`, latest and historical NAV (`nav`, `nav-history`, `nav-range`) and `holdings` / `stock-holdings`; review your holdings (`positions`, `position`, `position-performance`, `position-profits`, `position-nav`, `position-dividends`); and manage orders (`orders`, `order`, `transactions`, `validate-order`, `submit-order`, `cancel-order`). Funds are addressed by `counter_id` (e.g. `UT/FD/HK0000384492`), not a stock symbol — get one from `fund hot` / `fund list`. `submit-order` and `cancel-order` prompt for confirmation unless `--yes`. See the [Funds](/docs/cli/fund/market) docs
-- **Requests now send the user-facing symbol directly** — the CLI drops its client-side `symbol` ↔ `counter_id` conversion (and the bundled ETF / index tables) to match the SDK: `quote`, `fundamental`, `ipo`, `dca`, `trade`, `sharelist`, `screener` and the rest send symbols like `AAPL.US` / `HSI.HK` straight to the gateway and read the `symbol` field back from responses. `is_etf` now resolves via the gateway instead of a local table
 
 ### [v0.28.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.28.0)
 
