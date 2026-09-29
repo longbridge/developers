@@ -11,6 +11,7 @@ sidebar_icon: newspaper
 ### CLI v0.29.0
 
 - **[基金登陆终端](/zh-CN/docs/cli/fund/market)** — 新增 `longbridge fund` 命令组，覆盖整个基金渠道：浏览目录及单只基金的详情、分析、走势、收益、业绩、净值与持仓;查看你的基金持仓;并校验、提交与撤销基金订单。基金以 `counter_id`(如 `UT/FD/HK0000384492`) 寻址;`submit-order` / `cancel-order` 除非传 `--yes` 否则会要求确认
+- **请求直接发送用户可见的 symbol** — CLI 移除客户端的 `symbol` ↔ `counter_id` 转换（及内置的 ETF / 指数对照表），与 SDK 对齐:每个命令直接把 `AAPL.US` / `HSI.HK` 这样的 symbol 发往网关，并从响应的 `symbol` 字段读回
 
 ### MCP
 

@@ -10,6 +10,7 @@ sidebar_icon: newspaper
 ### [v0.29.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.29.0)
 
 - **新增 `fund` 命令組 —— 香港互惠基金** — `longbridge fund` 把基金渠道帶入終端：瀏覽目錄 (`hot`、`list`、`filters`),查看單隻基金的 `detail`、`analysis` / `analysis-detail`、`trend`、`annual-returns` / `quarterly-returns`、`performance` / `performance-comparison`、最新與歷史淨值 (`nav`、`nav-history`、`nav-range`) 以及 `holdings` / `stock-holdings`;查看你的持倉 (`positions`、`position`、`position-performance`、`position-profits`、`position-nav`、`position-dividends`);並管理訂單 (`orders`、`order`、`transactions`、`validate-order`、`submit-order`、`cancel-order`)。基金以 `counter_id`(如 `UT/FD/HK0000384492`) 尋址，而非股票 symbol —— 可從 `fund hot` / `fund list` 獲取。`submit-order` 與 `cancel-order` 除非傳 `--yes` 否則會要求確認。詳見 [基金](/zh-HK/docs/cli/fund/market) 文檔
+- **請求直接發送用戶可見的 symbol** — CLI 移除客戶端的 `symbol` ↔ `counter_id` 轉換（及內置的 ETF / 指數對照表），與 SDK 對齊：`quote`、`fundamental`、`ipo`、`dca`、`trade`、`sharelist`、`screener` 等命令直接把 `AAPL.US` / `HSI.HK` 這樣的 symbol 發往網關，並從響應的 `symbol` 欄位讀回；`is_etf` 改為經網關判定,不再依賴本地對照表
 
 ### [v0.28.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.28.0)
 

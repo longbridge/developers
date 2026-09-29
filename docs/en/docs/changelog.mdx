@@ -11,6 +11,7 @@ sidebar_icon: newspaper
 ### CLI v0.29.0
 
 - **[Mutual funds come to the terminal](/docs/cli/fund/market)** — the new `longbridge fund` command group covers the whole channel: browse the catalog and a fund's detail, analysis, trend, returns, performance, NAV and holdings; review your fund positions; and validate, submit and cancel fund orders. Funds are addressed by `counter_id` (e.g. `UT/FD/HK0000384492`); `submit-order` / `cancel-order` prompt for confirmation unless `--yes`
+- **Requests now send the user-facing symbol directly** — the CLI drops its client-side `symbol` ↔ `counter_id` conversion (and the bundled ETF / index tables) to match the SDK; every command sends symbols like `AAPL.US` / `HSI.HK` straight to the gateway and reads `symbol` back from responses
 
 ### MCP
 
