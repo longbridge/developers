@@ -35,12 +35,80 @@ jobs:
 
       - name: 探测 AK 可见的 bucket 与目标桶权限
         env:
-          AK: ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }}
-          SK: ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }}
+          # 运维发了专用 AK 后自动改用它,不必再改文件
+          AK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID || secrets.FE_LB_ASSET_ACCESS_KEY_ID }}
+          SK: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_SECRET || secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }}
+          CRED_SOURCE: ${{ secrets.FE_LB_OPENAPI_ACCESS_KEY_ID != '' && 'FE_LB_OPENAPI_*' || 'FE_LB_ASSET_*（回退）' }}
         run: |
           OSS="${{ github.workspace }}/ossutil"
           HK=oss-cn-hongkong.aliyuncs.com
 
+          # AccessKeyId 本身不输出。打印其 SHA256 前 8 位作为指纹：
+          # 运维对候选 AccessKeyId 算同样的哈希即可比对出这是哪个 RAM 用户。
+          echo "===== 0) 凭证指纹（$CRED_SOURCE）====="
+          echo "  AccessKeyId 长度  : ${#AK}"
+          echo "  AccessKeyId 指纹  : $(printf %s "$AK" | sha256sum | cut -c1-8)"
+
+          # 反查这把 AK 到底是哪个 RAM 用户。STS GetCallerIdentity 不需要任何授权，
+          # 任何有效凭证都能调；返回的 Arn 里就带 RAM 用户名。
+          # 本仓库是公开仓库，Actions 日志全网可见，故账号 UID 打码只留后 4 位，
+          # 仅保留 RAM 用户名（不是凭证，是本次要拿的答案）。
+          echo
+          echo "===== 0a) 这把 AK 属于哪个 RAM 用户 ====="
+          python3 - <<'PY'
+          import os, time, uuid, hmac, hashlib, base64, json
+          import urllib.parse, urllib.request, urllib.error
+
+          ak, sk = os.environ["AK"], os.environ["SK"]
+          if not ak or not sk:
+              print("  AK/SK 为空，跳过"); raise SystemExit
+
+          params = {
+              "Action": "GetCallerIdentity", "Version": "2015-04-01", "Format": "JSON",
+              "AccessKeyId": ak, "SignatureMethod": "HMAC-SHA1", "SignatureVersion": "1.0",
+              "SignatureNonce": uuid.uuid4().hex,
+              "Timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+          }
+          # 阿里云 RPC 签名要求 RFC3986：safe 只留 -_.~，空格出 %20、* 出 %2A
+          enc = lambda v: urllib.parse.quote(str(v), safe="-_.~")
+          canon = "&".join(f"{enc(k)}={enc(params[k])}" for k in sorted(params))
+          sts = "GET&" + enc("/") + "&" + enc(canon)
+          sig = base64.b64encode(
+              hmac.new((sk + "&").encode(), sts.encode(), hashlib.sha1).digest()
+          ).decode()
+
+          url = "https://sts.aliyuncs.com/?" + canon + "&Signature=" + enc(sig)
+          try:
+              body = urllib.request.urlopen(url, timeout=20).read().decode()
+          except urllib.error.HTTPError as e:
+              body = e.read().decode()
+          except Exception as e:
+              print("  请求失败:", e); raise SystemExit
+
+          try:
+              d = json.loads(body)
+          except Exception:
+              print("  非 JSON 响应:", body[:300]); raise SystemExit
+
+          uid = str(d.get("AccountId") or "")
+          mask = ("*" * max(0, len(uid) - 4)) + uid[-4:] if uid else ""
+          if "Arn" in d:
+              print("  IdentityType :", d.get("IdentityType"))
+              print("  AccountId    :", mask)
+              print("  Arn          :", d["Arn"].replace(uid, mask) if uid else d["Arn"])
+              print()
+              print("  >>> RAM 用户名 :", d["Arn"].rsplit("/", 1)[-1])
+          else:
+              print("  调用被拒:", d.get("Code"), "-", d.get("Message"))
+          PY
+
+          # 对照组：同一把 AK 去 stat 一个确定有权限的桶。
+          # 若这里也报 "does not belong to you"，说明该措辞只表示「无授权」而非「跨账号」。
+          echo
+          echo "===== 0b) 对照组 stat lb-assets（hangzhou，已知可写）====="
+          $OSS stat oss://lb-assets -e oss-cn-hangzhou.aliyuncs.com -i "$AK" -k "$SK" 2>&1 | tail -12 || true
+
+          echo
           echo "===== 1) ListBuckets（账号下所有桶,region 无关）====="
           $OSS ls -e "$HK" -i "$AK" -k "$SK" 2>&1 | tail -60 || true
 
@@ -49,9 +117,16 @@ jobs:
           $OSS stat oss://lb-openapi-canary -e "$HK" -i "$AK" -k "$SK" 2>&1 | tail -20 || true
 
           echo
-          echo "===== 3) 写权限探测 ====="
+          echo "===== 3) 写权限探测（凭证来源: $CRED_SOURCE）====="
           echo probe > /tmp/.ci-probe
-          if $OSS cp /tmp/.ci-probe oss://lb-openapi-canary/.ci-probe -f -e "$HK" -i "$AK" -k "$SK" 2>&1 | tail -20; then
+          # 注意不要写成 `if $OSS cp ... | tail`：管道的退出码取自最后一个命令(tail)，
+          # 恒为 0，会把 403 判成成功。先落盘再判退出码。
+          if $OSS cp /tmp/.ci-probe oss://lb-openapi-canary/.ci-probe -f \
+               -e "$HK" -i "$AK" -k "$SK" >/tmp/w.log 2>&1; then
+            tail -5 /tmp/w.log
             echo "写入成功,清理探针文件"
             $OSS rm oss://lb-openapi-canary/.ci-probe -f -e "$HK" -i "$AK" -k "$SK" >/dev/null 2>&1 || true
+          else
+            tail -20 /tmp/w.log
+            echo "写入失败（见上方 ErrorCode）"
           fi
