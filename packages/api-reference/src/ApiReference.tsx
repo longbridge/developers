@@ -641,7 +641,7 @@ function ApiSidebarGroup({
 }
 
 // WebSocket quote functions — a sidebar group alongside the HTTP endpoint
-// groups. Each command opens its own detail view (?ws=<id>).
+// groups. Each command opens its own detail view (/docs/api/<id>).
 function WsSidebarGroup({
   group,
   activeWs,

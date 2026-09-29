@@ -116,12 +116,18 @@ export function endpointList(
 ): Array<{ operationId: string; method: string; path: string; tag: string; summary: string }> {
   const { groups } = parseSpec(rawYaml)
   const out: Array<{ operationId: string; method: string; path: string; tag: string; summary: string }> = []
+  // Dedupe by operationId: a multi-tag op appears in more than one group, which
+  // would otherwise emit duplicate static paths (a fatal Astro build error).
+  const seen = new Set<string>()
   for (const g of groups) {
     // Flat endpoints plus every subsection's endpoints.
     const eps = [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)]
     for (const ep of eps) {
+      const id = ep.operation.operationId
+      if (seen.has(id)) continue
+      seen.add(id)
       out.push({
-        operationId: ep.operation.operationId,
+        operationId: id,
         method: ep.method,
         path: ep.path,
         tag: g.name,

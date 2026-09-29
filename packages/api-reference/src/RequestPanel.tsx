@@ -33,10 +33,16 @@ const L = {
 } as const
 
 // Try-it requests are capped so a hung socket (proxy stall, dropped network)
-// can't leave the button stuck on "Sending…" forever.
+// can't leave the button stuck on "Sending…" forever. The timer is always
+// cleared (via .finally) so it never dangles after a fast success.
 const REQUEST_TIMEOUT_MS = 30_000
-const timeout = (ms: number): Promise<never> =>
-  new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), ms))
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let t: ReturnType<typeof setTimeout>
+  const timer = new Promise<never>((_, reject) => {
+    t = setTimeout(() => reject(new Error('Request timed out')), ms)
+  })
+  return Promise.race([promise, timer]).finally(() => clearTimeout(t)) as Promise<T>
+}
 
 const IconSettings = () => (
   <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -203,7 +209,7 @@ export function RequestPanel({
         : m === 'put' ? client.put(finalPath, body)
         : m === 'delete' ? client.delete(finalPath, query)
         : client.get(finalPath, query)
-      const res = await Promise.race([call, timeout(REQUEST_TIMEOUT_MS)])
+      const res = await withTimeout(call, REQUEST_TIMEOUT_MS)
       onResponse(res)
     } catch (err) {
       onResponse({ status: 0, statusText: 'Error', response: { code: -1, msg: err instanceof Error ? err.message : String(err), data: null } })

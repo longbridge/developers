@@ -763,7 +763,7 @@ x-pages:
       The handshake negotiates three fixed values: protocol `version` = `1`, `codec` = `1` (Protobuf) and `platform` = `9` (OpenAPI).
 
       - **WebSocket** — pass them as query params: `wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
-      - **TCP** — send a 2-byte handshake. Each field sits in the **low 4 bits** of its nibble (same convention as the packet header below): byte 1 = `codec << 4 | ver`, byte 2 = `reserve << 4 | platform`. For `ver=1, codec=1, platform=9` that is `0x11 0x09` (`0b00010001 0b00001001`).
+      - **TCP** — send a 2-byte handshake packing the negotiated values: byte 1 = `codec << 4 | ver`, byte 2 = `reserve << 4 | platform` (so `version` and `platform` sit in the low nibble, matching the `type`-in-low-nibble packet header below). For `ver=1, codec=1, platform=9` that is `0x11 0x09` (`0b00010001 0b00001001`).
 
       ## 3. Packet framing
 
@@ -863,7 +863,7 @@ x-pages:
       握手协商三个固定值:协议 `version` = `1`、`codec` = `1`(Protobuf)、`platform` = `9`(OpenAPI)。
 
       - **WebSocket** — 作为查询参数传入:`wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
-      - **TCP** — 发送 2 字节握手。每个字段位于其所在半字节的**低 4 位**(与下方包头一致):字节 1 = `codec << 4 | ver`,字节 2 = `reserve << 4 | platform`。当 `ver=1, codec=1, platform=9` 时即 `0x11 0x09`(`0b00010001 0b00001001`)。
+      - **TCP** — 发送 2 字节握手,按如下打包协商值:字节 1 = `codec << 4 | ver`,字节 2 = `reserve << 4 | platform`(于是 `version` 与 `platform` 落在低半字节,与下方包头 type 在低位的约定一致)。当 `ver=1, codec=1, platform=9` 时即 `0x11 0x09`(`0b00010001 0b00001001`)。
 
       ## 3. 报文结构
 
@@ -963,7 +963,7 @@ x-pages:
       握手協商三個固定值:協議 `version` = `1`、`codec` = `1`(Protobuf)、`platform` = `9`(OpenAPI)。
 
       - **WebSocket** — 作為查詢參數傳入:`wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
-      - **TCP** — 發送 2 位元組握手。每個欄位位於其所在半位元組的**低 4 位**(與下方封包頭一致):位元組 1 = `codec << 4 | ver`,位元組 2 = `reserve << 4 | platform`。當 `ver=1, codec=1, platform=9` 時即 `0x11 0x09`(`0b00010001 0b00001001`)。
+      - **TCP** — 發送 2 位元組握手,按如下打包協商值:位元組 1 = `codec << 4 | ver`,位元組 2 = `reserve << 4 | platform`(於是 `version` 與 `platform` 落在低半位元組,與下方封包頭 type 在低位的約定一致)。當 `ver=1, codec=1, platform=9` 時即 `0x11 0x09`(`0b00010001 0b00001001`)。
 
       ## 3. 報文結構
 

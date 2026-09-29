@@ -171,6 +171,22 @@ export const GET: APIRoute = async ({ params }) => {
           slug: epId(ep),
         })
       }
+      // WebSocket commands merged into this tag's subgroups (path-based URL, same
+      // canonical form as endpoints). Without this the merged WS commands — which
+      // is all of them — would be missing from search entirely.
+      for (const c of g.subgroups.flatMap((sg) => sg.wsCommands ?? [])) {
+        const title = pickLocale(c.name, c.nameZh, c.nameZhHk, locale)
+        const desc = pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale)
+        sections.push({
+          id: `api-ws::${c.id}`,
+          url: `${prefix}/docs/api/${c.id}`,
+          title: title || c.id,
+          headings: [gname, title || c.id].filter(Boolean),
+          body: stripMarkdown(desc || '').slice(0, MAX_SECTION_BODY),
+          type: 'api',
+          slug: c.id,
+        })
+      }
     }
     for (const p of pages) {
       const title = pickLocale(p.title, p.titleZh, p.titleZhHk, locale)
@@ -192,7 +208,7 @@ export const GET: APIRoute = async ({ params }) => {
         const desc = pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale)
         sections.push({
           id: `api-ws::${c.id}`,
-          url: `${prefix}/docs/api?ws=${c.id}`,
+          url: `${prefix}/docs/api/${c.id}`,
           title: title || c.id,
           headings: [gname, title || c.id].filter(Boolean),
           body: stripMarkdown(desc || '').slice(0, MAX_SECTION_BODY),

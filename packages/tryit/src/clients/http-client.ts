@@ -203,7 +203,18 @@ export class LongbridgeApiClient {
 
       clearTimeout(timeoutId)
 
-      const result = await response.json()
+      // Read as text first so a non-JSON body (204 No Content, empty body, or a
+      // proxy/gateway HTML error page) is surfaced with its real HTTP status
+      // instead of throwing a JSON parse error that masquerades as status 0.
+      const text = await response.text()
+      let result: any
+      try {
+        result = text
+          ? JSON.parse(text)
+          : { code: response.status, msg: `HTTP ${response.status} ${response.statusText}`, data: null }
+      } catch {
+        result = { code: response.status, msg: text.slice(0, 800), data: null }
+      }
       return {
         status: response.status,
         statusText: response.statusText,
