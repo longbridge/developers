@@ -8,7 +8,9 @@ const yamlPath = fileURLToPath(new URL('../../../openapi.yaml', import.meta.url)
 const raw = readFileSync(yamlPath, 'utf8')
 const parsed = load(raw) as any
 const { groups } = parseSpec(raw)
-const allEps = groups.flatMap((g) => g.endpoints)
+// Include subgroup endpoints, not just the flat ones — otherwise the invariants
+// below only cover the handful of endpoints that live directly on a tag group.
+const allEps = groups.flatMap((g) => [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)])
 const declaredTags: string[] = (parsed.tags ?? []).map((t: any) => t.name)
 
 describe('openapi.yaml invariants', () => {

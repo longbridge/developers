@@ -1483,14 +1483,6 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* Leaf detail pages (endpoint / WS command) keep the middle column at a
-   comfortable reading measure — the code/response lives in the right rail, so
-   the prose + parameter tables don't need to sprawl the full width. */
-/* Temporarily disabled.
-[data-lbus-component='api-reference'] .docs-main.has-rail .docs-content {
-  max-width: 52rem;
-}
-*/
 
 /* Drawer chrome is hidden while the rail sits beside the content (wide screens). */
 .ep-urlbar-tryit,

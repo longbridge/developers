@@ -3,14 +3,20 @@
 // Renders the same interactive reference as /docs/api; the React app reads the
 // operationId from the pathname on hydration and focuses that endpoint.
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
-import { endpointList } from '@longbridge/openapi-api-reference/markdown'
+import { endpointList, wsCommandList } from '@longbridge/openapi-api-reference/markdown'
 import rawYaml from '../../../../openapi.yaml?raw'
 
 export function getStaticPaths() {
-  return endpointList(rawYaml).map((e) => ({
-    params: { op: e.operationId },
-    props: { summary: e.summary },
-  }))
+  return [
+    ...endpointList(rawYaml).map((e) => ({
+      params: { op: e.operationId },
+      props: { summary: e.summary },
+    })),
+    ...wsCommandList(rawYaml).map((w) => ({
+      params: { op: w.id },
+      props: { summary: w.name },
+    })),
+  ]
 }
 
 const { summary } = Astro.props as { summary: string }

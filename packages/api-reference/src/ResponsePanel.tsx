@@ -12,6 +12,7 @@ import type { ResponseExample } from './openapi-loader'
 const L = {
   response: { en: 'Response', 'zh-CN': '响应', 'zh-HK': '響應' },
   live: { en: 'Live', 'zh-CN': '实测', 'zh-HK': '實測' },
+  error: { en: 'Error', 'zh-CN': '错误', 'zh-HK': '錯誤' },
 } as const
 
 export interface ResponsePanelProps {
@@ -22,19 +23,25 @@ export interface ResponsePanelProps {
 
 export function ResponsePanel({ examples, live, locale }: ResponsePanelProps) {
   const statuses = examples.map((e) => e.status)
-  const liveStatus = live?.status && live.status > 0 ? live.status : null
+  // A live response always gets a tab — including a network/timeout failure,
+  // which surfaces as status 0 (rendered as an "Error" tab) so the user gets
+  // feedback instead of the request silently falling back to the doc example.
+  const liveStatus = live ? live.status : null
   const [active, setActive] = useState<number>(statuses[0] ?? 200)
 
-  // Jump to the live response's status tab when one arrives.
+  // Jump to the live response's tab when one arrives (0 is a valid tab here).
   useEffect(() => {
-    if (liveStatus) setActive(liveStatus)
+    if (liveStatus != null) setActive(liveStatus)
   }, [live, liveStatus])
 
-  const tabStatuses = liveStatus && !statuses.includes(liveStatus) ? [...statuses, liveStatus] : statuses
-  const isLiveTab = liveStatus === active
+  const tabStatuses = liveStatus != null && !statuses.includes(liveStatus) ? [...statuses, liveStatus] : statuses
+  // Guard against a stale `active` (e.g. an error tab left over from a prior
+  // endpoint) that no longer exists in the current tab set.
+  const shownActive = tabStatuses.includes(active) ? active : (tabStatuses[0] ?? 200)
+  const isLiveTab = liveStatus != null && liveStatus === shownActive
   const body = isLiveTab
     ? JSON.stringify((live as any).response ?? live, null, 2)
-    : (examples.find((e) => e.status === active)?.body ?? '')
+    : (examples.find((e) => e.status === shownActive)?.body ?? '')
 
   return (
     <section className="api-rail-card" data-lbus-component="response-panel">
@@ -47,9 +54,9 @@ export function ResponsePanel({ examples, live, locale }: ResponsePanelProps) {
           <button
             key={s}
             type="button"
-            className={`api-rail-tab${s === active ? ' is-active' : ''}${s >= 400 ? ' is-err' : ''}`}
+            className={`api-rail-tab${s === shownActive ? ' is-active' : ''}${s === 0 || s >= 400 ? ' is-err' : ''}`}
             onClick={() => setActive(s)}>
-            {s}
+            {s === 0 ? L.error[locale] : s}
           </button>
         ))}
       </div>

@@ -172,9 +172,12 @@ function allWsCommands(rawYaml: string): WsCommandItem[] {
   return out
 }
 
-/** Flat list of WS command ids (for getStaticPaths / indexing). */
-export function wsCommandList(rawYaml: string): Array<{ id: string }> {
-  return allWsCommands(rawYaml).map((c) => ({ id: c.id }))
+/** Flat list of WS commands (for getStaticPaths / indexing). Callers that only
+ *  need the id keep working; llms.txt uses name/cmd/direction to label pages. */
+export function wsCommandList(
+  rawYaml: string
+): Array<{ id: string; name: string; cmd?: number; direction: 'request' | 'push' }> {
+  return allWsCommands(rawYaml).map((c) => ({ id: c.id, name: c.name, cmd: c.cmd, direction: c.direction }))
 }
 
 /** Markdown for a single WS command by id (null if not found). */
@@ -185,7 +188,7 @@ export function wsCommandMarkdownById(rawYaml: string, id: string, locale: Local
 
 /** Full reference: intro + every page + every endpoint, grouped by tag. */
 export function referenceMarkdown(rawYaml: string, locale: Locale): string {
-  const { groups, pages } = parseSpec(rawYaml)
+  const { groups, pages, wsGroups } = parseSpec(rawYaml)
   let md = `# Longbridge OpenAPI Reference\n\nMachine-readable reference for all REST and WebSocket endpoints.\n\n`
 
   for (const pg of pages) {
@@ -205,12 +208,22 @@ export function referenceMarkdown(rawYaml: string, locale: Locale): string {
     md += `## ${tag}\n\n`
     // Flat endpoints (groups without subsections, e.g. Screener) at level 3.
     for (const ep of g.endpoints) md += endpointMarkdown(ep, locale, 3) + '\n'
-    // Subsections (docs subgroups): `### Subsection` then endpoints at level 4.
+    // Subsections (docs subgroups): `### Subsection` then endpoints at level 4,
+    // followed by any WebSocket commands filed under the same subsection.
     for (const sg of g.subgroups) {
       const sub = pickLocale(sg.name, sg.nameZh, sg.nameZhHk, locale)
       md += `### ${sub}\n\n`
       for (const ep of sg.endpoints) md += endpointMarkdown(ep, locale, 4) + '\n'
+      for (const c of sg.wsCommands ?? []) md += wsCommandMarkdown(c, locale, 4) + '\n'
     }
+  }
+
+  // Standalone WebSocket protocol groups (commands not merged into a topical
+  // subgroup) — usually empty after the merge, rendered here for completeness.
+  for (const wg of wsGroups) {
+    if (!wg.commands.length) continue
+    md += `## ${pickLocale(wg.name, wg.nameZh, wg.nameZhHk, locale)}\n\n`
+    for (const c of wg.commands) md += wsCommandMarkdown(c, locale, 3) + '\n'
   }
   return md.trimEnd() + '\n'
 }

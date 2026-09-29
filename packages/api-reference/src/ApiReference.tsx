@@ -143,16 +143,13 @@ const PARAM_NOTE: Record<Locale, string> = {
 // Docs-model section labels (trilingual).
 const L = {
   request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
-  parameters: { en: 'Parameters', 'zh-CN': '参数', 'zh-HK': '參數' },
   pathParams: { en: 'Path parameters', 'zh-CN': '路径参数', 'zh-HK': '路徑參數' },
   queryParams: { en: 'Query parameters', 'zh-CN': '查询参数', 'zh-HK': '查詢參數' },
   requestBody: { en: 'Request body', 'zh-CN': '请求体', 'zh-HK': '請求體' },
-  requestExample: { en: 'Request example', 'zh-CN': '请求示例', 'zh-HK': '請求示例' },
   response: { en: 'Response', 'zh-CN': '响应', 'zh-HK': '響應' },
   responseProps: { en: 'Response properties', 'zh-CN': '响应字段', 'zh-HK': '響應欄位' },
   responseJson: { en: 'Response JSON example', 'zh-CN': '响应 JSON 示例', 'zh-HK': '響應 JSON 示例' },
   errorCode: { en: 'Error code', 'zh-CN': '错误码', 'zh-HK': '錯誤碼' },
-  onThisPage: { en: 'On this page', 'zh-CN': '本页目录', 'zh-HK': '本頁目錄' },
   name: { en: 'Name', 'zh-CN': '名称', 'zh-HK': '名稱' },
   type: { en: 'Type', 'zh-CN': '类型', 'zh-HK': '類型' },
   required: { en: 'Required', 'zh-CN': '必填', 'zh-HK': '必填' },
@@ -168,14 +165,12 @@ const L = {
     'zh-CN': '示例使用 OAuth（Bearer）。如用 API Key 鉴权，请对请求签名 —— 见',
     'zh-HK': '示例使用 OAuth（Bearer）。如用 API Key 鑑權，請對請求簽名 —— 見',
   },
-  authLink: { en: 'Authentication', 'zh-CN': '鉴权', 'zh-HK': '鑑權' },
   authorization: { en: 'Authorization', 'zh-CN': '鉴权', 'zh-HK': '鑑權' },
   authorizationDesc: {
     en: 'Access token issued for the account, sent as `Authorization: Bearer <access_token>`.',
     'zh-CN': '账户签发的 access token，通过 `Authorization: Bearer <access_token>` 发送。',
     'zh-HK': '帳戶簽發的 access token，通過 `Authorization: Bearer <access_token>` 發送。',
   },
-  permission: { en: 'Permission', 'zh-CN': '权限', 'zh-HK': '權限' },
   tryIt: { en: 'Try it', 'zh-CN': 'Try it', 'zh-HK': 'Try it' },
   close: { en: 'Close', 'zh-CN': '关闭', 'zh-HK': '關閉' },
 } as const
@@ -634,7 +629,7 @@ function ApiSidebarGroup({
             })),
             ...wsGroups.map((wg) => ({
               rank: subRank(wg.name),
-              node: <WsSidebarGroup key={`w:${wg.name}`} group={wg} activeWs={activeWs} onSelect={onWs} locale={locale} />,
+              node: <WsSidebarGroup key={`w:${wg.name}`} group={wg} activeWs={activeWs} onSelect={onWs} locale={locale} forceOpen={forceOpen} />,
             })),
           ]
             .sort((a, b) => a.rank - b.rank)
@@ -652,27 +647,31 @@ function WsSidebarGroup({
   activeWs,
   onSelect,
   locale,
+  forceOpen = false,
 }: {
   group: WsGroupData
   activeWs: string | null
   onSelect: (id: string) => void
   locale: Locale
+  forceOpen?: boolean
 }) {
+  const hasActive = group.commands.some((c) => c.id === activeWs)
   const [open, setOpen] = useState(false)
+  const isOpen = forceOpen || open || hasActive
   const label = pickLocale(group.name, group.nameZh, group.nameZhHk, locale)
   return (
     <li data-lbus-component="sidebar-subgroup" className="list-none">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
+        aria-expanded={isOpen}
         className="group flex items-center w-full bg-transparent border-0 cursor-pointer text-left rounded-lg pl-3 pr-2 py-1 text-[13px] leading-6">
         <span className="flex-1 min-w-0 truncate font-semibold text-[color:var(--lb-fg-2)] group-hover:text-[color:var(--lb-brand)]">
           {label}
         </span>
-        <Caret open={open} />
+        <Caret open={isOpen} />
       </button>
-      {open && (
+      {isOpen && (
         <ul className="list-none py-0 m-0 pl-2 flex flex-col gap-[2px]" role="list">
           {group.commands.map((c) => {
             const active = activeWs === c.id
@@ -964,6 +963,15 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   // Parse spec once
   const { groups, pages, wsGroups, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
 
+  // Every WS command id (merged into subgroups + standalone groups) so path-based
+  // routing (/docs/api/<id>) can tell a WS command from a REST operationId.
+  const wsIdSet = useMemo(() => {
+    const s = new Set<string>()
+    for (const g of groups) for (const sg of g.subgroups) for (const c of sg.wsCommands ?? []) s.add(c.id)
+    for (const g of wsGroups) for (const c of g.commands) s.add(c.id)
+    return s
+  }, [groups, wsGroups])
+
   // ── URL state ─────────────────────────────────────────────────────────────
   // Canonical URLs are path-based: `/docs/api/<operationId>` (locale-prefixed).
   // The legacy `?op=` / `?page=` query form is still honored for old links.
@@ -973,7 +981,14 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     const path = window.location.pathname.replace(/\/+$/, '')
     if (path.startsWith(apiBase + '/')) {
       const seg = path.slice(apiBase.length + 1)
-      if (seg && !seg.includes('/')) return { op: decodeURIComponent(seg), page: null, ws: null }
+      if (seg && !seg.includes('/')) {
+        const id = decodeURIComponent(seg)
+        // A path segment is a WS command when it matches a known ws id, else an
+        // endpoint operationId.
+        return wsIdSet.has(id)
+          ? { op: null, page: null, ws: id }
+          : { op: id, page: null, ws: null }
+      }
     }
     const p = new URLSearchParams(window.location.search)
     return { op: p.get('op'), page: p.get('page'), ws: p.get('ws') }
@@ -1029,10 +1044,11 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     [apiBase]
   )
 
-  // Navigate to a WebSocket command → /docs/api?ws=<id>
+  // Navigate to a WebSocket command → /docs/api/<id> (path-based, like endpoints;
+  // getRoute resolves the segment to a WS command via wsIdSet).
   const selectWs = useCallback(
     (id: string) => {
-      window.history.pushState({}, '', `${apiBase}?ws=${id}`)
+      window.history.pushState({}, '', `${apiBase}/${id}`)
       setActiveWs(id)
       setActiveOp(null)
       setActivePage(null)
@@ -1369,7 +1385,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                 {wsGroups
                   .filter((w) => !filteredGroups.some((g) => g.name === w.tag))
                   .map((wg) => (
-                    <WsSidebarGroup key={wg.name} group={wg} activeWs={activeWs} onSelect={selectWs} locale={locale} />
+                    <WsSidebarGroup key={wg.name} group={wg} activeWs={activeWs} onSelect={selectWs} locale={locale} forceOpen={!!query.trim()} />
                   ))}
               </ul>
             </div>

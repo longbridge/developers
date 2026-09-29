@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
 import { resolveUrl, resolveLocale } from '@longbridge/openapi-utils'
-import { endpointList } from '@longbridge/openapi-api-reference/markdown'
+import { endpointList, wsCommandList } from '@longbridge/openapi-api-reference/markdown'
 import rawYaml from '../../openapi.yaml?raw'
 
 export const GET: APIRoute = async ({ site }) => {
@@ -16,9 +16,13 @@ export const GET: APIRoute = async ({ site }) => {
       return `- [${title}](${site}${url.replace(/^\//, '')})`
     })
 
-  // API Reference — one machine-readable .md per endpoint.
+  // API Reference — one machine-readable .md per endpoint …
   const apiLines = endpointList(rawYaml).map(
     (e) => `- [${e.summary}](${site}docs/api/${e.operationId}.md): ${e.method} ${e.path}`
+  )
+  // … and per WebSocket command.
+  const wsLines = wsCommandList(rawYaml).map(
+    (w) => `- [${w.name}](${site}docs/api/${w.id}.md): WS ${w.direction}${w.cmd != null ? ` cmd ${w.cmd}` : ''}`
   )
 
   const body =
@@ -27,6 +31,8 @@ export const GET: APIRoute = async ({ site }) => {
     '\n\n## API Reference\n\nFull reference: ' +
     `${site}docs/api.md\n\n` +
     apiLines.join('\n') +
+    '\n\n### WebSocket\n\n' +
+    wsLines.join('\n') +
     '\n'
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
 }

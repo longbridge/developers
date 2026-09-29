@@ -32,6 +32,12 @@ const L = {
   authMode: { en: 'Auth method', 'zh-CN': '鉴权方式', 'zh-HK': '鑑權方式' },
 } as const
 
+// Try-it requests are capped so a hung socket (proxy stall, dropped network)
+// can't leave the button stuck on "Sending…" forever.
+const REQUEST_TIMEOUT_MS = 30_000
+const timeout = (ms: number): Promise<never> =>
+  new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), ms))
+
 const IconSettings = () => (
   <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="3" />
@@ -167,6 +173,8 @@ export function RequestPanel({
         ).toString()
         const hasBody = m === 'post' || m === 'put' || m === 'patch'
         const url = `${baseUrl}${finalPath}${qs ? `?${qs}` : ''}`
+        const ctrl = new AbortController()
+        const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS)
         const res = await fetch(url, {
           method: method.toUpperCase(),
           headers: {
@@ -174,7 +182,8 @@ export function RequestPanel({
             ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
           },
           body: hasBody ? JSON.stringify(body) : undefined,
-        })
+          signal: ctrl.signal,
+        }).finally(() => clearTimeout(timer))
         // Read as text first so a non-JSON body (proxy/HTML error, empty 204) is
         // surfaced instead of a generic "non-JSON response".
         const text = await res.text()
@@ -189,11 +198,12 @@ export function RequestPanel({
       }
 
       const client = createQuickRequest(authData.appKey, authData.accessToken, authData.appSecret, { baseUrl })
-      let res: ApiResponse
-      if (m === 'post') res = await client.post(finalPath, body)
-      else if (m === 'put') res = await client.put(finalPath, body)
-      else if (m === 'delete') res = await client.delete(finalPath, query)
-      else res = await client.get(finalPath, query)
+      const call =
+        m === 'post' ? client.post(finalPath, body)
+        : m === 'put' ? client.put(finalPath, body)
+        : m === 'delete' ? client.delete(finalPath, query)
+        : client.get(finalPath, query)
+      const res = await Promise.race([call, timeout(REQUEST_TIMEOUT_MS)])
       onResponse(res)
     } catch (err) {
       onResponse({ status: 0, statusText: 'Error', response: { code: -1, msg: err instanceof Error ? err.message : String(err), data: null } })
