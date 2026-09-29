@@ -173,6 +173,7 @@ const L = {
   },
   tryIt: { en: 'Try it', 'zh-CN': 'Try it', 'zh-HK': 'Try it' },
   close: { en: 'Close', 'zh-CN': '关闭', 'zh-HK': '關閉' },
+  menu: { en: 'Menu', 'zh-CN': '菜单', 'zh-HK': '選單' },
 } as const
 
 type RowVM = { name: string; type: string; required: boolean; description: string }
@@ -1021,12 +1022,16 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     if (typeof window !== 'undefined') window.scrollTo({ top: 0 })
   }
 
+  // Narrow-screen (<lg) only: the left nav is an off-canvas drawer.
+  const [navOpen, setNavOpen] = useState(false)
+
   const selectEndpoint = useCallback(
     (id: string) => {
       window.history.pushState({}, '', `${apiBase}/${id}`)
       setActiveOp(id)
       setActivePage(null)
       setActiveWs(null)
+      setNavOpen(false)
       scrollTop()
     },
     [apiBase]
@@ -1039,6 +1044,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       setActivePage(id)
       setActiveOp(null)
       setActiveWs(null)
+      setNavOpen(false)
       scrollTop()
     },
     [apiBase]
@@ -1052,6 +1058,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       setActiveWs(id)
       setActiveOp(null)
       setActivePage(null)
+      setNavOpen(false)
       scrollTop()
     },
     [apiBase]
@@ -1292,6 +1299,14 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [railOpen])
+  useEffect(() => {
+    if (!navOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setNavOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [navOpen])
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -1327,10 +1342,29 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   return (
     <EnvProvider>
     <div ref={rootRef} data-lbus-component="api-reference" className="docs-layout">
+      {/* Narrow-screen nav toggle + backdrop (hidden on lg+, where the sidebar is
+          a sticky column). Without the drawer the fixed sidebar overlapped and
+          clipped the content on small viewports. */}
+      <button
+        type="button"
+        className="lg:hidden fixed left-3 top-[70px] z-40 inline-flex items-center gap-1.5 rounded-full border border-[color:var(--lb-stroke)] bg-[var(--lb-bg-1)] px-3 py-1.5 text-[13px] font-medium text-[color:var(--lb-fg-1)] shadow-sm"
+        aria-label={L.menu[locale]}
+        aria-expanded={navOpen}
+        onClick={() => setNavOpen(true)}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        {L.menu[locale]}
+      </button>
+      <div
+        className={`lg:hidden fixed inset-0 z-40 bg-black/35 transition-opacity duration-200 ${navOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+        aria-hidden="true"
+        onClick={() => setNavOpen(false)}
+      />
       {/* ── Sidebar (docs sidebar DOM) ── */}
       <aside
         data-lbus-component="sidebar"
-        className="fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-[color:var(--lb-stroke)] bg-[var(--lbus-c-bg)] px-6 py-6 lg:sticky lg:top-[60px] lg:z-auto lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:translate-x-0"
+        className={`fixed inset-y-0 left-0 z-50 w-64 overflow-y-auto border-r border-[color:var(--lb-stroke)] bg-[var(--lbus-c-bg)] px-6 py-6 transition-transform duration-200 ${navOpen ? 'translate-x-0' : '-translate-x-full'} lg:sticky lg:top-[60px] lg:z-auto lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:translate-x-0`}
         aria-label="API navigation">
         <nav aria-label="API navigation">
           {/* Static pages — a bare (header-less) group, like docs Overview/Getting Started */}
