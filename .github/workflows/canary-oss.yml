@@ -12,6 +12,9 @@ on:
   push:
     branches:
       - feat/nginx_decommission
+    paths-ignore:
+      # 只调探针时不要连带触发这条 17 分钟的完整构建
+      - '.github/workflows/oss-probe.yml'
   workflow_dispatch:
 
 concurrency:
