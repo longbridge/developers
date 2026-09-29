@@ -349,6 +349,7 @@ x-pages:
   - id: overview
     title: Overview
     x-title-zh: 概览
+    x-title-zh-hk: 概覽
     x-icon: book
     content: |
       This page is reorganized as a practical **OAuth 2.0 access flow** for new integrations.
@@ -705,6 +706,182 @@ x-pages:
       ## 兼容说明
 
       历史接口 `/v1/token/refresh` 属于旧方案兼容路径，不建议新接入继续采用。新接入请统一使用 OAuth 2.0 token endpoint。
+    x-content-zh-hk: |
+      本頁按 **OAuth 2.0 實際接入流程** 重新整理，用於新接入用戶快速走通。
+
+      > **提示：** 優先使用 SDK，接入更簡單：https://open.longbridge.com/sdk
+
+      ## API 須知
+
+      | 注意事項                                     | 參考文檔                                          |
+      | -------------------------------------------- | ------------------------------------------------- |
+      | 推薦使用各自語言的 SDK，而不是調用原生的接口 | [SDK 快速開始頁面](/docs/getting-started)         |
+      | 閱讀 OpenAPI 介紹中開通相應服務              | [OpenAPI 如何開通](/docs/#如何開通)               |
+      | 閱讀 OpenAPI 介紹中使用權限及限制            | [OpenAPI 使用權限及限制](/docs/#使用權限及限制)   |
+      | 瞭解通用錯誤碼，便於查找調用接口出錯的原因   | [通用錯誤碼](/docs/error-codes)                   |
+
+      ## OAuth 2.0（推薦方案）
+
+      新接入默認使用 OAuth 2.0。API Key 簽名方式作爲備選兼容方案可保留（例如在 SDK/歷史實現中），但不作爲默認接入方式。
+
+      ### Discovery 地址
+
+      - 生產環境：`https://openapi.longbridge.com/.well-known/oauth-authorization-server`
+      - 中國內地：`https://openapi.longbridge.cn/.well-known/oauth-authorization-server`
+
+      支持授權類型（以 Discovery 返回爲準）：
+
+      - `authorization_code`
+      - `refresh_token`
+
+      ## OAuth 2.0 授權流程
+
+      ### 註冊 OAuth 客戶端
+
+      如果沒有可視化後台入口，可通過接口動態註冊：
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/register \
+        -H "Content-Type: application/json" \
+        -d '{
+          "client_name": "my-openapi-app",
+          "redirect_uris": ["https://your-app.com/callback"],
+          "grant_types": ["authorization_code", "refresh_token"],
+          "response_types": ["code"]
+        }'
+      ```
+
+      > 註冊返回可能僅包含 `client_id`（public client，不返回 `client_secret`）。這種情況下請使用 PKCE，並在 token 請求裏不傳 `client_secret`。
+
+      ### 構造授權鏈接並獲取 code
+
+      ```text
+      https://openapi.longbridge.com/oauth2/authorize
+        ?response_type=code
+        &client_id=YOUR_CLIENT_ID
+        &redirect_uri=YOUR_REDIRECT_URI
+        &scope=3
+        &state=YOUR_RANDOM_STATE
+        &code_challenge=YOUR_CODE_CHALLENGE
+        &code_challenge_method=S256
+      ```
+
+      用戶授權後，回調地址會收到：
+
+      ```text
+      YOUR_REDIRECT_URI?code=AUTH_CODE&state=YOUR_RANDOM_STATE
+      ```
+
+      ### 用 code 換 access_token
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=authorization_code" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "redirect_uri=YOUR_REDIRECT_URI" \
+        -d "code=AUTH_CODE" \
+        -d "code_verifier=YOUR_CODE_VERIFIER"
+      # 僅當客戶端有 secret 時再加：
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ### 用 Bearer token 調 API（TSLA.US 實例）
+
+      ```bash
+      curl -X GET "https://openapi.longbridge.com/v1/quote/get_security_list?market=US&category=Overnight" \
+        -H "Authorization: Bearer ACCESS_TOKEN"
+      ```
+
+      實際返回（節選，保留 `TSLA.US` 項）：
+
+      ```json
+      {
+        "code": 0,
+        "message": "success",
+        "data": {
+          "list": [
+            {
+              "symbol": "TSLA.US",
+              "name_cn": "特斯拉",
+              "name_hk": "",
+              "name_en": ""
+            }
+          ]
+        }
+      }
+      ```
+
+      ### 刷新 token
+
+      通過 OAuth token endpoint 刷新（詳見下方"刷新 Token"部分）：
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=refresh_token" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "refresh_token=REFRESH_TOKEN"
+      # 僅當客戶端有 secret 時再加：
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ## 與舊文檔的關係
+
+      - 本頁：只講 **OAuth 2.0 主流程**（新接入默認看這裏）。
+      - 下方"刷新 Token"部分：只講刷新步驟細節與常見問題，避免重複。
+
+      ---
+
+      # 刷新 Token（OAuth 2.0）
+
+      本頁僅說明 OAuth 2.0 的 **refresh token** 刷新步驟。
+
+      - 如果你還沒走完完整授權流程，請先看上方認證部分。
+      - 本頁不重複註冊 client / 獲取 code 的流程，只關注"刷新"這一步
+
+      ## 推薦刷新方式（OAuth 2.0）
+
+      使用 OAuth token endpoint：
+
+      - `POST https://openapi.longbridge.com/oauth2/token`
+      - 或中國內地：`POST https://openapi.longbridge.cn/oauth2/token`
+
+      ### 請求參數（`application/x-www-form-urlencoded`）
+
+      | 名稱          | 必須 | 說明 |
+      | ------------- | ---- | ---- |
+      | grant_type    | 是   | 固定爲 `refresh_token` |
+      | client_id     | 是   | OAuth client id |
+      | refresh_token | 是   | 上一次簽發的 refresh token |
+      | client_secret | 否   | 僅機密客戶端需要；public client 不傳 |
+
+      ### 刷新示例
+
+      ```bash
+      curl -X POST https://openapi.longbridge.com/oauth2/token \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "grant_type=refresh_token" \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "refresh_token=YOUR_REFRESH_TOKEN"
+      # 僅當你的客戶端有 secret 時再加：
+      # -d "client_secret=YOUR_CLIENT_SECRET"
+      ```
+
+      ### 響應示例
+
+      ```json
+      {
+        "access_token": "...",
+        "refresh_token": "...",
+        "expires_in": 2592000,
+        "token_type": "Bearer"
+      }
+      ```
+
+      ## 兼容說明
+
+      歷史接口 `/v1/token/refresh` 屬於舊方案兼容路徑，不建議新接入繼續採用。新接入請統一使用 OAuth 2.0 token endpoint。
   - id: real-time-data
     title: Real-Time Market Data
     x-title-zh: 实时行情
@@ -1013,6 +1190,7 @@ x-pages:
   - id: error-codes
     title: Error Codes
     x-title-zh: 错误码
+    x-title-zh-hk: 錯誤碼
     x-icon: alert-circle
     content: |
       ## Error Codes
@@ -1040,6 +1218,19 @@ x-pages:
       | 429         | 429001 | ip request ratelimit   | IP 访问过于频繁，请稍后再试              |
       | 429         | 429002 | api request is limited | 接口访问过于频繁，请稍后再试             |
       | 500         | 500000 | internal error         | 服务内部错误，请联系客户经理进行处理         |
+    x-content-zh-hk: |
+      ## 錯誤碼
+
+      | HTTP Status | code   | message                | 說明                                     |
+      | ----------- | ------ | ---------------------- | ---------------------------------------- |
+      | 403         | 403201 | signature invalid      | 簽名無效                                 |
+      | 403         | 403202 | duplicate request      | 重複請求，同一個請求沒有更換 X-Timestamp |
+      | 403         | 403203 | apikey illegal         | App Key 無效                             |
+      | 403         | 403205 | ip is not allowed      | IP 地址無權訪問                          |
+      | 401         | 401003 | token expired          | Access Token 已過期。舊版 API Key：請在 [https://open.longbridge.com/](https://open.longbridge.com/) 重新獲取；OAuth：請使用 refresh token 流程刷新。 |
+      | 429         | 429001 | ip request ratelimit   | IP 訪問過於頻繁，請稍後再試              |
+      | 429         | 429002 | api request is limited | 接口訪問過於頻繁，請稍後再試             |
+      | 500         | 500000 | internal error         | 服務內部錯誤，請聯繫客戶經理進行處理         |
 x-websocket:
   groups:
     - name: Pull (WebSocket)
@@ -3222,7 +3413,7 @@ x-websocket:
               required: false
               description: "participant name (zh-CN)"
               x-description-zh: "券商名称 (简)"
-              x-description-zh-hk: "券商名稱 (简)"
+              x-description-zh-hk: "券商名稱 (簡)"
             - name: "└ participant_name_en"
               type: "string"
               required: false
@@ -3732,7 +3923,7 @@ x-websocket:
               required: false
               description: "Turnover"
               x-description-zh: "成交额"
-              x-description-zh-hk: "成交额"
+              x-description-zh-hk: "成交額"
             - name: "└ avg_price"
               type: "string"
               required: false
@@ -3996,43 +4187,43 @@ x-websocket:
               required: false
               description: "Close price"
               x-description-zh: "当前周期收盘价"
-              x-description-zh-hk: "當前周期收盤價"
+              x-description-zh-hk: "當前週期收盤價"
             - name: "└ open"
               type: "string"
               required: false
               description: "Open price"
               x-description-zh: "当前周期开盘价"
-              x-description-zh-hk: "當前周期開盤價"
+              x-description-zh-hk: "當前週期開盤價"
             - name: "└ low"
               type: "string"
               required: false
               description: "Low price"
               x-description-zh: "当前周期最低价"
-              x-description-zh-hk: "當前周期最低價"
+              x-description-zh-hk: "當前週期最低價"
             - name: "└ high"
               type: "string"
               required: false
               description: "High price"
               x-description-zh: "当前周期最高价"
-              x-description-zh-hk: "當前周期最高價"
+              x-description-zh-hk: "當前週期最高價"
             - name: "└ volume"
               type: "int64"
               required: false
               description: "Volume"
               x-description-zh: "当前周期成交量"
-              x-description-zh-hk: "當前周期成交量"
+              x-description-zh-hk: "當前週期成交量"
             - name: "└ turnover"
               type: "string"
               required: false
               description: "Turnover"
               x-description-zh: "当前周期成交额"
-              x-description-zh-hk: "當前周期成交額"
+              x-description-zh-hk: "當前週期成交額"
             - name: "└ timestamp"
               type: "int64"
               required: false
               description: "Timestamp"
               x-description-zh: "当前周期的时间戳"
-              x-description-zh-hk: "當前周期的時間戳"
+              x-description-zh-hk: "當前週期的時間戳"
             - name: "└ trade_session"
               type: "int32"
               required: false
@@ -4689,7 +4880,7 @@ x-websocket:
               required: false
               description: "Issuer Name (zh-CN)"
               x-description-zh: "机构名称 (简)"
-              x-description-zh-hk: "機構名稱 (简)"
+              x-description-zh-hk: "機構名稱 (簡)"
             - name: "└ name_en"
               type: "string"
               required: false
@@ -4978,7 +5169,7 @@ x-websocket:
               required: true
               description: "Language: 0 zh-CN, 1 en, 2 zh-HK"
               x-description-zh: "响应的语言：0 简体，1 English, 2 繁体"
-              x-description-zh-hk: "響應的語言：0 簡體，1 English, 2 繁体"
+              x-description-zh-hk: "響應的語言：0 簡體，1 English, 2 繁體"
           x-response-fields:
             - name: "warrant_list"
               type: "object[]"
@@ -6315,7 +6506,7 @@ x-websocket:
               required: true
               description: "Candlestick period"
               x-description-zh: "K 线周期"
-              x-description-zh-hk: "K 線周期"
+              x-description-zh-hk: "K 線週期"
             - name: "adjust_type"
               type: "int32"
               required: true
@@ -6400,43 +6591,43 @@ x-websocket:
               required: false
               description: "Close price"
               x-description-zh: "当前周期收盘价"
-              x-description-zh-hk: "當前周期收盤價"
+              x-description-zh-hk: "當前週期收盤價"
             - name: "└ open"
               type: "string"
               required: false
               description: "Open price"
               x-description-zh: "当前周期开盘价"
-              x-description-zh-hk: "當前周期開盤價"
+              x-description-zh-hk: "當前週期開盤價"
             - name: "└ low"
               type: "string"
               required: false
               description: "Low price"
               x-description-zh: "当前周期最低价"
-              x-description-zh-hk: "當前周期最低價"
+              x-description-zh-hk: "當前週期最低價"
             - name: "└ high"
               type: "string"
               required: false
               description: "High price"
               x-description-zh: "当前周期最高价"
-              x-description-zh-hk: "當前周期最高價"
+              x-description-zh-hk: "當前週期最高價"
             - name: "└ volume"
               type: "int64"
               required: false
               description: "Volume"
               x-description-zh: "当前周期成交量"
-              x-description-zh-hk: "當前周期成交量"
+              x-description-zh-hk: "當前週期成交量"
             - name: "└ turnover"
               type: "string"
               required: false
               description: "Turnover"
               x-description-zh: "当前周期成交额"
-              x-description-zh-hk: "當前周期成交額"
+              x-description-zh-hk: "當前週期成交額"
             - name: "└ timestamp"
               type: "int64"
               required: false
               description: "Timestamp"
               x-description-zh: "当前周期的时间戳"
-              x-description-zh-hk: "當前周期的時間戳"
+              x-description-zh-hk: "當前週期的時間戳"
             - name: "└ trade_session"
               type: "int32"
               required: false
@@ -8660,8 +8851,8 @@ x-websocket:
               type: "string"
               required: false
               description: "Topic"
-              x-description-zh: "topic"
-              x-description-zh-hk: "topic"
+              x-description-zh: "主题"
+              x-description-zh-hk: "主題"
             - name: "└ reason"
               type: "string"
               required: false
@@ -9027,8 +9218,8 @@ x-websocket:
               type: "string"
               required: false
               description: "Topic"
-              x-description-zh: "topic"
-              x-description-zh-hk: "topic"
+              x-description-zh: "主题"
+              x-description-zh-hk: "主題"
             - name: "content_type"
               type: "int32"
               required: false
@@ -9064,7 +9255,7 @@ x-websocket:
               required: false
               description: "Submitted quantity"
               x-description-zh: "委托数量"
-              x-description-zh-hk: "委托數量"
+              x-description-zh-hk: "委託數量"
             - name: "└ symbol"
               type: "string"
               required: false
@@ -9082,7 +9273,7 @@ x-websocket:
               required: false
               description: "Submitted price"
               x-description-zh: "委托价格"
-              x-description-zh-hk: "委托價格"
+              x-description-zh-hk: "委託價格"
             - name: "└ executed_quantity"
               type: "string"
               required: false
@@ -10386,8 +10577,8 @@ paths:
           type: string
           required: true
           description: Agent UID.
-          x-description-zh: Agent UID.
-          x-description-zh-hk: Agent UID.
+          x-description-zh: Agent UID。
+          x-description-zh-hk: Agent UID。
         - name: chat_uid
           in: path
           type: string
@@ -12151,7 +12342,7 @@ paths:
           required: false
           description: Pagination cursor for subscribed list
           x-description-zh: 已订阅列表的分页游标
-          x-description-zh-hk: 已訂閱列表的分頁游標
+          x-description-zh-hk: 已訂閱列表的分頁遊標
         - name: id
           type: integer
           required: true
@@ -12727,13 +12918,13 @@ paths:
       operationId: submit_order
       summary: Submit Order
       x-summary-zh: 委托下单
-      x-summary-zh-hk: 委托下單
+      x-summary-zh-hk: 委託下單
       description: |
         This API is used to submit order for HK and US stocks, warrant and option.
       x-description-zh: |
         该接口用于港美股，窝轮，期权的委托下单。
       x-description-zh-hk: |
-        該接口用於港美股，窩輪，期權的委托下單。
+        該接口用於港美股，窩輪，期權的委託下單。
       x-subgroup: Order
       x-subgroup-zh: 订单
       x-subgroup-zh-hk: 訂單
@@ -19531,56 +19722,56 @@ paths:
           type: object[]
           required: true
           description: A/H premium daily kline records
-          x-description-zh: A/H premium daily kline records
-          x-description-zh-hk: A/H premium daily kline records
+          x-description-zh: A/H 溢价日 K 线记录
+          x-description-zh-hk: A/H 溢價日 K 線記錄
         - name: └ timestamp
           type: string
           required: false
           description: Unix timestamp
-          x-description-zh: Unix timestamp
-          x-description-zh-hk: Unix timestamp
+          x-description-zh: Unix 时间戳
+          x-description-zh-hk: Unix 時間戳
         - name: └ ahpremium_rate
           type: string
           required: false
           description: A/H premium rate
-          x-description-zh: A/H premium rate
-          x-description-zh-hk: A/H premium rate
+          x-description-zh: A/H 溢价率
+          x-description-zh-hk: A/H 溢價率
         - name: └ aprice
           type: string
           required: false
           description: A-share price (CNY)
-          x-description-zh: A-share price (CNY)
-          x-description-zh-hk: A-share price (CNY)
+          x-description-zh: A 股价格（CNY）
+          x-description-zh-hk: A 股價格（CNY）
         - name: └ apreclose
           type: string
           required: false
           description: A-share previous close (CNY)
-          x-description-zh: A-share previous close (CNY)
-          x-description-zh-hk: A-share previous close (CNY)
+          x-description-zh: A 股昨收价（CNY）
+          x-description-zh-hk: A 股昨收價（CNY）
         - name: └ hprice
           type: string
           required: false
           description: H-share price (HKD)
-          x-description-zh: H-share price (HKD)
-          x-description-zh-hk: H-share price (HKD)
+          x-description-zh: H 股价格（HKD）
+          x-description-zh-hk: H 股價格（HKD）
         - name: └ hpreclose
           type: string
           required: false
           description: H-share previous close (HKD)
-          x-description-zh: H-share previous close (HKD)
-          x-description-zh-hk: H-share previous close (HKD)
+          x-description-zh: H 股昨收价（HKD）
+          x-description-zh-hk: H 股昨收價（HKD）
         - name: └ currency_rate
           type: string
           required: false
           description: CNH/HKD exchange rate
-          x-description-zh: CNH/HKD exchange rate
-          x-description-zh-hk: CNH/HKD exchange rate
+          x-description-zh: CNH/HKD 汇率
+          x-description-zh-hk: CNH/HKD 匯率
         - name: └ price_spread
           type: string
           required: false
           description: Price spread
-          x-description-zh: Price spread
-          x-description-zh-hk: Price spread
+          x-description-zh: 价差
+          x-description-zh-hk: 價差
       responses:
         '200':
           description: Successful response
@@ -19740,8 +19931,8 @@ paths:
           type: object[]
           required: true
           description: Intraday A/H premium kline data
-          x-description-zh: Intraday A/H premium kline data
-          x-description-zh-hk: Intraday A/H premium kline data
+          x-description-zh: 日内 A/H 溢价 K 线数据
+          x-description-zh-hk: 日內 A/H 溢價 K 線數據
         - name: └ timestamp
           type: string
           required: false
@@ -19752,44 +19943,44 @@ paths:
           type: string
           required: false
           description: A/H premium rate
-          x-description-zh: A/H premium rate
-          x-description-zh-hk: A/H premium rate
+          x-description-zh: A/H 溢价率
+          x-description-zh-hk: A/H 溢價率
         - name: └ aprice
           type: string
           required: false
           description: A-share price (CNY)
-          x-description-zh: A-share price (CNY)
-          x-description-zh-hk: A-share price (CNY)
+          x-description-zh: A 股价格（CNY）
+          x-description-zh-hk: A 股價格（CNY）
         - name: └ apreclose
           type: string
           required: false
           description: A-share previous close (CNY)
-          x-description-zh: A-share previous close (CNY)
-          x-description-zh-hk: A-share previous close (CNY)
+          x-description-zh: A 股昨收价（CNY）
+          x-description-zh-hk: A 股昨收價（CNY）
         - name: └ hprice
           type: string
           required: false
           description: H-share price (HKD)
-          x-description-zh: H-share price (HKD)
-          x-description-zh-hk: H-share price (HKD)
+          x-description-zh: H 股价格（HKD）
+          x-description-zh-hk: H 股價格（HKD）
         - name: └ hpreclose
           type: string
           required: false
           description: H-share previous close (HKD)
-          x-description-zh: H-share previous close (HKD)
-          x-description-zh-hk: H-share previous close (HKD)
+          x-description-zh: H 股昨收价（HKD）
+          x-description-zh-hk: H 股昨收價（HKD）
         - name: └ currency_rate
           type: string
           required: false
           description: CNH/HKD exchange rate
-          x-description-zh: CNH/HKD exchange rate
-          x-description-zh-hk: CNH/HKD exchange rate
+          x-description-zh: CNH/HKD 汇率
+          x-description-zh-hk: CNH/HKD 匯率
         - name: └ price_spread
           type: string
           required: false
           description: Price spread
-          x-description-zh: Price spread
-          x-description-zh-hk: Price spread
+          x-description-zh: 价差
+          x-description-zh-hk: 價差
       responses:
         '200':
           description: Successful response
@@ -20804,7 +20995,7 @@ paths:
       x-description-zh: |
         获取指定证券的成交统计数据，展示成交量的价格分布。
       x-description-zh-hk: |
-        獲取指定證券的成交統計數據，展示成交量的價格分布。
+        獲取指定證券的成交統計數據，展示成交量的價格分佈。
       x-subgroup: Market Data
       x-subgroup-zh: 市场数据
       x-subgroup-zh-hk: 市場數據
@@ -20923,7 +21114,7 @@ paths:
           required: false
           description: Price-level trade distribution
           x-description-zh: 按价位的成交分布，
-          x-description-zh-hk: 按價位的成交分布，
+          x-description-zh-hk: 按價位的成交分佈，
         - name: └ price
           type: string
           required: false
@@ -22448,8 +22639,8 @@ paths:
           type: string
           required: true
           description: US stock symbol, e.g. `AAPL.US`, `TSLA.US`
-          x-description-zh: US stock symbol, e.g. `AAPL.US`, `TSLA.US`
-          x-description-zh-hk: US stock symbol, e.g. `AAPL.US`, `TSLA.US`
+          x-description-zh: 美股代码，如 `AAPL.US`、`TSLA.US`
+          x-description-zh-hk: 美股代碼，如 `AAPL.US`、`TSLA.US`
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -22603,22 +22794,22 @@ paths:
           type: string
           required: true
           description: Underlying US stock symbol, e.g. `AAPL.US`, `TSLA.US`
-          x-description-zh: Underlying US stock symbol, e.g. `AAPL.US`, `TSLA.US`
-          x-description-zh-hk: Underlying US stock symbol, e.g. `AAPL.US`, `TSLA.US`
+          x-description-zh: 标的美股代码，如 `AAPL.US`、`TSLA.US`
+          x-description-zh-hk: 標的美股代碼，如 `AAPL.US`、`TSLA.US`
         - name: timestamp
           in: query
           type: integer
           required: false
           description: Start Unix timestamp (seconds); `0` returns the most recent (default `0`)
-          x-description-zh: Start Unix timestamp (seconds); `0` returns the most recent (default `0`)
-          x-description-zh-hk: Start Unix timestamp (seconds); `0` returns the most recent (default `0`)
+          x-description-zh: 起始 Unix 时间戳（秒）；`0` 返回最新数据（默认 `0`）
+          x-description-zh-hk: 起始 Unix 時間戳（秒）；`0` 返回最新數據（默認 `0`）
         - name: count
           in: query
           type: integer
           required: false
           description: Number of trading days to return (default `30`)
-          x-description-zh: Number of trading days to return (default `30`)
-          x-description-zh-hk: Number of trading days to return (default `30`)
+          x-description-zh: 返回的交易日数量（默认 `30`）
+          x-description-zh-hk: 返回的交易日數量（默認 `30`）
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -23031,8 +23222,8 @@ paths:
           type: string
           required: false
           description: Wikipedia URL
-          x-description-zh: Wikipedia URL
-          x-description-zh-hk: Wikipedia URL
+          x-description-zh: 维基百科 URL
+          x-description-zh-hk: 維基百科 URL
         - name: profile
           type: string
           required: false
@@ -23746,14 +23937,14 @@ paths:
           type: integer
           required: false
           description: Fiscal year
-          x-description-zh: Fiscal year
-          x-description-zh-hk: Fiscal year
+          x-description-zh: 财年
+          x-description-zh-hk: 財年
         - name: fiscal_period
           type: string
           required: false
           description: Fiscal period number within the fiscal year
-          x-description-zh: Fiscal period number within the fiscal year
-          x-description-zh-hk: Fiscal period number within the fiscal year
+          x-description-zh: 财年内的财季序号
+          x-description-zh-hk: 財年內的財季序號
         - name: opt_reports
           type: array
           required: false
@@ -24420,32 +24611,32 @@ paths:
           type: integer
           required: false
           description: Fiscal year
-          x-description-zh: Fiscal year
-          x-description-zh-hk: Fiscal year
+          x-description-zh: 财年
+          x-description-zh-hk: 財年
         - name: └ fiscal_period
           type: string
           required: false
           description: Fiscal period number within the fiscal year
-          x-description-zh: Fiscal period number within the fiscal year
-          x-description-zh-hk: Fiscal period number within the fiscal year
+          x-description-zh: 财年内的财季序号
+          x-description-zh-hk: 財年內的財季序號
         - name: └ period_text
           type: string
           required: false
           description: Display period label (e.g. Q1 2027)
-          x-description-zh: Display period label (e.g. Q1 2027)
-          x-description-zh-hk: Display period label (e.g. Q1 2027)
+          x-description-zh: 展示用周期标签（如 Q1 2027）
+          x-description-zh-hk: 展示用週期標籤（如 Q1 2027）
         - name: └ details
           type: object[]
           required: false
           description: List of financial indicator details
-          x-description-zh: List of financial indicator details
-          x-description-zh-hk: List of financial indicator details
+          x-description-zh: 财务指标详情列表
+          x-description-zh-hk: 財務指標詳情列表
         - name: └ ∟ key
           type: string
           required: false
           description: Indicator key (e.g. `eps`, `revenue`)
-          x-description-zh: Indicator key (e.g. `eps`, `revenue`)
-          x-description-zh-hk: Indicator key (e.g. `eps`, `revenue`)
+          x-description-zh: 指标键（如 `eps`、`revenue`）
+          x-description-zh-hk: 指標鍵（如 `eps`、`revenue`）
         - name: └ ∟ name
           type: string
           required: false
@@ -24456,68 +24647,68 @@ paths:
           type: string
           required: false
           description: Full description
-          x-description-zh: Full description
-          x-description-zh-hk: Full description
+          x-description-zh: 完整描述
+          x-description-zh-hk: 完整描述
         - name: └ ∟ estimate
           type: string
           required: false
           description: Consensus estimate
-          x-description-zh: Consensus estimate
-          x-description-zh-hk: Consensus estimate
+          x-description-zh: 一致预期值
+          x-description-zh-hk: 一致預期值
         - name: └ ∟ is_released
           type: boolean
           required: false
           description: Whether actual has been released
-          x-description-zh: Whether actual has been released
-          x-description-zh-hk: Whether actual has been released
+          x-description-zh: 实际值是否已公布
+          x-description-zh-hk: 實際值是否已公佈
         - name: └ ∟ actual
           type: string
           required: false
           description: Actual reported value
-          x-description-zh: Actual reported value
-          x-description-zh-hk: Actual reported value
+          x-description-zh: 实际披露值
+          x-description-zh-hk: 實際披露值
         - name: └ ∟ comp_value
           type: string
           required: false
           description: Comparison percentage value
-          x-description-zh: Comparison percentage value
-          x-description-zh-hk: Comparison percentage value
+          x-description-zh: 对比百分比值
+          x-description-zh-hk: 對比百分比值
         - name: └ ∟ comp_desc
           type: string
           required: false
           description: Comparison description
-          x-description-zh: Comparison description
-          x-description-zh-hk: Comparison description
+          x-description-zh: 对比描述
+          x-description-zh-hk: 對比描述
         - name: └ ∟ comp
           type: string
           required: false
           description: Comparison result (e.g. `beat`, `miss`)
-          x-description-zh: Comparison result (e.g. `beat`, `miss`)
-          x-description-zh-hk: Comparison result (e.g. `beat`, `miss`)
+          x-description-zh: 对比结果（如 `beat`、`miss`）
+          x-description-zh-hk: 對比結果（如 `beat`、`miss`）
         - name: current_index
           type: integer
           required: false
           description: Index of the current period in opt_periods
-          x-description-zh: Index of the current period in opt_periods
-          x-description-zh-hk: Index of the current period in opt_periods
+          x-description-zh: 当前周期在 opt_periods 中的索引
+          x-description-zh-hk: 當前週期在 opt_periods 中的索引
         - name: currency
           type: string
           required: false
           description: Reporting currency
-          x-description-zh: Reporting currency
-          x-description-zh-hk: Reporting currency
+          x-description-zh: 报告货币
+          x-description-zh-hk: 報告貨幣
         - name: opt_periods
           type: array
           required: false
           description: Available period options
-          x-description-zh: Available period options
-          x-description-zh-hk: Available period options
+          x-description-zh: 可选周期选项
+          x-description-zh-hk: 可選週期選項
         - name: current_period
           type: string
           required: false
           description: Current period code (e.g. `qf`)
-          x-description-zh: Current period code (e.g. `qf`)
-          x-description-zh-hk: Current period code (e.g. `qf`)
+          x-description-zh: 当前周期代码（如 `qf`）
+          x-description-zh-hk: 當前週期代碼（如 `qf`）
       responses:
         '200':
           description: Successful response
@@ -24683,62 +24874,62 @@ paths:
           type: object[]
           required: false
           description: List of EPS forecast periods
-          x-description-zh: List of EPS forecast periods
-          x-description-zh-hk: List of EPS forecast periods
+          x-description-zh: EPS 预测周期列表
+          x-description-zh-hk: EPS 預測週期列表
         - name: └ forecast_eps_median
           type: string
           required: false
           description: Median EPS estimate
-          x-description-zh: Median EPS estimate
-          x-description-zh-hk: Median EPS estimate
+          x-description-zh: EPS 预估中位数
+          x-description-zh-hk: EPS 預估中位數
         - name: └ forecast_eps_mean
           type: string
           required: false
           description: Mean EPS estimate
-          x-description-zh: Mean EPS estimate
-          x-description-zh-hk: Mean EPS estimate
+          x-description-zh: EPS 预估平均值
+          x-description-zh-hk: EPS 預估平均值
         - name: └ forecast_eps_lowest
           type: string
           required: false
           description: Lowest EPS estimate
-          x-description-zh: Lowest EPS estimate
-          x-description-zh-hk: Lowest EPS estimate
+          x-description-zh: 最低 EPS 预估值
+          x-description-zh-hk: 最低 EPS 預估值
         - name: └ forecast_eps_highest
           type: string
           required: false
           description: Highest EPS estimate
-          x-description-zh: Highest EPS estimate
-          x-description-zh-hk: Highest EPS estimate
+          x-description-zh: 最高 EPS 预估值
+          x-description-zh-hk: 最高 EPS 預估值
         - name: └ institution_total
           type: integer
           required: false
           description: Total contributing institutions
-          x-description-zh: Total contributing institutions
-          x-description-zh-hk: Total contributing institutions
+          x-description-zh: 参与机构总数
+          x-description-zh-hk: 參與機構總數
         - name: └ institution_up
           type: integer
           required: false
           description: Institutions revising up
-          x-description-zh: Institutions revising up
-          x-description-zh-hk: Institutions revising up
+          x-description-zh: 上调预期的机构数
+          x-description-zh-hk: 上調預期的機構數
         - name: └ institution_down
           type: integer
           required: false
           description: Institutions revising down
-          x-description-zh: Institutions revising down
-          x-description-zh-hk: Institutions revising down
+          x-description-zh: 下调预期的机构数
+          x-description-zh-hk: 下調預期的機構數
         - name: └ forecast_start_date
           type: string
           required: false
           description: Forecast period start date
-          x-description-zh: Forecast period start date
-          x-description-zh-hk: Forecast period start date
+          x-description-zh: 预测周期开始日期
+          x-description-zh-hk: 預測週期開始日期
         - name: └ forecast_end_date
           type: string
           required: false
           description: Forecast period end date
-          x-description-zh: Forecast period end date
-          x-description-zh-hk: Forecast period end date
+          x-description-zh: 预测周期结束日期
+          x-description-zh-hk: 預測週期結束日期
       responses:
         '200':
           description: Successful response
@@ -25495,7 +25686,7 @@ paths:
           required: false
           description: Net profit margin
           x-description-zh: 净利润率
-          x-description-zh-hk: 净利润率
+          x-description-zh-hk: 淨利潤率
         - name: └ leverage
           type: string
           required: false
@@ -25536,14 +25727,14 @@ paths:
           type: string
           required: false
           description: 5-year average DPS
-          x-description-zh: 5-year average DPS
-          x-description-zh-hk: 5-year average DPS
+          x-description-zh: 5 年平均每股股息
+          x-description-zh-hk: 5 年平均每股股息
         - name: └ div_payout_ratio
           type: string
           required: false
           description: Dividend payout ratio
-          x-description-zh: Dividend payout ratio
-          x-description-zh-hk: Dividend payout ratio
+          x-description-zh: 股息支付率
+          x-description-zh-hk: 股息支付率
         - name: └ assets
           type: string
           required: false
@@ -25567,7 +25758,7 @@ paths:
           required: false
           description: Net income
           x-description-zh: 净利润
-          x-description-zh-hk: 净利润
+          x-description-zh-hk: 淨利潤
         - name: └ history
           type: object[]
           required: false
@@ -25797,8 +25988,8 @@ paths:
           type: string
           required: false
           description: Company name
-          x-description-zh: Company name
-          x-description-zh-hk: Company name
+          x-description-zh: 公司名称
+          x-description-zh-hk: 公司名稱
         - name: └ market
           type: string
           required: false
@@ -25809,8 +26000,8 @@ paths:
           type: string
           required: false
           description: Reporting currency
-          x-description-zh: Reporting currency
-          x-description-zh-hk: Reporting currency
+          x-description-zh: 报告货币
+          x-description-zh-hk: 報告貨幣
         - name: └ price_close
           type: string
           required: false
@@ -25833,8 +26024,8 @@ paths:
           type: string
           required: false
           description: Price-to-Earnings ratio
-          x-description-zh: Price-to-Earnings ratio
-          x-description-zh-hk: Price-to-Earnings ratio
+          x-description-zh: 市盈率
+          x-description-zh-hk: 市盈率
         - name: └ pb
           type: string
           required: false
@@ -25851,8 +26042,8 @@ paths:
           type: string
           required: false
           description: Dividend yield
-          x-description-zh: Dividend yield
-          x-description-zh-hk: Dividend yield
+          x-description-zh: 股息率
+          x-description-zh-hk: 股息率
         - name: └ roa
           type: string
           required: false
@@ -25876,7 +26067,7 @@ paths:
           required: false
           description: Net profit margin
           x-description-zh: 净利润率
-          x-description-zh-hk: 净利润率
+          x-description-zh-hk: 淨利潤率
         - name: └ leverage
           type: string
           required: false
@@ -25893,8 +26084,8 @@ paths:
           type: string
           required: false
           description: Earnings per share
-          x-description-zh: Earnings per share
-          x-description-zh-hk: Earnings per share
+          x-description-zh: 每股收益
+          x-description-zh-hk: 每股收益
         - name: └ sales_ps
           type: string
           required: false
@@ -25905,32 +26096,32 @@ paths:
           type: string
           required: false
           description: Book value per share
-          x-description-zh: Book value per share
-          x-description-zh-hk: Book value per share
+          x-description-zh: 每股净资产
+          x-description-zh-hk: 每股淨資產
         - name: └ dps
           type: string
           required: false
           description: Dividends per share
-          x-description-zh: Dividends per share
-          x-description-zh-hk: Dividends per share
+          x-description-zh: 每股股息
+          x-description-zh-hk: 每股股息
         - name: └ five_y_avg_dps
           type: string
           required: false
           description: 5-year average DPS
-          x-description-zh: 5-year average DPS
-          x-description-zh-hk: 5-year average DPS
+          x-description-zh: 5 年平均每股股息
+          x-description-zh-hk: 5 年平均每股股息
         - name: └ div_payout_ratio
           type: string
           required: false
           description: Dividend payout ratio
-          x-description-zh: Dividend payout ratio
-          x-description-zh-hk: Dividend payout ratio
+          x-description-zh: 股息支付率
+          x-description-zh-hk: 股息支付率
         - name: └ assets
           type: string
           required: false
           description: Total assets
-          x-description-zh: Total assets
-          x-description-zh-hk: Total assets
+          x-description-zh: 总资产
+          x-description-zh-hk: 總資產
         - name: └ liabilities
           type: string
           required: false
@@ -25948,13 +26139,13 @@ paths:
           required: false
           description: Net income
           x-description-zh: 净利润
-          x-description-zh-hk: 净利润
+          x-description-zh-hk: 淨利潤
         - name: └ history
           type: object[]
           required: false
           description: Historical valuation data
-          x-description-zh: Historical valuation data
-          x-description-zh-hk: Historical valuation data
+          x-description-zh: 历史估值数据
+          x-description-zh-hk: 歷史估值數據
         - name: └ ∟ date
           type: string
           required: false
@@ -25965,8 +26156,8 @@ paths:
           type: string
           required: false
           description: Price-to-Earnings ratio
-          x-description-zh: Price-to-Earnings ratio
-          x-description-zh-hk: Price-to-Earnings ratio
+          x-description-zh: 市盈率
+          x-description-zh-hk: 市盈率
         - name: └ ∟ pb
           type: string
           required: false
@@ -26127,8 +26318,8 @@ paths:
           type: object
           required: false
           description: P/E ratio distribution
-          x-description-zh: P/E ratio distribution
-          x-description-zh-hk: P/E ratio distribution
+          x-description-zh: 市盈率分布
+          x-description-zh-hk: 市盈率分佈
         - name: └ low
           type: string
           required: false
@@ -26175,8 +26366,8 @@ paths:
           type: object
           required: false
           description: P/B ratio distribution
-          x-description-zh: P/B ratio distribution
-          x-description-zh-hk: P/B ratio distribution
+          x-description-zh: 市净率分布
+          x-description-zh-hk: 市淨率分佈
         - name: └ low
           type: string
           required: false
@@ -26223,8 +26414,8 @@ paths:
           type: object
           required: false
           description: P/S ratio distribution
-          x-description-zh: P/S ratio distribution
-          x-description-zh-hk: P/S ratio distribution
+          x-description-zh: 市销率分布
+          x-description-zh-hk: 市銷率分佈
         - name: └ low
           type: string
           required: false
@@ -26960,7 +27151,7 @@ paths:
           required: false
           description: Company secretary
           x-description-zh: 公司秘书
-          x-description-zh-hk: 公司秘書
+          x-description-zh-hk: 公司祕書
         - name: audit_inst
           type: string
           required: false
@@ -27426,31 +27617,31 @@ paths:
           required: true
           description: Corporate action list
           x-description-zh: 公司行动列表，
-          x-description-zh-hk: Corporate action list
+          x-description-zh-hk: 公司行動列表
         - name: └ id
           type: string
           required: false
           description: Action ID
           x-description-zh: 行动 ID
-          x-description-zh-hk: Action ID
+          x-description-zh-hk: 公司行動 ID
         - name: └ act_desc
           type: string
           required: false
           description: Action description
           x-description-zh: 行动描述
-          x-description-zh-hk: Action description
+          x-description-zh-hk: 公司行動描述
         - name: └ act_type
           type: string
           required: false
           description: Action type category
           x-description-zh: 行动类型分类
-          x-description-zh-hk: Action type category
+          x-description-zh-hk: 公司行動類型分類
         - name: └ action
           type: string
           required: false
           description: Action code (e.g. `DividendExDate`)
           x-description-zh: 行动代码（如 `DividendExDate`）
-          x-description-zh-hk: Action code (e.g. `DividendExDate`)
+          x-description-zh-hk: 公司行動代碼（如 `DividendExDate`）
         - name: └ date
           type: string
           required: false
@@ -27462,43 +27653,43 @@ paths:
           required: false
           description: Short display date (MM.DD)
           x-description-zh: 简短展示日期（MM.DD）
-          x-description-zh-hk: Short display date (MM.DD)
+          x-description-zh-hk: 簡短展示日期（MM.DD）
         - name: └ date_type
           type: string
           required: false
           description: Date type label (e.g. Payment Date)
           x-description-zh: 日期类型标签（如 Payment Date）
-          x-description-zh-hk: Date type label (e.g. Payment Date)
+          x-description-zh-hk: 日期類型標籤（如 Payment Date）
         - name: └ date_zone
           type: string
           required: false
           description: Time zone (e.g. EST)
           x-description-zh: 时区（如 EST）
-          x-description-zh-hk: Time zone (e.g. EST)
+          x-description-zh-hk: 時區（如 EST）
         - name: └ delay_content
           type: string
           required: false
           description: Delay content description
           x-description-zh: 延迟内容描述
-          x-description-zh-hk: Delay content description
+          x-description-zh-hk: 延遲內容描述
         - name: └ is_delay
           type: boolean
           required: false
           description: Whether the event is delayed
           x-description-zh: 是否延迟
-          x-description-zh-hk: Whether the event is delayed
+          x-description-zh-hk: 事件是否延遲
         - name: └ live
           type: boolean
           required: false
           description: Whether currently live
           x-description-zh: 是否实时
-          x-description-zh-hk: Whether currently live
+          x-description-zh-hk: 當前是否正在直播
         - name: └ recent
           type: boolean
           required: false
           description: Whether this is a recent event
           x-description-zh: 是否为近期事件
-          x-description-zh-hk: Whether this is a recent event
+          x-description-zh-hk: 是否爲近期事件
       responses:
         '200':
           description: Successful response
@@ -27656,32 +27847,32 @@ paths:
           type: object[]
           required: false
           description: List of investment holdings
-          x-description-zh: List of investment holdings
-          x-description-zh-hk: List of investment holdings
+          x-description-zh: 投资持仓列表
+          x-description-zh-hk: 投資持倉列表
         - name: └ company_id
           type: string
           required: false
           description: Company ID
-          x-description-zh: Company ID
-          x-description-zh-hk: Company ID
+          x-description-zh: 公司 ID
+          x-description-zh-hk: 公司 ID
         - name: └ company_name
           type: string
           required: false
           description: Display company name
-          x-description-zh: Display company name
-          x-description-zh-hk: Display company name
+          x-description-zh: 展示用公司名称
+          x-description-zh-hk: 展示用公司名稱
         - name: └ company_name_zhcn
           type: string
           required: false
           description: Chinese company name
-          x-description-zh: Chinese company name
-          x-description-zh-hk: Chinese company name
+          x-description-zh: 公司中文名称
+          x-description-zh-hk: 公司中文名稱
         - name: └ company_name_en
           type: string
           required: false
           description: English company name
-          x-description-zh: English company name
-          x-description-zh-hk: English company name
+          x-description-zh: 公司英文名称
+          x-description-zh-hk: 公司英文名稱
         - name: └ symbol
           type: string
           required: false
@@ -27692,32 +27883,32 @@ paths:
           type: string
           required: false
           description: Ownership percentage
-          x-description-zh: Ownership percentage
-          x-description-zh-hk: Ownership percentage
+          x-description-zh: 持股比例
+          x-description-zh-hk: 持股比例
         - name: └ shares_value
           type: string
           required: false
           description: Value of shares held
-          x-description-zh: Value of shares held
-          x-description-zh-hk: Value of shares held
+          x-description-zh: 持股市值
+          x-description-zh-hk: 持股市值
         - name: └ shares_rank
           type: string
           required: false
           description: Rank by shares held
-          x-description-zh: Rank by shares held
-          x-description-zh-hk: Rank by shares held
+          x-description-zh: 按持股数排名
+          x-description-zh-hk: 按持股數排名
         - name: └ currency
           type: string
           required: false
           description: Currency
-          x-description-zh: Currency
-          x-description-zh-hk: Currency
+          x-description-zh: 货币
+          x-description-zh-hk: 貨幣
         - name: forward_url
           type: string
           required: false
           description: Company investment relations page URL
-          x-description-zh: Company investment relations page URL
-          x-description-zh-hk: Company investment relations page URL
+          x-description-zh: 公司投资者关系页面 URL
+          x-description-zh-hk: 公司投資者關係頁面 URL
         - name: total
           type: integer
           required: false
@@ -27989,7 +28180,7 @@ paths:
           required: false
           description: Period label (e.g. `FY2024`, `Q1 2024`)
           x-description-zh: 报告期标签（如 `FY2024`、`Q1 2024`）
-          x-description-zh-hk: 報告期標签（如 `FY2024`、`Q1 2024`）
+          x-description-zh-hk: 報告期標籤（如 `FY2024`、`Q1 2024`）
         - name: └ ∟ indicators
           type: object[]
           required: false
@@ -28415,7 +28606,7 @@ paths:
       x-description-zh: |
         获取指定证券的分红历史及即将公布的分红信息。
       x-description-zh-hk: |
-        獲取指定證券的股息歷史及即將公布的股息信息。
+        獲取指定證券的股息歷史及即將公佈的股息信息。
       x-subgroup: Fundamentals
       x-subgroup-zh: 基本面数据
       x-subgroup-zh-hk: 基本面數據
@@ -28553,26 +28744,26 @@ paths:
           type: string
           required: false
           description: Dividend event ID
-          x-description-zh: Dividend event ID
-          x-description-zh-hk: Dividend event ID
+          x-description-zh: 派息事件 ID
+          x-description-zh-hk: 派息事件 ID
         - name: └ desc
           type: string
           required: false
           description: Dividend description
-          x-description-zh: Dividend description
-          x-description-zh-hk: Dividend description
+          x-description-zh: 派息描述
+          x-description-zh-hk: 派息描述
         - name: └ symbol
           type: string
           required: false
           description: Security symbol
-          x-description-zh: Security symbol
-          x-description-zh-hk: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
         - name: └ record_date
           type: string
           required: false
           description: Record date
-          x-description-zh: Record date
-          x-description-zh-hk: Record date
+          x-description-zh: 股权登记日
+          x-description-zh-hk: 股權登記日
         - name: └ ex_date
           type: string
           required: false
@@ -28583,8 +28774,8 @@ paths:
           type: string
           required: false
           description: Payment date
-          x-description-zh: Payment date
-          x-description-zh-hk: Payment date
+          x-description-zh: 派息日
+          x-description-zh-hk: 派息日
         - name: └ dividend_summary
           type: object
           required: false
@@ -28601,8 +28792,8 @@ paths:
           type: string
           required: false
           description: Dividend description
-          x-description-zh: Dividend description
-          x-description-zh-hk: Dividend description
+          x-description-zh: 派息描述
+          x-description-zh-hk: 派息描述
         - name: total
           type: string
           required: false
@@ -28760,32 +28951,32 @@ paths:
           type: string
           required: false
           description: Dividend description
-          x-description-zh: Dividend description
-          x-description-zh-hk: Dividend description
+          x-description-zh: 派息描述
+          x-description-zh-hk: 派息描述
         - name: └ record_date
           type: string
           required: false
           description: Record date (YYYY-MM-DD)
-          x-description-zh: Record date (YYYY-MM-DD)
-          x-description-zh-hk: Record date (YYYY-MM-DD)
+          x-description-zh: 股权登记日（YYYY-MM-DD）
+          x-description-zh-hk: 股權登記日（YYYY-MM-DD）
         - name: └ ex_date
           type: string
           required: false
           description: Ex-dividend date (YYYY-MM-DD)
-          x-description-zh: Ex-dividend date (YYYY-MM-DD)
-          x-description-zh-hk: Ex-dividend date (YYYY-MM-DD)
+          x-description-zh: 除息日（YYYY-MM-DD）
+          x-description-zh-hk: 除息日（YYYY-MM-DD）
         - name: └ payment_date
           type: string
           required: false
           description: Payment date (YYYY-MM-DD)
-          x-description-zh: Payment date (YYYY-MM-DD)
-          x-description-zh-hk: Payment date (YYYY-MM-DD)
+          x-description-zh: 派息日（YYYY-MM-DD）
+          x-description-zh-hk: 派息日（YYYY-MM-DD）
         - name: └ symbol
           type: string
           required: false
           description: Security symbol
-          x-description-zh: Security symbol
-          x-description-zh-hk: Security symbol
+          x-description-zh: 证券代码
+          x-description-zh-hk: 證券代碼
       responses:
         '200':
           description: Successful response
@@ -30149,8 +30340,8 @@ paths:
           type: object
           required: false
           description: Rating distribution history
-          x-description-zh: Rating distribution history
-          x-description-zh-hk: Rating distribution history
+          x-description-zh: 评级分布历史
+          x-description-zh-hk: 評級分佈歷史
         - name: └ list
           type: object[]
           required: false
@@ -30161,44 +30352,44 @@ paths:
           type: integer
           required: false
           description: Strong buy count
-          x-description-zh: Strong buy count
-          x-description-zh-hk: Strong buy count
+          x-description-zh: 强烈买入评级数量
+          x-description-zh-hk: 強烈買入評級數量
         - name: └ ∟ buy
           type: integer
           required: false
           description: Buy count
-          x-description-zh: Buy count
-          x-description-zh-hk: Buy count
+          x-description-zh: 买入评级数量
+          x-description-zh-hk: 買入評級數量
         - name: └ ∟ hold
           type: integer
           required: false
           description: Hold count
-          x-description-zh: Hold count
-          x-description-zh-hk: Hold count
+          x-description-zh: 持有评级数量
+          x-description-zh-hk: 持有評級數量
         - name: └ ∟ sell
           type: integer
           required: false
           description: Sell count
-          x-description-zh: Sell count
-          x-description-zh-hk: Sell count
+          x-description-zh: 卖出评级数量
+          x-description-zh-hk: 賣出評級數量
         - name: └ ∟ under
           type: integer
           required: false
           description: Underperform count
-          x-description-zh: Underperform count
-          x-description-zh-hk: Underperform count
+          x-description-zh: 跑输市场评级数量
+          x-description-zh-hk: 跑輸市場評級數量
         - name: └ ∟ date
           type: string
           required: false
           description: Date
-          x-description-zh: Date
-          x-description-zh-hk: Date
+          x-description-zh: 日期
+          x-description-zh-hk: 日期
         - name: target
           type: object
           required: false
           description: Target price history
-          x-description-zh: Target price history
-          x-description-zh-hk: Target price history
+          x-description-zh: 目标价历史
+          x-description-zh-hk: 目標價歷史
         - name: └ updated_at
           type: string
           required: false
@@ -30221,44 +30412,44 @@ paths:
           type: string
           required: false
           description: Unix timestamp
-          x-description-zh: Unix timestamp
-          x-description-zh-hk: Unix timestamp
+          x-description-zh: Unix 时间戳
+          x-description-zh-hk: Unix 時間戳
         - name: └ ∟ price
           type: string
           required: false
           description: Closing price on that date
-          x-description-zh: Closing price on that date
-          x-description-zh-hk: Closing price on that date
+          x-description-zh: 当日收盘价
+          x-description-zh-hk: 當日收盤價
         - name: └ ∟ meet
           type: boolean
           required: false
           description: Whether price met target
-          x-description-zh: Whether price met target
-          x-description-zh-hk: Whether price met target
+          x-description-zh: 价格是否达到目标
+          x-description-zh-hk: 價格是否達到目標
         - name: └ ∟ avg_target
           type: string
           required: false
           description: Average target price
-          x-description-zh: Average target price
-          x-description-zh-hk: Average target price
+          x-description-zh: 平均目标价
+          x-description-zh-hk: 平均目標價
         - name: └ ∟ min_target
           type: string
           required: false
           description: Lowest target price
-          x-description-zh: Lowest target price
-          x-description-zh-hk: Lowest target price
+          x-description-zh: 最低目标价
+          x-description-zh-hk: 最低目標價
         - name: └ ∟ max_target
           type: string
           required: false
           description: Highest target price
-          x-description-zh: Highest target price
-          x-description-zh-hk: Highest target price
+          x-description-zh: 最高目标价
+          x-description-zh-hk: 最高目標價
         - name: └ ∟ date
           type: string
           required: false
           description: Date
-          x-description-zh: Date
-          x-description-zh-hk: Date
+          x-description-zh: 日期
+          x-description-zh-hk: 日期
         - name: └ data_percent
           type: string
           required: false
@@ -30269,8 +30460,8 @@ paths:
           type: string
           required: false
           description: Currency symbol
-          x-description-zh: Currency symbol
-          x-description-zh-hk: Currency symbol
+          x-description-zh: 货币符号
+          x-description-zh-hk: 貨幣符號
       responses:
         '200':
           description: Successful response
@@ -30665,7 +30856,7 @@ paths:
           required: false
           description: Period label (e.g. `FY2024`, `Q1 2024`)
           x-description-zh: 报告期标签（如 `FY2024`、`Q1 2024`）
-          x-description-zh-hk: 報告期標签（如 `FY2024`、`Q1 2024`）
+          x-description-zh-hk: 報告期標籤（如 `FY2024`、`Q1 2024`）
         - name: └ fp_start
           type: string
           required: false
@@ -30803,36 +30994,36 @@ paths:
           type: string
           required: true
           description: Indicator code from `macroeconomic_indicators`
-          x-description-zh: Indicator code from `macroeconomic_indicators`
-          x-description-zh-hk: Indicator code from `macroeconomic_indicators`
+          x-description-zh: 来自 `macroeconomic_indicators` 的指标代码
+          x-description-zh-hk: 來自 `macroeconomic_indicators` 的指標代碼
         - name: start_date
           in: query
           type: string
           required: false
           description: Start date in `YYYY-MM-DD` format
-          x-description-zh: Start date in `YYYY-MM-DD` format
-          x-description-zh-hk: Start date in `YYYY-MM-DD` format
+          x-description-zh: 开始日期，`YYYY-MM-DD` 格式
+          x-description-zh-hk: 開始日期，`YYYY-MM-DD` 格式
         - name: end_date
           in: query
           type: string
           required: false
           description: End date in `YYYY-MM-DD` format
-          x-description-zh: End date in `YYYY-MM-DD` format
-          x-description-zh-hk: End date in `YYYY-MM-DD` format
+          x-description-zh: 结束日期，`YYYY-MM-DD` 格式
+          x-description-zh-hk: 結束日期，`YYYY-MM-DD` 格式
         - name: offset
           in: query
           type: integer
           required: false
           description: 'Pagination offset. Default: 0'
-          x-description-zh: 'Pagination offset. Default: 0'
-          x-description-zh-hk: 'Pagination offset. Default: 0'
+          x-description-zh: '分页偏移量。默认：0'
+          x-description-zh-hk: '分頁偏移量。默認：0'
         - name: limit
           in: query
           type: integer
           required: false
           description: 'Max records. Default: 100, max: 100'
-          x-description-zh: 'Max records. Default: 100, max: 100'
-          x-description-zh-hk: 'Max records. Default: 100, max: 100'
+          x-description-zh: '最大记录数。默认：100，最大：100'
+          x-description-zh-hk: '最大記錄數。默認：100，最大：100'
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -30939,50 +31130,50 @@ paths:
           type: MacroeconomicIndicator
           required: true
           description: Indicator metadata
-          x-description-zh: Indicator metadata
-          x-description-zh-hk: Indicator metadata
+          x-description-zh: 指标元数据
+          x-description-zh-hk: 指標元數據
         - name: data
           type: Macroeconomic[]
           required: true
           description: Historical data points
-          x-description-zh: Historical data points
-          x-description-zh-hk: Historical data points
+          x-description-zh: 历史数据点
+          x-description-zh-hk: 歷史數據點
         - name: count
           type: int
           required: true
           description: Total number of data points
-          x-description-zh: Total number of data points
-          x-description-zh-hk: Total number of data points
+          x-description-zh: 数据点总数
+          x-description-zh-hk: 數據點總數
         - name: period
           type: string
           required: true
           description: Statistical period (e.g. `2024-12-01`, `2024-Q4`)
-          x-description-zh: Statistical period (e.g. `2024-12-01`, `2024-Q4`)
-          x-description-zh-hk: Statistical period (e.g. `2024-12-01`, `2024-Q4`)
+          x-description-zh: 统计周期（如 `2024-12-01`、`2024-Q4`）
+          x-description-zh-hk: 統計週期（如 `2024-12-01`、`2024-Q4`）
         - name: release_at
           type: int
           required: false
           description: Unix timestamp of release datetime
-          x-description-zh: Unix timestamp of release datetime
-          x-description-zh-hk: Unix timestamp of release datetime
+          x-description-zh: 发布时间的 Unix 时间戳
+          x-description-zh-hk: 發佈時間的 Unix 時間戳
         - name: actual_value
           type: string
           required: true
           description: Actual released value
-          x-description-zh: Actual released value
-          x-description-zh-hk: Actual released value
+          x-description-zh: 实际公布值
+          x-description-zh-hk: 實際公佈值
         - name: previous_value
           type: string
           required: true
           description: Previous period value
-          x-description-zh: Previous period value
-          x-description-zh-hk: Previous period value
+          x-description-zh: 上一周期值
+          x-description-zh-hk: 上一週期值
         - name: forecast_value
           type: string
           required: true
           description: Market consensus forecast
-          x-description-zh: Market consensus forecast
-          x-description-zh-hk: Market consensus forecast
+          x-description-zh: 市场一致预期
+          x-description-zh-hk: 市場一致預期
       responses:
         '200':
           description: Successful response
@@ -31032,29 +31223,29 @@ paths:
           type: string
           required: false
           description: Filter by country. Omit for all countries.
-          x-description-zh: Filter by country. Omit for all countries.
-          x-description-zh-hk: Filter by country. Omit for all countries.
+          x-description-zh: 按国家筛选。省略则返回所有国家。
+          x-description-zh-hk: 按國家篩選。省略則返回所有國家。
         - name: keyword
           in: query
           type: string
           required: false
           description: Fuzzy search by indicator name (case-insensitive)
-          x-description-zh: Fuzzy search by indicator name (case-insensitive)
-          x-description-zh-hk: Fuzzy search by indicator name (case-insensitive)
+          x-description-zh: 按指标名称模糊搜索（不区分大小写）
+          x-description-zh-hk: 按指標名稱模糊搜索（不區分大小寫）
         - name: offset
           in: query
           type: integer
           required: false
           description: 'Pagination offset. Default: 0'
-          x-description-zh: 'Pagination offset. Default: 0'
-          x-description-zh-hk: 'Pagination offset. Default: 0'
+          x-description-zh: '分页偏移量。默认：0'
+          x-description-zh-hk: '分頁偏移量。默認：0'
         - name: limit
           in: query
           type: integer
           required: false
           description: 'Max records per page. Default: 100, max: 1000'
-          x-description-zh: 'Max records per page. Default: 100, max: 1000'
-          x-description-zh-hk: 'Max records per page. Default: 100, max: 1000'
+          x-description-zh: '每页最大记录数。默认：100，最大：1000'
+          x-description-zh-hk: '每頁最大記錄數。默認：100，最大：1000'
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -31683,8 +31874,8 @@ paths:
           type: string
           required: false
           description: Description of current valuation
-          x-description-zh: Description of current valuation
-          x-description-zh-hk: Description of current valuation
+          x-description-zh: 当前估值描述
+          x-description-zh-hk: 當前估值描述
         - name: └ ∟ industry_median
           type: string
           required: false
@@ -31945,7 +32136,7 @@ paths:
           required: false
           description: Income statement items
           x-description-zh: 损益表条目列表
-          x-description-zh-hk: 損益表条目列表
+          x-description-zh-hk: 損益表條目列表
         - name: └ report
           type: object
           required: false
@@ -31957,19 +32148,19 @@ paths:
           required: false
           description: Period label (e.g. `FY2024`, `Q1 2024`)
           x-description-zh: 报告期标签（如 `FY2024`、`Q1 2024`）
-          x-description-zh-hk: 報告期標签（如 `FY2024`、`Q1 2024`）
+          x-description-zh-hk: 報告期標籤（如 `FY2024`、`Q1 2024`）
         - name: └ ∟ start_date
           type: string
           required: false
           description: Period start date (YYYY-MM-DD)
           x-description-zh: 报告期开始日期
-          x-description-zh-hk: 報告期开始日期
+          x-description-zh-hk: 報告期開始日期
         - name: └ ∟ end_date
           type: string
           required: false
           description: Period end date (YYYY-MM-DD)
           x-description-zh: 报告期结束日期
-          x-description-zh-hk: 報告期结束日期
+          x-description-zh-hk: 報告期結束日期
         - name: └ revenue
           type: string
           required: false
@@ -31981,19 +32172,19 @@ paths:
           required: false
           description: Net income
           x-description-zh: 净利润
-          x-description-zh-hk: 净利润
+          x-description-zh-hk: 淨利潤
         - name: └ net_margin
           type: string
           required: false
           description: Net profit margin
           x-description-zh: 净利润率
-          x-description-zh-hk: 净利润率
+          x-description-zh-hk: 淨利潤率
         - name: bs_list
           type: object[]
           required: false
           description: Balance sheet items
           x-description-zh: 资产负债表条目列表
-          x-description-zh-hk: 資產負債表条目列表
+          x-description-zh-hk: 資產負債表條目列表
         - name: └ report
           type: object
           required: false
@@ -32005,19 +32196,19 @@ paths:
           required: false
           description: Period label (e.g. `FY2024`, `Q1 2024`)
           x-description-zh: 报告期标签（如 `FY2024`、`Q1 2024`）
-          x-description-zh-hk: 報告期標签（如 `FY2024`、`Q1 2024`）
+          x-description-zh-hk: 報告期標籤（如 `FY2024`、`Q1 2024`）
         - name: └ ∟ start_date
           type: string
           required: false
           description: Period start date (YYYY-MM-DD)
           x-description-zh: 报告期开始日期
-          x-description-zh-hk: 報告期开始日期
+          x-description-zh-hk: 報告期開始日期
         - name: └ ∟ end_date
           type: string
           required: false
           description: Period end date (YYYY-MM-DD)
           x-description-zh: 报告期结束日期
-          x-description-zh-hk: 報告期结束日期
+          x-description-zh-hk: 報告期結束日期
         - name: └ total_assets
           type: string
           required: false
@@ -32041,7 +32232,7 @@ paths:
           required: false
           description: Cash flow items
           x-description-zh: 现金流量表条目列表
-          x-description-zh-hk: 现金流量表条目列表
+          x-description-zh-hk: 現金流量表條目列表
         - name: └ report
           type: object
           required: false
@@ -32053,43 +32244,43 @@ paths:
           required: false
           description: Period label (e.g. `FY2024`, `Q1 2024`)
           x-description-zh: 报告期标签（如 `FY2024`、`Q1 2024`）
-          x-description-zh-hk: 報告期標签（如 `FY2024`、`Q1 2024`）
+          x-description-zh-hk: 報告期標籤（如 `FY2024`、`Q1 2024`）
         - name: └ ∟ start_date
           type: string
           required: false
           description: Period start date (YYYY-MM-DD)
           x-description-zh: 报告期开始日期
-          x-description-zh-hk: 報告期开始日期
+          x-description-zh-hk: 報告期開始日期
         - name: └ ∟ end_date
           type: string
           required: false
           description: Period end date (YYYY-MM-DD)
           x-description-zh: 报告期结束日期
-          x-description-zh-hk: 報告期结束日期
+          x-description-zh-hk: 報告期結束日期
         - name: └ operating
           type: string
           required: false
           description: Operating cash flow
           x-description-zh: 经营活动现金流
-          x-description-zh-hk: 经營活动现金流
+          x-description-zh-hk: 經營活動現金流
         - name: └ investing
           type: string
           required: false
           description: Investing cash flow
           x-description-zh: 投资活动现金流
-          x-description-zh-hk: 投資活动现金流
+          x-description-zh-hk: 投資活動現金流
         - name: └ financing
           type: string
           required: false
           description: Financing cash flow
           x-description-zh: 筹资活动现金流
-          x-description-zh-hk: 籌資活动现金流
+          x-description-zh-hk: 籌資活動現金流
         - name: ccy_symbol
           type: string
           required: false
           description: Currency symbol
           x-description-zh: 货币符号
-          x-description-zh-hk: 貨币符号
+          x-description-zh-hk: 貨幣符號
         - name: report_type
           type: string
           required: false
@@ -32318,7 +32509,7 @@ paths:
           required: true
           description: Period type code (e.g. `A`=annual, `Q`=quarterly)
           x-description-zh: 报告周期代码（如 `A`=年报、`Q`=季报）
-          x-description-zh-hk: 報告週期代碼（如 `A`=年报、`Q`=季报）
+          x-description-zh-hk: 報告週期代碼（如 `A`=年報、`Q`=季報）
         - name: ff_year
           type: int
           required: true
@@ -32372,7 +32563,7 @@ paths:
           required: true
           description: Hierarchy level (1=top level)
           x-description-zh: 层级（1=顶层）
-          x-description-zh-hk: 層級（1=顶层）
+          x-description-zh-hk: 層級（1=頂層）
         - name: display_order
           type: int
           required: true
@@ -32571,31 +32762,31 @@ paths:
           required: true
           description: Currency code (e.g. `USD`)
           x-description-zh: 货币代码，如 `USD`
-          x-description-zh-hk: 貨币代码，如 `USD`
+          x-description-zh-hk: 貨幣代碼，如 `USD`
         - name: report
           type: string
           required: true
           description: Report period type (e.g. `annual`, `quarterly`)
           x-description-zh: 报告周期类型（如 `annual`、`quarterly`）
-          x-description-zh-hk: 報告周期類型（如 `annual`、`quarterly`）
+          x-description-zh-hk: 報告週期類型（如 `annual`、`quarterly`）
         - name: empty_fields
           type: string[]
           required: false
           description: Fields with no data for this period
           x-description-zh: 本期无数据的字段列表
-          x-description-zh-hk: 本期无數据的字段列表
+          x-description-zh-hk: 本期無數據的字段列表
         - name: list
           type: USKeyMetricItem[]
           required: true
           description: Key metric records by period
           x-description-zh: 按报告期排列的关键指标数据
-          x-description-zh-hk: 按報告期排列的关鍵指標數据
+          x-description-zh-hk: 按報告期排列的關鍵指標數據
         - name: ff_period
           type: string
           required: true
           description: Period type code (e.g. `A`=annual, `Q`=quarterly)
           x-description-zh: 报告周期代码（如 `A`=年报、`Q`=季报）
-          x-description-zh-hk: 報告周期代码（如 `A`=年報、`Q`=季報）
+          x-description-zh-hk: 報告週期代碼（如 `A`=年報、`Q`=季報）
         - name: ff_year
           type: int
           required: true
@@ -32607,25 +32798,25 @@ paths:
           required: true
           description: Period end date (YYYY-MM-DD)
           x-description-zh: 报告期结束日期
-          x-description-zh-hk: 報告期结束日期
+          x-description-zh-hk: 報告期結束日期
         - name: report_txt
           type: string
           required: true
           description: Period label (e.g. `FY2024`)
           x-description-zh: 报告期标签（如 `FY2024`）
-          x-description-zh-hk: 報告期標签（如 `FY2024`）
+          x-description-zh-hk: 報告期標籤（如 `FY2024`）
         - name: rpt_date
           type: string
           required: true
           description: Report release date (YYYY-MM-DD)
           x-description-zh: 财报发布日期
-          x-description-zh-hk: 財報发布日期
+          x-description-zh-hk: 財報發佈日期
         - name: fields
           type: object[]
           required: true
           description: Key financial metric values (structure varies by company)
           x-description-zh: 关键财务指标（结构因公司而异）
-          x-description-zh-hk: 关鍵財务指標（结構因公司而异）
+          x-description-zh-hk: 關鍵財務指標（結構因公司而異）
       responses:
         '200':
           description: Successful response
@@ -33065,8 +33256,8 @@ paths:
           type: string
           required: false
           description: Fiscal year
-          x-description-zh: Fiscal year
-          x-description-zh-hk: Fiscal year
+          x-description-zh: 财年
+          x-description-zh-hk: 財年
         - name: └ currency
           type: string
           required: false
@@ -33279,8 +33470,8 @@ paths:
           type: string
           required: false
           description: Fiscal year
-          x-description-zh: Fiscal year
-          x-description-zh-hk: Fiscal year
+          x-description-zh: 财年
+          x-description-zh-hk: 財年
         - name: └ fiscal_year_range
           type: string
           required: false
@@ -33369,8 +33560,8 @@ paths:
           type: string
           required: false
           description: Fiscal year
-          x-description-zh: Fiscal year
-          x-description-zh-hk: Fiscal year
+          x-description-zh: 财年
+          x-description-zh-hk: 財年
         - name: └ fiscal_year_range
           type: string
           required: false
@@ -33483,14 +33674,14 @@ paths:
           type: string
           required: false
           description: Payment date
-          x-description-zh: Payment date
-          x-description-zh-hk: Payment date
+          x-description-zh: 派息日
+          x-description-zh-hk: 派息日
         - name: └ record_date
           type: string
           required: false
           description: Record date
-          x-description-zh: Record date
-          x-description-zh-hk: Record date
+          x-description-zh: 股权登记日
+          x-description-zh-hk: 股權登記日
         - name: └ title
           type: string
           required: false
@@ -34077,8 +34268,8 @@ paths:
           type: string
           required: false
           description: Workspace ID
-          x-description-zh: Workspace ID
-          x-description-zh-hk: Workspace ID
+          x-description-zh: 工作区 ID
+          x-description-zh-hk: 工作區 ID
         - name: └ name
           type: string
           required: false
@@ -34140,8 +34331,8 @@ paths:
           type: string
           required: true
           description: Workspace ID
-          x-description-zh: Workspace ID
-          x-description-zh-hk: Workspace ID
+          x-description-zh: 工作区 ID
+          x-description-zh-hk: 工作區 ID
         - name: page
           in: query
           type: integer
@@ -34905,7 +35096,7 @@ paths:
           required: false
           description: Author display name
           x-description-zh: 作者昵称
-          x-description-zh-hk: 作者昵稱
+          x-description-zh-hk: 作者暱稱
         - name: └ ∟ avatar
           type: string
           required: false
@@ -35615,7 +35806,7 @@ paths:
           required: false
           description: Whether a group member.
           x-description-zh: 是否群组成员。
-          x-description-zh-hk: 是否群組成員。
+          x-description-zh-hk: 是否羣組成員。
         - name: └ ∟ description
           type: string
           required: false
@@ -35662,8 +35853,8 @@ paths:
           type: string
           required: false
           description: Description of current valuation
-          x-description-zh: Description of current valuation
-          x-description-zh-hk: Description of current valuation
+          x-description-zh: 当前估值描述
+          x-description-zh-hk: 當前估值描述
         - name: └ ∟ ∟ ∟ icon
           type: string
           required: false
@@ -35717,7 +35908,7 @@ paths:
           required: false
           description: Group ID.
           x-description-zh: 群组 ID。
-          x-description-zh-hk: 群組 ID。
+          x-description-zh-hk: 羣組 ID。
         - name: └ sharelist_type
           type: integer
           required: false
@@ -36397,42 +36588,42 @@ paths:
           required: true
           description: start time timestamp, in `seconds`, E.g:`1650037563`
           x-description-zh: 开始时间，时间戳，以 `秒` 为单位，例如：`1650037563`
-          x-description-zh-hk: 开始时间，时间戳，以 `秒` 为单位，例如：`1650037563`
+          x-description-zh-hk: 開始時間，時間戳，以 `秒` 爲單位，例如：`1650037563`
         - name: end_time
           in: query
           type: string
           required: true
           description: end time timestamp, in `seconds`, E.g:`1650747581`
           x-description-zh: 结束时间，时间戳，以 `秒` 为单位，例如：`1650747581`
-          x-description-zh-hk: 结束时间，时间戳，以 `秒` 为单位，例如：`1650747581`
+          x-description-zh-hk: 結束時間，時間戳，以 `秒` 爲單位，例如：`1650747581`
         - name: business_type
           in: query
           type: string
           required: false
           description: Balance type. <b>Option:</b>, `1` - cash, `2` - stock, `3` - fund
           x-description-zh: 资金类型。<b>可选值:</b>, `1` - 现金，`2` - 股票，`3` - 基金
-          x-description-zh-hk: 资金类型。<b>可选值:</b>, `1` - 现金，`2` - 股票，`3` - 基金
+          x-description-zh-hk: 資金類型。<b>可選值:</b>, `1` - 現金，`2` - 股票，`3` - 基金
         - name: symbol
           in: query
           type: string
           required: false
           description: Target code, E.g:`AAPL.US`
           x-description-zh: 标的代码，例如：`AAPL.US`
-          x-description-zh-hk: 标的代码，例如：`AAPL.US`
+          x-description-zh-hk: 標的代碼，例如：`AAPL.US`
         - name: page
           in: query
           type: string
           required: false
           description: start page. <b>Default value:</b> `1`, <b>Data validation rules:</b>, <b>Ranges:</b> `>=1`
           x-description-zh: 起始页。<b>默认值:</b> `1`, <b>数据校验规则:</b>, <b>取值范围:</b> `>=1`
-          x-description-zh-hk: 起始页。<b>默认值:</b> `1`, <b>数据校验规则:</b>, <b>取值范围:</b> `>=1`
+          x-description-zh-hk: 起始頁。<b>默認值:</b> `1`, <b>數據校驗規則:</b>, <b>取值範圍:</b> `>=1`
         - name: size
           in: query
           type: string
           required: false
           description: page size. <b>Default value:</b> `50`, <b>Data validation rules:</b> `1~10000`
           x-description-zh: 每页大小。<b>默认值:</b> `50`, <b>数据校验规则:</b> `1~10000`
-          x-description-zh-hk: 每页大小。<b>默认值:</b> `50`, <b>数据校验规则:</b> `1~10000`
+          x-description-zh-hk: 每頁大小。<b>默認值:</b> `50`, <b>數據校驗規則:</b> `1~10000`
       x-codeSamples:
         - lang: Shell
           label: CLI
@@ -36556,7 +36747,7 @@ paths:
           required: true
           description: Funding Category. <b>Option:</b>, `1` - cash, `2` - stock, `3` - fund
           x-description-zh: 资金类别。<b>可选值:</b>, `1` - 现金，`2` - 股票，`3` - 基金
-          x-description-zh-hk: 资金类别。<b>可選值:</b>, `1` - 現金，`2` - 股票，`3` - 基金
+          x-description-zh-hk: 資金類別。<b>可選值:</b>, `1` - 現金，`2` - 股票，`3` - 基金
         - name: └ balance
           type: string
           required: true
@@ -37596,7 +37787,7 @@ paths:
           required: true
           description: Available buying power (cash)
           x-description-zh: 可用买入力（现金）
-          x-description-zh-hk: 可用買入力（现金）
+          x-description-zh-hk: 可用買入力（現金）
         - name: overnight_buy_power
           type: string
           required: true
@@ -38416,26 +38607,26 @@ paths:
           type: boolean
           required: false
           description: Whether there are more pages
-          x-description-zh: Whether there are more pages
-          x-description-zh-hk: Whether there are more pages
+          x-description-zh: 是否有更多页
+          x-description-zh-hk: 是否有更多頁
         - name: profit
           type: string
           required: false
           description: Total profit/loss
-          x-description-zh: Total profit/loss
-          x-description-zh-hk: Total profit/loss
+          x-description-zh: 总盈亏
+          x-description-zh-hk: 總盈虧
         - name: stock_items
           type: object[]
           required: false
           description: P&L breakdown by stock
-          x-description-zh: P&L breakdown by stock
-          x-description-zh-hk: P&L breakdown by stock
+          x-description-zh: 按股票划分的盈亏明细
+          x-description-zh-hk: 按股票劃分的盈虧明細
         - name: └ code
           type: string
           required: false
           description: Stock code
-          x-description-zh: Stock code
-          x-description-zh-hk: Stock code
+          x-description-zh: 股票代码
+          x-description-zh-hk: 股票代碼
         - name: └ market
           type: string
           required: false
@@ -38446,14 +38637,14 @@ paths:
           type: string
           required: false
           description: Stock name
-          x-description-zh: Stock name
-          x-description-zh-hk: Stock name
+          x-description-zh: 股票名称
+          x-description-zh-hk: 股票名稱
         - name: └ profit
           type: string
           required: false
           description: Profit/loss for this stock
-          x-description-zh: Profit/loss for this stock
-          x-description-zh-hk: Profit/loss for this stock
+          x-description-zh: 该股票盈亏
+          x-description-zh-hk: 該股票盈虧
       responses:
         '200':
           description: Successful response
@@ -39476,7 +39667,7 @@ paths:
           required: false
           description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
           x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
-          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麼 has_more 就會為 true
       responses:
         '200':
           description: Successful response
@@ -39926,7 +40117,7 @@ paths:
           required: false
           description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
           x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
-          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麼 has_more 就會為 true
       responses:
         '200':
           description: Successful response
@@ -40382,7 +40573,7 @@ paths:
           required: false
           description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
           x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
-          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麼 has_more 就會為 true
       responses:
         '200':
           description: Successful response
@@ -40591,7 +40782,7 @@ paths:
           required: false
           description: has more orders record. The maximum number of orders per query is 1000, if the number of results exceeds 1000, then has_more will be true
           x-description-zh: 是否还有更多数据。. 每次查询最大订单数量为 1000，如果查询结果数量超过 1000，那么 has_more 就会为 true
-          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麽 has_more 就會為 true
+          x-description-zh-hk: 是否還有更多數據。. 每次查詢最大訂單數量為 1000，如果查詢結果數量超過 1000，那麼 has_more 就會為 true
       responses:
         '200':
           description: Successful response
@@ -40819,7 +41010,7 @@ paths:
           required: false
           description: Cursor for paging the lifecycle history. Pass the last `history_id` of a page to fetch older entries.
           x-description-zh: 生命周期历史的分页游标，传入某页最后一条的 `history_id` 以获取更早的记录
-          x-description-zh-hk: 生命週期歷史的分頁游標，傳入某頁最後一條的 `history_id` 以獲取更早的記錄
+          x-description-zh-hk: 生命週期歷史的分頁遊標，傳入某頁最後一條的 `history_id` 以獲取更早的記錄
         - name: limit
           in: query
           type: integer
@@ -41220,7 +41411,7 @@ paths:
           required: true
           description: History entry ID, also used as the paging cursor
           x-description-zh: 历史记录 ID，同时用作分页游标
-          x-description-zh-hk: 歷史記錄 ID，同時用作分頁游標
+          x-description-zh-hk: 歷史記錄 ID，同時用作分頁遊標
         - name: └ created_at
           type: string
           required: true
@@ -42668,6 +42859,7 @@ paths:
         retrieve securities eligible for extended-hours (pre-market / after-hours) trading sessions.
         Both `market` and `category` are required parameters.
       x-description-zh: 按市场和类别筛选可交易证券列表，主要用于获取符合盘前/盘后延长交易时段条件的证券。`market` 和 `category` 均为必填参数。
+      x-description-zh-hk: 按市場和類別篩選可交易證券列表，主要用於獲取符合盤前/盤後延長交易時段條件的證券。`market` 和 `category` 均爲必填參數。
       tags:
         - Quote
       x-parameters:
@@ -42849,6 +43041,7 @@ paths:
         Get the historical market temperature time series for the specified market within a date range.
         Each data point contains the daily temperature, valuation, and sentiment scores (all scored 0–100).
       x-description-zh: 获取指定市场在日期范围内的历史市场温度时间序列，每个数据点包含当日情绪温度、估值和情绪分项评分（均为 0–100 分制）。
+      x-description-zh-hk: 獲取指定市場在日期範圍內的歷史市場溫度時間序列，每個數據點包含當日情緒溫度、估值和情緒分項評分（均爲 0–100 分制）。
       tags:
         - Market
       x-parameters:
@@ -43049,6 +43242,7 @@ paths:
         Get the current sentiment temperature snapshot for the specified market.
         Scores range from 0–100; a higher value indicates a more bullish market.
       x-description-zh: 获取指定市场的当前情绪温度快照。评分范围 0–100，数值越高表示市场越乐观。
+      x-description-zh-hk: 獲取指定市場的當前情緒溫度快照。評分範圍 0–100，數值越高表示市場越樂觀。
       tags:
         - Market
       x-parameters:
@@ -43221,6 +43415,7 @@ paths:
         Query available account statements (daily or monthly). Returns a list of statement
         dates and file keys that can be used with the download endpoint.
       x-description-zh: 查询可用的账户结单（日结单或月结单），返回结单日期和文件标识列表，可用于下载接口。
+      x-description-zh-hk: 查詢可用的賬戶結單（日結單或月結單），返回結單日期和文件標識列表，可用於下載接口。
       tags:
         - Account
       x-parameters:
@@ -43400,6 +43595,7 @@ paths:
         Get a presigned download URL for a specific statement file. The URL returns a JSON
         document containing the full statement content with all sections.
       x-description-zh: 获取指定结单文件的预签名下载地址，返回包含结单全部板块的 JSON 文档。
+      x-description-zh-hk: 獲取指定結單文件的預簽名下載地址，返回包含結單全部板塊的 JSON 文檔。
       tags:
         - Account
       x-parameters:
@@ -43550,6 +43746,7 @@ paths:
         Get the list of regulatory filings or disclosure documents for the specified symbol.
         Each filing includes a title, file name, download URLs, and publication timestamp.
       x-description-zh: 获取指定标的的监管文件或信息披露文件列表，每条记录包含标题、文件名、下载链接和发布时间戳。
+      x-description-zh-hk: 獲取指定標的的監管文件或信息披露文件列表，每條記錄包含標題、文件名、下載鏈接和發佈時間戳。
       tags:
         - Quote
       x-parameters:
