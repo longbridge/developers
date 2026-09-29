@@ -6675,7 +6675,7 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Subscribe
+          name: Subscribe Quote
           x-name-zh: 订阅行情
           x-name-zh-hk: 訂閱行情
           cmd: 6
@@ -7115,9 +7115,9 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Push · Quote
-          x-name-zh: 推送 · 报价
-          x-name-zh-hk: 推送 · 報價
+          name: Quote
+          x-name-zh: 实时价格订阅
+          x-name-zh-hk: 價格訂閱
           cmd: 101
           direction: push
           description: |
@@ -7418,9 +7418,9 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Push · Depth
-          x-name-zh: 推送 · 盘口
-          x-name-zh-hk: 推送 · 盤口
+          name: Depth
+          x-name-zh: 实时盘口订阅
+          x-name-zh-hk: 盤口訂閱
           cmd: 102
           direction: push
           description: |
@@ -7695,9 +7695,9 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Push · Brokers
-          x-name-zh: 推送 · 经纪队列
-          x-name-zh-hk: 推送 · 經紀隊列
+          name: Brokers
+          x-name-zh: 实时经纪队列订阅
+          x-name-zh-hk: 經紀隊列訂閱
           cmd: 103
           direction: push
           description: |
@@ -7967,9 +7967,9 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Push · Trades
-          x-name-zh: 推送 · 成交
-          x-name-zh-hk: 推送 · 成交
+          name: Trades
+          x-name-zh: 实时成交明细订阅
+          x-name-zh-hk: 成交明細訂閱
           cmd: 104
           direction: push
           description: |
@@ -8217,9 +8217,9 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Push · Candlestick
-          x-name-zh: 推送 · K 线
-          x-name-zh-hk: 推送 · K 線
+          name: Candlesticks
+          x-name-zh: K 线
+          x-name-zh-hk: K 線
           cmd: 105
           direction: push
           description: |

@@ -409,14 +409,9 @@
   margin-bottom: 24px;
 }
 
-/* Keep the readable content to a comfortable measure — markdown pages (no rail)
-   would otherwise span the full ~1040px column. Tables/cards outside .prose keep
-   their own width. */
-.api-page-md,
-.api-page-content .prose,
-.api-page-content .vp-doc {
-  max-width: 50rem;
-}
+/* Standalone content pages (Overview, Authentication, Realtime Quote, Error
+   Codes) use the full column width — their tables and code blocks need the room.
+   No max-width cap here. */
 
 .prose p,
 .vp-doc p { margin: 0 0 12px; }
@@ -431,6 +426,30 @@
   background: var(--lb-c-bg-mute, #f0f4f8);
   padding: 1px 4px;
   border-radius: var(--ar-radius-sm);
+}
+
+/* Fenced code blocks in doc markdown (e.g. WS protobuf schemas) render as a
+   code-card: white surface + border, matching the endpoint code panels. */
+.prose pre,
+.vp-doc pre {
+  margin: 0 0 16px;
+  padding: 16px;
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, #e2e8f0);
+  border-radius: var(--ar-radius-md);
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.7;
+  font-family: var(--lb-font-mono, 'Fira Code', 'JetBrains Mono', monospace);
+  color: var(--lb-fg-1, #1f2937);
+  tab-size: 2;
+}
+.prose pre code,
+.vp-doc pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  border-radius: 0;
 }
 
 .prose h2, .vp-doc h2 { font-size: 18px; font-weight: 600; margin: 20px 0 12px; }
@@ -617,14 +636,18 @@
 /* ── Dark mode ───────────────────────────────────────────────────────────── */
 
 :root[data-mode="dark"] .code-card,
-:root[data-mode="dark"] .code-card .code-pre {
+:root[data-mode="dark"] .code-card .code-pre,
+:root[data-mode="dark"] .prose pre,
+:root[data-mode="dark"] .vp-doc pre {
   background: #0d1117;
   color: #e6edf3;
   border-color: rgba(255,255,255,0.08);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-mode="light"]) .code-card,
-  :root:not([data-mode="light"]) .code-card .code-pre {
+  :root:not([data-mode="light"]) .code-card .code-pre,
+  :root:not([data-mode="light"]) .prose pre,
+  :root:not([data-mode="light"]) .vp-doc pre {
     background: #0d1117;
     color: #e6edf3;
     border-color: rgba(255,255,255,0.08);
@@ -1223,6 +1246,13 @@
 .api-rail-card .code-pre {
   overflow-x: auto;
 }
+/* Call example (SDK snippet) wraps instead of scrolling horizontally; the JSON
+   response example (.ws-response) keeps its own scroll. */
+.api-rail-card .code-pre:not(.ws-response) {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: visible;
+}
 /* Response JSON: theme-aware editor box — light on the site's secondary
    surface in light mode, GitHub-dark in dark mode. */
 [data-lbus-component='response-panel'] .code-pre {
@@ -1445,6 +1475,22 @@
   gap: 2rem;
   align-items: start;
 }
+
+/* Standalone content pages (no rail) have no TOC column — the host `.docs-main`
+   otherwise reserves a 14rem TOC track, squeezing the article. Let content fill
+   the full width so wide tables/protocol layouts have room. */
+[data-lbus-component='api-reference'] .docs-main:not(.has-rail) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Leaf detail pages (endpoint / WS command) keep the middle column at a
+   comfortable reading measure — the code/response lives in the right rail, so
+   the prose + parameter tables don't need to sprawl the full width. */
+/* Temporarily disabled.
+[data-lbus-component='api-reference'] .docs-main.has-rail .docs-content {
+  max-width: 52rem;
+}
+*/
 
 /* Drawer chrome is hidden while the rail sits beside the content (wide screens). */
 .ep-urlbar-tryit,

@@ -341,15 +341,23 @@ function marketToSuffix(name: string): string {
   if (mZh) return `${mZh[2]}（${mZh[1]}）`
   return name
 }
-function stripLeadingVerb(name: string): string {
-  // Drop a "Push · " / "推送 · " prefix — the WS badge already marks it as push —
-  // and a redundant "Warrant" / "权证" prefix (already under the Warrants group).
-  const n = name
+// Drop a "Push · " / "推送 · " prefix (the WS badge already marks it as push) and
+// a redundant "Warrant" / "权证" prefix (already under the Warrants group).
+function stripRedundantPrefix(name: string): string {
+  return name
     .replace(/^(Push|推送|推播)\s*[·:]\s*/, '')
     .replace(/^(Warrant|权证|權證|轮证|輪證)\s*/, '')
+}
+function stripLeadingVerb(name: string): string {
+  const n = stripRedundantPrefix(name)
   const re = /^[㐀-鿿]/.test(n) ? VERB_ZH : VERB_EN
   const stripped = n.replace(re, '').trim()
   return marketToSuffix(stripped.length > 0 ? stripped : n)
+}
+// WS command names keep their leading verb — Subscribe / Unsubscribe / 订阅 / 取消
+// are the meaning, not noise — so only strip the push/warrant prefix + market.
+function wsLeafName(name: string): string {
+  return marketToSuffix(stripRedundantPrefix(name))
 }
 
 // Icons for the top-level groups, matching the CLI docs category icons (lucide),
@@ -543,7 +551,7 @@ function ApiSidebarSubGroup({
                       className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
                       <span className="nav-method method-ws">WS</span>
                       <span className="flex-1 min-w-0 truncate">
-                        {stripLeadingVerb(pickLocale(c.name, c.nameZh, c.nameZhHk, locale))}
+                        {wsLeafName(pickLocale(c.name, c.nameZh, c.nameZhHk, locale))}
                       </span>
                     </button>
                   </li>
@@ -691,6 +699,7 @@ const L_WS = {
   request: { en: 'Request', 'zh-CN': '请求', 'zh-HK': '請求' },
   push: { en: 'Push', 'zh-CN': '推送', 'zh-HK': '推送' },
   callExample: { en: 'Call example', 'zh-CN': '调用示例', 'zh-HK': '調用示例' },
+  example: { en: 'Example', 'zh-CN': '示例', 'zh-HK': '示例' },
   responseExample: { en: 'Response example', 'zh-CN': '响应示例', 'zh-HK': '響應示例' },
   pushExample: { en: 'Push example', 'zh-CN': '推送示例', 'zh-HK': '推送示例' },
   reqParams: { en: 'Request parameters', 'zh-CN': '请求参数', 'zh-HK': '請求參數' },
@@ -705,23 +714,31 @@ function wsBlocks(cmd: WsCommandItem): CodeBlock[] {
 /** WebSocket command — center column (mirrors the endpoint detail: title, a
  *  method/URL-style bar, then description). Call example + response live in the
  *  right rail (WsRail), exactly like an HTTP endpoint. */
-function WsDetail({ cmd, locale, localePrefix }: { cmd: WsCommandItem; locale: Locale; localePrefix: string }) {
+function WsDetail({ cmd, tag, locale, localePrefix, onOpenRail }: { cmd: WsCommandItem; tag: string; locale: Locale; localePrefix: string; onOpenRail?: () => void }) {
   const title = pickLocale(cmd.name, cmd.nameZh, cmd.nameZhHk, locale)
   const desc = pickLocale(cmd.description, cmd.descriptionZh, cmd.descriptionZhHk, locale)
   return (
     <>
-      <h1 className="ep-title">{title}</h1>
+      {tag && <p className="ep-tag">{tag}</p>}
+      <div className="ep-titlebar">
+        <h1 className="ep-title">{title}</h1>
+        <CopyPageMenu operationId={cmd.id} localePrefix={localePrefix} locale={locale} />
+      </div>
       <div className="ep-urlbar" data-lbus-component="ws-bar">
         <span className="ep-method-badge method-ws">WS</span>
         <code className="ep-urlbar-url">
           {(cmd.direction === 'push' ? L_WS.push : L_WS.request)[locale]}
           {cmd.cmd != null ? ` · cmd ${cmd.cmd}` : ''}
         </code>
+        {onOpenRail && (
+          <button type="button" className="ep-urlbar-tryit" onClick={onOpenRail}>
+            {L_WS.example[locale]}
+          </button>
+        )}
       </div>
       {desc && <div className="prose vp-doc" dangerouslySetInnerHTML={{ __html: renderMd(desc, localePrefix) }} />}
       {cmd.quoteCommand && (
         <section className="api-section">
-          <h2>{L.permission[locale]}</h2>
           <QuotePermission command={cmd.quoteCommand} locale={locale} />
         </section>
       )}
@@ -737,16 +754,39 @@ function WsDetail({ cmd, locale, localePrefix }: { cmd: WsCommandItem; locale: L
           <ParamTable rows={rowsFrom(cmd.responseFields, locale)} locale={locale} />
         </section>
       )}
+      {cmd.responseExample && (
+        <section className="api-section">
+          <h3>{L.responseJson[locale]}</h3>
+          <CodeTabs
+            blocks={[{ label: 'JSON', lang: 'json', code: cmd.responseExample.trim() }]}
+            labelCopy={t(locale, 'api.copy')}
+            labelCopied={t(locale, 'api.copied')}
+          />
+        </section>
+      )}
     </>
   )
 }
 
 /** WebSocket command — right rail: call example (SDK, language dropdown) + a
  *  response/push JSON card. Mirrors the endpoint rail (RequestPanel/ResponsePanel). */
-function WsRail({ cmd, locale, labelCopy, labelCopied }: { cmd: WsCommandItem; locale: Locale; labelCopy: string; labelCopied: string }) {
+function WsRail({ cmd, locale, labelCopy, labelCopied, open, onClose }: { cmd: WsCommandItem; locale: Locale; labelCopy: string; labelCopied: string; open: boolean; onClose: () => void }) {
   const blocks = wsBlocks(cmd)
   return (
-    <aside className="api-rail" data-lbus-component="ws-rail">
+    <>
+    <div
+      className={`api-rail-scrim${open ? ' open' : ''}`}
+      onClick={onClose}
+      aria-hidden="true"
+    />
+    <aside className={`api-rail${open ? ' open' : ''}`} data-lbus-component="ws-rail">
+      <button
+        type="button"
+        className="api-rail-close"
+        aria-label={L.close[locale]}
+        onClick={onClose}>
+        ✕
+      </button>
       {blocks.length > 0 && (
         <section className="api-rail-card">
           <div className="api-rail-head">
@@ -766,6 +806,7 @@ function WsRail({ cmd, locale, labelCopy, labelCopied }: { cmd: WsCommandItem; l
         </section>
       )}
     </aside>
+    </>
   )
 }
 
@@ -1211,6 +1252,13 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     }
     return null
   }, [activeWs, wsGroups, groups])
+  // Top-level group label for the WS eyebrow/breadcrumb (mirrors epTag for REST).
+  const wsTag = useMemo<string>(() => {
+    if (!activeWsGroup) return ''
+    const tag = activeWsGroup.tag ?? activeWsGroup.name
+    const grp = groups.find((g) => g.name === tag)
+    return pickLocale(tag, grp?.nameZh, grp?.nameZhHk, locale)
+  }, [activeWsGroup, groups, locale])
 
   // Live TryIt response for the right-rail Response panel; cleared per endpoint.
   const [liveResp, setLiveResp] = useState<ApiResponse | null>(null)
@@ -1219,7 +1267,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   useEffect(() => {
     setLiveResp(null)
     setRailOpen(false)
-  }, [activeOp])
+  }, [activeOp, activeWs])
   useEffect(() => {
     if (!railOpen) return
     const onKey = (e: KeyboardEvent) => {
@@ -1239,7 +1287,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const crumbs: { text: string; href?: string }[] =
     showWs && activeWsCmd && activeWsGroup
       ? [
-          { text: pickLocale(activeWsGroup.name, activeWsGroup.nameZh, activeWsGroup.nameZhHk, locale) },
+          ...(wsTag ? [{ text: wsTag }] : []),
           { text: pickLocale(activeWsCmd.name, activeWsCmd.nameZh, activeWsCmd.nameZhHk, locale) },
         ]
       : showEndpoint && activeEndpoint
@@ -1336,7 +1384,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
               <DocsBreadcrumb items={crumbs} locale={locale} />
               {/* ── WebSocket command detail (center) ── */}
               {showWs && activeWsCmd && (
-                <WsDetail cmd={activeWsCmd} locale={locale} localePrefix={localePrefix} />
+                <WsDetail cmd={activeWsCmd} tag={wsTag} locale={locale} localePrefix={localePrefix} onOpenRail={() => setRailOpen(true)} />
               )}
               {/* ── Page content ── */}
               {showPage && activePg && (
@@ -1349,15 +1397,17 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   )}
                   <div className="api-page-md" dangerouslySetInnerHTML={{ __html: pageParts.before }} />
                   {activePg.codeTabs?.length ? (
-                    <CodeTabs
-                      blocks={activePg.codeTabs.map((s) => ({
-                        lang: s.lang.toLowerCase(),
-                        code: s.source,
-                        label: s.label,
-                      }))}
-                      labelCopy={t(locale, 'api.copy')}
-                      labelCopied={t(locale, 'api.copied')}
-                    />
+                    <div className="api-page-codetabs">
+                      <CodeTabs
+                        blocks={activePg.codeTabs.map((s) => ({
+                          lang: s.lang.toLowerCase(),
+                          code: s.source,
+                          label: s.label,
+                        }))}
+                        labelCopy={t(locale, 'api.copy')}
+                        labelCopied={t(locale, 'api.copied')}
+                      />
+                    </div>
                   ) : null}
                   {pageParts.after && (
                     <div className="api-page-md" dangerouslySetInnerHTML={{ __html: pageParts.after }} />
@@ -1410,7 +1460,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                     activeEndpoint.operation['x-quote-level'] ||
                     activeEndpoint.operation['x-quote-market']) && (
                     <section className="api-section">
-                      <h2>{L.permission[locale]}</h2>
                       <QuotePermission
                         command={activeEndpoint.operation['x-quote-command']}
                         level={activeEndpoint.operation['x-quote-level']}
@@ -1526,6 +1575,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                 locale={locale}
                 labelCopy={t(locale, 'api.copy')}
                 labelCopied={t(locale, 'api.copied')}
+                open={railOpen}
+                onClose={() => setRailOpen(false)}
               />
             )}
 

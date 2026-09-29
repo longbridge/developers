@@ -6,7 +6,7 @@
  */
 import type { Locale } from '@longbridge/openapi-utils'
 import { load } from 'js-yaml'
-import { parseSpec, pickLocale, buildResponseExample, type EndpointItem, type XParameter } from './openapi-loader'
+import { parseSpec, pickLocale, buildResponseExample, type EndpointItem, type WsCommandItem, type XParameter } from './openapi-loader'
 import rawQuotePermissions from '../../../quote-permissions.yaml?raw'
 
 // ── Quote-permission callout (mirrors the <QuotePermission> MDX component) ─────
@@ -142,6 +142,45 @@ export function endpointMarkdownById(rawYaml: string, operationId: string, local
     if (ep) return endpointMarkdown(ep, locale, 1)
   }
   return null
+}
+
+// ── WebSocket commands ────────────────────────────────────────────────────────
+
+/** Markdown for a single WebSocket command. `base` is the top heading level. */
+export function wsCommandMarkdown(cmd: WsCommandItem, locale: Locale, base = 1): string {
+  const h = (n: number) => '#'.repeat(base + n - 1)
+  const title = pickLocale(cmd.name, cmd.nameZh, cmd.nameZhHk, locale)
+  const desc = pickLocale(cmd.description, cmd.descriptionZh, cmd.descriptionZhHk, locale)
+  const dir = cmd.direction === 'push' ? 'push' : 'request'
+
+  let md = `${h(1)} ${title}\n\n\`WS\` \`${dir}${cmd.cmd != null ? ` · cmd ${cmd.cmd}` : ''}\`\n\n`
+  if (cmd.quoteCommand) md += quotePermissionMarkdown({ 'x-quote-command': cmd.quoteCommand }, locale)
+  if (desc.trim()) md += desc.trim() + '\n\n'
+  if (cmd.fields?.length) md += paramTable(cmd.fields, 'Request Parameters', h(2), locale)
+  if (cmd.responseFields?.length)
+    md += paramTable(cmd.responseFields, cmd.direction === 'push' ? 'Push Fields' : 'Response Fields', h(2), locale)
+  if (cmd.responseExample) md += `${h(2)} Response JSON Example\n\n\`\`\`json\n${cmd.responseExample.trim()}\n\`\`\`\n\n`
+  return md.trimEnd() + '\n'
+}
+
+/** All WS commands (merged into topical subgroups + any standalone ws groups). */
+function allWsCommands(rawYaml: string): WsCommandItem[] {
+  const { groups, wsGroups } = parseSpec(rawYaml)
+  const out: WsCommandItem[] = []
+  for (const g of groups) for (const sg of g.subgroups) out.push(...(sg.wsCommands ?? []))
+  for (const g of wsGroups) out.push(...g.commands)
+  return out
+}
+
+/** Flat list of WS command ids (for getStaticPaths / indexing). */
+export function wsCommandList(rawYaml: string): Array<{ id: string }> {
+  return allWsCommands(rawYaml).map((c) => ({ id: c.id }))
+}
+
+/** Markdown for a single WS command by id (null if not found). */
+export function wsCommandMarkdownById(rawYaml: string, id: string, locale: Locale): string | null {
+  const cmd = allWsCommands(rawYaml).find((c) => c.id === id)
+  return cmd ? wsCommandMarkdown(cmd, locale, 1) : null
 }
 
 /** Full reference: intro + every page + every endpoint, grouped by tag. */
