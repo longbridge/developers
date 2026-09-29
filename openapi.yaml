@@ -763,18 +763,20 @@ x-pages:
       The handshake negotiates three fixed values: protocol `version` = `1`, `codec` = `1` (Protobuf) and `platform` = `9` (OpenAPI).
 
       - **WebSocket** — pass them as query params: `wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
-      - **TCP** — send a 2-byte handshake: `ver` (4 bits), `codec` (4 bits), `platform` (4 bits), `reserve` (4 bits), e.g. bytes `0b00010001 0b00001001`.
+      - **TCP** — send a 2-byte handshake. Each field sits in the **low 4 bits** of its nibble (same convention as the packet header below): byte 1 = `codec << 4 | ver`, byte 2 = `reserve << 4 | platform`. For `ver=1, codec=1, platform=9` that is `0x11 0x09` (`0b00010001 0b00001001`).
 
       ## 3. Packet framing
 
-      Every packet begins with a 1-byte header:
+      Every packet begins with a 1-byte header. `type` occupies the **low 4 bits**; the flags sit above it:
 
-      | Bits | Field | Meaning |
-      |------|-------|---------|
-      | 4 | `type` | `1` request · `2` response · `3` push |
-      | 1 | `verify` | `1` = nonce + signature present |
-      | 1 | `gzip` | `1` = body is gzip-compressed |
-      | 2 | `reserve` | — |
+      | Bit(s) | Field | Meaning |
+      |--------|-------|---------|
+      | 0–3 | `type` | `1` request · `2` response · `3` push |
+      | 4 | `verify` | `1` = nonce + signature present |
+      | 5 | `gzip` | `1` = body is gzip-compressed |
+      | 6–7 | `reserve` | — |
+
+      So a plain request header byte is `0x01` (type 1, no verify/gzip); set bit 4 (`0x10`) for `verify` or bit 5 (`0x20`) for `gzip`.
 
       **Request** (`type=1`): `cmd_code` (1B) · `request_id` (4B uint32, unique per connection) · `timeout` (2B ms, ≤ 60000) · `body_len` (3B) · `body` (protobuf) · then `nonce` (8B) + `signature` (16B) when `verify=1`.
 
@@ -861,18 +863,20 @@ x-pages:
       握手协商三个固定值:协议 `version` = `1`、`codec` = `1`(Protobuf)、`platform` = `9`(OpenAPI)。
 
       - **WebSocket** — 作为查询参数传入:`wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
-      - **TCP** — 发送 2 字节握手:`ver`(4 位)、`codec`(4 位)、`platform`(4 位)、`reserve`(4 位),例如字节 `0b00010001 0b00001001`。
+      - **TCP** — 发送 2 字节握手。每个字段位于其所在半字节的**低 4 位**(与下方包头一致):字节 1 = `codec << 4 | ver`,字节 2 = `reserve << 4 | platform`。当 `ver=1, codec=1, platform=9` 时即 `0x11 0x09`(`0b00010001 0b00001001`)。
 
       ## 3. 报文结构
 
-      每个报文以 1 字节头部开始:
+      每个报文以 1 字节头部开始。`type` 位于**低 4 位**,其余标志位在其之上:
 
       | 位 | 字段 | 含义 |
       |----|------|------|
-      | 4 | `type` | `1` 请求 · `2` 响应 · `3` 推送 |
-      | 1 | `verify` | `1` = 含 nonce + 签名 |
-      | 1 | `gzip` | `1` = body 经 gzip 压缩 |
-      | 2 | `reserve` | — |
+      | 0–3 | `type` | `1` 请求 · `2` 响应 · `3` 推送 |
+      | 4 | `verify` | `1` = 含 nonce + 签名 |
+      | 5 | `gzip` | `1` = body 经 gzip 压缩 |
+      | 6–7 | `reserve` | — |
+
+      因此普通请求的头字节是 `0x01`(type 1,不含 verify/gzip);置 bit 4(`0x10`)表示 `verify`,置 bit 5(`0x20`)表示 `gzip`。
 
       **请求**(`type=1`):`cmd_code`(1B)· `request_id`(4B uint32，连接内唯一)· `timeout`(2B 毫秒，≤ 60000)· `body_len`(3B)· `body`(protobuf)· 当 `verify=1` 时追加 `nonce`(8B)+ `signature`(16B)。
 
@@ -959,18 +963,20 @@ x-pages:
       握手協商三個固定值:協議 `version` = `1`、`codec` = `1`(Protobuf)、`platform` = `9`(OpenAPI)。
 
       - **WebSocket** — 作為查詢參數傳入:`wss://openapi-quote.longbridge.com?version=1&codec=1&platform=9`
-      - **TCP** — 發送 2 位元組握手:`ver`(4 位)、`codec`(4 位)、`platform`(4 位)、`reserve`(4 位),例如位元組 `0b00010001 0b00001001`。
+      - **TCP** — 發送 2 位元組握手。每個欄位位於其所在半位元組的**低 4 位**(與下方封包頭一致):位元組 1 = `codec << 4 | ver`,位元組 2 = `reserve << 4 | platform`。當 `ver=1, codec=1, platform=9` 時即 `0x11 0x09`(`0b00010001 0b00001001`)。
 
       ## 3. 報文結構
 
-      每個報文以 1 位元組頭部開始:
+      每個報文以 1 位元組頭部開始。`type` 位於**低 4 位**,其餘旗標位在其之上:
 
       | 位 | 欄位 | 含義 |
       |----|------|------|
-      | 4 | `type` | `1` 請求 · `2` 響應 · `3` 推送 |
-      | 1 | `verify` | `1` = 含 nonce + 簽名 |
-      | 1 | `gzip` | `1` = body 經 gzip 壓縮 |
-      | 2 | `reserve` | — |
+      | 0–3 | `type` | `1` 請求 · `2` 響應 · `3` 推送 |
+      | 4 | `verify` | `1` = 含 nonce + 簽名 |
+      | 5 | `gzip` | `1` = body 經 gzip 壓縮 |
+      | 6–7 | `reserve` | — |
+
+      因此普通請求的頭位元組是 `0x01`(type 1,不含 verify/gzip);置 bit 4(`0x10`)表示 `verify`,置 bit 5(`0x20`)表示 `gzip`。
 
       **請求**(`type=1`):`cmd_code`(1B)· `request_id`(4B uint32，連接內唯一)· `timeout`(2B 毫秒，≤ 60000)· `body_len`(3B)· `body`(protobuf)· 當 `verify=1` 時追加 `nonce`(8B)+ `signature`(16B)。
 
@@ -1096,7 +1102,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["700.HK", "AAPL.US"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 10]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 10]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -1114,7 +1120,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["700.HK", "AAPL.US"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 10]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 10]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -1129,7 +1135,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = MultiSecurityRequest.encode({ symbol: ["700.HK", "AAPL.US"] }).finish()
-                const hdr = Buffer.from([0x10, 10])
+                const hdr = Buffer.from([0x01, 10])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -1147,7 +1153,7 @@ x-websocket:
 
                 byte[] body = MultiSecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 10);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 10);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -1164,7 +1170,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = MultiSecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 10];
+                let mut pkt = vec![0x01u8, 10];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -1185,7 +1191,7 @@ x-websocket:
                 MultiSecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(10);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(10);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -1207,7 +1213,7 @@ x-websocket:
                 req := &quote.MultiSecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 10}
+                pkt := []byte{0x01, 10}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -1400,7 +1406,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["700.HK", "AAPL.US"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 11]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 11]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -1418,7 +1424,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["700.HK", "AAPL.US"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 11]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 11]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -1433,7 +1439,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = MultiSecurityRequest.encode({ symbol: ["700.HK", "AAPL.US"] }).finish()
-                const hdr = Buffer.from([0x10, 11])
+                const hdr = Buffer.from([0x01, 11])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -1451,7 +1457,7 @@ x-websocket:
 
                 byte[] body = MultiSecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 11);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 11);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -1468,7 +1474,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = MultiSecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 11];
+                let mut pkt = vec![0x01u8, 11];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -1489,7 +1495,7 @@ x-websocket:
                 MultiSecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(11);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(11);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -1511,7 +1517,7 @@ x-websocket:
                 req := &quote.MultiSecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 11}
+                pkt := []byte{0x01, 11}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -1812,7 +1818,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["AAPL220429P162500.US"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 12]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 12]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -1830,7 +1836,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["AAPL220429P162500.US"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 12]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 12]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -1845,7 +1851,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = MultiSecurityRequest.encode({ symbol: ["AAPL220429P162500.US"] }).finish()
-                const hdr = Buffer.from([0x10, 12])
+                const hdr = Buffer.from([0x01, 12])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -1863,7 +1869,7 @@ x-websocket:
 
                 byte[] body = MultiSecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 12);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 12);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -1880,7 +1886,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = MultiSecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 12];
+                let mut pkt = vec![0x01u8, 12];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -1901,7 +1907,7 @@ x-websocket:
                 MultiSecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(12);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(12);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -1923,7 +1929,7 @@ x-websocket:
                 req := &quote.MultiSecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 12}
+                pkt := []byte{0x01, 12}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -2154,7 +2160,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["66642.HK"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 13]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 13]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -2172,7 +2178,7 @@ x-websocket:
                 body = quote_pb2.MultiSecurityRequest(symbol=["66642.HK"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 13]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 13]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -2187,7 +2193,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = MultiSecurityRequest.encode({ symbol: ["66642.HK"] }).finish()
-                const hdr = Buffer.from([0x10, 13])
+                const hdr = Buffer.from([0x01, 13])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -2205,7 +2211,7 @@ x-websocket:
 
                 byte[] body = MultiSecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 13);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 13);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -2222,7 +2228,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = MultiSecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 13];
+                let mut pkt = vec![0x01u8, 13];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -2243,7 +2249,7 @@ x-websocket:
                 MultiSecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(13);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(13);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -2265,7 +2271,7 @@ x-websocket:
                 req := &quote.MultiSecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 13}
+                pkt := []byte{0x01, 13}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -2510,7 +2516,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 14]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 14]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -2528,7 +2534,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 14]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 14]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -2543,7 +2549,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityRequest.encode({ symbol: "700.HK" }).finish()
-                const hdr = Buffer.from([0x10, 14])
+                const hdr = Buffer.from([0x01, 14])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -2561,7 +2567,7 @@ x-websocket:
 
                 byte[] body = SecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 14);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 14);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -2578,7 +2584,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 14];
+                let mut pkt = vec![0x01u8, 14];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -2599,7 +2605,7 @@ x-websocket:
                 SecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(14);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(14);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -2621,7 +2627,7 @@ x-websocket:
                 req := &quote.SecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 14}
+                pkt := []byte{0x01, 14}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -2800,7 +2806,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 15]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 15]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -2818,7 +2824,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 15]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 15]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -2833,7 +2839,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityRequest.encode({ symbol: "700.HK" }).finish()
-                const hdr = Buffer.from([0x10, 15])
+                const hdr = Buffer.from([0x01, 15])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -2851,7 +2857,7 @@ x-websocket:
 
                 byte[] body = SecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 15);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 15);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -2868,7 +2874,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 15];
+                let mut pkt = vec![0x01u8, 15];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -2889,7 +2895,7 @@ x-websocket:
                 SecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(15);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(15);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -2911,7 +2917,7 @@ x-websocket:
                 req := &quote.SecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 15}
+                pkt := []byte{0x01, 15}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -3063,7 +3069,7 @@ x-websocket:
                 body = b""
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3081,7 +3087,7 @@ x-websocket:
                 body = b""
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3096,7 +3102,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = new Uint8Array()
-                const hdr = Buffer.from([0x10, 16])
+                const hdr = Buffer.from([0x01, 16])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -3114,7 +3120,7 @@ x-websocket:
 
                 byte[] body = new byte[0];
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 16);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 16);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -3131,7 +3137,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body: Vec<u8> = Vec::new();
-                let mut pkt = vec![0x10u8, 16];
+                let mut pkt = vec![0x01u8, 16];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -3151,7 +3157,7 @@ x-websocket:
 
                 std::string body;
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(16);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(16);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -3172,7 +3178,7 @@ x-websocket:
 
                 var body []byte
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 16}
+                pkt := []byte{0x01, 16}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -3290,7 +3296,7 @@ x-websocket:
                 body = quote_pb2.SecurityTradeRequest(symbol="700.HK", count=10).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3308,7 +3314,7 @@ x-websocket:
                 body = quote_pb2.SecurityTradeRequest(symbol="700.HK", count=10).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3323,7 +3329,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityTradeRequest.encode({ symbol: "700.HK", count: 10 }).finish()
-                const hdr = Buffer.from([0x10, 17])
+                const hdr = Buffer.from([0x01, 17])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -3341,7 +3347,7 @@ x-websocket:
 
                 byte[] body = SecurityTradeRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 17);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 17);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -3358,7 +3364,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityTradeRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 17];
+                let mut pkt = vec![0x01u8, 17];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -3379,7 +3385,7 @@ x-websocket:
                 SecurityTradeRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(17);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(17);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -3401,7 +3407,7 @@ x-websocket:
                 req := &quote.SecurityTradeRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 17}
+                pkt := []byte{0x01, 17}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -3547,7 +3553,7 @@ x-websocket:
                 body = quote_pb2.SecurityIntradayRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 18]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 18]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3565,7 +3571,7 @@ x-websocket:
                 body = quote_pb2.SecurityIntradayRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 18]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 18]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3580,7 +3586,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityIntradayRequest.encode({ symbol: "700.HK" }).finish()
-                const hdr = Buffer.from([0x10, 18])
+                const hdr = Buffer.from([0x01, 18])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -3598,7 +3604,7 @@ x-websocket:
 
                 byte[] body = SecurityIntradayRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 18);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 18);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -3615,7 +3621,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityIntradayRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 18];
+                let mut pkt = vec![0x01u8, 18];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -3636,7 +3642,7 @@ x-websocket:
                 SecurityIntradayRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(18);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(18);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -3658,7 +3664,7 @@ x-websocket:
                 req := &quote.SecurityIntradayRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 18}
+                pkt := []byte{0x01, 18}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -3803,7 +3809,7 @@ x-websocket:
                 body = quote_pb2.SecurityCandlestickRequest(symbol="700.HK", period=1000, count=10, adjust_type=0).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 19]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 19]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3821,7 +3827,7 @@ x-websocket:
                 body = quote_pb2.SecurityCandlestickRequest(symbol="700.HK", period=1000, count=10, adjust_type=0).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 19]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 19]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -3836,7 +3842,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityCandlestickRequest.encode({ symbol: "700.HK", period: 1000, count: 10, adjust_type: 0 }).finish()
-                const hdr = Buffer.from([0x10, 19])
+                const hdr = Buffer.from([0x01, 19])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -3854,7 +3860,7 @@ x-websocket:
 
                 byte[] body = SecurityCandlestickRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 19);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 19);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -3871,7 +3877,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityCandlestickRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 19];
+                let mut pkt = vec![0x01u8, 19];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -3892,7 +3898,7 @@ x-websocket:
                 SecurityCandlestickRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(19);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(19);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -3914,7 +3920,7 @@ x-websocket:
                 req := &quote.SecurityCandlestickRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 19}
+                pkt := []byte{0x01, 19}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -4087,7 +4093,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="AAPL.US").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 20]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 20]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4105,7 +4111,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="AAPL.US").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 20]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 20]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4120,7 +4126,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityRequest.encode({ symbol: "AAPL.US" }).finish()
-                const hdr = Buffer.from([0x10, 20])
+                const hdr = Buffer.from([0x01, 20])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -4138,7 +4144,7 @@ x-websocket:
 
                 byte[] body = SecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 20);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 20);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -4155,7 +4161,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 20];
+                let mut pkt = vec![0x01u8, 20];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -4176,7 +4182,7 @@ x-websocket:
                 SecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(20);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(20);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -4198,7 +4204,7 @@ x-websocket:
                 req := &quote.SecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 20}
+                pkt := []byte{0x01, 20}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -4289,7 +4295,7 @@ x-websocket:
                 body = quote_pb2.OptionChainDateStrikeInfoRequest(symbol="AAPL.US", expiry_date="20220429").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 21]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 21]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4307,7 +4313,7 @@ x-websocket:
                 body = quote_pb2.OptionChainDateStrikeInfoRequest(symbol="AAPL.US", expiry_date="20220429").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 21]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 21]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4322,7 +4328,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = OptionChainDateStrikeInfoRequest.encode({ symbol: "AAPL.US", expiry_date: "20220429" }).finish()
-                const hdr = Buffer.from([0x10, 21])
+                const hdr = Buffer.from([0x01, 21])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -4340,7 +4346,7 @@ x-websocket:
 
                 byte[] body = OptionChainDateStrikeInfoRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 21);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 21);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -4357,7 +4363,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = OptionChainDateStrikeInfoRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 21];
+                let mut pkt = vec![0x01u8, 21];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -4378,7 +4384,7 @@ x-websocket:
                 OptionChainDateStrikeInfoRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(21);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(21);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -4400,7 +4406,7 @@ x-websocket:
                 req := &quote.OptionChainDateStrikeInfoRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 21}
+                pkt := []byte{0x01, 21}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -4533,7 +4539,7 @@ x-websocket:
                 body = b""
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 22]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 22]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4551,7 +4557,7 @@ x-websocket:
                 body = b""
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 22]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 22]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4566,7 +4572,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = new Uint8Array()
-                const hdr = Buffer.from([0x10, 22])
+                const hdr = Buffer.from([0x01, 22])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -4584,7 +4590,7 @@ x-websocket:
 
                 byte[] body = new byte[0];
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 22);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 22);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -4601,7 +4607,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body: Vec<u8> = Vec::new();
-                let mut pkt = vec![0x10u8, 22];
+                let mut pkt = vec![0x01u8, 22];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -4621,7 +4627,7 @@ x-websocket:
 
                 std::string body;
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(22);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(22);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -4642,7 +4648,7 @@ x-websocket:
 
                 var body []byte
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 22}
+                pkt := []byte{0x01, 22}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -4762,7 +4768,7 @@ x-websocket:
                 body = quote_pb2.WarrantFilterListRequest(symbol="700.HK", filter_config=quote_pb2.FilterConfig(sort_by=1, sort_order=0, sort_offset=0, sort_count=20), language=1).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 23]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 23]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4780,7 +4786,7 @@ x-websocket:
                 body = quote_pb2.WarrantFilterListRequest(symbol="700.HK", filter_config=quote_pb2.FilterConfig(sort_by=1, sort_order=0, sort_offset=0, sort_count=20), language=1).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 23]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 23]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -4795,7 +4801,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = WarrantFilterListRequest.encode({ symbol: "700.HK", filter_config: { sort_by: 1, sort_order: 0, sort_offset: 0, sort_count: 20 }, language: 1 }).finish()
-                const hdr = Buffer.from([0x10, 23])
+                const hdr = Buffer.from([0x01, 23])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -4813,7 +4819,7 @@ x-websocket:
 
                 byte[] body = WarrantFilterListRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 23);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 23);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -4830,7 +4836,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = WarrantFilterListRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 23];
+                let mut pkt = vec![0x01u8, 23];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -4851,7 +4857,7 @@ x-websocket:
                 WarrantFilterListRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(23);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(23);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -4873,7 +4879,7 @@ x-websocket:
                 req := &quote.WarrantFilterListRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 23}
+                pkt := []byte{0x01, 23}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -5188,7 +5194,7 @@ x-websocket:
                 body = quote_pb2.CapitalFlowIntradayRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 24]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 24]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -5206,7 +5212,7 @@ x-websocket:
                 body = quote_pb2.CapitalFlowIntradayRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 24]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 24]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -5221,7 +5227,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = CapitalFlowIntradayRequest.encode({ symbol: "700.HK" }).finish()
-                const hdr = Buffer.from([0x10, 24])
+                const hdr = Buffer.from([0x01, 24])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -5239,7 +5245,7 @@ x-websocket:
 
                 byte[] body = CapitalFlowIntradayRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 24);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 24);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -5256,7 +5262,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = CapitalFlowIntradayRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 24];
+                let mut pkt = vec![0x01u8, 24];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -5277,7 +5283,7 @@ x-websocket:
                 CapitalFlowIntradayRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(24);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(24);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -5299,7 +5305,7 @@ x-websocket:
                 req := &quote.CapitalFlowIntradayRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 24}
+                pkt := []byte{0x01, 24}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -5417,7 +5423,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 25]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 25]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -5435,7 +5441,7 @@ x-websocket:
                 body = quote_pb2.SecurityRequest(symbol="700.HK").SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 25]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 25]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -5450,7 +5456,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityRequest.encode({ symbol: "700.HK" }).finish()
-                const hdr = Buffer.from([0x10, 25])
+                const hdr = Buffer.from([0x01, 25])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -5468,7 +5474,7 @@ x-websocket:
 
                 byte[] body = SecurityRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 25);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 25);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -5485,7 +5491,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 25];
+                let mut pkt = vec![0x01u8, 25];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -5506,7 +5512,7 @@ x-websocket:
                 SecurityRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(25);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(25);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -5528,7 +5534,7 @@ x-websocket:
                 req := &quote.SecurityRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 25}
+                pkt := []byte{0x01, 25}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -5681,7 +5687,7 @@ x-websocket:
                 body = quote_pb2.SecurityCalcQuoteRequest(symbols=["700.HK"], calc_index=[1, 4]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 26]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 26]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -5699,7 +5705,7 @@ x-websocket:
                 body = quote_pb2.SecurityCalcQuoteRequest(symbols=["700.HK"], calc_index=[1, 4]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 26]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 26]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -5714,7 +5720,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SecurityCalcQuoteRequest.encode({ symbols: ["700.HK"], calc_index: [1, 4] }).finish()
-                const hdr = Buffer.from([0x10, 26])
+                const hdr = Buffer.from([0x01, 26])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -5732,7 +5738,7 @@ x-websocket:
 
                 byte[] body = SecurityCalcQuoteRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 26);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 26);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -5749,7 +5755,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityCalcQuoteRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 26];
+                let mut pkt = vec![0x01u8, 26];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -5770,7 +5776,7 @@ x-websocket:
                 SecurityCalcQuoteRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(26);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(26);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -5792,7 +5798,7 @@ x-websocket:
                 req := &quote.SecurityCalcQuoteRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 26}
+                pkt := []byte{0x01, 26}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -6157,7 +6163,7 @@ x-websocket:
                     offset_request=quote_pb2.SecurityHistoryCandlestickRequest.OffsetQuery(direction=1, count=10)).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 27]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 27]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6176,7 +6182,7 @@ x-websocket:
                     offset_request=quote_pb2.SecurityHistoryCandlestickRequest.OffsetQuery(direction=1, count=10)).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 27]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 27]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6192,7 +6198,7 @@ x-websocket:
 
                 const body = SecurityHistoryCandlestickRequest.encode({ symbol: "700.HK", period: 1000, adjust_type: 0, query_type: 1,
                   offset_request: { direction: 1, count: 10 } }).finish()
-                const hdr = Buffer.from([0x10, 27])
+                const hdr = Buffer.from([0x01, 27])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -6210,7 +6216,7 @@ x-websocket:
 
                 byte[] body = SecurityHistoryCandlestickRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 27);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 27);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -6227,7 +6233,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SecurityHistoryCandlestickRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 27];
+                let mut pkt = vec![0x01u8, 27];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -6248,7 +6254,7 @@ x-websocket:
                 SecurityHistoryCandlestickRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(27);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(27);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -6270,7 +6276,7 @@ x-websocket:
                 req := &quote.SecurityHistoryCandlestickRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 27}
+                pkt := []byte{0x01, 27}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -6511,7 +6517,7 @@ x-websocket:
                 body = b""
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 5]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 5]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6529,7 +6535,7 @@ x-websocket:
                 body = b""
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 5]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 5]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6544,7 +6550,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = new Uint8Array()
-                const hdr = Buffer.from([0x10, 5])
+                const hdr = Buffer.from([0x01, 5])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -6562,7 +6568,7 @@ x-websocket:
 
                 byte[] body = new byte[0];
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 5);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 5);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -6579,7 +6585,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body: Vec<u8> = Vec::new();
-                let mut pkt = vec![0x10u8, 5];
+                let mut pkt = vec![0x01u8, 5];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -6599,7 +6605,7 @@ x-websocket:
 
                 std::string body;
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(5);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(5);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -6620,7 +6626,7 @@ x-websocket:
 
                 var body []byte
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 5}
+                pkt := []byte{0x01, 5}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -6733,7 +6739,7 @@ x-websocket:
                 body = quote_pb2.SubscribeRequest(symbol=["700.HK", "AAPL.US"], sub_type=[1], is_first_push=True).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6751,7 +6757,7 @@ x-websocket:
                 body = quote_pb2.SubscribeRequest(symbol=["700.HK", "AAPL.US"], sub_type=[1], is_first_push=True).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6766,7 +6772,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = SubscribeRequest.encode({ symbol: ["700.HK", "AAPL.US"], sub_type: [1], is_first_push: true }).finish()
-                const hdr = Buffer.from([0x10, 6])
+                const hdr = Buffer.from([0x01, 6])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -6784,7 +6790,7 @@ x-websocket:
 
                 byte[] body = SubscribeRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 6);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 6);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -6801,7 +6807,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = SubscribeRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 6];
+                let mut pkt = vec![0x01u8, 6];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -6822,7 +6828,7 @@ x-websocket:
                 SubscribeRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(6);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(6);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -6844,7 +6850,7 @@ x-websocket:
                 req := &quote.SubscribeRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 6}
+                pkt := []byte{0x01, 6}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -6973,7 +6979,7 @@ x-websocket:
                 body = quote_pb2.UnsubscribeRequest(symbol=["700.HK", "AAPL.US"], sub_type=[1], unsub_all=False).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 7]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 7]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -6989,7 +6995,7 @@ x-websocket:
                 body = quote_pb2.UnsubscribeRequest(symbol=["700.HK", "AAPL.US"], sub_type=[1], unsub_all=False).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 7]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 7]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -7002,7 +7008,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = UnsubscribeRequest.encode({ symbol: ["700.HK", "AAPL.US"], sub_type: [1], unsub_all: false }).finish()
-                const hdr = Buffer.from([0x10, 7])
+                const hdr = Buffer.from([0x01, 7])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -7019,7 +7025,7 @@ x-websocket:
 
                 byte[] body = UnsubscribeRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 7);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 7);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -7034,7 +7040,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = UnsubscribeRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 7];
+                let mut pkt = vec![0x01u8, 7];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -7054,7 +7060,7 @@ x-websocket:
                 UnsubscribeRequest req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(7);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(7);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -7074,7 +7080,7 @@ x-websocket:
                 req := &quote.UnsubscribeRequest{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 7}
+                pkt := []byte{0x01, 7}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -7184,7 +7190,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[1], is_first_push=True).SerializeToString()
-                ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 101): header, cmd, body_len(3), body
                 raw = ws.recv()
@@ -7201,7 +7207,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[1], is_first_push=True).SerializeToString()
-                await ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                await ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 101): header, cmd, body_len(3), body
                 raw = await ws.recv()
@@ -7217,7 +7223,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6) to start the feed:
                 const sub = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [1], is_first_push: true }).finish()
-                const hdr = Buffer.from([0x10, 6])
+                const hdr = Buffer.from([0x01, 6])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([sub.length >> 16, sub.length >> 8, sub.length])
                 ws.send(Buffer.concat([hdr, meta, len, sub]))  // binary frame
@@ -7237,7 +7243,7 @@ x-websocket:
                 // 1) subscribe (cmd 6):
                 byte[] body = SubscribeRequest.newBuilder().addSymbol("700.HK").addSubType(SubType.forNumber(1)).setIsFirstPush(true).build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 6);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 6);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -7255,7 +7261,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6):
                 let body = SubscribeRequest { symbol: vec!["700.HK".into()], sub_type: vec![1], is_first_push: true }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 6];
+                let mut pkt = vec![0x01u8, 6];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -7278,7 +7284,7 @@ x-websocket:
                 SubscribeRequest req; req.add_symbol("700.HK"); req.add_sub_type((SubType)1); req.set_is_first_push(true);
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(6);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(6);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -7301,7 +7307,7 @@ x-websocket:
                 sub := &quote.SubscribeRequest{Symbol: []string{"700.HK"}, SubType: []quote.SubType{1}, IsFirstPush: true}
                 body, _ := proto.Marshal(sub)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 6}
+                pkt := []byte{0x01, 6}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -7466,7 +7472,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[2], is_first_push=True).SerializeToString()
-                ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 102): header, cmd, body_len(3), body
                 raw = ws.recv()
@@ -7483,7 +7489,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[2], is_first_push=True).SerializeToString()
-                await ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                await ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 102): header, cmd, body_len(3), body
                 raw = await ws.recv()
@@ -7499,7 +7505,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6) to start the feed:
                 const sub = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [2], is_first_push: true }).finish()
-                const hdr = Buffer.from([0x10, 6])
+                const hdr = Buffer.from([0x01, 6])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([sub.length >> 16, sub.length >> 8, sub.length])
                 ws.send(Buffer.concat([hdr, meta, len, sub]))  // binary frame
@@ -7519,7 +7525,7 @@ x-websocket:
                 // 1) subscribe (cmd 6):
                 byte[] body = SubscribeRequest.newBuilder().addSymbol("700.HK").addSubType(SubType.forNumber(2)).setIsFirstPush(true).build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 6);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 6);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -7537,7 +7543,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6):
                 let body = SubscribeRequest { symbol: vec!["700.HK".into()], sub_type: vec![2], is_first_push: true }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 6];
+                let mut pkt = vec![0x01u8, 6];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -7560,7 +7566,7 @@ x-websocket:
                 SubscribeRequest req; req.add_symbol("700.HK"); req.add_sub_type((SubType)2); req.set_is_first_push(true);
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(6);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(6);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -7583,7 +7589,7 @@ x-websocket:
                 sub := &quote.SubscribeRequest{Symbol: []string{"700.HK"}, SubType: []quote.SubType{2}, IsFirstPush: true}
                 body, _ := proto.Marshal(sub)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 6}
+                pkt := []byte{0x01, 6}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -7755,7 +7761,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[3], is_first_push=True).SerializeToString()
-                ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 103): header, cmd, body_len(3), body
                 raw = ws.recv()
@@ -7772,7 +7778,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[3], is_first_push=True).SerializeToString()
-                await ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                await ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 103): header, cmd, body_len(3), body
                 raw = await ws.recv()
@@ -7788,7 +7794,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6) to start the feed:
                 const sub = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [3], is_first_push: true }).finish()
-                const hdr = Buffer.from([0x10, 6])
+                const hdr = Buffer.from([0x01, 6])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([sub.length >> 16, sub.length >> 8, sub.length])
                 ws.send(Buffer.concat([hdr, meta, len, sub]))  // binary frame
@@ -7808,7 +7814,7 @@ x-websocket:
                 // 1) subscribe (cmd 6):
                 byte[] body = SubscribeRequest.newBuilder().addSymbol("700.HK").addSubType(SubType.forNumber(3)).setIsFirstPush(true).build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 6);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 6);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -7826,7 +7832,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6):
                 let body = SubscribeRequest { symbol: vec!["700.HK".into()], sub_type: vec![3], is_first_push: true }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 6];
+                let mut pkt = vec![0x01u8, 6];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -7849,7 +7855,7 @@ x-websocket:
                 SubscribeRequest req; req.add_symbol("700.HK"); req.add_sub_type((SubType)3); req.set_is_first_push(true);
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(6);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(6);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -7872,7 +7878,7 @@ x-websocket:
                 sub := &quote.SubscribeRequest{Symbol: []string{"700.HK"}, SubType: []quote.SubType{3}, IsFirstPush: true}
                 body, _ := proto.Marshal(sub)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 6}
+                pkt := []byte{0x01, 6}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -8012,7 +8018,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[4], is_first_push=True).SerializeToString()
-                ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 104): header, cmd, body_len(3), body
                 raw = ws.recv()
@@ -8029,7 +8035,7 @@ x-websocket:
 
                 # 1) subscribe (cmd 6) to start the feed:
                 sub = quote_pb2.SubscribeRequest(symbol=["700.HK"], sub_type=[4], is_first_push=True).SerializeToString()
-                await ws.send(bytes([0x10, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
+                await ws.send(bytes([0x01, 6]) + struct.pack(">IH", 1, 5000) + len(sub).to_bytes(3, "big") + sub)
 
                 # 2) read push packets (cmd 104): header, cmd, body_len(3), body
                 raw = await ws.recv()
@@ -8045,7 +8051,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6) to start the feed:
                 const sub = SubscribeRequest.encode({ symbol: ["700.HK"], sub_type: [4], is_first_push: true }).finish()
-                const hdr = Buffer.from([0x10, 6])
+                const hdr = Buffer.from([0x01, 6])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([sub.length >> 16, sub.length >> 8, sub.length])
                 ws.send(Buffer.concat([hdr, meta, len, sub]))  // binary frame
@@ -8065,7 +8071,7 @@ x-websocket:
                 // 1) subscribe (cmd 6):
                 byte[] body = SubscribeRequest.newBuilder().addSymbol("700.HK").addSubType(SubType.forNumber(4)).setIsFirstPush(true).build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 6);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 6);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -8083,7 +8089,7 @@ x-websocket:
 
                 // 1) subscribe (cmd 6):
                 let body = SubscribeRequest { symbol: vec!["700.HK".into()], sub_type: vec![4], is_first_push: true }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 6];
+                let mut pkt = vec![0x01u8, 6];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -8106,7 +8112,7 @@ x-websocket:
                 SubscribeRequest req; req.add_symbol("700.HK"); req.add_sub_type((SubType)4); req.set_is_first_push(true);
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(6);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(6);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -8129,7 +8135,7 @@ x-websocket:
                 sub := &quote.SubscribeRequest{Symbol: []string{"700.HK"}, SubType: []quote.SubType{4}, IsFirstPush: true}
                 body, _ := proto.Marshal(sub)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 6}
+                pkt := []byte{0x01, 6}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -8497,7 +8503,7 @@ x-websocket:
                 body = trade_pb2.Sub(topics=["private"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -8515,7 +8521,7 @@ x-websocket:
                 body = trade_pb2.Sub(topics=["private"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 16]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -8530,7 +8536,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = Sub.encode({ topics: ["private"] }).finish()
-                const hdr = Buffer.from([0x10, 16])
+                const hdr = Buffer.from([0x01, 16])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -8548,7 +8554,7 @@ x-websocket:
 
                 byte[] body = Sub.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 16);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 16);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -8565,7 +8571,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = Sub { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 16];
+                let mut pkt = vec![0x01u8, 16];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -8586,7 +8592,7 @@ x-websocket:
                 Sub req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(16);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(16);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -8608,7 +8614,7 @@ x-websocket:
                 req := &trade.Sub{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 16}
+                pkt := []byte{0x01, 16}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
@@ -8724,7 +8730,7 @@ x-websocket:
                 body = trade_pb2.Unsub(topics=["private"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 ws.send(pkt)  # binary frame
 
                 raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -8742,7 +8748,7 @@ x-websocket:
                 body = trade_pb2.Unsub(topics=["private"]).SerializeToString()
 
                 # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x10, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
+                pkt = bytes([0x01, 17]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
                 await ws.send(pkt)  # binary frame
 
                 raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
@@ -8757,7 +8763,7 @@ x-websocket:
                 // message types from protobufjs (loaded from the .proto)
 
                 const body = Unsub.encode({ topics: ["private"] }).finish()
-                const hdr = Buffer.from([0x10, 17])
+                const hdr = Buffer.from([0x01, 17])
                 const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
                 const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
                 ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
@@ -8775,7 +8781,7 @@ x-websocket:
 
                 byte[] body = Unsub.newBuilder()/* set fields per the Request table */.build().toByteArray();
                 ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x10).put((byte) 17);          // header, cmd
+                buf.put((byte) 0x01).put((byte) 17);          // header, cmd
                 buf.putInt(1).putShort((short) 5000);            // request_id, timeout
                 buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
                 buf.put(body);
@@ -8792,7 +8798,7 @@ x-websocket:
                 // prost messages; tokio-tungstenite Message::Binary
 
                 let body = Unsub { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x10u8, 17];
+                let mut pkt = vec![0x01u8, 17];
                 pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
                 pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
                 let bl = body.len();
@@ -8813,7 +8819,7 @@ x-websocket:
                 Unsub req; /* set fields per the Request table */
                 std::string body; req.SerializeToString(&body);
                 std::string pkt;
-                pkt.push_back(0x10); pkt.push_back(17);                       // header, cmd
+                pkt.push_back(0x01); pkt.push_back(17);                       // header, cmd
                 uint32_t rid = 1; uint16_t to = 5000;
                 pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
                 pkt.append({(char)(to>>8),(char)to});
@@ -8835,7 +8841,7 @@ x-websocket:
                 req := &trade.Unsub{/* set fields per the Request table */}
                 body, _ := proto.Marshal(req)
                 // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x10, 17}
+                pkt := []byte{0x01, 17}
                 pkt = binary.BigEndian.AppendUint32(pkt, 1)
                 pkt = binary.BigEndian.AppendUint16(pkt, 5000)
                 pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
