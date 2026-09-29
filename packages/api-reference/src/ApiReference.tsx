@@ -1307,6 +1307,14 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [navOpen])
+  // Narrow-screen reveal bar: slides down once scrolled (mirrors docs LocalNav).
+  const [navRevealed, setNavRevealed] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setNavRevealed(window.scrollY > 100)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -1342,18 +1350,41 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   return (
     <EnvProvider>
     <div ref={rootRef} data-lbus-component="api-reference" className="docs-layout">
-      {/* Narrow-screen nav backdrop (hidden on lg+, where the sidebar is a sticky
-          column). The open trigger is an in-flow button at the top of the content
-          (below), so it never overlaps the breadcrumb. */}
+      {/* Narrow-screen nav — same mechanism as docs/cli pages: a reveal bar that
+          slides down on scroll with a "菜单" toggle, a slide-in sidebar drawer and
+          a backdrop. (Re-created here rather than importing the app shell, which
+          this package can't depend on; markup/behaviour mirror LocalNav/Sidebar/
+          Backdrop.) */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-black/35 transition-opacity duration-200 ${navOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-        aria-hidden="true"
-        onClick={() => setNavOpen(false)}
-      />
+        className="lg:hidden fixed left-0 right-0 top-[60px] z-20 transition-transform duration-200 will-change-transform"
+        style={{ transform: navRevealed ? 'translateY(0)' : 'translateY(-100%)', pointerEvents: navRevealed ? 'auto' : 'none' }}
+        data-lbus-component="local-nav">
+        <div className="flex items-center h-12 px-4 bg-[var(--lb-bg-1)] border-b border-[color:var(--lb-stroke)]">
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 bg-transparent border-0 cursor-pointer text-[12px] font-medium text-[color:var(--lb-fg-3)] hover:text-[color:var(--lb-fg-1)]"
+            aria-label={L.menu[locale]}
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen(true)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+            {L.menu[locale]}
+          </button>
+        </div>
+      </div>
+      {navOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-20 lg:hidden"
+          data-lbus-component="backdrop"
+          aria-hidden="true"
+          onClick={() => setNavOpen(false)}
+        />
+      )}
       {/* ── Sidebar (docs sidebar DOM) ── */}
       <aside
         data-lbus-component="sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-64 overflow-y-auto border-r border-[color:var(--lb-stroke)] bg-[var(--lbus-c-bg)] px-6 py-6 transition-transform duration-200 ${navOpen ? 'translate-x-0' : '-translate-x-full'} lg:sticky lg:top-[60px] lg:z-auto lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:translate-x-0`}
+        className={`fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-[color:var(--lb-stroke)] bg-[var(--lbus-c-bg)] px-6 py-6 transition-transform duration-200 ${navOpen ? 'translate-x-0' : '-translate-x-full'} lg:sticky lg:top-[60px] lg:z-auto lg:inset-y-auto lg:h-[calc(100vh-60px)] lg:translate-x-0`}
         aria-label="API navigation">
         <nav aria-label="API navigation">
           {/* Static pages — a bare (header-less) group, like docs Overview/Getting Started */}
@@ -1420,19 +1451,6 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         <div className="docs-inner">
           <div className={`docs-main${(showEndpoint && isDocsModel) || showWs ? ' has-rail' : ''}`}>
             <article className="docs-content">
-              {/* Narrow-screen nav opener — in-flow (above the breadcrumb) so it
-                  never overlaps content; hidden on lg+ where the sidebar is a column. */}
-              <button
-                type="button"
-                className="lg:hidden mb-3 inline-flex items-center gap-1.5 rounded-full border border-[color:var(--lb-stroke)] bg-[var(--lb-bg-1)] px-3 py-1.5 text-[13px] font-medium text-[color:var(--lb-fg-1)]"
-                aria-label={L.menu[locale]}
-                aria-expanded={navOpen}
-                onClick={() => setNavOpen(true)}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-                {L.menu[locale]}
-              </button>
               <DocsBreadcrumb items={crumbs} locale={locale} />
               {/* ── WebSocket command detail (center) ── */}
               {showWs && activeWsCmd && (
