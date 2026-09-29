@@ -1,0 +1,96 @@
+---
+title: 'orders & trading'
+sidebar_label: 'orders & trading'
+sidebar_position: 3
+---
+
+# longbridge fund（訂單與交易）
+
+在終端管理基金訂單——列出訂單與交易流水、查看單筆訂單、下單前校驗，以及提交或撤銷訂單。
+
+基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）標識。這些命令作用於你的賬戶，需要登錄;`submit-order` 與 `cancel-order` 動用真實資金，除非傳 `--yes`,否則會要求確認。
+
+## 基本用法
+
+```bash
+# 你的基金訂單(同時也是成交 / 交易記錄)
+longbridge fund orders
+```
+
+```
+| Order ID           | Counter ID          | Action | Amount | Units   | Status    | Currency | Created At           |
+|--------------------|---------------------|--------|--------|---------|-----------|----------|----------------------|
+| 776181234567890123 | UT/FD/HK0000384492  | Buy    | 100.00 | —       | Filled    | USD      | 2026-09-20 10:03:11  |
+```
+
+## 示例
+
+### 查看訂單與流水
+
+```bash
+# 全部基金訂單,或按條件篩選
+longbridge fund orders
+longbridge fund orders --counter-id UT/FD/HK0000384492 --action buy --state filled \
+  --currency USD --start 2026-01-01 --end 2026-09-30 --page 1 --size 20
+# 單筆訂單詳情
+longbridge fund order 776181234567890123
+# 資金流水記錄
+longbridge fund transactions --currencies USD,HKD --start 2026-01-01 --end 2026-09-30
+```
+
+### 下單前校驗
+
+```bash
+# 試運行校驗——不會下單,返回費用 / 預估份額 / 限額
+longbridge fund validate-order UT/FD/KYG3861F1019 --action buy --currency USD --amount 100
+```
+
+### 提交訂單
+
+```bash
+# 按金額買入(會要求確認)
+longbridge fund submit-order UT/FD/KYG3861F1019 --action buy --currency USD --amount 100
+# 按份額賣出,跳過確認
+longbridge fund submit-order UT/FD/KYG3861F1019 --action sell --currency USD --units 50 --yes
+# 全部賣出
+longbridge fund submit-order UT/FD/KYG3861F1019 --action sell --currency USD --sell-all --yes
+```
+
+### 撤銷訂單
+
+```bash
+# 撤銷未成交的訂單(會要求確認)
+longbridge fund cancel-order 776181234567890123
+longbridge fund cancel-order 776181234567890123 --yes
+```
+
+任意命令加 `--format json` 可輸出機器可讀格式。
+
+## 選項
+
+| 選項 | 命令 | 說明 | 默認 |
+| ---- | ---- | ---- | ---- |
+| `--counter-id` | `orders` | 按基金 counter id 篩選 (可重複) | — |
+| `--action` | `orders`、`validate-order`、`submit-order` | `orders`:篩選 (`buy,sell`);下單命令：`buy` \| `sell` | — |
+| `--state` | `orders` | 按狀態篩選，逗號分隔 | — |
+| `--currency` | `orders`、`validate-order`、`submit-order` | 幣種 (如 `USD`、`HKD`) | — |
+| `--business-type` / `--category` / `--currencies` | `transactions` | 流水篩選條件 | — |
+| `--start` / `--end` | `orders`、`transactions` | 日期區間 (`YYYY-MM-DD` 或 RFC 3339) | — |
+| `--page` / `--size` | `orders`、`transactions` | 頁碼與每頁條數 | — |
+| `--amount` | `validate-order`、`submit-order` | 金額 (按金額下單) | — |
+| `--units` | `validate-order`、`submit-order` | 份額 (按份額下單) | — |
+| `--dividend-option` | `validate-order`、`submit-order` | 分紅方式 | — |
+| `--fund-source` | `validate-order` | 資金來源 | — |
+| `--fee` | `submit-order` | 費用 | — |
+| `--sell-all` | `submit-order` | 賣出全部持倉 | false |
+| `--remark` | `submit-order` | 訂單備註 | — |
+| `--yes` | `submit-order`、`cancel-order` | 跳過交互式確認 | false |
+| `--format` | 全部 | 輸出格式：`table` \| `json` | `table` |
+
+## 要求
+
+需要 OAuth 交易權限——先運行 `longbridge auth login`。動用真實資金前，務必先 `validate-order`(或不帶 `--yes` 運行 `submit-order` 以查看確認信息)。基金以 `counter_id` 尋址 (來自 [`fund hot` / `fund list`](/zh-HK/docs/cli/fund/market))。
+
+## 說明
+
+`submit-order` 與 `cancel-order` 動用真實資金，運行前會要求確認;僅在可信、非交互場景下傳 `--yes`。

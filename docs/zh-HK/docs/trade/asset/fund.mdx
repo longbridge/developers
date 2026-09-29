@@ -227,7 +227,7 @@ func main() {
         "account_channel": "lb",
         "fund_info": [
           {
-            "symbol": "HK0000447943",
+            "counter_id": "UT/FD/HK0000447943",
             "symbol_name": "高騰亞洲收益基金",
             "currency": "USD",
             "holding_units": "5.000",
@@ -264,7 +264,7 @@ func main() {
 | list                       | object[] | false    | 股票持倉信息   |
 | ∟ account_channel          | string   | true     | 賬戶類型       |
 | ∟ fund_info                | object[] | false    | 基金詳情       |
-| ∟∟ symbol                  | string   | true     | 基金 ISIN 代碼 |
+| ∟∟ counter_id                  | string   | true     | 基金 counter_id（末段為 ISIN） |
 | ∟∟ current_net_asset_value | string   | true     | 當前淨值       |
 | ∟∟ net_asset_value_day     | string   | true     | 當前淨值時間   |
 | ∟∟ symbol_name             | string   | true     | 基金名稱       |

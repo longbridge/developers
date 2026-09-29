@@ -1,0 +1,96 @@
+---
+title: 'orders & trading'
+sidebar_label: 'orders & trading'
+sidebar_position: 3
+---
+
+# longbridge fund (orders & trading)
+
+Manage mutual-fund orders from the terminal — list your orders and transactions, inspect one order, validate an order before sending it, and submit or cancel an order.
+
+Funds are identified by their **`counter_id`** (e.g. `UT/FD/HK0000384492`). These commands act on your account, so they require login; `submit-order` and `cancel-order` move real money and prompt for confirmation unless you pass `--yes`.
+
+## Basic Usage
+
+```bash
+# Your fund orders (also the trade / execution record)
+longbridge fund orders
+```
+
+```
+| Order ID           | Counter ID          | Action | Amount | Units   | Status    | Currency | Created At           |
+|--------------------|---------------------|--------|--------|---------|-----------|----------|----------------------|
+| 776181234567890123 | UT/FD/HK0000384492  | Buy    | 100.00 | —       | Filled    | USD      | 2026-09-20 10:03:11  |
+```
+
+## Examples
+
+### Inspect orders & transactions
+
+```bash
+# All fund orders, or filtered
+longbridge fund orders
+longbridge fund orders --counter-id UT/FD/HK0000384492 --action buy --state filled \
+  --currency USD --start 2026-01-01 --end 2026-09-30 --page 1 --size 20
+# One order's detail
+longbridge fund order 776181234567890123
+# Cash-flow transaction records
+longbridge fund transactions --currencies USD,HKD --start 2026-01-01 --end 2026-09-30
+```
+
+### Validate before you buy
+
+```bash
+# Dry-run validation — places NO order, returns fees / estimated units / limits
+longbridge fund validate-order UT/FD/KYG3861F1019 --action buy --currency USD --amount 100
+```
+
+### Submit an order
+
+```bash
+# Buy by cash amount (prompts for confirmation)
+longbridge fund submit-order UT/FD/KYG3861F1019 --action buy --currency USD --amount 100
+# Sell by units, skipping the prompt
+longbridge fund submit-order UT/FD/KYG3861F1019 --action sell --currency USD --units 50 --yes
+# Sell the entire holding
+longbridge fund submit-order UT/FD/KYG3861F1019 --action sell --currency USD --sell-all --yes
+```
+
+### Cancel an order
+
+```bash
+# Withdraw an unfilled order (prompts for confirmation)
+longbridge fund cancel-order 776181234567890123
+longbridge fund cancel-order 776181234567890123 --yes
+```
+
+Add `--format json` to any command for machine-readable output.
+
+## Options
+
+| Option | Commands | Description | Default |
+| ------ | -------- | ----------- | ------- |
+| `--counter-id` | `orders` | Filter by fund counter id (repeatable) | — |
+| `--action` | `orders`, `validate-order`, `submit-order` | `orders`: filter (`buy,sell`); order commands: `buy` \| `sell` | — |
+| `--state` | `orders` | Filter by state(s), comma-separated | — |
+| `--currency` | `orders`, `validate-order`, `submit-order` | Currency (e.g. `USD`, `HKD`) | — |
+| `--business-type` / `--category` / `--currencies` | `transactions` | Transaction filters | — |
+| `--start` / `--end` | `orders`, `transactions` | Date range (`YYYY-MM-DD` or RFC 3339) | — |
+| `--page` / `--size` | `orders`, `transactions` | Page number and page size | — |
+| `--amount` | `validate-order`, `submit-order` | Cash amount (amount-based order) | — |
+| `--units` | `validate-order`, `submit-order` | Unit count (unit-based order) | — |
+| `--dividend-option` | `validate-order`, `submit-order` | Dividend option | — |
+| `--fund-source` | `validate-order` | Fund source | — |
+| `--fee` | `submit-order` | Fee | — |
+| `--sell-all` | `submit-order` | Sell the entire holding | false |
+| `--remark` | `submit-order` | Order remark / note | — |
+| `--yes` | `submit-order`, `cancel-order` | Skip the interactive confirmation | false |
+| `--format` | all | Output format: `table` \| `json` | `table` |
+
+## Requirements
+
+OAuth trade permission is required — run `longbridge auth login` first. Always `validate-order` (or run `submit-order` without `--yes` to see the confirmation) before committing real capital. Funds are addressed by `counter_id` (from [`fund hot` / `fund list`](/docs/cli/fund/market)).
+
+## Notes
+
+`submit-order` and `cancel-order` affect live capital and prompt for confirmation before running; pass `--yes` only in trusted, non-interactive contexts.

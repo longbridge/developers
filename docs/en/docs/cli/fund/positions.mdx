@@ -1,0 +1,74 @@
+---
+title: 'positions'
+sidebar_label: 'positions'
+sidebar_position: 2
+---
+
+# longbridge fund (positions)
+
+Review your mutual-fund holdings — the positions overview, a single holding's detail, and its performance, cumulative profit, net-value history and dividends.
+
+Funds are identified by their **`counter_id`** (e.g. `UT/FD/HK0000384492`). These commands read your account, so they require login.
+
+## Basic Usage
+
+```bash
+# Overview of every fund you hold
+longbridge fund positions
+```
+
+```
+| Counter ID          | Name                        | Currency | Holding Units | Cost NAV | Current NAV | Holding Profit |
+|---------------------|-----------------------------|----------|---------------|----------|-------------|----------------|
+| UT/FD/HK0000384492  | Allianz Income and Growth   | USD      | 1250.00       | 9.812    | 10.431      | +773.75        |
+```
+
+## Examples
+
+### Positions overview
+
+```bash
+longbridge fund positions
+# Scope to a specific sub-account
+longbridge fund positions --account-channel lb --aaid 123456
+```
+
+### A single holding
+
+```bash
+# Detail of one held fund, optionally over a date range
+longbridge fund position UT/FD/HK0000384492
+longbridge fund position UT/FD/HK0000384492 --start 2026-01-01 --end 2026-06-30
+```
+
+### Performance, profit, NAV & dividends of a held fund
+
+```bash
+# Performance figures for a fund you hold
+longbridge fund position-performance UT/FD/HK0000384492
+# Cumulative-profit series (paged, date range)
+longbridge fund position-profits UT/FD/HK0000384492 --start 2026-01-01 --end 2026-06-30 --page 1 --size 30
+# Net-value history over a relative window
+longbridge fund position-nav UT/FD/HK0000384492 --month-before 6
+longbridge fund position-nav UT/FD/HK0000384492 --year-before 1
+# Dividend records
+longbridge fund position-dividends UT/FD/HK0000384492 --currency USD --page 1 --size 20
+```
+
+Add `--format json` to any command for machine-readable output.
+
+## Options
+
+| Option | Commands | Description | Default |
+| ------ | -------- | ----------- | ------- |
+| `--account-channel` | `positions`, `position` | Account channel | — |
+| `--aaid` | `positions`, `position` | Sub-account id | — |
+| `--start` / `--end` | `position`, `position-profits`, `position-dividends` | Date range (`YYYY-MM-DD` or RFC 3339) | — |
+| `--month-before` / `--year-before` | `position-nav` | Relative NAV window before now | — |
+| `--currency` | `position-dividends` | Currency filter (e.g. `HKD`, `USD`) | — |
+| `--page` / `--size` | `position-profits`, `position-dividends` | Page number and page size | — |
+| `--format` | all | Output format: `table` \| `json` | `table` |
+
+## Requirements
+
+OAuth account permission is required — run `longbridge auth login` first. Funds are addressed by `counter_id` (from [`fund hot` / `fund list`](/docs/cli/fund/market)). To place or cancel fund orders, see [orders & trading](/docs/cli/fund/orders).

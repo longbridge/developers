@@ -7,6 +7,10 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.29.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.29.0)
+
+- **新增 `fund` 命令组 —— 香港互惠基金** — `longbridge fund` 把基金渠道带入终端：浏览目录 (`hot`、`list`、`filters`),查看单只基金的 `detail`、`analysis` / `analysis-detail`、`trend`、`annual-returns` / `quarterly-returns`、`performance` / `performance-comparison`、最新与历史净值 (`nav`、`nav-history`、`nav-range`) 以及 `holdings` / `stock-holdings`;查看你的持仓 (`positions`、`position`、`position-performance`、`position-profits`、`position-nav`、`position-dividends`);并管理订单 (`orders`、`order`、`transactions`、`validate-order`、`submit-order`、`cancel-order`)。基金以 `counter_id`(如 `UT/FD/HK0000384492`) 寻址，而非股票 symbol —— 可从 `fund hot` / `fund list` 获取。`submit-order` 与 `cancel-order` 除非传 `--yes` 否则会要求确认。详见 [基金](/zh-CN/docs/cli/fund/market) 文档
+
 ### [v0.28.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.28.0)
 
 - **[在终端里与 LongbridgeAI 对话](/zh-CN/docs/cli/ai)** — 新增 `longbridge ai` 命令，打开全屏对话界面：回答实时流式返回，以 Markdown 渲染，图表、表格、语法高亮代码和实时行情卡片都直接画在终端里。标题栏行情条跟随对话提到的每一只标的（点击即展开完整行情卡片），斜杠命令覆盖 `/new` `/retry` `/copy` `/export` `/quote` `/resume` `/settings` `/agent` `/login`；对话保存在你的账户上，在终端开始的对话可以在其他使用 LongbridgeAI 的地方继续
