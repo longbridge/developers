@@ -6,9 +6,9 @@ sidebar_position: 1
 
 # longbridge fund（行情數據）
 
-在終端瀏覽基金目錄與單隻基金的行情數據——熱銷榜、可篩選的基金列表,以及單隻基金的詳情、分析、走勢、收益、業績、淨值（NAV）與持倉。
+在終端瀏覽基金目錄與單隻基金的行情數據——熱銷榜、可篩選的基金列表，以及單隻基金的詳情、分析、走勢、收益、業績、淨值（NAV）與持倉。
 
-每隻基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）標識,而非股票 symbol。可從 `longbridge fund hot` 或 `longbridge fund list` 獲取,再作為位置參數傳給其他命令。
+每隻基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）標識，而非股票 symbol。可從 `longbridge fund hot` 或 `longbridge fund list` 獲取，再作為位置參數傳給其他命令。
 
 ## 基本用法
 
@@ -88,14 +88,14 @@ longbridge fund stock-holdings UT/FD/HK0000384492 --limit 20
 | 選項 | 命令 | 說明 | 默認 |
 | ---- | ---- | ---- | ---- |
 | `--quick-id` | `list` | 快捷篩選 id(可重複) | — |
-| `--time-interval` | `list` | 收益率區間,如 `1m` `3m` `1y`(可重複) | — |
+| `--time-interval` | `list` | 收益率區間，如 `1m` `3m` `1y`(可重複) | — |
 | `--period` | `analysis`、`analysis-detail`、`trend`、`performance-comparison` | 分析 / 比較週期 | — |
 | `--page` / `--size` | `annual-returns`、`quarterly-returns`、`nav-history` | 頁碼與每頁條數 | — |
 | `--month-before` / `--year-before` | `nav-range` | 相對當前的淨值時間窗 | — |
 | `--scene` | `holdings` | 持倉拆解口徑 | — |
 | `--limit` | `stock-holdings` | 返回股票數量上限 | — |
-| `--format` | 全部 | 輸出格式:`table` \| `json` | `table` |
+| `--format` | 全部 | 輸出格式：`table` \| `json` | `table` |
 
 ## 要求
 
-這些是行情數據命令,無需賬戶權限。基金以 `counter_id` 尋址,可從 `fund hot` / `fund list` 獲取。查看你的持倉與訂單,見 [我的持倉](/zh-HK/docs/cli/fund/positions) 與 [訂單與交易](/zh-HK/docs/cli/fund/orders)。
+這些是行情數據命令，無需賬戶權限。基金以 `counter_id` 尋址，可從 `fund hot` / `fund list` 獲取。查看你的持倉與訂單，見 [我的持倉](/zh-HK/docs/cli/fund/positions) 與 [訂單與交易](/zh-HK/docs/cli/fund/orders)。

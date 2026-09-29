@@ -6,9 +6,9 @@ sidebar_position: 3
 
 # longbridge fund（订单与交易）
 
-在终端管理基金订单——列出订单与交易流水、查看单笔订单、下单前校验,以及提交或撤销订单。
+在终端管理基金订单——列出订单与交易流水、查看单笔订单、下单前校验，以及提交或撤销订单。
 
-基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）标识。这些命令作用于你的账户,需要登录;`submit-order` 与 `cancel-order` 动用真实资金,除非传 `--yes`,否则会要求确认。
+基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）标识。这些命令作用于你的账户，需要登录;`submit-order` 与 `cancel-order` 动用真实资金，除非传 `--yes`,否则会要求确认。
 
 ## 基本用法
 
@@ -70,27 +70,27 @@ longbridge fund cancel-order 776181234567890123 --yes
 
 | 选项 | 命令 | 说明 | 默认 |
 | ---- | ---- | ---- | ---- |
-| `--counter-id` | `orders` | 按基金 counter id 筛选(可重复) | — |
-| `--action` | `orders`、`validate-order`、`submit-order` | `orders`:筛选(`buy,sell`);下单命令:`buy` \| `sell` | — |
-| `--state` | `orders` | 按状态筛选,逗号分隔 | — |
-| `--currency` | `orders`、`validate-order`、`submit-order` | 币种(如 `USD`、`HKD`) | — |
+| `--counter-id` | `orders` | 按基金 counter id 筛选 (可重复) | — |
+| `--action` | `orders`、`validate-order`、`submit-order` | `orders`:筛选 (`buy,sell`);下单命令：`buy` \| `sell` | — |
+| `--state` | `orders` | 按状态筛选，逗号分隔 | — |
+| `--currency` | `orders`、`validate-order`、`submit-order` | 币种 (如 `USD`、`HKD`) | — |
 | `--business-type` / `--category` / `--currencies` | `transactions` | 流水筛选条件 | — |
-| `--start` / `--end` | `orders`、`transactions` | 日期区间(`YYYY-MM-DD` 或 RFC 3339) | — |
+| `--start` / `--end` | `orders`、`transactions` | 日期区间 (`YYYY-MM-DD` 或 RFC 3339) | — |
 | `--page` / `--size` | `orders`、`transactions` | 页码与每页条数 | — |
-| `--amount` | `validate-order`、`submit-order` | 金额(按金额下单) | — |
-| `--units` | `validate-order`、`submit-order` | 份额(按份额下单) | — |
+| `--amount` | `validate-order`、`submit-order` | 金额 (按金额下单) | — |
+| `--units` | `validate-order`、`submit-order` | 份额 (按份额下单) | — |
 | `--dividend-option` | `validate-order`、`submit-order` | 分红方式 | — |
 | `--fund-source` | `validate-order` | 资金来源 | — |
 | `--fee` | `submit-order` | 费用 | — |
 | `--sell-all` | `submit-order` | 卖出全部持仓 | false |
 | `--remark` | `submit-order` | 订单备注 | — |
 | `--yes` | `submit-order`、`cancel-order` | 跳过交互式确认 | false |
-| `--format` | 全部 | 输出格式:`table` \| `json` | `table` |
+| `--format` | 全部 | 输出格式：`table` \| `json` | `table` |
 
 ## 要求
 
-需要 OAuth 交易权限——先运行 `longbridge auth login`。动用真实资金前,务必先 `validate-order`(或不带 `--yes` 运行 `submit-order` 以查看确认信息)。基金以 `counter_id` 寻址(来自 [`fund hot` / `fund list`](/zh-CN/docs/cli/fund/market))。
+需要 OAuth 交易权限——先运行 `longbridge auth login`。动用真实资金前，务必先 `validate-order`(或不带 `--yes` 运行 `submit-order` 以查看确认信息)。基金以 `counter_id` 寻址 (来自 [`fund hot` / `fund list`](/zh-CN/docs/cli/fund/market))。
 
 ## 说明
 
-`submit-order` 与 `cancel-order` 动用真实资金,运行前会要求确认;仅在可信、非交互场景下传 `--yes`。
+`submit-order` 与 `cancel-order` 动用真实资金，运行前会要求确认;仅在可信、非交互场景下传 `--yes`。

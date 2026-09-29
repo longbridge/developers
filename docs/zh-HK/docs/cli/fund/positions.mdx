@@ -6,9 +6,9 @@ sidebar_position: 2
 
 # longbridge fund（持倉）
 
-查看你的基金持倉——持倉總覽、單隻持倉詳情,及其業績、累計收益、淨值歷史與分紅。
+查看你的基金持倉——持倉總覽、單隻持倉詳情，及其業績、累計收益、淨值歷史與分紅。
 
-基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）標識。這些命令讀取你的賬戶,需要登錄。
+基金以其 **`counter_id`**（如 `UT/FD/HK0000384492`）標識。這些命令讀取你的賬戶，需要登錄。
 
 ## 基本用法
 
@@ -63,12 +63,12 @@ longbridge fund position-dividends UT/FD/HK0000384492 --currency USD --page 1 --
 | ---- | ---- | ---- | ---- |
 | `--account-channel` | `positions`、`position` | 賬戶渠道 | — |
 | `--aaid` | `positions`、`position` | 子賬戶 id | — |
-| `--start` / `--end` | `position`、`position-profits`、`position-dividends` | 日期區間(`YYYY-MM-DD` 或 RFC 3339) | — |
+| `--start` / `--end` | `position`、`position-profits`、`position-dividends` | 日期區間 (`YYYY-MM-DD` 或 RFC 3339) | — |
 | `--month-before` / `--year-before` | `position-nav` | 相對當前的淨值時間窗 | — |
-| `--currency` | `position-dividends` | 幣種篩選(如 `HKD`、`USD`) | — |
+| `--currency` | `position-dividends` | 幣種篩選 (如 `HKD`、`USD`) | — |
 | `--page` / `--size` | `position-profits`、`position-dividends` | 頁碼與每頁條數 | — |
-| `--format` | 全部 | 輸出格式:`table` \| `json` | `table` |
+| `--format` | 全部 | 輸出格式：`table` \| `json` | `table` |
 
 ## 要求
 
-需要 OAuth 賬戶權限——先運行 `longbridge auth login`。基金以 `counter_id` 尋址(來自 [`fund hot` / `fund list`](/zh-HK/docs/cli/fund/market))。下單或撤單見 [訂單與交易](/zh-HK/docs/cli/fund/orders)。
+需要 OAuth 賬戶權限——先運行 `longbridge auth login`。基金以 `counter_id` 尋址 (來自 [`fund hot` / `fund list`](/zh-HK/docs/cli/fund/market))。下單或撤單見 [訂單與交易](/zh-HK/docs/cli/fund/orders)。
