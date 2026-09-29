@@ -1342,20 +1342,9 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   return (
     <EnvProvider>
     <div ref={rootRef} data-lbus-component="api-reference" className="docs-layout">
-      {/* Narrow-screen nav toggle + backdrop (hidden on lg+, where the sidebar is
-          a sticky column). Without the drawer the fixed sidebar overlapped and
-          clipped the content on small viewports. */}
-      <button
-        type="button"
-        className="lg:hidden fixed left-3 top-[70px] z-40 inline-flex items-center gap-1.5 rounded-full border border-[color:var(--lb-stroke)] bg-[var(--lb-bg-1)] px-3 py-1.5 text-[13px] font-medium text-[color:var(--lb-fg-1)] shadow-sm"
-        aria-label={L.menu[locale]}
-        aria-expanded={navOpen}
-        onClick={() => setNavOpen(true)}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-        {L.menu[locale]}
-      </button>
+      {/* Narrow-screen nav backdrop (hidden on lg+, where the sidebar is a sticky
+          column). The open trigger is an in-flow button at the top of the content
+          (below), so it never overlaps the breadcrumb. */}
       <div
         className={`lg:hidden fixed inset-0 z-40 bg-black/35 transition-opacity duration-200 ${navOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
         aria-hidden="true"
@@ -1431,6 +1420,19 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
         <div className="docs-inner">
           <div className={`docs-main${(showEndpoint && isDocsModel) || showWs ? ' has-rail' : ''}`}>
             <article className="docs-content">
+              {/* Narrow-screen nav opener — in-flow (above the breadcrumb) so it
+                  never overlaps content; hidden on lg+ where the sidebar is a column. */}
+              <button
+                type="button"
+                className="lg:hidden mb-3 inline-flex items-center gap-1.5 rounded-full border border-[color:var(--lb-stroke)] bg-[var(--lb-bg-1)] px-3 py-1.5 text-[13px] font-medium text-[color:var(--lb-fg-1)]"
+                aria-label={L.menu[locale]}
+                aria-expanded={navOpen}
+                onClick={() => setNavOpen(true)}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+                {L.menu[locale]}
+              </button>
               <DocsBreadcrumb items={crumbs} locale={locale} />
               {/* ── WebSocket command detail (center) ── */}
               {showWs && activeWsCmd && (
