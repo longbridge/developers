@@ -33,7 +33,10 @@ export function createDynamicRequest(authConfig: AuthConfig, options: RequestOpt
     }
   }
 
-  if (import.meta.env.DEV) {
+  // In dev, route through the same-origin proxy to avoid CORS — but only when
+  // the caller didn't pass an explicit baseUrl. The API Reference passes its own
+  // per-environment dev proxy prefix (/api-prod, /api-test), which must win.
+  if (import.meta.env.DEV && !options.baseUrl) {
     baseUrl = '/api'
   }
 

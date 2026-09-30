@@ -10,11 +10,11 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the hierarchical sub-sector tree for an industry group, including stock count, daily change, and YTD change at each node. Counter IDs come from `industry_rank`.
+Get the hierarchical sub-sector tree for an industry group, including stock count, daily change, and YTD change at each node. Symbols come from `industry_rank`.
 
 <CliCommand>
-longbridge industry-peers BK/US/IN00258
-longbridge industry-peers BK/HK/IN20337
+longbridge industry-peers IN00258.US
+longbridge industry-peers IN20337.HK
 </CliCommand>
 
 <SDKLinks module="fundamental" klass="FundamentalContext" method="industry_peers" />
@@ -26,7 +26,7 @@ longbridge industry-peers BK/HK/IN20337
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| counter_id | string | YES | Industry unique identifier (BK/MARKET/ID format) from `industry_rank` |
+| symbol | string | YES | Industry unique identifier (BK/MARKET/ID format) from `industry_rank` |
 | market | string | YES | Market code: `US` / `HK` / `CN` / `SG` |
 
 ## Request Example
@@ -41,7 +41,7 @@ oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = FundamentalContext(config)
 
-resp = ctx.industry_peers("BK/US/IN00258", "US")
+resp = ctx.industry_peers("IN00258.US", "US")
 print(resp)
 ```
 
@@ -57,7 +57,7 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncFundamentalContext.create(config)
 
-    resp = await ctx.industry_peers("BK/US/IN00258", "US")
+    resp = await ctx.industry_peers("IN00258.US", "US")
     print(resp)
 
 if __name__ == "__main__":
@@ -76,7 +76,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = FundamentalContext.new(config)
-  const resp = await ctx.industryPeers('BK/US/IN00258', 'US')
+  const resp = await ctx.industryPeers('IN00258.US', 'US')
   console.log(resp)
 }
 main().catch(console.error)
@@ -94,7 +94,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              FundamentalContext ctx = FundamentalContext.create(config)) {
-            var resp = ctx.getIndustryPeers("BK/US/IN00258", "US").get();
+            var resp = ctx.getIndustryPeers("IN00258.US", "US").get();
             System.out.println(resp);
         }
     }
@@ -113,7 +113,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = FundamentalContext::new(config);
-    let resp = ctx.industry_peers("BK/US/IN00258", "US").await?;
+    let resp = ctx.industry_peers("IN00258.US", "US").await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -136,7 +136,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             FundamentalContext ctx = FundamentalContext::create(config);
-            ctx.industry_peers("BK/US/IN00258", "US", [](auto resp) {
+            ctx.industry_peers("IN00258.US", "US", [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -175,7 +175,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.IndustryPeers(context.Background(), "BK/US/IN00258", "US")
+	resp, err := c.IndustryPeers(context.Background(), "IN00258.US", "US")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -199,14 +199,14 @@ func main() {
     "top": {"name": "All Industries", "market": "US"},
     "chain": {
       "name": "Technology",
-      "counter_id": "BK/US/IN00258",
+      "symbol": "IN00258.US",
       "stock_num": 542,
       "chg": "0.0231",
       "ytd_chg": "0.0875",
       "next": [
         {
           "name": "在线消费电子产品零售",
-          "counter_id": "",
+          "symbol": "",
           "stock_num": 4,
           "chg": "0.0268",
           "ytd_chg": "-0.1869",
@@ -252,7 +252,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | name | string | false | Sector name |
-| counter_id | string | false | Sector counter ID (present on root node; empty string on child nodes) |
+| symbol | string | false | Sector symbol (present on root node; empty string on child nodes) |
 | stock_num | integer | false | Number of stocks in this sector |
 | chg | string | false | Daily change (decimal; may be empty string) |
 | ytd_chg | string | false | Year-to-date change (decimal; may be empty string) |

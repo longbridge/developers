@@ -15,16 +15,16 @@ longbridge industry-rank --market US
 ```
 
 ```
-| rank | name                                    | counter_id      | chg    | indicator |
+| rank | name                                    | symbol      | chg    | indicator |
 |------|-----------------------------------------|-----------------|--------|-----------|
-| 1    | Semiconductors                          | BK/US/IN00258   | +3.82% | ...       |
-| 2    | Software - Infrastructure               | BK/US/IN00305   | +2.91% | ...       |
-| 3    | Biotechnology                           | BK/US/IN00043   | +2.54% | ...       |
-| 4    | Electronic Components                   | BK/US/IN00099   | +1.98% | ...       |
-| 5    | Asset Management                        | BK/US/IN00033   | +1.73% | ...       |
+| 1    | Semiconductors                          | IN00258.US   | +3.82% | ...       |
+| 2    | Software - Infrastructure               | IN00305.US   | +2.91% | ...       |
+| 3    | Biotechnology                           | IN00043.US   | +2.54% | ...       |
+| 4    | Electronic Components                   | IN00099.US   | +1.98% | ...       |
+| 5    | Asset Management                        | IN00033.US   | +1.73% | ...       |
 ```
 
-`counter_id` 列（如 `BK/US/IN00258`）可直接传给 [`industry-peers`](./industry-peers)，展开该板块的完整竞争树。
+`symbol` 列（如 `IN00258.US`）可直接传给 [`industry-peers`](./industry-peers)，展开该板块的完整竞争树。
 
 ## 示例
 
@@ -51,8 +51,8 @@ longbridge industry-rank --market CN --indicator revenue-growth
 ### 进一步下探某板块
 
 ```bash
-# 从 industry-rank 获取 counter_id，再探索其子板块
-longbridge industry-peers BK/US/IN00258
+# 从 industry-rank 获取 symbol，再探索其子板块
+longbridge industry-peers IN00258.US
 ```
 
 ## 选项
