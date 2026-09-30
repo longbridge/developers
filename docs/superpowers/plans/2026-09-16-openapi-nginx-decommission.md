@@ -732,7 +732,7 @@ C4 的含义：**切换风险低**。产物已在 Pages 上持续更新半年，
 | G2 | zip 不在 Pages 上 | 改 `prebuild-skills.ts`，产出清单对齐 `pack-skills.yml`，见 §15.7 | **工作区已改，本地实测 14/15 逐字节一致** |
 | G3 | `install` / `install.ps1` 路径 | **S1 已修**（`public/longbridge/longbridge-terminal/`） | 已在分支上 |
 | G4 | `/en` 前缀 302 等 nginx 重定向 | 新增 `public/_redirects`，但**只放 `/en` 裸前缀一条**；`/en/*` 通配与 install.md 的 301 必须进 Functions，理由见下 | **部分完成** |
-| G5 | SPA 8 个前缀 | Pages Functions 代理，见 §15.4 | **未做**——等 private 的 Pages project |
+| G5 | SPA 8 个前缀 | Pages Functions 转发，见 §15.11 | **已做，本地验证通过**——等凭证可见性确认 |
 | G8 | nginx 下线后 `/skill/install.md`、`/skill-install.md` 两条路由消失 | Function 接管，见 §15.10 | **已做，本地端到端验证通过** |
 | G6 | longport-developers 同样缺 Pages 部署 | 新增 `wrangler pages deploy` 步骤 + project | longport-developers |
 | G7 | `X-Robots-Tag: noindex`（longportapp 侧） | `_headers` | longport-developers |
@@ -798,6 +798,14 @@ bun run build:longport:release  # → packages/longport/.vitepress/dist
 > **不整体迁移 GitLab CI**：那条流水线有 33 个 job、三条产品线（openapi / longport / openapi-sdk），产出含 `whale-assets/**`（App 内嵌 webview）与 `lb-assets/openapi-sdk/**`。整体迁移会把 App 内嵌与 SDK 发布拖进本次改造，验证面从「两个文档站」扩大到「App 内嵌 + SDK + 文档站」，出问题无法归因。若要退役 GitLab，应单独立项。
 
 ### 15.5 canary 验证路径（不需要动 DNS）
+
+> **已查实（2026-09-30）**：`wrangler pages deploy <dir>` **会自动编译并部署同目录级的
+> `functions/`**，不需要额外跑 `wrangler pages functions build`。官方文档对此表述含糊、
+> `pages deploy --help` 也没有相关 flag，是用一次真实部署确认的：预览上
+> `/en/docs/getting-started` 返回 302，说明 Function 已生效。
+>
+> 同一次部署还印证了 Function 里**不需要**强制 https：线上重定向目标本就是
+> `https://…`，本地 `wrangler pages dev` 显示的 `http://` 只是 dev 形态。
 
 CF Pages 分支预览自带域名。对当前分支跑一次：
 
@@ -1075,3 +1083,74 @@ cookie，代理层已剥离，不落到 `open.*` 域；注入结果因邀请码�
 阿里云 CDN 的改写规则**不能按 query 分支**，也没有边缘计算，所以 `.cn` 上这两条路径只能：
 永远 301 到 `longbridge.cn/skill-install.md`（保注入、失去无参时的 200），或永远静态 200
 （保状态码、带邀请码时静默丢归属）。属 §14 的决策，尚未定。
+
+---
+
+## 15.11 SPA 合站落地（G5，2026-09-30）
+
+### 两侧改动
+
+**private 仓（`longbridge/openapi-website-private`，代码在 GitHub）**
+
+- 新增 `.github/workflows/canary-cloudflare.yml`：照搬 GitLab 跑通的路径（yarn 装依赖 →
+  先构建 `packages/utils` → `build:canary`），部署到独立 Pages project
+  `longbridge-openapi-app`。**GitLab 一行不动**，`whale-assets`（App 内嵌）与 openapi-sdk
+  两条线零影响。
+- 构建期只需 `PROXY=canary`。已查实 `PUBLIC_PATH` 是 CI 遗留变量，**代码里无人消费**
+  （`rg` 零命中），`base: '/'`，所以资源是根相对的。
+- `wrangler pages project create … || true` 自建 project，省掉一次人工操作。
+
+**docs 仓 Function**
+
+```ts
+const SPA_PREFIXES = ['auth','sso','account','log-out','scope','oauth2','dashboard','connect']
+// /{locale?}/{prefix}{/seg}*  →  <origin>/{locale?/}{path}.html
+// /_app/*                     →  <origin>/_app/*
+```
+
+`SPA_ORIGIN` 表**包含预览域名** —— 与 `INSTALL_MAIN_SITE` 不同，SPA 转发没有回环风险
+（主站只回源 install 那两条路径，不碰 SPA 前缀），所以预览环境也启用，让这套转发在绑正式
+域名之前就能完整验证。
+
+### 顺手拆掉一个雷（同 §15.9 同类）
+
+S1 给 private 仓加的 `postbuild` **无条件**跑 `to-directory-index.ts`，把 `dashboard.html`
+转成 `dashboard/index.html`。而 nginx 的 SPA 规则取的是：
+
+```nginx
+set $openapi_try "/web-brand/${deploy_env_prefix}-openapi/$path.html";
+```
+
+**一旦合入，GitLab 那条线的产物就和 nginx 对不上，`/dashboard` 全线 404。**
+已改为按 `BUILD_FORMAT` 开关、默认跳过，与 docs 仓 `astro.config.ts` 的同名变量一致。
+两向都验过：不设变量保留 `foo.html`，设 `directory` 转成 `foo/index.html`。
+
+### 为什么资源也必须转发
+
+实测线上 `/dashboard` 的 HTML 引用的是**根相对**路径 `/assets/app.CUwW24Yy.js`，而这些资源
+带 `x-oss-*` 头、走的是**文档前缀** `new-docs/raw/assets/` —— 这正是「四个项目共用 `/assets/`」
+的来源。`.com` 文档迁到 Pages 后 `dist/assets/` 是空的（S1 已把文档资源挪到 `/_docs/`），
+所以只转发 HTML 会让 SPA 资源全部 404。S1 给 private 仓设的 `assetsDir: '_app'` 正是为此
+准备的命名空间。
+
+### 本地实测（临时把测试 host 指向线上 CDN，布局相同；验完已撤）
+
+| 请求 | 结果 | 对照线上 |
+|---|---|---|
+| `/dashboard` | 200 · `User Account Center \| Longbridge Developers` | 标题一致 |
+| `/zh-CN/dashboard` | 200 · `个人中心 \| Longbridge Developers` | locale 映射正确 |
+| `/auth` / `/connect` | 200 | ✅ |
+| `/oauth2/authorize` | **404** | **与线上一致** |
+| `/docs/getting-started.html` | 308 | 不在前缀内，不转发 |
+| `/dashboard`（`open.longportapp.com`） | 404 | 未配来源，不转发 |
+
+**不实现 nginx 的 SPA 兜底**：`error_page 404 → index.html` 是死代码（`_common.conf` 无
+`proxy_intercept_errors`，假设 #4），实测 `/oauth2/authorize` 线上就是 404。实现它会把
+404 变成 200，属行为变化。
+
+### 待确认
+
+`CLOUDFLARE_API_TOKEN` 是**组织级** secret（这也解释了为何 docs 仓 Settings 页只显示
+`REVIEWDOG_TOKEN`、运行时却能解析）。组织 secret 有可见性设置，若为「Selected
+repositories」需把 private 仓加进列表。workflow 第一步用表达式比较检查（值不进 shell），
+缺了会直接报错说明，推一次即知。
