@@ -1,0 +1,22 @@
+# Cloudflare Pages 重定向表。只放本文件能正确表达的规则，其余走 functions/。
+#
+# 官方文档的两条约束决定了哪些规则**不能**写在这里：
+#
+# 1) 「Redirects are always followed, regardless of whether or not an asset
+#    matches the incoming request.」—— 重定向优先于静态文件。
+#    所以 `/en/*` 的通配 302 会连带劫持真实存在的 `/en/**.md`
+#    （`[locale]/[...slug].md.ts` 给每篇文档 × 每个 locale 各生成一个端点），
+#    以及主站取数用的 `/en/skill/install.md`。
+#
+# 2) 不支持 domain-level 源，也不能代理外部域。
+#    所以 `/skill/install.md` → longbridge.com 的 301 不能写在这里：它会在
+#    *.pages.dev 上一并生效，而主站正要从 pages.dev 取这个文件，形成回环
+#    （方案 §2 的回环陷阱在 CF 上的新形态）。
+#
+# 这两类都要按 hostname / 扩展名判断，归 functions/，见方案 §15.4。
+#
+# 尾斜杠与 .html 后缀的收敛不需要规则：Pages 原生 308 到规范形式。
+
+# /en 裸前缀 → 站点根。该路径没有对应产物（en 是 root locale，不生成 /en/ 页面），
+# 不存在劫持静态文件的风险。
+/en    /    302
