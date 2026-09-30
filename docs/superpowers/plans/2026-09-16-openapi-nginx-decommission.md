@@ -732,7 +732,8 @@ C4 的含义：**切换风险低**。产物已在 Pages 上持续更新半年，
 | G2 | zip 不在 Pages 上 | 改 `prebuild-skills.ts`，产出清单对齐 `pack-skills.yml`，见 §15.7 | **工作区已改，本地实测 14/15 逐字节一致** |
 | G3 | `install` / `install.ps1` 路径 | **S1 已修**（`public/longbridge/longbridge-terminal/`） | 已在分支上 |
 | G4 | `/en` 前缀 302 等 nginx 重定向 | 新增 `public/_redirects`，但**只放 `/en` 裸前缀一条**；`/en/*` 通配与 install.md 的 301 必须进 Functions，理由见下 | **部分完成** |
-| G5 | SPA 8 个前缀 | Pages Functions 代理，见 15.4 | openapi-website + private |
+| G5 | SPA 8 个前缀 | Pages Functions 代理，见 §15.4 | **未做**——等 private 的 Pages project |
+| G8 | nginx 下线后 `/skill/install.md`、`/skill-install.md` 两条路由消失 | Function 接管，见 §15.10 | **已做，本地端到端验证通过** |
 | G6 | longport-developers 同样缺 Pages 部署 | 新增 `wrangler pages deploy` 步骤 + project | longport-developers |
 | G7 | `X-Robots-Tag: noindex`（longportapp 侧） | `_headers` | longport-developers |
 
@@ -983,3 +984,94 @@ build: { format: BUILD_FORMAT, assets: '_docs' }
 `'directory'` 只在那个 OSS 桶真正接管后才需要，而该桶连写权限都还没下来。
 
 `assets: '_docs'` 与 format 无关，两轨都保留。
+
+---
+
+## 15.10 install.md 两条路由如何接管（2026-09-30，本地端到端验证）
+
+### 背景：nginx 下线会同时带走两条路由
+
+`_skill_install.conf` 是**共享 include**，被 9 处引用：`open.longbridge.com/{_release,_canary,_cn}.conf`
+各一处（**随 openapi 一起下线**），`longbridge.com/index.conf` 六处（**主站，不下线**）。
+
+所以 openapi 侧今天这两条路由，nginx 一删就没了：
+
+| 路径 | 今天 | 提供者 |
+|---|---|---|
+| `/skill/install.md`（旧，真实流量带邀请码） | **301** → `longbridge.com/skill-install.md`，保留 query | openapi nginx |
+| `/skill-install.md`（新） | **200 + 注入** | openapi nginx（include 的副产物） |
+
+真实用法（用户提供的提示词原文）：
+
+```
+Please follow this guide to install Longbridge AI Toolkit:
+https://open.longbridge.com/skill/install.md?invite-code=ARWGVW
+```
+
+### 决策：注入留在主站，Function 只做转发
+
+**不在项目里实现注入。** 理由：主站 nginx 不在下线范围内、注入器仍然存在；且注入点是一份
+AI agent 会照着执行 shell 命令的 markdown，把用户输入拼进去这件事不宜有两套实现。
+
+两条路径各按**今天的形态**对接主站，零行为变化：
+
+| 路径 | 处置 | 为什么不是另一种 |
+|---|---|---|
+| `/skill/install.md` | **301 到主站**（保留 query） | 今天就是 301 |
+| `/skill-install.md` | **反向代理到主站**，原样返回 | 今天是 200；改 301 会让状态码变化，改静态文件会丢注入 |
+
+被否决的两个备选：
+
+- **Function 自己注入**：预览环境验不了（pages.dev 必须是原文出口，否则主站回源会双重注入），
+  且需要给邀请码做字符集校验——`searchParams.get()` 返回已解码值，换行/反引号能进到指令文档里。
+  nginx 取的是未解码的 `$args`，天然无此问题。
+- **构建产物新增 `/skill-install.md` 静态文件**：能拿到 200，但静态文件无法按 query 注入，
+  带邀请码访问会**静默丢归属**。
+
+### 不会回环
+
+主站回源取的是**斜杠**那条 `pages.dev/skill/install.md`，而 `pages.dev` 不在站点表里、直出原文，
+链路终止。前提是 S4 把 `$skill_install_host` 指向 `pages.dev` 而**不是**公网域名——指向公网域名
+会命中 301 形成无限重定向（§2 回环陷阱）。
+
+### 本地实测（`wrangler pages dev` + 合成 dist，对着真实主站）
+
+| 请求（Host: open.longbridge.com） | 码 | 注入 | set-cookie | Cache-Control |
+|---|---|---|---|---|
+| `/skill-install.md?invite-code=ARWGVW` | 200 | **5 处** | 0 | `no-store` |
+| `/skill-install.md?invite-code=3333` | 200 | **5 处** | 0 | `no-store` |
+| `/zh-CN/skill-install.md?invite-code=ARWGVW` | 200 | **5 处** | 0 | `no-store` |
+| `/skill-install.md`（无码） | 200 | 0 | 0 | `no-store` |
+| `/skill/install.md?invite-code=ARWGVW` | 301 → `longbridge.com/skill-install.md?invite-code=ARWGVW` | — | — | — |
+
+原文出口（`pages.dev` / `open.longportapp.com`）：斜杠路径 200 原文，不跳不代理。
+
+注入 5 处与现网 `longbridge.com/skill-install.md` 一致。主站会下发阿里云 WAF 的 `acw_tc`
+cookie，代理层已剥离，不落到 `open.*` 域；注入结果因邀请码而异，故 `no-store`。
+实测不同邀请码之间不串（`AAA111` 的响应里无 `BBB222`，反之亦然）。
+
+### 站点表为什么是显式枚举
+
+`INSTALL_MAIN_SITE` 只列 `open.longbridge.com` / `open.longbridge.xyz`，不用「去掉 `open.` 前缀」
+这类推导，两处实测反例：
+
+1. **`open.longportapp.com` 根本不跳**。其 nginx 注释原文：「与仓库路径对齐，不做 URL 迁移，
+   **无 invite-code 处理**」。实测 `/skill/install.md` → 200、`/skill-install.md` → 404、
+   `longportapp.com/skill-install.md` → 302 去别处。推导规则会把它 301 到错地址。
+2. `open-canary.longbridge.xyz` 这类形态前缀匹配不到，会在「以为验过了」的情况下静默失效。
+
+`open.longbridge.cn` 同样 301（→ `longbridge.cn`），但 `.cn` 走阿里云轨、不经过 Function，故不列。
+
+### 降级与已知形态
+
+主站不可用时降级为本站原文（内容正确，仅无注入），并带 `x-install-md-degraded` 响应头，
+避免静默。
+
+`pages.dev/skill-install.md` 返回 **404**（产物无此文件、pages.dev 不做代理）。这是预期的：
+没有任何消费方访问它，主站回源走的是斜杠那条。
+
+### `.cn` 轨待定
+
+阿里云 CDN 的改写规则**不能按 query 分支**，也没有边缘计算，所以 `.cn` 上这两条路径只能：
+永远 301 到 `longbridge.cn/skill-install.md`（保注入、失去无参时的 200），或永远静态 200
+（保状态码、带邀请码时静默丢归属）。属 §14 的决策，尚未定。
