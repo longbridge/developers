@@ -1487,7 +1487,7 @@
    within its track — on every page (standalone content pages and the 1fr cell
    beside a right rail). */
 [data-lbus-component='api-reference'] .docs-content {
-  max-width: 64rem;
+  max-width: 52rem;
   margin-inline: auto;
 }
 
