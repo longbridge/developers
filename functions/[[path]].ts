@@ -54,6 +54,29 @@ const INSTALL_MAIN_SITE: Record<string, string> = {
   'open.longbridge.xyz': 'longbridge.xyz',
 }
 
+/**
+ * SPA 的 8 个前缀，与 nginx location 正则同源（_release.conf:40）。
+ * 形态：`/{locale?}/{prefix}{/seg}*`，对应上游 `<origin>/{locale?/}{path}.html`。
+ */
+const SPA_PREFIXES = ['auth', 'sso', 'account', 'log-out', 'scope', 'oauth2', 'dashboard', 'connect']
+const SPA_PAGE = new RegExp(`^/(?:(en|zh-CN|zh-HK)/)?((?:${SPA_PREFIXES.join('|')})(?:/[^/]+)*)/?$`)
+/** SPA 的 hash 资源命名空间（private 仓 vitepress 的 assetsDir） */
+const SPA_ASSETS = '/_app/'
+
+/**
+ * 文档站 host → SPA 来源。SPA 由 private 仓（openapi-website-private，代码在 GitHub）
+ * 自建 Actions 发到独立 Pages project，GitLab 一行不动。
+ *
+ * 与 INSTALL_MAIN_SITE 不同，这里**包含预览域名**：SPA 转发不存在回环风险
+ * （主站只回源 install 那两条路径，不碰 SPA 前缀），所以预览环境也启用，
+ * 让这套转发在绑正式域名之前就能完整验证。
+ */
+const SPA_ORIGIN: Record<string, string> = {
+  'open.longbridge.com': 'https://longbridge-openapi-app.pages.dev',
+  'open.longbridge.xyz': 'https://canary.longbridge-openapi-app.pages.dev',
+  'canary.longbridge-developers.pages.dev': 'https://canary.longbridge-openapi-app.pages.dev',
+}
+
 export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
   const url = new URL(request.url)
   const host = (request.headers.get('host') ?? url.hostname).split(':')[0].toLowerCase()
@@ -118,8 +141,33 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     return Response.redirect(new URL(path.slice('/en'.length) + url.search, url).toString(), 302)
   }
 
-  // ④ TODO(G5-SPA)：/auth /sso /account /log-out /scope /oauth2 /dashboard /connect
-  //    （含 locale 前缀与子路径）需代理到 private 仓库的独立 Pages project。
-  //    该 project 尚未创建，故暂不接管——这些路径当前会走到静态资源并 404。
+  // ④ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
+  const spaOrigin = SPA_ORIGIN[host]
+  if (spaOrigin) {
+    const page = SPA_PAGE.exec(path)
+    // 上游是纯静态，query 对它无意义；客户端脚本读的是浏览器地址栏的 search，
+    // 不转发可避免每个 ?code=... 在边缘各占一份缓存。
+    const target = page
+      ? `${spaOrigin}/${page[1] ? `${page[1]}/` : ''}${page[2]}.html`
+      : path.startsWith(SPA_ASSETS)
+        ? `${spaOrigin}${path}`
+        : null
+
+    if (target) {
+      try {
+        const res = await fetch(target, { headers: { accept: request.headers.get('accept') ?? '*/*' } })
+        // 原样透传状态与响应头：上游 404 就是 404。nginx 那条 error_page 404 →
+        // index.html 的 SPA 兜底是死代码（_common.conf 没有 proxy_intercept_errors，
+        // 实测 /oauth2/authorize 线上就是 404），这里不实现，保持状态码语义不变。
+        return new Response(res.body, res)
+      } catch {
+        return new Response('SPA origin unreachable', {
+          status: 502,
+          headers: { 'content-type': 'text/plain; charset=utf-8', 'x-spa-degraded': 'origin-unreachable' },
+        })
+      }
+    }
+  }
+
   return next()
 }
