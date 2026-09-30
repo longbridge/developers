@@ -725,15 +725,36 @@ C4 的含义：**切换风险低**。产物已在 Pages 上持续更新半年，
 
 ### 15.3 待补缺口（按优先级）
 
-| # | 缺口 | 处置 | 归属 |
+| # | 缺口 | 处置 | 状态 |
 |---|---|---|---|
-| G1 | 不存在路径返回 200 | 新增 `src/pages/404.astro` → 产出 `404.html` | openapi-website |
-| G2 | `/skill/*.zip`（31 个）不在 Pages 上 | **方案 (a)**：clone+打包并入文档构建，见 §15.7 | openapi-website |
-| G3 | `install` / `install.ps1` 路径 | **S1 已修**（`public/longbridge/longbridge-terminal/`），随分支合入即好 | openapi-website |
-| G4 | `/en` 前缀 302、尾斜杠等 nginx 重定向 | 新增 `_redirects`（Pages 原生，仓库内可 review） | 两个 docs 仓库 |
+| G1 | 不存在路径返回 200 | 新增 `src/pages/404.astro`。Astro 对 `/404` 有特判，`format:'directory'` 下仍产根部 `404.html`（`astro/dist/core/build/common.js` 的 `STATUS_CODE_PAGES`） | **工作区已改，待 CI 验** |
+| G2 | zip 不在 Pages 上 | 改 `prebuild-skills.ts`，产出清单对齐 `pack-skills.yml`，见 §15.7 | **工作区已改，本地实测 14/15 逐字节一致** |
+| G3 | `install` / `install.ps1` 路径 | **S1 已修**（`public/longbridge/longbridge-terminal/`） | 已在分支上 |
+| G4 | `/en` 前缀 302 等 nginx 重定向 | 新增 `public/_redirects`，但**只放 `/en` 裸前缀一条**；`/en/*` 通配与 install.md 的 301 必须进 Functions，理由见下 | **部分完成** |
 | G5 | SPA 8 个前缀 | Pages Functions 代理，见 15.4 | openapi-website + private |
 | G6 | longport-developers 同样缺 Pages 部署 | 新增 `wrangler pages deploy` 步骤 + project | longport-developers |
 | G7 | `X-Robots-Tag: noindex`（longportapp 侧） | `_headers` | longport-developers |
+
+#### G4 为什么大部分规则进不了 `_redirects`
+
+官方文档两条约束（已查实）：
+
+> 「The order of your redirects matter. **the top-most redirect is applied**」
+> 「**Redirects are always followed, regardless of whether or not an asset matches the incoming request.**」
+> 「Domain-level redirects ❌」「Proxying will only support relative URLs on your site. **You cannot proxy external domains.**」
+> 上限 2,000 静态 / 100 动态
+
+推论：
+
+1. **重定向优先于静态文件** → `/en/*` 的通配 302 会劫持真实存在的 `/en/**.md`。
+   这些端点成规模：`src/pages/[locale]/[...slug].md.ts` 给每篇文档 × 每个 locale 各生成一个，
+   实测 `/en/docs/getting-started.md` 200 / 52783 B、`/en/docs/cli.md` 200 / 1761 B。
+   其中 `/en/skill/install.md` 正是主站取数路径（§4 S4），被劫持后 nginx 的
+   `proxy_pass` **不跟随重定向**，会把 302 原样吐给浏览器。
+2. **源不支持 hostname** → `/skill/install.md` → `longbridge.com` 的 301 会在 `*.pages.dev`
+   上一并生效，而主站正要从 pages.dev 取它 —— §2 的回环陷阱在 CF 上的新形态。
+
+这两类都要按 hostname / 扩展名判断，归 Functions。
 
 ### 15.4 SPA 合站：Pages Functions
 
@@ -813,8 +834,27 @@ run: |
 它只产 `dist/skill/*.zip`。而 **Pages 每次部署是全量不可变快照**，单独 `wrangler pages deploy dist`
 会把整站覆盖成只剩 zip。
 
-**方案 (a)**：把 clone+打包并入文档构建 —— 产出的 zip 放进 `public/skill/`，随 astro build 一起进 dist，
-一次部署包含全部。`repository_dispatch: skill-updated` 改为触发文档发布流水线。
+**实现上比预想简单**：`src/integrations/prebuild-skills.ts` **本就在** `astro:build:done`
+clone skills 仓并打 zip 进 `dist/skill/`，只是产出清单和 `pack-skills.yml` 不一致 ——
+它只产 `skills.zip`（仓库根整包），缺 `longbridge-all.zip` 与每技能一个。改这个集成即可，
+不必动 workflow。
+
+实测线上清单与本地新实现的对账（clone 真实 skills 仓跑 zip）：
+
+| | 线上 | 新实现 |
+|---|---|---|
+| `longbridge-all.zip` | 392,074 | **392,074** ✅ |
+| 13 个 `longbridge*.zip` | 8,512 – 53,327 | **逐字节一致** ✅ |
+| `skills.zip` | 858,239 | 434,568 ⚠️ 见下 |
+
+**顺带修掉一个既有缺陷**：`skills.zip` 线上那份含**整个 `.git`**（45 个条目，其中
+386 KB 的 packfile，占该包 45%）——`prebuild-skills.ts:80` 的 `zip -r "$ZIP" .` 没排除。
+原始设计里有这个排除（`plans/2026-08-17-astro-migration-stage-1.md:2960` 写的是
+`zip -r … -x '.git/*'`），实现时丢了。修复后 858 KB → 435 KB。
+
+**待查的线上异常**：`open.longbridge.com/skill/longbridge-market-data.zip` 返回 **405 / 2,657 B**
+（同目录其它 zip 都是 200）。本地能正常产出 24,191 B。疑似 CDN/WAF 对该路径的拦截，
+迁移后应复测。
 
 - 代价：skill 更新需等一次完整文档构建（~17 min）
 - 备选 (c)：Pages Functions 代理 `/skill/*.zip` 回 OSS —— 更新即时，但每次下载从 CF 边缘回一次杭州
