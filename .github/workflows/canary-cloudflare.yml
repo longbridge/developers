@@ -1,9 +1,10 @@
-# CF 轨的验证流水线：把当前分支部署到 Cloudflare Pages 的**预览**环境。
+# Canary 验证 —— Cloudflare Pages 轨（open.longbridge.com / open.longportapp.com）。
+# 把当前分支部署到 Pages 的**预览**环境。
 #
 # 用现有 project longbridge-developers 而不是新建：预览分支有自己的 URL
 # (<branch>.<project>.pages.dev)，不碰 production（production 分支是 main），
 # 因此不需要任何运维介入、不需要改 DNS。方案 §15.5。
-name: Deploy Pages Preview
+name: Canary · Cloudflare Pages
 
 on:
   push:
@@ -73,7 +74,7 @@ jobs:
           need () { [ -e "dist/$1" ] || { echo "::error::缺少 dist/$1"; fail=1; }; }
 
           need index.html
-          need docs/getting-started/index.html          # format:'directory'
+          need docs/getting-started.html                # format:'file'（CF 轨规范 URL 无尾斜杠）
           need docs/getting-started.md                  # .md 端点
           need _docs                                    # 独立资源命名空间
           need longbridge/longbridge-terminal/install   # 官方安装脚本
@@ -89,8 +90,9 @@ jobs:
             echo "::error::skills.zip 里仍含 .git/"; fail=1
           fi
 
-          # 旧的扁平形态不应再出现
-          [ ! -e dist/docs/getting-started.html ] || { echo "::error::仍有扁平 .html 产物"; fail=1; }
+          # 目录索引形态是 .cn 轨专用；出现在这里说明 BUILD_FORMAT 被误设，
+          # 会导致 Pages 把规范 URL 变成带尾斜杠、与 canonical 自相矛盾
+          [ ! -e dist/docs/getting-started/index.html ] || { echo "::error::出现目录索引产物，BUILD_FORMAT 被误设为 directory"; fail=1; }
 
           exit $fail
 
