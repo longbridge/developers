@@ -1,6 +1,13 @@
-# Plan: openapi 站点下线 nginx，改由阿里云 CDN + 专用 OSS 桶承载
+# Plan: openapi 站点下线 nginx（边缘分两轨）
 
-状态：**执行中**（S0/S1 已落工作区，S2+ 等桶）。决策记录见 §11，进度见 §12。
+状态：**执行中**。2026-09-30 边缘架构拆分为两轨（见 §11 D7、§15）：
+
+| 轨 | 域名 | 边缘 | 存储 |
+|---|---|---|---|
+| **CF 轨** | open.longbridge.com、open.longportapp.com（及其别名） | Cloudflare Pages | Pages 自带 |
+| **阿里云轨** | open.longbridge.cn | 阿里云 CDN | 新建专用 OSS 桶 |
+
+S0/S1 已落工作区且对两轨都有效。决策记录见 §11，进度见 §12。
 
 涉及 7 个加速域名、4 个产物仓库、6 条流水线、2 套 CI、1 个 nginx 仓库。
 
@@ -9,23 +16,31 @@
 ## 0. 现状与目标
 
 ```
-今天:  client → traefik → websites-nginx → 阿里云CDN(assets.lbkrs.com/wbrks/lbctrl) → OSS(lb-assets 共享桶)
-目标:  client → 阿里云CDN → OSS(openapi 专用桶，桶根即站点根)
+今天:   client → traefik → websites-nginx → 阿里云CDN(assets.lbkrs.com/wbrks/lbctrl) → OSS(lb-assets 共享桶)
+
+目标（2026-09-30 拆分）:
+  .com / .longportapp.com →  client → Cloudflare Pages
+  .cn                     →  client → 阿里云CDN → OSS(openapi 专用桶，桶根即站点根)
 ```
 
-nginx 的上游本身就是 CDN，这次是砍掉中间两跳，把改写/重定向/响应头职责下沉到 CDN 加速域名配置。
+nginx 的上游本身就是 CDN（`_release.conf:21-22` 的 `$oss_upstream_host`/`$oss_assets_host` 指向
+`assets.wbrks.com`/`assets.lbkrs.com`，不是 OSS endpoint），所以现状实为三层。
+
+- **CF 轨**砍掉 traefik/nginx 与阿里云 CDN 两层，改写/重定向职责下沉到仓库内的 `_redirects` 与 Pages Functions。
+- **阿里云轨**砍掉 traefik/nginx 一层，职责下沉到 CDN 加速域名配置（§14 原样适用）。
 
 **待迁移域名与目标桶**
 
-| 域名 | 环境 | 目标桶 | 特殊性 |
-|---|---|---|---|
-| open.longbridge.com | release | `lb-openapi` | 主站点 |
-| open.longbridge.cn | release | `lb-openapi-cn` | 裁剪版内容（`region.config.ts`），catch-all 302 → .com |
-| open.longbridge.xyz | canary | `lb-openapi-canary` | — |
-| open.longportapp.com | release | `lp-openapi` | 带 X-Robots-Tag noindex |
-| open.longportapp.cn | release | 同上 | 别名域名 |
-| open.wbrks.com | release | 同上 | 别名域名 |
-| open.longbridgeapp.com | release | — | 整域 301 → open.longportapp.com |
+| 域名 | 环境 | 边缘 | 目标 | 特殊性 |
+|---|---|---|---|---|
+| open.longbridge.com | release | **CF Pages** | project `longbridge-developers` | 主站点 |
+| open.longbridge.xyz | canary | **CF Pages** | canary project（新建） | 验证域名 |
+| open.longportapp.com | release | **CF Pages** | project 待建 | 带 X-Robots-Tag noindex |
+| open.longportapp.cn | release | **CF Pages** | 同上 | 别名域名 |
+| open.wbrks.com | release | **CF Pages** | 同上 | 别名域名 |
+| open.longbridgeapp.com | release | — | — | 整域 301 → open.longportapp.com |
+| open.longbridge.cn | release | **阿里云 CDN** | 桶 `lb-openapi-cn` | 裁剪版内容（`region.config.ts`），catch-all 302 → .com |
+| （验证）open-canary.longbridge.xyz | canary | **阿里云 CDN** | 桶 `lb-openapi-canary` | 转为 .cn 轨的验证环境 |
 
 桶命名依据现有惯例推导（`lb-assets` / `lb-assets-canary`：prod 无后缀、环境走后缀；组织前缀 `lb-` 既是惯例也保证 OSS 全局唯一）。`lp-` 前缀无先例，SRE 可能倾向 `longport-openapi`——桶名事后改不了，需先确认。
 
@@ -156,7 +171,10 @@ set $skill_install_base "";                      # 桶根即站点根
 ### S0 数据正确性（已完成，见 §12）
 ### S1 产物形态统一（已完成，见 §12）
 
-### S2 建桶与上传目标切换
+> **2026-09-30 分轨后**：S2/S3 拆成两条。下文原文对应 **`.cn` 轨**（建桶 + 阿里云 CDN）；
+> `.com` / `.longportapp.com` 的对应工作见 §15.3 缺口表与 §15.6 运维清单。
+
+### S2 建桶与上传目标切换（`.cn` 轨）
 
 - SRE 建 4 个桶，**公共读**（假设 #26），开启静态网站托管：默认首页 `index.html`、子目录首页开启、文件 404 规则 = **Index**
 - 每桶配加速域名（对外站点域名；longbridge 系另配内部直取域名）
@@ -195,9 +213,29 @@ ossutil cp oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/asset
 - `open-canary.longbridge.xyz`（longbridge 侧）+ longportapp 侧同类域名
 - longportapp 侧风险更高：两个 vitepress 写同一个桶，`hashmap.json`/`sitemap.xml` 已在互相覆盖
 
-### S4 主站解耦
+### S4 主站解耦（2026-09-30 改写：按轨分流）
 
-- `websites-nginx/config/sites/longbridge.com/index.conf` 168/228/287/333/432/498——`$skill_install_host` 改为内部直取域名、`$skill_install_base` 改为空串
+`longbridge.com/index.conf` 共 6 处 `$skill_install_*`，**其中 5 处是 `.com`、1 处是 `.cn`**，改法不同
+（下表行号为 `set` 语句实测所在行；原文记的 168/228/287/333/432/498 是 location 块起始行）：
+
+| 行 | 现值 `$skill_install_base` | 轨 | 改为 |
+|---|---|---|---|
+| 182–183 | `…/open.longbridge.com/new-docs/raw` | CF | host=`longbridge-developers.pages.dev`，base=`""` |
+| 243–244 | 同上 | CF | 同上 |
+| **303–304** | `…/open.longbridge.cn/new-docs/raw` ← **`.cn`** | **阿里云** | host=`assets-openapi-cn.lbkrs.com`，base=`""` |
+| 350–351 | `…/open.longbridge.com/new-docs/raw` | CF | host=`longbridge-developers.pages.dev`，base=`""` |
+| 518–519 | 同上 | CF | 同上 |
+| 588–589 | 同上 | CF | 同上 |
+
+另 `open.longbridge.com/_cn.conf:56-57` 一处，属 `.cn` 轨，同 303–304 处理。
+
+**为什么 CF 轨必须做 S4（新增约束）**：`.com` 走 Pages 后**不会有新 OSS 桶**，主站若继续从
+`lb-assets` 旧前缀取数，S5 的「停止双写」就永远做不了，会留一条只为喂主站的僵尸发布线。
+改指 Pages 后双写才能真正停。
+
+**可行性已验证**：`longbridge-developers.pages.dev/skill/install.md` 与线上
+`longbridge.com/skill-install.md` 均为 200 `text/markdown`、**同为 10177 字节**；
+且 Pages 上无 301 规则，不存在 §2 的回环。
 
 ### S5 切流后清理
 
@@ -389,8 +427,13 @@ find dist -type f | sed 's|^dist/||' | sort > dist-manifest.txt
 | 2026-09-16 | 旧资源**按路径迁移**，非全量复制；实际只迁 `assets/**` | 只保真正会断的哈希资源；垃圾与错误数据不进新桶 |
 | 2026-09-16 | **改就改彻底**，不做双形态过渡；**全部走分支，验证通过才合 main** | 有独立验证域名 `open-canary.longbridge.xyz` 兜底 |
 | 2026-09-20 | canary 先纯 OSS 跑通（后被下条取代） | 快速验证产物形态，不等 CDN |
-| 2026-09-20 | **最终架构定为 CDN + OSS**：CDN 绑域名，OSS 只存资源；canary 与生产都走这套 | 同时解决三件纯 OSS 做不到的事：`X-Frame-Options`（OAuth 授权页点击劫持面）、尾斜杠收敛、全球延迟（实测直连 OSS 首字节比经 CDN 慢 55–76%，且 OSS 是单 region） |
+| 2026-09-20 | **最终架构定为 CDN + OSS**：CDN 绑域名，OSS 只存资源；canary 与生产都走这套 | 同时解决三件纯 OSS 做不到的事：`X-Frame-Options`（OAuth 授权页点击劫持面）、尾斜杠收敛、全球延迟（实测直连 OSS 首字节比经 CDN 慢 55–76%，且 OSS 是单 region）<br>**⚠️ 2026-09-30 更正**：`X-Frame-Options` 这条依据不成立——实测现网 `open.longbridge.com` 响应头里**根本没有**该头（`_common.conf:1` 虽有 `add_header`，但 nginx 的 `add_header` 不向子 location 继承，被覆盖了）。结论仍成立，但只剩后两条理由。 |
 | 2026-09-20 | CDN 回源走**路线 B**：源站填 OSS 标准 endpoint + 开私有 Bucket 回源，桶保持私有 | 多 2 条目录索引改写规则，换来桶不可绕过 CDN + 回源全程 HTTPS；不继承 `lb-assets` 公共读的历史包袱 |
+| **2026-09-30** | **边缘拆两轨**：`.com` / `.longportapp.com` 走 **Cloudflare Pages**，`.cn` 保持**阿里云 CDN + 新建专用桶** | `.cn` 面向大陆，Cloudflare 免费/Pro 版大陆访问质量不可控（要用 CF 中国网络需企业版 + 京东云 + 备案）。`.com` 侧则本就有 CF Pages 双发（2026-04-02 起），产物现成，且 Pages 原生解决目录索引、URL 规范化、`.md` MIME、证书 |
+| **2026-09-30** | 主站取数（§4 S4）**5 处改指 `longbridge-developers.pages.dev`、1 处（`.cn`）指新桶内部直取域名** | 不改则 S5「停止双写」永远做不了，会留一条只为喂主站的僵尸发布线。已验证 Pages 上那份与线上同为 10177 字节，且无 301 回环 |
+| **2026-09-30** | skill zip 走**方案 (a)**：clone+打包并入文档构建，不单独 deploy | Pages 每次部署是全量不可变快照，**不能增量加文件**；`pack-skills.yml` 单独 deploy 会把整站覆盖成只剩 zip |
+| **2026-09-30** | private 的 SPA 由**其 GitHub 主仓自建 Actions** 发独立 Pages project | 实测 GitHub 仓 138 commits / HEAD 09-16 且无 `.github/workflows/`，GitLab 仓仅 25 commits / 只有 `tool/ci`。走 GitHub 可让 GitLab 一行不动，`whale-assets`（App 内嵌）/ SDK 两条线零影响 |
+| **2026-09-30** | CF 轨的 SPA 合站用 **Pages Functions**，**不用** Worker 路由 | 约束推导：`longbridge.com`/`longportapp.com`/`longbridge.xyz` 的 DNS 均托管在 **AWS Route 53**（实测 NS 为 `*.awsdns-*`）。Cloudflare **Worker Routes 要求 zone 托管在 Cloudflare**；Pages 自定义域名与 Pages Functions 则不要求。除非迁 DNS，否则 Worker 方案不可行 |
 
 ---
 
@@ -429,7 +472,32 @@ find dist -type f | sed 's|^dist/||' | sort > dist-manifest.txt
 - `package.json` × 3：JSON 合法，diff 无整文件重排
 - **未跑真实 build**：`openapi-website/CLAUDE.md` 禁止 AI 会话执行 build；另两个仓库属重型任务。三处 build 需人工在终端各跑一次
 
-### 待验证（人工跑 build 时确认）
+### CI 验证结果（2026-09-21，run 35592818282）
+
+`Build canary` 与 `Sanity check dist shape` 两步均通过，三个原「待人工跑 build 确认」的点一次性验掉：
+
+| 断言 | 结论 |
+|---|---|
+| `dist/docs/getting-started/index.html` 存在 | `format:'directory'` 生效 |
+| `dist/docs/getting-started.html` 不存在 | 扁平形态已彻底消除，`copy-routes.ts` 删除无副作用 |
+| `dist/_docs/` 存在 | `assets:'_docs'` 命名空间隔离生效 |
+| `dist/docs/getting-started.md` 存在 | **`.md` 端点未被目录化**（原假设仅靠推断） |
+| `dist/longbridge/longbridge-terminal/install` 存在 | 搬迁生效，`.gitignore` 未锚定的坑已修 |
+
+`Upload to Aliyun OSS` 步失败，写权限预检报 `AccessDenied / because of bucket acl`——
+现有 `FE_LB_ASSET_*`（配 `lb-assets` 杭州）对 `lb-openapi-canary` 无权限，符合预期。
+
+### ⚠️ 凭证现状与待收缩项（2026-09-23）
+
+运维已放权，采用**与 `whale-assets` 相同的那把 AK/SK**。这解开了当前阻塞，但留下一个待办：
+
+该 AK 可写整个 `whale-assets`——全公司 web 应用产物（含 private SPA、session 包等）都在里面。
+把它放进文档站仓库的 GitHub Secret，爆炸半径超出本项目需要。
+
+**生产切流前应收缩为按桶授权**，策略见 §14.8。这与方案 §11 的「凭证收缩」决策一致，
+只是 canary 阶段先用共享 AK 打通链路。
+
+### 仍待验证（需真实上传后）
 
 1. astro `format:'directory'` 下，`src/pages/[...slug].md.ts` 产出的 `.md` 端点是否仍为 `docs/x.md` 而非 `docs/x.md/index.html`
 2. 三个 vitepress 项目 `assetsDir` 改名后，产物 HTML 引用的资源路径是否同步更新
@@ -504,6 +572,9 @@ GitHub 仓库 `longbridge/developers` 加两个 secret：`FE_LB_OPENAPI_ACCESS_K
 ---
 
 ## 14. CDN + OSS 落地配置（2026-09-20 定稿，取代 §3 与 §13 的纯 OSS 形态）
+
+> **适用范围收窄（2026-09-30）**：本节自即日起**只适用于 `.cn` 轨**。
+> `.com` / `.longportapp.com` 改走 Cloudflare Pages，见 §15。桶、加速域名、改写规则、RAM 策略按 `.cn` 单轨重新核算。
 
 架构：**CDN 绑域名，OSS 只存资源**。canary 与生产同一套。
 
@@ -590,3 +661,234 @@ Host 与 SNI 都正确，线上 DNS 不受影响。12 条规则可全部这样�
 | zip 392KB（总计） | 175ms | 272ms | +55% |
 
 差距主要在 TLS 握手（63ms vs 146ms）。测量点单一且在亚太，**对全球用户不具代表性**——OSS 单 region，CDN 全球边缘，欧美用户差距会更大。
+
+### 14.8 按桶授权的 RAM 策略（生产用）
+
+```json
+{
+  "Version": "1",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "oss:PutObject",
+        "oss:GetObject",
+        "oss:DeleteObject",
+        "oss:ListObjects",
+        "oss:AbortMultipartUpload"
+      ],
+      "Resource": [
+        "acs:oss:*:*:<bucket>",
+        "acs:oss:*:*:<bucket>/*"
+      ]
+    }
+  ]
+}
+```
+
+两条 Resource 缺一不可：不带 `/*` 的是桶本身（`ListObjects` 需要），带 `/*` 的是桶内对象。
+`DeleteObject` 供预检清理与后续 `--delete` 全量同步；`AbortMultipartUpload` 防大文件中断后残留碎片计费。
+
+---
+
+## 15. Cloudflare Pages 轨（`.com` / `.longportapp.com`，2026-09-30 新增）
+
+### 15.1 已验证的现状
+
+| # | 事实 | 证据 |
+|---|---|---|
+| C1 | CF Pages 部署步骤 2026-04-02 加入，project `longbridge-developers` | code @`git log -S'cloudflare/wrangler-action'` → `8d4dc396` |
+| C2 | **只有 `release.yml` 推 Pages**，canary 不推 | code @`rg 'wrangler-action' .github/workflows/` 仅 1 处 |
+| C3 | `longbridge-developers.pages.dev` 活着且内容是当前文档站 | runtime @HTTP 200，`server: cloudflare`、`cf-ray: …-HKG` |
+| C4 | **没有任何域名指向它** —— 发了半年没接流量 | runtime @`open.longbridge.com` 响应头有 `eagleid`/`via: ens-cache*`/`x-oss-cdn-auth`，**无 `cf-ray`** |
+| C5 | 三个域名 DNS 均在 **AWS Route 53** | runtime @`dig NS` → `ns-*.awsdns-*` |
+| C6 | 仓库内**没有** `404.astro` / `_redirects` / `_headers` / `_routes.json` | code @`fd` 零命中；`ls src/pages` |
+
+C4 的含义：**切换风险低**。产物已在 Pages 上持续更新半年，只差接流量与补缺口。
+
+### 15.2 CF Pages 实测行为 vs 现网 nginx
+
+| 路径 | CF Pages | 现网 nginx | 结论 |
+|---|---|---|---|
+| `/docs/getting-started` | 200 html | 200 html | ✅ 一致 |
+| `/docs/getting-started/` | **308 → 去尾斜杠** | 302 | ✅ 原生规范化 |
+| `/docs/getting-started.html` | **308 → 去扩展名** | — | ✅ 白送 |
+| `/docs/getting-started.md` | 200 `text/markdown` | 200 `text/markdown` | ✅ 自动按扩展名给 MIME |
+| `/en/docs/getting-started` | 200 | 302 去 `/en` | ⚠️ 行为不同，需 `_redirects` 补 |
+| `/sitemap-index.xml` | **200** | **404** | ✅ 顺手修好既有缺陷 |
+| `/skill/longbridge.zip` | 200 但 **HTML** | 200 `application/zip` | ❌ 产物缺失 |
+| `/longbridge/longbridge-terminal/install` | 200 但 **HTML** | 200 `octet-stream` | ❌ 产物路径不对（S1 已修，未合 main） |
+| `/dashboard`、`/auth` | 200 但 **HTML** | SPA | ❌ SPA 不在 Pages |
+| 任意不存在路径 | **200 + 首页 HTML** | 404 | ❌ 严重 |
+
+最后一行根因 = C6：产物里没有 `404.html` 时，Pages 退化为 SPA 行为，把 `index.html` 以 **200** 返回。会让搜索引擎把大量不存在的 URL 当重复首页索引。
+
+### 15.3 待补缺口（按优先级）
+
+| # | 缺口 | 处置 | 归属 |
+|---|---|---|---|
+| G1 | 不存在路径返回 200 | 新增 `src/pages/404.astro` → 产出 `404.html` | openapi-website |
+| G2 | `/skill/*.zip`（31 个）不在 Pages 上 | **方案 (a)**：clone+打包并入文档构建，见 §15.7 | openapi-website |
+| G3 | `install` / `install.ps1` 路径 | **S1 已修**（`public/longbridge/longbridge-terminal/`），随分支合入即好 | openapi-website |
+| G4 | `/en` 前缀 302、尾斜杠等 nginx 重定向 | 新增 `_redirects`（Pages 原生，仓库内可 review） | 两个 docs 仓库 |
+| G5 | SPA 8 个前缀 | Pages Functions 代理，见 15.4 | openapi-website + private |
+| G6 | longport-developers 同样缺 Pages 部署 | 新增 `wrangler pages deploy` 步骤 + project | longport-developers |
+| G7 | `X-Robots-Tag: noindex`（longportapp 侧） | `_headers` | longport-developers |
+
+### 15.4 SPA 合站：Pages Functions
+
+`open.longbridge.com` 背后是两个来源，nginx 按路径拼成一站：
+
+| 路径 | 来源 | 发布方 | 现落点 |
+|---|---|---|---|
+| `auth` `sso` `account` `log-out` `scope` `oauth2` `dashboard` `connect`（+ 可选 `en\|zh-HK\|zh-CN` 前缀 + 子路径） | **SPA** | private 仓库 / GitLab | `lb-assets/web-brand/release-openapi/` |
+| 其余全部 | **文档** | public 仓库 / GitHub | `lb-assets/github/release/open.longbridge.com/new-docs/raw/` |
+
+CF Pages 一个 project 只接一份产物，`_redirects` 只能重定向和站内改写、**不能代理外部来源**。可行解：
+
+- **选定方案**：public 仓库加 `functions/`，命中上述前缀时 `fetch()` SPA 来源，其余走 Pages 静态资源。GitLab 侧零改动。
+- 备选（需迁 DNS，已排除）：Worker 绑 `open.longbridge.com/*` 做路由层 —— 见 §11 D7 第二条。
+- 已否决：构建时合并产物 —— 会让 SPA 更新必须等文档发布，耦合两个团队的发布节奏。
+
+**SPA 来源已定（2026-09-30）：private 仓库自建 GitHub Actions → 独立 Pages project → 文档仓 Functions 转发。GitLab 一行不动。**
+
+关键事实（实测）：
+
+```
+openapi-website-private        (GitHub)  138 commits  HEAD 2026-09-16  完整代码
+openapi-website-private(gitlab)(GitLab)   25 commits  HEAD 2026-07-20  只有 tool/ci 配置
+```
+
+GitHub 是**代码主仓**，GitLab 只是 CI 配置仓，且 GitHub 主仓**尚无 `.github/workflows/`**。因此：
+
+- 不必给 GitLab 配 `CLOUDFLARE_API_TOKEN`
+- `whale-assets`（App 内嵌 webview）、`lb-assets/openapi-sdk`、`web-brand` 三条线完全不受影响
+- 构建命令现成，且 `postbuild` 已挂 S1 的 `to-directory-index.ts`，产物形态已对齐：
+
+```bash
+bun run build:release           # → packages/openapi/.vitepress/dist
+bun run build:longport:release  # → packages/longport/.vitepress/dist
+```
+
+被此取代的两个备选：回源 `assets.lbkrs.com`（每请求回一次杭州）、GitLab deploy job 加 wrangler（要给 GitLab 发凭证）。
+
+> **不整体迁移 GitLab CI**：那条流水线有 33 个 job、三条产品线（openapi / longport / openapi-sdk），产出含 `whale-assets/**`（App 内嵌 webview）与 `lb-assets/openapi-sdk/**`。整体迁移会把 App 内嵌与 SDK 发布拖进本次改造，验证面从「两个文档站」扩大到「App 内嵌 + SDK + 文档站」，出问题无法归因。若要退役 GitLab，应单独立项。
+
+### 15.5 canary 验证路径（不需要动 DNS）
+
+CF Pages 分支预览自带域名。对当前分支跑一次：
+
+```bash
+wrangler pages deploy dist --project-name=longbridge-developers --branch=feat/nginx_decommission
+```
+
+即得 `feat-nginx-decommission.longbridge-developers.pages.dev`，不影响生产，零运维介入。
+待缺口补齐后再考虑把 `open-canary.longbridge.xyz` 指过来（见 15.6）。
+
+### 15.6 待运维/控制台完成（CF 轨）
+
+1. 新建 canary Pages project，production branch 设为验证分支
+2. Pages → Custom domains 添加域名；因 zone 在 Route 53，CF 会给出 CNAME 目标 `<project>.pages.dev`
+3. 在 **Route 53** 改记录：`open-canary.longbridge.xyz` 从 `…w.cdngslb.com`（阿里云 CDN）改指 `<project>.pages.dev`
+4. CF 自动 HTTP 验证签发证书 —— 顺带解决当前 `https://open-canary.longbridge.xyz` 握手失败（阿里云 CDN 侧未配证书）
+5. 该域名从阿里云 CDN 解绑
+6. `longportapp` 侧新建 Pages project
+
+### 15.7 skill zip 在 Pages 上的处置（方案 a）
+
+体积不是问题：实测 `longbridge.zip` = **37,521 字节**、`Content-Type: application/zip`；
+CF Pages 单文件上限 **25 MiB**、单部署 **20,000 文件**，差三个数量级。MIME 由扩展名自动给，无需 `_headers`。
+
+问题在形态。`pack-skills.yml` 是独立流水线：
+
+```yaml
+on:
+  repository_dispatch: { types: [skill-updated] }    # skills 仓更新时被通知
+run: |
+  git clone github.com/longbridge/skills.git skills-repo   # zip 来自外部仓库，不是本仓 skills/
+  zip -r dist/skill/longbridge-all.zip .
+  for dir in */; do zip -r dist/skill/${dir%/}.zip "$dir"; done
+```
+
+它只产 `dist/skill/*.zip`。而 **Pages 每次部署是全量不可变快照**，单独 `wrangler pages deploy dist`
+会把整站覆盖成只剩 zip。
+
+**方案 (a)**：把 clone+打包并入文档构建 —— 产出的 zip 放进 `public/skill/`，随 astro build 一起进 dist，
+一次部署包含全部。`repository_dispatch: skill-updated` 改为触发文档发布流水线。
+
+- 代价：skill 更新需等一次完整文档构建（~17 min）
+- 备选 (c)：Pages Functions 代理 `/skill/*.zip` 回 OSS —— 更新即时，但每次下载从 CF 边缘回一次杭州
+- 取 (a) 的理由：zip 更新频率低；一个发布者、一份真相，优于多挂一条代理路径
+
+### 15.8 阿里云轨受到的影响
+
+`.cn` 仍按 §14 执行，**新建专用桶不变**。已完成的 `lb-openapi-canary` + CDN 绑定 + 私有回源验证转为 `.cn` 轨的验证环境，不浪费。
+
+仍阻塞：该桶的写权限。已定位到 GitHub Actions 用的 RAM 用户是 **`lb-assets-github`**（STS `GetCallerIdentity` 实测），而运维把 `lb-openapi-canary` 加进的是另一个用户 `gitlab-user-fe-uploader` 的策略。待运维在 `lb-assets-github` 的策略里补：
+
+```json
+"acs:oss:*:*:lb-openapi-canary",
+"acs:oss:*:*:lb-openapi-canary/*"
+```
+
+> 注：现有策略对 `lb-assets` 只授了对象级 `…/*`、没授桶级，所以 `ossutil stat oss://lb-assets` 也是 403。两行都补上才好排查。
+
+---
+
+## 16. 跨项目消费方对账（2026-09-30）
+
+切 Cloudflare 前，对本地 52 个 clone 做了一次全量扫描，回答「多个项目在用 openapi 的资源，切 CF 是否满足」。
+方法：先按 `new-docs/raw` / `web-brand/*-openapi`（**消费 OSS 对象**）与 `open.longbridge.(com|cn)` /
+`open.longportapp.com`（**消费 HTTP 域名**）分两类，再从第二类里剔除纯内容链接，只看程序化消费。
+
+> 范围限制同假设 #24：仅覆盖本地 clone，不代表公司全部仓库。
+
+### 16.1 结论一览
+
+| # | 发现 | 对 CF 切换的影响 |
+|---|---|---|
+| E1 | **主站 `longbridge.com` 消费的是 OSS 对象前缀，不是 `open.*` 域名** | 切 CF 零影响；但衍生出 S4 新约束（见 §4 S4） |
+| E2 | **CORS 已满足**，无需额外配置 | 无需动作 |
+| E3 | **现网本就没有 `X-Frame-Options`** 等安全头 | CF 不输出不算回归；§11 相应依据已更正 |
+| E4 | 其余 20 个仓库**全是链接引用**，无浏览器端跨域 fetch | 无需动作，URL 可达即可 |
+
+### 16.2 E1 证据
+
+```nginx
+# longbridge.com/index.conf 共 6 处
+set $skill_install_host "assets.lbkrs.com";                                              # CDN → lb-assets
+set $skill_install_base "/github/${deploy_env_prefix}/open.longbridge.com/new-docs/raw"; # OSS 前缀
+```
+
+走的是 CDN→OSS 取对象，**不经过 `open.longbridge.com` 域名**。三点实测：
+
+| URL | 结果 |
+|---|---|
+| `longbridge.com/skill-install.md` | 200 `text/markdown` **10177 B** ← 现网在跑 |
+| `open.longbridge.com/skill/install.md` | **301** ← §2 回环陷阱，主站不能从这取 |
+| `longbridge-developers.pages.dev/skill/install.md` | 200 `text/markdown` **10177 B** ← 字节数一致 |
+
+### 16.3 E2 / E3 证据
+
+```
+现网 open.longbridge.com :  access-control-allow-origin: *
+CF Pages                 :  access-control-allow-origin: *
+                            x-content-type-options: nosniff        ← 还多给一个
+```
+
+现网 `/docs/getting-started` 的完整响应头里**无** `X-Frame-Options`、CSP、HSTS、`X-Robots-Tag`，
+只有 `content-type` / `vary` / `set-cookie` / `access-control-allow-origin` 与一堆 CDN/OSS 的头。
+若要补安全头，CF Pages 用 `_headers` 一行即可——比现在 nginx 配了却不生效强。
+
+### 16.4 E4 清单（节选）
+
+```
+longbridge-hk/utils/constant.js:18      export const OPENAPI_DOMAIN = 'https://open.longbridge.com'
+docs/.../HomeNavbar.vue:35              { label: 'Skill', href: 'https://open.longbridge.com/skill' }
+whale-apidocs/.../Footer.astro:31       <a href="https://open.longportapp.com">OpenAPI</a>
+whale-docs-cf/scripts/lib/nav-convert.test.ts   （测试夹具里的 href）
+longbridge-hk/pages/trading-platforms.vue:113   window.open(`https://open.longbridge.com/${locale}?app_id=…`)
+```
+
+全部为 `href` / `window.open` / nav 配置，用户点击跳转。命中路径在 Pages 上实测均 200；
+查询参数（如 `?app_id=longbridge`）对静态文件服务无影响。
