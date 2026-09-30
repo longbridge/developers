@@ -62,3 +62,5 @@ docs/.vitepress/.temp/
 dist-diff/
 .baseline-dist/
 .baseline-sitemap.xml
+# wrangler pages dev 的本地状态目录
+.wrangler/
