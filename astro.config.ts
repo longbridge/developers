@@ -17,15 +17,22 @@ import { prebuildSkills } from './src/integrations/prebuild-skills'
 
 const REGION = process.env['VITE_REGION'] ?? 'global'
 const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longportapp.com'
+const BUILD_FORMAT = process.env['BUILD_FORMAT'] === 'directory' ? 'directory' : 'file'
 
 export default defineConfig({
   site: SITE,
-  // nginx 下线后由 CDN + OSS 直接承载，两项都随之改变：
-  // - format:'directory' 让每条路由产出 `foo/index.html`，配合 OSS 静态网站托管的
-  //   「子目录首页 + 文件404规则=Index」，/foo 直接 200 且地址栏不变，CDN 侧零改写规则。
-  // - assets:'_docs' 把本站的 hash 资源独立成命名空间。旧的 /assets/ 是四个项目共用的，
-  //   谁也不敢清理；分开之后 /assets/ 成为纯退役区，可在切流观察期后整目录删除。
-  build: { format: 'directory', assets: '_docs' },
+  // 产物形态按边缘分轨，默认 'file'：
+  // - Cloudflare Pages（.com / .longportapp.com）必须用 'file'。Pages 会把 URL 规范化
+  //   到与产物一致的形态：'file' 产 `foo.html` → 规范 URL 是 `/foo`（与现网 nginx 完全
+  //   一致）；'directory' 产 `foo/index.html` → 规范 URL 变成 `/foo/`，`/foo` 反被 308
+  //   到带尾斜杠版本，而 canonical 仍写无尾斜杠，两者自相矛盾（实测见方案 §15.9）。
+  // - 阿里云轨（.cn）将来由 OSS 静态网站托管直接承载时才需要 'directory'，配合
+  //   「子目录首页 + 文件404规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
+  //   流水线上设 BUILD_FORMAT=directory 即可。.cn 今天仍走 nginx（由 nginx 补 .html），
+  //   所以现在同样用 'file'。
+  // assets:'_docs' 与 format 无关、两轨都需要：旧的 /assets/ 是四个项目共用的，谁也不敢
+  // 清理；分开之后 /assets/ 成为纯退役区，可在切流观察期后整目录删除。
+  build: { format: BUILD_FORMAT, assets: '_docs' },
   integrations: [
     react(),
     mdx(),
