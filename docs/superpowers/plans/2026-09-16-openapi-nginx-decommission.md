@@ -433,6 +433,7 @@ find dist -type f | sed 's|^dist/||' | sort > dist-manifest.txt
 | **2026-09-30** | 主站取数（§4 S4）**5 处改指 `longbridge-developers.pages.dev`、1 处（`.cn`）指新桶内部直取域名** | 不改则 S5「停止双写」永远做不了，会留一条只为喂主站的僵尸发布线。已验证 Pages 上那份与线上同为 10177 字节，且无 301 回环 |
 | **2026-09-30** | skill zip 走**方案 (a)**：clone+打包并入文档构建，不单独 deploy | Pages 每次部署是全量不可变快照，**不能增量加文件**；`pack-skills.yml` 单独 deploy 会把整站覆盖成只剩 zip |
 | **2026-09-30** | private 的 SPA 由**其 GitHub 主仓自建 Actions** 发独立 Pages project | 实测 GitHub 仓 138 commits / HEAD 09-16 且无 `.github/workflows/`，GitLab 仓仅 25 commits / 只有 `tool/ci`。走 GitHub 可让 GitLab 一行不动，`whale-assets`（App 内嵌）/ SDK 两条线零影响 |
+| **2026-09-30** | **`build.format` 改为环境变量驱动，默认回到 `'file'`**；仅 `.cn` 的 OSS 静态托管流水线设 `BUILD_FORMAT=directory`。修正 S1（`d8b2cce6`）把 `'directory'` 定为全局默认的决定 | 预览实测：`'directory'` 下 Pages 把规范 URL 变成**带尾斜杠**，`/docs/getting-started` 反被 308 到 `/docs/getting-started/`，而 canonical 仍写无尾斜杠——自相矛盾。`'file'` 则与现网 nginx 逐条一致。详见 §15.9 |
 | **2026-09-30** | CF 轨的 SPA 合站用 **Pages Functions**，**不用** Worker 路由 | 约束推导：`longbridge.com`/`longportapp.com`/`longbridge.xyz` 的 DNS 均托管在 **AWS Route 53**（实测 NS 为 `*.awsdns-*`）。Cloudflare **Worker Routes 要求 zone 托管在 Cloudflare**；Pages 自定义域名与 Pages Functions 则不要求。除非迁 DNS，否则 Worker 方案不可行 |
 
 ---
@@ -565,7 +566,7 @@ GitHub 仓库 `longbridge/developers` 加两个 secret：`FE_LB_OPENAPI_ACCESS_K
 
 ### CI
 
-新增 `.github/workflows/canary-oss.yml`：push 本分支或手动触发 → 构建（`VITE_SITE_HOSTNAME=https://open-canary.longbridge.xyz`）→ 产物形态自检 → 传 `oss://lb-openapi-canary/` 桶根。
+新增 `.github/workflows/canary-aliyun.yml`：push 本分支或手动触发 → 构建（`VITE_SITE_HOSTNAME=https://open-canary.longbridge.xyz`）→ 产物形态自检 → 传 `oss://lb-openapi-canary/` 桶根。
 
 **刻意不复用 `canary.yml`**：那条的上传目标是 `lb-assets/github/canary/open.longbridge.com/...`，本分支产物是目录索引形态，而旧 nginx 取扁平 key 且全链路无 `--delete`——传进去不报错，而是让现有 `open.longbridge.xyz` 静默冻结在上一次构建。
 
@@ -864,7 +865,16 @@ clone skills 仓并打 zip 进 `dist/skill/`，只是产出清单和 `pack-skill
 
 `.cn` 仍按 §14 执行，**新建专用桶不变**。已完成的 `lb-openapi-canary` + CDN 绑定 + 私有回源验证转为 `.cn` 轨的验证环境，不浪费。
 
-仍阻塞：该桶的写权限。已定位到 GitHub Actions 用的 RAM 用户是 **`lb-assets-github`**（STS `GetCallerIdentity` 实测），而运维把 `lb-openapi-canary` 加进的是另一个用户 `gitlab-user-fe-uploader` 的策略。待运维在 `lb-assets-github` 的策略里补：
+仍阻塞：该桶的写权限。
+
+已查实的部分：GitHub Actions 用的 AK 属于 RAM 用户 **`lb-assets-github`**（STS
+`GetCallerIdentity` 实测），它对 `lb-openapi-canary` 是 `AccessDenied`，对 `lb-assets`
+也只有对象级权限（`stat` 同样 403，说明策略里只有 `…/lb-assets/*` 没有桶级 ARN）。
+
+**未查实**：运维实际把桶加进了哪个用户/策略。只知道加完之后 `lb-assets-github` 仍被拒，
+且运维在其登录的账号里搜不到 `lb-assets-github`——账号归属尚未比对（§15.8 末）。
+
+待运维在 `lb-assets-github` 的策略里补：
 
 ```json
 "acs:oss:*:*:lb-openapi-canary",
@@ -932,3 +942,44 @@ longbridge-hk/pages/trading-platforms.vue:113   window.open(`https://open.longbr
 
 全部为 `href` / `window.open` / nav 配置，用户点击跳转。命中路径在 Pages 上实测均 200；
 查询参数（如 `?app_id=longbridge`）对静态文件服务无影响。
+
+---
+
+## 15.9 尾斜杠：`build.format` 必须按轨区分（2026-09-30 预览实测）
+
+S1（`d8b2cce6`）把 `build.format` 全局改成 `'directory'`，是为 OSS 静态网站托管准备的。
+CF 预览部署后实测发现，这个值在 Cloudflare Pages 上会**反转 URL 规范形式**：
+
+| | `/docs/getting-started` | `/docs/getting-started/` |
+|---|---|---|
+| 现网 nginx | **200** | 302 去尾斜杠 |
+| 生产 Pages（`format:'file'`） | **200** | 308 去尾斜杠 |
+| 预览 Pages（`format:'directory'`） | **308 加尾斜杠** | 200 |
+
+`/pricing`、`/sdk` 同样。并且 canonical 自相矛盾：
+
+```html
+<link rel="canonical" href="https://…/docs/getting-started">   <!-- 无尾斜杠 -->
+```
+而该 URL 本身 308 到带尾斜杠版本——搜索引擎拿到的 canonical 指向一个永久重定向地址。
+
+**机制**：Pages 把 URL 规范化到与产物一致的形态。`'file'` 产 `foo.html` → 规范 URL `/foo`；
+`'directory'` 产 `foo/index.html` → 规范 URL `/foo/`。**无法用 `_redirects` 覆盖**——
+自定义规则与 Pages 内建规范化会互相打架。
+
+**处置**：`astro.config.ts` 改为
+
+```ts
+const BUILD_FORMAT = process.env['BUILD_FORMAT'] === 'directory' ? 'directory' : 'file'
+build: { format: BUILD_FORMAT, assets: '_docs' }
+```
+
+| 轨 | 值 | 设在哪 |
+|---|---|---|
+| CF（`.com` / `.longportapp.com`） | `'file'`（默认） | 无需设置 |
+| 阿里云（`.cn`，将来由 OSS 静态托管承载） | `'directory'` | `canary-aliyun.yml` 已显式设 `BUILD_FORMAT: directory` |
+
+**注意 `.cn` 今天也应该是 `'file'`**：它仍走 nginx，由 nginx 给 URL 补 `.html`。
+`'directory'` 只在那个 OSS 桶真正接管后才需要，而该桶连写权限都还没下来。
+
+`assets: '_docs'` 与 format 无关，两轨都保留。
