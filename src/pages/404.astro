@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+// 这个文件存在本身就是修复：产物里没有 404.html 时，Cloudflare Pages 会退化成
+// SPA 行为，把 index.html 以 **200** 返回给任何不存在的路径，搜索引擎会把大量
+// 死链当成重复首页索引。（实测 /definitely-not-exist-xyz → 200 + 首页 HTML。）
+//
+// Astro 对 /404 有特判，`build.format:'directory'` 下仍产出根部的 404.html
+// 而不是 404/index.html —— 见 astro/dist/core/build/common.js 的 STATUS_CODE_PAGES。
+---
+
+<BaseLayout title="404 · Page Not Found" description="The page you are looking for does not exist." hideFooter>
+  <main id="main" class="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center gap-4 px-4 text-center">
+    <p class="text-6xl font-semibold tracking-tight opacity-40">404</p>
+    <h1 class="text-2xl font-semibold">Page not found</h1>
+    <p class="opacity-70">
+      The page you are looking for does not exist or has been moved.
+    </p>
+    <a class="mt-2 underline underline-offset-4" href="/">Back to Longbridge Developers</a>
+  </main>
+</BaseLayout>
