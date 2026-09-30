@@ -1,0 +1,129 @@
+# CF 轨的验证流水线：把当前分支部署到 Cloudflare Pages 的**预览**环境。
+#
+# 用现有 project longbridge-developers 而不是新建：预览分支有自己的 URL
+# (<branch>.<project>.pages.dev)，不碰 production（production 分支是 main），
+# 因此不需要任何运维介入、不需要改 DNS。方案 §15.5。
+name: Deploy Pages Preview
+
+on:
+  push:
+    branches:
+      - feat/nginx_decommission
+    paths-ignore:
+      - '.github/workflows/oss-probe.yml'
+      - 'docs/superpowers/**'
+  workflow_dispatch:
+    inputs:
+      cf_branch:
+        description: 'Cloudflare 部署标签（决定预览子域名）'
+        required: false
+        default: canary
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: build & deploy preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependency
+        run: bun install --frozen-lockfile
+
+      # wrangler 的 --branch 只是部署标签，不必等于 git 分支名。用固定短名，
+      # 预览子域名才不会变成 feat-nginx-decommission.… 这种长串。
+      - name: Resolve preview hostname
+        id: alias
+        env:
+          RAW: ${{ inputs.cf_branch || 'canary' }}
+        run: |
+          label=$(echo "$RAW" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')
+          echo "label=$label" >> "$GITHUB_OUTPUT"
+          echo "host=https://${label}.longbridge-developers.pages.dev" >> "$GITHUB_OUTPUT"
+          echo "部署标签: $label   预览域名: https://${label}.longbridge-developers.pages.dev"
+
+      - name: Build canary
+        run: bun run build:canary
+        env:
+          # 指向预览域名，canonical / sitemap / llms.txt 里的链接不会跳出验证环境
+          VITE_SITE_HOSTNAME: ${{ steps.alias.outputs.host }}
+          VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
+          NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
+
+      # 只断言本轮四项改动的产物形态，不做内容断言
+      - name: Sanity check dist shape
+        run: |
+          set -e
+          fail=0
+          need () { [ -e "dist/$1" ] || { echo "::error::缺少 dist/$1"; fail=1; }; }
+
+          need index.html
+          need docs/getting-started/index.html          # format:'directory'
+          need docs/getting-started.md                  # .md 端点
+          need _docs                                    # 独立资源命名空间
+          need longbridge/longbridge-terminal/install   # 官方安装脚本
+          need 404.html                                 # G1：没有它 Pages 会 200 兜底
+          need _redirects                               # G4
+
+          # G2：zip 清单应与线上一致（1 个仓库整包 + 1 个 all + 每技能各一个）
+          zips=$(ls dist/skill/*.zip 2>/dev/null | wc -l | tr -d ' ')
+          echo "dist/skill 下 zip 数量: $zips"
+          [ "$zips" -ge 15 ] || { echo "::error::zip 数量 $zips < 15，prebuild-skills 可能失败"; fail=1; }
+          [ -e dist/skill/longbridge-all.zip ] || { echo "::error::缺少 longbridge-all.zip"; fail=1; }
+          if unzip -l dist/skill/skills.zip 2>/dev/null | grep -q '\.git/'; then
+            echo "::error::skills.zip 里仍含 .git/"; fail=1
+          fi
+
+          # 旧的扁平形态不应再出现
+          [ ! -e dist/docs/getting-started.html ] || { echo "::error::仍有扁平 .html 产物"; fail=1; }
+
+          exit $fail
+
+      - name: Deploy to Cloudflare Pages (preview)
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 335162bab35b74f065a0351212011d5a
+          command: pages deploy dist --project-name=longbridge-developers --branch=${{ steps.alias.outputs.label }}
+
+      # 地址以 wrangler 实际返回为准；steps.alias 那个是本地推算的，仅作兜底
+      - name: Summary
+        env:
+          URL_EXACT: ${{ steps.deploy.outputs.deployment-url }}
+          URL_ALIAS: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
+          URL_GUESS: ${{ steps.alias.outputs.host }}
+        run: |
+          exact="${URL_EXACT:-（wrangler 未返回）}"
+          alias="${URL_ALIAS:-$URL_GUESS}"
+          {
+            echo "### Cloudflare Pages 预览"
+            echo ""
+            echo "| | 地址 |"
+            echo "|---|---|"
+            echo "| 本次部署（唯一） | $exact |"
+            echo "| 分支别名（稳定） | $alias |"
+            echo ""
+            echo "验证清单："
+            echo '- `/definitely-not-exist-xyz` 应为 **404**（此前是 200 + 首页）'
+            echo '- `/skill/longbridge-all.zip` 应为 **200 application/zip**'
+            echo '- `/skill/skills.zip` 解包后不应含 `.git/`'
+            echo '- `/docs/getting-started` 200、`/docs/getting-started.md` 为 text/markdown'
+            echo '- `/en` 应 302 到 `/`；`/en/skill/install.md` 应仍为 **200**（不被劫持）'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "预览地址: $exact  |  $alias"
