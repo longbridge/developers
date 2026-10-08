@@ -64,7 +64,7 @@ const SPA_PAGE = new RegExp(`^/(?:(en|zh-CN|zh-HK)/)?((?:${SPA_PREFIXES.join('|'
 const SPA_ASSETS = '/_app/'
 
 /**
- * 文档站 host → SPA 来源。SPA 由 private 仓（openapi-website-private，代码在 GitHub）
+ * 文档站 host → SPA 来源。SPA 由 private 仓（longbridge/developers-website-private）
  * 自建 Actions 发到独立 Pages project，GitLab 一行不动。
  *
  * 与 INSTALL_MAIN_SITE 不同，这里**包含预览域名**：SPA 转发不存在回环风险
@@ -72,9 +72,9 @@ const SPA_ASSETS = '/_app/'
  * 让这套转发在绑正式域名之前就能完整验证。
  */
 const SPA_ORIGIN: Record<string, string> = {
-  'open.longbridge.com': 'https://longbridge-openapi-app.pages.dev',
-  'open.longbridge.xyz': 'https://canary.longbridge-openapi-app.pages.dev',
-  'canary.longbridge-developers.pages.dev': 'https://canary.longbridge-openapi-app.pages.dev',
+  'open.longbridge.com': 'https://developers-website-private.pages.dev',
+  'open.longbridge.xyz': 'https://canary.developers-website-private.pages.dev',
+  'canary.longbridge-developers.pages.dev': 'https://canary.developers-website-private.pages.dev',
 }
 
 export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
@@ -156,7 +156,16 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     if (target) {
       try {
         const res = await fetch(target, { headers: { accept: request.headers.get('accept') ?? '*/*' } })
-        // 原样透传状态与响应头：上游 404 就是 404。nginx 那条 error_page 404 →
+        // 上游是纯静态站，5xx 只会来自基础设施而非业务。实测：project 尚未创建时
+        // pages.dev **返回** 530 而不是抛错，只靠 catch 兜不住，会把 Cloudflare
+        // 内部码原样透给客户端且不打降级标记。故按状态码再判一次。
+        if (res.status >= 500) {
+          return new Response('SPA origin error', {
+            status: 502,
+            headers: { 'content-type': 'text/plain; charset=utf-8', 'x-spa-degraded': `origin-${res.status}` },
+          })
+        }
+        // 其余原样透传状态与响应头：上游 404 就是 404。nginx 那条 error_page 404 →
         // index.html 的 SPA 兜底是死代码（_common.conf 没有 proxy_intercept_errors，
         // 实测 /oauth2/authorize 线上就是 404），这里不实现，保持状态码语义不变。
         return new Response(res.body, res)
