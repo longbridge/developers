@@ -5,8 +5,8 @@
  *   1.「Redirects are always followed, regardless of whether or not an asset
  *      matches the incoming request.」重定向优先于静态文件，`/en/*` 的通配会
  *      劫持真实存在的 /en/**.md 端点。
- *   2. 源不支持 hostname。而 install 相关规则**必须**按 hostname 分流：主站要从
- *      本站回源取原文，规则若在所有域名上生效就会形成回环。
+ *   2. 源不支持 hostname，也不能反代外部域名。而 install、SPA、登录页都**必须**
+ *      按 hostname 分流到不同上游，terminal 三条又必须反代（见 TERMINAL_*）。
  *
  * 邀请码注入不在这里做——注入统一留在主站 nginx 的 sub_filter（主站不在本次下线
  * 范围内）。openapi 侧两条 install 路径按今天的形态各自对接主站：
@@ -17,9 +17,10 @@
  * 已实测：S4 把主站上游换成 Pages 后注入链路仍成立（TLS1.2 可用、SNI 已开、
  * Host 头正确、空 Accept-Encoding 不压缩、原文含 4 处锚点且未被预注入）。
  * 反向代理不会回环：主站回源取的是**斜杠**那条 pages.dev/skill/install.md，
- * 而 pages.dev 不在站点表里，直出原文，链路终止。
+ * 而 pages.dev 在站点表里不配 installMainSite，直出原文，链路终止。
  *
- * 详见方案 §15.4 / §15.9。
+ * 路由与 nginx 逐条对齐的依据：websites-nginx 的 open.longbridge.com/_release.conf
+ * 及其 include。详见方案 §15.4 / §15.9 / §15.11。
  */
 
 interface Ctx {
@@ -32,27 +33,17 @@ const LEGACY_INSTALL = /^\/(?:(en|zh-CN|zh-HK)\/)?skill\/install\.md$/
 /** 新路径 */
 const CURRENT_INSTALL = /^\/(?:(en|zh-CN|zh-HK)\/)?skill-install\.md$/
 
+/** 带 locale 前缀的 llms 文件，nginx 一律回同一份根级产物（_llms.conf）。 */
+const LOCALE_LLMS = /^\/(?:en|zh-CN|zh-HK)\/(llms(?:-full)?\.txt)$/
+
 /**
- * 「站点域名 → 主站域名」显式表。只有列在这里的 host 才把 install 路径 301 到主站；
- * 其余（*.pages.dev、预览别名、本地 dev、longportapp）一律返回原文——**主站正是从
- * 这些地址回源取未注入的原文**，若在那里也跳转就会回环。
- *
- * 用显式表而不是「去掉 open. 前缀」这类推导，因为两处实测反例：
- *
- *  1. open.longportapp.com 的同一路径**直接服务原文**，既不跳也不注入。其 nginx
- *     注释原文：「与仓库路径对齐，不做 URL 迁移，无 invite-code 处理」。实测
- *     /skill/install.md → 200、/skill-install.md → 404、longportapp.com/skill-install.md
- *     → 302 去别处。推导规则会把它 301 到错地址，是回归。
- *  2. 若 canary 自定义域名取成 open-canary.longbridge.xyz 这类形态，前缀规则匹配
- *     不到，会在「以为验过了」的情况下静默失效。
- *
- * open.longbridge.cn 同样 301（→ longbridge.cn），但 .cn 走阿里云 CDN 轨、不经过
- * 本 Function，故不列入。新增站点必须显式加一行——这是安全相关决策，应当过 review。
+ * 登录页（session 应用），与 nginx `_login-page-proxy-brand.conf` 同一条正则：
+ * 大小写不敏感、只锚开头（`/loginx` 也会命中——照搬，不擅自收紧），排除
+ * `/login/callback`。所有路径共用一份 index.html，locale 由页面脚本读地址栏；
+ * 它引用的 JS/CSS 都是绝对 CDN 地址，所以只需转发这一个文件。
  */
-const INSTALL_MAIN_SITE: Record<string, string> = {
-  'open.longbridge.com': 'longbridge.com',
-  'open.longbridge.xyz': 'longbridge.xyz',
-}
+const SESSION_PAGE = /^\/(?:(?:en|zh-HK|zh-CN)\/)?(?:login(?!\/callback)|password\/reset|tfa|binding)/i
+const SESSION_INDEX = '/web/longbridge-com/apps/session/index.html'
 
 /**
  * SPA 的 8 个前缀，与 nginx location 正则同源（_release.conf:40）。
@@ -70,25 +61,96 @@ const SPA_PAGE = new RegExp(`^/(?:(en|zh-CN|zh-HK)/)?((?:${SPA_PREFIXES.join('|'
 const SPA_ASSETS = '/_app/'
 
 /**
- * 文档站 host → SPA 来源。SPA 由 private 仓（longbridge/developers-website-private）
- * 自建 Actions 发到独立 Pages project，GitLab 一行不动。
- *
- * 与 INSTALL_MAIN_SITE 不同，这里**包含预览域名**：SPA 转发不存在回环风险
- * （主站只回源 install 那两条路径，不碰 SPA 前缀），所以预览环境也启用，
- * 让这套转发在绑正式域名之前就能完整验证。
+ * CLI 版本号与二进制。nginx 对这三条是**反代**不是跳转（_release.conf:53/100/116）：
+ * `releases/latest` 返回一行版本号，旧版安装脚本用 `curl --silent` 不带 `-L` 取它，
+ * 改成 302 会让这类脚本拿到空内容，所以保持 200。
+ * 路径里写死 release：OSS 上只有 release 通道（github/canary/longbridge-terminal
+ * 不存在，nginx canary 这几条本来就是 404），canary 环境借此也能真跑通。
  */
-const SPA_ORIGIN: Record<string, string> = {
-  'open.longbridge.com': 'https://developers-website-private.pages.dev',
-  'open.longbridge.xyz': 'https://canary.developers-website-private.pages.dev',
-  'canary.longbridge-developers.pages.dev': 'https://canary.developers-website-private.pages.dev',
+const TERMINAL_ORIGIN = 'https://assets.lbkrs.com'
+const TERMINAL_ALIAS: Record<string, string> = {
+  '/longbridge/longbridge-terminal/releases/latest': '/github/release/longbridge-terminal/latest',
+  '/longbridge/longbridge-terminal/longbridge.json': '/github/release/longbridge-terminal/longbridge.json',
+}
+const TERMINAL_RAW_PREFIX = '/github/release/longbridge-terminal'
+
+interface Site {
+  /** SPA 所在的 Pages project（private 仓 developers-website-private 自建 Actions 发布） */
+  spa: string
+  /** 登录页所在资源站，即 nginx 对应 server 块挂 login 前设的 $upstream_host */
+  session: string
+  /** install 两条路径交给哪个主站；不填 = 直出本站原文 */
+  installMainSite?: string
+}
+
+/**
+ * 站点表：host → 该站点的全部上游。所有按 host 分流的规则只读这一张表，
+ * 新增站点只加一行——这是安全相关决策，应当过 review。
+ *
+ * 用显式表而不是「去掉 open. 前缀」这类推导，因为两处实测反例：
+ *  1. open.longportapp.com 的同一路径**直接服务原文**，既不跳也不注入。其 nginx
+ *     注释原文：「与仓库路径对齐，不做 URL 迁移，无 invite-code 处理」。实测
+ *     /skill/install.md → 200、/skill-install.md → 404、longportapp.com/skill-install.md
+ *     → 302 去别处。推导规则会把它 301 到错地址，是回归。
+ *  2. 测试域名 open-canary.longbridge.xyz 不以 `open.` 开头，前缀规则匹配不到，
+ *     会在「以为验过了」的情况下静默失效。
+ *
+ * pages.dev 入口不配 installMainSite：主站将来从这类地址回源取未注入原文，
+ * 这里若也跳转就会回环。它保留 SPA 与登录页，好在绑正式域名之前完整验证。
+ * open.longbridge.cn 走阿里云 CDN 轨、不经过本 Function，故不列入。
+ */
+const SITES: Record<string, Site> = {
+  'open.longbridge.com': {
+    spa: 'https://developers-website-private.pages.dev',
+    session: 'https://assets.wbrks.com',
+    installMainSite: 'longbridge.com',
+  },
+  'open-canary.longbridge.xyz': {
+    spa: 'https://developers-website-private-canary.pages.dev',
+    session: 'https://assets-staging.wbrks.com',
+    installMainSite: 'longbridge.xyz',
+  },
+  'longbridge-developers-canary.pages.dev': {
+    spa: 'https://developers-website-private-canary.pages.dev',
+    session: 'https://assets-staging.wbrks.com',
+  },
+}
+
+/**
+ * 反代到纯静态上游。`tag` 决定降级头的名字（`x-<tag>-degraded`）。
+ *
+ * 上游都是纯静态站，5xx 只会来自基础设施而非业务。实测：project 尚未创建时
+ * pages.dev **返回** 530（创建后传播期间是 522）而不是抛错，只靠 catch 兜不住，
+ * 会把 Cloudflare 内部码原样透给客户端且不打降级标记。故按状态码再判一次。
+ *
+ * 其余原样透传：上游 404 就是 404。nginx SPA 那条 error_page 404 → index.html 的
+ * 兜底是死代码（_common.conf 没有 proxy_intercept_errors，实测 /oauth2/authorize
+ * 线上就是 404），这里不实现，保持状态码语义不变。
+ *
+ * 不转发 query：上游是纯静态，query 对它无意义；页面脚本读的是浏览器地址栏的
+ * search，不转发可避免每个 ?code= / ?redirect_to= 在边缘各占一份缓存。
+ */
+async function forward(target: string, request: Request, tag: string): Promise<Response> {
+  const degraded = (reason: string) =>
+    new Response(`${tag} origin error`, {
+      status: 502,
+      headers: { 'content-type': 'text/plain; charset=utf-8', [`x-${tag}-degraded`]: reason },
+    })
+  try {
+    const res = await fetch(target, { headers: { accept: request.headers.get('accept') ?? '*/*' } })
+    if (res.status >= 500) return degraded(`origin-${res.status}`)
+    return new Response(res.body, res)
+  } catch {
+    return degraded('origin-unreachable')
+  }
 }
 
 export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
   const url = new URL(request.url)
   const host = (request.headers.get('host') ?? url.hostname).split(':')[0].toLowerCase()
   const path = url.pathname
-  /** 有值 = 该域名把 install 路径 301 到主站；undefined = 原文出口 */
-  const mainSite = INSTALL_MAIN_SITE[host]
+  const site = SITES[host]
+  const mainSite = site?.installMainSite
 
   // ① 旧路径 → 301 到主站。今天就是这个行为，保持不变。
   //    必须保留 query——邀请码靠它传到主站的 sub_filter，丢了就是静默丢归属。
@@ -137,7 +199,21 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     return new Response(fallback.body, { status: fallback.status, headers })
   }
 
-  // ③ /en 前缀收敛（对齐 nginx）。放行 .md：/en/**.md 是真实存在的端点
+  // ③～⑤ 必须排在 ⑥ /en 收敛之前：nginx 里它们的 location 都先于 `^/en(.+)$`
+  //    声明，`/en/login`、`/en/llms.txt` 是直接服务，不会先被 302 掉前缀。
+
+  // ③ 带 locale 的 llms 文件 → 本站根级那份，200。
+  const llms = LOCALE_LLMS.exec(path)
+  if (llms) return next(new Request(new URL(`/${llms[1]}`, url), request))
+
+  // ④ 登录页 → session 应用。
+  if (site && SESSION_PAGE.test(path)) return forward(`${site.session}${SESSION_INDEX}`, request, 'session')
+
+  // ⑤ CLI 版本号与二进制 → 反代 OSS。与站点无关，任何入口都可用。
+  const terminal = TERMINAL_ALIAS[path] ?? (path.startsWith(TERMINAL_RAW_PREFIX) ? path : null)
+  if (terminal) return forward(`${TERMINAL_ORIGIN}${terminal}`, request, 'terminal')
+
+  // ⑥ /en 前缀收敛（对齐 nginx）。放行 .md：/en/**.md 是真实存在的端点
   //    （src/pages/[locale]/[...slug].md.ts 每篇文档 × 每个 locale 各一个），
   //    其中 /en/skill/install.md 正是主站回源路径之一。
   if (path.startsWith('/en/') && !path.endsWith('.md')) {
@@ -147,41 +223,15 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     return Response.redirect(new URL(path.slice('/en'.length) + url.search, url).toString(), 302)
   }
 
-  // ④ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
-  const spaOrigin = SPA_ORIGIN[host]
-  if (spaOrigin) {
+  // ⑦ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
+  if (site) {
     const page = SPA_PAGE.exec(path)
-    // 上游是纯静态，query 对它无意义；客户端脚本读的是浏览器地址栏的 search，
-    // 不转发可避免每个 ?code=... 在边缘各占一份缓存。
     const target = page
-      ? `${spaOrigin}/${page[1] ? `${page[1]}/` : ''}${page[2]}.html`
+      ? `${site.spa}/${page[1] ? `${page[1]}/` : ''}${page[2]}.html`
       : path.startsWith(SPA_ASSETS)
-        ? `${spaOrigin}${path}`
+        ? `${site.spa}${path}`
         : null
-
-    if (target) {
-      try {
-        const res = await fetch(target, { headers: { accept: request.headers.get('accept') ?? '*/*' } })
-        // 上游是纯静态站，5xx 只会来自基础设施而非业务。实测：project 尚未创建时
-        // pages.dev **返回** 530 而不是抛错，只靠 catch 兜不住，会把 Cloudflare
-        // 内部码原样透给客户端且不打降级标记。故按状态码再判一次。
-        if (res.status >= 500) {
-          return new Response('SPA origin error', {
-            status: 502,
-            headers: { 'content-type': 'text/plain; charset=utf-8', 'x-spa-degraded': `origin-${res.status}` },
-          })
-        }
-        // 其余原样透传状态与响应头：上游 404 就是 404。nginx 那条 error_page 404 →
-        // index.html 的 SPA 兜底是死代码（_common.conf 没有 proxy_intercept_errors，
-        // 实测 /oauth2/authorize 线上就是 404），这里不实现，保持状态码语义不变。
-        return new Response(res.body, res)
-      } catch {
-        return new Response('SPA origin unreachable', {
-          status: 502,
-          headers: { 'content-type': 'text/plain; charset=utf-8', 'x-spa-degraded': 'origin-unreachable' },
-        })
-      }
-    }
+    if (target) return forward(target, request, 'spa')
   }
 
   return next()
