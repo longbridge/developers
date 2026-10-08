@@ -1060,8 +1060,8 @@ cookie，代理层已剥离，不落到 `open.*` 域；注入结果因邀请码�
 
 ### 站点表为什么是显式枚举
 
-`INSTALL_MAIN_SITE` 只列 `open.longbridge.com` / `open.longbridge.xyz`，不用「去掉 `open.` 前缀」
-这类推导，两处实测反例：
+站点表（现为 `SITES`，§15.12 合并了原 `INSTALL_MAIN_SITE` / `SPA_ORIGIN`）显式列 host，
+不用「去掉 `open.` 前缀」这类推导，两处实测反例：
 
 1. **`open.longportapp.com` 根本不跳**。其 nginx 注释原文：「与仓库路径对齐，不做 URL 迁移，
    **无 invite-code 处理**」。实测 `/skill/install.md` → 200、`/skill-install.md` → 404、
@@ -1108,7 +1108,7 @@ const SPA_PREFIXES = ['auth','sso','account','log-out','scope','oauth2','dashboa
 // /_app/*                     →  <origin>/_app/*
 ```
 
-`SPA_ORIGIN` 表**包含预览域名** —— 与 `INSTALL_MAIN_SITE` 不同，SPA 转发没有回环风险
+站点表里的 pages.dev 入口**保留 SPA 转发**、只是不配 `installMainSite` —— SPA 转发没有回环风险
 （主站只回源 install 那两条路径，不碰 SPA 前缀），所以预览环境也启用，让这套转发在绑正式
 域名之前就能完整验证。
 
@@ -1148,9 +1148,91 @@ set $openapi_try "/web-brand/${deploy_env_prefix}-openapi/$path.html";
 `proxy_intercept_errors`，假设 #4），实测 `/oauth2/authorize` 线上就是 404。实现它会把
 404 变成 200，属行为变化。
 
-### 待确认
+### private 仓跑通 Actions 的四道坎（已解决）
 
-`CLOUDFLARE_API_TOKEN` 是**组织级** secret（这也解释了为何 docs 仓 Settings 页只显示
-`REVIEWDOG_TOKEN`、运行时却能解析）。组织 secret 有可见性设置，若为「Selected
-repositories」需把 private 仓加进列表。workflow 第一步用表达式比较检查（值不进 shell），
-缺了会直接报错说明，推一次即知。
+依次撞到、依次解决，每一道都挡在下一道前面：
+
+| 现象 | 根因 | 解法 |
+|---|---|---|
+| `CLOUDFLARE_API_TOKEN 可见: no` | 组织在 **GitHub Free**：「Organization-level secrets … are not accessible by private repositories for GitHub Free」，改可见性无效 | 新发 token（`Account / Cloudflare Pages / 编辑`）放 **仓库级** secret |
+| job 20s「not started … payments have failed」 | Free 私有仓按分钟计费，额度/支出上限拦截 | `runs-on: [self-hosted, Linux, X64]`，自托管不计量（实测有效） |
+| `yarn: command not found`；wrangler-action 也去找 yarn | 自托管机无 yarn；仓里 `yarn.lock` 与 `bun.lock` 并存，action 按锁文件猜中 yarn | 装依赖改 bun（仓库本就是 bun）；action 显式 `packageManager: bun`。`yarn.lock` 暂不能删：GitLab 流水线 clone 本仓后跑 `yarn install --frozen-lockfile` |
+| `Project not found [8000007]` | 建 project 那步用 `wrangler@latest`（v4 要求 node ≥ 22），runner 是 node 20，命令根本没跑起来 | 钉 `wrangler@3`；建 project 一步不再静默吞错 |
+
+`@lb-public/*` 依赖走公司 GitLab npm registry，**公网匿名可读**（`--resolve` 钉公网 ELB 实测
+200），不需要额外凭证。
+
+## 15.12 测试域名 open-canary.longbridge.xyz 与路由补齐（2026-10-08）
+
+### 测试域名必须是独立 project 的 production
+
+目标：文档与 SPA 同在 `open-canary.longbridge.xyz`，与线上 `open.longbridge.com` 同构。
+
+障碍：DNS 在 Route 53。Cloudflare 官方明文：自定义域名挂预览分支「only supported when using a
+proxied Cloudflare DNS record」，外部 DNS 下「your custom alias will be sent to the production
+branch」。而 `longbridge-developers` 的 production 是 `release.yml` 发的**生产构建**。
+
+解法：canary 发到新 project **`longbridge-developers-canary`** 的 production（`--branch=main`）。
+
+SPA 技术上不受这条限制（Function 在服务端 fetch `.pages.dev`，分支别名可用），但为了两边
+一一对应，同样拆成生产 / canary 两个 project，canary 也以 production 发布：
+
+| | 生产 | canary |
+|---|---|---|
+| 文档 | `longbridge-developers` | `longbridge-developers-canary` |
+| SPA | `developers-website-private` | `developers-website-private-canary` |
+
+规则统一为：**裸 `<project>.pages.dev` 就是该环境的内容**，不再依赖分支别名。
+
+绑定顺序不能反（反了是 522）：先在 Pages 控制台给新 project 加自定义域名，再在 Route 53 把
+`open-canary.longbridge.xyz` CNAME 到 `longbridge-developers-canary.pages.dev`。
+
+### 对照 nginx 全量 location 后补齐的路由
+
+此前「18 条路径 0 回归」只覆盖了已知路径。改为枚举 `_release.conf` 及其 include 的全部 25 个
+location 逐条对照 nginx canary，补齐四处：
+
+| 路由 | nginx 行为 | 此前 CF | 现在 |
+|---|---|---|---|
+| `/login` `/tfa` `/binding` `/password/reset`（含 locale，排除 `/login/callback`） | 反代 session 应用 index.html | **404，登录链路整条断** | Function 反代，上游按站点区分 |
+| `/longbridge/longbridge-terminal/{releases/latest,longbridge.json}`、`/github/release/longbridge-terminal/*` | **反代 200**（§3 表写 302 是为阿里云 CDN 的妥协） | 404 | Function 反代 200。302 会让不带 `-L` 的旧安装脚本取到空版本号 |
+| `/{en,zh-CN,zh-HK}/llms{,-full}.txt` | 回同一份根级文件 | 404 / 302 | 改写到根级，200 |
+| canary `robots.txt` | `Disallow: /`（`_no_robots.conf`） | 生产那份（只禁 auth/account） | `PROXY=canary` 时全站禁爬；CF 只给**预览部署**补 noindex，production + 自定义域名拿不到 |
+
+§9 验收表「登录页 `/login`、`/tfa`、`/binding` 正常渲染」一直在，但 §3 规则表从未给它路由 ——
+写了验收、没写实现，是这次漏网的根因。
+
+三张按 host 分流的表合并为一张 `SITES`（`spa` / `session` / `installMainSite?`），新增站点只改一行。
+
+验证：本地直接执行 Function 打**真实上游**，27/27；降级分支 stub 11/11。
+
+### 切到 canary 分支之前（未决）
+
+现阶段两仓的 canary workflow 由 `feat/nginx_decommission` 触发；目标是改为 `canary` 分支。
+CF 侧已按将来的分支名取：两个 `-canary` project 的 production 分支与部署标签都是 `canary`。
+
+切换前必须先处理：合进 `canary` 会同时喂给老流水线——
+
+| 被波及 | 路径 | 结果 |
+|---|---|---|
+| `open.longbridge.xyz` 文档 | 文档仓 `canary.yml`（push: main, canary）用新代码构建，资源在 `/_docs/` | JS/CSS 404 |
+| `open.longbridge.xyz` SPA | GitLab canary `git clone -b canary` private 仓，`assetsDir: '_app'` | JS/CSS 404 |
+| **longportapp canary** | 同上，longport 包 `assetsDir: '_lpapp'` | JS/CSS 404（不在本次范围内） |
+
+nginx 只有 `/assets` 走 docs raw；其余路径落进 `location /` 被改写为 `…$uri/index.html`，必 404
+（同一机制使 `/sitemap-index.xml` 今天在 nginx 上就是 404）。
+
+建议解法：
+1. **SPA 撤回 `_app` / `_lpapp`，回到默认 `/assets`**：private 仓产物与今天逐字节一致，GitLab
+   喂的所有环境不受影响。CF 侧 Function 改为转发 `/assets/*` 到 SPA project（文档已迁到 `_docs`，
+   不冲突），`_routes.json` 不再排除 `/assets/*`。
+2. 文档那一半二选一：(A) nginx `open.longbridge.com` 各 server 块加 `location ^~ /_docs`，映射同
+   `/assets`，合 `canary` / `main` 与切流解耦；(B) 接受 `open.longbridge.xyz` 文档页失效，代价是
+   合 `main` 必须与 `.com` 切流同时进行。
+
+### 遗留
+
+- `canary-aliyun.yml` 写着由 `open-canary.longbridge.xyz` 承载，域名改给 CF 后阿里云验证轨需另找域名。
+- SPA 生产 project `developers-website-private` **还没有任何发布**（裸地址 404），private 仓只有 canary workflow。
+  `.com` 切换前必须补 release workflow；否则表现为**安静的 404**（404 按设计透传，不打降级标记）。
+- GitLab CI 写死旧仓库名 `openapi-website-private`，现靠 GitHub 改名重定向存活；同名新仓一建即失效。
