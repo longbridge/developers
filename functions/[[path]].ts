@@ -60,7 +60,13 @@ const INSTALL_MAIN_SITE: Record<string, string> = {
  */
 const SPA_PREFIXES = ['auth', 'sso', 'account', 'log-out', 'scope', 'oauth2', 'dashboard', 'connect']
 const SPA_PAGE = new RegExp(`^/(?:(en|zh-CN|zh-HK)/)?((?:${SPA_PREFIXES.join('|')})(?:/[^/]+)*)/?$`)
-/** SPA 的 hash 资源命名空间（private 仓 vitepress 的 assetsDir） */
+/**
+ * SPA 的 hash 资源命名空间（private 仓 vitepress 的 assetsDir）。
+ *
+ * 它**必须**留在 `public/_routes.json` 的 exclude 之外。看着像静态资源，但文件
+ * 在另一个 Pages project 上，本站产物里没有 `_app/`——排除掉就直接 404，而且页面
+ * 本身仍是 200，只是 JS/CSS 全丢，只看状态码发现不了（实测踩过）。
+ */
 const SPA_ASSETS = '/_app/'
 
 /**
