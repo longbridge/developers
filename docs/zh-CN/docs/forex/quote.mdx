@@ -1,0 +1,284 @@
+---
+slug: quote
+sidebar_position: 2
+title: 获取报价
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+该接口用于获取外汇兑换报价。返回的报价会锁定一个短时间窗口内的执行汇率，在窗口内提交即可按该汇率成交。
+
+<CliCommand>
+longbridge forex quote USD HKD --amount 1000
+</CliCommand>
+
+<SDKLinks module="forex" klass="ForexContext" method="quote" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/forex/quote </td></tr>
+</tbody>
+</table>
+
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
+
+| Name          | Type   | Required | Description                                                               |
+| ------------- | ------ | -------- | ------------------------------------------------------------------------- |
+| from          | string | YES      | 转出货币，ISO 4217，例如：`USD`                                           |
+| to            | string | YES      | 转入货币，例如：`HKD`                                                     |
+| amount        | string | 条件必填 | 转出金额。`amount` / `target_amount` 二者必填其一。最多 2 位小数，最小 `0.01` |
+| target_amount | string | 条件必填 | 转入金额。`amount` / `target_amount` 二者必填其一。                       |
+
+请求示例：
+
+```json
+{ "from": "USD", "to": "HKD", "amount": "1000.00" }
+```
+
+报价与您绑定，只能由您本人提交。
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python" default>
+
+```python
+from decimal import Decimal
+from longbridge.openapi import ForexContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+
+# Create a context for forex APIs
+ctx = ForexContext(config)
+
+# Get quote
+resp = ctx.quote("USD", "HKD", amount=Decimal("1000.00"))
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from decimal import Decimal
+from longbridge.openapi import AsyncForexContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+
+    # Create a context for forex APIs
+    ctx = AsyncForexContext.create(config)
+
+    # Get quote
+    resp = await ctx.quote("USD", "HKD", amount=Decimal("1000.00"))
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, ForexContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = new ForexContext(config)
+  const resp = await ctx.quote('USD', 'HKD', '1000.00')
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.forex.*;
+import java.math.BigDecimal;
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             ForexContext ctx = ForexContext.create(config)) {
+            ForexQuote resp = ctx.quote("USD", "HKD", new BigDecimal("1000.00"), null).get();
+            System.out.println(resp);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, forex::{ForexContext, GetForexQuoteOptions}, Config};
+use rust_decimal::Decimal;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = ForexContext::new(config);
+    let resp = ctx.quote("USD", "HKD", Some(GetForexQuoteOptions::new().amount(Decimal::from(1000)))).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+#include <iostream>
+#include <longbridge.hpp>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+using namespace longbridge;
+using namespace longbridge::forex;
+
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    ForexContext ctx = ForexContext::create(config);
+
+    ctx.quote("USD", "HKD", Decimal(1000.0), std::nullopt, [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "rate: " << res->rate << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
+    });
+
+    std::cin.get();
+    return 0;
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/forex"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/shopspring/decimal"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fctx, err := forex.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fctx.Close()
+	amount := decimal.NewFromFloat(1000)
+	resp, err := fctx.Quote(context.Background(), &forex.GetForexQuote{
+		From:   "USD",
+		To:     "HKD",
+		Amount: &amount,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("rate:", resp.Rate)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "ok": true,
+    "quote_id": "Q20260925000123",
+    "rate": "7.7812",
+    "expire_at": 1790000000000,
+    "ccy_pair": "USD/HKD"
+  }
+}
+```
+
+`data` 字段说明：
+
+| Name      | Type   | Description                                                                             |
+| --------- | ------ | --------------------------------------------------------------------------------------- |
+| quote_id  | string | 报价 id，提交订单时使用                                                                  |
+| rate      | string | 客户执行汇率（标准货币对表示；1 BASE = rate QUOTE）。在窗口内的订单按此汇率成交          |
+| expire_at | int64  | 报价过期时间，Unix 毫秒时间戳                                                            |
+| ccy_pair  | string | 汇率对应的标准货币对，格式为 BASE/QUOTE；与请求的 `from`/`to` 方向无关（HKD→USD 与 USD→HKD 均返回 USD/HKD） |
+
+### Response Status
+
+| Status | Description              | Schema |
+| ------ | ------------------------ | ------ |
+| 200    | 报价获取成功。           | None   |
+| 400    | 请求参数错误，请求被拒绝。 | None   |
+
+<aside className="success">
+</aside>
