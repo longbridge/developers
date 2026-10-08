@@ -250,7 +250,7 @@ ossutil cp oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/asset
 **✅ 可触碰**
 - `openapi-website/`：`astro.config.ts`、`package.json`、`src/pages/{robots,llms,llms-full}.txt.ts`、`scripts/copy-routes.ts`（删）、`docs/public/**`、`public/**`、`packages/ui/src/SDK.tsx`、`.github/workflows/{release,canary,pack-skills}.yml`
 - `longport-developers/`：`docs/.vitepress/config.mts`、`package.json`、`script/to-directory-index.ts`（新增）、`docs/public/robots.txt`（新增）、`.github/workflows/{release,canary}.yml`
-- `openapi-website-private/`：两个 `packages/*/.vitepress/config.mts` 与 `package.json`、`scripts/to-directory-index.ts`（新增）
+- `developers-website-private/`：两个 `packages/*/.vitepress/config.mts` 与 `package.json`、`scripts/to-directory-index.ts`（新增）
 - `openapi-website-private(gitlab)/`：`tool/ci/apps/*.js`、`_auto_generate_do_not_edit.yml`
 - `longbridge-web/`：**仅** `tool/ci/apps/openapi.js` 及生成物中的 openapi job
 - `websites-nginx/`：**仅** `longbridge.com/index.conf` 那 6 行 `$skill_install_*`（S4）+ `open.longbridge.com/`、`open.longportapp.com/` 两目录（S5）
@@ -403,8 +403,8 @@ find dist -type f | sed 's|^dist/||' | sort > dist-manifest.txt
 | `longbridge/developers` | GH Actions `release.yml` `canary.yml` | `open.longbridge.com` + `open.longbridge.cn` | 活跃 |
 | 同上 | GH Actions `pack-skills.yml` | `open.longbridge.com/**/skill/` | 活跃，独立触发 |
 | `longportapp/developers` | GH Actions `release.yml` `canary.yml` | `open.longportapp.com` | 活跃 |
-| `openapi-website-private` · `packages/openapi` | GitLab CI | `open.longbridge.com`（非 HTML） | 活跃 |
-| `openapi-website-private` · `packages/longport` | GitLab CI | `open.longportapp.com`（非 HTML） | 活跃 |
+| `developers-website-private` · `packages/openapi` | GitLab CI | `open.longbridge.com`（非 HTML） | 活跃 |
+| `developers-website-private` · `packages/longport` | GitLab CI | `open.longportapp.com`（非 HTML） | 活跃 |
 | `longbridge-web` · `packages/openapi` | GitLab CI | `open.longportapp.com`（非 HTML） | **2025-08 停更，job 仍可触发** |
 
 组织级补扫：
@@ -461,7 +461,7 @@ find dist -type f | sed 's|^dist/||' | sort > dist-manifest.txt
 - 新增 `docs/public/robots.txt`（本仓原本没有任何 robots 产物）
 - llms `.md` 链接：**无需改动**（假设 #32）
 
-**openapi-website-private**（+8 / −2，新增 1 文件）
+**developers-website-private**（+8 / −2，新增 1 文件）
 - 新增 `scripts/to-directory-index.ts`（两个包共用）
 - `packages/openapi` — `assetsDir:'_app'`，`postbuild` 接转换脚本（排在 `build:sdk` 之后，它也输出到同一 dist）
 - `packages/longport` — `assetsDir:'_lpapp'`，同上
@@ -778,7 +778,7 @@ CF Pages 一个 project 只接一份产物，`_redirects` 只能重定向和站�
 关键事实（实测）：
 
 ```
-openapi-website-private        (GitHub)  138 commits  HEAD 2026-09-16  完整代码
+developers-website-private      (GitHub)  138 commits  HEAD 2026-09-16  完整代码
 openapi-website-private(gitlab)(GitLab)   25 commits  HEAD 2026-07-20  只有 tool/ci 配置
 ```
 
@@ -1090,11 +1090,11 @@ cookie，代理层已剥离，不落到 `open.*` 域；注入结果因邀请码�
 
 ### 两侧改动
 
-**private 仓（`longbridge/openapi-website-private`，代码在 GitHub）**
+**private 仓（`longbridge/developers-website-private`，代码在 GitHub）**
 
 - 新增 `.github/workflows/canary-cloudflare.yml`：照搬 GitLab 跑通的路径（yarn 装依赖 →
   先构建 `packages/utils` → `build:canary`），部署到独立 Pages project
-  `longbridge-openapi-app`。**GitLab 一行不动**，`whale-assets`（App 内嵌）与 openapi-sdk
+  `developers-website-private`（与仓库同名）。**GitLab 一行不动**，`whale-assets`（App 内嵌）与 openapi-sdk
   两条线零影响。
 - 构建期只需 `PROXY=canary`。已查实 `PUBLIC_PATH` 是 CI 遗留变量，**代码里无人消费**
   （`rg` 零命中），`base: '/'`，所以资源是根相对的。
