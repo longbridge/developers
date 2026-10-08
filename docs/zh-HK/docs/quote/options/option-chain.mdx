@@ -1,0 +1,148 @@
+---
+slug: /quote/pull/option-chain
+title: 期權鏈
+sidebar_position: 11
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+獲取標的在指定到期日下的期權合約列表。
+
+每張合約都是獨立的一項，認購與認沽不配對，因此只有單邊掛牌的行權價只會返回一項。
+
+## 請求
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP 方法</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/gemini/option/option_chain_list</td></tr>
+</tbody>
+</table>
+
+### 查詢參數
+
+| 名稱          | 類型   | 必填 | 描述                                                                                                                                       |
+| ------------- | ------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| symbol        | string | 是   | 正股標的代碼，使用 `ticker.region` 格式，例如：`BABA.US`                                                                                   |
+| expiry_date   | string | 是   | 期權到期日，使用 `YYYYMMDD` 格式，例如：`20261218`                                                                                         |
+| standard_only | bool   | 否   | 是否過濾因公司行動產生的舊期權合約。`true` / `1` 僅返回標準期權合約；不傳或 `false` 則返回全部合約，含 `standard_attr` 為 `old` 的舊合約 |
+
+### 請求示例
+
+<Tabs groupId="request-example">
+  <TabItem value="curl" label="cURL" default>
+
+```bash
+curl "https://openapi.longbridge.com/v1/gemini/option/option_chain_list?symbol=BABA.US&expiry_date=20261218" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json"
+```
+
+  </TabItem>
+</Tabs>
+
+## 響應
+
+### 響應頭
+
+- Content-Type: application/json
+
+### 排序規則
+
+列表按固定順序返回：標準合約在前，`standard_attr` 為 `old` 的合約在後；組內先按 `option_type`，
+再按 `strike_price` 升序，認購排在認沽之前。
+
+### 響應示例
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "list": [
+      {
+        "expiry_date": "20261218",
+        "strike_price": "50",
+        "direction": "C",
+        "symbol": "BABA261218C50000.US",
+        "standard_attr": "",
+        "option_type": "",
+        "days_to_expiry": 106
+      },
+      {
+        "expiry_date": "20261218",
+        "strike_price": "50",
+        "direction": "P",
+        "symbol": "BABA261218P50000.US",
+        "standard_attr": "",
+        "option_type": "",
+        "days_to_expiry": 106
+      },
+      {
+        "expiry_date": "20261218",
+        "strike_price": "55",
+        "direction": "C",
+        "symbol": "BABA261218C55000.US",
+        "standard_attr": "",
+        "option_type": "",
+        "days_to_expiry": 106
+      },
+      {
+        "expiry_date": "20261218",
+        "strike_price": "55",
+        "direction": "P",
+        "symbol": "BABA261218P55000.US",
+        "standard_attr": "",
+        "option_type": "",
+        "days_to_expiry": 106
+      },
+      {
+        "expiry_date": "20261218",
+        "strike_price": "10",
+        "direction": "C",
+        "symbol": "BABA2261218C10000.US",
+        "standard_attr": "old",
+        "option_type": "",
+        "days_to_expiry": 106
+      },
+      {
+        "expiry_date": "20261218",
+        "strike_price": "10",
+        "direction": "P",
+        "symbol": "BABA2261218P10000.US",
+        "standard_attr": "old",
+        "option_type": "",
+        "days_to_expiry": 106
+      }
+    ]
+  }
+}
+```
+
+### 響應狀態
+
+| 狀態碼 | 描述       | Schema                                                |
+| ------ | ---------- | ----------------------------------------------------- |
+| 200    | 成功       | [option_chain_response](#schemaoption_chain_response) |
+| 500    | 服務端錯誤 | 無                                                    |
+
+## Schemas
+
+### option_chain_response
+
+<a id="schemaoption_chain_response"></a>
+
+| 名稱             | 類型     | 必填 | 描述                                                                                                                |
+| ---------------- | -------- | ---- | --------------------------------------------------------------------------------------------------------------------- |
+| list             | object[] | true | 期權合約列表                                                                                                        |
+| ∟ expiry_date    | string   | true | 到期日，美東時間，使用 `YYYYMMDD` 格式                                                                              |
+| ∟ strike_price   | string   | true | 行權價                                                                                                              |
+| ∟ direction      | string   | true | 合約方向。`C`：認購期權（Call）；`P`：認沽期權（Put）                                                               |
+| ∟ symbol         | string   | true | 期權標的代碼，使用 `ticker.region` 格式                                                                             |
+| ∟ standard_attr  | string   | true | 標識該期權合約是否為公司行動（如股票拆分、併購等）後產生的舊合約。`old`：表示舊期權合約；無值表示正常有效合約       |
+| ∟ option_type    | string   | true | 特殊到期週期類型標識。`W`：週期權（每週到期）；`Q`：季度期權（每季度到期）；無值表示標準月度期權                    |
+| ∟ days_to_expiry | int32    | true | 期權距到期日的剩餘天數，以美東時間零點為基準每日更新。當天到期的期權值為 `0`，已過期的期權值為負數                  |
