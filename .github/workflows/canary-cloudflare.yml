@@ -1,9 +1,13 @@
-# Canary 验证 —— Cloudflare Pages 轨（open.longbridge.com / open.longportapp.com）。
-# 把当前分支部署到 Pages 的**预览**环境。
+# Canary 验证 —— Cloudflare Pages 轨。测试域名 open-canary.longbridge.xyz，
+# 文档与 SPA 同域（SPA 由 Function 转发，见 functions/[[path]].ts 的 SITES）。
 #
-# 用现有 project longbridge-developers 而不是新建：预览分支有自己的 URL
-# (<branch>.<project>.pages.dev)，不碰 production（production 分支是 main），
-# 因此不需要任何运维介入、不需要改 DNS。方案 §15.5。
+# 发到 canary 专用 project longbridge-developers-canary，并以它的 **production**
+# 对外，而不是做 longbridge-developers 的预览分支：测试域名的 DNS 在 Route 53，
+# Cloudflare 对外部 DNS 的自定义域名只路由到 production 分支，挂不到预览分支
+# （官方文档 pages/how-to/custom-branch-aliases 的明文限制）。
+#
+# 现阶段由改造分支触发，后续改为 canary 分支（前提见方案 §15.12）。部署标签与该
+# project 的 production 分支已按将来的分支名取作 canary。
 name: Canary · Cloudflare Pages
 
 on:
@@ -16,13 +20,17 @@ on:
   workflow_dispatch:
     inputs:
       cf_branch:
-        description: 'Cloudflare 部署标签（决定预览子域名）'
+        description: 'Cloudflare 部署标签。canary = 测试域名那份；其它值发成临时预览'
         required: false
         default: canary
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  CF_ACCOUNT_ID: 335162bab35b74f065a0351212011d5a
+  CF_PROJECT: longbridge-developers-canary
 
 jobs:
   preview:
@@ -46,22 +54,28 @@ jobs:
       - name: Install dependency
         run: bun install --frozen-lockfile
 
-      # wrangler 的 --branch 只是部署标签，不必等于 git 分支名。用固定短名，
-      # 预览子域名才不会变成 feat-nginx-decommission.… 这种长串。
-      - name: Resolve preview hostname
+      # wrangler 的 --branch 是部署标签。canary 即该 project 的 production（建 project
+      # 时声明），由测试域名承载；其它标签发成 <label>.<project>.pages.dev 临时预览
+      # （临时预览不在 Function 的站点表里，不转发 SPA 与登录页）。
+      - name: Resolve deploy target
         id: alias
         env:
           RAW: ${{ inputs.cf_branch || 'canary' }}
         run: |
           label=$(echo "$RAW" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')
+          if [ "$label" = "canary" ]; then
+            host=https://open-canary.longbridge.xyz
+          else
+            host="https://${label}.${CF_PROJECT}.pages.dev"
+          fi
           echo "label=$label" >> "$GITHUB_OUTPUT"
-          echo "host=https://${label}.longbridge-developers.pages.dev" >> "$GITHUB_OUTPUT"
-          echo "部署标签: $label   预览域名: https://${label}.longbridge-developers.pages.dev"
+          echo "host=$host" >> "$GITHUB_OUTPUT"
+          echo "部署标签: $label   对外域名: $host"
 
       - name: Build canary
         run: bun run build:canary
         env:
-          # 指向预览域名，canonical / sitemap / llms.txt 里的链接不会跳出验证环境
+          # canonical / sitemap / llms.txt 里的链接指向本次部署的对外域名，不跳出验证环境
           VITE_SITE_HOSTNAME: ${{ steps.alias.outputs.host }}
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
           NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
@@ -94,15 +108,34 @@ jobs:
           # 会导致 Pages 把规范 URL 变成带尾斜杠、与 canonical 自相矛盾
           [ ! -e dist/docs/getting-started/index.html ] || { echo "::error::出现目录索引产物，BUILD_FORMAT 被误设为 directory"; fail=1; }
 
+          # canary 必须全站禁爬：它以 production 身份挂在自定义域名上，Cloudflare 不会
+          # 像对预览部署那样自动补 noindex，这一行是唯一的防线
+          grep -qx 'Disallow: /' dist/robots.txt || { echo "::error::robots.txt 未全站禁爬，canary 会被搜索引擎收录"; fail=1; }
+
           exit $fail
 
-      - name: Deploy to Cloudflare Pages (preview)
+      - name: Ensure Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT_ID }}
+        run: |
+          # project 已存在时这条必然报错，属正常，不中断流程；但输出与退出码要打出来，
+          # 权限不足长得一样，吞掉的话下一步部署失败会查不出根因。
+          # 钉 3.x：wrangler 4 要求 node >= 22，3.114.x 是 >= 16.17。
+          set +e
+          out=$(npx --yes wrangler@3 pages project create "$CF_PROJECT" --production-branch=canary 2>&1)
+          code=$?
+          echo "$out" | tail -5
+          echo "(exit=$code；非 0 若是「already exists」属正常，其余看上面输出)"
+          exit 0
+
+      - name: Deploy to Cloudflare Pages
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 335162bab35b74f065a0351212011d5a
-          command: pages deploy dist --project-name=longbridge-developers --branch=${{ steps.alias.outputs.label }}
+          accountId: ${{ env.CF_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ env.CF_PROJECT }} --branch=${{ steps.alias.outputs.label }} --commit-dirty=true
 
       # 地址以 wrangler 实际返回为准；steps.alias 那个是本地推算的，仅作兜底
       - name: Summary
@@ -114,18 +147,20 @@ jobs:
           exact="${URL_EXACT:-（wrangler 未返回）}"
           alias="${URL_ALIAS:-$URL_GUESS}"
           {
-            echo "### Cloudflare Pages 预览"
+            echo "### Cloudflare Pages canary"
             echo ""
             echo "| | 地址 |"
             echo "|---|---|"
             echo "| 本次部署（唯一） | $exact |"
-            echo "| 分支别名（稳定） | $alias |"
+            echo "| 稳定入口 | $alias |"
+            echo "| 测试域名（需已绑定） | https://open-canary.longbridge.xyz |"
             echo ""
             echo "验证清单："
-            echo '- `/definitely-not-exist-xyz` 应为 **404**（此前是 200 + 首页）'
-            echo '- `/skill/longbridge-all.zip` 应为 **200 application/zip**'
-            echo '- `/skill/skills.zip` 解包后不应含 `.git/`'
-            echo '- `/docs/getting-started` 200、`/docs/getting-started.md` 为 text/markdown'
-            echo '- `/en` 应 302 到 `/`；`/en/skill/install.md` 应仍为 **200**（不被劫持）'
+            echo '- `/login`、`/tfa`、`/binding`、`/password/reset` 应为 **200**（登录页）'
+            echo '- `/dashboard` 200，且其 `/_app/*` 资源全部 200'
+            echo '- `/robots.txt` 应为 `Disallow: /`'
+            echo '- `/zh-CN/llms.txt` 200；`/longbridge/longbridge-terminal/releases/latest` 200 且返回版本号'
+            echo '- `/definitely-not-exist-xyz` 应为 **404**'
+            echo '- `/en` 应 302 到 `/`'
           } >> "$GITHUB_STEP_SUMMARY"
           echo "预览地址: $exact  |  $alias"
