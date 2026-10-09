@@ -5,15 +5,121 @@
  * Syntax highlight classes: .hl-k .hl-s .hl-n .hl-b .hl-cmd .hl-flag .hl-punct .hl-comment
  */
 
-/* ── Root layout ─────────────────────────────────────────────────────────── */
+/* Quote-permission card + `:::` callout boxes — ported 1:1 from docs so they
+   render identically in the reference. */
+@import './QuotePermission.css';
+@import './callout.css';
 
-.api-reference-page {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  grid-template-rows: 1fr;
-  min-height: calc(100vh - var(--lb-nav-height, 64px));
-  background: var(--lb-c-bg, #fff);
-  color: var(--lb-c-text-1, #213547);
+/* ── Canonical design tokens ─────────────────────────────────────────────────
+   Status colors, focus ring, and radius scale. These names are shared across
+   files — keep them stable. Light values here; dark overrides below. */
+:root {
+  /* Status: success / info / warning / danger / note */
+  --lb-c-success-bg: #dcfce7;
+  --lb-c-success-fg: #166534;
+  --lb-c-success-border: #86efac;
+  --lb-c-info-bg: #dbeafe;
+  --lb-c-info-fg: #1e40af;
+  --lb-c-info-border: #93c5fd;
+  --lb-c-warning-bg: #fef9c3;
+  --lb-c-warning-fg: #854d0e;
+  --lb-c-warning-border: #fde047;
+  --lb-c-danger-bg: #fee2e2;
+  --lb-c-danger-fg: #991b1b;
+  --lb-c-danger-border: #fca5a5;
+  --lb-c-note-bg: #f3e8ff;
+  --lb-c-note-fg: #6b21a8;
+  --lb-c-note-border: #d8b4fe;
+
+  /* Bridge the phantom --lb-c-* vocabulary to the host site's real design
+     tokens, so the reference inherits the site's teal brand and light/dark
+     surfaces instead of silently falling back to VitePress blue/slate. These
+     reference dark-aware site tokens, so they need no per-mode overrides. */
+  --lb-c-brand:         var(--lb-brand, #00b8b8);
+  --lb-c-brand-soft:    var(--lb-brand-2, #e5f8f8);
+  --lb-c-bg:            var(--lb-bg-1, #fff);
+  --lb-c-bg-soft:       var(--lb-bg-2, #f3f5f6);
+  --lb-c-bg-mute:       var(--lb-bg-2, #f3f5f6);
+  --lb-c-text-1:        var(--lb-fg-1, #0a0e19);
+  --lb-c-text-2:        var(--lb-fg-2, #6c6e75);
+  --lb-c-text-3:        var(--lb-fg-3, #a9abae);
+  --lb-c-divider:       var(--lb-stroke, #e6e7e8);
+  --lb-c-divider-light: var(--lb-stroke, #e6e7e8);
+
+  /* Focus ring — 2px page-colored gap + 2px brand ring for visible offset */
+  --lb-focus-ring: 0 0 0 2px var(--lb-c-bg, #fff), 0 0 0 4px var(--lb-brand, #00b8b8);
+
+  /* Height of the site's sticky TopNav — the reference's sticky rail/code
+     panels offset from it. Matches TopNav's h-[60px]; the old 64px fallback
+     left a 4px gap. */
+  --lb-nav-height: 60px;
+
+  /* Radius scale — private to the api-reference (prefixed --ar- so it never
+     collides with the host site's --lb-radius-* tokens). */
+  --ar-radius-sm: 6px;
+  --ar-radius-md: 6px; /* aligned to the site's 6px (sm) step — the scale has no 8px */
+  --ar-radius-lg: 12px;
+  --ar-radius-pill: 999px;
+}
+
+:root[data-mode='dark'] {
+  --lb-c-success-bg: rgba(35, 134, 54, 0.18);
+  --lb-c-success-fg: #56d364;
+  --lb-c-success-border: rgba(63, 185, 80, 0.4);
+  --lb-c-info-bg: rgba(56, 139, 253, 0.18);
+  --lb-c-info-fg: #79c0ff;
+  --lb-c-info-border: rgba(56, 139, 253, 0.4);
+  --lb-c-warning-bg: rgba(187, 128, 9, 0.2);
+  --lb-c-warning-fg: #e3b341;
+  --lb-c-warning-border: rgba(187, 128, 9, 0.45);
+  --lb-c-danger-bg: rgba(248, 81, 73, 0.18);
+  --lb-c-danger-fg: #ff7b72;
+  --lb-c-danger-border: rgba(248, 81, 73, 0.4);
+  --lb-c-note-bg: rgba(163, 113, 247, 0.18);
+  --lb-c-note-fg: #d2a8ff;
+  --lb-c-note-border: rgba(163, 113, 247, 0.4);
+
+  --lb-focus-ring: 0 0 0 2px var(--lb-c-bg, #fff), 0 0 0 4px var(--lb-brand, #00f0c4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode='light']) {
+    --lb-c-success-bg: rgba(35, 134, 54, 0.18);
+    --lb-c-success-fg: #56d364;
+    --lb-c-success-border: rgba(63, 185, 80, 0.4);
+    --lb-c-info-bg: rgba(56, 139, 253, 0.18);
+    --lb-c-info-fg: #79c0ff;
+    --lb-c-info-border: rgba(56, 139, 253, 0.4);
+    --lb-c-warning-bg: rgba(187, 128, 9, 0.2);
+    --lb-c-warning-fg: #e3b341;
+    --lb-c-warning-border: rgba(187, 128, 9, 0.45);
+    --lb-c-danger-bg: rgba(248, 81, 73, 0.18);
+    --lb-c-danger-fg: #ff7b72;
+    --lb-c-danger-border: rgba(248, 81, 73, 0.4);
+    --lb-c-note-bg: rgba(163, 113, 247, 0.18);
+    --lb-c-note-fg: #d2a8ff;
+    --lb-c-note-border: rgba(163, 113, 247, 0.4);
+
+    --lb-focus-ring: 0 0 0 2px var(--lb-c-bg, #fff), 0 0 0 4px var(--lb-brand, #00f0c4);
+  }
+}
+
+/* ── Focus ring (keyboard) — shared across all interactive controls ─────────
+   Never remove an outline without a visible replacement. */
+.ep-env-seg:focus-visible,
+.code-tab:focus-visible,
+.ep-urlbar-icon:focus-visible,
+.ep-copypage-toggle:focus-visible,
+.ep-copypage-main:focus-visible,
+.ep-copypage-btn:focus-visible,
+.ep-copypage-item:focus-visible,
+.api-rail-authselect:focus-visible,
+.api-rail-tab:focus-visible,
+.api-rail-tokenbtn:focus-visible,
+.api-rail-send:focus-visible,
+.code-lang-select:focus-visible,
+.intro-cat-card:focus-visible {
+  box-shadow: var(--lb-focus-ring);
+  outline: none;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────────────────────── */
@@ -39,7 +145,7 @@
 .search-input {
   width: 100%;
   padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: var(--ar-radius-md);
   border: 1px solid var(--lb-c-divider, #e2e8f0);
   background: var(--lb-c-bg, #fff);
   color: var(--lb-c-text-1, #213547);
@@ -69,63 +175,18 @@
   border-radius: 2px;
 }
 
-/* ── Sidebar nav items ────────────────────────────────────────────────────── */
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  padding: 6px 16px;
-  text-align: left;
-  background: none;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 13px;
-  color: var(--lb-c-text-2, #476582);
-  line-height: 1.4;
-  transition: background 0.15s, color 0.15s;
-}
-
-.nav-item:hover {
-  background: var(--lb-c-bg-mute, #f0f4f8);
-  color: var(--lb-c-text-1, #213547);
-}
-
 .nav-item.is-active {
   background: var(--lb-c-brand-soft, #dbeafe);
   color: var(--lb-c-brand, #2563eb);
   font-weight: 500;
 }
 
-/* Pages nav items have no method badge — just text */
-.page-group .nav-item {
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.tag-group {
-  margin-top: 4px;
-}
-
-.tag-label {
-  padding: 8px 16px 4px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--lb-c-text-3, #94a3b8);
-  margin: 0;
-}
-
 /* ── Method badges (nav + detail) ────────────────────────────────────────── */
 
-.nav-method,
 .ep-method-badge {
   display: inline-block;
   padding: 1px 5px;
-  border-radius: 3px;
+  border-radius: var(--ar-radius-sm);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -133,46 +194,36 @@
   flex-shrink: 0;
 }
 
-.method-get    { background: #dcfce7; color: #166534; }
-.method-post   { background: #dbeafe; color: #1e40af; }
-.method-put    { background: #fef9c3; color: #854d0e; }
-.method-delete { background: #fee2e2; color: #991b1b; }
-.method-patch  { background: #f3e8ff; color: #6b21a8; }
+/* Sidebar method badge — fixed width so GET/POST/PUT/DELETE all align, and
+   subtle enough to sit next to the docs-style item text. */
+.nav-method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  margin-right: 8px;
+  padding: 2px 0;
+  border-radius: var(--ar-radius-sm);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.method-get    { background: var(--lb-c-success-bg); color: var(--lb-c-success-fg); }
+.method-post   { background: var(--lb-c-info-bg);    color: var(--lb-c-info-fg); }
+.method-put    { background: var(--lb-c-warning-bg); color: var(--lb-c-warning-fg); }
+.method-delete { background: var(--lb-c-danger-bg);  color: var(--lb-c-danger-fg); }
+.method-patch  { background: var(--lb-c-note-bg);    color: var(--lb-c-note-fg); }
 .method-ws,
 .method-websocket { background: #fce7f3; color: #9d174d; }
-
-.nav-label {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ── Main area ────────────────────────────────────────────────────────────── */
-
-.api-main,
-.api-intro {
-  grid-column: 2;
-  padding: 40px 48px;
-  overflow-y: auto;
-}
-
-/* Endpoint split: two columns */
-.api-main--split {
-  display: grid;
-  grid-template-columns: 1fr 440px;
-  gap: 40px;
-  align-items: start;
-}
-
-.api-content {
-  min-width: 0;
-}
 
 /* ── Intro panel ─────────────────────────────────────────────────────────── */
 
 .intro-content {
-  max-width: 660px;
+  max-width: 900px;
 }
 
 .intro-title {
@@ -185,44 +236,117 @@
 .intro-desc {
   font-size: 15px;
   color: var(--lb-c-text-2, #476582);
-  margin: 0 0 28px;
+  margin: 0 0 12px;
   line-height: 1.7;
 }
 
-.intro-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 28px;
+.intro-section {
+  margin: 28px 0 0;
 }
-
-.intro-card {
-  padding: 20px;
-  border: 1px solid var(--lb-c-divider, #e2e8f0);
-  border-radius: 8px;
-  background: var(--lb-c-bg-soft, #f9fafb);
-}
-
-.intro-card-title {
-  display: block;
-  font-size: 14px;
+.intro-h2 {
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 0 0 12px;
   color: var(--lb-c-text-1, #213547);
 }
 
-.intro-card-desc {
+/* Base URLs */
+.intro-urls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.intro-url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--lb-c-divider, #e2e8f0);
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-bg-2, #f8fafc);
+}
+.intro-url code {
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
   font-size: 13px;
-  color: var(--lb-c-text-2, #476582);
-  margin: 0;
-  line-height: 1.6;
+  color: var(--lb-fg-1, #1f2937);
+}
+.intro-url-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: var(--ar-radius-pill);
+  background: rgba(22, 163, 74, 0.14);
+  color: #15803d;
+}
+.intro-url-tag--test {
+  background: rgba(100, 116, 139, 0.16);
+  color: #475569;
 }
 
-.intro-hint {
-  font-size: 13px;
-  color: var(--lb-c-text-3, #94a3b8);
+/* Quick links */
+.intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.intro-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lb-brand, #16a34a);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: left;
+}
+.intro-link:hover {
+  text-decoration: underline;
+}
+
+/* Category cards */
+.intro-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
   margin: 0;
-  font-style: italic;
+}
+.intro-cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--lb-c-divider, #e2e8f0);
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-c-bg-soft, #f9fafb);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.intro-cat-card:hover:not(:disabled) {
+  border-color: var(--lb-brand, #16a34a);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.intro-cat-card:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.intro-cat-card--ws {
+  border-style: dashed;
+}
+.intro-cat-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-c-text-1, #213547);
+}
+.intro-cat-count {
+  font-size: 12px;
+  color: var(--lb-c-text-3, #94a3b8);
+}
+:root[data-mode='dark'] .intro-url,
+:root[data-mode='dark'] .intro-cat-card {
+  background: #161b22;
+  border-color: #30363d;
 }
 
 /* ── Endpoint header ─────────────────────────────────────────────────────── */
@@ -230,8 +354,8 @@
 .ep-tag {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  text-transform: none;
   color: var(--lb-c-brand, #2563eb);
   margin: 0 0 8px;
 }
@@ -251,7 +375,7 @@
   padding: 10px 14px;
   background: var(--lb-c-bg-soft, #f9fafb);
   border: 1px solid var(--lb-c-divider, #e2e8f0);
-  border-radius: 6px;
+  border-radius: var(--ar-radius-md);
   margin-bottom: 20px;
   font-family: var(--lb-font-mono, 'Fira Code', 'JetBrains Mono', monospace);
   flex-wrap: wrap;
@@ -270,21 +394,9 @@
   color: var(--lb-c-text-2, #476582);
 }
 
+/* Layout-only; visual treatment is the shared copy-button rule below. */
 .path-copy-btn {
   margin-left: auto;
-  padding: 3px 8px;
-  border: 1px solid var(--lb-c-divider, #e2e8f0);
-  border-radius: 4px;
-  background: var(--lb-c-bg, #fff);
-  font-size: 11px;
-  cursor: pointer;
-  color: var(--lb-c-text-2, #476582);
-  transition: background 0.15s, color 0.15s;
-}
-
-.path-copy-btn:hover {
-  background: var(--lb-c-bg-mute, #f0f4f8);
-  color: var(--lb-c-text-1, #213547);
 }
 
 /* ── Prose / vp-doc area ─────────────────────────────────────────────────── */
@@ -296,6 +408,10 @@
   color: var(--lb-c-text-1, #213547);
   margin-bottom: 24px;
 }
+
+/* Standalone content pages (Overview, Authentication, Realtime Quote, Error
+   Codes) use the full column width — their tables and code blocks need the room.
+   No max-width cap here. */
 
 .prose p,
 .vp-doc p { margin: 0 0 12px; }
@@ -309,7 +425,31 @@
   font-size: 0.875em;
   background: var(--lb-c-bg-mute, #f0f4f8);
   padding: 1px 4px;
-  border-radius: 3px;
+  border-radius: var(--ar-radius-sm);
+}
+
+/* Fenced code blocks in doc markdown (e.g. WS protobuf schemas) render as a
+   code-card: white surface + border, matching the endpoint code panels. */
+.prose pre,
+.vp-doc pre {
+  margin: 0 0 16px;
+  padding: 16px;
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, #e2e8f0);
+  border-radius: var(--ar-radius-md);
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.7;
+  font-family: var(--lb-font-mono, 'Fira Code', 'JetBrains Mono', monospace);
+  color: var(--lb-fg-1, #1f2937);
+  tab-size: 2;
+}
+.prose pre code,
+.vp-doc pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  border-radius: 0;
 }
 
 .prose h2, .vp-doc h2 { font-size: 18px; font-weight: 600; margin: 20px 0 12px; }
@@ -321,63 +461,6 @@
   margin-bottom: 32px;
 }
 
-.section-title {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--lb-c-text-3, #94a3b8);
-  margin: 0 0 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--lb-c-divider, #e2e8f0);
-}
-
-.param-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.param-row {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--lb-c-divider-light, #f1f5f9);
-}
-
-.param-row:last-child {
-  border-bottom: none;
-}
-
-.param-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.param-name {
-  font-family: var(--lb-font-mono, monospace);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--lb-c-text-1, #213547);
-  background: none;
-  padding: 0;
-}
-
-.param-type {
-  font-size: 11px;
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: var(--lb-c-bg-mute, #f0f4f8);
-  color: var(--lb-c-text-3, #94a3b8);
-  font-family: var(--lb-font-mono, monospace);
-}
-
-.param-required {
-  font-size: 11px;
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
 .param-required.is-required {
   background: #fee2e2;
   color: #991b1b;
@@ -386,13 +469,6 @@
 .param-required.is-optional {
   background: var(--lb-c-bg-soft, #f9fafb);
   color: var(--lb-c-text-3, #94a3b8);
-}
-
-.param-desc {
-  font-size: 13px;
-  color: var(--lb-c-text-2, #476582);
-  margin: 0;
-  line-height: 1.6;
 }
 
 .param-fallback {
@@ -413,10 +489,10 @@
 }
 
 .code-card {
-  border-radius: 8px;
+  border-radius: var(--ar-radius-md);
   overflow: hidden;
-  border: 1px solid var(--lb-c-divider, #e2e8f0);
-  background: #1e2a3a;
+  border: 1px solid var(--lb-stroke, #e2e8f0);
+  background: var(--lb-bg-1, #fff);
 }
 
 .card-header {
@@ -424,8 +500,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 14px;
-  background: #16202d;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: var(--lbus-c-bg, #fff);
+  border-bottom: 1px solid var(--lb-stroke, rgba(0,0,0,0.06));
 }
 
 .card-label {
@@ -433,23 +509,50 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: var(--lb-fg-2, #6c6e75);
 }
 
-.copy-btn {
-  font-size: 11px;
-  padding: 2px 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 4px;
-  background: rgba(255,255,255,0.06);
-  color: #94a3b8;
+/* Shared copy-ICON treatment — one ghost icon button used by every copy
+   affordance so the whole reference speaks one icon language. */
+.copy-btn,
+.code-tabs-copy,
+.page-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--ar-radius-sm);
+  color: var(--lb-fg-2, #6c6e75);
+  flex: none;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-
-.copy-btn:hover {
-  background: rgba(255,255,255,0.1);
-  color: #e2e8f0;
+.copy-btn:hover,
+.code-tabs-copy:hover,
+.page-copy-btn:hover {
+  background: var(--lb-bg-2, #f3f5f6);
+  color: var(--lb-fg-1, #1f2937);
+}
+/* Text copy button (labelled) keeps a ghost pill treatment. */
+.path-copy-btn {
+  background: transparent;
+  border: 1px solid var(--lb-stroke, #e2e8f0);
+  border-radius: var(--ar-radius-sm);
+  color: var(--lb-fg-2, #6c6e75);
+  font-size: 12px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  flex: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.path-copy-btn:hover {
+  background: var(--lb-bg-2, #f3f5f6);
+  color: var(--lb-fg-1, #1f2937);
 }
 
 .card-body {
@@ -462,91 +565,42 @@
   font-size: 12.5px;
   line-height: 1.7;
   font-family: var(--lb-font-mono, 'Fira Code', 'JetBrains Mono', monospace);
-  color: #e2e8f0;
+  color: var(--lb-fg-1, #1f2937);
   white-space: pre;
   tab-size: 2;
 }
-
-/* ── Syntax highlighting ─────────────────────────────────────────────────── */
-
-.hl-k    { color: #f472b6; }   /* keywords */
-.hl-s    { color: #86efac; }   /* strings */
-.hl-n    { color: #fdba74; }   /* numbers */
-.hl-b    { color: #7dd3fc; }   /* booleans / null */
-.hl-cmd  { color: #60a5fa; }   /* command name */
-.hl-flag { color: #c084fc; }   /* flags / options */
-.hl-punct{ color: #94a3b8; }   /* punctuation */
-.hl-comment { color: #475569; font-style: italic; }
-
-/* ── QuotePermission ─────────────────────────────────────────────────────── */
-
-.qp-wrapper {
-  padding: 14px 16px;
-  border: 1px solid var(--lb-c-divider, #e2e8f0);
-  border-radius: 8px;
-  background: var(--lb-c-bg-soft, #f9fafb);
-  margin-bottom: 20px;
+.code-card .code-pre {
+  background: var(--lb-bg-1, #fff);
 }
 
-.qp-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
+/* ── Syntax highlighting — GitHub token colors, theme-aware ──────────────────
+   Light (github-light) is the default; dark overrides live in the dark block. */
+.hl-k    { color: #cf222e; }   /* keywords */
+.hl-s    { color: #0a3069; }   /* strings */
+.hl-n    { color: #0550ae; }   /* numbers */
+.hl-b    { color: #0550ae; }   /* booleans / null */
+.hl-cmd  { color: #8250df; }   /* command name */
+.hl-flag { color: #0550ae; }   /* flags / options */
+.hl-punct{ color: #24292f; }   /* punctuation */
+.hl-comment { color: #6e7781; font-style: italic; }
 
-.qp-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--lb-c-text-3, #94a3b8);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.qp-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.qp-badge--green  { background: #dcfce7; color: #166534; }
-.qp-badge--blue   { background: #dbeafe; color: #1e40af; }
-.qp-badge--orange { background: #ffedd5; color: #9a3412; }
-.qp-badge--yellow { background: #fef9c3; color: #854d0e; }
-.qp-badge--purple { background: #f3e8ff; color: #6b21a8; }
-
-.qp-market {
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: var(--lb-c-bg-mute, #f0f4f8);
-  color: var(--lb-c-text-2, #476582);
-}
-
-.qp-desc {
-  font-size: 13px;
-  color: var(--lb-c-text-2, #476582);
-  margin: 0 0 6px;
-  line-height: 1.6;
-}
-
-.qp-note {
-  font-size: 12px;
-  color: var(--lb-c-text-3, #94a3b8);
-  margin: 0;
-}
-
-.qp-link {
-  color: var(--lb-c-brand, #2563eb);
-  text-decoration: underline;
-}
-
-/* ── Page content area ───────────────────────────────────────────────────── */
-
-.api-page-content {
-  max-width: 720px;
+:root[data-mode="dark"] .hl-k    { color: #ff7b72; }
+:root[data-mode="dark"] .hl-s    { color: #a5d6ff; }
+:root[data-mode="dark"] .hl-n    { color: #79c0ff; }
+:root[data-mode="dark"] .hl-b    { color: #79c0ff; }
+:root[data-mode="dark"] .hl-cmd  { color: #d2a8ff; }
+:root[data-mode="dark"] .hl-flag { color: #79c0ff; }
+:root[data-mode="dark"] .hl-punct{ color: #c9d1d9; }
+:root[data-mode="dark"] .hl-comment { color: #8b949e; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode="light"]) .hl-k    { color: #ff7b72; }
+  :root:not([data-mode="light"]) .hl-s    { color: #a5d6ff; }
+  :root:not([data-mode="light"]) .hl-n    { color: #79c0ff; }
+  :root:not([data-mode="light"]) .hl-b    { color: #79c0ff; }
+  :root:not([data-mode="light"]) .hl-cmd  { color: #d2a8ff; }
+  :root:not([data-mode="light"]) .hl-flag { color: #79c0ff; }
+  :root:not([data-mode="light"]) .hl-punct{ color: #c9d1d9; }
+  :root:not([data-mode="light"]) .hl-comment { color: #8b949e; }
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
@@ -566,20 +620,12 @@
 }
 
 @media (max-width: 768px) {
-  .api-reference-page {
-    grid-template-columns: 1fr;
-  }
 
   .api-sidebar {
     position: static;
     height: auto;
     border-right: none;
     border-bottom: 1px solid var(--lb-c-divider, #e2e8f0);
-  }
-
-  .api-main,
-  .api-intro {
-    padding: 24px 20px;
   }
 
   .intro-cards {
@@ -589,22 +635,1021 @@
 
 /* ── Dark mode ───────────────────────────────────────────────────────────── */
 
-:root[data-theme="dark"] .code-card {
-  background: #1e2a3a;
+:root[data-mode="dark"] .code-card,
+:root[data-mode="dark"] .code-card .code-pre,
+:root[data-mode="dark"] .prose pre,
+:root[data-mode="dark"] .vp-doc pre {
+  background: #0d1117;
+  color: #e6edf3;
   border-color: rgba(255,255,255,0.08);
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .code-card {
-    background: #1e2a3a;
+  :root:not([data-mode="light"]) .code-card,
+  :root:not([data-mode="light"]) .code-card .code-pre,
+  :root:not([data-mode="light"]) .prose pre,
+  :root:not([data-mode="light"]) .vp-doc pre {
+    background: #0d1117;
+    color: #e6edf3;
     border-color: rgba(255,255,255,0.08);
   }
 }
 
-:root[data-theme="dark"] .card-header {
-  background: #16202d;
+:root[data-mode="dark"] .card-header {
+  background: #161b22;
+  border-bottom-color: rgba(255,255,255,0.06);
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .card-header {
-    background: #16202d;
+  :root:not([data-mode="light"]) .card-header {
+    background: #161b22;
+    border-bottom-color: rgba(255,255,255,0.06);
   }
+}
+
+/* "SDK method parameters." note under the Parameters heading */
+.section-note {
+  margin: -4px 0 12px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Parameters / schema tables — mirror docs `.docs-content table` */
+.api-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+/* Fixed layout + shared column widths so every field table on a page lines up
+   (params, response fields, auth headers all use the same column geometry).
+   Scoped under `.docs-content` to override the site's `table{display:block;
+   width:max-content}` rule, which would otherwise size each table to its own
+   content and break alignment. */
+.docs-content .api-param-table,
+.docs-content .api-fields {
+  display: table;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 100%;
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.api-param-table th:nth-child(1),
+.api-param-table td:nth-child(1),
+.api-fields th:nth-child(1),
+.api-fields td:nth-child(1) {
+  width: 24%;
+}
+.api-param-table th:nth-child(2),
+.api-param-table td:nth-child(2),
+.api-fields th:nth-child(2),
+.api-fields td:nth-child(2) {
+  width: 14%;
+}
+/* Wide enough for the English "Required"/"Optional" header + value at the 52rem
+   content measure (9% clipped them into the Description column). */
+.api-param-table th:nth-child(3),
+.api-param-table td:nth-child(3),
+.api-fields th:nth-child(3),
+.api-fields td:nth-child(3) {
+  width: 14%;
+}
+/* Type / Required columns must not wrap (esp. the 2-char 必填/可选). Name and
+   Description may wrap within their fixed column. */
+.api-param-table th:nth-child(2),
+.api-param-table td:nth-child(2),
+.api-param-table th:nth-child(3),
+.api-param-table td:nth-child(3),
+.api-fields th:nth-child(2),
+.api-fields td:nth-child(2),
+.api-fields th:nth-child(3),
+.api-fields td:nth-child(3) {
+  white-space: nowrap;
+}
+/* Long nested names (e.g. attached_params.profit_taker_submit_price) must wrap
+   inside the fixed Name column instead of overflowing into the Type column.
+   Scoped under .docs-content to beat the site's `table td` rule. */
+.docs-content .api-param-table td:nth-child(1),
+.docs-content .api-param-table td:nth-child(1) code,
+.docs-content .api-fields td:nth-child(1),
+.docs-content .api-fields td:nth-child(1) code {
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+.api-param-table .param-required.is-required {
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 12px;
+}
+.api-param-table .param-required.is-optional {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Code examples flow in the single column (not sticky right rail) */
+.api-main--docs .code-panel {
+  position: static;
+  top: auto;
+  max-width: 100%;
+}
+.api-section--code {
+  margin-top: 8px;
+}
+/* Let the grid track cap the content width (matches docs .docs-inner) */
+.api-doc-layout .api-content--docs {
+  max-width: none;
+}
+.api-toc-list li.is-sub a {
+  padding-left: 26px;
+  font-size: 12px;
+}
+.error-code-note {
+  color: var(--lb-fg-2, #64748b);
+  font-size: 14px;
+}
+
+/* ── Docs-style LIGHT code (tabs + single) ───────────────────────────────── */
+.code-tabs {
+  margin: 8px 0 4px;
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-md);
+  overflow: hidden;
+  background: var(--lb-bg-1, #fff);
+}
+.code-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  background: var(--lbus-c-bg, #fff);
+}
+.code-tabs-list {
+  display: flex;
+  overflow-x: auto;
+}
+.code-tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.code-tab.is-active {
+  color: var(--lb-fg-1, #1f2937);
+  border-bottom-color: var(--lb-brand, #16a34a);
+  font-weight: 600;
+}
+.code-tabs-copy {
+  margin-right: 8px;
+}
+.code-tabs-body {
+  overflow-x: auto;
+}
+.code-tabs .code-pre {
+  margin: 0;
+  padding: 16px;
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--lb-fg-1, #1f2937);
+  background: var(--lb-bg-1, #fff);
+}
+
+:root[data-mode="dark"] .code-tabs,
+:root[data-mode="dark"] .code-tabs .code-pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-mode="dark"] .code-tabs-bar {
+  background: #161b22;
+}
+
+/* Field-name column in parameter/response tables: plain monospace, no inline-
+   code background pill (docs param tables show names without a background). */
+.docs-content .api-fields td code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.92em;
+  color: inherit;
+}
+
+/* Page-item icon shares the same fixed column width as the method badge so all
+   sidebar item text (pages + endpoints) aligns to one left edge. */
+.nav-page-icon {
+  width: 42px;
+  margin-right: 8px;
+}
+
+/* Markdown code blocks inside x-pages — styled like the CodeTabs card (light,
+   rounded, bordered) instead of bare text. */
+.api-page-md pre {
+  margin: 16px 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: var(--lb-bg-2, #f3f5f6);
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-md);
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-page-md pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+/* Inline code inside x-page prose */
+.api-page-md :not(pre) > code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 5px;
+  border-radius: var(--ar-radius-sm);
+  font-size: 0.9em;
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+}
+:root[data-mode="dark"] .api-page-md pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+:root[data-mode="dark"] .api-page-md :not(pre) > code {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Copy button injected into x-page markdown code blocks */
+.api-page-md pre .page-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+}
+.api-page-md pre:hover .page-copy-btn {
+  opacity: 1;
+}
+
+/* Push the slim DocFooter to the bottom on short pages (e.g. the intro) instead
+   of letting it float up right under the content. Scoped to the reference. */
+[data-lbus-component="api-reference"] .docs-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px);
+}
+[data-lbus-component="api-reference"] .docs-main {
+  flex: 1 0 auto;
+}
+
+/* ── Endpoint URL bar (method + URL + env toggle + copy page) ────────────── */
+.ep-urlbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 20px;
+  padding: 8px 10px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-bg-2, #f8fafc);
+}
+.ep-urlbar-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+  background: none;
+  border: none;
+  padding: 0;
+}
+.ep-urlbar-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.ep-urlbar-icon:hover {
+  background: var(--lb-bg-2, #f3f5f6);
+  color: var(--lb-fg-1, #1f2937);
+}
+.ep-env-seg {
+  flex: none;
+  padding: 3px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+  letter-spacing: normal;
+  color: var(--lb-fg-2, #64748b);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.ep-env-seg.is-active {
+  color: #fff;
+  background: var(--lb-brand, #16a34a);
+}
+/* Split "copy page" dropdown */
+.ep-copypage {
+  flex: none;
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+.ep-copypage-main,
+.ep-copypage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--lb-fg-1, #1f2937);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.ep-copypage-main {
+  padding: 0 10px;
+  border-radius: var(--ar-radius-sm) 0 0 var(--ar-radius-sm);
+}
+.ep-copypage-toggle {
+  padding: 0 7px;
+  border-left: none;
+  border-radius: 0 var(--ar-radius-sm) var(--ar-radius-sm) 0;
+  font-size: 11px;
+}
+.ep-copypage-main:hover,
+.ep-copypage-toggle:hover {
+  background: var(--lb-bg-2, #f3f5f6);
+}
+.ep-copypage-ic {
+  display: inline-flex;
+  align-items: center;
+  color: var(--lb-fg-2, #64748b);
+}
+/* Chevron on the split-button toggle matches the <select> chevron (muted). */
+.ep-copypage-toggle {
+  color: var(--lb-fg-2, #64748b);
+  justify-content: center;
+}
+.ep-copypage-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 208px;
+  padding: 6px;
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-md);
+  box-shadow: var(--lb-shadow-menu, 0 2px 9px rgba(43, 62, 92, 0.14));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ep-copypage-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--ar-radius-md);
+  cursor: pointer;
+  text-align: left;
+}
+.ep-copypage-item:hover {
+  background: var(--lb-bg-2, #f3f5f6);
+}
+.ep-copypage-item svg {
+  flex: none;
+  color: var(--lb-fg-2, #64748b);
+}
+:root[data-mode='dark'] .ep-urlbar {
+  background: #161b22;
+}
+:root[data-mode='dark'] .ep-urlbar-env,
+:root[data-mode='dark'] .ep-copypage-main,
+:root[data-mode='dark'] .ep-copypage-toggle,
+:root[data-mode='dark'] .ep-copypage-menu {
+  background: #0d1117;
+  color: var(--lb-fg-1, #e6edf3);
+}
+:root[data-mode='dark'] .ep-copypage-item {
+  color: #e6edf3;
+}
+:root[data-mode='dark'] .ep-copypage-main:hover,
+:root[data-mode='dark'] .ep-copypage-toggle:hover,
+:root[data-mode='dark'] .ep-copypage-item:hover {
+  background: #161b22;
+}
+
+/* WebSocket command detail view */
+.ws-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 20px;
+}
+.ws-cmd,
+.ws-dir {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: var(--ar-radius-md);
+  font-family: var(--lb-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  color: var(--lb-fg-2, #64748b);
+  background: var(--lb-bg-2, #f1f5f9);
+}
+.ws-response {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, #e6e7e8);
+  color: var(--lb-fg-1, #1f2937);
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+:root[data-mode='dark'] .ws-response {
+  background: #0d1117;
+  color: #e6edf3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode='light']) .ws-response {
+    background: #0d1117;
+    color: #e6edf3;
+  }
+}
+:root[data-mode='dark'] .ws-cmd,
+:root[data-mode='dark'] .ws-dir {
+  background: #161b22;
+}
+
+/* Authorization heading row: title on the left, auth-method dropdown on the right. */
+.api-auth-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.api-auth-head h2 {
+  margin: 0;
+}
+/* Custom dropdown (button + popover menu) — replaces native <select> so the
+   option list matches the docs styling. Width/placement via per-context class. */
+.ar-dropdown {
+  position: relative;
+  flex: none;
+}
+.ar-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--lb-fg-1, #1f2937);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-sm);
+  cursor: pointer;
+}
+.ar-dropdown-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ar-dropdown-btn svg {
+  flex: none;
+  color: var(--lb-fg-2, #64748b);
+}
+.ar-dropdown-btn:hover,
+.ar-dropdown-btn[aria-expanded='true'] {
+  background: var(--lb-bg-2, #f3f5f6);
+}
+.ar-dropdown-btn:focus-visible {
+  box-shadow: var(--lb-focus-ring);
+  outline: none;
+}
+/* Positioned via inline fixed coords (portal to <body>) so it is never clipped. */
+.ar-dropdown-menu {
+  z-index: 1080;
+  max-height: min(320px, 60vh);
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, #e6e7e8);
+  border-radius: var(--ar-radius-md);
+  box-shadow: var(--lb-shadow-menu, 0 2px 9px rgba(43, 62, 92, 0.14));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ar-dropdown-option {
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 13px;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--lb-fg-1, #1f2937);
+  background: transparent;
+  border: none;
+  border-radius: var(--ar-radius-sm);
+  cursor: pointer;
+}
+.ar-dropdown-option:hover {
+  background: var(--lb-bg-2, #f3f5f6);
+}
+.ar-dropdown-option.is-active {
+  color: var(--lb-brand, #00b8b8);
+  font-weight: 600;
+}
+.ar-dropdown-option:focus-visible {
+  box-shadow: var(--lb-focus-ring);
+  outline: none;
+}
+:root[data-mode='dark'] .ar-dropdown-btn,
+:root[data-mode='dark'] .ar-dropdown-menu {
+  background: #161b22;
+  border-color: #2c3039;
+  color: #e6edf3;
+}
+/* Per-context sizing/placement — the value dropdowns share one width. */
+.ar-dropdown.api-auth-select,
+.ar-dropdown.ar-lang {
+  width: 130px;
+}
+.ar-dropdown.ar-lang {
+  margin: 6px 8px;
+}
+.ar-dropdown.ar-auth-block {
+  width: 100%;
+  margin: 4px 0 10px;
+}
+.api-auth-note {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--lb-fg-2, #64748b);
+}
+.api-auth-link {
+  color: var(--lb-brand, #16a34a);
+  text-decoration: none;
+  font-weight: 500;
+}
+.api-auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Right rail: Request + Response panels ───────────────────────────────── */
+.api-rail {
+  position: sticky;
+  top: calc(var(--lb-nav-height, 64px) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - var(--lb-nav-height, 64px) - 40px);
+  overflow-y: auto;
+}
+.api-rail-card {
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-bg-2, #f3f5f6);
+  padding: 12px;
+  min-width: 0;
+}
+/* Keep code from widening the 22rem rail — it scrolls inside its own box. */
+.api-rail-card .code-tabs,
+.api-rail-card .code-tabs-body,
+.api-rail-card .code-pre {
+  min-width: 0;
+  max-width: 100%;
+}
+.api-rail-card .code-pre {
+  overflow-x: auto;
+}
+/* Call example (SDK snippet) wraps instead of scrolling horizontally; the JSON
+   response example (.ws-response) keeps its own scroll. */
+.api-rail-card .code-pre:not(.ws-response) {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: visible;
+}
+/* Response JSON: theme-aware editor box — light on the site's secondary
+   surface in light mode, GitHub-dark in dark mode. */
+[data-lbus-component='response-panel'] .code-pre {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, #e6e7e8);
+  color: var(--lb-fg-1, #1f2937);
+  font-size: 12.5px;
+  line-height: 1.6;
+  max-height: 420px;
+  overflow: auto;
+}
+:root[data-mode='dark'] [data-lbus-component='response-panel'] .code-pre {
+  background: #0d1117;
+  color: #e6edf3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode='light']) [data-lbus-component='response-panel'] .code-pre {
+    background: #0d1117;
+    color: #e6edf3;
+  }
+}
+.api-rail-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.api-rail-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-rail-authselect {
+  margin-left: auto;
+  padding: 3px 24px 3px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--lb-fg-1, #1f2937);
+  background: var(--lb-bg-1, #fff)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-sm);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.api-rail-authselect:hover {
+  background-color: var(--lb-bg-2, #f3f5f6);
+}
+.api-rail-oauthform {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-md);
+  background: var(--lb-bg-1, #fff);
+}
+.api-rail-oauthlabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--lb-fg-2, #64748b);
+}
+.api-rail-tokenbtn {
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--lb-fg-2, #64748b);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-sm);
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.api-rail-tokenform {
+  margin-bottom: 10px;
+}
+/* The TryIt AuthorizationForm/ParametersForm reference legacy `--vp-c-*` tokens
+   that don't exist on this site, so its inputs fall back to raw browser styling.
+   Re-style them here with the site's `--lb-*` tokens for a coherent look. */
+.api-rail .tryit-base-form {
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.08)) !important;
+  background: var(--lb-bg-1, #fff);
+}
+.api-rail .tryit-form-header {
+  padding: 10px 12px;
+}
+.api-rail .tryit-form-header h2 {
+  font-size: 13px;
+  color: var(--lb-fg-1, #1f2937);
+}
+.api-rail .tryit-input {
+  width: 100%;
+  padding: 6px 9px;
+  border-radius: var(--ar-radius-md);
+  border: 1px solid var(--lbus-c-divider, rgba(0, 0, 0, 0.12));
+  background: var(--lb-bg-1, #fff);
+  color: var(--lb-fg-1, #1f2937);
+  font-size: 12.5px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.api-rail .tryit-input:focus {
+  border-color: var(--lb-brand, #16a34a);
+}
+.api-rail .tryit-input::placeholder {
+  color: var(--lb-fg-3, #9ca3af);
+}
+.api-rail .tryit-form-content {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.api-rail .tryit-form-content.tryit-collapsed {
+  max-height: 0;
+}
+:root[data-mode='dark'] .api-rail .tryit-base-form,
+:root[data-mode='dark'] .api-rail .tryit-input {
+  background: #0d1117;
+  color: #e6edf3;
+}
+.api-rail-params {
+  margin-top: 10px;
+}
+.api-rail-send {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: normal;
+  color: var(--lb-fg-invert, #fff);
+  background: var(--lb-fg-1, #0a0e19);
+  border: none;
+  border-radius: var(--ar-radius-md);
+  cursor: pointer;
+}
+.api-rail-send:not(:disabled):hover {
+  background: color-mix(in srgb, var(--lb-fg-1, #0a0e19) 86%, #fff);
+}
+.api-rail-send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.api-rail-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.api-rail-tab {
+  padding: 3px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  letter-spacing: normal;
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--lb-fg-2, #64748b);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, rgba(0, 0, 0, 0.08));
+  border-radius: var(--ar-radius-sm);
+  cursor: pointer;
+}
+/* One selected treatment across the whole reference: brand fill + white text,
+   matching the env (生产/测试) segmented control. The status code itself
+   (200 vs 4xx) carries the success/error meaning, so no color-only cue is lost. */
+.api-rail-tab.is-active {
+  color: var(--lb-fg-invert, #fff);
+  background: var(--lb-fg-1, #0a0e19);
+  border-color: var(--lb-fg-1, #0a0e19);
+}
+.api-rail-live {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: var(--ar-radius-pill);
+  background: rgba(22, 163, 74, 0.15);
+  color: #15803d;
+}
+:root[data-mode='dark'] .api-rail-card {
+  background: #0d1117;
+}
+:root[data-mode='dark'] .api-rail-tokenbtn,
+:root[data-mode='dark'] .api-rail-authselect,
+:root[data-mode='dark'] .api-rail-oauthform,
+:root[data-mode='dark'] .api-rail-tab {
+  background: #161b22;
+}
+:root[data-mode='dark'] .api-rail-authselect {
+  color: #e6edf3;
+  /* restore the chevron the `background:#161b22` shorthand above wiped out,
+     with a light-enough stroke for the dark surface */
+  background: #161b22
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+}
+/* The API reference is a 3-column console. Instead of the docs pages' asymmetric
+   header-aligned gutter (which left a big empty left margin), center the whole
+   app block (nav + content + rail) at a fixed max width with equal side gutters,
+   and let the content region fill that centered width. */
+@media (min-width: 1024px) {
+  [data-lbus-component='api-reference'].docs-layout {
+    max-width: none;
+    padding-left: 0;
+  }
+}
+[data-lbus-component='api-reference'] .docs-inner {
+  max-width: none;
+  margin: 0;
+}
+
+/* three-column widths — only when the right rail is present. Full-bleed: the
+   center fills, the rail takes a generous fixed width so nothing looks empty. */
+[data-lbus-component='api-reference'] .docs-main.has-rail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30rem;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Standalone content pages (no rail) have no TOC column — the host `.docs-main`
+   otherwise reserves a 14rem TOC track, squeezing the article. Give the column
+   the full track so the centered content below can use it. */
+[data-lbus-component='api-reference'] .docs-main:not(.has-rail) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Content column: capped to a comfortable measure and horizontally centered
+   within its track — on every page (standalone content pages and the 1fr cell
+   beside a right rail). */
+[data-lbus-component='api-reference'] .docs-content {
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+
+/* Drawer chrome is hidden while the rail sits beside the content (wide screens). */
+.ep-urlbar-tryit,
+.api-rail-scrim,
+.api-rail-close {
+  display: none;
+}
+
+/* Narrow screens: the content goes full-width and the request rail becomes an
+   on-demand right-side drawer opened from the "Try it" button below the URL. */
+@media (max-width: 1600px) {
+  [data-lbus-component='api-reference'] .docs-main.has-rail {
+    grid-template-columns: 1fr;
+  }
+  /* "Try it" trigger sits inline in the URL bar, right after the copy button. */
+  .ep-urlbar-tryit {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--lb-fg-invert, #fff);
+    background: var(--lb-fg-1, #0a0e19);
+    border: none;
+    border-radius: var(--ar-radius-pill);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ep-urlbar-tryit:hover {
+    background: color-mix(in srgb, var(--lb-fg-1, #0a0e19) 86%, #fff);
+  }
+  .ep-urlbar-tryit:focus-visible {
+    box-shadow: var(--lb-focus-ring);
+    outline: none;
+  }
+  .api-rail {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(640px, 96vw);
+    max-width: 96vw;
+    max-height: none;
+    overflow-y: auto;
+    padding: 16px 18px 32px;
+    background: var(--lb-bg-1, #fff);
+    border-left: 1px solid var(--lb-stroke, #e6e7e8);
+    box-shadow: -12px 0 40px rgba(10, 14, 25, 0.14);
+    transform: translateX(100%);
+    transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1050;
+  }
+  .api-rail.open {
+    transform: none;
+  }
+  :root[data-mode='dark'] .api-rail {
+    background: #0d1117;
+    border-left-color: #2c3039;
+  }
+  .api-rail-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 14, 25, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1040;
+  }
+  .api-rail-scrim.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .api-rail-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--lb-stroke, #e6e7e8);
+    border-radius: var(--ar-radius-sm);
+    background: var(--lb-bg-1, #fff);
+    color: var(--lb-fg-2, #6c6e75);
+    cursor: pointer;
+  }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────────
+   Disable decorative transitions/animations for users who prefer reduced
+   motion. Focus rings and layout are unaffected. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Endpoint title row: heading owns the page-level "copy page" action. */
+.ep-titlebar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.ep-titlebar .ep-title {
+  margin-bottom: 0;
+}
+.ep-titlebar .ep-copypage {
+  flex: none;
+  margin-top: 6px;
+}
+/* Settings button sits on the right of the request panel head. */
+.api-rail-head .api-rail-iconbtn {
+  margin-left: auto;
+}
+/* Auth-method select, shown full-width inside the collapsible settings panel. */
+.api-rail-authselect--block {
+  display: block;
+  width: 100%;
+  margin: 4px 0 10px;
+}
+/* Settings toggle in the request-panel head — icon-only ghost button. */
+.api-rail-iconbtn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--lb-fg-2, #6c6e75);
+  background: var(--lb-bg-1, #fff);
+  border: 1px solid var(--lb-stroke, #e6e7e8);
+  border-radius: var(--ar-radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.api-rail-iconbtn:hover,
+.api-rail-iconbtn[aria-expanded='true'] {
+  background: var(--lb-bg-2, #f3f5f6);
+  color: var(--lb-fg-1, #0a0e19);
+}
+.api-rail-iconbtn[aria-expanded='true'] {
+  border-color: var(--lb-fg-3, #a9abae);
+}
+.api-rail-iconbtn:focus-visible {
+  box-shadow: var(--lb-focus-ring);
+  outline: none;
+}
+:root[data-mode='dark'] .api-rail-iconbtn {
+  background: #161b22;
+  border-color: #2c3039;
+  color: #9d9fa3;
 }

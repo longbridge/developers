@@ -15,6 +15,6 @@ export interface Props {
 
 const { title, description = '', locale = 'en' } = Astro.props
 ---
-<BaseLayout title={title} description={description} locale={locale}>
+<BaseLayout title={title} description={description} locale={locale} hideFooter>
   <ApiReference client:load rawYaml={rawYaml} locale={locale} />
 </BaseLayout>

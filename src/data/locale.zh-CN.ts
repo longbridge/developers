@@ -45,7 +45,7 @@ export const locale = {
   'footer.about': '关于我们',
   'footer.rights': '© {year} Longbridge. 版权所有。',
   // API Reference
-  'api.search': '搜索...',
+  'api.search': '搜索…',
   'api.sections.authorizations': '鉴权',
   'api.sections.pathParams': '路径参数',
   'api.sections.queryParams': '查询参数',
@@ -54,7 +54,7 @@ export const locale = {
   'api.code.request': '请求',
   'api.code.response': '响应',
   'api.copy': '复制',
-  'api.copied': '已复制！',
+  'api.copied': '已复制',
   'api.intro.title': 'API 参考',
   'api.intro.desc': '浏览所有可用的 REST 和 WebSocket 接口。通过左侧侧边栏按分类查找接口。',
   'api.intro.httpTitle': 'REST API',
@@ -64,6 +64,6 @@ export const locale = {
   'api.intro.hint': '点击侧边栏中的任意接口，查看参数说明、代码示例和响应示例。',
   'api.param.required': '必填',
   'api.param.optional': '可选',
-  'api.fallback': '本规范中未定义请求体字段。',
+  'api.fallback': '此接口无需请求参数。',
   'api.pathCopy': '复制路径',
 } as const

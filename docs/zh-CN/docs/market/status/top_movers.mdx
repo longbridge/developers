@@ -203,7 +203,7 @@ func main() {
       {
         "stock": {
           "code": "TSLA",
-          "counter_id": "ST/US/TSLA",
+          "symbol": "TSLA.US",
           "name": "特斯拉",
           "change": "-0.0388",
           "last_done": "404.110",
@@ -243,7 +243,7 @@ func main() {
 | events | object[] | false | 异动股票列表 |
 | ∟ stock | object | false | 股票基本信息 |
 | ∟ ∟ code | string | false | 股票代码（如 `TSLA`） |
-| ∟ ∟ counter_id | string | false | Counter ID（如 `ST/US/TSLA`） |
+| ∟ ∟ symbol | string | false | Symbol（如 `TSLA.US`） |
 | ∟ ∟ name | string | false | 证券名称 |
 | ∟ ∟ change | string | false | 涨跌幅（如 `-0.0388`） |
 | ∟ ∟ last_done | string | false | 最新成交价 |

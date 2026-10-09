@@ -17,6 +17,7 @@ import { useTryItMode } from './hooks/useTryItMode'
 import { useAuthorization } from './hooks/useAuthorization'
 import { useResponse } from './hooks/useResponse'
 import { createQuickRequest } from './utils/request'
+import { MissingAppSecretError } from './clients/http-client'
 
 export interface TryItProps {
   operationId?: string
@@ -117,11 +118,23 @@ export function TryIt({ method, path, parameters = [] }: TryItProps) {
       }
       setResult(res)
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err)
+      // This is almost always a client-side failure (network/CORS/DNS, timeout,
+      // or a missing App Secret) — NOT a server 500. Represent it as such and show
+      // a human message; keep the raw detail as secondary info.
+      const detail = err instanceof Error ? err.message : String(err)
+      const isMissingSecret =
+        err instanceof MissingAppSecretError ||
+        (err as { code?: string })?.code === 'MISSING_APP_SECRET'
+      const message = isMissingSecret
+        ? 'Enter your App Secret to sign this request.'
+        : "Couldn't send the request. Check your connection and try again."
       setResult({
-        status: 500,
-        statusText: 'Internal Server Error',
-        response: { code: -1, msg: errorMsg, data: null },
+        status: 0,
+        statusText: 'Request failed',
+        networkError: true,
+        errorMessage: message,
+        errorDetail: detail,
+        response: { code: -1, msg: message, data: null },
       })
     } finally {
       setIsLoading(false)
@@ -153,9 +166,14 @@ export function TryIt({ method, path, parameters = [] }: TryItProps) {
 
         {/* Back */}
         <button
+          type="button"
           onClick={handleGoBack}
-          className="ml-auto text-xs underline cursor-pointer"
-          style={{ color: 'var(--vp-c-text-3)', background: 'none', border: 'none', padding: 0 }}
+          className="ml-auto inline-flex items-center text-xs px-2 py-1 rounded-md transition-colors duration-200 hover:opacity-80"
+          style={{
+            color: 'var(--vp-c-text-3)',
+            background: 'transparent',
+            border: '1px solid var(--vp-c-border)',
+          }}
         >
           ← Back
         </button>
