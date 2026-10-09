@@ -9,8 +9,12 @@
  *   openapi.longbridge.com   → regionConfig[REGION].apiBaseUrl
  *   mcp.longbridge.com       → regionConfig[REGION].mcpHostname
  *
- * Runs only when VITE_REGION is set to a known region with a config entry.
- * For the global build (no VITE_REGION), this integration is a no-op.
+ * Runs when VITE_REGION is set to a known region with a config entry.
+ *
+ * 没有 region 的构建（release / canary）只替换站点域名，目标取 VITE_SITE_HOSTNAME：
+ * release 设的就是 open.longbridge.com，等于不改；canary 设的是测试域名，文档里
+ * 写死的 open.longbridge.com 链接（zip 下载、安装命令等）才会指回测试站，而不是把
+ * 测试者带去线上。API / MCP 域名在这条路径上不替换。
  *
  * Legacy reference: .legacy/vitepress-reference/.vitepress/region-utils.ts
  * `buildRegionUrlReplacements()` — same logic ported to an Astro integration.
@@ -44,6 +48,15 @@ function buildReplacements(region: string): [string, string][] {
   return pairs
 }
 
+/** Site-hostname-only pairs for builds without a region. */
+function buildSiteReplacements(site: string | undefined): [string, string][] {
+  if (!site || site === 'https://open.longbridge.com') return []
+  return [
+    ['https://open.longbridge.com', site],
+    ['open.longbridge.com', site.replace(/^https?:\/\//, '')],
+  ]
+}
+
 /** Recursively collect all files with the given extensions under a directory. */
 async function collectFiles(dir: string, extensions: string[]): Promise<string[]> {
   const results: string[] = []
@@ -66,11 +79,10 @@ export function regionHostnameRewrite(): AstroIntegration {
     hooks: {
       'astro:build:done': async ({ dir, logger }) => {
         const region = process.env['VITE_REGION']
-        if (!region) return
-
-        const replacements = buildReplacements(region)
+        const site = process.env['VITE_SITE_HOSTNAME']
+        const replacements = region ? buildReplacements(region) : buildSiteReplacements(site)
         if (replacements.length === 0) {
-          logger.info(`[region-hostname-rewrite] No replacements for region "${region}", skipping.`)
+          logger.info(`[region-hostname-rewrite] No replacements for region "${region ?? site ?? 'global'}", skipping.`)
           return
         }
 
