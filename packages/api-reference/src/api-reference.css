@@ -702,13 +702,15 @@
 .api-param-table td:nth-child(2),
 .api-fields th:nth-child(2),
 .api-fields td:nth-child(2) {
-  width: 15%;
+  width: 14%;
 }
+/* Wide enough for the English "Required"/"Optional" header + value at the 52rem
+   content measure (9% clipped them into the Description column). */
 .api-param-table th:nth-child(3),
 .api-param-table td:nth-child(3),
 .api-fields th:nth-child(3),
 .api-fields td:nth-child(3) {
-  width: 9%;
+  width: 14%;
 }
 /* Type / Required columns must not wrap (esp. the 2-char 必填/可选). Name and
    Description may wrap within their fixed column. */
