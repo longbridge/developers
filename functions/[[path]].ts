@@ -117,6 +117,16 @@ const SITES: Record<string, Site> = {
 }
 
 /**
+ * nginx 的 `/docs` 与 `/sdk` location（大小写不敏感、只锚开头，照搬）。用于：
+ *  - Markdown 内容协商只在 `/docs` 下生效（_release.conf:88-97）
+ *  - 这两类页面不加 X-Frame-Options（nginx 只在 `location /` 里加）
+ */
+const DOCS_PAGE = /^\/(?:(?:en|zh-HK|zh-CN)\/)?docs/i
+const DOCS_OR_SDK = /^\/(?:(?:en|zh-HK|zh-CN)\/)?(?:docs|sdk)/i
+/** `_llms.conf` 把 `/{locale}/docs/**.md` 当文档原文直出，排在 /en 收敛之前。 */
+const LOCALE_DOCS_MD = /^\/(?:en|zh-HK|zh-CN)\/docs.*\.md$/i
+
+/**
  * 反代到纯静态上游。`tag` 决定降级头的名字（`x-<tag>-degraded`）。
  *
  * 上游都是纯静态站，5xx 只会来自基础设施而非业务。实测：project 尚未创建时
@@ -152,16 +162,55 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
   const site = SITES[host]
   const mainSite = site?.installMainSite
 
-  // ① 旧路径 → 301 到主站。今天就是这个行为，保持不变。
-  //    必须保留 query——邀请码靠它传到主站的 sub_filter，丢了就是静默丢归属。
+  // 规则顺序照搬 nginx：正则 location 按书写顺序取第一个命中（_release.conf），
+  // `^~` 前缀优先于全部正则。顺序一变，/en/xxx、末尾斜杠这类路径的结果就会不同。
+
+  // ① 登录页（_release.conf:18，最先 include）
+  if (site && SESSION_PAGE.test(path)) return forward(`${site.session}${SESSION_INDEX}`, request, 'session')
+
+  // ② 带 locale 的 llms 文件 → 根级那份（_llms.conf，第二个 include）
+  const llms = LOCALE_LLMS.exec(path)
+  if (llms) return next(new Request(new URL(`/${llms[1]}`, url), request))
+
+  // ③ CLI 版本号与二进制 → 反代 OSS。`^~ /github/release/...` 优先于所有正则；
+  //    /longbridge/longbridge-terminal/* 是普通前缀，但没有正则会命中这几个精确路径。
+  const terminal = TERMINAL_ALIAS[path] ?? (path.startsWith(TERMINAL_RAW_PREFIX) ? path : null)
+  if (terminal) return forward(`${TERMINAL_ORIGIN}${terminal}`, request, 'terminal')
+
+  // ④ 末尾斜杠 → 302 去掉（_release.conf:27）。nginx 的 return 会丢 query，这里保留：
+  //    丢掉会让 /dashboard/?code=... 这类回跳参数消失，属于修 bug 而非改语义。
+  if (path.length > 1 && path.endsWith('/')) {
+    return Response.redirect(new URL(path.replace(/\/+$/, '') + url.search, url).toString(), 302)
+  }
+
+  // ⑤ /en 前缀收敛（_release.conf:31）。站点域名上只放行 `_llms.conf` 已接管的
+  //    /en/docs/**.md，与 nginx 一致：/en/skill-install.md 等先 302 掉前缀。
+  //    不把 install 交给主站的入口（pages.dev，即 installMainSite 为空）放行全部
+  //    .md：主站将来会从这类地址回源取 /en/skill/install.md 原文，那里跳转就断了。
+  if (path.startsWith('/en/')) {
+    const keep = LOCALE_DOCS_MD.test(path) || (!mainSite && path.endsWith('.md'))
+    if (!keep) return Response.redirect(new URL(path.slice('/en'.length) + url.search, url).toString(), 302)
+  }
+
+  // ⑥ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
+  if (site) {
+    const page = SPA_PAGE.exec(path)
+    const target = page
+      ? `${site.spa}/${page[1] ? `${page[1]}/` : ''}${page[2]}.html`
+      : path.startsWith(SPA_ASSETS)
+        ? `${site.spa}${path}`
+        : null
+    if (target) return forward(target, request, 'spa')
+  }
+
+  // ⑦ 旧路径 → 301 到主站。必须保留 query——邀请码靠它传到主站的 sub_filter。
   const legacy = mainSite ? LEGACY_INSTALL.exec(path) : null
   if (legacy) {
     const prefix = legacy[1] ? `${legacy[1]}/` : ''
     return Response.redirect(`https://${mainSite}/${prefix}skill-install.md${url.search}`, 301)
   }
 
-  // ② 新路径 → 反向代理到主站，由主站注入后原样返回。今天这条是 200 + 注入，
-  //    走代理而不是 301 才能保持状态码不变。
+  // ⑧ 新路径 → 反向代理到主站，由主站注入后原样返回（保持 200 + 注入）。
   const current = mainSite ? CURRENT_INSTALL.exec(path) : null
   if (current) {
     const prefix = current[1] ? `${current[1]}/` : ''
@@ -191,7 +240,6 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
       // 落到下面的降级分支
     }
     // 主站不可用时降级为本站原文：内容仍然正确，只是没有邀请码注入。
-    // 加一个响应头把降级暴露出来，避免静默丢归属查不到原因。
     const fallback = await next(new Request(new URL(`/${prefix}skill/install.md`, url), request))
     const headers = new Headers(fallback.headers)
     headers.set('x-install-md-degraded', 'main-site-unreachable')
@@ -199,40 +247,30 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     return new Response(fallback.body, { status: fallback.status, headers })
   }
 
-  // ③～⑤ 必须排在 ⑥ /en 收敛之前：nginx 里它们的 location 都先于 `^/en(.+)$`
-  //    声明，`/en/login`、`/en/llms.txt` 是直接服务，不会先被 302 掉前缀。
-
-  // ③ 带 locale 的 llms 文件 → 本站根级那份，200。
-  const llms = LOCALE_LLMS.exec(path)
-  if (llms) return next(new Request(new URL(`/${llms[1]}`, url), request))
-
-  // ④ 登录页 → session 应用。
-  if (site && SESSION_PAGE.test(path)) return forward(`${site.session}${SESSION_INDEX}`, request, 'session')
-
-  // ⑤ CLI 版本号与二进制 → 反代 OSS。与站点无关，任何入口都可用。
-  const terminal = TERMINAL_ALIAS[path] ?? (path.startsWith(TERMINAL_RAW_PREFIX) ? path : null)
-  if (terminal) return forward(`${TERMINAL_ORIGIN}${terminal}`, request, 'terminal')
-
-  // ⑥ /en 前缀收敛（对齐 nginx）。放行 .md：/en/**.md 是真实存在的端点
-  //    （src/pages/[locale]/[...slug].md.ts 每篇文档 × 每个 locale 各一个），
-  //    其中 /en/skill/install.md 正是主站回源路径之一。
-  if (path.startsWith('/en/') && !path.endsWith('.md')) {
-    // 这条与站点表无关：nginx 在 longbridge 与 longportapp 两侧都有同样的收敛，
-    // 且 pages.dev 上一并生效更便于预览时验证。
-    // 目标继承请求的 scheme 与 host；Pages 对外只服务 https，故线上必定是 https。
-    return Response.redirect(new URL(path.slice('/en'.length) + url.search, url).toString(), 302)
+  // ⑨ /docs 的 Markdown 内容协商（_release.conf:91）：Accept 含 text/markdown 时返回
+  //    同路径的 .md 原文。AI 工具靠它拿干净文本。.md 路径本身在 nginx 里先被
+  //    `\.md$` 接走，不进这里。
+  const isDocs = DOCS_PAGE.test(path)
+  if (isDocs && !path.endsWith('.md') && /text\/markdown/i.test(request.headers.get('accept') ?? '')) {
+    const md = await next(new Request(new URL(`${path}.md${url.search}`, url), request))
+    const res = new Response(md.body, md)
+    res.headers.append('vary', 'Accept')
+    return res
   }
 
-  // ⑦ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
-  if (site) {
-    const page = SPA_PAGE.exec(path)
-    const target = page
-      ? `${site.spa}/${page[1] ? `${page[1]}/` : ''}${page[2]}.html`
-      : path.startsWith(SPA_ASSETS)
-        ? `${site.spa}${path}`
-        : null
-    if (target) return forward(target, request, 'spa')
+  const res = await next()
+  // ⑩ X-Frame-Options：nginx 只在 `location /` 里加（_release.conf:123），即除了
+  //    /docs、/sdk、.md、.zip、robots.txt 之外的页面。照搬范围，不擅自扩大——
+  //    扩大到文档页可能弄坏未知的 iframe 嵌入方。
+  if (!DOCS_OR_SDK.test(path) && !/\.(?:md|zip)$/i.test(path) && path !== '/robots.txt') {
+    const guarded = new Response(res.body, res)
+    guarded.headers.set('x-frame-options', 'SAMEORIGIN')
+    return guarded
   }
-
-  return next()
+  if (isDocs) {
+    const varied = new Response(res.body, res)
+    varied.headers.append('vary', 'Accept')
+    return varied
+  }
+  return res
 }
