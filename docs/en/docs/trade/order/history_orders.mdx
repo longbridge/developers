@@ -414,7 +414,7 @@ func main() {
 | ∟∟ activate_rth             | string   | true     | Whether the order submitted after triggering allows pre/post market trading    |
 | ∟∟ submit_price             | string   | true     | Submitted price                    |
 | ∟ multi_leg                 | object   | false    | Multi-leg strategy information. Only returned for multi-leg option combination orders; otherwise not returned. |
-| ∟∟ strategy                 | string   | false    | Multi-leg strategy<br/><br/> **Enum Value:**<br/> `0` - CoveredCall (Covered stock)<br/> `1` - CoveredPut (Covered stock)<br/> `2` - VerticalCallSpread (Vertical spread)<br/> `3` - VerticalPutSpread (Vertical spread)<br/> `4` - Collar<br/> `5` - Straddle<br/> `6` - Strangle |
+| ∟∟ strategy                 | string   | false    | Multi-leg strategy<br/><br/> **Enum Value:**<br/> `0` - CoveredCall (Covered stock)<br/> `1` - CoveredPut (Covered stock)<br/> `2` - VerticalCallSpread (Vertical spread)<br/> `3` - VerticalPutSpread (Vertical spread)<br/> `4` - Collar<br/> `5` - Straddle<br/> `6` - Strangle<br/> `7` - CalendarCallSpread (Calendar)<br/> `8` - CalendarPutSpread (Calendar) |
 | ∟∟ strategy_name            | string   | false    | Strategy name |
 | ∟∟ multileg_id              | string   | false    | Multi-leg combination ID |
 | ∟∟ code                     | string   | false    | Multi-leg combination code |
