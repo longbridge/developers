@@ -862,9 +862,13 @@ clone skills 仓并打 zip 进 `dist/skill/`，只是产出清单和 `pack-skill
 原始设计里有这个排除（`plans/2026-08-17-astro-migration-stage-1.md:2960` 写的是
 `zip -r … -x '.git/*'`），实现时丢了。修复后 858 KB → 435 KB。
 
-**待查的线上异常**：`open.longbridge.com/skill/longbridge-market-data.zip` 返回 **405 / 2,657 B**
-（同目录其它 zip 都是 200）。本地能正常产出 24,191 B。疑似 CDN/WAF 对该路径的拦截，
-迁移后应复测。
+**线上异常（已定性，2026-10-08）**：`open.longbridge.com/skill/longbridge-market-data.zip` 返回
+**405 / 2,657 B**，是**阿里云 WAF 的备份文件下载防护**误拦，与迁移无关（OSS 源文件、`.cn`、CF canary
+均正常）。拦截页只有 traceid，无规则 ID；以下规律由对照实验得出：文件名在扩展名前的**最后一段**
+（以 `-` 或 `.` 分隔，下划线不算）为 `data` / `web` / `db` / `www` / `backup` / `site`，且扩展名为
+`.zip` / `.tar.gz` / `.rar` 时拦截。13 个技能里只有 `market-data` 命中。2026-10-08 起 `.com` 的
+`/skill/` 前缀已放行（`/x/data.zip` 仍拦，范围合理）；`open.longbridge.xyz` 仍拦。
+新增技能命名避开上述结尾。
 
 - 代价：skill 更新需等一次完整文档构建（~17 min）
 - 备选 (c)：Pages Functions 代理 `/skill/*.zip` 回 OSS —— 更新即时，但每次下载从 CF 边缘回一次杭州
@@ -1236,3 +1240,128 @@ nginx 只有 `/assets` 走 docs raw；其余路径落进 `location /` 被改写�
 - SPA 生产 project `developers-website-private` **还没有任何发布**（裸地址 404），private 仓只有 canary workflow。
   `.com` 切换前必须补 release workflow；否则表现为**安静的 404**（404 按设计透传，不打降级标记）。
 - GitLab CI 写死旧仓库名 `openapi-website-private`，现靠 GitHub 改名重定向存活；同名新仓一建即失效。
+- **主站 `/skill-install.md` 依赖 OSS 上的 install 原文**：主站 nginx 从
+  `assets.lbkrs.com/github/<env>/open.longbridge.com/new-docs/raw` 取原文再注入邀请码
+  （`websites-nginx` 的 `longbridge.com/index.conf:182-183`）。与 openapi 是否切 CF 无关，
+  `.com` 切换后 `release.yml` 的 OSS 上传**不能整段删**，至少保留到 S4（主站上游改到 Pages）完成。
+- private 仓的仓库级 `CLOUDFLARE_API_TOKEN`（`Account / Cloudflare Pages / 编辑`）正在被 canary
+  workflow 使用，不要删。
+- **技能 zip 的即时更新链路**：skills 仓变更经 `repository_dispatch` 触发 `pack-skills.yml`，它只往 OSS
+  写 zip；切到 CF 后站点改从部署产物取 zip，不重建就一直是旧的。已改为 OSS 上传后再
+  `gh workflow run` 触发 `release.yml`（main）/ `canary-cloudflare.yml`（canary 触发分支），技能更新到
+  上线由约 1 分钟变为一次完整构建（约 15 分钟）。`repository_dispatch` 用默认分支的 workflow 文件，
+  **合入 main 后才生效**。`.cn` 的 zip 一直只随 `release.yml` 更新，非本次引入。
+- 主站 canary（`websites-nginx/longbridge.com/index.conf:538,619`）的 `$open_site_host` 仍是旧的
+  `open.longbridge.xyz`：`longbridge.xyz/mcp`、`/cli`、`/skill` 会跳到旧 nginx canary 而非
+  `open-canary`。主站 release 那两处只做 302，浏览器重新解析域名，切 CF 后不经过 openapi nginx。
+
+## 15.13 nginx 功能全量对齐验收（2026-10-09）
+
+目标：`open-canary.longbridge.xyz` 支持 openapi nginx 的全部功能。对标的是**线上 release 的行为**
+（`_release.conf`），不只是 nginx canary——release 有、canary 没有的功能（Markdown 内容协商、
+terminal 四条、`= /robots.txt`）同样要覆盖。
+
+### 方法
+
+1. 逐条读 `_release.conf` 及其 include（`_login-page-proxy-brand.conf`、`_assets.conf`、
+   `_llms.conf`、`_skill_install.conf`、`sites/_common.conf`），按**指令**而不是按 location 对照
+   （响应头、匹配顺序、内容协商都不是 location 能看出来的）。
+2. 穷举：canary 构建产物的 sitemap（938 页）与 llms.txt（318 个 `.md`）全量请求。线上 `.com` 前有
+   阿里云 WAF，**不做全量扫描**（可能触发 CC 防护封出口 IP），只对 canary 非 200 的逐个核对。
+3. 行为矩阵：内容协商、匹配顺序、末尾斜杠、大小写、query 透传等，线上与 canary 同路径对照。
+4. 改动先在本地直接执行 Function 打真实上游回归，再上线复测。
+
+### 结果
+
+| nginx 功能 | canary | 依据 |
+|---|---|---|
+| `robots.txt` | ✓ canary 全站禁爬；release 产物与 nginx 文件逐行一致 | 线上 |
+| 登录页 `/login` `/tfa` `/binding` `/password/reset` | ✓ | 线上 + 浏览器实测登录跳回 |
+| `/assets/*` → docs raw | 不再需要：新构建用 `/_docs/`，本地所有仓库无外部引用；切换后只影响旧页面缓存 | 全仓搜索 |
+| 多语言 `llms.txt` / `llms-full.txt` | ✓ | 线上 |
+| `/{locale}/docs/**.md` | ✓ | 318 个 `.md` 扫描 |
+| 末尾斜杠 302 | ✓（**本轮修**：此前 SPA 200、`.md/` 404） | 线上对照 |
+| `/en` 前缀 302 | ✓（**本轮修**匹配顺序，见下） | 线上对照 |
+| SPA 8 个前缀 | ✓ | 线上，资源 7/7 sha256 一致 |
+| CLI 安装包 4 条 | ✓ | 线上 |
+| `/skill/install.md` 301、`/skill-install.md` 注入 | ✓ | 线上，注入 5 次、无 cookie 泄漏 |
+| `/_internal/skill-install` 不对外 | ✓ 404 | 线上 |
+| `.md` / `.zip` / `/sdk` | ✓ | 线上 |
+| **`/docs` Markdown 内容协商**（`Accept: text/markdown`，`_release.conf:91`） | ✓（**本轮补**，此前返回 HTML） | 线上对照 |
+| **`X-Frame-Options: SAMEORIGIN`**（只在 `location /`） | ✓（**本轮补**，范围同 nginx） | 线上对照 |
+| `location /` 兜底 | ✓ | 937 个 sitemap 页面全部 200 |
+| http → https | ✓（nginx 这段是注释掉的，CF 默认做） | 线上 |
+| `/oauth2` 登录回跳（9 月新增） | 不涉及：只 include 在主站 | 配置检查 |
+
+上线后 14 个行为场景与线上 `.com` 在状态码、`Location`、`Content-Type`、`X-Frame-Options` 有无上
+一致；全量重扫 937/937、317/318（唯一的 301 是 `/skill/install.md`，按设计）。
+
+### 本轮修复
+
+- **匹配顺序**：nginx 正则 location 按书写顺序取第一个命中，`^~` 前缀优先于全部正则。Function 改为
+  同序：登录页 → 多语言 llms → terminal → 末尾斜杠 → `/en` → SPA → install。由此
+  `/en/skill-install.md` 等先 302 掉前缀（此前直接反代 / 301 到主站），`/login/` 仍直出登录页。
+  不把 install 交给主站的入口（pages.dev）放行全部 `/en/*.md`，供主站 S4 后回源。
+- **内容协商**：`/docs` 下 `Accept` 含 `text/markdown` 时返回同路径 `.md`，并加 `Vary: Accept`。
+- **X-Frame-Options**：只加在 nginx `location /` 覆盖的页面（排除 `/docs`、`/sdk`、`.md`、`.zip`、
+  `robots.txt`）。不扩大到文档页，避免弄坏未知的 iframe 嵌入方（本地仓库未发现）。
+- **写死的站点链接**：`region-hostname-rewrite` 原先只在设置 `VITE_REGION` 时运行，canary 页面里
+  zip 下载、安装命令、`/connect` 等仍指向线上（旧 nginx canary 同样如此）。无 region 的构建现按
+  `VITE_SITE_HOSTNAME` 替换站点域名；release 设的就是线上域名，产物不变。抽查 5 页从 5–11 处降为 0。
+
+### 有意保留的差异
+
+| 现象 | 线上 | canary | 原因 |
+|---|---|---|---|
+| `/docs/x.html`、`/index.html` | 404 | 308 到规范地址 | Pages 默认行为，属改进 |
+| 末尾斜杠跳转的 query | 丢弃 | 保留 | 丢掉会让 `/dashboard/?code=` 丢回跳参数 |
+| terminal 在 canary | 404（找不存在的 canary 通道） | 200（固定 release 通道） | 测试环境也能真跑通 |
+
+### 未覆盖（需人工）
+
+- 用真实 OpenAPI 应用走完整 OAuth 授权流程（会回调第三方，外部模拟不了）。
+- `.md` 接口与 `llms.txt` 正文里的站点域名不替换（替换只处理 HTML/CSS/JS，`.cn` 同样如此）。
+- 文档代码示例里的 `openapi.longbridge.com` 在 canary 上仍是线上 API：改成测试 API 属产品决定，未做。
+
+### canary 测试方式
+
+- **发布**：两仓推 `feat/nginx_decommission` 自动部署（公开仓只改 `docs/superpowers/**` 不触发），
+  也可在 Actions 手动 Run workflow。文档约 15 分钟；SPA 跑在自托管 runner，视排队。
+- **账号**：canary 环境账号（后端 `api.longbridge.xyz` / `mr.longbridge.xyz`）。
+- **对照**：同路径打开 `open.longbridge.xyz`（旧 nginx canary，同一套后端）。
+- **排障**：看响应头 `x-spa-degraded` / `x-session-degraded` / `x-terminal-degraded` /
+  `x-install-md-degraded`（冒号后是上游真实状态码或 `origin-unreachable`）；反馈时带完整 URL、
+  状态码、上述头与 `cf-ray`。
+
+### 15.14 资源目录分轨：OSS 产物保留 /assets（2026-10-12）
+
+**问题**：`build.assets: '_docs'` 对所有构建生效，而 `release.yml` / `canary.yml` 的 OSS 产物由 nginx
+承载（`.com` 切流前、`.cn`、`open.longbridge.xyz`）。nginx 只有 `/assets` 映射到文档产物。
+
+**零部署实测**（用 OSS 上已存在的非 `/assets` 文件探测 nginx 的路由行为）：
+
+| 文件 | OSS 源文件 | 经 nginx `.com` | 经 nginx `.xyz` | 经 nginx `.cn` |
+|---|---|---|---|---|
+| `/pagefind/pagefind.js` | 200 | 404 | 404 | 302 → open.longbridge.com |
+| `/sitemap-index.xml` | 200 | 404 | 404 | 302 → open.longbridge.com |
+
+成因：`_release.conf:129-139` 的 `location /` 改写为 `…/raw$uri/index.html`；`_cn.conf` 的 `location /`
+直接 `302 https://open.longbridge.com$request_uri`。故产物一旦改用 `/_docs`，三处 nginx 站点全部丢样式与脚本，
+且合并 main 即触发（`release.yml` 同时构建 `.cn`），与 `.com` 是否切流无关。
+
+**决定（方案 C）**：不改 nginx，按承载方分轨。
+
+- `astro.config.ts` 读 `ASSETS_DIR`，只认 `_docs`，其余一律 `assets`（默认）。默认取 `assets`：漏设时坏的是
+  CF 轨（`/assets/*` 在 `_routes.json` 排除里，仍走静态可用），而不是 nginx 承载的线上站点。
+- 设 `ASSETS_DIR=_docs`：`canary-cloudflare.yml`、`canary-aliyun.yml`（自有桶 + CDN，不经 nginx）、`release.yml`
+  新拆出的 `deploy_cloudflare` job。
+- `release.yml`：CF 部署从 `deploy_release` 拆成独立 job 单独构建（两份产物资源目录不同，不能共用）；三个 job
+  并行，墙钟时间不变。OSS 侧（`deploy_release`、`deploy_cn`、`canary.yml`）各加断言：无 `dist/_docs` 且
+  `dist/assets/*.css` 存在。
+- `src/pages/assets/search-index.[locale].json.ts` 是页面路由，固定在 `/assets/`，不受此开关影响。
+- `public/` 下的静态文件不随开关移动，两轨都要能取到，只能放 `/assets/`（nginx 有映射、`_routes.json` 已排除）：
+  `sdk.svg` 从 `public/_docs/` 挪回 `public/assets/`，`packages/ui/src/SDK.tsx` 同步回 `/assets/sdk.svg`（与 main 一致）。
+  `public/_docs/` 因此必须保持为空，否则 OSS 断言 `test ! -e dist/_docs` 会失败。
+- 由此 `.com` 切流不再需要发布 websites-nginx（原 P3 作废）；SPA 侧是否需要 nginx 取决于 P1。
+- 清理时机：nginx 全部下线后，默认值改为 `_docs` 并删除该开关与 OSS 断言。
+
