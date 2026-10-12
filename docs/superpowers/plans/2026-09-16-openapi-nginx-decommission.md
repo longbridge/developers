@@ -1369,4 +1369,14 @@ terminal 四条、`= /robots.txt`）同样要覆盖。
   `/assets` 会与文档站固定在 `/assets/` 的 `search-index.*.json`、`sdk.svg` 冲突，Function 得逐文件区分归属。
   分轨后 CF 上三类资源各占一个目录（`/_docs`、`/_app`、`/assets`），Function 与 `_routes.json` 不用改。
 - 清理时机：nginx 全部下线后，默认值改为 `_docs` 并删除该开关与 OSS 断言。
+- **页面形态同样分轨（恢复 `scripts/copy-routes.ts`）**：main 的三个 build 脚本在 astro 之后跑 `copy-routes.ts`，
+  把 `/docs/**`、`/sdk/**` 以外的页面（`/pricing`、`/skill`、各 locale 首页）转成 `foo/index.html`——nginx 的
+  `location /` 改写为 `$uri/index.html`（`_release.conf:129-139`，`.cn` 的 `/skill` 同理），而 `/docs`、`/sdk`
+  改写为 `$uri.html`。改造分支曾在转目录索引形态时删掉它，默认改回 `'file'` 后漏恢复：OSS 上传是 `-u`
+  只增不删，合 main 后这类页面会**静默停在旧版本**，新页面 404。现从 main 原样恢复，只在 OSS 三个任务
+  （`deploy_release`、`deploy_cn`、`canary.yml`）里作为独立步骤运行，并断言 `dist/skill/index.html` 存在、
+  `dist/skill.html` 不存在；CF 轨不运行（Pages 会把 `/pricing` 308 到 `/pricing/`）。
+- 已知旧问题（非本次引入）：nginx 读的 `raw/longbridge-terminal/install` 最后修改于 2026-08-28，main 的 Astro
+  构建从未产出它（文件在非 publicDir 的 `docs/public/`）。改造分支挪到 `public/longbridge/…` 后上传位置变为
+  `raw/longbridge/…`，nginx 不读，nginx 版维持现状；切到 CF 后直接用最新版。
 
