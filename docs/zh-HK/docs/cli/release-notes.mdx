@@ -9,9 +9,9 @@ sidebar_icon: newspaper
 
 ### [v0.30.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.30.0)
 
-- **行情命令不再建立 WebSocket 連接** — 以下一次性行情命令改用 HTTP REST 行情接口:`quote`、`depth`、`brokers`、`trades`、`intraday`、`kline`、`static`、`calc-index`、`capital`、`participants`、`trading`、`warrant`、`option`,以及 `portfolio`、`sharelist` 和下單預覽中的行情查詢。省去了 WebSocket 握手，啟動更快，輸出保持不變。TUI 和 `longbridge serve` 仍使用 WebSocket
+- **行情命令不再建立 WebSocket 連接** — 以下一次性行情命令改用 HTTP REST 行情接口：`quote`、`depth`、`brokers`、`trades`、`intraday`、`kline`、`static`、`calc-index`、`capital`、`participants`、`trading`、`warrant`、`option`,以及 `portfolio`、`sharelist` 和下單預覽中的行情查詢。省去了 WebSocket 握手，啟動更快，輸出保持不變。TUI 和 `longbridge serve` 仍使用 WebSocket
 - **API 報錯顯示業務碼和 trace id** — 例如 `Error: API error (code 301604): no quote access`,下一行是 `trace_id: …`。以前的格式是 `WebSocket error (status=7, code=…)`,如果腳本解析了這段文字，需要相應調整
-- **修復:`option chain <SYMBOL> --date <DATE>` 報錯** — v0.29.0 返回 `404000 api not found`,現在能返回完整的行權價鏈
+- **修復：`option chain <SYMBOL> --date <DATE>` 報錯** — v0.29.0 返回 `404000 api not found`,現在能返回完整的行權價鏈
 - **AI 對話界面跟隨終端主題** — `longbridge ai` 的配色會適配淺色和深色終端
 
 ### [v0.29.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.29.0)
