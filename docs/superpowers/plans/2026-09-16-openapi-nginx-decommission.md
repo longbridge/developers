@@ -1380,3 +1380,17 @@ terminal 四条、`= /robots.txt`）同样要覆盖。
   构建从未产出它（文件在非 publicDir 的 `docs/public/`）。改造分支挪到 `public/longbridge/…` 后上传位置变为
   `raw/longbridge/…`，nginx 不读，nginx 版维持现状；切到 CF 后直接用最新版。
 
+### 15.15 临时：开发分支直接发生产 Cloudflare project（2026-10-12）
+
+切流前两个生产 project 无消费方（`open.longbridge.com` 仍指 nginx），为在合 main 之前就能在
+`longbridge-developers.pages.dev` 上完整验证（P4），临时让 `feat/nginx_decommission` 发生产 CF：
+
+- 公开仓 `release.yml`：push 分支加 `feat/nginx_decommission`；`deploy_release`、`deploy_cn` 加
+  `if: github.ref_name != 'feat/nginx_decommission'` 跳过——它们发的是 nginx 线上在用的 `.com` / `.cn` OSS。
+- private 仓 `release-cloudflare.yml`：push 分支加 `feat/nginx_decommission`（该 workflow 只发 CF）。
+- 副作用：公开仓 main 的每次 push 也会发同一个生产 project（旧代码、无 Function），两边互相覆盖、后推者生效。
+  验证前确认当前生产部署来自 feat（看 CF 控制台或手动 dispatch 一次 `release.yml` 选 feat 分支）。
+- 发起前两仓 feat 均已 merge 最新 `origin/main`。
+- **合 main 前（P5）必须删掉这三处临时改动**，否则合入后 OSS 任务的 `if` 仍在、但对 main 无影响；
+  触发分支残留会让旧分支名继续可发生产。
+
