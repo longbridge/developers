@@ -110,6 +110,11 @@ const SITES: Record<string, Site> = {
     session: 'https://assets-staging.wbrks.com',
     installMainSite: 'longbridge.xyz',
   },
+  // 生产 project 自己的入口：切 DNS 之前用它完整验证 SPA 与登录页（方案 P4）
+  'longbridge-developers.pages.dev': {
+    spa: 'https://developers-website-private.pages.dev',
+    session: 'https://assets.wbrks.com',
+  },
   'longbridge-developers-canary.pages.dev': {
     spa: 'https://developers-website-private-canary.pages.dev',
     session: 'https://assets-staging.wbrks.com',
