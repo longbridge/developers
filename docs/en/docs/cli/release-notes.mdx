@@ -7,6 +7,13 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.30.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.30.0)
+
+- **Quote commands no longer open a WebSocket** — the one-shot quote commands use the HTTP REST quote API: `quote`, `depth`, `brokers`, `trades`, `intraday`, `kline`, `static`, `calc-index`, `capital`, `participants`, `trading`, `warrant` and `option`, plus the quote lookups in `portfolio`, `sharelist` and order previews. They start faster because there is no WebSocket handshake, and their output is unchanged. The TUI and `longbridge serve` still use the WebSocket
+- **API errors show the business code and a trace id** — for example `Error: API error (code 301604): no quote access` followed by a `trace_id: …` line. The previous form was `WebSocket error (status=7, code=…)`, so update any script that parses this text
+- **Fix: `option chain <SYMBOL> --date <DATE>` failed** — in v0.29.0 it returned `404000 api not found`; it now returns the full strike chain
+- **Chat TUI follows the terminal theme** — `longbridge ai` adapts its colors to light and dark terminals
+
 ### [v0.29.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.29.0)
 
 - **New `fund` command group — Hong Kong mutual funds** — `longbridge fund` brings the mutual-fund channel to the terminal: browse the catalog (`hot`, `list`, `filters`), read a fund's `detail`, `analysis` / `analysis-detail`, `trend`, `annual-returns` / `quarterly-returns`, `performance` / `performance-comparison`, latest and historical NAV (`nav`, `nav-history`, `nav-range`) and `holdings` / `stock-holdings`; review your holdings (`positions`, `position`, `position-performance`, `position-profits`, `position-nav`, `position-dividends`); and manage orders (`orders`, `order`, `transactions`, `validate-order`, `submit-order`, `cancel-order`). Funds are addressed by `counter_id` (e.g. `UT/FD/HK0000384492`), not a stock symbol — get one from `fund hot` / `fund list`. `submit-order` and `cancel-order` prompt for confirmation unless `--yes`. See the [Funds](/docs/cli/fund/market) docs
