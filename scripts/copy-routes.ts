@@ -1,4 +1,8 @@
 /**
+ * 只在发往 OSS、由 nginx 承载的流水线里运行（release.yml 的 deploy_release / deploy_cn、
+ * canary.yml）。Cloudflare 轨不能运行：Pages 按产物形态规范化 URL，转成目录索引后
+ * /pricing 会被 308 到 /pricing/。见方案 §15.14。
+ *
  * Post-build script: reconcile each route to the ONE file shape the production
  * nginx actually serves for its URL prefix — matching the legacy VitePress
  * output exactly, with no duplicate files.

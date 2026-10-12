@@ -17,20 +17,34 @@ import { prebuildMcpTools } from './src/integrations/prebuild-mcp-tools'
 import { prebuildSkills } from './src/integrations/prebuild-skills'
 
 const REGION = process.env['VITE_REGION'] ?? 'global'
-// build:release 未把 VITE_SITE_HOSTNAME 传给 astro build，兜底值就是生产域名；
+// 未设置 VITE_SITE_HOSTNAME 时（dev 等）兜底为生产域名；
 // sitemap / llms.txt / robots / 页面 canonical 都从这里取（Astro.site）。
 const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longbridge.com'
 const sitemapLocale = (url: string) =>
   new URL(url).pathname.match(/^\/(zh-CN|zh-HK)(\/|$)/)?.[1] ?? 'en'
+const BUILD_FORMAT = process.env['BUILD_FORMAT'] === 'directory' ? 'directory' : 'file'
+const ASSETS_DIR = process.env['ASSETS_DIR'] === '_docs' ? '_docs' : 'assets'
 
 export default defineConfig({
   site: SITE,
-  // `assets: 'assets'` (default is `_astro`) so hashed CSS/JS land in /assets/ —
-  // the path the production nginx already serves (_assets.conf, matching the
-  // legacy VitePress output). Without this, /_astro/* has no nginx rule, falls
-  // to the catch-all, and every stylesheet/script 404s. public/assets/sdk.svg
-  // coexists (unique name, no clash with content-hashed files).
-  build: { format: 'file', assets: 'assets' },
+  // 产物形态按边缘分轨，默认 'file'：
+  // - Cloudflare Pages（.com / .longportapp.com）必须用 'file'。Pages 会把 URL 规范化
+  //   到与产物一致的形态：'file' 产 `foo.html` → 规范 URL 是 `/foo`（与现网 nginx 完全
+  //   一致）；'directory' 产 `foo/index.html` → 规范 URL 变成 `/foo/`，`/foo` 反被 308
+  //   到带尾斜杠版本，而 canonical 仍写无尾斜杠，两者自相矛盾（实测见方案 §15.9）。
+  // - 阿里云轨（.cn）将来由 OSS 静态网站托管直接承载时才需要 'directory'，配合
+  //   「子目录首页 + 文件404规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
+  //   流水线上设 BUILD_FORMAT=directory 即可。.cn 今天仍走 nginx（由 nginx 补 .html），
+  //   所以现在同样用 'file'。
+  // 资源目录按「谁来路由这个产物」分轨，默认 'assets'：
+  // - 发往 OSS、由 nginx 承载的构建（.com 的 OSS 副本、.cn、open.longbridge.xyz）必须用
+  //   'assets'。nginx 只有 /assets 映射到文档产物，其余路径落进 `location /` 被改写成
+  //   `$uri/index.html` 必 404（.cn 则 302 去 .com），实测见方案 §15.14。
+  // - 发往 Cloudflare Pages 与阿里云静态托管的构建设 ASSETS_DIR=_docs：与 SPA 的资源
+  //   命名空间分开，Function 不必区分 /assets 归谁。
+  // 默认取 'assets'：漏设变量时坏的是 CF 轨（仍可用，/assets 在 _routes 排除里走静态），
+  // 而不是 nginx 承载的线上站点。nginx 全部下线后改默认值并删掉这个开关。
+  build: { format: BUILD_FORMAT, assets: ASSETS_DIR },
   integrations: [
     react(),
     mdx(),

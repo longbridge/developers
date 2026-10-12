@@ -7,6 +7,9 @@ on:
       - feat/lb
       - feat/deploy_cn
       - cloudflare-pages
+      # 临时：改造期间开发分支只发 Cloudflare 生产 project（切流前无消费方），两个 OSS
+      # 任务用 if 跳过——它们发的是 nginx 线上正在用的 .com / .cn。合 main 前删掉（方案 P5）
+      - feat/nginx_decommission
   workflow_dispatch:
 
 concurrency:
@@ -16,6 +19,7 @@ concurrency:
 jobs:
   deploy_release:
     name: build
+    if: github.ref_name != 'feat/nginx_decommission'
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -49,12 +53,15 @@ jobs:
         env:
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.lbkrs.com'
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 335162bab35b74f065a0351212011d5a
-          command: pages deploy dist --project-name=longbridge-developers --branch=main
+      # nginx 的 location / 只认目录索引（foo/index.html），/docs、/sdk 只认扁平（foo.html）
+      - name: Reshape routes for nginx
+        run: |
+          bun run scripts/copy-routes.ts
+          test -f dist/skill/index.html && test ! -e dist/skill.html || { echo "::error::copy-routes 未生效，nginx 的 location / 会取不到页面"; exit 1; }
+
+      # 这份产物给 nginx 承载的 .com 用，资源必须在 /assets（见 astro.config.ts）
+      - name: Assert assets dir
+        run: test ! -e dist/_docs && find dist/assets -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::OSS 产物的资源目录不是 /assets，nginx 会 404"; exit 1; }
 
       - name: Upload to Aliyun OSS
         run: |
@@ -65,8 +72,47 @@ jobs:
           ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.txt" --meta "Cache-Control:no-cache#Content-type:text/plain;charset=utf-8"
           ${{github.workspace}}/ossutil cp ./dist/ oss://lb-assets/github/release/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.html" --meta "Cache-Control:no-cache#Content-type:text/html;charset=utf-8"
 
+  # Cloudflare 单独构建一份：资源目录与 OSS 那份不同（ASSETS_DIR=_docs），不能共用产物
+  deploy_cloudflare:
+    name: build-cloudflare
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependency
+        run: bun install --frozen-lockfile --verbose
+
+      - name: Build release
+        run: bun run build:release
+        env:
+          VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.lbkrs.com'
+          ASSETS_DIR: _docs
+
+      - name: Assert assets dir
+        run: find dist/_docs -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::缺少 dist/_docs，ASSETS_DIR 未生效"; exit 1; }
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 335162bab35b74f065a0351212011d5a
+          command: pages deploy dist --project-name=longbridge-developers --branch=main
+
   deploy_cn:
     name: build-cn
+    if: github.ref_name != 'feat/nginx_decommission'
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +143,15 @@ jobs:
 
       - name: Build CN
         run: bun run build:cn
+
+      # nginx 的 location / 只认目录索引（foo/index.html），/docs、/sdk 只认扁平（foo.html）
+      - name: Reshape routes for nginx
+        run: |
+          bun run scripts/copy-routes.ts
+          test -f dist/skill/index.html && test ! -e dist/skill.html || { echo "::error::copy-routes 未生效，nginx 的 location / 会取不到页面"; exit 1; }
+
+      - name: Assert assets dir
+        run: test ! -e dist/_docs && find dist/assets -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::OSS 产物的资源目录不是 /assets，nginx 会 404"; exit 1; }
 
       - name: Upload to Aliyun OSS (CN)
         run: |
