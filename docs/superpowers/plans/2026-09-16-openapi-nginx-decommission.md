@@ -1362,6 +1362,11 @@ terminal 四条、`= /robots.txt`）同样要覆盖。
 - `public/` 下的静态文件不随开关移动，两轨都要能取到，只能放 `/assets/`（nginx 有映射、`_routes.json` 已排除）：
   `sdk.svg` 从 `public/_docs/` 挪回 `public/assets/`，`packages/ui/src/SDK.tsx` 同步回 `/assets/sdk.svg`（与 main 一致）。
   `public/_docs/` 因此必须保持为空，否则 OSS 断言 `test ! -e dist/_docs` 会失败。
-- 由此 `.com` 切流不再需要发布 websites-nginx（原 P3 作废）；SPA 侧是否需要 nginx 取决于 P1。
+- 由此 `.com` 切流不再需要发布 websites-nginx（原 P3 作废）。
+- **SPA 同样分轨（取代「撤回 `/assets`」）**：private 仓 `packages/openapi/.vitepress/config.mts` 的 `assetsDir`
+  读 `ASSETS_DIR`，只认 `_app`，默认 `assets`；GitLab 构建不设，产物与改造前逐字节一致；CF 构建（`canary-cloudflare.yml`、
+  将来的 release）设 `_app`。longport 包的 `_lpapp` 撤回（无 CF 发布，不在本次范围）。撤回方案被否决的原因：SPA 回到
+  `/assets` 会与文档站固定在 `/assets/` 的 `search-index.*.json`、`sdk.svg` 冲突，Function 得逐文件区分归属。
+  分轨后 CF 上三类资源各占一个目录（`/_docs`、`/_app`、`/assets`），Function 与 `_routes.json` 不用改。
 - 清理时机：nginx 全部下线后，默认值改为 `_docs` 并删除该开关与 OSS 断言。
 
