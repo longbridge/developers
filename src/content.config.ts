@@ -5,6 +5,9 @@ import { z } from 'zod'
 const docsSchema = z.object({
   title: z.string().optional(),
   titleTemplate: z.string().optional(),
+  // SEO：完整 <title>（不再拼品牌后缀）与 meta description，规则见 src/lib/page-meta.ts。
+  seo_title: z.string().optional(),
+  description: z.string().optional(),
   id: z.string().optional(),
   slug: z.string().optional(),
   sidebar_position: z.number().optional(),
