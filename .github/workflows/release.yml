@@ -49,6 +49,12 @@ jobs:
         env:
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.lbkrs.com'
 
+      # nginx 的 location / 只认目录索引（foo/index.html），/docs、/sdk 只认扁平（foo.html）
+      - name: Reshape routes for nginx
+        run: |
+          bun run scripts/copy-routes.ts
+          test -f dist/skill/index.html && test ! -e dist/skill.html || { echo "::error::copy-routes 未生效，nginx 的 location / 会取不到页面"; exit 1; }
+
       # 这份产物给 nginx 承载的 .com 用，资源必须在 /assets（见 astro.config.ts）
       - name: Assert assets dir
         run: test ! -e dist/_docs && find dist/assets -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::OSS 产物的资源目录不是 /assets，nginx 会 404"; exit 1; }
@@ -132,6 +138,12 @@ jobs:
 
       - name: Build CN
         run: bun run build:cn
+
+      # nginx 的 location / 只认目录索引（foo/index.html），/docs、/sdk 只认扁平（foo.html）
+      - name: Reshape routes for nginx
+        run: |
+          bun run scripts/copy-routes.ts
+          test -f dist/skill/index.html && test ! -e dist/skill.html || { echo "::error::copy-routes 未生效，nginx 的 location / 会取不到页面"; exit 1; }
 
       - name: Assert assets dir
         run: test ! -e dist/_docs && find dist/assets -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::OSS 产物的资源目录不是 /assets，nginx 会 404"; exit 1; }
