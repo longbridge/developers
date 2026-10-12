@@ -12,11 +12,16 @@ import { remarkRegionFilter } from './src/integrations/remark-region-filter'
 import remarkDirective from 'remark-directive'
 import { remarkCallout } from './src/integrations/remark-callout'
 import { regionHostnameRewrite } from './src/integrations/region-hostname-rewrite'
+import { sitemapLocaleFiles } from './src/integrations/sitemap-locale-files'
 import { prebuildMcpTools } from './src/integrations/prebuild-mcp-tools'
 import { prebuildSkills } from './src/integrations/prebuild-skills'
 
 const REGION = process.env['VITE_REGION'] ?? 'global'
-const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longportapp.com'
+// 未设置 VITE_SITE_HOSTNAME 时（dev 等）兜底为生产域名；
+// sitemap / llms.txt / robots / 页面 canonical 都从这里取（Astro.site）。
+const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longbridge.com'
+const sitemapLocale = (url: string) =>
+  new URL(url).pathname.match(/^\/(zh-CN|zh-HK)(\/|$)/)?.[1] ?? 'en'
 const BUILD_FORMAT = process.env['BUILD_FORMAT'] === 'directory' ? 'directory' : 'file'
 
 export default defineConfig({
@@ -38,13 +43,30 @@ export default defineConfig({
     mdx(),
     icon(),
     sitemap({
+      // hreflang 取值与页面 head 一致（en / zh-Hans / zh-Hant），见 src/lib/page-meta.ts。
       i18n: {
         defaultLocale: 'en',
-        locales: { 'en': 'en', 'zh-CN': 'zh-CN', 'zh-HK': 'zh-HK' },
+        locales: { 'en': 'en', 'zh-CN': 'zh-Hans', 'zh-HK': 'zh-Hant' },
       },
       // Legacy config.mts sitemap.transformItems: drop migration URLs.
       filter: (page) => !page.includes('migration'),
+      // 补 x-default → 英文版，与页面 head 一致（规则见 src/lib/page-meta.ts buildSeoLinks）。
+      // 只有一种语言的页面插件不输出 links；英文单语页同样补 en + x-default。
+      serialize: (item) => {
+        const isZh = /^\/zh-(CN|HK)(\/|$)/.test(new URL(item.url).pathname)
+        const links = item.links ?? (isZh ? [] : [{ url: item.url, lang: 'en' }])
+        const en = links.find((l) => l.lang === 'en')
+        return { ...item, links: en ? [...links, { url: en.url, lang: 'x-default' }] : item.links }
+      },
+      // 按语言分组，再由 sitemapLocaleFiles 落到 /{en,zh-CN,zh-HK}/sitemap.xml，
+      // 总索引为 /sitemap.xml。
+      chunks: {
+        'en': (item) => (sitemapLocale(item.url) === 'en' ? item : undefined),
+        'zh-CN': (item) => (sitemapLocale(item.url) === 'zh-CN' ? item : undefined),
+        'zh-HK': (item) => (sitemapLocale(item.url) === 'zh-HK' ? item : undefined),
+      },
     }),
+    sitemapLocaleFiles(),
     regionHostnameRewrite(),
     prebuildMcpTools(),
     prebuildSkills(),

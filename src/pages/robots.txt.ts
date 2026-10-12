@@ -13,12 +13,14 @@ export const GET: APIRoute = ({ site }) => {
   const body = `User-agent: *
 Disallow: /auth
 Disallow: /en/auth
+Disallow: /zh-CN/auth
 Disallow: /zh-HK/auth
 Disallow: /account
 Disallow: /en/account
+Disallow: /zh-CN/account
 Disallow: /zh-HK/account
 
-Sitemap: ${site}sitemap-index.xml
+Sitemap: ${site}sitemap.xml
 `
   return new Response(body, { headers: { 'Content-Type': 'text/plain' } })
 }
