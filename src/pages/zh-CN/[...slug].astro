@@ -9,7 +9,7 @@ import { buildMdxComponents } from '@/mdx-components'
 import { Pricing } from '@/components/mdx/Pricing'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { SkillPage } from '@/components/mdx/SkillPage'
-import { composeTitle } from '@/lib/site-title'
+import { resolvePageTitle, resolvePageDescription } from '@/lib/page-meta'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -28,27 +28,25 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
-const titleStr = composeTitle(
-  entry.data.title,
-  (entry.data as { titleTemplate?: string }).titleTemplate,
-)
+const titleStr = resolvePageTitle(entry.data)
+const description = resolvePageDescription(entry.data, entry.body)
 const layoutKind = resolveLayoutKind(entry)
 // docs/zh-CN/index.mdx — the homepage; hydrated island like Pricing (see en page).
 const isHome = entry.id === 'zh-CN/index'
 const isSkill = entry.id === 'zh-CN/skill/index'
 ---
 {layoutKind === 'docs' && (
-  <DocsLayout title={titleStr} locale="zh-CN" entry={entry} headings={headings}>
+  <DocsLayout title={titleStr} description={description} locale="zh-CN" entry={entry} headings={headings}>
     <Content components={buildMdxComponents('zh-CN')} />
   </DocsLayout>
 )}
 {layoutKind === 'api' && (
-  <ApiReferenceLayout title={titleStr} locale="zh-CN">
+  <ApiReferenceLayout title={titleStr} description={description} locale="zh-CN">
     <Content components={buildMdxComponents('zh-CN')} />
   </ApiReferenceLayout>
 )}
 {layoutKind === 'plain' && (
-  <PlainLayout title={titleStr} locale="zh-CN">
+  <PlainLayout title={titleStr} description={description} locale="zh-CN">
     {entry.data.id === 'pricing' ? (
       <Pricing client:load locale="zh-CN" />
     ) : isHome ? (
