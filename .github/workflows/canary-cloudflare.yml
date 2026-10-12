@@ -13,7 +13,7 @@ name: Canary · Cloudflare Pages
 on:
   push:
     branches:
-      - feat/nginx_decommission
+      - feat/nginx_decommission   # 改分支时同步 pack-skills.yml 的 CANARY_REF
     paths-ignore:
       - '.github/workflows/oss-probe.yml'
       - 'docs/superpowers/**'
@@ -79,6 +79,7 @@ jobs:
           VITE_SITE_HOSTNAME: ${{ steps.alias.outputs.host }}
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
           NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
+          ASSETS_DIR: _docs   # 资源目录分轨，见 astro.config.ts
 
       # 只断言本轮四项改动的产物形态，不做内容断言
       - name: Sanity check dist shape

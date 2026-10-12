@@ -46,6 +46,10 @@ jobs:
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
           NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
 
+      # 产物由 nginx 承载（open.longbridge.xyz），资源必须在 /assets（见 astro.config.ts）
+      - name: Assert assets dir
+        run: test ! -e dist/_docs && find dist/assets -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::OSS 产物的资源目录不是 /assets，nginx 会 404"; exit 1; }
+
       - name: Upload to Aliyun OSS
         run: |
           ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.zip" --exclude "*.xml" --meta=Cache-Control:max-age=31536000

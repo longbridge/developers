@@ -23,6 +23,7 @@ const SITE = process.env['VITE_SITE_HOSTNAME'] ?? 'https://open.longbridge.com'
 const sitemapLocale = (url: string) =>
   new URL(url).pathname.match(/^\/(zh-CN|zh-HK)(\/|$)/)?.[1] ?? 'en'
 const BUILD_FORMAT = process.env['BUILD_FORMAT'] === 'directory' ? 'directory' : 'file'
+const ASSETS_DIR = process.env['ASSETS_DIR'] === '_docs' ? '_docs' : 'assets'
 
 export default defineConfig({
   site: SITE,
@@ -35,9 +36,15 @@ export default defineConfig({
   //   「子目录首页 + 文件404规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
   //   流水线上设 BUILD_FORMAT=directory 即可。.cn 今天仍走 nginx（由 nginx 补 .html），
   //   所以现在同样用 'file'。
-  // assets:'_docs' 与 format 无关、两轨都需要：旧的 /assets/ 是四个项目共用的，谁也不敢
-  // 清理；分开之后 /assets/ 成为纯退役区，可在切流观察期后整目录删除。
-  build: { format: BUILD_FORMAT, assets: '_docs' },
+  // 资源目录按「谁来路由这个产物」分轨，默认 'assets'：
+  // - 发往 OSS、由 nginx 承载的构建（.com 的 OSS 副本、.cn、open.longbridge.xyz）必须用
+  //   'assets'。nginx 只有 /assets 映射到文档产物，其余路径落进 `location /` 被改写成
+  //   `$uri/index.html` 必 404（.cn 则 302 去 .com），实测见方案 §15.14。
+  // - 发往 Cloudflare Pages 与阿里云静态托管的构建设 ASSETS_DIR=_docs：与 SPA 的资源
+  //   命名空间分开，Function 不必区分 /assets 归谁。
+  // 默认取 'assets'：漏设变量时坏的是 CF 轨（仍可用，/assets 在 _routes 排除里走静态），
+  // 而不是 nginx 承载的线上站点。nginx 全部下线后改默认值并删掉这个开关。
+  build: { format: BUILD_FORMAT, assets: ASSETS_DIR },
   integrations: [
     react(),
     mdx(),

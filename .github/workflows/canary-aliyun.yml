@@ -76,6 +76,7 @@ jobs:
           # 本流水线验证的是 OSS 静态网站托管形态，必须显式要目录索引；
           # astro.config.ts 的默认值是 'file'（供 Cloudflare Pages 轨用）
           BUILD_FORMAT: directory
+          ASSETS_DIR: _docs   # 资源目录分轨，见 astro.config.ts
 
       - name: Sanity check dist shape
         run: |
