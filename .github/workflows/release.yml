@@ -7,6 +7,9 @@ on:
       - feat/lb
       - feat/deploy_cn
       - cloudflare-pages
+      # 临时：改造期间开发分支只发 Cloudflare 生产 project（切流前无消费方），两个 OSS
+      # 任务用 if 跳过——它们发的是 nginx 线上正在用的 .com / .cn。合 main 前删掉（方案 P5）
+      - feat/nginx_decommission
   workflow_dispatch:
 
 concurrency:
@@ -16,6 +19,7 @@ concurrency:
 jobs:
   deploy_release:
     name: build
+    if: github.ref_name != 'feat/nginx_decommission'
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -108,6 +112,7 @@ jobs:
 
   deploy_cn:
     name: build-cn
+    if: github.ref_name != 'feat/nginx_decommission'
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
