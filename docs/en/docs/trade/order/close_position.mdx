@@ -1,7 +1,7 @@
 ---
 slug: close_position
 sidebar_position: 9
-title: Close a position
+title: Close a Position
 ---
 
 Closes an existing position by submitting a regular order in the opposite direction. There is no dedicated close-position API, and the [Submit Order](./submit) request has no open/close flag: a long position is closed with a `Sell` order, a short position is covered with a `Buy` order. The sign of the position quantity is the only thing that decides the direction.

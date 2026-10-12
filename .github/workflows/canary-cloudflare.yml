@@ -1,0 +1,167 @@
+# Canary 验证 —— Cloudflare Pages 轨。测试域名 open-canary.longbridge.xyz，
+# 文档与 SPA 同域（SPA 由 Function 转发，见 functions/[[path]].ts 的 SITES）。
+#
+# 发到 canary 专用 project longbridge-developers-canary，并以它的 **production**
+# 对外，而不是做 longbridge-developers 的预览分支：测试域名的 DNS 在 Route 53，
+# Cloudflare 对外部 DNS 的自定义域名只路由到 production 分支，挂不到预览分支
+# （官方文档 pages/how-to/custom-branch-aliases 的明文限制）。
+#
+# 由 canary 分支触发，与 canary.yml（nginx 版 open.longbridge.xyz）同一分支。git 分支、
+# 部署标签与该 project 的 production 分支三处都叫 canary。
+name: Canary · Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - canary   # 改分支时同步 pack-skills.yml 的 CANARY_REF
+    paths-ignore:
+      - '.github/workflows/oss-probe.yml'
+      - 'docs/superpowers/**'
+  workflow_dispatch:
+    inputs:
+      cf_branch:
+        description: 'Cloudflare 部署标签。canary = 测试域名那份；其它值发成临时预览'
+        required: false
+        default: canary
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CF_ACCOUNT_ID: 335162bab35b74f065a0351212011d5a
+  CF_PROJECT: longbridge-developers-canary
+
+jobs:
+  preview:
+    name: build & deploy preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependency
+        run: bun install --frozen-lockfile
+
+      # wrangler 的 --branch 是部署标签。canary 即该 project 的 production（建 project
+      # 时声明），由测试域名承载；其它标签发成 <label>.<project>.pages.dev 临时预览
+      # （临时预览不在 Function 的站点表里，不转发 SPA 与登录页）。
+      - name: Resolve deploy target
+        id: alias
+        env:
+          RAW: ${{ inputs.cf_branch || 'canary' }}
+        run: |
+          label=$(echo "$RAW" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')
+          if [ "$label" = "canary" ]; then
+            host=https://open-canary.longbridge.xyz
+          else
+            host="https://${label}.${CF_PROJECT}.pages.dev"
+          fi
+          echo "label=$label" >> "$GITHUB_OUTPUT"
+          echo "host=$host" >> "$GITHUB_OUTPUT"
+          echo "部署标签: $label   对外域名: $host"
+
+      - name: Build canary
+        run: bun run build:canary
+        env:
+          # canonical / sitemap / llms.txt 里的链接指向本次部署的对外域名，不跳出验证环境
+          VITE_SITE_HOSTNAME: ${{ steps.alias.outputs.host }}
+          VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
+          NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
+          ASSETS_DIR: _docs   # 资源目录分轨，见 astro.config.ts
+
+      # 只断言本轮四项改动的产物形态，不做内容断言
+      - name: Sanity check dist shape
+        run: |
+          set -e
+          fail=0
+          need () { [ -e "dist/$1" ] || { echo "::error::缺少 dist/$1"; fail=1; }; }
+
+          need index.html
+          need docs/getting-started.html                # format:'file'（CF 轨规范 URL 无尾斜杠）
+          need docs/getting-started.md                  # .md 端点
+          need _docs                                    # 独立资源命名空间
+          need longbridge/longbridge-terminal/install   # 官方安装脚本
+          need 404.html                                 # G1：没有它 Pages 会 200 兜底
+          need _redirects                               # G4
+
+          # G2：zip 清单应与线上一致（1 个仓库整包 + 1 个 all + 每技能各一个）
+          zips=$(ls dist/skill/*.zip 2>/dev/null | wc -l | tr -d ' ')
+          echo "dist/skill 下 zip 数量: $zips"
+          [ "$zips" -ge 15 ] || { echo "::error::zip 数量 $zips < 15，prebuild-skills 可能失败"; fail=1; }
+          [ -e dist/skill/longbridge-all.zip ] || { echo "::error::缺少 longbridge-all.zip"; fail=1; }
+          if unzip -l dist/skill/skills.zip 2>/dev/null | grep -q '\.git/'; then
+            echo "::error::skills.zip 里仍含 .git/"; fail=1
+          fi
+
+          # 目录索引形态是 .cn 轨专用；出现在这里说明 BUILD_FORMAT 被误设，
+          # 会导致 Pages 把规范 URL 变成带尾斜杠、与 canonical 自相矛盾
+          [ ! -e dist/docs/getting-started/index.html ] || { echo "::error::出现目录索引产物，BUILD_FORMAT 被误设为 directory"; fail=1; }
+
+          # canary 必须全站禁爬：它以 production 身份挂在自定义域名上，Cloudflare 不会
+          # 像对预览部署那样自动补 noindex，这一行是唯一的防线
+          grep -qx 'Disallow: /' dist/robots.txt || { echo "::error::robots.txt 未全站禁爬，canary 会被搜索引擎收录"; fail=1; }
+
+          exit $fail
+
+      - name: Ensure Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT_ID }}
+        run: |
+          # project 已存在时这条必然报错，属正常，不中断流程；但输出与退出码要打出来，
+          # 权限不足长得一样，吞掉的话下一步部署失败会查不出根因。
+          # 钉 3.x：wrangler 4 要求 node >= 22，3.114.x 是 >= 16.17。
+          set +e
+          out=$(npx --yes wrangler@3 pages project create "$CF_PROJECT" --production-branch=canary 2>&1)
+          code=$?
+          echo "$out" | tail -5
+          echo "(exit=$code；非 0 若是「already exists」属正常，其余看上面输出)"
+          exit 0
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ env.CF_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ env.CF_PROJECT }} --branch=${{ steps.alias.outputs.label }} --commit-dirty=true
+
+      # 地址以 wrangler 实际返回为准；steps.alias 那个是本地推算的，仅作兜底
+      - name: Summary
+        env:
+          URL_EXACT: ${{ steps.deploy.outputs.deployment-url }}
+          URL_ALIAS: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
+          URL_GUESS: ${{ steps.alias.outputs.host }}
+        run: |
+          exact="${URL_EXACT:-（wrangler 未返回）}"
+          alias="${URL_ALIAS:-$URL_GUESS}"
+          {
+            echo "### Cloudflare Pages canary"
+            echo ""
+            echo "| | 地址 |"
+            echo "|---|---|"
+            echo "| 本次部署（唯一） | $exact |"
+            echo "| 稳定入口 | $alias |"
+            echo "| 测试域名（需已绑定） | https://open-canary.longbridge.xyz |"
+            echo ""
+            echo "验证清单："
+            echo '- `/login`、`/tfa`、`/binding`、`/password/reset` 应为 **200**（登录页）'
+            echo '- `/dashboard` 200，且其 `/_app/*` 资源全部 200'
+            echo '- `/robots.txt` 应为 `Disallow: /`'
+            echo '- `/zh-CN/llms.txt` 200；`/longbridge/longbridge-terminal/releases/latest` 200 且返回版本号'
+            echo '- `/definitely-not-exist-xyz` 应为 **404**'
+            echo '- `/en` 应 302 到 `/`'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "预览地址: $exact  |  $alias"
