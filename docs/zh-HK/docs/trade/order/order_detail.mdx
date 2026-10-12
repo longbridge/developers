@@ -460,7 +460,7 @@ func main() {
 | ∟∟ activate_rth            | string   | true     | 觸發後提交訂單是否允許盤前盤後。 |
 | ∟∟ submit_price            | string   | true     | 委託價格 |
 | multi_leg                  | object   | false    | 多腿策略信息，僅多腿期權組合訂單返回，非組合訂單不返回。 |
-| ∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可選值：**<br/> `0` - CoveredCall（股票擔保）<br/> `1` - CoveredPut（股票擔保）<br/> `2` - VerticalCallSpread（跨價期權）<br/> `3` - VerticalPutSpread（跨價期權）<br/> `4` - Collar（領式策略）<br/> `5` - Straddle（馬鞍式策略）<br/> `6` - Strangle（勒束式策略） |
+| ∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可選值：**<br/> `0` - CoveredCall（股票擔保）<br/> `1` - CoveredPut（股票擔保）<br/> `2` - VerticalCallSpread（跨價期權）<br/> `3` - VerticalPutSpread（跨價期權）<br/> `4` - Collar（領式策略）<br/> `5` - Straddle（馬鞍式策略）<br/> `6` - Strangle（勒束式策略）<br/> `7` - CalendarCallSpread（跨期期權策略）<br/> `8` - CalendarPutSpread（跨期期權策略） |
 | ∟ strategy_name            | string   | false    | 策略名稱 |
 | ∟ multileg_id              | string   | false    | 多腿組合 ID |
 | ∟ code                     | string   | false    | 多腿組合代碼 |
