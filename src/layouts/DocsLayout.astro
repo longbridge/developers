@@ -15,12 +15,13 @@ import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } f
 
 interface Props {
   title: string
+  description?: string
   locale: Locale
   entry: CollectionEntry<'docs'>
   headings: TocHeading[]
 }
 
-const { title, locale, entry, headings } = Astro.props
+const { title, description, locale, entry, headings } = Astro.props
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
 // `sidebar: false` (e.g. mcp.mdx — it has its own top-nav tab) renders the
 // docs page full-width with no left navigation, keeping only the TOC.
@@ -50,7 +51,7 @@ const crumbs: BreadcrumbItem[] =
     : [{ text: entry.data.title ?? '(untitled)' }]
 ---
 
-<BaseLayout title={title} locale={locale} hideFooter>
+<BaseLayout title={title} description={description} locale={locale} hideFooter>
   {showSidebar && (
     <LocalNav locale={locale} pathname={pathname} nodes={sidebar} headings={headings} client:load />
   )}
