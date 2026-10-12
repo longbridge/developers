@@ -9,7 +9,7 @@ import { buildMdxComponents } from '@/mdx-components'
 import { Pricing } from '@/components/mdx/Pricing'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { SkillPage } from '@/components/mdx/SkillPage'
-import { composeTitle } from '@/lib/site-title'
+import { resolvePageTitle, resolvePageDescription } from '@/lib/page-meta'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -30,10 +30,8 @@ const { entry } = Astro.props
 const { Content, headings } = await render(entry)
 // Document title — legacy `createTitle` parity (brand suffix for content pages,
 // brand prefix for the homepage's `titleTemplate` tagline). See lib/site-title.
-const titleStr = composeTitle(
-  entry.data.title,
-  (entry.data as { titleTemplate?: string }).titleTemplate,
-)
+const titleStr = resolvePageTitle(entry.data)
+const description = resolvePageDescription(entry.data, entry.body)
 const layoutKind = resolveLayoutKind(entry)
 // docs/en/index.mdx — the homepage. Like Pricing, it is an interactive island
 // (CLI/SDK tabs, copy buttons, scroll reveal) so it must hydrate; the
@@ -44,17 +42,17 @@ const isHome = entry.id === 'en/index'
 const isSkill = entry.id === 'en/skill/index'
 ---
 {layoutKind === 'docs' && (
-  <DocsLayout title={titleStr} locale="en" entry={entry} headings={headings}>
+  <DocsLayout title={titleStr} description={description} locale="en" entry={entry} headings={headings}>
     <Content components={buildMdxComponents('en')} />
   </DocsLayout>
 )}
 {layoutKind === 'api' && (
-  <ApiReferenceLayout title={titleStr} locale="en">
+  <ApiReferenceLayout title={titleStr} description={description} locale="en">
     <Content components={buildMdxComponents('en')} />
   </ApiReferenceLayout>
 )}
 {layoutKind === 'plain' && (
-  <PlainLayout title={titleStr} locale="en">
+  <PlainLayout title={titleStr} description={description} locale="en">
     {/* Pricing is a fully interactive island (billing toggle) — render it
         hydrated instead of the SSR-only mdx-component so the toggle works. */}
     {entry.data.id === 'pricing' ? (
