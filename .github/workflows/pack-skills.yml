@@ -25,6 +25,9 @@ jobs:
     name: Pack skills and upload to OSS
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: write   # 下面两步用 gh workflow run 触发 CF 重新构建
 
     steps:
       - name: Resolve environment
@@ -87,6 +90,28 @@ jobs:
             --include "*.zip" \
             --meta "Cache-Control:no-cache#Content-type:application/zip;charset=utf-8"
           echo "✓ Uploaded to release OSS"
+
+      # Cloudflare 上的 zip 是文档构建产物的一部分（prebuild-skills 打进 dist），上面的
+      # OSS 上传碰不到它。不重建的话，切到 CF 的站点会一直发旧 zip，直到下次有人推文档。
+      # GITHUB_TOKEN 发起的 workflow_dispatch 允许触发新的 run（GitHub 只对它和
+      # repository_dispatch 网开一面）。
+      - name: Rebuild release on Cloudflare
+        if: steps.setup.outputs.target == 'release' || steps.setup.outputs.target == 'both'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run release.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo "✓ Triggered release.yml on main"
+
+      - name: Rebuild canary on Cloudflare
+        if: steps.setup.outputs.target == 'canary' || steps.setup.outputs.target == 'both'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # 必须与 canary-cloudflare.yml 的 push 触发分支一致；那边切到 canary 分支时这里同步改
+          CANARY_REF: feat/nginx_decommission
+        run: |
+          gh workflow run canary-cloudflare.yml --repo "$GITHUB_REPOSITORY" --ref "$CANARY_REF"
+          echo "✓ Triggered canary-cloudflare.yml on $CANARY_REF"
 
       - name: Summary
         run: |
