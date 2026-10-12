@@ -187,8 +187,10 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
   //    /en/docs/**.md，与 nginx 一致：/en/skill-install.md 等先 302 掉前缀。
   //    不把 install 交给主站的入口（pages.dev，即 installMainSite 为空）放行全部
   //    .md：主站将来会从这类地址回源取 /en/skill/install.md 原文，那里跳转就断了。
+  //    /en/sitemap.xml 是英文 sitemap 的约定地址（nginx 同样排在 /en 跳转之前放行）。
   if (path.startsWith('/en/')) {
-    const keep = LOCALE_DOCS_MD.test(path) || (!mainSite && path.endsWith('.md'))
+    const keep =
+      LOCALE_DOCS_MD.test(path) || path === '/en/sitemap.xml' || (!mainSite && path.endsWith('.md'))
     if (!keep) return Response.redirect(new URL(path.slice('/en'.length) + url.search, url).toString(), 302)
   }
 
