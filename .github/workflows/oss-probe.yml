@@ -3,14 +3,8 @@
 name: OSS Permission Probe
 
 on:
-  # workflow_dispatch 的手动按钮只在默认分支上才出现,这个文件还在特性分支,
-  # 所以额外挂一个 push 触发:改动本文件即重跑,不用把探针合进 main。
+  # 只手动触发（随改造分支合入 main 后，Actions 页面即有手动按钮）
   workflow_dispatch:
-  push:
-    branches:
-      - feat/nginx_decommission
-    paths:
-      - '.github/workflows/oss-probe.yml'
 
 jobs:
   probe:

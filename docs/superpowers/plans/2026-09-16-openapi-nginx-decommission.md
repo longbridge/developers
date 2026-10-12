@@ -1391,6 +1391,16 @@ terminal 四条、`= /robots.txt`）同样要覆盖。
 - 副作用：公开仓 main 的每次 push 也会发同一个生产 project（旧代码、无 Function），两边互相覆盖、后推者生效。
   验证前确认当前生产部署来自 feat（看 CF 控制台或手动 dispatch 一次 `release.yml` 选 feat 分支）。
 - 发起前两仓 feat 均已 merge 最新 `origin/main`。
-- **合 main 前（P5）必须删掉这三处临时改动**，否则合入后 OSS 任务的 `if` 仍在、但对 main 无影响；
+- **已于 P5 合入前删除（2026-10-12）。** P5a 演练（两仓合入 `canary`，nginx 版 `open.longbridge.xyz`）文档与 SPA 均通过：资源全在 `/assets/` 且 200，`/pricing`、`/skill`、`/zh-CN` 为新构建。原要求：合 main 前（P5）必须删掉这三处临时改动，否则合入后 OSS 任务的 `if` 仍在、但对 main 无影响；
   触发分支残留会让旧分支名继续可发生产。
+
+### 15.16 canary 触发分支切到 `canary`（2026-10-12，随 P5 合入）
+
+§15.12 的前提（private 仓 assetsDir 经 GitLab 波及 nginx canary）已由资源目录分轨解决，P5a 也已在 `canary`
+分支上验证，故随合 main 一并切换：
+
+- 两仓 `canary-cloudflare.yml` 的 push 分支 `feat/nginx_decommission` → `canary`；公开仓 `pack-skills.yml` 的
+  `CANARY_REF` 同步为 `canary`。
+- `canary-aliyun.yml`（写权限阻塞未解）与 `oss-probe.yml`（一次性诊断）去掉 push 触发，只留手动。
+- 此后改造分支不再触发任何部署；`open-canary.longbridge.xyz` 随 `canary` 分支更新。
 

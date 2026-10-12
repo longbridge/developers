@@ -18,12 +18,7 @@
 name: Canary · Aliyun CDN + OSS
 
 on:
-  push:
-    branches:
-      - feat/nginx_decommission
-    paths-ignore:
-      # 只调探针时不要连带触发这条 17 分钟的完整构建
-      - '.github/workflows/oss-probe.yml'
+  # 只手动触发：上面的写权限阻塞未解，挂在 push 上每次都会失败。阻塞解除后再决定挂哪个分支
   workflow_dispatch:
 
 concurrency:

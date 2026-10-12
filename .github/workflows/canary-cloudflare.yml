@@ -6,14 +6,14 @@
 # Cloudflare 对外部 DNS 的自定义域名只路由到 production 分支，挂不到预览分支
 # （官方文档 pages/how-to/custom-branch-aliases 的明文限制）。
 #
-# 现阶段由改造分支触发，后续改为 canary 分支（前提见方案 §15.12）。部署标签与该
-# project 的 production 分支已按将来的分支名取作 canary。
+# 由 canary 分支触发，与 canary.yml（nginx 版 open.longbridge.xyz）同一分支。git 分支、
+# 部署标签与该 project 的 production 分支三处都叫 canary。
 name: Canary · Cloudflare Pages
 
 on:
   push:
     branches:
-      - feat/nginx_decommission   # 改分支时同步 pack-skills.yml 的 CANARY_REF
+      - canary   # 改分支时同步 pack-skills.yml 的 CANARY_REF
     paths-ignore:
       - '.github/workflows/oss-probe.yml'
       - 'docs/superpowers/**'

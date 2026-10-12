@@ -108,7 +108,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           # 必须与 canary-cloudflare.yml 的 push 触发分支一致；那边切到 canary 分支时这里同步改
-          CANARY_REF: feat/nginx_decommission
+          CANARY_REF: canary
         run: |
           gh workflow run canary-cloudflare.yml --repo "$GITHUB_REPOSITORY" --ref "$CANARY_REF"
           echo "✓ Triggered canary-cloudflare.yml on $CANARY_REF"
