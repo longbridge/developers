@@ -80,9 +80,9 @@ lb-openapi/
 
 | # | 假设 | 证据 | 状态 |
 |---|---|---|---|
-| 1 | 链路为 client→traefik→nginx→阿里云CDN→OSS | runtime @响应头含 `via: ens-cache*`/`x-oss-*`，`X-Frame-Options`/`X-Robots-Tag` 由 nginx 注入 | verified |
+| 1 | 链路为 client→traefik→nginx→阿里云 CDN→OSS | runtime @响应头含 `via: ens-cache*`/`x-oss-*`，`X-Frame-Options`/`X-Robots-Tag` 由 nginx 注入 | verified |
 | 2 | `lb-assets` 桶为公共读 | runtime @OSS 直连 200；对照 `lb-assets-hk` → 403 | verified |
-| 3 | 阿里云 CDN「访问URL重写」break=内部改写、Redirect=302/303/307，支持 PCRE 与 `$1`，单域名上限 50 条 | 阿里云文档 120538 | verified (doc) |
+| 3 | 阿里云 CDN「访问 URL 重写」break=内部改写、Redirect=302/303/307，支持 PCRE 与 `$1`，单域名上限 50 条 | 阿里云文档 120538 | verified (doc) |
 | 4 | SPA 的 `error_page 404 → index fallback` 是死代码 | code @`_common.conf` 无 `proxy_intercept_errors`；runtime @`/dashboard/<不存在>` → OSS 404 XML | verified |
 | 5 | `longbridge.json` 的 sub_filter 是空操作 | runtime @两份内容均不含 `open.longbridge.com` 串 | verified |
 | 6 | invite-code 注入在主站已可用；跨域 301 保留 query | runtime @`longbridge.com/skill-install.md?invite-code=PROBE123` 注入成功 | verified |
@@ -104,11 +104,11 @@ lb-openapi/
 | 22 | 其中 `longbridge-terminal/install(.ps1)` 被 10 处文档引用；8 个 svg 零引用 | code @`rg` 复核 | verified |
 | 23 | `~* \.md$` / `~* \.zip$` 是 longbridge 侧的**按扩展名通配**规则，longportapp 侧没有 | code @`_release.conf:71,77`；runtime @longportapp `/skill/longbridge.zip` → 404 | verified |
 | 24 | 往三个前缀写入的流水线共 6 条（5 活跃 + 1 遗留） | code @本地 52 clone `rg --hidden`；**仅覆盖本地 clone** | verified（范围受限） |
-| 25 | OSS 静态网站托管「文件404规则=Index」对不带尾斜杠路径返回 200 且地址栏不变 | 阿里云 OSS 文档 | verified (doc) |
+| 25 | OSS 静态网站托管「文件 404 规则=Index」对不带尾斜杠路径返回 200 且地址栏不变 | 阿里云 OSS 文档 | verified (doc) |
 | 26 | CDN 私有 Bucket 回源与 OSS 默认首页互斥 → **新桶必须公共读** | 阿里云文档 + 社区整理 | verified (doc) |
 | 27 | 阿里云 CDN 重写正则是否支持负向先行断言（`.cn` catch-all 302 需排除 `/docs` `/skill`） | — | **to measure**（建桶时） |
 | 28 | `cross-env A=1 cmd1 && cmd2` 中 A **不会**传给 cmd2 | runtime @直接实测：`cmd1: yes` / `cmd2: undefined` | verified |
-| 29 | 因 #28，`build:release`/`build:canary` 的 `astro build` 从未拿到 `VITE_API_BASE_URL`/`VITE_SITE_HOSTNAME`/`NODE_OPTIONS`；`build:cn` 因有 `sh -c` 包裹而正常 | runtime @对照实验：cn 桶 llms.txt 318×`open.longbridge.cn`（对） vs .com 桶 318×`open.longportapp.com`（错） | verified |
+| 29 | 因 #28，`build:release`/`build:canary` 的 `astro build` 从未拿到 `VITE_API_BASE_URL`/`VITE_SITE_HOSTNAME`/`NODE_OPTIONS`；`build:cn` 因有 `sh -c` 包裹而正常 | runtime @对照实验：cn 桶 llms.txt 318×`open.longbridge.cn`（对）vs .com 桶 318×`open.longportapp.com`（错） | verified |
 | 30 | llms.txt 的真实产出方是 `src/pages/llms.txt.ts`，`scripts/generate-llms.ts` 未被任何 CI 调用 | code @`rg "build:llms" .github/workflows/` 零命中 | verified |
 | 31 | `_cn.conf:15` include 的是 **`.com`** 的 `_llms.conf`，线上 `open.longbridge.cn/llms.txt` 服务的是 .com 桶那份错的 | code @`_cn.conf:15`；runtime @两桶内容对比 | verified |
 | 32 | longport-developers 的 llms.txt 本就输出 `.md` 链接（199 条中 198 条） | runtime @桶内统计 | verified |
@@ -160,7 +160,7 @@ set $skill_install_base "";                      # 桶根即站点根
 
 **响应头**：longbridge 侧 `X-Frame-Options: SAMEORIGIN`；longportapp 侧 `X-Robots-Tag: noindex, nofollow`；**验证域名**额外加 `X-Robots-Tag: noindex, nofollow` 防收录。
 
-**规则 7 与 OSS 的配合**：先 302 掉尾斜杠，再由「文件404规则=Index」处理无尾斜杠路径。`/` 本身不匹配规则 7（要求 `/` 前至少一字符），走 OSS 默认首页。
+**规则 7 与 OSS 的配合**：先 302 掉尾斜杠，再由「文件 404 规则=Index」处理无尾斜杠路径。`/` 本身不匹配规则 7（要求 `/` 前至少一字符），走 OSS 默认首页。
 
 **各域名差异**：canary / cn / longportapp 换对应桶；longportapp 系无 terminal 规则；`.cn` 末位加 catch-all 302 → `https://open.longbridge.com$uri`，需排除 `/docs` `/skill`（依赖假设 #27，若不支持负向先行断言则改为正向列举）。
 
@@ -601,7 +601,7 @@ GitHub 仓库 `longbridge/developers` 加两个 secret：`FE_LB_OPENAPI_ACCESS_K
 | 过滤参数 | **关闭**（query 要留给 `?invite-code=` 的 301） |
 | 缓存 | 遵循源站（ossutil 上传时已按类型分组设好 Cache-Control） |
 
-### 14.3 访问URL重写（12 条，顺序即优先级）
+### 14.3 访问 URL 重写（12 条，顺序即优先级）
 
 | 序 | 模式 | 匹配 | 目标 | canary |
 |---|---|---|---|---|
