@@ -56,7 +56,7 @@ export function prebuildSkills(): AstroIntegration {
             execFileSync('git', ['clone', '--depth', '1', '--quiet', SKILLS_REPO, SKILLS_DIR], { stdio: 'pipe' })
           }
         } catch (err) {
-          console.warn(`[prebuild-skills] git 失败(${err instanceof Error ? err.message : err}) — 跳过 zip`)
+          console.warn(`[prebuild-skills] git 失败 (${err instanceof Error ? err.message : err}) — 跳过 zip`)
           return
         }
 
@@ -70,7 +70,7 @@ export function prebuildSkills(): AstroIntegration {
           writeZip(path.join(DIST_SKILL_DIR, 'skills.zip'), SKILLS_DIR, ['.', '-x', '.git/*'])
           written.push('skills.zip')
         } catch (err) {
-          console.warn(`[prebuild-skills] skills.zip 失败(${err instanceof Error ? err.message : err})`)
+          console.warn(`[prebuild-skills] skills.zip 失败 (${err instanceof Error ? err.message : err})`)
         }
 
         if (!fs.existsSync(SKILLS_SUBDIR)) {
@@ -82,7 +82,7 @@ export function prebuildSkills(): AstroIntegration {
           writeZip(path.join(DIST_SKILL_DIR, 'longbridge-all.zip'), SKILLS_SUBDIR, ['.'])
           written.push('longbridge-all.zip')
         } catch (err) {
-          console.warn(`[prebuild-skills] longbridge-all.zip 失败(${err instanceof Error ? err.message : err})`)
+          console.warn(`[prebuild-skills] longbridge-all.zip 失败 (${err instanceof Error ? err.message : err})`)
         }
 
         for (const entry of fs.readdirSync(SKILLS_SUBDIR, { withFileTypes: true })) {
@@ -91,7 +91,7 @@ export function prebuildSkills(): AstroIntegration {
             writeZip(path.join(DIST_SKILL_DIR, `${entry.name}.zip`), SKILLS_SUBDIR, [entry.name])
             written.push(`${entry.name}.zip`)
           } catch (err) {
-            console.warn(`[prebuild-skills] ${entry.name}.zip 失败(${err instanceof Error ? err.message : err})`)
+            console.warn(`[prebuild-skills] ${entry.name}.zip 失败 (${err instanceof Error ? err.message : err})`)
           }
         }
 
