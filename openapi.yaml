@@ -2045,6 +2045,7 @@ paths:
                   limit_depth_level: 0
                   trigger_count: 0
                   monitor_price: ''
+                  delayed_until: '0'
                   free_status: None
                   free_amount: ''
                   free_currency: ''
@@ -2137,6 +2138,14 @@ paths:
                   nullable: true
                   maxLength: 255
                   description: Order remark (max 255 characters).
+                delayed_until:
+                  type: integer
+                  format: int64
+                  nullable: true
+                  description: |
+                    Time-condition submit time (Unix timestamp, seconds). `0` or omitted keeps the current
+                    time condition; `1` clears it; any other value sets a new time, which must be later
+                    than now and no more than 90 days ahead.
       responses:
         '200':
           description: Successful response
@@ -2461,6 +2470,7 @@ paths:
                       limit_depth_level: 0
                       trigger_count: 0
                       monitor_price: ''
+                      delayed_until: '0'
                   has_more: false
         default:
           description: Unexpected error
@@ -2666,6 +2676,7 @@ paths:
                       limit_depth_level: 0
                       trigger_count: 0
                       monitor_price: ''
+                      delayed_until: '0'
                   has_more: false
         default:
           description: Unexpected error
@@ -3586,3 +3597,7 @@ components:
           type: string
           nullable: true
           description: Monitor price for conditional orders.
+        delayed_until:
+          type: string
+          nullable: true
+          description: Time-condition submit time, Unix timestamp (seconds). `0` when the order is not a time-condition order.
