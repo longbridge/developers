@@ -33,7 +33,7 @@ export default defineConfig({
   //   一致）；'directory' 产 `foo/index.html` → 规范 URL 变成 `/foo/`，`/foo` 反被 308
   //   到带尾斜杠版本，而 canonical 仍写无尾斜杠，两者自相矛盾（实测见方案 §15.9）。
   // - 阿里云轨（.cn）将来由 OSS 静态网站托管直接承载时才需要 'directory'，配合
-  //   「子目录首页 + 文件404规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
+  //   「子目录首页 + 文件 404 规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
   //   流水线上设 BUILD_FORMAT=directory 即可。.cn 今天仍走 nginx（由 nginx 补 .html），
   //   所以现在同样用 'file'。
   // 资源目录按「谁来路由这个产物」分轨，默认 'assets'：
