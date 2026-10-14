@@ -265,6 +265,7 @@ func main() {
     "outside_rth": "ANY_TIME",
     "currency": "USD",
     "remark": "1680863603.927165",
+    "delayed_until": "0",
     "free_status": "None",
     "free_amount": "",
     "free_currency": "",
@@ -408,6 +409,7 @@ func main() {
 | currency                   | string   | true     | 結算貨幣                                                                                                                                                                                           |
 | outside_rth                | string   | true     | 是否允許盤前盤後<br/> 當訂單不是美股時，默認為 UnknownOutsideRth<br/><br/> **可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後<br/> `OVERNIGHT` - 夜盤                    |
 | remark                     | string   | true     | 備註                                                                                                                                                                                               |
+| delayed_until | string | true | 時間條件單的提交時間，格式為時間戳 (秒)<br/><br/>非時間條件單時為 `0` |
 | free_status                | string   | true     | 免傭狀態，默認為 None<br/><br/> **可選值：**<br/> `None` - 無<br/> `Calculated` - 免傭額待計算<br/> `Pending` - 待免傭<br/> `Ready` - 已免傭                                                       |
 | free_amount                | string   | true     | 免佣金額，默認為空字符串                                                                                                                                                                           |
 | free_currency              | string   | true     | 免傭貨幣，默認為空字符串                                                                                                                                                                           |
