@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocsLayout from '@/layouts/DocsLayout.astro'
+import PlainLayout from '@/layouts/PlainLayout.astro'
+import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
+import { resolveUrl, resolveLocale, resolveLayoutKind } from '@longbridge/openapi-utils'
+import { currentRegion, includedInRegion } from '@longbridge/openapi-utils'
+import { buildMdxComponents } from '@/mdx-components'
+import { Pricing } from '@/components/mdx/Pricing'
+import { NewHomePage } from '@longbridge/openapi-homepage'
+import { SkillPage } from '@/components/mdx/SkillPage'
+import { resolvePageTitle, resolvePageDescription } from '@/lib/page-meta'
+
+export async function getStaticPaths() {
+  const region = currentRegion()
+  const all = await getCollection('docs')
+  return all
+    .filter((e) => resolveLocale(e) === 'en')
+    .filter((e) => includedInRegion(resolveUrl(e), region))
+    .map((e) => {
+      const url = resolveUrl(e)
+      return {
+        params: { slug: url === '/' ? undefined : url.replace(/^\//, '') },
+        props: { entry: e },
+      }
+    })
+}
+
+const { entry } = Astro.props
+const { Content, headings } = await render(entry)
+// Document title — legacy `createTitle` parity (brand suffix for content pages,
+// brand prefix for the homepage's `titleTemplate` tagline). See lib/site-title.
+const titleStr = resolvePageTitle(entry.data)
+const description = resolvePageDescription(entry.data, entry.body)
+const layoutKind = resolveLayoutKind(entry)
+// docs/en/index.mdx — the homepage. Like Pricing, it is an interactive island
+// (CLI/SDK tabs, copy buttons, scroll reveal) so it must hydrate; the
+// MDX-mapped <NewHomePage/> is SSR-only.
+const isHome = entry.id === 'en/index'
+// docs/en/skill/index.mdx — hydrated island like the homepage (tabs, copy
+// buttons, catalog filter + modal).
+const isSkill = entry.id === 'en/skill/index'
+---
+{layoutKind === 'docs' && (
+  <DocsLayout title={titleStr} description={description} locale="en" entry={entry} headings={headings}>
+    <Content components={buildMdxComponents('en')} />
+  </DocsLayout>
+)}
+{layoutKind === 'api' && (
+  <ApiReferenceLayout title={titleStr} description={description} locale="en">
+    <Content components={buildMdxComponents('en')} />
+  </ApiReferenceLayout>
+)}
+{layoutKind === 'plain' && (
+  <PlainLayout title={titleStr} description={description} locale="en">
+    {/* Pricing is a fully interactive island (billing toggle) — render it
+        hydrated instead of the SSR-only mdx-component so the toggle works. */}
+    {entry.data.id === 'pricing' ? (
+      <Pricing client:load locale="en" />
+    ) : isHome ? (
+      <NewHomePage client:load locale="en" />
+    ) : isSkill ? (
+      <SkillPage client:load locale="en" />
+    ) : (
+      <Content components={buildMdxComponents('en')} />
+    )}
+  </PlainLayout>
+)}

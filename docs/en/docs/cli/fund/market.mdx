@@ -1,0 +1,101 @@
+---
+title: 'market data'
+sidebar_label: 'market data'
+sidebar_position: 1
+---
+
+# longbridge fund (market data)
+
+Browse the mutual-fund catalog and a fund's market data from the terminal — the hot list, the filterable fund list, and per-fund detail, analysis, trend, returns, performance, net value (NAV) and holdings.
+
+Every fund is identified by its **`counter_id`** (e.g. `UT/FD/HK0000384492`), not a stock symbol. Get one from `longbridge fund hot` or `longbridge fund list`, then pass it as the positional argument to the other commands.
+
+## Basic Usage
+
+```bash
+# Hot-selling funds — a good source of counter_ids
+longbridge fund hot
+```
+
+```
+| Counter ID          | Name                          | Currency | Earning Rate | Risk Level |
+|---------------------|-------------------------------|----------|--------------|------------|
+| UT/FD/HK0000384492  | Allianz Income and Growth     | USD      | 12.34%       | Medium     |
+| UT/FD/KYG3861F1019  | JPMorgan Global Bond          | USD      | 4.21%        | Low        |
+```
+
+## Examples
+
+### Discover funds
+
+```bash
+# Hot-selling fund list
+longbridge fund hot
+# Full fund list, optionally narrowed by quick-filter ids and earning-rate intervals
+longbridge fund list
+longbridge fund list --quick-id 1 --quick-id 2 --time-interval 1m --time-interval 1y
+# The filter options you can pass to `list`
+longbridge fund filters
+```
+
+### Fund detail & analysis
+
+```bash
+# Fund profile: name, ISIN, risk level, manager, fees…
+longbridge fund detail UT/FD/HK0000384492
+# Analysis (level 1) and the deeper level-2 breakdown; --period selects the window
+longbridge fund analysis UT/FD/HK0000384492
+longbridge fund analysis-detail UT/FD/HK0000384492 --period 3
+# Trend chart data
+longbridge fund trend UT/FD/HK0000384492
+```
+
+### Returns & performance
+
+```bash
+# Annual / quarterly returns (paged)
+longbridge fund annual-returns UT/FD/HK0000384492 --page 1 --size 20
+longbridge fund quarterly-returns UT/FD/HK0000384492
+# Performance figures, and a peer comparison
+longbridge fund performance UT/FD/HK0000384492
+longbridge fund performance-comparison UT/FD/HK0000384492 --period 3
+```
+
+### Net value (NAV)
+
+```bash
+# Latest NAV
+longbridge fund nav UT/FD/HK0000384492
+# Historical NAV — paged, or by a relative time range
+longbridge fund nav-history UT/FD/HK0000384492 --page 1 --size 30
+longbridge fund nav-range UT/FD/HK0000384492 --month-before 6
+longbridge fund nav-range UT/FD/HK0000384492 --year-before 1
+```
+
+### Holdings
+
+```bash
+# A fund's top-10 holdings (--scene selects the breakdown)
+longbridge fund holdings UT/FD/HK0000384492
+# Reverse lookup: which funds hold a given stock
+longbridge fund stock-holdings UT/FD/HK0000384492 --limit 20
+```
+
+Add `--format json` to any command for machine-readable output.
+
+## Options
+
+| Option | Commands | Description | Default |
+| ------ | -------- | ----------- | ------- |
+| `--quick-id` | `list` | Quick-filter id (repeatable) | — |
+| `--time-interval` | `list` | Earning-rate interval, e.g. `1m` `3m` `1y` (repeatable) | — |
+| `--period` | `analysis`, `analysis-detail`, `trend`, `performance-comparison` | Analysis / comparison period selector | — |
+| `--page` / `--size` | `annual-returns`, `quarterly-returns`, `nav-history` | Page number and page size | — |
+| `--month-before` / `--year-before` | `nav-range` | Relative NAV window before now | — |
+| `--scene` | `holdings` | Holdings breakdown scene | — |
+| `--limit` | `stock-holdings` | Max number of stocks to return | — |
+| `--format` | all | Output format: `table` \| `json` | `table` |
+
+## Requirements
+
+These are market-data commands and need no account permission. Funds are addressed by `counter_id`, which you obtain from `fund hot` / `fund list`. For your holdings and orders, see [my positions](/docs/cli/fund/positions) and [orders & trading](/docs/cli/fund/orders).

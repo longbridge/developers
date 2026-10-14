@@ -1,0 +1,80 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import type { CollectionEntry } from 'astro:content'
+import type { Locale } from '@longbridge/openapi-utils'
+import Breadcrumb from '@components/shell/Breadcrumb'
+import type { BreadcrumbItem } from '@components/shell/Breadcrumb'
+import LocalNav from '@components/shell/LocalNav'
+import Sidebar from '@components/shell/Sidebar'
+import TOC from '@components/shell/TOC'
+import type { TocHeading } from '@components/shell/TOC'
+import PrevNext from '@components/shell/PrevNext'
+import DocMeta from '@components/shell/DocMeta.astro'
+import DocFooter from '@components/shell/DocFooter.astro'
+import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } from '@longbridge/openapi-utils'
+
+interface Props {
+  title: string
+  description?: string
+  locale: Locale
+  entry: CollectionEntry<'docs'>
+  headings: TocHeading[]
+}
+
+const { title, description, locale, entry, headings } = Astro.props
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
+// `sidebar: false` (e.g. mcp.mdx — it has its own top-nav tab) renders the
+// docs page full-width with no left navigation, keeping only the TOC.
+const showSidebar = entry.data.sidebar !== false
+
+// Legacy renders the page title as the article H1. When the MDX body already
+// starts with its own `#` heading (155 pages do), VitePress shows that; when
+// it doesn't (index, quote/objects, …), the frontmatter title becomes the
+// H1. Mirror that: inject the title H1 only when the body has no level-1
+// heading. (No body H1 uses the `{#id}` syntax, so the headings array — which
+// misses JSX-rewritten headings — is reliable for this check.)
+const hasBodyH1 = headings.some((h) => h.depth === 1)
+const injectedTitle = !hasBodyH1 ? entry.data.title : undefined
+const sidebar = buildSidebar(locale, resolveSidebarScope(pathname))
+const { prev, next } = getPrevNext(sidebar, pathname)
+
+// Build multi-layer breadcrumb by walking the sidebar tree; fall back
+// to just the current page title if the pathname isn't in the sidebar.
+const trail = findBreadcrumbTrail(sidebar, pathname)
+const crumbs: BreadcrumbItem[] =
+  trail.length > 0
+    ? trail.map((t, i) => ({
+        text: t.text,
+        // Last crumb is the current page — no href.
+        href: i < trail.length - 1 ? t.href : undefined,
+      }))
+    : [{ text: entry.data.title ?? '(untitled)' }]
+---
+
+<BaseLayout title={title} description={description} locale={locale} hideFooter>
+  {showSidebar && (
+    <LocalNav locale={locale} pathname={pathname} nodes={sidebar} headings={headings} client:load />
+  )}
+  <div class:list={['docs-layout', { 'docs-layout--no-sidebar': !showSidebar }]}>
+    {showSidebar && (
+      <Sidebar nodes={sidebar} pathname={pathname} client:load transition:persist="docs-sidebar" />
+    )}
+    <div class="docs-body">
+      <div class="docs-inner">
+        <div class="docs-main">
+          <article class="docs-content">
+            {showSidebar && !entry.data.hide_breadcrumb && (
+              <Breadcrumb locale={locale} items={crumbs} />
+            )}
+            {injectedTitle && <h1>{injectedTitle}</h1>}
+            <slot />
+            <DocMeta entry={entry} locale={locale} />
+            <PrevNext prev={prev} next={next} />
+          </article>
+          <TOC headings={headings} locale={locale} client:load />
+        </div>
+        <DocFooter locale={locale} />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

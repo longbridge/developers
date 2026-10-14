@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* Tailwind v4 requires explicit source scanning — global.css lives in
+   src/styles/ so relative sources must climb to src/, packages/, and docs/
+   for the class extractor to find them. */
+@source "../**/*.{astro,tsx,ts,jsx,js}";
+@source "../../packages/ui/src/**/*.{tsx,ts}";
+@source "../../docs/**/*.{mdx,md}";
+
+/* Inter (variable) — self-hosted via @fontsource, matching legacy which
+   bundles Inter woff2 for its `.vp-doc` content font. */
+@import "@fontsource-variable/inter";
+
+@import "./tokens.css";
+@import "./shiki.css";
+
+/* Tailwind v4 custom dark variant — the site toggles theme via a
+   `data-mode="dark"` attribute on <html> (tokens.css line 388), not the
+   default `.dark` class. Without this declaration, tailwind's built-in
+   `dark:` prefix falls back to `prefers-color-scheme: dark` and the
+   attribute-scoped nested syntax `[[data-mode='dark']_&]:hidden` does
+   not resolve correctly, so both light+dark logos render simultaneously. */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+@import "./docs.css";
+@import "./mdx-page-overrides.css";
+@import "./callout.css";
+
+/* reset */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: 400;
+  background: var(--lbus-c-bg);
+  color: var(--lbus-c-text);
+  font-family: var(--lbus-font-sans);
+  font-synthesis: style;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background var(--lbus-transition-base), color var(--lbus-transition-base);
+}
+/* The top nav is position:fixed (like legacy .app-nav) so it stays pinned
+   during elastic overscroll instead of rubber-banding away from the fixed
+   mobile local-nav below it. Reserve its 60px height here — this replaces the
+   space the header used to occupy in flow when it was sticky, so content
+   position is unchanged. */
+#main-content { padding-top: 60px; }
+/* Whale app (Longbridge in-app WebView): the host provides its own chrome, so
+   hide the site top nav, mobile local-nav and marketing footer, and drop the
+   fixed-header offset. Ported from legacy LayoutInner `v-if="!isWhaleApp"`. */
+html.is-whale-app [data-lbus-component='top-nav'],
+html.is-whale-app [data-lbus-component='local-nav'],
+html.is-whale-app footer[data-lbus-component='footer'] {
+  display: none !important;
+}
+html.is-whale-app #main-content {
+  padding-top: 0 !important;
+}
+/* Theme-toggle circular reveal (ThemeToggle view-transition): disable the
+   default root cross-fade so the clip-path animation is the only effect. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+/* NOTE: tailwind v4 preflight already resets:
+   - button/input font (was: `input, button, textarea, select { font: inherit }`)
+   - img/svg/video display:block + max-width:100%
+   Both original resets sat OUTSIDE @layer, so they cascaded after tailwind
+   utilities and blocked `.font-medium` on <button> AND `.hidden` on <img>.
+   The latter caused BOTH light+dark logos to render simultaneously — a
+   subtle logo bug that survived four rounds of pixel-parity review.
+   Removed. Rely on tailwind v4 preflight, which lives in @layer base and
+   is correctly overridden by utilities. */

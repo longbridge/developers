@@ -30,18 +30,36 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
       - name: Install dependency
-        run: bun install
+        run: bun install --frozen-lockfile --verbose
 
       - name: Build canary
         run: bun run build:canary
         env:
           VITE_PORTAL_GATEWAY_BASE_URL: 'https://mr.longbridge.xyz'
-          NODE_OPTIONS: --max-old-space-size=12288 --expose-gc
+          NODE_OPTIONS: --max-old-space-size=14336 --expose-gc
+
+      # nginx 的 location / 只认目录索引（foo/index.html），/docs、/sdk 只认扁平（foo.html）
+      - name: Reshape routes for nginx
+        run: |
+          bun run scripts/copy-routes.ts
+          test -f dist/skill/index.html && test ! -e dist/skill.html || { echo "::error::copy-routes 未生效，nginx 的 location / 会取不到页面"; exit 1; }
+
+      # 产物由 nginx 承载（open.longbridge.xyz），资源必须在 /assets（见 astro.config.ts）
+      - name: Assert assets dir
+        run: test ! -e dist/_docs && find dist/assets -maxdepth 1 \( -name '*.js' -o -name '*.css' \) | grep -q . || { echo "::error::OSS 产物的资源目录不是 /assets，nginx 会 404"; exit 1; }
 
       - name: Upload to Aliyun OSS
         run: |
-          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.zip" --meta=Cache-Control:max-age=31536000
-          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.zip" --meta "Cache-Control:no-cache#Content-type:application/zip;charset=utf-8"
-          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.md" --meta "Cache-Control:no-cache#Content-type:text/markdown;charset=utf-8"
-          ${{github.workspace}}/ossutil cp ./docs/.vitepress/dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.html" --meta "Cache-Control:no-cache#Content-type:text/html;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --exclude "*.html" --exclude "*.md" --exclude "*.zip" --exclude "*.xml" --meta=Cache-Control:max-age=31536000
+          ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.xml" --meta "Cache-Control:no-cache#Content-type:application/xml;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.zip" --meta "Cache-Control:no-cache#Content-type:application/zip;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.md" --meta "Cache-Control:no-cache#Content-type:text/markdown;charset=utf-8"
+          ${{github.workspace}}/ossutil cp ./dist oss://lb-assets/github/canary/open.longbridge.com/new-docs/raw/ -u -r -j 10 -e oss-cn-hangzhou.aliyuncs.com -i ${{ secrets.FE_LB_ASSET_ACCESS_KEY_ID }} -k ${{ secrets.FE_LB_ASSET_ACCESS_KEY_SECRET }} --include "*.html" --meta "Cache-Control:no-cache#Content-type:text/html;charset=utf-8"

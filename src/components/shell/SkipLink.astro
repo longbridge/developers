@@ -1,0 +1,34 @@
+---
+interface Props {
+  href?: string
+  label?: string
+}
+const { href = '#main-content', label = 'Skip to main content' } = Astro.props
+---
+
+<a
+  class="skip-link"
+  href={href}
+  data-lbus-component="skip-link"
+>
+  {label}
+</a>
+
+<style>
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 9999;
+    padding: 0.5rem 1rem;
+    background: var(--lb-bg-1, #fff);
+    color: var(--lb-fg-1, #000);
+    font-size: 0.875rem;
+    text-decoration: none;
+    border-radius: 0 0 0.25rem 0;
+    transition: top 0.1s;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+</style>

@@ -1,0 +1,156 @@
+import { t } from '@longbridge/openapi-utils'
+import type { Locale } from '@longbridge/openapi-utils'
+
+interface Props {
+  locale: Locale
+}
+
+const LOGO_LIGHT =
+  'https://assets.lbkrs.com/uploads/e76f6d93-80f8-4f9b-8b8d-2c86f0c94a78/longbridge-developers-light.png'
+const LOGO_DARK =
+  'https://assets.lbkrs.com/uploads/37a18fa4-46a4-408c-a36a-560004eb3cfb/longbridge-developers-dark.png'
+
+function localePath(locale: Locale, path: string): string {
+  if (locale === 'en') return path
+  return `/${locale}${path}`
+}
+
+function sgBaseUrl(locale: Locale): string {
+  return locale === 'en' ? 'https://longbridge.com/sg' : 'https://longbridge.com/sg/zh-CN'
+}
+
+export default function Footer({ locale }: Props) {
+  const year = new Date().getFullYear()
+  const base = sgBaseUrl(locale)
+  const homeHref = locale === 'en' ? '/' : `/${locale}/`
+
+  return (
+    <footer className="border-t border-[color:var(--lb-stroke)] text-[color:var(--lb-fg-2)] text-sm pt-14 pb-10 px-6" data-lbus-component="footer">
+      <div className="max-w-[1240px] mx-auto grid gap-x-6 gap-y-9 grid-cols-2 lg:gap-10 lg:grid-cols-[1.6fr_repeat(5,1fr)]">
+        {/* Brand column */}
+        <div className="flex flex-col gap-2 col-span-full lg:col-auto">
+          <a href={homeHref} className="inline-flex items-center gap-2 text-[color:var(--lbus-c-text)] no-underline" aria-label="Longbridge Developers">
+            <img
+              className="h-6 w-auto block [[data-mode='dark']_&]:hidden"
+              src={LOGO_LIGHT}
+              alt="Longbridge Developers"
+            />
+            <img
+              className="h-6 w-auto hidden [[data-mode='dark']_&]:inline-block"
+              src={LOGO_DARK}
+              alt="Longbridge Developers"
+            />
+          </a>
+          <p>{t(locale, 'footer.tagline')}</p>
+          <div className="self-start inline-flex items-center gap-2 mt-[10px] px-3 py-1.5 rounded-full border border-[color:var(--lb-stroke)] text-[color:var(--lb-fg-2)] text-[0.72rem]">
+            <span
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: 999,
+                background: 'var(--lb-up)',
+                boxShadow: '0 0 0 3px color-mix(in srgb, var(--lb-up) 25%, transparent)',
+                flexShrink: 0,
+                display: 'inline-block',
+              }}
+            />
+            <span>{t(locale, 'footer.status')}</span>
+          </div>
+        </div>
+
+        {/* Products */}
+        <div>
+          <h5 className="text-[12px] font-semibold uppercase tracking-[0.96px] mb-[14px] mt-0 text-[color:var(--lb-fg-3)]">{t(locale, 'footer.products')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[10px]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/skill')}>AI Skill</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/cli')}>CLI</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/llm')}>LLMs</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://navi-lang.org" target="_blank" rel="noreferrer">Navi</a></li>
+          </ul>
+        </div>
+
+        {/* AI Integrations */}
+        <div>
+          <h5 className="text-[12px] font-semibold uppercase tracking-[0.96px] mb-[14px] mt-0 text-[color:var(--lb-fg-3)]">{t(locale, 'footer.integrations')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[10px]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/mcp')}>MCP</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://chatgpt.com/plugins/longbridge" target="_blank" rel="noreferrer">ChatGPT App</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://claude.ai/directory/longbridge" target="_blank" rel="noreferrer">Claude Connector</a></li>
+          </ul>
+        </div>
+
+        {/* Resources */}
+        <div>
+          <h5 className="text-[12px] font-semibold uppercase tracking-[0.96px] mb-[14px] mt-0 text-[color:var(--lb-fg-3)]">{t(locale, 'footer.resources')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[10px]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/getting-started')}>{t(locale, 'footer.gettingStarted')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs')}>Documentation</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/assets')}>{t(locale, 'footer.assets')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/quote/pull/quote')}>Quote API</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/trade/order/submit')}>Trade API</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/changelog')}>{t(locale, 'footer.changelog')}</a></li>
+            <li>
+              <a
+                className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]"
+                href="https://github.com/longbridge/developers/issues"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t(locale, 'footer.feedback')}
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Company */}
+        <div>
+          <h5 className="text-[12px] font-semibold uppercase tracking-[0.96px] mb-[14px] mt-0 text-[color:var(--lb-fg-3)]">{t(locale, 'footer.company')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[10px]">
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://longbridge.com" target="_blank" rel="noreferrer">Longbridge</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://longbridge.com/download" target="_blank" rel="noreferrer">{t(locale, 'footer.download')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://status.longbridge.com" target="_blank" rel="noreferrer">{t(locale, 'footer.statusPage')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://longbridge.com/about" target="_blank" rel="noreferrer">{t(locale, 'footer.about')}</a></li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href="https://github.com/longbridge" target="_blank" rel="noreferrer">GitHub</a></li>
+          </ul>
+        </div>
+
+        {/* Legal */}
+        <div>
+          <h5 className="text-[12px] font-semibold uppercase tracking-[0.96px] mb-[14px] mt-0 text-[color:var(--lb-fg-3)]">{t(locale, 'footer.legal')}</h5>
+          <ul className="list-none p-0 m-0 flex flex-col gap-[10px]">
+            <li>
+              <a
+                className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]"
+                href={`${base}/support/topics/us-trade/user-agreement`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t(locale, 'footer.terms')}
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]"
+                href={`${base}/support/topics/Other/privacy-policy`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t(locale, 'footer.privacy')}
+              </a>
+            </li>
+            <li><a className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]" href={localePath(locale, '/docs/legal')}>{t(locale, 'footer.agreements')}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-[color:var(--lb-stroke)] max-w-[1240px] mx-auto mt-10 pt-6 flex flex-col items-center gap-3 text-center sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:text-left text-[color:var(--lb-fg-3)] text-[12.5px]">
+        <div>{t(locale, 'footer.rights', { year })}</div>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <a className="text-[color:var(--lb-fg-3)] no-underline hover:text-[color:var(--lb-brand)]" href="/">English</a>
+          <a className="text-[color:var(--lb-fg-3)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-CN/">简体中文</a>
+          <a className="text-[color:var(--lb-fg-3)] no-underline hover:text-[color:var(--lb-brand)]" href="/zh-HK/">繁體中文</a>
+        </div>
+      </div>
+    </footer>
+  )
+}

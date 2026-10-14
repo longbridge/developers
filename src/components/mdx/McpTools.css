@@ -1,0 +1,271 @@
+/*
+ * McpTools.css
+ * Scoped to [data-lbus-component="mcp-tools"].
+ * Ported from McpTools.vue <style scoped>.
+ * VitePress CSS vars mapped to Astro project equivalents:
+ *   --vp-c-bg        → --lbus-c-bg
+ *   --vp-c-divider   → --lbus-c-divider
+ *   --vp-c-text-1    → --lb-fg-1
+ *   --vp-c-text-2    → --lb-fg-2
+ *   --vp-c-text-3    → --lb-fg-3
+ *   --vp-c-brand-1   → --lb-brand
+ *   --vp-c-default-soft → --lb-bg-2
+ *   --vp-c-bg-soft   → --lb-bg-2
+ *   --vp-nav-height  → 64px (constant)
+ * Dark mode uses [data-mode="dark"] to match project convention.
+ */
+
+[data-lbus-component="mcp-tools"].mcp-tools {
+  margin: 1rem 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  position: sticky;
+  top: 64px;
+  z-index: 1;
+  background: var(--lbus-c-bg);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-input-wrap {
+  width: 320px;
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--lb-fg-3);
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-input {
+  width: 100%;
+  padding: 0.55rem 2.25rem 0.55rem 2.25rem;
+  border: 1px solid var(--lbus-c-divider);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--lb-fg-1);
+  font-size: 0.9rem;
+  line-height: 1.25;
+  outline: none;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-input::placeholder {
+  color: var(--lb-fg-3);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-clear {
+  position: absolute;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--lb-fg-3);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-clear:hover {
+  color: var(--lb-fg-1);
+  background: var(--lb-bg-2);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-empty {
+  padding: 1rem;
+  text-align: center;
+  color: var(--lb-fg-2);
+  font-size: 0.9rem;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tools-list {
+  border: 1px solid var(--lbus-c-divider);
+  border-radius: 6px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 0 0.75rem;
+}
+
+/* ── Accordion item ── */
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-item {
+  border-bottom: 1px solid var(--lbus-c-divider);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-item:last-child {
+  border-bottom: 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: var(--lb-fg-1);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-chevron {
+  color: var(--lb-fg-3);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-trigger[data-state="open"] .mcp-accordion-chevron {
+  transform: rotate(90deg);
+}
+
+/* ── Accordion content ── */
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-content {
+  overflow: hidden;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-content[data-state="closed"] {
+  display: none;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-accordion-content-inner {
+  padding-bottom: 0.75rem;
+}
+
+/* ── Tool title in trigger ── */
+
+[data-lbus-component="mcp-tools"] .mcp-tool-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tool-icon {
+  color: var(--lb-fg-3);
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tool-icon--open {
+  color: var(--lb-brand);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tool-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 1rem;
+  color: var(--lb-fg-1);
+  background: transparent;
+  padding: 0;
+}
+
+/* ── Tool content ── */
+
+[data-lbus-component="mcp-tools"] .mcp-tool-desc {
+  margin: 0 0 0.5rem;
+  color: var(--lb-fg-2);
+  font-size: 0.75rem;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-tool-no-params {
+  margin: 0;
+  color: var(--lb-fg-3);
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-params-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--lb-fg-2);
+}
+
+[data-lbus-component="mcp-tools"] .mcp-params {
+  margin: 0;
+  padding: 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param {
+  padding: 0.3rem 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param:first-child {
+  padding-top: 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param:last-child {
+  padding-bottom: 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0 0 0.2rem;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 0.75rem;
+  color: var(--lb-fg-1);
+  background: var(--lb-bg-2);
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-type {
+  font-size: 0.75rem;
+  color: var(--lb-fg-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-required {
+  font-size: 0.75rem;
+  color: var(--lb-fg-2);
+  background: var(--lb-bg-2);
+  padding: 0.08rem 0.35rem;
+  border-radius: 4px;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-body {
+  margin: 0;
+  padding-left: 0;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-desc {
+  margin: 0;
+  color: var(--lb-fg-2);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+[data-lbus-component="mcp-tools"] .mcp-param-meta {
+  margin: 0;
+  color: var(--lb-fg-3);
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+}
+
+/* ── Dark mode overrides ── */
+
+[data-mode="dark"] [data-lbus-component="mcp-tools"] .mcp-tools-input {
+  border-color: var(--lbus-c-divider);
+}

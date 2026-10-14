@@ -1,0 +1,509 @@
+/* Two-level docs layout, matching legacy:
+   (1) `.docs-layout` is a FULL-WIDTH grid — sidebar flush-left, content
+       region (`.docs-body`) fills the rest. It is NOT a centered 80rem block
+       (that squeezed the article to the middle with huge margins on wide
+       screens).
+   (2) inside the content region, `.docs-inner` caps the article + TOC at
+       ~1280px and centers them within the post-sidebar space (the legacy
+       `.VPDoc .container` model). */
+.docs-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .docs-layout {
+    grid-template-columns: 16rem minmax(0, 1fr);
+    /* Left-align the sidebar column with the header's centered 1240px
+       container so the sidebar items line up under the logo. The header is
+       `max-w-[1240px] px-6 mx-auto`; this padding matches its left edge, and
+       the sidebar's own px-6 (Sidebar.tsx) then matches the logo's px-6
+       inset. The content region still extends to the right for wide text. */
+    padding-left: max(0px, calc((100vw - 1240px) / 2));
+  }
+  /* `sidebar: false` pages (e.g. MCP) drop the left nav column and let the
+     content region fill the width, centered by `.docs-inner`. */
+  .docs-layout--no-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 0;
+  }
+}
+/* No-sidebar pages also drop the breadcrumb, which is what normally offsets
+   the article from the nav. Restore legacy's gap (nav bottom → h1 = 32px on
+   the MCP page). */
+.docs-layout--no-sidebar .docs-content {
+  padding-top: 32px;
+}
+
+/* Content region (everything right of the sidebar). The top wash (晕染) lives
+   here so it never bleeds under the sidebar/menu column. */
+.docs-body {
+  position: relative;
+  min-width: 0;
+}
+.docs-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 420px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 90% 60% at 50% 0%,
+    color-mix(in srgb, var(--lb-brand) 12%, transparent) 0%,
+    transparent 72%
+  );
+}
+
+.docs-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+@media (min-width: 1024px) {
+  .docs-inner {
+    padding: 0 2rem 2rem;
+  }
+}
+
+/* article + TOC live in this row; DocFooter is a sibling BELOW it inside
+   `.docs-inner`. Keeping the footer out of `.docs-main` means the sticky
+   TOC's containing block is just the article row, so a long TOC can no
+   longer slide down and overlap the footer. */
+.docs-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+@media (min-width: 1024px) {
+  .docs-main {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    gap: 4rem;
+  }
+}
+
+/* NOTE: `.docs-sidebar` positioning is specified inline on Sidebar.tsx
+   (lg:sticky lg:top-[60px] lg:h-[calc(100vh-60px)]). */
+
+.docs-content {
+  min-width: 0;
+  /* Left inset for the article body; the breadcrumb is pulled back out so it
+     hangs at the column's left edge, 32px left of the body (matches legacy). */
+  padding-left: 2rem;
+}
+
+.docs-content [data-lbus-component="breadcrumb"] {
+  margin-left: -2rem;
+}
+/* The breadcrumb <ol> would otherwise inherit the prose list padding
+   (`.docs-content ol { padding-left: 20px }`), pushing "Home" 20px right of the
+   nav edge and out of alignment with the article body. */
+.docs-content [data-lbus-component="breadcrumb"] ol {
+  padding-left: 0;
+}
+
+/* Body text — legacy `.vp-doc` uses --vp-c-text-1 = #3c3c43 (a soft near-black,
+   not pure black). Our --lb-fg-1 (#0A0E19) rendered the article noticeably
+   darker. Scope the softer tone to the doc content; headings and table cells
+   inherit it. Site chrome (nav/sidebar) keeps the --lb-* tokens. */
+.docs-content {
+  /* Legacy `.vp-doc` renders its content in Inter (self-hosted) at 15px /
+     ~1.75 line-height — a different face from the SF Pro Display used by the
+     site chrome. Match it here (headings inherit Inter too; code/table keep
+     their own font/size). */
+  font-family: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #3c3c43;
+  /* Legacy `.vp-doc` renders on an antialiased (grayscale) body; without this
+     macOS falls back to subpixel smoothing, which makes the same #3c3c43 text
+     look noticeably heavier/darker. Match legacy so the body reads lighter. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[data-mode="dark"] .docs-content {
+  color: rgba(255, 255, 245, 0.86);
+}
+
+/* Headings — legacy `.vp-doc`: 600 weight; h1 32 / h2 24 (no border) / h3 20;
+   larger top margins for section rhythm. */
+.docs-content h1,
+.docs-content h2,
+.docs-content h3,
+.docs-content h4,
+.docs-content h5,
+.docs-content h6 {
+  color: inherit;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  /* Anchor gutter: headings host the absolute `.header-anchor` (#) on their
+     left. */
+  position: relative;
+  /* Offset in-page anchor jumps (TOC + heading #) so the 61px sticky header
+     doesn't cover the target heading. */
+  scroll-margin-top: 80px;
+}
+.docs-content h1 { font-size: 2rem; margin-top: 0; }
+.docs-content h2 { font-size: 1.5rem; margin-top: 3rem; }
+.docs-content h3 { font-size: 1.25rem; margin-top: 2rem; }
+.docs-content h4 { font-size: 1rem; margin-top: 1.5rem; }
+
+.docs-content p { margin: 1em 0; }
+
+/* Bold text — legacy `.vp-doc strong` is 600, not the browser-default 700. */
+.docs-content strong,
+.docs-content b { font-weight: 600; }
+
+/* Links — legacy `.vp-doc a`: body-colored, underlined, medium weight
+   (NOT brand-tinted). */
+.docs-content a {
+  color: inherit;
+  /* Legacy underlines are a barely-there rgba(0,0,0,.06) at 4px offset — NOT
+     the text color. --lbus-c-divider is exactly that value in light, and flips
+     to a faint white in dark (legacy leaves it black, i.e. invisible in dark;
+     the token is a small improvement). Longhands so the shorthand doesn't
+     reset decoration-color back to currentColor. */
+  text-decoration-line: underline;
+  text-decoration-color: var(--lbus-c-divider);
+  text-underline-offset: 4px;
+  font-weight: 500;
+}
+.docs-content a:hover { color: var(--lb-brand); }
+
+/* Chrome links inside the article (breadcrumb, prev/next) are not prose links —
+   keep their component styling instead of the underlined body-link treatment. */
+.docs-content [data-lbus-component="breadcrumb"] a,
+.docs-content [data-lbus-component="prev-next"] a,
+.docs-content [data-lbus-component="doc-meta"] a {
+  text-decoration: none;
+  font-weight: inherit;
+}
+
+/* Doc meta row (Markdown / Edit / Last Updated) — legacy `.VPDocFooter`:
+   muted, small, icons inline, above the pager. */
+.doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: var(--lb-fg-2);
+}
+.doc-meta__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lb-fg-2);
+}
+.doc-meta__link:hover { color: var(--lb-brand); }
+.doc-meta svg { display: block; flex-shrink: 0; }
+.doc-meta__updated { color: var(--lb-fg-2); }
+
+/* Slim doc footer — legacy `.vp-doc .footer`: a full-width row split into two
+   groups pushed to opposite ends (space-between). Replaces the big 4-column
+   marketing footer, which legacy docs pages do not render. Lives as a
+   full-width child of `.docs-inner` (spans the article + TOC columns);
+   `padding-left` matches the article body's 2rem inset so its left edge lines
+   up under the content, not the breadcrumb. */
+.docs-doc-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* nowrap keeps the two groups on one line (space-between pushes them apart);
+     each group wraps its own links internally when space is tight. Matches
+     legacy `.vp-doc .footer`. */
+  flex-wrap: nowrap;
+  gap: 12px 24px;
+  margin-top: 24px;
+  padding: 16px 0 32px 2rem;
+  /* Legacy groups are `text-xs`: 12px / 16px line-height, Inter (the footer
+     sits outside `.docs-content`, so restate Inter — it won't inherit it). */
+  font-family: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+}
+.docs-doc-footer__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px; /* legacy gap-y-2 (row 8) + gap-x-5 (col 20) */
+}
+/* Below the sidebar breakpoint the content column is narrow — stack the two
+   groups instead of cramming them side by side. */
+@media (max-width: 1023px) {
+  .docs-doc-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  /* Single-column on mobile: drop the desktop left inset (and the breadcrumb's
+     negative pull) so the article's left/right padding is symmetric — the
+     16px comes from `.docs-inner` on both sides. The doc footer shares the same
+     2rem inset, so reset it too. */
+  .docs-content {
+    padding-left: 0;
+  }
+  .docs-content [data-lbus-component='breadcrumb'] {
+    margin-left: 0;
+  }
+  .docs-doc-footer {
+    padding-left: 0;
+  }
+}
+/* Legacy `.footer-link`: constant muted #929295 (same in light + dark),
+   weight 400, no underline. */
+.docs-doc-footer a {
+  color: #929295;
+  font-weight: 400;
+  text-decoration: none;
+}
+.docs-doc-footer a:hover {
+  color: var(--lb-brand);
+}
+.docs-doc-footer__github {
+  display: flex;
+  align-items: center;
+}
+.docs-doc-footer svg {
+  display: block;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────────────────
+   Shiki emits `pre.astro-code` with an inline background (github-light = white,
+   github-dark = #24292e). Match legacy `.vp-doc`: radius 8, 20/24 padding,
+   13px mono. The light container bg overrides shiki's inline white to
+   --lb-bg-2 (≈ legacy #f6f6f7); the dark bg swap is handled in shiki.css. */
+.docs-content pre {
+  overflow-x: auto;
+  margin: 16px 0;
+  padding: 20px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+html:not([data-mode="dark"]) .docs-content pre.astro-code {
+  background: var(--lb-bg-2) !important;
+}
+.docs-content pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Inline code (code not inside a pre) — legacy `.vp-doc :not(pre) > code`. */
+.docs-content :not(pre) > code {
+  background: var(--lb-bg-2);
+  color: var(--lb-fg-1);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: var(--app-mono);
+  font-size: 0.875em;
+}
+
+/* ── CLI command terminal card ─────────────────────────────────────────────
+   `<CliCommand>` blocks (mdx preflight → `code` prop → CliCommand.tsx).
+   Terminal card: header row (">_ CLI" + copy) over a body whose comment /
+   command-keyword / subcommand tokens use the site's github-light/dark shiki
+   palette, so it reads like the fenced code blocks. */
+.cli-command {
+  margin: 16px 0;
+  border: 1px solid var(--lbus-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--lb-bg-2);
+  font-family: var(--app-mono);
+}
+.cli-command__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--lbus-c-divider);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--lb-fg-2);
+}
+.cli-command__prompt {
+  color: var(--lb-fg-3);
+  margin-right: 4px;
+}
+/* Header actions: "CLI Usage Docs" (book) + "Install CLI" (download) links,
+   matching legacy. */
+.cli-command__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.cli-command__action {
+  display: inline-flex;
+  align-items: center;
+  color: var(--lb-fg-2);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.15s, color 0.15s;
+}
+.cli-command__action:hover {
+  opacity: 1;
+  color: var(--lb-brand);
+}
+.cli-command__action svg {
+  display: block;
+}
+.cli-command__body {
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--lb-fg-1);
+}
+.cli-line {
+  white-space: pre;
+}
+/* github-light token colours (match shiki github-light used by fenced code) */
+.cli-comment { color: #6e7781; }
+.cli-tok-kw { color: #8250df; }
+.cli-tok-sub { color: #0550ae; }
+/* github-dark equivalents */
+[data-mode="dark"] .cli-comment { color: #8b949e; }
+[data-mode="dark"] .cli-tok-kw { color: #d2a8ff; }
+[data-mode="dark"] .cli-tok-sub { color: #79c0ff; }
+
+/* ── Tables ──────────────────────────────────────────────────────────────
+   Legacy `.vp-doc table`: block-level with horizontal scroll, collapsed 1px
+   dividers (--lbus-c-divider = rgba(0,0,0,.06)), header + even-row zebra in
+   --lb-bg-2, 8/16 cell padding, muted header text. */
+.docs-content table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  width: max-content;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+}
+.docs-content th,
+.docs-content td {
+  border: 1px solid var(--lbus-c-divider);
+  padding: 8px 16px;
+}
+.docs-content th {
+  background: var(--lb-bg-2);
+  color: var(--lb-fg-2);
+  font-weight: 600;
+  text-align: left;
+}
+.docs-content td {
+  color: inherit;
+}
+.docs-content tbody tr:nth-child(2n) {
+  background: var(--lb-bg-2);
+}
+
+/* Lists — Tailwind Preflight strips list markers; legacy `.vp-doc` keeps
+   disc/decimal at 20px indent. */
+/* Mermaid diagrams (client-rendered from ```mermaid fences by mermaid-init). */
+.mermaid-diagram { display: flex; justify-content: center; margin: 20px 0; }
+.mermaid-diagram svg { max-width: 100%; height: auto; }
+
+.docs-content ul,
+.docs-content ol { padding-left: 20px; margin: 16px 0; }
+.docs-content ul { list-style: disc; }
+.docs-content ol { list-style: decimal; }
+.docs-content li { margin: 4px 0; }
+.docs-content li > ul,
+.docs-content li > ol { margin: 4px 0; }
+
+/* Blockquote — legacy: subtle 2px divider bar, muted italic text. */
+.docs-content blockquote {
+  border-left: 2px solid var(--lbus-c-divider);
+  padding-left: 16px;
+  color: var(--lb-fg-2);
+  font-style: italic;
+  margin: 16px 0;
+}
+
+/* Horizontal rule + images. */
+.docs-content hr {
+  border: none;
+  border-top: 1px solid var(--lbus-c-divider);
+  margin: 24px 0;
+}
+.docs-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Scrollbars ────────────────────────────────────────────────────────────
+   Thin, rounded, theme-aware scrollbars on the docs scroll regions (sidebar,
+   TOC, code blocks, tables), drawn from the design system: `--app-card-stroke-
+   strong` thumb over a transparent track, `999px` pill radius, darkening to
+   `--lb-fg-3` on hover. Firefox uses scrollbar-width/color; WebKit uses the
+   pseudo-elements. Scoped to docs so the rest of the site keeps native bars. */
+[data-lbus-component="sidebar"],
+.docs-toc,
+.docs-content pre,
+.docs-content table {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lb-fg-3) transparent;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar,
+.docs-toc::-webkit-scrollbar,
+.docs-content pre::-webkit-scrollbar,
+.docs-content table::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar-track,
+.docs-toc::-webkit-scrollbar-track,
+.docs-content pre::-webkit-scrollbar-track,
+.docs-content table::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar-thumb,
+.docs-toc::-webkit-scrollbar-thumb,
+.docs-content pre::-webkit-scrollbar-thumb,
+.docs-content table::-webkit-scrollbar-thumb {
+  background: var(--lb-fg-3);
+  border-radius: 999px;
+}
+[data-lbus-component="sidebar"]::-webkit-scrollbar-thumb:hover,
+.docs-toc::-webkit-scrollbar-thumb:hover,
+.docs-content pre::-webkit-scrollbar-thumb:hover,
+.docs-content table::-webkit-scrollbar-thumb:hover {
+  background: var(--lb-fg-2);
+}
+
+.docs-toc {
+  position: sticky;
+  /* Pin at the SAME offset as the at-rest position (60px header + the 2.75rem
+     gap below it) so the TOC does NOT jump up to the header when the page
+     scrolls — it holds the level it has at the top of the page. */
+  top: calc(60px + 2.75rem);
+  align-self: start;
+  /* Drop the TOC down so "On this page" starts level with the article body,
+     not the breadcrumb — matches legacy (aside sits ~48px below the nav at
+     rest). margin-top (not padding) so it still sticks near the top on
+     scroll. */
+  margin-top: 2.75rem;
+  padding: 0 0 1.5rem;
+  max-height: calc(100vh - 60px - 2.75rem);
+  overflow-y: auto;
+}
+
+/* Vertical divider between the article and the TOC, starting at "On this
+   page" — legacy `.VPDocAsideOutline .content` uses border-left 1px
+   rgba(0,0,0,.06), which is exactly --lbus-c-divider. On the inner nav so
+   the line begins at the title, not in the margin-top gap above it. */
+.docs-toc nav {
+  border-left: 1px solid var(--lbus-c-divider);
+  padding-left: 1.5rem;
+}
+
+@media (max-width: 1023px) { .docs-toc { display: none; } }

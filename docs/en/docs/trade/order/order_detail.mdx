@@ -1,0 +1,479 @@
+﻿---
+slug: order_detail
+sidebar_position: 4
+title: Order Details
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+This API is used for order detail query
+
+<CliCommand>
+# Replace the order ID below with your actual order ID
+longbridge order detail 693664675163312128
+</CliCommand>
+
+<SDKLinks module="trade" klass="TradeContext" method="order_detail" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/trade/order </td></tr>
+</tbody>
+</table>
+
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
+
+| Name        | Type   | Required | Description                                                               |
+| ----------- | ------ | -------- | ------------------------------------------------------------------------- |
+| order_id    | string | YES      | Order ID for specifying order ID query, for example: `701276261045858304` |
+| is_attached | bool   | NO       | Whether `order_id` refers to an attached order                           |
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python" default>
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+
+resp = ctx.order_detail(
+    order_id = "701276261045858304",
+    is_attached = False,
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+
+    resp = await ctx.order_detail(
+        order_id = "701276261045858304",
+        is_attached = False,
+    )
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.orderDetail('701276261045858304')
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.trade.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             TradeContext ctx = TradeContext.create(config)) {
+            OrderDetail resp = ctx.getOrderDetail("701276261045858304").get();
+            System.out.println(resp);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, _) = TradeContext::new(config);
+    let resp = ctx.order_detail("701276261045858304").await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+#include <iostream>
+#include <longbridge.hpp>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+using namespace longbridge;
+using namespace longbridge::trade;
+
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    TradeContext ctx = TradeContext::create(config);
+
+    ctx.order_detail("701276261045858304", [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << res->order_id << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
+    });
+
+    std::cin.get();
+    return 0;
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	tctx, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tctx.Close()
+	detail, err := tctx.OrderDetail(context.Background(), "701276261045858304")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", detail)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "order_id": "828940451093708800",
+    "status": "FilledStatus",
+    "stock_name": "Apple",
+    "quantity": "10",
+    "executed_quantity": "10",
+    "price": "200.000",
+    "executed_price": "164.660",
+    "submitted_at": "1680863604",
+    "side": "Buy",
+    "symbol": "AAPL.US",
+    "order_type": "LO",
+    "last_done": "164.660",
+    "trigger_price": "0.0000",
+    "msg": "",
+    "tag": "Normal",
+    "time_in_force": "Day",
+    "expire_date": "2023-04-10",
+    "updated_at": "1681113000",
+    "trigger_at": "0",
+    "trailing_amount": "",
+    "trailing_percent": "",
+    "limit_offset": "",
+    "limit_depth_level": 0,
+    "monitor_price": "",
+    "trigger_count": 1,
+    "trigger_status": "NOT_USED",
+    "outside_rth": "ANY_TIME",
+    "currency": "USD",
+    "remark": "1680863603.927165",
+    "delayed_until": "0",
+    "free_status": "None",
+    "free_amount": "",
+    "free_currency": "",
+    "deductions_status": "NONE",
+    "deductions_amount": "",
+    "deductions_currency": "",
+    "platform_deducted_status": "NONE",
+    "platform_deducted_amount": "",
+    "platform_deducted_currency": "",
+    "history": [
+      {
+        "price": "164.6600",
+        "quantity": "10",
+        "status": "FilledStatus",
+        "msg": "Execution of 10",
+        "time": "1681113000"
+      },
+      {
+        "price": "200.0000",
+        "quantity": "10",
+        "status": "NewStatus",
+        "msg": "",
+        "time": "1681113000"
+      }
+    ],
+    "charge_detail": {
+      "items": [
+        {
+          "code": "BROKER_FEES",
+          "name": "Broker Fees",
+          "fees": []
+        },
+        {
+          "code": "THIRD_FEES",
+          "name": "Third-party Fees",
+          "fees": []
+        }
+      ],
+      "total_amount": "0",
+      "currency": "USD"
+    },
+    "attached_orders": [
+      {
+        "order_id": "706388312699592705",
+        "attached_type_display": 2,
+        "trigger_price": "10.500",
+        "quantity": "200",
+        "executed_qty": "0",
+        "status": "NewStatus",
+        "updated_at": "1651644898",
+        "withdrawn": false,
+        "gtd": "",
+        "time_in_force": "Day",
+        "counter_id": "",
+        "trigger_status": 0,
+        "executed_amount": "0",
+        "tag": 0,
+        "submitted_at": "1651644897",
+        "executed_price": "0.000",
+        "force_only_rth": "RTH_ONLY",
+        "reviewed": false,
+        "activate_order_type": "MIT",
+        "activate_rth": "RTH_ONLY",
+        "submit_price": "",
+        "limit_depth_level": 0
+      }
+    ],
+    "multi_leg": {
+      "strategy": "2",
+      "strategy_name": "Vertical spread",
+      "multileg_id": "Spread_QQQ20260731C764/767",
+      "code": "QQQ 260731 764/767 Vertical spread",
+      "legs": [
+        {
+          "symbol": "QQQ260731C764000.US",
+          "side": "Buy",
+          "position": "LONG",
+          "ratio_quantity": "1",
+          "strike_price": "764",
+          "expire_date": "20260731",
+          "contract_direction": "C"
+        },
+        {
+          "symbol": "QQQ260731C767000.US",
+          "side": "Sell",
+          "position": "SHORT",
+          "ratio_quantity": "1",
+          "strike_price": "767",
+          "expire_date": "20260731",
+          "contract_direction": "C"
+        }
+      ]
+    }
+  }
+}
+```
+
+### Response Status
+
+| Status | Description                            | Schema                                      |
+| ------ | -------------------------------------- | ------------------------------------------- |
+| 200    | Order detail query successful          | [order_detail_rsp](#schemaorder_detail_rsp) |
+| 400    | Query failed, request parameter error. | None                                        |
+
+<aside className="success">
+</aside>
+
+## Schemas
+
+### order_detail_rsp
+
+<a id="schemaorder_detail_rsp"></a>
+<a id="schemaorder_detail_rsp"></a>
+
+Order Information
+
+| Name                       | Type     | Required | Description                                                                                                                                                                                                                                                    |
+| -------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| order_id                   | string   | true     | Order ID                                                                                                                                                                                                                                                       |
+| status                     | string   | true     | [Order Status](../trade-definition#orderstatus)                                                                                                                                                                                                                |
+| stock_name                 | string   | true     | Stock Name                                                                                                                                                                                                                                                     |
+| quantity                   | string   | true     | Order Quantity                                                                                                                                                                                                                                                 |
+| executed_quantity          | string   | true     | Executed Quantity<br/><br/>When the order is not executed, it is 0                                                                                                                                                                                             |
+| price                      | string   | true     | Order Price<br/><br/>When the market price conditional order is not triggered, it is an empty string                                                                                                                                                           |
+| executed_price             | string   | true     | Execution Price<br/><br/>When the order is not executed, it is 0                                                                                                                                                                                               |
+| submitted_at               | string   | true     | Submitted Time                                                                                                                                                                                                                                                 |
+| side                       | string   | true     | Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                                                                                                                                                                                    |
+| symbol                     | string   | true     | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                                                                                                                                                                   |
+| order_type                 | string   | true     | [Order Type](../trade-definition#ordertype)                                                                                                                                                                                                                    |
+| last_done                  | string   | true     | Last done.<br/><br/>when the order is not filled, value is empty string                                                                                                                                                                                        |
+| trigger_price              | string   | true     | `LIT` / `MIT` Order Trigger Price.<br/><br/>When the order is not `LIT` / `MIT` order, value is empty string                                                                                                                                                   |
+| msg                        | string   | true     | Rejected message or remark, default value is empty string.                                                                                                                                                                                                     |
+| tag                        | string   | true     | Order tag<br/><br/> **Enum Value**<br/> `Normal` - Normal Order<br/> `Gtc` - Long term Order<br/> `Grey` - Grey Order                                                                                                                                          |
+| time_in_force              | string   | true     | Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order                                                                                                                      |
+| expire_date                | string   | true     | Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`.<br/><br/> When not a long term order, default value is empty string                                                                                                                  |
+| updated_at                 | string   | true     | Last updated time, formatted as a timestamp (second)                                                                                                                                                                                                           |
+| trigger_at                 | string   | true     | Conditional order trigger time. formatted as a timestamp (second)                                                                                                                                                                                              |
+| trailing_amount            | string   | true     | `TSLPAMT` order trailing amount.<br/><br/>When the order is not `TSLPAMT` order, value is empty string                                                                                                                                                         |
+| trailing_percent           | string   | true     | `TSLPPCT` order trailing percent.<br/><br/>When the order is not `TSLPPCT` order, value is empty string                                                                                                                                                        |
+| limit_offset               | string   | true     | `TSLPPCT` order limit offset amount.<br/><br/>When the order is not `TSLPPCT` order, value is empty string                                                                                                                                                     |
+| trigger_status             | string   | true     | Conditional Order Trigger Status<br/> When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED<br/><br/> **Enum Value**<br/> `NOT_USED`<br/> `DEACTIVE`<br /> `ACTIVE`<br /> `RELEASED`                |
+| currency                   | string   | true     | Currency                                                                                                                                                                                                                                                       |
+| outside_rth                | string   | true     | Enable or disable outside regular trading hours<br/> Default is `UnknownOutsideRth` when the order is not a US stock<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - Regular trading hour only<br/> `ANY_TIME` - Any time<br/> `OVERNIGHT` - Overnight"            |
+| remark                     | string   | true     | Remark                                                                                                                                                                                                                                                         |
+| delayed_until | string | true | Time-condition submit time, formatted as a timestamp (second).<br/><br/>`0` when the order is not a time-condition order |
+| free_status                | string   | true     | Commission-free Status, default value is None<br/><br/> **Enum Value:**<br/> `None` - None<br/> `Calculated` - Commission-free amount to be calculated<br/> `Pending` - Pending commission-free<br/> `Ready` - Commission-free applied                         |
+| free_amount                | string   | true     | Commission-free amount, default value is empty string.                                                                                                                                                                                                         |
+| free_currency              | string   | true     | Commission-free currency, default value is empty string.                                                                                                                                                                                                       |
+| deductions_status          | string   | true     | Deduction status/Cashback Status, default value is NONE<br/><br/> **Enum Value:**<br/> `NONE` - Pending Settlement <br/> `NO_DATA` - Settled with no data<br/> `PENDING` - Settled and pending distribution<br/> `DONE` - Settled and distributed              |
+| deductions_amount          | string   | true     | Deduction amount, default value is empty string.                                                                                                                                                                                                               |
+| deductions_currency        | string   | true     | Deduction currency, default value is empty string.                                                                                                                                                                                                             |
+| platform_deducted_status   | string   | true     | Platform fee deduction status/Cashback Status, default value is NONE<br/><br/> **Enum Value:**<br/> `NONE` - Pending Settlement <br/> `NO_DATA` - Settled with no data<br/> `PENDING` - Settled and pending distribution<br/> `DONE` - Settled and distributed |
+| platform_deducted_amount   | string   | true     | Platform fee deduction amount, default value is empty string.                                                                                                                                                                                                  |
+| platform_deducted_currency | string   | true     | Platform fee deduction currency, default value is empty string.                                                                                                                                                                                                |
+| history                    | object[] | true     | Order history details                                                                                                                                                                                                                                          |
+| ∟ price                    | string   | true     | Executed price for executed orders, submitted price for expired, canceled, rejected orders, etc.                                                                                                                                                               |
+| ∟ quantity                 | string   | true     | Executed quantity for executed orders, remaining quantity for expired, canceled, rejected orders, etc.                                                                                                                                                         |
+| ∟ status                   | string   | true     | Order status                                                                                                                                                                                                                                                   |
+| ∟ msg                      | string   | true     | Execution or error message                                                                                                                                                                                                                                     |
+| ∟ time                     | string   | true     | Occurrence time                                                                                                                                                                                                                                                |
+| charge_detail              | object   | true     | Order charges                                                                                                                                                                                                                                                  |
+| ∟ total_amount             | string   | true     | Total charges amount                                                                                                                                                                                                                                           |
+| ∟ currency                 | string   | true     | Settlement currency                                                                                                                                                                                                                                            |
+| ∟ items                    | object[] | true     | Order charge details                                                                                                                                                                                                                                           |
+| ∟∟ code                    | string   | true     | Charge category code<br/><br/> **Enum Value:**<br/> `UNKNOWN`<br/> `BROKER_FEES`<br/> `THIRD_FEES`                                                                                                                                                             |
+| ∟∟ name                    | string   | true     | Charge category name                                                                                                                                                                                                                                           |
+| ∟∟ fees                    | object[] | true     | Charge details                                                                                                                                                                                                                                                 |
+| ∟∟∟ code                   | string   | true     | Charge code                                                                                                                                                                                                                                                    |
+| ∟∟∟ name                   | string   | true     | Charge name                                                                                                                                                                                                                                                    |
+| ∟∟∟ amount                 | string   | true     | Charge amount                                                                                                                                                                                                                                                  |
+| ∟∟∟ currency               | string   | true     | Charge currency                                                                                                                                                                                                                                                |
+| ∟ limit_depth_level      | int32    | true     | Specifies the bid/ask depth level |
+| ∟ monitor_price          | string   | true     | Monitoring price |
+| ∟ trigger_count          | int32    | true     | Number of triggers |
+| ∟ attached_orders          | object[] | false    | List of attached order details |
+| ∟∟ order_id                | string   | true     | Attached order ID |
+| ∟∟ attached_type_display   | int32    | true     | Attached order type.<br/><br/> **Enum Value:**<br/> `1` - Take Profit<br/> `2` - Stop Loss |
+| ∟∟ trigger_price           | string   | true     | Trigger price |
+| ∟∟ quantity                | string   | true     | Order quantity |
+| ∟∟ executed_qty            | string   | true     | Executed quantity |
+| ∟∟ status                  | string   | true     | Order status |
+| ∟∟ updated_at              | string   | true     | Last updated time, formatted as a timestamp (second) |
+| ∟∟ withdrawn               | boolean  | true     | Whether the order has been withdrawn |
+| ∟∟ gtd                     | string   | true     | GTD expiration date, format: `YYYY-MM-DD` |
+| ∟∟ time_in_force           | string   | true     | Time in force Type<br/><br/> **Enum Value:**<br/> `Day` - Day Order<br/> `GTC` - Good Til Canceled Order<br/> `GTD` - Good Til Date Order |
+| ∟∟ counter_id              | string   | true     | Counter order ID |
+| ∟∟ trigger_status          | int32    | true     | Conditional order trigger status after the attached order is activated.<br/> `0` - Not activated<br/> `1` - Monitoring<br/> `2` - Cancelled<br/> `4` - Triggered |
+| ∟∟ executed_amount         | string   | true     | Executed amount |
+| ∟∟ tag                     | int32    | true     | Order tag |
+| ∟∟ submitted_at            | string   | true     | Submitted time, formatted as a timestamp (second) |
+| ∟∟ executed_price          | string   | true     | Executed price |
+| ∟∟ force_only_rth          | string   | true     | Whether execution is restricted to regular trading hours only |
+| ∟∟ reviewed                | boolean  | true     | Whether the order has been reviewed |
+| ∟∟ activate_order_type     | string   | true     | Order type submitted after triggering, e.g. `LIT` (limit-if-touched) or `MIT` (market-if-touched) |
+| ∟∟ activate_rth            | string   | true     | Whether the order submitted after triggering allows pre/post market trading |
+| ∟∟ submit_price            | string   | true     | Submitted price |
+| ∟∟ limit_depth_level       | int32    | true     | Specifies the bid/ask depth level |
+| multi_leg                  | object   | false    | Multi-leg strategy information. Only returned for multi-leg option combination orders; otherwise not returned. |
+| ∟ strategy                 | string   | false    | Multi-leg strategy<br/><br/> **Enum Value:**<br/> `0` - CoveredCall (Covered stock)<br/> `1` - CoveredPut (Covered stock)<br/> `2` - VerticalCallSpread (Vertical spread)<br/> `3` - VerticalPutSpread (Vertical spread)<br/> `4` - Collar<br/> `5` - Straddle<br/> `6` - Strangle<br/> `7` - CalendarCallSpread (Calendar)<br/> `8` - CalendarPutSpread (Calendar) |
+| ∟ strategy_name            | string   | false    | Strategy name |
+| ∟ multileg_id              | string   | false    | Multi-leg combination ID |
+| ∟ code                     | string   | false    | Multi-leg combination code |
+| ∟ legs                     | object[] | false    | Legs of the combination order |
+| ∟∟ symbol                  | string   | false    | Option symbol, use `ticker.region` format, example: `QQQ260731C764000.US` |
+| ∟∟ side                    | string   | false    | Order Side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell` |
+| ∟∟ position                | string   | false    | Position direction<br/><br/> **Enum Value:**<br/> `LONG`<br/> `SHORT` |
+| ∟∟ ratio_quantity          | string   | false    | Leg ratio quantity |
+| ∟∟ strike_price            | string   | false    | Strike price |
+| ∟∟ expire_date             | string   | false    | Option expiry date, format: `YYYYMMDD` |
+| ∟∟ contract_direction      | string   | false    | Contract type<br/><br/> **Enum Value:**<br/> `C` - Call<br/> `P` - Put |
