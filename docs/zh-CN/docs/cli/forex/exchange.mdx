@@ -1,0 +1,71 @@
+---
+title: '货币兑换'
+sidebar_label: '货币兑换'
+sidebar_position: 1
+---
+
+# longbridge forex
+
+在终端里直接把账户内的一种货币兑换成另一种。流程分三步且为异步：先**询价**拿到汇率，再用该报价**下单**，然后**查询**订单直到进入终态。
+
+这些命令作用于你的账户，需要登录；`submit-order` 会动用真实资金，未加 `--yes` 时会提示确认。
+
+## 基本用法
+
+```bash
+# 锁定汇率并拿到 quote_id（--amount 与 --target-amount 二选一）
+longbridge forex quote USD HKD --amount 1000
+```
+
+```
+| Field     | Value            |
+|-----------|------------------|
+| quote_id  | Q20260925000123  |
+| rate      | 7.7812           |
+| ccy_pair  | USD/HKD          |
+| expire_at | 1790000000000    |
+```
+
+## 示例
+
+### 询价
+
+```bash
+# 按兑出金额（你花出的 USD）
+longbridge forex quote USD HKD --amount 1000
+# …或按兑入金额（你想收到的 HKD）
+longbridge forex quote USD HKD --target-amount 7800
+```
+
+`rate` 按标准币种对表示（`1 BASE = rate QUOTE`，如 `USD/HKD`），与你请求的兑换方向无关。报价与你绑定，且仅在有效期内可用（`expire_at` 为 Unix 毫秒时间戳）。
+
+### 提交兑换
+
+```bash
+# 用 quote_id 下单，并带上你自定义的唯一订单号
+longbridge forex submit-order Q20260925000123 my-order-0001
+# 跳过确认（例如用于脚本）
+longbridge forex submit-order Q20260925000123 my-order-0001 --yes
+```
+
+下单成功只代表订单**已受理**——兑换为异步完成，命令会重新查询并打印当前订单状态。相同 `client_order_id` 不会产生第二笔订单；超时请先查询，确有必要再用**同一个**订单号重新询价并提交。
+
+### 查询订单
+
+```bash
+longbridge forex order my-order-0001
+```
+
+```
+| Field       | Value   |
+|-------------|---------|
+| state       | 1       |
+| rate        | 7.7812  |
+| from_amount | 1000    |
+| to_amount   | 7781.2  |
+| fail_reason |         |
+```
+
+`state` 为 `0` 处理中（请继续查询）、`1` 兑换成功、`2` 兑换失败（冻结资金已退回）。建议轮询间隔不低于 2 秒；多数订单在 1 分钟内进入终态。
+
+> 任意命令加 `--format json` 可获取完整的机器可读返回。
