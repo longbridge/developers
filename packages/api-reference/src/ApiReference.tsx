@@ -317,14 +317,16 @@ function DocFooterRow({ locale }: { locale: Locale }) {
   )
 }
 
-// Drop the leading CRUD/read verb from an endpoint name — the HTTP method badge
-// already conveys the action, so "Query Signals" → "Signals", "Get Signal
-// Detail" → "Signal Detail", "更新定投" → "定投". Falls back to the original if
-// stripping would leave nothing.
-const VERB_EN =
-  /^(Query|List|Get|Fetch|Retrieve|Return|Show|Create|Add|New|Update|Modify|Set|Replace|Delete|Remove|Cancel|Submit|Estimate|Calculate|Calc|Check|Search|Pin|Unpin|Enable|Disable|Suspend|Restart|Toggle|Download|Export|Register|Bind|Subscribe|Unsubscribe|Apply)\s+/i
-const VERB_ZH =
-  /^(查询|获取|列出|返回|显示|创建|新建|新增|更新|修改|设置|替换|删除|移除|取消|提交|估算|计算|校验|检查|搜索|置顶|启用|禁用|暂停|重启|切换|下载|导出|注册|绑定|订阅|退订|应用)/
+// Drop a leading *read* verb from a GET endpoint name — the GET badge already
+// says "read", so "Query Signals" → "Signals", "Get Signal Detail" → "Signal
+// Detail", "获取自选股分组" → "自选股分组". Any other verb (Create / Submit /
+// Cancel / Suspend / Replace / 删除 / 暂停 …) names the operation itself and is
+// kept: several POST/PUT/DELETE endpoints share a resource noun ("Submit /
+// Cancel / Suspend Grid Order"), and stripping their verbs would leave
+// identical, ambiguous labels. Falls back to the original if stripping would
+// leave nothing.
+const READ_VERB_EN = /^(Query|List|Get|Fetch|Retrieve|Return|Show)\s+/i
+const READ_VERB_ZH = /^(查询|查詢|获取|獲取|列出|返回|显示|顯示)/
 // Move a leading market qualifier to a parenthetical suffix, so the topic reads
 // first: "US Crypto Overview" → "Crypto Overview (US)", "美股加密货币概览" →
 // "加密货币概览（美股）".
@@ -344,9 +346,10 @@ function stripRedundantPrefix(name: string): string {
     .replace(/^(Push|推送|推播)\s*[·:]\s*/, '')
     .replace(/^(Warrant|权证|權證|轮证|輪證)\s*/, '')
 }
-function stripLeadingVerb(name: string): string {
+function stripLeadingVerb(name: string, method: string): string {
   const n = stripRedundantPrefix(name)
-  const re = /^[㐀-鿿]/.test(n) ? VERB_ZH : VERB_EN
+  if (method.toUpperCase() !== 'GET') return marketToSuffix(n)
+  const re = /^[㐀-鿿]/.test(n) ? READ_VERB_ZH : READ_VERB_EN
   const stripped = n.replace(re, '').trim()
   return marketToSuffix(stripped.length > 0 ? stripped : n)
 }
@@ -453,7 +456,8 @@ function EndpointLeaves({
             ep.operation['x-summary-zh'],
             ep.operation['x-summary-zh-hk'],
             locale
-          )
+          ),
+          ep.method
         )
         return (
           <li key={id} className="list-none">
@@ -526,7 +530,8 @@ function ApiSidebarSubGroup({
                       <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
                       <span className="flex-1 min-w-0 truncate">
                         {stripLeadingVerb(
-                          pickLocale(ep.operation.summary, ep.operation['x-summary-zh'], ep.operation['x-summary-zh-hk'], locale)
+                          pickLocale(ep.operation.summary, ep.operation['x-summary-zh'], ep.operation['x-summary-zh-hk'], locale),
+                          ep.method
                         )}
                       </span>
                     </button>
@@ -1339,7 +1344,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                   activeEndpoint.operation['x-summary-zh'],
                   activeEndpoint.operation['x-summary-zh-hk'],
                   locale
-                )
+                ),
+                activeEndpoint.method
               ),
             },
           ]
@@ -1497,7 +1503,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                           activeEndpoint.operation['x-summary-zh'],
                           activeEndpoint.operation['x-summary-zh-hk'],
                           locale
-                        )
+                        ),
+                        activeEndpoint.method
                       )}
                     </h1>
                     <CopyPageMenu
