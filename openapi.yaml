@@ -12036,6 +12036,244 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    get:
+      operationId: list_topic_replies
+      summary: Topic Replies
+      x-summary-zh: 讨论回复
+      x-summary-zh-hk: 討論回覆
+      description: |
+        Get a paginated list of replies for a specific topic. Browse the discussion on [Topics](https://longbridge.com/topics).
+
+        Each reply includes author info, body (plain text), engagement counts, and a `reply_to_id` field: `"0"` indicates a top-level reply; any other value identifies the parent reply for nested replies.
+      x-description-zh: |
+        获取指定讨论下的回复列表，支持分页。完整社区讨论可访问 [社区](https://longbridge.com/topics)。
+
+        每条回复包含作者信息、正文（纯文本）、互动数据及 `reply_to_id` 字段：`"0"` 表示顶层回复，其他值表示对指定回复的嵌套回复。
+      x-description-zh-hk: |
+        獲取指定討論下的回覆列表，支持分頁。完整社區討論可瀏覽 [社區](https://longbridge.com/topics)。
+
+        每條回覆包含作者信息、正文（純文本）、互動數據及 `reply_to_id` 字段：`"0"` 表示頂層回覆，其他值表示對指定回覆的嵌套回覆。
+      x-subgroup: Topics
+      x-subgroup-zh: 话题
+      x-subgroup-zh-hk: 話題
+      tags:
+        - News & Contents
+      x-parameters:
+        - name: topic_id
+          in: path
+          type: string
+          required: true
+          description: Topic ID (e.g. `6993508780031016960`)
+          x-description-zh: 讨论 ID，如 `6993508780031016960`
+          x-description-zh-hk: 討論 ID，如 `6993508780031016960`
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number (1-based). Defaults to `1`.
+          x-description-zh: 页码，默认 1
+          x-description-zh-hk: 頁碼，默認 1
+        - name: size
+          in: query
+          type: integer
+          required: false
+          description: Items per page, range 1–50. Defaults to `20`.
+          x-description-zh: 每页数量，范围 1~50，默认 20
+          x-description-zh-hk: 每頁數量，範圍 1~50，默認 20
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge topic replies 6993508780031016960
+            longbridge topic replies 6993508780031016960 --page 2 --size 20
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/content/topics/<topic_id>/comments\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: items
+          type: object[]
+          required: true
+          description: List of replies
+          x-description-zh: 回复列表
+          x-description-zh-hk: 回覆列表
+        - name: └ id
+          type: string
+          required: true
+          description: Reply ID
+          x-description-zh: 回复 ID
+          x-description-zh-hk: 回覆 ID
+        - name: └ topic_id
+          type: string
+          required: true
+          description: Parent topic ID
+          x-description-zh: 所属讨论 ID
+          x-description-zh-hk: 所屬討論 ID
+        - name: └ body
+          type: string
+          required: false
+          description: Reply body (plain text)
+          x-description-zh: 回复正文（纯文本）
+          x-description-zh-hk: 回覆正文（純文本）
+        - name: └ reply_to_id
+          type: string
+          required: false
+          description: Parent reply ID; `"0"` = top-level reply
+          x-description-zh: 父回复 ID，`"0"` 表示顶层回复
+          x-description-zh-hk: 父回覆 ID，`"0"` 表示頂層回覆
+        - name: └ author
+          type: object
+          required: false
+          description: Author info
+          x-description-zh: 作者信息
+          x-description-zh-hk: 作者信息
+        - name: └ images
+          type: object[]
+          required: false
+          description: Attached images
+          x-description-zh: 附图列表
+          x-description-zh-hk: 附圖列表
+        - name: └ likes_count
+          type: int32
+          required: false
+          description: Likes count
+          x-description-zh: 点赞数
+          x-description-zh-hk: 點讚數
+        - name: └ comments_count
+          type: int32
+          required: false
+          description: Nested replies count
+          x-description-zh: 嵌套回复数
+          x-description-zh-hk: 嵌套回覆數
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time as Unix timestamp (seconds)
+          x-description-zh: 创建时间，Unix 时间戳（秒）
+          x-description-zh-hk: 創建時間，Unix 時間戳（秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  items:
+                    - id: '7001234567890123456'
+                      topic_id: '6993508780031016960'
+                      body: Great analysis!
+                      reply_to_id: '0'
+                      author:
+                        member_id: '10087'
+                        name: John Smith
+                        avatar: https://example.com/avatar2.jpg
+                      images: []
+                      likes_count: 5
+                      comments_count: 2
+                      created_at: '1742001500'
+                    - id: '7001234567890123457'
+                      topic_id: '6993508780031016960'
+                      body: I disagree on the valuation part.
+                      reply_to_id: '7001234567890123456'
+                      author:
+                        member_id: '10088'
+                        name: Alice Lee
+                        avatar: https://example.com/avatar3.jpg
+                      images: []
+                      likes_count: 1
+                      comments_count: 0
+                      created_at: '1742001800'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/sharelists:
     post:
       operationId: create_sharelist
@@ -13577,6 +13815,724 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    get:
+      operationId: order_detail
+      summary: Order Details
+      x-summary-zh: 订单详情
+      x-summary-zh-hk: 訂單詳情
+      description: |
+        This API is used for order detail query
+      x-description-zh: |
+        该接口用于订单详情查询。
+      x-description-zh-hk: |
+        該接口用於訂單詳情查詢。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
+      tags:
+        - Trade
+      x-parameters:
+        - name: order_id
+          in: query
+          type: string
+          required: true
+          description: 'Order ID for specifying order ID query, for example: `701276261045858304`'
+          x-description-zh: 订单 ID，用于指定订单 ID 查询，例如：`701276261045858304`
+          x-description-zh-hk: 訂單 ID，用於指定訂單 ID 查詢，例如：`701276261045858304`
+        - name: is_attached
+          in: query
+          type: boolean
+          required: false
+          description: Whether `order_id` refers to an attached order
+          x-description-zh: order_id 是否为附加单
+          x-description-zh-hk: order_id 是否為附加單
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Replace the order ID below with your actual order ID
+            longbridge order detail 693664675163312128
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: order_id
+          type: string
+          required: false
+          description: Order ID
+          x-description-zh: 订单 ID
+          x-description-zh-hk: 訂單 ID
+        - name: status
+          type: string
+          required: false
+          description: 'Order Status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `DelayedNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`DelayedNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`DelayedNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+        - name: stock_name
+          type: string
+          required: false
+          description: Stock Name
+          x-description-zh: 股票名称
+          x-description-zh-hk: 股票名稱
+        - name: quantity
+          type: string
+          required: false
+          description: Submitted Quantity
+          x-description-zh: 下单数量
+          x-description-zh-hk: 下單數量
+        - name: executed_quantity
+          type: string
+          required: false
+          description: Executed Quantity. when the order is not filled, value is 0
+          x-description-zh: 成交数量。. 当订单未成交时为 0
+          x-description-zh-hk: 成交數量。. 當訂單未成交時為 0
+        - name: price
+          type: string
+          required: false
+          description: Submitted Price. when market condition order is not triggered, value is empty string
+          x-description-zh: 下单价格。. 当市价条件单未触发时为空字符串
+          x-description-zh-hk: 下單價格。. 當市價條件單未觸發時為空字符串
+        - name: executed_price
+          type: string
+          required: false
+          description: Executed Price. when the order is not filled, value is 0
+          x-description-zh: 成交价。. 当订单未成交时为 0
+          x-description-zh-hk: 成交價。. 當訂單未成交時為 0
+        - name: submitted_at
+          type: string
+          required: false
+          description: Submitted Time
+          x-description-zh: 下单时间
+          x-description-zh-hk: 下單時間
+        - name: side
+          type: string
+          required: false
+          description: Order Side. **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出
+          x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出
+        - name: symbol
+          type: string
+          required: false
+          description: 'Stock symbol, use `ticker.region` format, example: `AAPL.US`'
+          x-description-zh: 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
+        - name: order_type
+          type: string
+          required: false
+          description: 'Order Type. One of: `LO`, `ELO`, `MO`, `AO`, `ALO`, `ODD`, `LIT`, `MIT`, `TSLPAMT`, `TSLPPCT`, `SLO`.'
+          x-description-zh: 订单类型。可选值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+          x-description-zh-hk: 訂單類型。可選值：`LO`、`ELO`、`MO`、`AO`、`ALO`、`ODD`、`LIT`、`MIT`、`TSLPAMT`、`TSLPPCT`、`SLO`。
+        - name: last_done
+          type: string
+          required: false
+          description: Last done. when the order is not filled, value is empty string
+          x-description-zh: 最近成交价格。. 当订单未成交时为空字符串
+          x-description-zh-hk: 最近成交價格。. 當訂單未成交時為空字符串
+        - name: trigger_price
+          type: string
+          required: false
+          description: '`LIT` / `MIT` Order Trigger Price. When the order is not `LIT` / `MIT` order, value is empty string'
+          x-description-zh: '`LIT` / `MIT` 订单触发价格。. 当订单不是 `LIT` / `MIT` 订单为空字符串'
+          x-description-zh-hk: '`LIT` / `MIT` 訂單觸發價格。. 當訂單不是 `LIT` / `MIT` 訂單為空字符串'
+        - name: msg
+          type: string
+          required: false
+          description: Rejected message or remark, default value is empty string.
+          x-description-zh: 拒绝信息或备注，默认为空字符串。
+          x-description-zh-hk: 拒絕信息或備註，默認為空字符串。
+        - name: tag
+          type: string
+          required: false
+          description: Order tag. **Enum Value**, `Normal` - Normal Order, `Gtc` - Long term Order, `Grey` - Grey Order
+          x-description-zh: 订单标记。**可选值：**, `Normal` - 普通订单，`Gtc` - 长期单，`Grey` - 暗盘单
+          x-description-zh-hk: 訂單標記。**可選值：**, `Normal` - 普通訂單，`Gtc` - 長期單，`Grey` - 暗盤單
+        - name: time_in_force
+          type: string
+          required: false
+          description: Time in force Type. **Enum Value:**, `Day` - Day Order, `GTC` - Good Til Canceled Order, `GTD` - Good Til Date Order
+          x-description-zh: 订单有效期类型。**可选值：**, `Day` - 当日有效，`GTC` - 撤单前有效，`GTD` - 到期前有效
+          x-description-zh-hk: 訂單有效期類型。**可選值：**, `Day` - 當日有效，`GTC` - 撤單前有效，`GTD` - 到期前有效
+        - name: expire_date
+          type: string
+          required: false
+          description: 'Long term order expire date, format: `YYYY-MM-DD`, example: `2022-12-05`. When not a long term order, default value is empty string'
+          x-description-zh: 长期单过期时间，格式为 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是长期单时，默认为空字符串。`
+          x-description-zh-hk: 長期單過期時間，格式為 `YYYY-MM-DD`, 例如：`2022-12-05。. 不是長期單時，默認為空字符串。`
+        - name: updated_at
+          type: string
+          required: false
+          description: Last updated time, formatted as a timestamp (second)
+          x-description-zh: 最近更新时间，格式为时间戳 (秒)，默认为 0。
+          x-description-zh-hk: 最近更新時間，格式為時間戳 (秒)，默認為 0。
+        - name: trigger_at
+          type: string
+          required: false
+          description: Conditional order trigger time. formatted as a timestamp (second)
+          x-description-zh: 条件单触发时间，格式为时间戳 (秒)，默认为 0。
+          x-description-zh-hk: 條件單觸發時間，格式為時間戳 (秒)，默認為 0。
+        - name: trailing_amount
+          type: string
+          required: false
+          description: '`TSLPAMT` order trailing amount. When the order is not `TSLPAMT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` 订单跟踪金额。. 当订单不是 `TSLPAMT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` 訂單跟蹤金額。. 當訂單不是 `TSLPAMT` 訂單時為空字符串。'
+        - name: trailing_percent
+          type: string
+          required: false
+          description: '`TSLPPCT` order trailing percent. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPPCT` 订单跟踪涨跌幅。. 当订单不是 `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPPCT` 訂單跟蹤漲跌幅。. 當訂單不是 `TSLPPCT` 訂單時為空字符串。'
+        - name: limit_offset
+          type: string
+          required: false
+          description: '`TSLPPCT` order limit offset amount. When the order is not `TSLPPCT` order, value is empty string'
+          x-description-zh: '`TSLPAMT` / `TSLPPCT` 订单指定价差。. 当订单不是 `TSLPAMT` / `TSLPPCT` 订单时为空字符串。'
+          x-description-zh-hk: '`TSLPAMT` / `TSLPPCT` 訂單指定價差。. 當訂單不是 `TSLPAMT` / `TSLPPCT` 訂單時為空字符串。'
+        - name: trigger_status
+          type: string
+          required: false
+          description: Conditional Order Trigger Status, When an order is not a conditional order or a conditional order is not triggered, the trigger status is NOT_USED. **Enum Value**, `NOT_USED`, `DEACTIVE`, `ACTIVE`, `RELEASED`
+          x-description-zh: 条件单触发状态，当订单不是条件单或条件单未触发时，触发状态为 NOT_USED. **可选值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已触发
+          x-description-zh-hk: 條件單觸發狀態，當訂單不是條件單或條件單未觸發時，觸發狀態為 NOT_USED. **可選值：**, `NOT_USED` - 未激活 `DEACTIVE` - 已失效 `ACTIVE` - 已激活 `RELEASED` - 已觸發
+        - name: currency
+          type: string
+          required: false
+          description: Currency
+          x-description-zh: 结算货币
+          x-description-zh-hk: 結算貨幣
+        - name: outside_rth
+          type: string
+          required: false
+          description: Enable or disable outside regular trading hours, Default is `UnknownOutsideRth` when the order is not a US stock. **Enum Value:**, `RTH_ONLY` - Regular trading hour only, `ANY_TIME` - Any time, `OVERNIGHT` - Overnight"
+          x-description-zh: 是否允许盘前盘后，当订单不是美股时，默认为 UnknownOutsideRth. **可选值：**, `RTH_ONLY` - 不允许盘前盘后，`ANY_TIME` - 允许盘前盘后，`OVERNIGHT` - 夜盘"
+          x-description-zh-hk: 是否允許盤前盤後，當訂單不是美股時，默認為 UnknownOutsideRth. **可選值：**, `RTH_ONLY` - 不允許盤前盤後，`ANY_TIME` - 允許盤前盤後，`OVERNIGHT` - 夜盤
+        - name: remark
+          type: string
+          required: false
+          description: Remark
+          x-description-zh: 备注
+          x-description-zh-hk: 備註
+        - name: delayed_until
+          type: string
+          required: false
+          description: Time-condition submit time, formatted as a timestamp (second). `0` when the order is not a time-condition order
+          x-description-zh: 时间条件单的提交时间，格式为时间戳 (秒)。非时间条件单时为 `0`
+          x-description-zh-hk: 時間條件單的提交時間，格式為時間戳 (秒)。非時間條件單時為 `0`
+        - name: free_status
+          type: string
+          required: true
+          description: Commission-free Status, default value is None **Enum Value:** `None` - None `Calculated` - Commission-free amount to be calculated `Pending` - Pending commission-free `Ready` - Commission-free applied
+          x-description-zh: 免佣状态，默认为 None **可选值：** `None` - 无 `Calculated` - 免佣额待计算 `Pending` - 待免佣 `Ready` - 已免佣
+          x-description-zh-hk: 免傭狀態，默認為 None **可選值：** `None` - 無 `Calculated` - 免傭額待計算 `Pending` - 待免傭 `Ready` - 已免傭
+        - name: free_amount
+          type: string
+          required: true
+          description: Commission-free amount, default value is empty string.
+          x-description-zh: 免佣金额，默认为空字符串
+          x-description-zh-hk: 免佣金額，默認為空字符串
+        - name: free_currency
+          type: string
+          required: true
+          description: Commission-free currency, default value is empty string.
+          x-description-zh: 免佣货币，默认为空字符串
+          x-description-zh-hk: 免傭貨幣，默認為空字符串
+        - name: deductions_status
+          type: string
+          required: true
+          description: Deduction status/Cashback Status, default value is NONE **Enum Value:** `NONE` - Pending Settlement `NO_DATA` - Settled with no data `PENDING` - Settled and pending distribution `DONE` - Settled and distributed
+          x-description-zh: 抵扣状态/返现状态，默认为 NONE **可选值：** `NONE` - 待结算 `NO_DATA` - 已结算无数据 `PENDING` - 已结算待发放 `DONE` - 已结算已发放
+          x-description-zh-hk: 抵扣狀態/返現狀態，默認為 NONE **可選值：** `NONE` - 待結算 `NO_DATA` - 已結算無數據 `PENDING` - 已結算待發放 `DONE` - 已結算已發放
+        - name: deductions_amount
+          type: string
+          required: true
+          description: Deduction amount, default value is empty string.
+          x-description-zh: 抵扣金额，默认为空字符串
+          x-description-zh-hk: 抵扣金額，默認為空字符串
+        - name: deductions_currency
+          type: string
+          required: true
+          description: Deduction currency, default value is empty string.
+          x-description-zh: 抵扣货币，默认为空字符串
+          x-description-zh-hk: 抵扣貨幣，默認為空字符串
+        - name: platform_deducted_status
+          type: string
+          required: true
+          description: Platform fee deduction status/Cashback Status, default value is NONE **Enum Value:** `NONE` - Pending Settlement `NO_DATA` - Settled with no data `PENDING` - Settled and pending distribution `DONE` - Settled and distributed
+          x-description-zh: 平台费抵扣状态/返现状态，默认为 NONE **可选值：** `NONE` - 待结算 `NO_DATA` - 已结算无数据 `PENDING` - 已结算待发放 `DONE` - 已结算已发放
+          x-description-zh-hk: 平臺費抵扣狀態/返現狀態，默認為 NONE **可選值：** `NONE` - 待結算 `NO_DATA` - 已結算無數據 `PENDING` - 已結算待發放 `DONE` - 已結算已發放
+        - name: platform_deducted_amount
+          type: string
+          required: true
+          description: Platform fee deduction amount, default value is empty string.
+          x-description-zh: 平台费抵扣金额，默认为空字符串
+          x-description-zh-hk: 平臺費抵扣金額，默認為空字符串
+        - name: platform_deducted_currency
+          type: string
+          required: true
+          description: Platform fee deduction currency, default value is empty string.
+          x-description-zh: 平台费抵扣货币，默认为空字符串
+          x-description-zh-hk: 平臺費抵扣貨幣，默認為空字符串
+        - name: history
+          type: object[]
+          required: true
+          description: Order history details
+          x-description-zh: 订单历史明细
+          x-description-zh-hk: 訂單歷史明細
+        - name: └ price
+          type: string
+          required: false
+          description: Submitted Price. when market condition order is not triggered, value is empty string
+          x-description-zh: 下单价格。. 当市价条件单未触发时为空字符串
+          x-description-zh-hk: 下單價格。. 當市價條件單未觸發時為空字符串
+        - name: └ quantity
+          type: string
+          required: false
+          description: Submitted Quantity
+          x-description-zh: 下单数量
+          x-description-zh-hk: 下單數量
+        - name: └ status
+          type: string
+          required: false
+          description: 'Order Status. One of: `NotReported`, `ReplacedNotReported`, `ProtectedNotReported`, `VarietiesNotReported`, `DelayedNotReported`, `FilledStatus`, `WaitToNew`, `NewStatus`, `WaitToReplace`, `PendingReplaceStatus`, `ReplacedStatus`, `PartialFilledStatus`, `WaitToCancel`, `PendingCancelStatus`, `RejectedStatus`, `CanceledStatus`, `ExpiredStatus`, `PartialWithdrawal`.'
+          x-description-zh: 订单状态。可选值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`DelayedNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+          x-description-zh-hk: 訂單狀態。可選值：`NotReported`、`ReplacedNotReported`、`ProtectedNotReported`、`VarietiesNotReported`、`DelayedNotReported`、`FilledStatus`、`WaitToNew`、`NewStatus`、`WaitToReplace`、`PendingReplaceStatus`、`ReplacedStatus`、`PartialFilledStatus`、`WaitToCancel`、`PendingCancelStatus`、`RejectedStatus`、`CanceledStatus`、`ExpiredStatus`、`PartialWithdrawal`。
+        - name: └ msg
+          type: string
+          required: false
+          description: Rejected message or remark, default value is empty string.
+          x-description-zh: 拒绝信息或备注，默认为空字符串。
+          x-description-zh-hk: 拒絕信息或備註，默認為空字符串。
+        - name: └ time
+          type: string
+          required: true
+          description: Occurrence time
+          x-description-zh: 发生时间
+          x-description-zh-hk: 發生時間
+        - name: charge_detail
+          type: object
+          required: true
+          description: Order charges
+          x-description-zh: 订单费用
+          x-description-zh-hk: 訂單費用
+        - name: └ total_amount
+          type: string
+          required: true
+          description: Total charges amount
+          x-description-zh: 全部费用
+          x-description-zh-hk: 全部費用
+        - name: └ currency
+          type: string
+          required: false
+          description: Currency
+          x-description-zh: 结算货币
+          x-description-zh-hk: 結算貨幣
+        - name: └ items
+          type: object[]
+          required: true
+          description: Order charge details
+          x-description-zh: 订单费用明细
+          x-description-zh-hk: 訂單費用明細
+        - name: └ limit_depth_level
+          type: int32
+          required: true
+          description: Specifies the bid/ask depth level
+          x-description-zh: 指定买卖档位
+          x-description-zh-hk: 指定買賣檔位
+        - name: └ monitor_price
+          type: string
+          required: false
+          description: Monitoring price
+          x-description-zh: 监控价格
+          x-description-zh-hk: 監控價格
+        - name: └ trigger_count
+          type: int32
+          required: true
+          description: Number of triggers
+          x-description-zh: 触发次数
+          x-description-zh-hk: 觸發次數
+        - name: └ attached_orders
+          type: object[]
+          required: false
+          description: List of attached order details
+          x-description-zh: 附加订单详情列表
+          x-description-zh-hk: 附加訂單詳情列表
+        - name: multi_leg
+          type: object
+          required: false
+          description: Multi-leg strategy information. Only returned for multi-leg option combination orders; otherwise not returned.
+          x-description-zh: 多腿策略信息，仅多腿期权组合订单返回，非组合订单不返回。
+          x-description-zh-hk: 多腿策略信息，僅多腿期權組合訂單返回，非組合訂單不返回。
+        - name: └ strategy
+          type: string
+          required: false
+          description: Multi-leg strategy **Enum Value:** `0` - CoveredCall (Covered stock) `1` - CoveredPut (Covered stock) `2` - VerticalCallSpread (Vertical spread) `3` - VerticalPutSpread (Vertical spread) `4` - Collar `5` - Straddle `6` - Strangle `7` - CalendarCallSpread (Calendar) `8` - CalendarPutSpread (Calendar)
+          x-description-zh: 多腿策略 **可选值：** `0` - CoveredCall（股票担保）`1` - CoveredPut（股票担保）`2` - VerticalCallSpread（垂直策略）`3` - VerticalPutSpread（垂直策略）`4` - Collar（领式策略）`5` - Straddle（跨式策略）`6` - Strangle（宽跨式策略）`7` - CalendarCallSpread（日历策略）`8` - CalendarPutSpread（日历策略）
+          x-description-zh-hk: 多腿策略 **可選值：** `0` - CoveredCall（股票擔保）`1` - CoveredPut（股票擔保）`2` - VerticalCallSpread（跨價期權）`3` - VerticalPutSpread（跨價期權）`4` - Collar（領式策略）`5` - Straddle（馬鞍式策略）`6` - Strangle（勒束式策略）`7` - CalendarCallSpread（跨期期權策略）`8` - CalendarPutSpread（跨期期權策略）
+        - name: └ strategy_name
+          type: string
+          required: false
+          description: Strategy name
+          x-description-zh: 策略名称
+          x-description-zh-hk: 策略名稱
+        - name: └ multileg_id
+          type: string
+          required: false
+          description: Multi-leg combination ID
+          x-description-zh: 多腿组合 ID
+          x-description-zh-hk: 多腿組合 ID
+        - name: └ code
+          type: string
+          required: false
+          description: Multi-leg combination code
+          x-description-zh: 多腿组合代码
+          x-description-zh-hk: 多腿組合代碼
+        - name: └ legs
+          type: object[]
+          required: false
+          description: Legs of the combination order
+          x-description-zh: 组合订单的各腿
+          x-description-zh-hk: 組合訂單的各腿
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  order_id: '828940451093708800'
+                  status: FilledStatus
+                  stock_name: Apple
+                  quantity: '10'
+                  executed_quantity: '10'
+                  price: '200.000'
+                  executed_price: '164.660'
+                  submitted_at: '1680863604'
+                  side: Buy
+                  symbol: AAPL.US
+                  order_type: LO
+                  last_done: '164.660'
+                  trigger_price: '0.0000'
+                  msg: ''
+                  tag: Normal
+                  time_in_force: Day
+                  expire_date: '2023-04-10'
+                  updated_at: '1681113000'
+                  trigger_at: '0'
+                  trailing_amount: ''
+                  trailing_percent: ''
+                  limit_offset: ''
+                  limit_depth_level: 0
+                  monitor_price: ''
+                  trigger_count: 1
+                  trigger_status: NOT_USED
+                  outside_rth: ANY_TIME
+                  currency: USD
+                  remark: '1680863603.927165'
+                  delayed_until: '0'
+                  free_status: None
+                  free_amount: ''
+                  free_currency: ''
+                  deductions_status: NONE
+                  deductions_amount: ''
+                  deductions_currency: ''
+                  platform_deducted_status: NONE
+                  platform_deducted_amount: ''
+                  platform_deducted_currency: ''
+                  history:
+                    - price: '164.6600'
+                      quantity: '10'
+                      status: FilledStatus
+                      msg: Execution of 10
+                      time: '1681113000'
+                    - price: '200.0000'
+                      quantity: '10'
+                      status: NewStatus
+                      msg: ''
+                      time: '1681113000'
+                  charge_detail:
+                    items:
+                      - code: BROKER_FEES
+                        name: Broker Fees
+                        fees: []
+                      - code: THIRD_FEES
+                        name: Third-party Fees
+                        fees: []
+                    total_amount: '0'
+                    currency: USD
+                  attached_orders:
+                    - order_id: '706388312699592705'
+                      attached_type_display: 2
+                      trigger_price: '10.500'
+                      quantity: '200'
+                      executed_qty: '0'
+                      status: NewStatus
+                      updated_at: '1651644898'
+                      withdrawn: false
+                      gtd: ''
+                      time_in_force: Day
+                      counter_id: ''
+                      trigger_status: 0
+                      executed_amount: '0'
+                      tag: 0
+                      submitted_at: '1651644897'
+                      executed_price: '0.000'
+                      force_only_rth: RTH_ONLY
+                      reviewed: false
+                      activate_order_type: MIT
+                      activate_rth: RTH_ONLY
+                      submit_price: ''
+                      limit_depth_level: 0
+                  multi_leg:
+                    strategy: '2'
+                    strategy_name: Vertical spread
+                    multileg_id: Spread_QQQ20260731C764/767
+                    code: QQQ 260731 764/767 Vertical spread
+                    legs:
+                      - symbol: QQQ260731C764000.US
+                        side: Buy
+                        position: LONG
+                        ratio_quantity: '1'
+                        strike_price: '764'
+                        expire_date: '20260731'
+                        contract_direction: C
+                      - symbol: QQQ260731C767000.US
+                        side: Sell
+                        position: SHORT
+                        ratio_quantity: '1'
+                        strike_price: '767'
+                        expire_date: '20260731'
+                        contract_direction: C
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: cancel_order
+      summary: Cancel Order
+      x-summary-zh: 撤销订单
+      x-summary-zh-hk: 撤銷訂單
+      description: |
+        This API is used to withdraw an open order.
+      x-description-zh: |
+        该接口用于订单撤销。
+      x-description-zh-hk: |
+        該接口用於訂單撤銷。
+      x-subgroup: Order
+      x-subgroup-zh: 订单
+      x-subgroup-zh-hk: 訂單
+      tags:
+        - Trade
+      x-parameters:
+        - name: order_id
+          in: query
+          type: string
+          required: true
+          description: Order ID
+          x-description-zh: 订单 ID
+          x-description-zh-hk: 訂單 ID
+        - name: is_attached
+          in: query
+          type: boolean
+          required: false
+          description: Whether `order_id` refers to an attached order
+          x-description-zh: order_id 是否为附加单
+          x-description-zh-hk: order_id 是否為附加單
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # Replace the order ID below with your actual order ID
+            longbridge order cancel 693664675163312128
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request DELETE \
+              --url 'https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.delete(
+                "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.delete(
+                        "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>", {
+              method: "DELETE",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("DELETE", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::DELETE, "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"DELETE\", \"https://openapi.longbridge.com/v1/trade/order?order_id=<order_id>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data: {}
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/trade/order/multileg:
     post:
       operationId: submit_multileg
@@ -15095,6 +16051,512 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    get:
+      operationId: list_grid_orders
+      summary: List Grid Orders
+      x-summary-zh: 网格订单列表
+      x-summary-zh-hk: 網格訂單列表
+      description: |
+        Get a paged list of your grid orders, optionally filtered by market, symbol, or status.
+      x-description-zh: |
+        分页获取网格订单列表，可按市场、标的或状态筛选。
+      x-description-zh-hk: |
+        分頁獲取網格訂單列表，可按市場、標的或狀態篩選。
+      x-subgroup: Grid Trading
+      x-subgroup-zh: 网格交易
+      x-subgroup-zh-hk: 網格交易
+      tags:
+        - Trade
+      x-parameters:
+        - name: page
+          in: query
+          type: integer
+          required: false
+          description: Page number, starts at `1`
+          x-description-zh: 页码，从 `1` 开始
+          x-description-zh-hk: 頁碼，從 `1` 開始
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Page size
+          x-description-zh: 每页数量
+          x-description-zh-hk: 每頁數量
+        - name: market
+          in: query
+          type: string
+          required: false
+          description: Market filter **Enum Value:** `US` / `HK` / `CN` / `SG`
+          x-description-zh: 市场筛选 **可选值：** `US` / `HK` / `CN` / `SG`
+          x-description-zh-hk: 市場篩選 **可選值：** `US` / `HK` / `CN` / `SG`
+        - name: symbol
+          in: query
+          type: string
+          required: false
+          description: 'Security symbol, `ticker.region` format, example: `700.HK`'
+          x-description-zh: 标的代码，使用 `ticker.region` 格式，例如：`700.HK`
+          x-description-zh-hk: 標的代碼，使用 `ticker.region` 格式，例如：`700.HK`
+        - name: status
+          in: query
+          type: string
+          required: false
+          description: 'Grid order status filter, comma-joined, example: `Performing,Suspended`'
+          x-description-zh: 网格订单状态筛选，多个状态用逗号连接，例如：`Performing,Suspended`
+          x-description-zh-hk: 網格訂單狀態篩選，多個狀態用逗號連接，例如：`Performing,Suspended`
+        - name: sort_by
+          in: query
+          type: string
+          required: false
+          description: Field to sort by
+          x-description-zh: 排序字段
+          x-description-zh-hk: 排序字段
+        - name: sort_order
+          in: query
+          type: string
+          required: false
+          description: Sort direction
+          x-description-zh: 排序方向
+          x-description-zh-hk: 排序方向
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # List all grid orders (default)
+            longbridge grid
+            # Filter by symbol and status
+            longbridge grid --symbol 700.HK --status Performing
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/gridtrading/list' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/gridtrading/list",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/gridtrading/list",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/gridtrading/list", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/gridtrading/list"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/gridtrading/list")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/gridtrading/list");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/gridtrading/list\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: grid_order
+          type: object[]
+          required: false
+          description: Grid orders
+          x-description-zh: 网格订单
+          x-description-zh-hk: 網格訂單
+        - name: └ order_id
+          type: string
+          required: true
+          description: Grid order ID
+          x-description-zh: 网格订单 ID
+          x-description-zh-hk: 網格訂單 ID
+        - name: └ symbol
+          type: string
+          required: true
+          description: 'Stock symbol, use `ticker.region` format, example: `AAPL.US`'
+          x-description-zh: 标的代码，使用 `ticker.region` 格式，例如：`AAPL.US`
+          x-description-zh-hk: 標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US`
+        - name: └ stock_name
+          type: string
+          required: true
+          description: Stock name
+          x-description-zh: 标的名称
+          x-description-zh-hk: 標的名稱
+        - name: └ market
+          type: string
+          required: true
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: └ status
+          type: string
+          required: true
+          description: Grid order status
+          x-description-zh: 网格订单状态
+          x-description-zh-hk: 網格訂單狀態
+        - name: └ grid_status
+          type: string
+          required: true
+          description: Grid running status
+          x-description-zh: 网格运行状态
+          x-description-zh-hk: 網格運行狀態
+        - name: └ submitted_base_price
+          type: string
+          required: true
+          description: Submitted base price the grid is anchored to
+          x-description-zh: 网格锚定的提交基准价格
+          x-description-zh-hk: 網格錨定的提交基準價格
+        - name: └ current_base_price
+          type: string
+          required: true
+          description: Current base price
+          x-description-zh: 当前基准价格
+          x-description-zh-hk: 當前基準價格
+        - name: └ pre_trigger_base_price
+          type: string
+          required: true
+          description: Base price before the last trigger
+          x-description-zh: 上次触发前的基准价格
+          x-description-zh-hk: 上次觸發前的基準價格
+        - name: └ post_trigger_base_price
+          type: string
+          required: true
+          description: Base price after the last trigger
+          x-description-zh: 上次触发后的基准价格
+          x-description-zh-hk: 上次觸發後的基準價格
+        - name: └ upper_limit_price
+          type: string
+          required: true
+          description: Upper price bound
+          x-description-zh: 价格上限
+          x-description-zh-hk: 價格上限
+        - name: └ lower_limit_price
+          type: string
+          required: true
+          description: Lower price bound
+          x-description-zh: 价格下限
+          x-description-zh-hk: 價格下限
+        - name: └ trigger_price_type
+          type: int32
+          required: true
+          description: Trigger price type. **Enum Value:**, `1` - Spread, `2` - Percent
+          x-description-zh: 触发价格类型。**Enum Value:**, `1` - 价差，`2` - 百分比
+          x-description-zh-hk: 觸發價格類型。**Enum Value:**, `1` - 價差，`2` - 百分比
+        - name: └ trigger_spread_up
+          type: string
+          required: true
+          description: Upward trigger spread, used when `trigger_price_type` is `1`
+          x-description-zh: 向上触发价差，`trigger_price_type` 为 `1` 时使用
+          x-description-zh-hk: 向上觸發價差，`trigger_price_type` 為 `1` 時使用
+        - name: └ trigger_spread_down
+          type: string
+          required: true
+          description: Downward trigger spread, used when `trigger_price_type` is `1`
+          x-description-zh: 向下触发价差，`trigger_price_type` 为 `1` 时使用
+          x-description-zh-hk: 向下觸發價差，`trigger_price_type` 為 `1` 時使用
+        - name: └ trigger_percent_up
+          type: string
+          required: true
+          description: Upward trigger percent, used when `trigger_price_type` is `2`
+          x-description-zh: 向上触发百分比，`trigger_price_type` 为 `2` 时使用
+          x-description-zh-hk: 向上觸發百分比，`trigger_price_type` 為 `2` 時使用
+        - name: └ trigger_percent_down
+          type: string
+          required: true
+          description: Downward trigger percent, used when `trigger_price_type` is `2`
+          x-description-zh: 向下触发百分比，`trigger_price_type` 为 `2` 时使用
+          x-description-zh-hk: 向下觸發百分比，`trigger_price_type` 為 `2` 時使用
+        - name: └ pullback_percent
+          type: string
+          required: true
+          description: Pullback percent
+          x-description-zh: 回调百分比
+          x-description-zh-hk: 回調百分比
+        - name: └ pullback_spread
+          type: string
+          required: true
+          description: Pullback spread
+          x-description-zh: 回调价差
+          x-description-zh-hk: 回調價差
+        - name: └ rebound_percent
+          type: string
+          required: true
+          description: Rebound percent
+          x-description-zh: 反弹百分比
+          x-description-zh-hk: 反彈百分比
+        - name: └ rebound_spread
+          type: string
+          required: true
+          description: Rebound spread
+          x-description-zh: 反弹价差
+          x-description-zh-hk: 反彈價差
+        - name: └ trigger_sell_order_type
+          type: string
+          required: true
+          description: Sell-side grid order type. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 卖出方网格订单类型。**Enum Value:**, `GMO` - 网格市价单，`GLO` - 网格限价单，`GTG` - 网格触价单
+          x-description-zh-hk: 賣出方網格訂單類型。**Enum Value:**, `GMO` - 網格市價單，`GLO` - 網格限價單，`GTG` - 網格觸價單
+        - name: └ trigger_buy_order_type
+          type: string
+          required: true
+          description: Buy-side grid order type. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 买入方网格订单类型。**Enum Value:**, `GMO` - 网格市价单，`GLO` - 网格限价单，`GTG` - 网格触价单
+          x-description-zh-hk: 買入方網格訂單類型。**Enum Value:**, `GMO` - 網格市價單，`GLO` - 網格限價單，`GTG` - 網格觸價單
+        - name: └ trigger_sell_depth
+          type: int32
+          required: true
+          description: Sell-side order-book depth, range `-5..5`; `0` means use `trigger_sell_order_type`
+          x-description-zh: 卖出方盘口深度，范围 `-5..5`；`0` 表示使用 `trigger_sell_order_type`
+          x-description-zh-hk: 賣出方盤口深度，範圍 `-5..5`；`0` 表示使用 `trigger_sell_order_type`
+        - name: └ trigger_buy_depth
+          type: int32
+          required: true
+          description: Buy-side order-book depth, range `-5..5`; `0` means use `trigger_buy_order_type`
+          x-description-zh: 买入方盘口深度，范围 `-5..5`；`0` 表示使用 `trigger_buy_order_type`
+          x-description-zh-hk: 買入方盤口深度，範圍 `-5..5`；`0` 表示使用 `trigger_buy_order_type`
+        - name: └ trigger_quantity
+          type: string
+          required: true
+          description: Quantity per trigger
+          x-description-zh: 每次触发数量
+          x-description-zh-hk: 每次觸發數量
+        - name: └ trigger_sell_quantity
+          type: string
+          required: true
+          description: Sell-side trigger quantity
+          x-description-zh: 卖出方触发数量
+          x-description-zh-hk: 賣出方觸發數量
+        - name: └ trigger_buy_quantity
+          type: string
+          required: true
+          description: Buy-side trigger quantity
+          x-description-zh: 买入方触发数量
+          x-description-zh-hk: 買入方觸發數量
+        - name: └ upper_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled at the upper bound
+          x-description-zh: 触及上限时处理的数量
+          x-description-zh-hk: 觸及上限時處理的數量
+        - name: └ lower_limit_quantity
+          type: string
+          required: true
+          description: Quantity handled at the lower bound
+          x-description-zh: 触及下限时处理的数量
+          x-description-zh-hk: 觸及下限時處理的數量
+        - name: └ upper_limit_event
+          type: int32
+          required: true
+          description: Event when the upper bound is reached. **Enum Value:**, `1` - Ignore (keep grid running), `2` - Close position at last price
+          x-description-zh: 触及上限时的处理事件。**Enum Value:**, `1` - 忽略（保持网格运行）, `2` - 以最新价平仓
+          x-description-zh-hk: 觸及上限時的處理事件。**Enum Value:**, `1` - 忽略（保持網格運行）, `2` - 以最新價平倉
+        - name: └ lower_limit_event
+          type: int32
+          required: true
+          description: Event when the lower bound is reached. **Enum Value:**, `1` - Ignore (keep grid running), `2` - Close position at last price
+          x-description-zh: 触及下限时的处理事件。**Enum Value:**, `1` - 忽略（保持网格运行）, `2` - 以最新价平仓
+          x-description-zh-hk: 觸及下限時的處理事件。**Enum Value:**, `1` - 忽略（保持網格運行）, `2` - 以最新價平倉
+        - name: └ multiple_trigger
+          type: boolean
+          required: true
+          description: Whether a single grid level can trigger multiple times
+          x-description-zh: 单个网格档位是否可多次触发
+          x-description-zh-hk: 單個網格檔位是否可多次觸發
+        - name: └ trigger_times
+          type: int32
+          required: true
+          description: Number of times the grid has triggered
+          x-description-zh: 网格已触发次数
+          x-description-zh-hk: 網格已觸發次數
+        - name: └ total_buy_quantity
+          type: string
+          required: true
+          description: Total bought quantity
+          x-description-zh: 累计买入数量
+          x-description-zh-hk: 累計買入數量
+        - name: └ total_sell_quantity
+          type: string
+          required: true
+          description: Total sold quantity
+          x-description-zh: 累计卖出数量
+          x-description-zh-hk: 累計賣出數量
+        - name: └ total_profit_balance
+          type: string
+          required: true
+          description: Total profit balance
+          x-description-zh: 累计收益余额
+          x-description-zh-hk: 累計收益餘額
+        - name: └ settlement_currency
+          type: string
+          required: true
+          description: Settlement currency
+          x-description-zh: 结算货币
+          x-description-zh-hk: 結算貨幣
+        - name: └ time_in_force
+          type: int32
+          required: true
+          description: Time in force type. **Enum Value:**, `0` - Day, `1` - Good-Til-Canceled, `6` - Good-Til-Date
+          x-description-zh: 订单有效期类型。**Enum Value:**, `0` - 当日有效，`1` - 撤单前有效，`6` - 指定日期前有效
+          x-description-zh-hk: 訂單有效期類型。**Enum Value:**, `0` - 當日有效，`1` - 撤單前有效，`6` - 指定日期前有效
+        - name: └ gtd
+          type: string
+          required: true
+          description: 'Good-Til-Date expiry date, format: `YYYY-MM-DD`'
+          x-description-zh: 指定日期前有效的到期日期，格式：`YYYY-MM-DD`
+          x-description-zh-hk: 指定日期前有效的到期日期，格式：`YYYY-MM-DD`
+        - name: └ created_at
+          type: string
+          required: true
+          description: Creation time, formatted as RFC3339
+          x-description-zh: 创建时间，格式为 RFC3339
+          x-description-zh-hk: 創建時間，格式為 RFC3339
+        - name: └ rth
+          type: int32
+          required: true
+          description: Regular trading hours flag. **Enum Value:**, `0`, `1`, `2`
+          x-description-zh: 盘中交易时段标识。**Enum Value:**, `0`, `1`, `2`
+          x-description-zh-hk: 盤中交易時段標識。**Enum Value:**, `0`, `1`, `2`
+        - name: └ support_shortsell
+          type: boolean
+          required: true
+          description: Whether short selling is allowed
+          x-description-zh: 是否允许卖空
+          x-description-zh-hk: 是否允許賣空
+        - name: └ grid_order_type_up
+          type: string
+          required: true
+          description: Sell-side order type when depth is `0`. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 深度为 `0` 时卖出方的订单类型。**Enum Value:**, `GMO` - 网格市价单，`GLO` - 网格限价单，`GTG` - 网格触价单
+          x-description-zh-hk: 深度為 `0` 時賣出方的訂單類型。**Enum Value:**, `GMO` - 網格市價單，`GLO` - 網格限價單，`GTG` - 網格觸價單
+        - name: └ grid_order_type_down
+          type: string
+          required: true
+          description: Buy-side order type when depth is `0`. **Enum Value:**, `GMO` - Grid market order, `GLO` - Grid limit order, `GTG` - Grid touch-to-go
+          x-description-zh: 深度为 `0` 时买入方的订单类型。**Enum Value:**, `GMO` - 网格市价单，`GLO` - 网格限价单，`GTG` - 网格触价单
+          x-description-zh-hk: 深度為 `0` 時買入方的訂單類型。**Enum Value:**, `GMO` - 網格市價單，`GLO` - 網格限價單，`GTG` - 網格觸價單
+        - name: has_more
+          type: boolean
+          required: true
+          description: Whether there are more pages
+          x-description-zh: 是否还有更多页
+          x-description-zh-hk: 是否還有更多頁
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  grid_order:
+                    - order_id: '764609681686573056'
+                      symbol: 700.HK
+                      stock_name: TENCENT
+                      market: HK
+                      status: Performing
+                      grid_status: Performing
+                      submitted_base_price: '300.000'
+                      current_base_price: '300.000'
+                      pre_trigger_base_price: '300.000'
+                      post_trigger_base_price: '306.000'
+                      upper_limit_price: '360.000'
+                      lower_limit_price: '240.000'
+                      trigger_price_type: 2
+                      trigger_spread_up: ''
+                      trigger_spread_down: ''
+                      trigger_percent_up: '2'
+                      trigger_percent_down: '2'
+                      pullback_percent: ''
+                      pullback_spread: ''
+                      rebound_percent: ''
+                      rebound_spread: ''
+                      trigger_sell_order_type: GMO
+                      trigger_buy_order_type: GMO
+                      trigger_sell_depth: 0
+                      trigger_buy_depth: 0
+                      trigger_quantity: '100'
+                      trigger_sell_quantity: '100'
+                      trigger_buy_quantity: '100'
+                      upper_limit_quantity: '200'
+                      lower_limit_quantity: '100'
+                      upper_limit_event: 1
+                      lower_limit_event: 1
+                      multiple_trigger: false
+                      trigger_times: 3
+                      total_buy_quantity: '300'
+                      total_sell_quantity: '200'
+                      total_profit_balance: '1250.00'
+                      settlement_currency: HKD
+                      time_in_force: 1
+                      gtd: ''
+                      created_at: '2025-01-15T09:30:00+08:00'
+                      rth: 0
+                      support_shortsell: false
+                      grid_order_type_up: GMO
+                      grid_order_type_down: GMO
+                  has_more: false
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /v1/gridtrading/cancel:
     post:
       operationId: grid_cancel
@@ -15837,6 +17299,304 @@ paths:
         - lang: Go
           label: Go
           source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"PUT\", \"https://openapi.longbridge.com/v1/watchlist/groups\", strings.NewReader(`{\"id\":0,\"name\":\"<name>\",\"securities\":[],\"mode\":\"<mode>\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      operationId: list_watchlist_groups
+      summary: Watchlist Groups
+      x-summary-zh: 关注分组
+      x-summary-zh-hk: 關注分組
+      description: |
+        Get Watchlist groups
+      x-description-zh: |
+        获取自选股分组
+      x-description-zh-hk: |
+        獲取關注分組
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
+      x-quote-level: basic
+      tags:
+        - Quote
+      x-parameters: []
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # list all watchlist groups and their symbols
+            longbridge watchlist
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/watchlist/groups' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/watchlist/groups",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/watchlist/groups",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/watchlist/groups", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/watchlist/groups")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/watchlist/groups\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: groups
+          type: object[]
+          required: false
+          description: Groups
+          x-description-zh: 分组
+          x-description-zh-hk: 分組
+        - name: └ id
+          type: integer
+          required: true
+          description: Group ID
+          x-description-zh: 分组 ID
+          x-description-zh-hk: 分組 ID
+        - name: └ name
+          type: string
+          required: true
+          description: Name
+          x-description-zh: 名称
+          x-description-zh-hk: 名稱
+        - name: └ securities
+          type: object[]
+          required: true
+          description: Security
+          x-description-zh: 股票
+          x-description-zh-hk: 股票
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  groups:
+                    - id: 28020
+                      name: all
+                      securities:
+                        - symbol: 700.HK
+                          market: HK
+                          name: Tencent
+                          watched_price: '364.4'
+                          watched_at: 1652855022
+                          is_pinned: true
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: delete_watchlist_group
+      summary: Delete Group
+      x-summary-zh: 删除分组
+      x-summary-zh-hk: 刪除分組
+      description: |
+        Delete watched group
+      x-description-zh: |
+        删除自选股分组
+      x-description-zh-hk: |
+        刪除自選股分組
+      x-subgroup: Watchlist
+      x-subgroup-zh: 自选股
+      x-subgroup-zh-hk: 自選股
+      x-quote-level: basic
+      tags:
+        - Quote
+      x-parameters:
+        - name: id
+          in: query
+          type: integer
+          required: true
+          description: Group ID, for example `10086`.
+          x-description-zh: 分组 ID，例如 `10086`
+          x-description-zh-hk: 分組 ID，例如 `10086`
+        - name: purge
+          in: query
+          type: boolean
+          required: true
+          description: Whether to clear the securities in the group. If set to `true`, the securities in the group will be unfollowed. If set to `false`, the securities in the group will remain in the `All` group.
+          x-description-zh: 是否清除分组下的股票 为 `true`，则此分组下的股票将被取消关注 为 `false`，则此分组下的股票会保留在 `全部` 分组中
+          x-description-zh-hk: 是否清除分組下的股票 為 `true`，則此分組下的股票將被取消關註 為 `false`，則此分組下的股票會保留在 `全部` 分組中
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            # delete a watchlist group by ID (get ID from: longbridge watchlist)
+            longbridge watchlist delete <id>
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request DELETE \
+              --url 'https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.delete(
+                "https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.delete(
+                        "https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>", {
+              method: "DELETE",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("DELETE", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::DELETE, "https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"DELETE\", \"https://openapi.longbridge.com/v1/watchlist/groups?id=<id>&purge=<purge>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       responses:
         '200':
           description: Successful response

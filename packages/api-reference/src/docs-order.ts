@@ -29,7 +29,9 @@ const OVERRIDES: Record<string, number> = {
   short_trades_hk: 27,
   short_trades_us: 27.1,
   // Quote / Watchlist
+  list_watchlist_groups: 1,
   create_watchlist_group: 2,
+  delete_watchlist_group: 3,
   update_watchlist_group: 4,
   watchlist_pinned: 5,
   // Quote / Subscribe
@@ -43,6 +45,7 @@ const OVERRIDES: Record<string, number> = {
   // News & Contents / Topics
   list_topics: 2,
   list_my_topics: 3,
+  list_topic_replies: 6,
   // News & Contents / Sharelist
   list_sharelists: 1,
   popular_sharelists: 6,
@@ -51,12 +54,15 @@ const OVERRIDES: Record<string, number> = {
   sharelist_sort_securities: 9,
   // Trade / Order
   submit_order: 1,
+  order_detail: 4,
   replace_order: 5,
+  cancel_order: 6,
   estimate_max_purchase: 7,
   // Trade / Grid Trading
   grid_symbol_info: 0.5,
   grid_submit: 1,
   grid_replace: 2,
+  list_grid_orders: 3,
   grid_list_by_ids: 4,
   grid_detail: 5,
   grid_trigger_history: 6,
