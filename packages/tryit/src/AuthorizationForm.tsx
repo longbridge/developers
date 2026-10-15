@@ -20,9 +20,12 @@ export function AuthorizationForm({ authData, autoFilled, onChange }: Authorizat
   }
 
   return (
-    <div className="tryit-base-form rounded-xl overflow-hidden" style={{ border: '1px solid var(--vp-c-border)' }}>
-      <div
-        className="flex items-center justify-between cursor-pointer select-none p-4 tryit-form-header"
+    <div className="tryit-base-form overflow-hidden" style={{ border: '1px solid var(--lb-stroke, #e6e7e8)', borderRadius: 'var(--ar-radius-md, 6px)' }}>
+      <button
+        type="button"
+        aria-expanded={!collapsed}
+        className="flex items-center justify-between select-none p-4 tryit-form-header w-full text-left"
+        style={{ background: 'transparent', border: 'none' }}
         onClick={() => setCollapsed((c) => !c)}
       >
         <h2 className="font-semibold m-0" style={{ color: 'var(--vp-c-text-1)' }}>
@@ -33,7 +36,7 @@ export function AuthorizationForm({ authData, autoFilled, onChange }: Authorizat
             Auto filled
           </span>
         )}
-      </div>
+      </button>
 
       <div className={`tryit-form-content${collapsed ? ' tryit-collapsed' : ''}`}>
         <div className="px-4 pb-4 flex flex-col gap-3">

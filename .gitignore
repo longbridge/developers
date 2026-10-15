@@ -37,11 +37,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 old_docs
 .superpowers
+# superpowers plans/specs are local working artifacts — never version them.
+# (astro-migration files already tracked on main stay tracked; gitignore does
+# not affect already-tracked files.)
 docs/superpowers/*
-!docs/superpowers/specs/
-!docs/superpowers/specs/**
-!docs/superpowers/plans/
-!docs/superpowers/plans/**
 .claude/worktrees
 .worktrees
 

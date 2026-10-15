@@ -7,27 +7,27 @@
 /* ── PlayButton color variants ───────────────────────────────────────────── */
 
 .tryit-btn-success {
-  background-color: var(--vp-c-success-1);
+  background-color: var(--vp-c-success-1, var(--lb-c-success-fg, #16a34a));
   color: #fff;
 }
 
 .tryit-btn-brand {
-  background-color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-1, var(--lb-c-info-fg, #3b82f6));
   color: #fff;
 }
 
 .tryit-btn-warning {
-  background-color: var(--vp-c-warning-1);
+  background-color: var(--vp-c-warning-1, var(--lb-c-warning-fg, #d97706));
   color: #fff;
 }
 
 .tryit-btn-danger {
-  background-color: var(--vp-c-danger-1);
+  background-color: var(--vp-c-danger-1, var(--lb-c-danger-fg, #dc2626));
   color: #fff;
 }
 
 .tryit-btn-important {
-  background-color: var(--vp-c-important-1);
+  background-color: var(--vp-c-important-1, #8b5cf6);
   color: #fff;
 }
 
@@ -36,49 +36,92 @@
   color: #fff;
 }
 
+/* Focus ring for all interactive controls styled here (buttons + input) */
+.tryit-btn-success:focus-visible,
+.tryit-btn-brand:focus-visible,
+.tryit-btn-warning:focus-visible,
+.tryit-btn-danger:focus-visible,
+.tryit-btn-important:focus-visible,
+.tryit-btn-default:focus-visible,
+.tryit-input:focus-visible {
+  box-shadow: var(--lb-focus-ring, 0 0 0 2px #fff, 0 0 0 4px #3b82f6);
+  outline: none;
+}
+
 /* ── Method badge text + bg colors ──────────────────────────────────────── */
 
 .method-get {
-  color: var(--vp-c-success-1);
-  background-color: var(--vp-c-success-soft);
+  color: var(--vp-c-success-1, var(--lb-c-success-fg, #16a34a));
+  background-color: var(--vp-c-success-soft, var(--lb-c-success-bg, rgba(34, 197, 94, 0.1)));
 }
 
 .method-post {
-  color: var(--vp-c-brand-1);
-  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1, var(--lb-c-info-fg, #3b82f6));
+  background-color: var(--vp-c-brand-soft, var(--lb-c-info-bg, rgba(59, 130, 246, 0.1)));
 }
 
 .method-put {
-  color: var(--vp-c-warning-1);
-  background-color: var(--vp-c-warning-soft);
+  color: var(--vp-c-warning-1, var(--lb-c-warning-fg, #d97706));
+  background-color: var(--vp-c-warning-soft, var(--lb-c-warning-bg, rgba(234, 179, 8, 0.1)));
 }
 
 .method-delete {
-  color: var(--vp-c-danger-1);
-  background-color: var(--vp-c-danger-soft);
+  color: var(--vp-c-danger-1, var(--lb-c-danger-fg, #dc2626));
+  background-color: var(--vp-c-danger-soft, var(--lb-c-danger-bg, rgba(239, 68, 68, 0.1)));
 }
 
 .method-patch {
-  color: var(--vp-c-important-1);
-  background-color: var(--vp-c-important-soft);
+  color: var(--vp-c-important-1, #8b5cf6);
+  background-color: var(--vp-c-important-soft, rgba(139, 92, 246, 0.1));
 }
 
 /* ── Response status dot ─────────────────────────────────────────────────── */
 
+/* Dots carry a distinct glyph so status is not conveyed by hue alone. */
+.tryit-status-success,
+.tryit-status-danger,
+.tryit-status-warning,
+.tryit-status-default {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tryit-status-success::before,
+.tryit-status-danger::before,
+.tryit-status-warning::before,
+.tryit-status-default::before {
+  font-size: 9px;
+  line-height: 1;
+  color: #fff;
+}
+
 .tryit-status-success {
-  background-color: var(--vp-c-success-1);
+  background-color: var(--vp-c-success-1, var(--lb-c-success-fg, #16a34a));
+}
+.tryit-status-success::before {
+  content: "\2713"; /* ✓ */
 }
 
 .tryit-status-danger {
-  background-color: var(--vp-c-danger-1);
+  background-color: var(--vp-c-danger-1, var(--lb-c-danger-fg, #dc2626));
+}
+.tryit-status-danger::before {
+  content: "\2715"; /* ✕ */
 }
 
 .tryit-status-warning {
-  background-color: var(--vp-c-warning-1);
+  background-color: var(--vp-c-warning-1, var(--lb-c-warning-fg, #d97706));
+}
+.tryit-status-warning::before {
+  content: "\25B2"; /* ▲ */
 }
 
 .tryit-status-default {
-  background-color: var(--vp-c-text-3);
+  background-color: var(--vp-c-text-3, #9ca3af);
+}
+.tryit-status-default::before {
+  content: "\2022"; /* • */
 }
 
 /* ── Form inputs ─────────────────────────────────────────────────────────── */
@@ -86,10 +129,10 @@
 .tryit-input {
   width: 100%;
   padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--vp-c-border);
-  background-color: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
+  border-radius: var(--ar-radius-sm, 6px);
+  border: 1px solid var(--lb-stroke, #e6e7e8);
+  background-color: var(--lb-bg-1, #fff);
+  color: var(--lb-fg-1, #1f2937);
   font-size: 13px;
   line-height: 1.5;
   outline: none;
@@ -97,7 +140,28 @@
 }
 
 .tryit-input:focus {
-  border-color: var(--vp-c-brand-1);
+  border-color: var(--lb-brand, #00b8b8);
+}
+/* Required param flagged empty after a failed Try it. */
+.tryit-input--invalid,
+.tryit-input--invalid:focus {
+  border-color: var(--lb-risk-danger, #ff3a3a);
+  box-shadow: 0 0 0 1px var(--lb-risk-danger, #ff3a3a);
+}
+
+/* Keep the input legible on dark pages: track the site's data-mode toggle,
+   falling back to the OS preference when the host has not stamped a mode. */
+:root[data-mode="dark"] .tryit-input {
+  border-color: var(--lb-stroke, #2c3039);
+  background-color: var(--lb-bg-1, #161b22);
+  color: var(--lb-fg-1, #e5e7eb);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode="light"]) .tryit-input {
+    border-color: var(--lb-stroke, #2c3039);
+    background-color: var(--lb-bg-1, #161b22);
+    color: var(--lb-fg-1, #e5e7eb);
+  }
 }
 
 /* ── Collapsible form content ────────────────────────────────────────────── */
@@ -113,7 +177,23 @@
 }
 
 .tryit-form-header:hover {
-  background-color: var(--vp-c-bg-soft);
+  background-color: var(--lb-bg-2, #f3f5f6);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode="light"]) .tryit-form-header:hover {
+    background-color: var(--lb-bg-2, #161a26);
+  }
+}
+:root[data-mode="dark"] .tryit-form-header:hover {
+  background-color: var(--lb-bg-2, #161a26);
+}
+
+/* Respect reduced-motion: disable the collapse animation and input transition. */
+@media (prefers-reduced-motion: reduce) {
+  .tryit-form-content,
+  .tryit-input {
+    transition: none !important;
+  }
 }
 
 /* ── Panel wrapper ───────────────────────────────────────────────────────── */
