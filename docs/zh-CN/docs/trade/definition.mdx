@@ -3,6 +3,7 @@ id: trade_definition
 title: 交易命名词典
 slug: trade-definition
 sidebar_position: 2
+description: 'Longbridge 交易接口用到的字段与枚举定义，包括订单类型、订单状态、市场和 WebSocket 订单推送字段。'
 ---
 
 ## OrderType
@@ -44,6 +45,7 @@ sidebar_position: 2
 | ReplacedNotReported  | 待提交 (改单成功) |
 | ProtectedNotReported | 待提交 (保价订单) |
 | VarietiesNotReported | 待提交 (条件单)   |
+| DelayedNotReported   | 监控中 (时间条件单)|
 | FilledStatus         | 已成交            |
 | WaitToNew            | 已提待报          |
 | NewStatus            | 已委托            |
@@ -99,7 +101,7 @@ sidebar_position: 2
 | last_share         | string | 最新成交数量																																													 |
 | last_price         | string | 最新成交价格																																													 |
 | multi_leg          | object | 多腿策略信息，仅多腿期权组合订单推送                                                                                                     |
-| ∟ strategy         | string | 多腿策略<br/><br/>**可选值**<br/>`0` - CoveredCall（股票担保）<br />`1` - CoveredPut（股票担保）<br />`2` - VerticalCallSpread（垂直策略）<br />`3` - VerticalPutSpread（垂直策略）<br />`4` - Collar（领式策略）<br />`5` - Straddle（跨式策略）<br />`6` - Strangle（宽跨式策略） |
+| ∟ strategy         | string | 多腿策略<br/><br/>**可选值**<br/>`0` - CoveredCall（股票担保）<br />`1` - CoveredPut（股票担保）<br />`2` - VerticalCallSpread（垂直策略）<br />`3` - VerticalPutSpread（垂直策略）<br />`4` - Collar（领式策略）<br />`5` - Straddle（跨式策略）<br />`6` - Strangle（宽跨式策略）<br />`7` - CalendarCallSpread（日历策略）<br />`8` - CalendarPutSpread（日历策略） |
 | ∟ strategy_name    | string | 策略名称                                                                                                                             |
 | ∟ multileg_id      | string | 多腿组合 ID                                                                                                                          |
 | ∟ code             | string | 多腿组合代码                                                                                                                          |

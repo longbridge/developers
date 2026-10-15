@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ site }) => {
     .map((entry) => {
       const url = resolveUrl(entry)
       const title = entry.data.title ?? url
-      const absUrl = `${site}${url.replace(/^\//, '')}`
+      const absUrl = `${site}${url.replace(/^\//, '')}.md`
       const body = entry.body ?? ''
       return `# ${title}\nURL: ${absUrl}\n\n${body}`
     })

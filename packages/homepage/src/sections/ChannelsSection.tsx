@@ -12,8 +12,8 @@ import type { Locale } from '@longbridge/openapi-utils'
 // that toggles the class directly on the DOM node (never via React state, so
 // SSR and the first client render stay identical and the innerHTML is never
 // re-rendered).
-const CHATGPT_APP_URL = 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef'
-const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge'
+const CHATGPT_APP_URL = 'https://chatgpt.com/plugins/longbridge'
+const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/longbridge'
 
 type PartnerKey = 'chatgpt' | 'claude'
 

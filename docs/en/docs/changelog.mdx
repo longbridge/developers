@@ -4,7 +4,22 @@ title: Changelog
 slug: changelog
 sidebar_position: 7
 sidebar_icon: newspaper
+description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest first: new commands, API endpoints, MCP tools and other changes.'
 ---
+
+## 2026-10-13
+
+- **[Time-condition orders](/docs/trade/order/submit#time-condition-orders)** — pass `delayed_until` when submitting a regular or multi-leg order to have it held and sent automatically at a set time (up to 90 days ahead); change or clear the time with Replace Order, and read it back from the order query APIs
+
+## 2026-09-28
+
+### CLI v0.29.0
+
+- **[Mutual funds come to the terminal](/docs/cli/fund/market)** — the new `longbridge fund` command group covers the whole channel: browse the catalog and a fund's detail, analysis, trend, returns, performance, NAV and holdings; review your fund positions; and validate, submit and cancel fund orders. Funds are addressed by `counter_id` (e.g. `UT/FD/HK0000384492`); `submit-order` / `cancel-order` prompt for confirmation unless `--yes`
+
+### MCP
+
+- **28 fund-channel tools** — Longbridge MCP gains the Hong Kong mutual-fund channel in sync: catalog & market data, your positions, order lookup, and fund order validate / submit / cancel (writes require two-step confirmation)
 
 ## 2026-08-19
 

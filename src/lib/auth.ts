@@ -46,7 +46,7 @@ function localePath(locale: Locale, path: string): string {
 
 /**
  * Build the login redirect URL — 1:1 with legacy `createLoginRedirectPath`.
- * `/login?redirect_to=<origin>/sso?redirect_to=<current href>&logout=1&with-us=1[&invite-code=…]`
+ * `/login?redirect_to=<origin>/sso?redirect_to=<current href>&logout=1[&invite-code=…]`
  * so that after login the SSO round-trip lands the user back on the current page.
  */
 export function createLoginRedirectPath(
@@ -61,7 +61,7 @@ export function createLoginRedirectPath(
   return withQuery(localePath(locale, '/login'), {
     redirect_to,
     logout: '1',
-    'with-us': '1',
+    // 'with-us': '1',
     ...(inviteCode ? { [INVITE_CODE_KEY]: inviteCode } : {}),
   })
 }

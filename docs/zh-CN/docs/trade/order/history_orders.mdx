@@ -283,6 +283,7 @@ func main() {
         "limit_depth_level": 0,
         "monitor_price": "",
         "trigger_count": 1,
+        "delayed_until": "0",
         "attached_orders": [
           {
             "order_id": "706388312699592705",
@@ -305,7 +306,8 @@ func main() {
             "reviewed": false,
             "activate_order_type": "MIT",
             "activate_rth": "RTH_ONLY",
-            "submit_price": ""
+            "submit_price": "",
+            "limit_depth_level": 0
           }
         ],
         "multi_leg": {
@@ -390,6 +392,7 @@ func main() {
 | ∟ limit_depth_level | int32    | true     | 指定买卖档位        |
 | ∟ monitor_price     | string   | true     | 监控价格            |
 | ∟ trigger_count     | int32    | true     | 触发次数            |
+| ∟ delayed_until | string | true | 时间条件单的提交时间，格式为时间戳 (秒)<br/><br/>非时间条件单时为 `0` |
 | ∟ attached_orders           | object[] | false    | 附加订单详情列表 |
 | ∟∟ order_id                 | string   | true     | 附加订单 ID |
 | ∟∟ attached_type_display    | int32    | true     | 附加订单类型。**可选值：** `1` - 止盈 `2` - 止损 |
@@ -412,8 +415,9 @@ func main() {
 | ∟∟ activate_order_type      | string   | true     | 触发后提交的订单类型，例如 `LIT`（限价单）或 `MIT`（市价单） |
 | ∟∟ activate_rth             | string   | true     | 触发后提交订单是否允许盘前盘后。|
 | ∟∟ submit_price             | string   | true     | 委托价格 |
+| ∟∟ limit_depth_level        | int32    | true     | 指定买卖档位 |
 | ∟ multi_leg                 | object   | false    | 多腿策略信息，仅多腿期权组合订单返回，非组合订单不返回。 |
-| ∟∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可选值：**<br/> `0` - CoveredCall（股票担保）<br/> `1` - CoveredPut（股票担保）<br/> `2` - VerticalCallSpread（垂直策略）<br/> `3` - VerticalPutSpread（垂直策略）<br/> `4` - Collar（领式策略）<br/> `5` - Straddle（跨式策略）<br/> `6` - Strangle（宽跨式策略） |
+| ∟∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可选值：**<br/> `0` - CoveredCall（股票担保）<br/> `1` - CoveredPut（股票担保）<br/> `2` - VerticalCallSpread（垂直策略）<br/> `3` - VerticalPutSpread（垂直策略）<br/> `4` - Collar（领式策略）<br/> `5` - Straddle（跨式策略）<br/> `6` - Strangle（宽跨式策略）<br/> `7` - CalendarCallSpread（日历策略）<br/> `8` - CalendarPutSpread（日历策略） |
 | ∟∟ strategy_name            | string   | false    | 策略名称 |
 | ∟∟ multileg_id              | string   | false    | 多腿组合 ID |
 | ∟∟ code                     | string   | false    | 多腿组合代码 |

@@ -12,8 +12,8 @@ import type { Locale } from '@longbridge/openapi-utils'
  */
 export const siteHostname = 'https://open.longbridge.com'
 
-export const CHATGPT_APP_URL = 'https://chatgpt.com/apps/longbridge/asdk_app_6a2baf2fad748191812393c3e00308ef'
-export const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/connectors/longbridge'
+export const CHATGPT_APP_URL = 'https://chatgpt.com/plugins/longbridge'
+export const CLAUDE_CONNECTOR_URL = 'https://claude.ai/directory/longbridge'
 
 /** Legacy `localePfx`: '' for en, '/zh-CN' / '/zh-HK' otherwise. */
 export function localePfx(locale: Locale): string {

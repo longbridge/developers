@@ -51,6 +51,7 @@ longbridge order sell TSLA.US 100 --price 260.00
 | monitor_price      | string | NO       | Monitoring price. <br/>Monitoring starts only after reaching this price, updating the reference price.<br/>Valid for `TSLPAMT` / `TSLPPCT` orders.                                                                                                                                                                              |
 | trigger_count      | int32  | NO       | Number of triggers. Value range is 0 ~ 3.<br/>Specifies that within 1 minute, the order will only be placed after being triggered multiple times.<br/>Valid for `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` orders.                                                                                                                   |
 | client_request_id  | string | NO       | Idempotent request ID for preventing duplicate order submissions. The server caches this request ID for 10 minutes. If a request with the same ID is received within this period, it returns the same response without creating a duplicate order. Must be a unique identifier (e.g., UUID). |
+| delayed_until | int64 | NO | Time-condition order: the order is held (status `DelayedNotReported`) and only submitted at this time. Unix timestamp in seconds, example: `1767225600`<br/><br/>Must be later than the current time and no more than 90 days ahead. Omit or pass `0` for a regular order. See [Time-Condition Orders](#time-condition-orders) for supported order types |
 | attached_params    | object | NO       | Attached order parameters (take-profit / stop-loss) |
 | attached_params.attached_order_type | string | NO | Attached order type<br/><br/>**Enum Value:**<br/>`PROFIT_TAKER` - Take Profit<br/>`STOP_LOSS` - Stop Loss<br/>`BRACKET` - Bracket Order |
 | attached_params.profit_taker_price | string | NO | Take-profit trigger price |
@@ -61,6 +62,8 @@ longbridge order sell TSLA.US 100 --price 260.00
 | attached_params.profit_taker_submit_price | string | NO | Take-profit limit order submitted price, required when `activate_order_type` is `LIT` |
 | attached_params.stop_loss_submit_price | string | NO | Stop-loss limit order submitted price, required when `activate_order_type` is `LIT` |
 | attached_params.activate_rth | string | NO | Whether the order submitted after triggering allows pre/post market trading <br/><br/>**Enum Value:**<br/> `RTH_ONLY` - Regular trading hours only<br/> `ANY_TIME` - Any time |
+| attached_params.profit_taker_depth_level | int32 | NO | Specifies the bid/ask depth level for the take-profit limit order submitted price, valid when `activate_order_type` is `LIT` |
+| attached_params.stop_loss_depth_level | int32 | NO | Specifies the bid/ask depth level for the stop-loss limit order submitted price, valid when `activate_order_type` is `LIT` |
 
 ### Idempotency
 
@@ -88,6 +91,19 @@ If you do not provide `client_request_id` (or pass an empty value), the request 
 - No server-side caching of the request will be performed
 
 It is strongly recommended to always provide a unique `client_request_id` for critical order submissions to prevent unintended duplicates.
+
+### Time-Condition Orders
+
+Pass `delayed_until` (Unix timestamp in seconds) to create a time-condition order. The order is not sent to the exchange right away: it stays in `DelayedNotReported` status and is submitted automatically when the time arrives. The time must be later than now and no more than 90 days ahead.
+
+Supported markets and order types:
+
+- HK stocks / warrants: `LO` / `ELO` / `MO` / `LIT` / `MIT`
+- US stocks / warrants / options: `LO` / `MO` / `LIT` / `MIT`
+- SG stocks: `LO` / `MO` / `LIT` / `MIT`
+- Crypto: `LO` / `MO`
+
+Use [Replace Order](./replace) to change the time (`delayed_until` set to a new time) or turn it into a regular order (`delayed_until` set to `1`). Order queries return the time in the `delayed_until` field.
 
 ### Request Example
 

@@ -95,7 +95,10 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              MarketContext ctx = MarketContext.create(config)) {
-            var resp = ctx.getRankList("hot_all-us", false).get();
+            RankListOptions opts = new RankListOptions();
+            opts.key = "hot_all-us";
+            opts.needArticle = false;
+            var resp = ctx.getRankList(opts).get();
             System.out.println(resp);
         }
     }

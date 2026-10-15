@@ -265,6 +265,7 @@ func main() {
     "outside_rth": "ANY_TIME",
     "currency": "USD",
     "remark": "1680863603.927165",
+    "delayed_until": "0",
     "free_status": "None",
     "free_amount": "",
     "free_currency": "",
@@ -328,7 +329,8 @@ func main() {
         "reviewed": false,
         "activate_order_type": "MIT",
         "activate_rth": "RTH_ONLY",
-        "submit_price": ""
+        "submit_price": "",
+        "limit_depth_level": 0
       }
     ],
     "multi_leg": {
@@ -408,6 +410,7 @@ func main() {
 | currency                   | string   | true     | 結算貨幣                                                                                                                                                                                           |
 | outside_rth                | string   | true     | 是否允許盤前盤後<br/> 當訂單不是美股時，默認為 UnknownOutsideRth<br/><br/> **可選值：**<br/> `RTH_ONLY` - 不允許盤前盤後<br/> `ANY_TIME` - 允許盤前盤後<br/> `OVERNIGHT` - 夜盤                    |
 | remark                     | string   | true     | 備註                                                                                                                                                                                               |
+| delayed_until | string | true | 時間條件單的提交時間，格式為時間戳 (秒)<br/><br/>非時間條件單時為 `0` |
 | free_status                | string   | true     | 免傭狀態，默認為 None<br/><br/> **可選值：**<br/> `None` - 無<br/> `Calculated` - 免傭額待計算<br/> `Pending` - 待免傭<br/> `Ready` - 已免傭                                                       |
 | free_amount                | string   | true     | 免佣金額，默認為空字符串                                                                                                                                                                           |
 | free_currency              | string   | true     | 免傭貨幣，默認為空字符串                                                                                                                                                                           |
@@ -459,8 +462,9 @@ func main() {
 | ∟∟ activate_order_type     | string   | true     | 觸發後提交的訂單類型，例如 `LIT`（限價單）或 `MIT`（市價單） |
 | ∟∟ activate_rth            | string   | true     | 觸發後提交訂單是否允許盤前盤後。 |
 | ∟∟ submit_price            | string   | true     | 委託價格 |
+| ∟∟ limit_depth_level       | int32    | true     | 指定買賣檔位 |
 | multi_leg                  | object   | false    | 多腿策略信息，僅多腿期權組合訂單返回，非組合訂單不返回。 |
-| ∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可選值：**<br/> `0` - CoveredCall（股票擔保）<br/> `1` - CoveredPut（股票擔保）<br/> `2` - VerticalCallSpread（跨價期權）<br/> `3` - VerticalPutSpread（跨價期權）<br/> `4` - Collar（領式策略）<br/> `5` - Straddle（馬鞍式策略）<br/> `6` - Strangle（勒束式策略） |
+| ∟ strategy                 | string   | false    | 多腿策略<br/><br/> **可選值：**<br/> `0` - CoveredCall（股票擔保）<br/> `1` - CoveredPut（股票擔保）<br/> `2` - VerticalCallSpread（跨價期權）<br/> `3` - VerticalPutSpread（跨價期權）<br/> `4` - Collar（領式策略）<br/> `5` - Straddle（馬鞍式策略）<br/> `6` - Strangle（勒束式策略）<br/> `7` - CalendarCallSpread（跨期期權策略）<br/> `8` - CalendarPutSpread（跨期期權策略） |
 | ∟ strategy_name            | string   | false    | 策略名稱 |
 | ∟ multileg_id              | string   | false    | 多腿組合 ID |
 | ∟ code                     | string   | false    | 多腿組合代碼 |
