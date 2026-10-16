@@ -45,7 +45,6 @@ longbridge order replace 693664675163312128 --qty 200 --price 255.00
 | limit_depth_level | int32  | NO       | Specifies the bid/ask depth level. `TSLPAMT` / `TSLPPCT` Order Required                                |
 | monitor_price     | string | NO       | Monitoring price. `TSLPAMT` / `TSLPPCT` Order Required                                                 |
 | trigger_count     | int32  | NO       | Number of triggers. `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` Order Required                               |
-| delayed_until | int64 | NO | Time-condition submit time, Unix timestamp in seconds, example: `1767225600`<br/><br/>`0` or omitted - keep the current time condition<br/>`1` - clear the time condition<br/>Other values - set a new time, which must be later than the current time and no more than 90 days ahead |
 | attached_params   | object | NO       | Attached order parameters (take-profit / stop-loss)                                                    |
 | attached_params.attached_order_type | string | NO | Attached order type<br/><br/>**Enum Value:**<br/>`PROFIT_TAKER` - Take Profit<br/>`STOP_LOSS` - Stop Loss<br/>`BRACKET` - Bracket Order |
 | attached_params.profit_taker_price | string | NO | Take-profit trigger price |

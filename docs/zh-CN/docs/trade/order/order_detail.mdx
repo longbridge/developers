@@ -265,7 +265,6 @@ func main() {
     "outside_rth": "ANY_TIME",
     "currency": "USD",
     "remark": "1680863603.927165",
-    "delayed_until": "0",
     "free_status": "None",
     "free_amount": "",
     "free_currency": "",
@@ -410,7 +409,6 @@ func main() {
 | currency                   | string   | true     | 结算货币                                                                                                                                                                                           |
 | outside_rth                | string   | true     | 是否允许盘前盘后<br/> 当订单不是美股时，默认为 UnknownOutsideRth<br/><br/> **可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后<br/> `OVERNIGHT` - 夜盘"                   |
 | remark                     | string   | true     | 备注                                                                                                                                                                                               |
-| delayed_until | string | true | 时间条件单的提交时间，格式为时间戳 (秒)<br/><br/>非时间条件单时为 `0` |
 | free_status                | string   | true     | 免佣状态，默认为 None<br/><br/> **可选值：**<br/> `None` - 无<br/> `Calculated` - 免佣额待计算<br/> `Pending` - 待免佣<br/> `Ready` - 已免佣                                                       |
 | free_amount                | string   | true     | 免佣金额，默认为空字符串                                                                                                                                                                           |
 | free_currency              | string   | true     | 免佣货币，默认为空字符串                                                                                                                                                                           |

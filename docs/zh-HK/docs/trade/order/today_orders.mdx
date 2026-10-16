@@ -276,7 +276,6 @@ func main() {
         "limit_depth_level": 0,
         "monitor_price": "",
         "trigger_count": 1,
-        "delayed_until": "0",
         "attached_orders": [
           {
             "order_id": "706388312699592705",
@@ -384,7 +383,6 @@ func main() {
 | ∟ limit_depth_level | int32    | true     | 指定買賣檔位   |
 | ∟ monitor_price     | string   | true     | 監控價格       |
 | ∟ trigger_count     | int32    | true     | 觸發次數       |
-| ∟ delayed_until | string | true | 時間條件單的提交時間，格式為時間戳 (秒)<br/><br/>非時間條件單時為 `0` |
 | ∟ attached_orders           | object[] | false    | 附加訂單詳情列表 |
 | ∟∟ order_id                 | string   | true     | 附加訂單 ID |
 | ∟∟ attached_type_display    | int32    | true     | 附加訂單類型。**可選值：** `1` - 止盈 `2` - 止損 |

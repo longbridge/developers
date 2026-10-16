@@ -51,7 +51,6 @@ longbridge order sell TSLA.US 100 --price 260.00
 | monitor_price      | string |  NO      | 監控價格，需要達到該價格才會開始監控，更新參考價<br/>`TSLPAMT` / `TSLPPCT` 訂單有效 |
 | trigger_count      | int32  |  NO      | 觸發次數，取值範圍 0 ~ 3，表示在 1 分鐘內觸發多次才會觸發訂單，<br/>`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 訂單有效 |
 | client_request_id  | string | NO       | 冪等性請求 ID，用於防止重複下單。服務器會快取該請求 ID 10 分鐘。在此期間內如果收到相同 ID 的請求，將返回原始響應而不建立重複訂單。必須是唯一標識符（如 UUID）。 |
-| delayed_until | int64 | NO | 時間條件單：訂單先進入監控（狀態為 `DelayedNotReported`），到達該時間後才提交。Unix 時間戳（秒），例如：`1767225600`<br/><br/>必須晚於當前時間且不超過 90 天。不傳或傳 `0` 表示普通訂單。支持的訂單類型見[時間條件單](#時間條件單) |
 | attached_params    | object |  NO      | 附加單參數（止盈止損） |
 | attached_params.attached_order_type | string | NO | 附加單訂單類型<br/><br/>**可選值：**<br/>`PROFIT_TAKER` - 止盈<br/>`STOP_LOSS` - 止損<br/>`BRACKET` - 括號單 |
 | attached_params.profit_taker_price | string | NO | 止盈觸發價格 |
@@ -91,19 +90,6 @@ longbridge order sell TSLA.US 100 --price 260.00
 - 服務器不會對該請求進行快取
 
 強烈建議在關鍵下單操作中始終提供唯一的 `client_request_id`，以防止意外的重複訂單。
-
-### 時間條件單
-
-傳入 `delayed_until`（Unix 時間戳，秒）即可提交時間條件單。訂單不會立即報送交易所，而是以 `DelayedNotReported` 狀態等待，到達指定時間後自動提交。該時間必須晚於當前時間且不超過 90 天。
-
-支持的市場與訂單類型：
-
-- 港股正股 / 窩輪：`LO` / `ELO` / `MO` / `LIT` / `MIT`
-- 美股正股 / 窩輪 / 期權：`LO` / `MO` / `LIT` / `MIT`
-- 新加坡股票：`LO` / `MO` / `LIT` / `MIT`
-- 加密貨幣：`LO` / `MO`
-
-可通過[改單](./replace)修改提交時間（`delayed_until` 傳新的時間），或轉為普通訂單（`delayed_until` 傳 `1`）。訂單查詢接口通過 `delayed_until` 字段返回該時間。
 
 ### Request Example
 
