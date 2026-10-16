@@ -13288,6 +13288,13 @@ paths:
           description: Idempotent request ID for preventing duplicate order submissions. The server caches this request ID for 10 minutes. If a request with the same ID is received within this period, it returns the same response without creating a duplicate order. Must be a unique identifier (e.g., UUID).
           x-description-zh: 幂等性请求 ID，用于防止重复下单。服务器会缓存该请求 ID 10 分钟。在此期间内如果收到相同 ID 的请求，将返回原始响应而不创建重复订单。必须是唯一标识符（如 UUID）。
           x-description-zh-hk: 冪等性請求 ID，用於防止重複下單。服務器會快取該請求 ID 10 分鐘。在此期間內如果收到相同 ID 的請求，將返回原始響應而不建立重複訂單。必須是唯一標識符（如 UUID）。
+        - name: delayed_until
+          in: body
+          type: integer
+          required: false
+          description: 'Time-condition order: the order is held (status `DelayedNotReported`) and only submitted at this time. Unix timestamp in seconds, example: `1767225600`. Must be later than the current time and no more than 90 days ahead. Omit or pass `0` for a regular order.'
+          x-description-zh: 时间条件单：订单先进入监控（状态为 `DelayedNotReported`），到达该时间后才提交。Unix 时间戳（秒），例如：`1767225600`。必须晚于当前时间且不超过 90 天。不传或传 `0` 表示普通订单。
+          x-description-zh-hk: 時間條件單：訂單先進入監控（狀態為 `DelayedNotReported`），到達該時間後才提交。Unix 時間戳（秒），例如：`1767225600`。必須晚於當前時間且不超過 90 天。不傳或傳 `0` 表示普通訂單。
         - name: attached_params
           in: body
           type: object
@@ -13585,6 +13592,13 @@ paths:
           description: Number of triggers. `LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` Order Required
           x-description-zh: 触发次数，`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 订单必填
           x-description-zh-hk: 觸發次數，`LIT` / `MIT` / `TSLPAMT` / `TSLPPCT` 訂單必填
+        - name: delayed_until
+          in: body
+          type: integer
+          required: false
+          description: 'Time-condition submit time, Unix timestamp in seconds, example: `1767225600`. `0` or omitted - keep the current time condition; `1` - clear the time condition; other values - set a new time, which must be later than the current time and no more than 90 days ahead.'
+          x-description-zh: 时间条件单的提交时间，Unix 时间戳（秒），例如：`1767225600`。`0` 或不传 - 不修改时间条件；`1` - 清除时间条件；其他值 - 设置新的提交时间，必须晚于当前时间且不超过 90 天。
+          x-description-zh-hk: 時間條件單的提交時間，Unix 時間戳（秒），例如：`1767225600`。`0` 或不傳 - 不修改時間條件；`1` - 清除時間條件；其他值 - 設置新的提交時間，必須晚於當前時間且不超過 90 天。
         - name: attached_params
           in: body
           type: object
@@ -14110,6 +14124,12 @@ paths:
           description: Remark
           x-description-zh: 备注
           x-description-zh-hk: 備註
+        - name: delayed_until
+          type: string
+          required: false
+          description: Time-condition submit time, formatted as a timestamp (second). `0` when the order is not a time-condition order
+          x-description-zh: 时间条件单的提交时间，格式为时间戳 (秒)。非时间条件单时为 `0`
+          x-description-zh-hk: 時間條件單的提交時間，格式為時間戳 (秒)。非時間條件單時為 `0`
         - name: free_status
           type: string
           required: true
@@ -14322,6 +14342,7 @@ paths:
                   outside_rth: ANY_TIME
                   currency: USD
                   remark: '1680863603.927165'
+                  delayed_until: '0'
                   free_status: None
                   free_amount: ''
                   free_currency: ''
@@ -14628,6 +14649,13 @@ paths:
           description: Client request ID, used for idempotency (Maximum 64 characters)
           x-description-zh: 客户端请求 ID，用于幂等（最多 64 字符）
           x-description-zh-hk: 客戶端請求 ID，用於冪等（最多 64 字符）
+        - name: delayed_until
+          in: body
+          type: integer
+          required: false
+          description: 'Time-condition order: the order is held (status `DelayedNotReported`) and only submitted at this time. Unix timestamp in seconds, example: `1767225600`. Must be later than the current time and no more than 90 days ahead. Only `LO` / `MO` are supported. Omit or pass `0` for a regular order.'
+          x-description-zh: 时间条件单：订单先进入监控（状态为 `DelayedNotReported`），到达该时间后才提交。Unix 时间戳（秒），例如：`1767225600`。必须晚于当前时间且不超过 90 天，仅支持 `LO` / `MO`。不传或传 `0` 表示普通订单。
+          x-description-zh-hk: 時間條件單：訂單先進入監控（狀態為 `DelayedNotReported`），到達該時間後才提交。Unix 時間戳（秒），例如：`1767225600`。必須晚於當前時間且不超過 90 天，僅支持 `LO` / `MO`。不傳或傳 `0` 表示普通訂單。
       x-request-examples:
         - lang: Shell
           label: cURL
@@ -41431,6 +41459,12 @@ paths:
           description: Monitoring price
           x-description-zh: 监控价格
           x-description-zh-hk: 監控價格
+        - name: └ delayed_until
+          type: string
+          required: false
+          description: Time-condition submit time, formatted as a timestamp (second). `0` when the order is not a time-condition order
+          x-description-zh: 时间条件单的提交时间，格式为时间戳 (秒)。非时间条件单时为 `0`
+          x-description-zh-hk: 時間條件單的提交時間，格式為時間戳 (秒)。非時間條件單時為 `0`
         - name: └ monitor_counter_id
           type: string
           required: false
@@ -41487,6 +41521,7 @@ paths:
                       remark: ''
                       limit_depth_level: 0
                       monitor_price: ''
+                      delayed_until: '0'
                       trigger_count: 1
                       attached_orders:
                         - order_id: '706388312699592705'
@@ -41881,6 +41916,12 @@ paths:
           description: Monitoring price
           x-description-zh: 监控价格
           x-description-zh-hk: 監控價格
+        - name: └ delayed_until
+          type: string
+          required: false
+          description: Time-condition submit time, formatted as a timestamp (second). `0` when the order is not a time-condition order
+          x-description-zh: 时间条件单的提交时间，格式为时间戳 (秒)。非时间条件单时为 `0`
+          x-description-zh-hk: 時間條件單的提交時間，格式為時間戳 (秒)。非時間條件單時為 `0`
         - name: └ monitor_counter_id
           type: string
           required: false
@@ -41937,6 +41978,7 @@ paths:
                       remark: ''
                       limit_depth_level: 0
                       monitor_price: ''
+                      delayed_until: '0'
                       trigger_count: 1
                       attached_orders:
                         - order_id: '706388312699592705'

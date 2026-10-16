@@ -7,6 +7,10 @@ sidebar_icon: newspaper
 description: 'Longbridge OpenAPI、CLI、MCP 與 SDK 的更新日誌，按時間倒序列出新增命令、接口、MCP 工具及其他變更。'
 ---
 
+## 2026-10-13
+
+- **[時間條件單](/zh-HK/docs/trade/order/submit#時間條件單)** — 下單與多腿下單支持傳入 `delayed_until`，訂單先進入監控，到達指定時間（最長 90 天）後自動提交；可通過改單修改或清除提交時間，訂單查詢接口同步返回該字段
+
 ## 2026-09-28
 
 ### CLI v0.29.0
