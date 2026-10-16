@@ -283,7 +283,6 @@ func main() {
         "limit_depth_level": 0,
         "monitor_price": "",
         "trigger_count": 1,
-        "delayed_until": "0",
         "attached_orders": [
           {
             "order_id": "706388312699592705",
@@ -392,7 +391,6 @@ func main() {
 | ∟ limit_depth_level | int32    | true     | 指定买卖档位        |
 | ∟ monitor_price     | string   | true     | 监控价格            |
 | ∟ trigger_count     | int32    | true     | 触发次数            |
-| ∟ delayed_until | string | true | 时间条件单的提交时间，格式为时间戳 (秒)<br/><br/>非时间条件单时为 `0` |
 | ∟ attached_orders           | object[] | false    | 附加订单详情列表 |
 | ∟∟ order_id                 | string   | true     | 附加订单 ID |
 | ∟∟ attached_type_display    | int32    | true     | 附加订单类型。**可选值：** `1` - 止盈 `2` - 止损 |

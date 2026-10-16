@@ -39,7 +39,6 @@ This API is used to submit a multi-leg option combination order (such as vertica
 | ∟ ratio_quantity   | string   | YES      | Leg ratio quantity, example: `1`                                                                                                                                   |
 | remark             | string   | NO       | Remark (Maximum 255 characters)                                                                                                                                    |
 | client_request_id  | string   | NO       | Client request ID, used for idempotency (Maximum 64 characters)                                                                                                    |
-| delayed_until | int64 | NO | Time-condition order: the order is held (status `DelayedNotReported`) and only submitted at this time. Unix timestamp in seconds, example: `1767225600`<br/><br/>Must be later than the current time and no more than 90 days ahead. Only `LO` / `MO` are supported. Omit or pass `0` for a regular order |
 
 ### Request Example
 

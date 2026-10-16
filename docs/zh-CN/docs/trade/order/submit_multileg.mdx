@@ -39,7 +39,6 @@ headingLevel: 2
 | ∟ ratio_quantity   | string   | YES      | 该腿比例数量，例如：`1`                                                                                                                                             |
 | remark             | string   | NO       | 备注（最多 255 字符）                                                                                                                                               |
 | client_request_id  | string   | NO       | 客户端请求 ID，用于幂等（最多 64 字符）                                                                                                                             |
-| delayed_until | int64 | NO | 时间条件单：订单先进入监控（状态为 `DelayedNotReported`），到达该时间后才提交。Unix 时间戳（秒），例如：`1767225600`<br/><br/>必须晚于当前时间且不超过 90 天，仅支持 `LO` / `MO`。不传或传 `0` 表示普通订单 |
 
 ### Request Example
 
