@@ -42,7 +42,7 @@ Longbridge MCP 暴露 160+ 工具，覆盖六大能力域，客户端连接后�
 
 ## 前置条件
 
-- 已拥有 [Longbridge 账户](https://longbridge.com/hk/download)并完成开户，或开通模拟账户
+- 已拥有 [Longbridge 账户](https://longbridge.com/hk/download)并完成开户，或开通模拟账户（Longbridge US 账户不提供模拟账户）
 - 支持 MCP OAuth 2.1 的其他 AI 客户端（见下方兼容性说明）
 
 ## 客户端接入
@@ -185,7 +185,7 @@ AI 客户端                  浏览器                    Longbridge
 
 1. **发起连接** — 在客户端添加 Longbridge MCP 配置后，首次调用会触发授权
 2. **浏览器跳转** — 客户端自动打开浏览器，进入 Longbridge 登录与权限确认页
-3. **登录并授权** — 使用 Longbridge 账户登录，查看并同意所请求的权限范围（scope）
+3. **登录并授权** — 使用 Longbridge 账户登录，查看并同意所请求的权限范围（scope，参见 [OAuth 权限范围](/zh-CN/docs/getting-started#oauth-scopes)）
 4. **建立会话** — 授权完成后，客户端获得凭证，MCP 工具即可使用
 5. **凭证维护** — 凭证按 OAuth 策略自动刷新；如需撤销，前往 Longbridge 账户安全设置
 
@@ -231,3 +231,4 @@ Longbridge MCP 依赖 **MCP OAuth 2.1** 标准。若客户端未完整实现该�
 
 - 检查账户的交易权限和市场可交易资格
 - 确认当前 MCP 会话的 OAuth scope 包含交易相关权限
+- 错误码 `403308`（`Target API's scope is not in authorized scopes`）表示会话未被授予该工具所需的 scope（如 `account.read`、`trade.read` 或 `trade.write`）：请移除并重新添加 MCP 配置，授权时勾选该 scope。账户未开通对应市场的证券账户或交易权限时也可能出现该错误。参见 [OAuth 权限范围](/zh-CN/docs/getting-started#oauth-scopes)

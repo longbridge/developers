@@ -42,7 +42,7 @@ Actual tool availability depends on your region, account level, and granted OAut
 
 ## Prerequisites
 
-- An active [Longbridge account](https://longbridge.com/hk/download) with onboarding completed, or a paper trading account
+- An active [Longbridge account](https://longbridge.com/hk/download) with onboarding completed, or a paper trading account (Longbridge US accounts have no paper accounts)
 - Another AI client that supports MCP OAuth 2.1 (see compatibility note below)
 
 ## Client setup
@@ -185,7 +185,7 @@ AI client                  Browser                   Longbridge
 
 1. **Initiate connection** — Adding the Longbridge MCP config and calling a tool for the first time triggers the authorization flow
 2. **Browser redirect** — The client opens a browser tab with the Longbridge login and consent page
-3. **Sign in and approve** — Log in with your Longbridge account and review and accept the requested permission scopes
+3. **Sign in and approve** — Log in with your Longbridge account and review and accept the requested permission scopes (see [OAuth Scopes](/docs/getting-started#oauth-scopes))
 4. **Session established** — After approval, the client receives credentials and MCP tools become available
 5. **Credential maintenance** — Credentials are refreshed automatically per OAuth policy; to revoke access, visit Longbridge account security settings
 
@@ -231,3 +231,4 @@ If your client has incomplete OAuth support or cannot launch a browser, use an [
 
 - Verify trading permissions and market eligibility on your account
 - Confirm that the current MCP session's OAuth scopes include trading-related permissions
+- Error `403308` (`Target API's scope is not in authorized scopes`) means the session was not granted the scope the tool needs, such as `account.read`, `trade.read` or `trade.write`: remove and re-add the MCP configuration and grant that scope. It can also appear when the account has no securities account or trading permission for the market involved. See [OAuth Scopes](/docs/getting-started#oauth-scopes)

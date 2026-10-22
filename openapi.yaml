@@ -1201,6 +1201,7 @@ x-pages:
       | 403         | 403202 | duplicate request      | Repeat request, same request without replacement `x-timestamp`     |
       | 403         | 403203 | apikey illegal         | `App Key` is illegal                                               |
       | 403         | 403205 | ip is not allowed      | IP address is not authorized to access                             |
+      | 403         | 403308 | Target API's scope is not in authorized scopes | The OAuth token was not granted the scope this API needs (for example `account.read`, `trade.read` or `trade.write`). Authorize again and grant that scope; see [OAuth Scopes](/docs/getting-started#oauth-scopes). It can also appear when the account has no securities account or trading permission for the market involved. |
       | 401         | 401003 | token expired          | Access token expired. Legacy API Key: obtain a new token from [https://open.longbridge.com/](https://open.longbridge.com/). OAuth: use the refresh token flow. |
       | 429         | 429001 | ip request ratelimit   | Too frequent requests as a same IP address, please try again later |
       | 429         | 429002 | api request is limited | Too frequent requests on an API, please try again later            |
@@ -1214,6 +1215,7 @@ x-pages:
       | 403         | 403202 | duplicate request      | 重复请求，同一个请求没有更换 X-Timestamp |
       | 403         | 403203 | apikey illegal         | App Key 无效                             |
       | 403         | 403205 | ip is not allowed      | IP 地址无权访问                          |
+      | 403         | 403308 | Target API's scope is not in authorized scopes | OAuth Token 未被授予该接口所需的 scope（例如 `account.read`、`trade.read` 或 `trade.write`）。请重新授权并勾选该 scope，参见 [OAuth 权限范围](/zh-CN/docs/getting-started#oauth-scopes)。账户未开通对应市场的证券账户或交易权限时也可能出现该错误。 |
       | 401         | 401003 | token expired          | Access Token 已过期。旧版 API Key：请在 [https://open.longbridge.com/](https://open.longbridge.com/) 重新获取；OAuth：请使用 refresh token 流程刷新。 |
       | 429         | 429001 | ip request ratelimit   | IP 访问过于频繁，请稍后再试              |
       | 429         | 429002 | api request is limited | 接口访问过于频繁，请稍后再试             |
@@ -1227,6 +1229,7 @@ x-pages:
       | 403         | 403202 | duplicate request      | 重複請求，同一個請求沒有更換 X-Timestamp |
       | 403         | 403203 | apikey illegal         | App Key 無效                             |
       | 403         | 403205 | ip is not allowed      | IP 地址無權訪問                          |
+      | 403         | 403308 | Target API's scope is not in authorized scopes | OAuth Token 未被授予該接口所需的 scope（例如 `account.read`、`trade.read` 或 `trade.write`）。請重新授權並勾選該 scope，參見 [OAuth 權限範圍](/zh-HK/docs/getting-started#oauth-scopes)。賬戶未開通對應市場的證券賬戶或交易權限時也可能出現該錯誤。 |
       | 401         | 401003 | token expired          | Access Token 已過期。舊版 API Key：請在 [https://open.longbridge.com/](https://open.longbridge.com/) 重新獲取；OAuth：請使用 refresh token 流程刷新。 |
       | 429         | 429001 | ip request ratelimit   | IP 訪問過於頻繁，請稍後再試              |
       | 429         | 429002 | api request is limited | 接口訪問過於頻繁，請稍後再試             |

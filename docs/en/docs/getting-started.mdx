@@ -411,6 +411,45 @@ int main(int argc, char const* argv[]) {
 OAuth tokens should be stored securely in your application (e.g., encrypted file, secure keychain), **not in environment variables** for security reasons.
 :::
 
+<a id="oauth-scopes"></a>
+
+**OAuth Scopes**
+
+APIs that read account data or trade require the token to carry the matching scope; market data and other general APIs need no extra scope. Scopes are identified by key:
+
+| Scope key | Grants |
+| --------- | ------ |
+| `watchlist` | Watchlist groups (read and write) |
+| `account.read` | Account assets, positions and cash flow (read-only) |
+| `trade.read` | Order and execution lookup (read-only) |
+| `trade.write` | Placing, replacing and canceling orders, and other trading writes |
+
+The `/oauth2/register` response lists scopes as numeric ids (for example `"4 6 10 11 12"`). The ids are environment-specific: on `openapi.longbridge.com`, `4`, `6`, `10` and `11` are `watchlist`, `account.read`, `trade.read` and `trade.write`. Treat any other id as opaque and rely on the scope keys.
+
+If an API returns error `403308` (`Target API's scope is not in authorized scopes`), the token was not granted the scope that API needs. Delete the stored token under `~/.longbridge/openapi/tokens/<client_id>`, authorize again and grant that scope. See [Error Codes](/docs/error-codes).
+
+<a id="oauth-revoke"></a>
+
+**Revoke a Token**
+
+To revoke an access token or refresh token, send a form-encoded request to the revocation endpoint ([RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009)):
+
+```bash
+curl -X POST https://openapi.longbridge.com/oauth2/revoke \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "token=YOUR_REFRESH_TOKEN" \
+     -d "token_type_hint=refresh_token" \
+     -d "client_id=YOUR_CLIENT_ID"
+```
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `token` | YES | The access token or refresh token to revoke |
+| `token_type_hint` | NO | `access_token` or `refresh_token` |
+| `client_id` | YES | The `client_id` from Step 1 |
+
+After revoking, delete the stored token file so the SDK does not reuse it. You can also revoke authorizations in your Longbridge account security settings.
+
 #### Method 2: Legacy API Key (Compatible)
 
 **_Get App Key, App Secret, Access Token and other information_**

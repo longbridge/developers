@@ -413,6 +413,45 @@ int main(int argc, char const* argv[]) {
 OAuth Token 應安全儲存在應用程式中（如加密檔案、安全金鑰鏈），**不要儲存在環境變數中**。
 :::
 
+<a id="oauth-scopes"></a>
+
+**OAuth 權限範圍（scope）**
+
+讀取賬戶數據或交易的接口要求 Token 帶有對應的 scope；行情及其他通用接口無需額外 scope。scope 以 key 標識：
+
+| scope key | 授權內容 |
+| --------- | -------- |
+| `watchlist` | 自選股分組（讀寫） |
+| `account.read` | 賬戶資產、持倉與資金流水（只讀） |
+| `trade.read` | 訂單與成交查詢（只讀） |
+| `trade.write` | 下單、改單、撤單及其他交易寫操作 |
+
+`/oauth2/register` 的響應以數字 ID 列出 scope（例如 `"4 6 10 11 12"`）。這些 ID 因環境而異：在 `openapi.longbridge.com` 上，`4`、`6`、`10`、`11` 分別對應 `watchlist`、`account.read`、`trade.read`、`trade.write`。其他 ID 請視為不透明值，以 scope key 為準。
+
+如果接口返回錯誤碼 `403308`（`Target API's scope is not in authorized scopes`），說明 Token 未被授予該接口所需的 scope。請刪除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授權並勾選該 scope。參見[錯誤碼](/zh-HK/docs/error-codes)。
+
+<a id="oauth-revoke"></a>
+
+**撤銷 Token**
+
+如需撤銷 Access Token 或 Refresh Token，請以表單格式請求撤銷接口（[RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009)）：
+
+```bash
+curl -X POST https://openapi.longbridge.com/oauth2/revoke \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "token=YOUR_REFRESH_TOKEN" \
+     -d "token_type_hint=refresh_token" \
+     -d "client_id=YOUR_CLIENT_ID"
+```
+
+| 參數 | 必填 | 描述 |
+| ---- | ---- | ---- |
+| `token` | 是 | 要撤銷的 Access Token 或 Refresh Token |
+| `token_type_hint` | 否 | `access_token` 或 `refresh_token` |
+| `client_id` | 是 | 第一步獲得的 `client_id` |
+
+撤銷後請刪除本地保存的 Token 文件，避免 SDK 繼續使用。也可以在 Longbridge 賬戶安全設置中撤銷授權。
+
 #### 方式二：傳統 API Key（相容）
 
 **_取得 App Key、App Secret、Access Token 等資訊_**
