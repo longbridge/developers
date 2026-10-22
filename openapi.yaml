@@ -13835,10 +13835,22 @@ paths:
       x-summary-zh: 订单详情
       x-summary-zh-hk: 訂單詳情
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts; calling it from a Longbridge US account fails. Longbridge US accounts should use US Order Detail (`us_order_detail`, `GET /v1/us/orders/{order_id}`) instead.
+        :::
+
         This API is used for order detail query
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户，Longbridge US 账户调用会失败。Longbridge US 账户请改用美股委托详情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
+        :::
+
         该接口用于订单详情查询。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶，Longbridge US 賬戶調用會失敗。Longbridge US 賬戶請改用美股委託詳情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
+        :::
+
         該接口用於訂單詳情查詢。
       x-subgroup: Order
       x-subgroup-zh: 订单
@@ -42196,10 +42208,22 @@ paths:
       x-summary-zh: 当日订单
       x-summary-zh-hk: 當日訂單
       description: |
+        :::tip Longbridge US Accounts
+        Longbridge US accounts should prefer US Order History (`us_query_orders`, `POST /v1/us/orders/query`).
+        :::
+
         This API is used to get today order or get order by order id.
       x-description-zh: |
+        :::tip Longbridge US 账户
+        Longbridge US 账户建议优先使用美股历史委托（`us_query_orders`，`POST /v1/us/orders/query`）。
+        :::
+
         该接口用于获取当日订单和订单查询。
       x-description-zh-hk: |
+        :::tip Longbridge US 賬戶
+        Longbridge US 賬戶建議優先使用美股歷史委託（`us_query_orders`，`POST /v1/us/orders/query`）。
+        :::
+
         該接口用於獲取當日訂單和訂單查詢。
       x-subgroup: Order
       x-subgroup-zh: 订单
@@ -42646,10 +42670,22 @@ paths:
       x-summary-zh: 历史订单
       x-summary-zh-hk: 歷史訂單
       description: |
+        :::tip Longbridge US Accounts
+        Longbridge US accounts should prefer US Order History (`us_query_orders`, `POST /v1/us/orders/query`).
+        :::
+
         This API is used to get history order.
       x-description-zh: |
+        :::tip Longbridge US 账户
+        Longbridge US 账户建议优先使用美股历史委托（`us_query_orders`，`POST /v1/us/orders/query`）。
+        :::
+
         该接口用于获取历史订单。
       x-description-zh-hk: |
+        :::tip Longbridge US 賬戶
+        Longbridge US 賬戶建議優先使用美股歷史委託（`us_query_orders`，`POST /v1/us/orders/query`）。
+        :::
+
         該接口用於獲取歷史訂單。
       x-subgroup: Order
       x-subgroup-zh: 订单
