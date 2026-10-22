@@ -106,6 +106,30 @@ if __name__ == "__main__":
 ```
 
   </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.usTransactionHistory({
+    startAt: new Date('2026-01-01T00:00:00Z'),
+    endAt: new Date('2026-03-31T00:00:00Z'),
+    page: 1,
+    size: 20,
+    types: ['TT_DEPOSIT_AND_WITHDRAWAL', 'TT_STOCKS_AND_ETFS_TRADING'],
+  })
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
   <TabItem value="rust" label="Rust">
 
 ```rust
@@ -133,6 +157,52 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let resp = ctx.us_transaction_history(opts).await?;
     println!("{:?}", resp);
     Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.USTransactionHistory(context.Background(), &trade.GetUSTransactionHistory{
+		StartAt: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+		EndAt:   time.Date(2026, 3, 31, 0, 0, 0, 0, time.UTC),
+		Page:    1,
+		Size:    20,
+		Types:   []string{"TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
 }
 ```
 
