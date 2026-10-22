@@ -146,9 +146,14 @@ func main() {
 
 ## Response
 
-The HTTP API returns the rates as a two-level map: `universal_exchanges` maps a grouping key to an object whose `spec_exchanges` maps a second grouping key to a list of rates.
+The HTTP API returns the rates as a two-level map:
 
-The SDKs flatten this map into a single `exchanges` list. Each entry carries the two grouping keys as `universal_key` and `spec_key`, alongside the rate fields.
+- The outer key of `universal_exchanges` is the account channel, e.g. `us_lb_apex`.
+- The inner key of `spec_exchanges` is the rate type, e.g. `am` or `reference`.
+
+Other keys may appear, so iterate over the maps rather than hard-coding the keys. The rate fields are JSON numbers in the HTTP API.
+
+The SDKs flatten this map into a single `exchanges` list. Each entry carries the two keys as `universal_key` and `spec_key`, alongside the rate fields, and returns the rates as strings.
 
 ### Response Example
 
@@ -157,16 +162,27 @@ HTTP API:
 ```json
 {
   "universal_exchanges": {
-    "1": {
+    "us_lb_apex": {
       "spec_exchanges": {
-        "1": {
+        "am": {
           "exchanges": [
             {
               "base_currency": "USD",
-              "other_currency": "HKD",
-              "bid_rate": "7.7850",
-              "offer_rate": "7.7950",
-              "average_rate": "7.7900"
+              "other_currency": "USD",
+              "bid_rate": 1,
+              "offer_rate": 1,
+              "average_rate": 1
+            }
+          ]
+        },
+        "reference": {
+          "exchanges": [
+            {
+              "base_currency": "USD",
+              "other_currency": "USD",
+              "bid_rate": 1,
+              "offer_rate": 1,
+              "average_rate": 1
             }
           ]
         }
@@ -182,13 +198,22 @@ SDK (flattened):
 {
   "exchanges": [
     {
-      "universal_key": "1",
-      "spec_key": "1",
+      "universal_key": "us_lb_apex",
+      "spec_key": "am",
       "base_currency": "USD",
-      "other_currency": "HKD",
-      "bid_rate": "7.7850",
-      "offer_rate": "7.7950",
-      "average_rate": "7.7900"
+      "other_currency": "USD",
+      "bid_rate": "1",
+      "offer_rate": "1",
+      "average_rate": "1"
+    },
+    {
+      "universal_key": "us_lb_apex",
+      "spec_key": "reference",
+      "base_currency": "USD",
+      "other_currency": "USD",
+      "bid_rate": "1",
+      "offer_rate": "1",
+      "average_rate": "1"
     }
   ]
 }
@@ -209,7 +234,7 @@ SDK (flattened):
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| universal_exchanges | map&lt;string, [USUniversalExchanges](#USUniversalExchanges)&gt; | true | Exchange rates, grouped by a first grouping key |
+| universal_exchanges | map&lt;string, [USUniversalExchanges](#USUniversalExchanges)&gt; | true | Exchange rates keyed by account channel, e.g. `us_lb_apex` |
 
 ### USUniversalExchanges
 
@@ -217,7 +242,7 @@ SDK (flattened):
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| spec_exchanges | map&lt;string, [USSpecExchanges](#USSpecExchanges)&gt; | true | Exchange rates, grouped by a second grouping key |
+| spec_exchanges | map&lt;string, [USSpecExchanges](#USSpecExchanges)&gt; | true | Exchange rates keyed by rate type, e.g. `am` or `reference` |
 
 ### USSpecExchanges
 
@@ -225,7 +250,7 @@ SDK (flattened):
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| exchanges | [USExchangeRate](#USExchangeRate)[] | true | Exchange rates in this group |
+| exchanges | [USExchangeRate](#USExchangeRate)[] | true | Exchange rates of this rate type |
 
 ### USExchangeRate
 
@@ -235,13 +260,13 @@ SDK (flattened):
 | ---- | ---- | ----------- |
 | base_currency | string | Base currency |
 | other_currency | string | Quote currency |
-| bid_rate | string | Bid rate. The HTTP API may return it as a number; the SDKs always return a string |
-| offer_rate | string | Offer rate. The HTTP API may return it as a number; the SDKs always return a string |
-| average_rate | string | Average rate. The HTTP API may return it as a number; the SDKs always return a string |
+| bid_rate | number | Bid rate. The SDKs return it as a string |
+| offer_rate | number | Offer rate. The SDKs return it as a string |
+| average_rate | number | Average rate. The SDKs return it as a string |
 
 In the SDK response, each `exchanges` entry also has:
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| universal_key | string | The `universal_exchanges` grouping key the rate came from |
-| spec_key | string | The `spec_exchanges` grouping key the rate came from |
+| universal_key | string | The account channel the rate came from (the `universal_exchanges` key), e.g. `us_lb_apex` |
+| spec_key | string | The rate type the rate came from (the `spec_exchanges` key), e.g. `am` or `reference` |

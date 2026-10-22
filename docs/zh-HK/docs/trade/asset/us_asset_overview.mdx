@@ -167,8 +167,8 @@ func main() {
 
 ```json
 {
-  "account_type": "US",
-  "asset_timestamp": 1751866334,
+  "account_type": "1",
+  "asset_timestamp": "1792661597",
   "cash_buy_power": "12500.00",
   "overnight_buy_power": "10000.00",
   "currency": "USD",
@@ -184,25 +184,43 @@ func main() {
   ],
   "stock_list": [
     {
-      "symbol": "AAPL.US",
+      "symbol": "MULL",
+      "full_symbol": "MULL.US",
+      "counter_id": "ETF/US/MULL",
+      "name": "GraniteShares 2x Long MU Daily ETF",
+      "market": "US",
+      "asset_type": "STOCK",
+      "position_side": "LONG",
       "quantity": "10",
       "currency": "USD",
-      "average_cost": "180.00",
-      "last_done": "185.00",
-      "prev_close": "183.00",
-      "asset_type": "stock",
-      "trade_status": "Normal"
+      "average_cost": "48.20",
+      "last_done": "51.35",
+      "prev_close": "50.10",
+      "market_price": "51.35",
+      "today_pl": "12.50",
+      "industry_name": "",
+      "trade_status": "201"
     }
   ],
+  "option_list": [],
   "crypto_list": [
     {
-      "symbol": "BTCUSD.BKKT",
-      "average_cost": "50000.00",
+      "symbol": "BTCUSD",
+      "counter_id": "VA/BKKT/BTCUSD",
+      "name": "Bitcoin",
+      "market": "BKKT",
+      "asset_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.01",
+      "average_cost": "108000.00",
       "currency": "USD",
-      "asset_type": "crypto",
-      "industry_name": "Cryptocurrency"
+      "industry_name": "",
+      "trade_status": "105"
     }
-  ]
+  ],
+  "multi_leg": {
+    "holdings": []
+  }
 }
 ```
 
@@ -222,8 +240,8 @@ func main() {
 
 | 名稱 | 類型 | 必填 | 描述 |
 | ---- | ---- | ---- | ---- |
-| account_type | string | 是 | 賬戶類型標識 |
-| asset_timestamp | int64 | 是 | 資產數據快照時間（Unix 秒） |
+| account_type | string | 是 | 賬戶類型標識，例如 `"1"` |
+| asset_timestamp | string | 是 | 資產數據快照時間，以數字字符串表示的 Unix 秒（例如 `"1792661597"`）；SDK 返回整數 |
 | cash_buy_power | string | 是 | 可用買入力（现金） |
 | overnight_buy_power | string | 是 | 隔夜買入力 |
 | currency | string | 是 | 基礎貨幣 |
@@ -231,6 +249,7 @@ func main() {
 | stock_list | USStockEntry[] | 否 | 股票持倉 |
 | option_list | object[] | 否 | 期權持倉 |
 | crypto_list | USCryptoEntry[] | 否 | 加密貨幣持倉 |
+| multi_leg | object | 否 | 多腿（期權組合）持倉，位於 `holdings` 列表中。由 HTTP 接口返回 |
 
 ### USCashEntry
 
@@ -251,14 +270,15 @@ func main() {
 
 | 名稱 | 類型 | 描述 |
 | ---- | ---- | ---- |
-| symbol | string | 股票代碼（如 `AAPL`） |
-| full_symbol | string | 完整代碼（如 `AAPL.US`） |
-| asset_type | string | 資產類型 |
+| symbol | string | 不帶市場後綴的股票代碼，例如 `MULL` |
+| full_symbol | string | 完整代碼，例如 `MULL.US` |
+| counter_id | string | 內部標的標識，例如 `ETF/US/MULL`。由 HTTP 接口返回 |
+| asset_type | string | 資產類型，例如 `STOCK` |
 | quantity | string | 持有數量 |
 | currency | string | 貨幣代碼 |
 | average_cost | string | 平均持倉成本價 |
 | market | string | 市場標識 |
-| trade_status | string | 交易狀態 |
+| trade_status | string | 交易狀態代碼，例如 `201` |
 | prev_close | string | 上一收盤價 |
 | last_done | string | 最新成交價 |
 | market_price | string | 當前市場價格 |
@@ -273,8 +293,14 @@ func main() {
 
 | 名稱 | 類型 | 描述 |
 | ---- | ---- | ---- |
-| symbol | string | 加密貨幣交易對代碼，如 `BTCUSD.BKKT` |
+| symbol | string | 不帶市場後綴的加密貨幣交易對代碼，例如 `BTCUSD`；調用其他接口時請使用 `BTCUSD.BKKT` |
+| counter_id | string | 內部標的標識，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回 |
+| market | string | 市場：`BKKT`。由 HTTP 接口返回 |
+| name | string | 加密貨幣名稱，例如 `Bitcoin`。由 HTTP 接口返回 |
+| quantity | string | 持有數量。由 HTTP 接口返回 |
 | average_cost | string | 平均持倉成本價 |
 | currency | string | 計價貨幣 |
-| asset_type | string | 資產類型 |
+| asset_type | string | 資產類型：`CRYPTO` |
 | industry_name | string | 行業/分類名稱 |
+
+HTTP 接口返回的加密貨幣記錄除 `full_symbol` 外與股票記錄字段相同；SDK 的加密貨幣類型可能只包含上表中未標註「由 HTTP 接口返回」的字段。

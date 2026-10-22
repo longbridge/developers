@@ -39626,15 +39626,15 @@ paths:
         - name: account_type
           type: string
           required: true
-          description: Account type identifier
-          x-description-zh: 账户类型标识
-          x-description-zh-hk: 賬戶類型標識
+          description: 'Account type identifier, e.g. `"1"`'
+          x-description-zh: '账户类型标识，例如 `"1"`'
+          x-description-zh-hk: '賬戶類型標識，例如 `"1"`'
         - name: asset_timestamp
           type: string
           required: true
-          description: Snapshot time (Unix seconds)
-          x-description-zh: 资产数据快照时间（Unix 秒）
-          x-description-zh-hk: 資產數據快照時間（Unix 秒）
+          description: 'Snapshot time, Unix seconds as a numeric string (e.g. `"1792661597"`). The SDKs return an integer'
+          x-description-zh: '资产数据快照时间，以数字字符串表示的 Unix 秒（例如 `"1792661597"`）；SDK 返回整数'
+          x-description-zh-hk: '資產數據快照時間，以數字字符串表示的 Unix 秒（例如 `"1792661597"`）；SDK 返回整數'
         - name: cash_buy_power
           type: string
           required: true
@@ -39677,14 +39677,20 @@ paths:
           description: Crypto positions
           x-description-zh: 加密货币持仓
           x-description-zh-hk: 加密貨幣持倉
+        - name: multi_leg
+          type: object
+          required: false
+          description: 'Multi-leg (option strategy) holdings, in a `holdings` list. Returned by the HTTP API'
+          x-description-zh: '多腿（期权组合）持仓，位于 `holdings` 列表中。由 HTTP 接口返回'
+          x-description-zh-hk: '多腿（期權組合）持倉，位於 `holdings` 列表中。由 HTTP 接口返回'
       responses:
         '200':
           description: Successful response
           content:
             application/json:
               example:
-                account_type: US
-                asset_timestamp: 1751866334
+                account_type: '1'
+                asset_timestamp: '1792661597'
                 cash_buy_power: '12500.00'
                 overnight_buy_power: '10000.00'
                 currency: USD
@@ -39696,20 +39702,37 @@ paths:
                     outstanding: '500.00'
                     frozen_buy_cash: '0.00'
                 stock_list:
-                  - symbol: AAPL.US
+                  - symbol: MULL
+                    full_symbol: MULL.US
+                    counter_id: ETF/US/MULL
+                    name: GraniteShares 2x Long MU Daily ETF
+                    market: US
+                    asset_type: STOCK
+                    position_side: LONG
                     quantity: '10'
                     currency: USD
-                    average_cost: '180.00'
-                    last_done: '185.00'
-                    prev_close: '183.00'
-                    asset_type: stock
-                    trade_status: Normal
+                    average_cost: '48.20'
+                    last_done: '51.35'
+                    prev_close: '50.10'
+                    market_price: '51.35'
+                    today_pl: '12.50'
+                    industry_name: ''
+                    trade_status: '201'
+                option_list: []
                 crypto_list:
-                  - symbol: BTCUSD.BKKT
-                    average_cost: '50000.00'
+                  - symbol: BTCUSD
+                    counter_id: VA/BKKT/BTCUSD
+                    name: Bitcoin
+                    market: BKKT
+                    asset_type: CRYPTO
+                    position_side: LONG
+                    quantity: '0.01'
+                    average_cost: '108000.00'
                     currency: USD
-                    asset_type: crypto
-                    industry_name: Cryptocurrency
+                    industry_name: ''
+                    trade_status: '105'
+                multi_leg:
+                  holdings: []
         default:
           description: Unexpected error
           content:
@@ -40598,27 +40621,27 @@ paths:
         - name: title
           type: string
           required: false
-          description: Display title
-          x-description-zh: 展示标题
-          x-description-zh-hk: 展示標題
+          description: 'Display title, e.g. `VA Sell Success: ETHUSD`'
+          x-description-zh: '展示标题，例如 `VA Sell Success: ETHUSD`'
+          x-description-zh-hk: '展示標題，例如 `VA Sell Success: ETHUSD`'
         - name: biz_code
           type: string
           required: false
-          description: Business code
-          x-description-zh: 业务代码
-          x-description-zh-hk: 業務代碼
+          description: 'Business code. Values seen include `LCSTBD`, `LCWD`, `LVABAD` (crypto buy filled), `LVASAD` (crypto sell filled) and `LVAVNSCR` (crypto deposit); other codes may appear. Use this field, not the display text, in program logic'
+          x-description-zh: '业务代码。出现过的取值包括 `LCSTBD`、`LCWD`、`LVABAD`（加密货币买入成交）、`LVASAD`（加密货币卖出成交）和 `LVAVNSCR`（加密货币转入），也可能出现其他取值。程序逻辑请使用该字段而非展示文本'
+          x-description-zh-hk: '業務代碼。出現過的取值包括 `LCSTBD`、`LCWD`、`LVABAD`（加密貨幣買入成交）、`LVASAD`（加密貨幣賣出成交）和 `LVAVNSCR`（加密貨幣轉入），也可能出現其他取值。程序邏輯請使用該字段而非展示文本'
         - name: biz_code_name
           type: string
           required: false
-          description: Business code name
-          x-description-zh: 业务代码名称
-          x-description-zh-hk: 業務代碼名稱
+          description: 'Display name of the business code, e.g. `VA Sell Success`; its language can vary'
+          x-description-zh: '业务代码的展示名称，例如 `VA Sell Success`，语言可能不同'
+          x-description-zh-hk: '業務代碼的展示名稱，例如 `VA Sell Success`，語言可能不同'
         - name: amount
           type: string
           required: false
-          description: Amount; negative for outflows
-          x-description-zh: 金额，流出时为负数
-          x-description-zh-hk: 金額，流出時為負數
+          description: Amount
+          x-description-zh: 金额
+          x-description-zh-hk: 金額
         - name: currency
           type: string
           required: false
@@ -40628,9 +40651,15 @@ paths:
         - name: symbol
           type: string
           required: false
-          description: 'Security symbol, e.g. `AAPL.US`, when the record relates to a security'
-          x-description-zh: '关联的标的代码，例如 `AAPL.US`（仅当记录与证券相关时返回）'
-          x-description-zh-hk: '關聯的標的代碼，例如 `AAPL.US`（僅當記錄與證券相關時返回）'
+          description: 'Security symbol in `TICKER.MARKET` form, e.g. `MULL.US` or `BTCUSD.BKKT`, when the record relates to a security'
+          x-description-zh: '`TICKER.MARKET` 格式的标的代码，例如 `MULL.US` 或 `BTCUSD.BKKT`（仅当记录与证券相关时返回）'
+          x-description-zh-hk: '`TICKER.MARKET` 格式的標的代碼，例如 `MULL.US` 或 `BTCUSD.BKKT`（僅當記錄與證券相關時返回）'
+        - name: counter_id
+          type: string
+          required: false
+          description: 'Internal security identifier returned alongside `symbol`, e.g. `VA/BKKT/BTCUSD`. Returned by the HTTP API; the SDK types may not expose it'
+          x-description-zh: '与 `symbol` 一同返回的内部标的标识，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回，SDK 类型中可能未包含'
+          x-description-zh-hk: '與 `symbol` 一同返回的內部標的標識，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回，SDK 類型中可能未包含'
         - name: market
           type: string
           required: false
@@ -40674,17 +40703,17 @@ paths:
           x-description-zh: 备注
           x-description-zh-hk: 備註
         - name: create_at
-          type: integer
+          type: string
           required: false
-          description: Creation time (Unix seconds)
-          x-description-zh: 创建时间（Unix 秒）
-          x-description-zh-hk: 創建時間（Unix 秒）
+          description: 'Creation time, Unix seconds as a numeric string (e.g. `"1790203596"`). The SDKs return a date-time value'
+          x-description-zh: '创建时间，以数字字符串表示的 Unix 秒（例如 `"1790203596"`）；SDK 返回日期时间类型'
+          x-description-zh-hk: '創建時間，以數字字符串表示的 Unix 秒（例如 `"1790203596"`）；SDK 返回日期時間類型'
         - name: done_at
-          type: integer
+          type: string
           required: false
-          description: Completion time (Unix seconds)
-          x-description-zh: 完成时间（Unix 秒）
-          x-description-zh-hk: 完成時間（Unix 秒）
+          description: 'Completion time, Unix seconds as a numeric string (e.g. `"1790203596"`). The SDKs return a date-time value'
+          x-description-zh: '完成时间，以数字字符串表示的 Unix 秒（例如 `"1790203596"`）；SDK 返回日期时间类型'
+          x-description-zh-hk: '完成時間，以數字字符串表示的 Unix 秒（例如 `"1790203596"`）；SDK 返回日期時間類型'
       responses:
         '200':
           description: Successful response
@@ -40693,21 +40722,38 @@ paths:
               example:
                 current_page: 1
                 items:
-                  - title: Buy AAPL
-                    biz_code: STOCK_BUY
-                    biz_code_name: Stock Buy
-                    amount: '-1850.00'
+                  - title: 'VA Sell Success: ETHUSD'
+                    biz_code: LVASAD
+                    biz_code_name: VA Sell Success
+                    amount: '1185.42'
                     currency: USD
-                    symbol: AAPL.US
-                    market: US
-                    equity_type: STOCK
+                    symbol: ETHUSD.BKKT
+                    counter_id: VA/BKKT/ETHUSD
+                    market: BKKT
+                    equity_type: CRYPTO
                     position_side: LONG
-                    quantity: '10'
-                    quantity_description: 10 shares
-                    ref_no: '202603150001'
+                    quantity: '0.3'
+                    quantity_description: 0.3 ETH
+                    ref_no: '202609240001'
                     remark: ''
-                    create_at: 1773590400
-                    done_at: 1773590460
+                    create_at: '1790203596'
+                    done_at: '1790203596'
+                  - title: 'Cryptocurrency Deposit: BTCUSD'
+                    biz_code: LVAVNSCR
+                    biz_code_name: Cryptocurrency Deposit
+                    amount: '0'
+                    currency: ''
+                    symbol: BTCUSD.BKKT
+                    counter_id: VA/BKKT/BTCUSD
+                    market: BKKT
+                    equity_type: CRYPTO
+                    position_side: LONG
+                    quantity: '0.01'
+                    quantity_description: 0.01 BTC
+                    ref_no: '202610090001'
+                    remark: ''
+                    create_at: '1791478565'
+                    done_at: '1791478565'
         default:
           description: Unexpected error
           content:
@@ -40727,7 +40773,7 @@ paths:
 
         Get the exchange rates used by a US account.
 
-        The rates are returned as a two-level map: `universal_exchanges` maps a grouping key to an object whose `spec_exchanges` maps a second grouping key to a list of rates. The SDKs flatten this map into a single `exchanges` list, and each entry carries the two grouping keys as `universal_key` and `spec_key`.
+        The rates are returned as a two-level map: the outer key of `universal_exchanges` is the account channel (e.g. `us_lb_apex`), and the inner key of `spec_exchanges` is the rate type (e.g. `am` or `reference`). Other keys may appear, so iterate over the maps rather than hard-coding the keys. The rate fields are JSON numbers. The SDKs flatten this map into a single `exchanges` list, and each entry carries the two keys as `universal_key` and `spec_key`, with the rates as strings.
       x-description-zh: |
         :::warning Longbridge US 账户
         此方法仅适用于美国数据中心账户。
@@ -40735,7 +40781,7 @@ paths:
 
         获取美股账户使用的汇率。
 
-        汇率以两级映射返回：`universal_exchanges` 以第一层分组键映射到一个对象，该对象的 `spec_exchanges` 再以第二层分组键映射到汇率列表。SDK 会将该映射展开为单个 `exchanges` 列表，每条记录以 `universal_key` 和 `spec_key` 保留两层分组键。
+        汇率以两级映射返回：`universal_exchanges` 的外层键为账户通道（例如 `us_lb_apex`），`spec_exchanges` 的内层键为汇率类型（例如 `am` 或 `reference`）。可能出现其他键，请遍历映射读取，不要写死键名。汇率字段为 JSON 数字。SDK 会将该映射展开为单个 `exchanges` 列表，每条记录以 `universal_key` 和 `spec_key` 保留两层键，汇率以字符串返回。
       x-description-zh-hk: |
         :::warning Longbridge US 賬戶
         此方法僅適用於美國數據中心賬戶。
@@ -40743,7 +40789,7 @@ paths:
 
         獲取美股賬戶使用的匯率。
 
-        匯率以兩級映射返回：`universal_exchanges` 以第一層分組鍵映射到一個對象，該對象的 `spec_exchanges` 再以第二層分組鍵映射到匯率列表。SDK 會將該映射展開為單個 `exchanges` 列表，每條記錄以 `universal_key` 和 `spec_key` 保留兩層分組鍵。
+        匯率以兩級映射返回：`universal_exchanges` 的外層鍵為賬戶通道（例如 `us_lb_apex`），`spec_exchanges` 的內層鍵為匯率類型（例如 `am` 或 `reference`）。可能出現其他鍵，請遍歷映射讀取，不要寫死鍵名。匯率字段為 JSON 數字。SDK 會將該映射展開為單個 `exchanges` 列表，每條記錄以 `universal_key` 和 `spec_key` 保留兩層鍵，匯率以字符串返回。
       x-subgroup: Assets
       x-subgroup-zh: 资产
       x-subgroup-zh-hk: 資產
@@ -40840,21 +40886,21 @@ paths:
         - name: universal_exchanges
           type: 'map<string, USUniversalExchanges>'
           required: true
-          description: 'Exchange rates, grouped by a first grouping key'
-          x-description-zh: 按第一层分组键分组的汇率
-          x-description-zh-hk: 按第一層分組鍵分組的匯率
+          description: 'Exchange rates keyed by account channel, e.g. `us_lb_apex`'
+          x-description-zh: '以账户通道为键的汇率，例如 `us_lb_apex`'
+          x-description-zh-hk: '以賬戶通道為鍵的匯率，例如 `us_lb_apex`'
         - name: spec_exchanges
           type: 'map<string, USSpecExchanges>'
           required: true
-          description: 'Exchange rates, grouped by a second grouping key'
-          x-description-zh: 按第二层分组键分组的汇率
-          x-description-zh-hk: 按第二層分組鍵分組的匯率
+          description: 'Exchange rates keyed by rate type, e.g. `am` or `reference`'
+          x-description-zh: '以汇率类型为键的汇率，例如 `am` 或 `reference`'
+          x-description-zh-hk: '以匯率類型為鍵的匯率，例如 `am` 或 `reference`'
         - name: exchanges
           type: 'USExchangeRate[]'
           required: true
-          description: Exchange rates in this group
-          x-description-zh: 该分组下的汇率
-          x-description-zh-hk: 該分組下的匯率
+          description: Exchange rates of this rate type
+          x-description-zh: 该汇率类型下的汇率
+          x-description-zh-hk: 該匯率類型下的匯率
         - name: base_currency
           type: string
           required: false
@@ -40868,23 +40914,23 @@ paths:
           x-description-zh: 报价货币
           x-description-zh-hk: 報價貨幣
         - name: bid_rate
-          type: string
+          type: number
           required: false
-          description: Bid rate (may be returned as a number)
-          x-description-zh: 买入汇率（可能以数字返回）
-          x-description-zh-hk: 買入匯率（可能以數字返回）
+          description: Bid rate. The SDKs return it as a string
+          x-description-zh: 买入汇率。SDK 以字符串返回
+          x-description-zh-hk: 買入匯率。SDK 以字符串返回
         - name: offer_rate
-          type: string
+          type: number
           required: false
-          description: Offer rate (may be returned as a number)
-          x-description-zh: 卖出汇率（可能以数字返回）
-          x-description-zh-hk: 賣出匯率（可能以數字返回）
+          description: Offer rate. The SDKs return it as a string
+          x-description-zh: 卖出汇率。SDK 以字符串返回
+          x-description-zh-hk: 賣出匯率。SDK 以字符串返回
         - name: average_rate
-          type: string
+          type: number
           required: false
-          description: Average rate (may be returned as a number)
-          x-description-zh: 平均汇率（可能以数字返回）
-          x-description-zh-hk: 平均匯率（可能以數字返回）
+          description: Average rate. The SDKs return it as a string
+          x-description-zh: 平均汇率。SDK 以字符串返回
+          x-description-zh-hk: 平均匯率。SDK 以字符串返回
       responses:
         '200':
           description: Successful response
@@ -40892,15 +40938,22 @@ paths:
             application/json:
               example:
                 universal_exchanges:
-                  '1':
+                  us_lb_apex:
                     spec_exchanges:
-                      '1':
+                      am:
                         exchanges:
                           - base_currency: USD
-                            other_currency: HKD
-                            bid_rate: '7.7850'
-                            offer_rate: '7.7950'
-                            average_rate: '7.7900'
+                            other_currency: USD
+                            bid_rate: 1
+                            offer_rate: 1
+                            average_rate: 1
+                      reference:
+                        exchanges:
+                          - base_currency: USD
+                            other_currency: USD
+                            bid_rate: 1
+                            offer_rate: 1
+                            average_rate: 1
         default:
           description: Unexpected error
           content:

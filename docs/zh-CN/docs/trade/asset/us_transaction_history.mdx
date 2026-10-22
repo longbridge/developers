@@ -213,6 +213,8 @@ func main() {
 
 响应不返回总条数。当某页返回的记录数少于 `size` 时，即为最后一页。
 
+HTTP 接口中，`create_at` 和 `done_at` 是以数字字符串表示的 Unix 秒（例如 `"1790203596"`），SDK 会将其转换为日期时间类型。
+
 ### Response Example
 
 ```json
@@ -220,38 +222,40 @@ func main() {
   "current_page": 1,
   "items": [
     {
-      "title": "Buy AAPL",
-      "biz_code": "STOCK_BUY",
-      "biz_code_name": "Stock Buy",
-      "amount": "-1850.00",
+      "title": "VA Sell Success: ETHUSD",
+      "biz_code": "LVASAD",
+      "biz_code_name": "VA Sell Success",
+      "amount": "1185.42",
       "currency": "USD",
-      "symbol": "AAPL.US",
-      "market": "US",
-      "equity_type": "STOCK",
+      "symbol": "ETHUSD.BKKT",
+      "counter_id": "VA/BKKT/ETHUSD",
+      "market": "BKKT",
+      "equity_type": "CRYPTO",
       "position_side": "LONG",
-      "quantity": "10",
-      "quantity_description": "10 shares",
-      "ref_no": "202603150001",
+      "quantity": "0.3",
+      "quantity_description": "0.3 ETH",
+      "ref_no": "202609240001",
       "remark": "",
-      "create_at": 1773590400,
-      "done_at": 1773590460
+      "create_at": "1790203596",
+      "done_at": "1790203596"
     },
     {
-      "title": "Deposit",
-      "biz_code": "DEPOSIT",
-      "biz_code_name": "Deposit",
-      "amount": "5000.00",
-      "currency": "USD",
-      "symbol": "",
-      "market": "",
-      "equity_type": "",
-      "position_side": "",
-      "quantity": "",
-      "quantity_description": "",
-      "ref_no": "202603010001",
+      "title": "Cryptocurrency Deposit: BTCUSD",
+      "biz_code": "LVAVNSCR",
+      "biz_code_name": "Cryptocurrency Deposit",
+      "amount": "0",
+      "currency": "",
+      "symbol": "BTCUSD.BKKT",
+      "counter_id": "VA/BKKT/BTCUSD",
+      "market": "BKKT",
+      "equity_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.01",
+      "quantity_description": "0.01 BTC",
+      "ref_no": "202610090001",
       "remark": "",
-      "create_at": 1772323200,
-      "done_at": 1772326800
+      "create_at": "1791478565",
+      "done_at": "1791478565"
     }
   ]
 }
@@ -281,18 +285,35 @@ func main() {
 
 | 名称 | 类型 | 描述 |
 | ---- | ---- | ---- |
-| title | string | 展示标题 |
-| biz_code | string | 业务代码 |
-| biz_code_name | string | 业务代码名称 |
-| amount | string | 金额，流出时为负数 |
-| currency | string | 货币 |
-| symbol | string | 关联的标的代码，例如 `AAPL.US`（仅当记录与证券相关时返回） |
-| market | string | 市场 |
-| equity_type | string | 持仓类型 |
-| position_side | string | 持仓方向 |
+| title | string | 展示标题，例如 `VA Sell Success: ETHUSD` |
+| biz_code | string | 业务代码，例如 `LVASAD`，参见[业务代码](#biz-codes) |
+| biz_code_name | string | 业务代码的展示名称，例如 `VA Sell Success` |
+| amount | string | 金额 |
+| currency | string | 货币，例如 `USD`；可能为空，例如加密货币转入 |
+| symbol | string | `TICKER.MARKET` 格式的标的代码，例如 `MULL.US` 或 `BTCUSD.BKKT`（仅当记录与证券相关时返回） |
+| counter_id | string | 与 `symbol` 一同返回的内部标的标识，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回，SDK 类型中可能未包含 |
+| market | string | 市场，例如 `US` 或 `BKKT` |
+| equity_type | string | 持仓类型，例如 `STOCK`、`OPTION`、`CRYPTO` |
+| position_side | string | 持仓方向：`LONG` \| `SHORT` |
 | quantity | string | 数量 |
 | quantity_description | string | 数量描述 |
 | ref_no | string | 参考编号 |
 | remark | string | 备注 |
-| create_at | integer | 创建时间（Unix 秒） |
-| done_at | integer | 完成时间（Unix 秒） |
+| create_at | string | 创建时间，以数字字符串表示的 Unix 秒；SDK 返回日期时间类型 |
+| done_at | string | 完成时间，以数字字符串表示的 Unix 秒；SDK 返回日期时间类型 |
+
+### 业务代码
+
+<a id="biz-codes"></a>
+
+`biz_code` 标识记录的类型。生产环境中出现过的取值包括：
+
+| biz_code | 描述 |
+| -------- | ---- |
+| `LVABAD` | 加密货币买入成交（`biz_code_name`：`VA Buy Success`） |
+| `LVASAD` | 加密货币卖出成交（`biz_code_name`：`VA Sell Success`） |
+| `LVAVNSCR` | 加密货币转入（`biz_code_name`：`Cryptocurrency Deposit`） |
+| `LCSTBD` | 生产环境中出现过，展示名称以 `biz_code_name` 为准 |
+| `LCWD` | 生产环境中出现过，展示名称以 `biz_code_name` 为准 |
+
+以上列表并不完整，可能出现其他取值。`title` 和 `biz_code_name` 为展示文本，语言可能不同，程序逻辑请使用 `biz_code` 判断。
