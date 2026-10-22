@@ -53,3 +53,13 @@ No. The Longbridge US desk (US DC) does not provide paper accounts, so the entir
 Calling one of them from a paper account returns an error rather than an empty result — do not treat that failure as "this account has no orders".
 
 If you need a paper environment, use an AP account instead. The data center only determines where your account is held — it does not restrict API connectivity. AP paper accounts can trade U.S. symbols and read them through the generic trade APIs (`today_orders`, `history_orders`, `account_balance`, `stock_positions`, and so on). See Q4 for what paper accounts support.
+
+## Q11: How do I close a position?
+
+There is no dedicated close-position API, and the order request has no open/close flag. Closing is a regular order in the opposite direction:
+
+1. Call `stock_positions` for the symbol and read `available_quantity` (not `quantity`). If it is `0`, there is nothing to close.
+2. A positive value is a long position: submit a `Sell` order. A negative value is a short position: submit a `Buy` order. Use the absolute value as the quantity.
+3. Use a market order (`MO`) during regular hours. US pre-market and after-hours do not accept market orders, so submit a limit order (`LO`) at the latest price with `outside_rth` set to `ANY_TIME`. Pass a unique `client_request_id` so a retry cannot close the position twice.
+
+Submitting more than `available_quantity` opens a position in the opposite direction. See [Close a position](/docs/trade/order/close_position) for a complete, runnable example in each SDK language.

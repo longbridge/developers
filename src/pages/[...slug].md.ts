@@ -10,6 +10,8 @@ export async function getStaticPaths() {
   const all = await getCollection('docs')
   return all
     .filter((entry) => resolveLocale(entry) === 'en')
+    // /docs/api.md is served from openapi.yaml by src/pages/docs/api.md.ts.
+    .filter((entry) => !resolveUrl(entry).endsWith('/docs/api'))
     .map((entry) => {
       const url = resolveUrl(entry) // e.g. /docs/trade/grid/list
       const slug = url === '/' ? undefined : url.replace(/^\//, '')

@@ -61,6 +61,8 @@ longbridge order replace 693664675163312128 --qty 200 --price 255.00
 | attached_params.profit_taker_submit_price | string | NO | 止盈限价委托价格，`activate_order_type` 为 `LIT` 时必填 |
 | attached_params.stop_loss_submit_price | string | NO | 止损限价委托价格，`activate_order_type` 为 `LIT` 时必填 |
 | attached_params.activate_rth | string | NO | 触发后提交的订单是否允许盘前盘后<br/><br/>**可选值：**<br/> `RTH_ONLY` - 不允许盘前盘后<br/> `ANY_TIME` - 允许盘前盘后 |
+| attached_params.profit_taker_depth_level | int32 | NO | 止盈限价委托价格的买卖档位，`activate_order_type` 为 `LIT` 时有效 |
+| attached_params.stop_loss_depth_level | int32 | NO | 止损限价委托价格的买卖档位，`activate_order_type` 为 `LIT` 时有效 |
 
 
 ### Request Example

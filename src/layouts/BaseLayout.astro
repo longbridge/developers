@@ -5,6 +5,8 @@ import SkipLink from '../components/shell/SkipLink.astro'
 import TopNav from '../components/shell/TopNav'
 import Footer from '../components/shell/Footer'
 import type { Locale } from '@longbridge/openapi-utils'
+import { buildSeoLinks } from '@/lib/page-meta'
+import { getPublishedUrls } from '@/lib/published-urls'
 
 export interface Props {
   title: string
@@ -31,20 +33,11 @@ const apiProxyDefault = JSON.stringify(process.env.VITE_PORTAL_GATEWAY_BASE_URL)
 const apiProxyBootstrap = `(function(){var d=document;function c(n){var m=('; '+d.cookie).split('; '+n+'=');return m.length===2?decodeURIComponent(m.pop().split(';').shift()):undefined;}var a=c('app_id')||c('x-original-app-id');var US={longbridge_us:'https://mr.longbridge.com',longbridge_us_uat:'https://mr.longbridge-staging.com'};window.__API_PROXY_URL__=(a&&US[a])||${apiProxyDefault};})();`
 const gtagInit = `window.dataLayer = window.dataLayer||[];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-P81Y8BDYYS');`
 
-// Per-page SEO head — ported 1:1 from legacy config.mts transformHead:
-// canonical + hreflang alternates (en / zh-Hans / zh-Hant) + a text/markdown
-// discovery alternate + og/twitter. Computed from the URL + locale.
-const seoHost = import.meta.env.VITE_SITE_HOSTNAME ?? 'https://open.longbridge.com'
-const localePathname = pathname.replace(/\/+$/, '').replace(/^\//, '') // '', 'docs', 'zh-CN/docs/x'
-const neutralPath = localePathname.replace(/^zh-CN\/?/, '').replace(/^zh-HK\/?/, '')
-const join = (base: string, p: string) => (p ? `${base}/${p}` : `${base}/`)
-const canonicalUrl = join(seoHost, localePathname)
-const alternates = {
-  en: join(seoHost, neutralPath),
-  zhHans: join(seoHost, neutralPath ? `zh-CN/${neutralPath}` : 'zh-CN'),
-  zhHant: join(seoHost, neutralPath ? `zh-HK/${neutralPath}` : 'zh-HK'),
-  markdown: `${seoHost}/${localePathname ? `${localePathname}.md` : 'index.md'}`,
-}
+// Per-page SEO head: canonical + hreflang (en / zh-Hans / zh-Hant / x-default)
+// + text/markdown discovery alternate + og/twitter. 推导规则见 lib/page-meta。
+const seoHost = Astro.site!.origin
+const seo = buildSeoLinks(pathname, seoHost, await getPublishedUrls())
+const canonicalUrl = seo.canonical
 const ogImage = 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png'
 ---
 <!doctype html>
@@ -57,10 +50,8 @@ const ogImage = 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e07
 
     {/* Per-page SEO (ported from legacy config.mts transformHead) */}
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" hreflang="en" href={alternates.en} />
-    <link rel="alternate" hreflang="zh-Hans" href={alternates.zhHans} />
-    <link rel="alternate" hreflang="zh-Hant" href={alternates.zhHant} />
-    <link rel="alternate" type="text/markdown" href={alternates.markdown} />
+    {seo.alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <link rel="alternate" type="text/markdown" href={seo.markdown} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}

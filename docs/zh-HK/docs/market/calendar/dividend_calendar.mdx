@@ -29,6 +29,9 @@ longbridge finance-calendar dividend --filter positions
 | start | string | YES | 開始日期，格式 YYYY-MM-DD |
 | end | string | YES | 結束日期，格式 YYYY-MM-DD |
 | market | string | NO | 市場篩選：US、HK、SH、SZ，不填則返回所有市場 |
+| count | integer | NO | 每頁最大事件數，省略時使用伺服器預設值 |
+| offset | integer | NO | 從視窗起始跳過的事件數 |
+| next | CalendarPageDirection | NO | 從 `next_date` 游標翻頁的方向：`Later` 或 `Earlier` |
 
 ## Request Example
 
@@ -36,13 +39,13 @@ longbridge finance-calendar dividend --filter positions
   <TabItem value="python" label="Python">
 
 ```python
-from longbridge.openapi import CalendarContext, Config, OAuthBuilder
+from longbridge.openapi import CalendarContext, CalendarCategory, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = CalendarContext(config)
 
-resp = ctx.dividend_calendar("AAPL.US")
+resp = ctx.finance_calendar(CalendarCategory.Dividend, "2024-01-01", "2024-03-31")
 print(resp)
 ```
 
@@ -51,14 +54,14 @@ print(resp)
 
 ```python
 import asyncio
-from longbridge.openapi import AsyncCalendarContext, Config, OAuthBuilder
+from longbridge.openapi import AsyncCalendarContext, CalendarCategory, Config, OAuthBuilder
 
 async def main() -> None:
     oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
     config = Config.from_oauth(oauth)
     ctx = AsyncCalendarContext.create(config)
 
-    resp = await ctx.dividend_calendar("AAPL.US")
+    resp = await ctx.finance_calendar(CalendarCategory.Dividend, "2024-01-01", "2024-03-31")
     print(resp)
 
 if __name__ == "__main__":
@@ -69,7 +72,7 @@ if __name__ == "__main__":
   <TabItem value="nodejs" label="Node.js">
 
 ```javascript
-const { Config, CalendarContext, OAuth } = require('longbridge')
+const { Config, CalendarContext, CalendarCategory, OAuth } = require('longbridge')
 
 async function main() {
   const oauth = await OAuth.build('your-client-id', (_, url) => {
@@ -77,7 +80,7 @@ async function main() {
   })
   const config = Config.fromOAuth(oauth)
   const ctx = CalendarContext.new(config)
-  const resp = await ctx.dividend_calendar('AAPL.US')
+  const resp = await ctx.financeCalendar(CalendarCategory.Dividend, '2024-01-01', '2024-03-31')
   console.log(resp)
 }
 main().catch(console.error)
@@ -95,7 +98,7 @@ class Main {
         try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
              Config config = Config.fromOAuth(oauth);
              CalendarContext ctx = CalendarContext.create(config)) {
-            var resp = ctx.getDividendCalendar("AAPL.US").get();
+            var resp = ctx.financeCalendar(CalendarCategory.Dividend, "2024-01-01", "2024-03-31", null).get();
             System.out.println(resp);
         }
     }
@@ -107,14 +110,14 @@ class Main {
 
 ```rust
 use std::sync::Arc;
-use longbridge::{oauth::OAuthBuilder, calendar::CalendarContext, Config};
+use longbridge::{oauth::OAuthBuilder, calendar::{CalendarContext, CalendarCategory}, Config};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
     let config = Arc::new(Config::from_oauth(oauth));
     let ctx = CalendarContext::new(config);
-    let resp = ctx.dividend_calendar("AAPL.US").await?;
+    let resp = ctx.finance_calendar(CalendarCategory::Dividend, "2024-01-01", "2024-03-31", None, None, None, None).await?;
     println!("{:?}", resp);
     Ok(())
 }
@@ -137,7 +140,7 @@ int main() {
             if (!res) return;
             Config config = Config::from_oauth(*res);
             CalendarContext ctx = CalendarContext::create(config);
-            ctx.dividend_calendar("AAPL.US", [](auto resp) {
+            ctx.finance_calendar(CalendarCategory::Dividend, "2024-01-01", "2024-03-31", "", std::nullopt, std::nullopt, std::nullopt, [](auto resp) {
                 if (resp) std::cout << "OK" << std::endl;
             });
         });
@@ -176,7 +179,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	resp, err := c.DividendCalendar(context.Background(), "AAPL.US")
+	resp, err := c.FinanceCalendar(context.Background(), "Dividend", "2024-01-01", "2024-03-31", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -197,11 +200,11 @@ func main() {
   "code": 0,
   "message": "success",
   "data": {
-    "date": "2026-04-30",
+    "date": "2024-01-01",
     "list": [
       {
-        "date": "2026-04-30",
-        "count": 275,
+        "date": "2024-01-15",
+        "count": 1,
         "infos": [
           {
             "id": "12345",
@@ -210,7 +213,7 @@ func main() {
             "counter_name": "Apple Inc.",
             "event_type": "",
             "activity_type": "",
-            "date": "2026-05-14",
+            "date": "2024-01-15",
             "datetime": "",
             "content": "",
             "star": 0,

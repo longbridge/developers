@@ -53,3 +53,13 @@ sidebar_position: 2
 用模擬賬戶調用這些接口會返回錯誤，而不是空結果——請勿將該失敗理解為「此賬戶沒有委託」。
 
 如果需要模擬環境，請改用 AP 賬戶。數據中心只決定賬戶歸屬，並不限制 API 連通性。AP 模擬賬戶同樣可以交易美股，並通過通用交易接口（`today_orders`、`history_orders`、`account_balance`、`stock_positions` 等）讀取數據。模擬賬戶支持的範圍見 Q4。
+
+## Q11: 如何平倉？
+
+平台沒有專門的平倉接口，下單請求裡也沒有開倉、平倉標記。平倉就是提交一筆與持倉方向相反的普通訂單：
+
+1. 用該標的調用 `stock_positions`，讀取 `available_quantity`（不是 `quantity`）。為 `0` 說明沒有可平倉位。
+2. 正數是多頭，提交 `Sell` 訂單；負數是空頭，提交 `Buy` 訂單回補。數量取絕對值。
+3. 盤中用市價單（`MO`）。美股盤前、盤後不接受市價單，改用最新價提交限價單（`LO`），並把 `outside_rth` 設為 `ANY_TIME`。傳入唯一的 `client_request_id`，避免重試時把倉位平兩遍。
+
+提交數量超過 `available_quantity` 時，多出的部分會變成反向開倉。各語言 SDK 的完整可運行示例見[平倉](/zh-HK/docs/trade/order/close_position)。

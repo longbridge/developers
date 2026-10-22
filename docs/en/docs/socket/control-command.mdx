@@ -1,5 +1,5 @@
 ---
-title: Control commands
+title: Control Commands
 id: control-command
 slug: /socket/control-command
 sidebar_position: 4
@@ -19,7 +19,7 @@ Control Commands:
 ## Close
 
 :::info
-Cmd：`0`
+Cmd: `0`
 :::
 
 Before server close the connection between client, server will send a close packet.
@@ -57,7 +57,7 @@ message Close {
 ## Heartbeat
 
 :::info
-Cmd：`1`
+Cmd: `1`
 :::
 
 Oner peer and send heartbeat to another peer to known health of another peer. Heartbeat do not limit body structure, one peer receive a heartbeat packet, only need send the `body` back.
@@ -77,7 +77,7 @@ peer-a -->> peer-b: heartbeat response, req_id: 1
 end
 ```
 
-Example of heartbeat `body` ：
+Example of heartbeat `body`:
 
 ```protobuf
 message Heartbeat {
@@ -88,7 +88,7 @@ message Heartbeat {
 ## Auth
 
 :::info
-Cmd：`2`
+Cmd: `2`
 :::
 
 Client need prove connection is legal. After handshake with server, client send auth packet as first packet.
@@ -120,7 +120,7 @@ message AuthResponse {
 ## Reconnect
 
 :::info
-Cmd：`3`
+Cmd: `3`
 :::
 
 After client disconnect from server, client can use session to reconnect to server when session is not expired. After reconnect success, server will set new session in reconnect response body.

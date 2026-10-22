@@ -3,6 +3,7 @@ id: trade_definition
 title: 交易命名詞典
 slug: trade-definition
 sidebar_position: 2
+description: 'Longbridge 交易接口用到的字段與枚舉定義，包括訂單類型、訂單狀態、市場和 WebSocket 訂單推送字段。'
 ---
 
 ## OrderType
@@ -44,6 +45,7 @@ sidebar_position: 2
 | ReplacedNotReported  | 待提交 (改單成功) |
 | ProtectedNotReported | 待提交 (保價訂單) |
 | VarietiesNotReported | 待提交 (條件單)   |
+| DelayedNotReported   | 監控中 (時間條件單)|
 | FilledStatus         | 已成交            |
 | WaitToNew            | 已提待報          |
 | NewStatus            | 已委托            |
@@ -99,7 +101,7 @@ sidebar_position: 2
 | last_share         | string | 最新成交數量																																													 |
 | last_price         | string | 最新成交價格																																													 |
 | multi_leg          | object | 多腿策略信息，僅多腿期權組合訂單推送                                                                                                     |
-| ∟ strategy         | string | 多腿策略<br/><br/>**可選值**<br/>`0` - CoveredCall（股票擔保）<br />`1` - CoveredPut（股票擔保）<br />`2` - VerticalCallSpread（跨價期權）<br />`3` - VerticalPutSpread（跨價期權）<br />`4` - Collar（領式策略）<br />`5` - Straddle（馬鞍式策略）<br />`6` - Strangle（勒束式策略） |
+| ∟ strategy         | string | 多腿策略<br/><br/>**可選值**<br/>`0` - CoveredCall（股票擔保）<br />`1` - CoveredPut（股票擔保）<br />`2` - VerticalCallSpread（跨價期權）<br />`3` - VerticalPutSpread（跨價期權）<br />`4` - Collar（領式策略）<br />`5` - Straddle（馬鞍式策略）<br />`6` - Strangle（勒束式策略）<br />`7` - CalendarCallSpread（跨期期權策略）<br />`8` - CalendarPutSpread（跨期期權策略） |
 | ∟ strategy_name    | string | 策略名稱                                                                                                                             |
 | ∟ multileg_id      | string | 多腿組合 ID                                                                                                                          |
 | ∟ code             | string | 多腿組合代碼                                                                                                                          |

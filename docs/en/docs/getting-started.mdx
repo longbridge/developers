@@ -3,6 +3,8 @@ sidebar_position: 1
 slug: getting-started
 title: Getting Started
 sidebar_icon: zap
+seo_title: 'Getting Started with Longbridge OpenAPI: Keys & First Call'
+description: 'Enable Longbridge OpenAPI, get your App Key, App Secret and Access Token, install the SDK and make your first market data or trading request.'
 ---
 
 ## Foreword
@@ -189,7 +191,7 @@ Let's take obtaining assets as an example to demonstrate how to use the SDK.
 
 Longbridge OpenAPI supports two authentication methods:
 
-#### Method 1: OAuth 2.0 (Recommended) ⭐
+#### Method 1: OAuth 2.0 (Recommended) ⭐ {#oauth-2-0}
 
 OAuth 2.0 is the modern authentication method that uses Bearer tokens without requiring HMAC signatures, making it more secure and convenient.
 
@@ -1561,7 +1563,7 @@ func main() {
 }
 ```
 
-运行：
+Run:
 
 ```shell
 go run ./
@@ -1913,7 +1915,7 @@ After running, the output is as follows:
 Order {
   order_id: "718437534753550336",
   status: NotReported,
-  stock_name: "腾讯控股 1",
+  stock_name: "TENCENT",
   quantity: 200,
   executed_quantity: None,
   price: Some(50.000),

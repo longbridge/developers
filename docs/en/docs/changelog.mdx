@@ -4,7 +4,18 @@ title: Changelog
 slug: changelog
 sidebar_position: 7
 sidebar_icon: newspaper
+description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest first: new commands, API endpoints, MCP tools and other changes.'
 ---
+
+## 2026-09-28
+
+### CLI v0.29.0
+
+- **[Mutual funds come to the terminal](/docs/cli/fund/market)** — the new `longbridge fund` command group covers the whole channel: browse the catalog and a fund's detail, analysis, trend, returns, performance, NAV and holdings; review your fund positions; and validate, submit and cancel fund orders. Funds are addressed by `counter_id` (e.g. `UT/FD/HK0000384492`); `submit-order` / `cancel-order` prompt for confirmation unless `--yes`
+
+### MCP
+
+- **28 fund-channel tools** — Longbridge MCP gains the Hong Kong mutual-fund channel in sync: catalog & market data, your positions, order lookup, and fund order validate / submit / cancel (writes require two-step confirmation)
 
 ## 2026-08-19
 
@@ -383,7 +394,7 @@ sidebar_icon: newspaper
 ## 2023-11-03
 
 - Add quote history candlestick interface
-  - Long connection `Business Command：27`, obtain the history candlestick of security
+  - Long connection `Business Command: 27`, obtain the history candlestick of security
 
 ## 2023-08-17
 
@@ -406,7 +417,7 @@ sidebar_icon: newspaper
 ## 2022-07-18
 
 - Update security static info interface
-  - Long connection `Business Command：10`, response add `board` fields
+  - Long connection `Business Command: 10`, response add `board` fields
 
 ## 2022-07-14
 

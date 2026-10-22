@@ -11,7 +11,7 @@ sidebar_position: 17
 ## 基本用法
 
 ```bash
-longbridge industry-peers BK/US/IN00258
+longbridge industry-peers IN00258.US
 ```
 
 ```
@@ -35,14 +35,14 @@ Root: Semiconductors (US)
 # 第一步：查找板塊
 longbridge industry-rank --market US
 
-# 第二步：使用 counter_id 列深入探索
-longbridge industry-peers BK/US/IN00258
+# 第二步：使用 symbol 列深入探索
+longbridge industry-peers IN00258.US
 ```
 
 ### 港股板塊樹形結構
 
 ```bash
-longbridge industry-peers BK/HK/IN00012
+longbridge industry-peers IN00012.HK
 ```
 
 在不同市場下使用方式相同——從 `industry-rank --market HK`、`--market CN` 或 `--market SG` 獲取計數器 ID 即可。

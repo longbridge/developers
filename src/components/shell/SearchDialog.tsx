@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import MiniSearch from 'minisearch'
 import type { Locale } from '@longbridge/openapi-utils'
 import { t } from '@longbridge/openapi-utils'
-import SearchResults, { type SearchHit } from './SearchResults'
+import SearchResults, { type SearchHit, type SearchType } from './SearchResults'
 
 interface Props {
   locale: Locale
@@ -17,6 +17,8 @@ interface Section {
   title: string
   headings: string[]
   body: string
+  type: SearchType
+  slug: string
 }
 
 const DEBOUNCE_MS = 120
@@ -32,13 +34,17 @@ async function buildIndex(locale: Locale): Promise<MiniSearch<Section>> {
   // as a static file via _assets.conf. A root .json would fall to the catch-all,
   // be rewritten to `<path>/index.html`, and 404 — the "Search index failed to
   // load" seen on the deployed site. Mirrors the /assets asset-dir alignment.
-  const res = await fetch(`/assets/search-index.${locale}.json`)
+  // `cache: 'no-cache'` forces revalidation: the index URL is not
+  // content-hashed, so a stale copy (from a prior deploy or a mid-session
+  // rebuild) would otherwise be served from the HTTP cache until it expires,
+  // hiding freshly-indexed content.
+  const res = await fetch(`/assets/search-index.${locale}.json`, { cache: 'no-cache' })
   if (!res.ok) throw new Error(`search-index ${locale} ${res.status}`)
   const { sections } = (await res.json()) as { sections: Section[] }
 
   const ms = new MiniSearch<Section>({
-    fields: ['title', 'headingsJoined', 'body'],
-    storeFields: ['url', 'title', 'headings'],
+    fields: ['title', 'headingsJoined', 'slug', 'body'],
+    storeFields: ['url', 'title', 'headings', 'type'],
     tokenize: (text) => {
       const out: string[] = []
       let buf = ''
@@ -60,10 +66,10 @@ async function buildIndex(locale: Locale): Promise<MiniSearch<Section>> {
       // For non-virtual fields, hand back the raw value. Returning a
       // stringified array here corrupts storeFields — `headings` came back
       // as "a,b,c" instead of ["a","b","c"] and the UI's .map() blew up.
-      return (doc as unknown as Record<string, unknown>)[field] as string
+      return ((doc as unknown as Record<string, unknown>)[field] as string) ?? ''
     },
     searchOptions: {
-      boost: { title: 3, headingsJoined: 2, body: 1 },
+      boost: { title: 3, headingsJoined: 2, slug: 2, body: 1 },
       fuzzy: 0.15,
       prefix: true,
     },
@@ -206,11 +212,22 @@ export default function SearchDialog({ locale, isOpen, onClose }: Props) {
       setLoading(true)
       try {
         const raw = ms.search(trimmed)
-        const hits: SearchHit[] = raw.slice(0, MAX_RESULTS).map((r) => ({
+        // Collapse to one hit per page: a doc is sliced into many heading
+        // sections (…#parameters, …#response, …), and without this a single
+        // page floods every result slot — burying the API / CLI / MCP pages
+        // for the same topic. Keep the highest-ranked section per base URL
+        // (the #hash still deep-links to that section).
+        const byPage = new Map<string, (typeof raw)[number]>()
+        for (const r of raw) {
+          const base = (r.url as string).split('#')[0]
+          if (!byPage.has(base)) byPage.set(base, r)
+        }
+        const hits: SearchHit[] = [...byPage.values()].slice(0, MAX_RESULTS).map((r) => ({
           id: String(r.id),
           url: r.url as string,
           title: r.title as string,
           headings: r.headings as string[],
+          type: (r.type as SearchType) ?? 'docs',
           matchedTerms: r.terms ?? [],
         }))
         setResults(hits)
