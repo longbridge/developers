@@ -363,7 +363,7 @@ x-pages:
       | Prefer SDKs over raw HTTP when possible      | [SDK Quick Start](/docs/getting-started)                              |
       | Enable required OpenAPI services first       | [How to enable OpenAPI](/docs/#how-to-enable-openapi)                 |
       | Understand permissions and restrictions      | [Permissions and restrictions](/docs/#permissions-and-restrictions)   |
-      | Check common error codes for troubleshooting | [Error Codes](/docs/error-codes)                                      |
+      | Check common error codes for troubleshooting | [Error Codes](/docs/api?page=error-codes)                                      |
 
       ## OAuth 2.0 (Default)
 
@@ -542,7 +542,7 @@ x-pages:
       | 推荐使用各自语言的 SDK，而不是调用原生的接口 | [SDK 快速开始页面](/docs/getting-started)         |
       | 阅读 OpenAPI 介绍中开通相应服务              | [OpenAPI 如何开通](/docs/#如何开通)               |
       | 阅读 OpenAPI 介绍中使用权限及限制            | [OpenAPI 使用权限及限制](/docs/#使用权限及限制)   |
-      | 了解通用错误码，便于查找调用接口出错的原因   | [通用错误码](/docs/error-codes)                   |
+      | 了解通用错误码，便于查找调用接口出错的原因   | [通用错误码](/docs/api?page=error-codes)                   |
 
       ## OAuth 2.0（推荐方案）
 
@@ -718,7 +718,7 @@ x-pages:
       | 推薦使用各自語言的 SDK，而不是調用原生的接口 | [SDK 快速開始頁面](/docs/getting-started)         |
       | 閱讀 OpenAPI 介紹中開通相應服務              | [OpenAPI 如何開通](/docs/#如何開通)               |
       | 閱讀 OpenAPI 介紹中使用權限及限制            | [OpenAPI 使用權限及限制](/docs/#使用權限及限制)   |
-      | 瞭解通用錯誤碼，便於查找調用接口出錯的原因   | [通用錯誤碼](/docs/error-codes)                   |
+      | 瞭解通用錯誤碼，便於查找調用接口出錯的原因   | [通用錯誤碼](/docs/api?page=error-codes)                   |
 
       ## OAuth 2.0（推薦方案）
 
