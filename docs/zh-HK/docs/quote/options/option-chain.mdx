@@ -18,18 +18,18 @@ headingLevel: 2
 
 <table className="http-basic">
 <tbody>
-<tr><td className="http-basic-key">HTTP 方法</td><td>GET</td></tr>
-<tr><td className="http-basic-key">HTTP URL</td><td>/v1/gemini/option/option_chain_list</td></tr>
+<tr><td className="http-basic-key">HTTP 方法</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/options/strikes</td></tr>
 </tbody>
 </table>
 
-### 查詢參數
+### 請求參數
 
 | 名稱          | 類型   | 必填 | 描述                                                                                                                                       |
 | ------------- | ------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | symbol        | string | 是   | 正股標的代碼，使用 `ticker.region` 格式，例如：`BABA.US`                                                                                   |
 | expiry_date   | string | 是   | 期權到期日，使用 `YYYYMMDD` 格式，例如：`20261218`                                                                                         |
-| standard_only | bool   | 否   | 是否過濾因公司行動產生的舊期權合約。`true` / `1` 僅返回標準期權合約；不傳或 `false` 則返回全部合約，含 `standard_attr` 為 `old` 的舊合約 |
+| standard_only | bool   | 否   | 是否過濾因公司行動產生的舊期權合約。`true` 僅返回標準期權合約；不傳或 `false` 則返回全部合約，含 `standard_attr` 為 `old` 的舊合約 |
 
 ### 請求示例
 
@@ -37,9 +37,14 @@ headingLevel: 2
   <TabItem value="curl" label="cURL" default>
 
 ```bash
-curl "https://openapi.longbridge.com/v1/gemini/option/option_chain_list?symbol=BABA.US&expiry_date=20261218" \
+curl -X POST "https://openapi.longbridge.com/v1/quote/options/strikes" \
   -H "Authorization: Bearer <token>" \
-  -H "Accept: application/json"
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "symbol": "BABA.US",
+    "expiry_date": "20261218"
+  }'
 ```
 
   </TabItem>
