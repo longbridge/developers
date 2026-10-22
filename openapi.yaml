@@ -363,7 +363,7 @@ x-pages:
       | Prefer SDKs over raw HTTP when possible      | [SDK Quick Start](/docs/getting-started)                              |
       | Enable required OpenAPI services first       | [How to enable OpenAPI](/docs/#how-to-enable-openapi)                 |
       | Understand permissions and restrictions      | [Permissions and restrictions](/docs/#permissions-and-restrictions)   |
-      | Check common error codes for troubleshooting | [Error Codes](/docs/error-codes)                                      |
+      | Check common error codes for troubleshooting | [Error Codes](/docs/api?page=error-codes)                                      |
 
       ## OAuth 2.0 (Default)
 
@@ -542,7 +542,7 @@ x-pages:
       | 推荐使用各自语言的 SDK，而不是调用原生的接口 | [SDK 快速开始页面](/docs/getting-started)         |
       | 阅读 OpenAPI 介绍中开通相应服务              | [OpenAPI 如何开通](/docs/#如何开通)               |
       | 阅读 OpenAPI 介绍中使用权限及限制            | [OpenAPI 使用权限及限制](/docs/#使用权限及限制)   |
-      | 了解通用错误码，便于查找调用接口出错的原因   | [通用错误码](/docs/error-codes)                   |
+      | 了解通用错误码，便于查找调用接口出错的原因   | [通用错误码](/docs/api?page=error-codes)                   |
 
       ## OAuth 2.0（推荐方案）
 
@@ -718,7 +718,7 @@ x-pages:
       | 推薦使用各自語言的 SDK，而不是調用原生的接口 | [SDK 快速開始頁面](/docs/getting-started)         |
       | 閱讀 OpenAPI 介紹中開通相應服務              | [OpenAPI 如何開通](/docs/#如何開通)               |
       | 閱讀 OpenAPI 介紹中使用權限及限制            | [OpenAPI 使用權限及限制](/docs/#使用權限及限制)   |
-      | 瞭解通用錯誤碼，便於查找調用接口出錯的原因   | [通用錯誤碼](/docs/error-codes)                   |
+      | 瞭解通用錯誤碼，便於查找調用接口出錯的原因   | [通用錯誤碼](/docs/api?page=error-codes)                   |
 
       ## OAuth 2.0（推薦方案）
 
@@ -982,7 +982,7 @@ x-pages:
 
       ## Commands
 
-      After authenticating, send business commands over the same connection. Every quote pull, subscription, push and trade command — with its cmd code, protobuf request/response, field tables and native call example — is documented under the **WebSocket** groups in the sidebar (**行情 → Pull / Subscription / Push**, **交易 → Notification**).
+      After authenticating, send business commands over the same connection. Every quote pull, subscription, push and trade command — with its cmd code, protobuf request/response, field tables and native call example — is documented under the **WebSocket** groups in the sidebar (**Quote → Pull / Subscription / Push**, **Trade → Notification**).
 
       ## Reference implementation
 
@@ -9780,7 +9780,7 @@ paths:
         - name: └ ∟ unit
           type: string
           required: false
-          description: Value unit, e.g. `%`, `亿`.
+          description: Value unit, e.g. `%`, `B`.
           x-description-zh: 数值单位，如 `%`、` 亿`。
           x-description-zh-hk: 數值單位，如 `%`、` 億`。
       responses:
@@ -10069,16 +10069,16 @@ paths:
                     - stock:
                         code: TSLA
                         symbol: TSLA.US
-                        name: 特斯拉
+                        name: Tesla, Inc.
                         change: '-0.0388'
                         last_done: '404.110'
                         market: US
                         labels:
-                          - 汽车制造商
+                          - Automobile Manufacturers
                         logo: https://assets.lbkrs.com/ticker/ST/US/TSLA.png
                         trade_status: 0
                       timestamp: '1779202097'
-                      alert_reason: 波动超 20 日均值
+                      alert_reason: Volatility exceeds 20-day avg
                       alert_type: 11
                       post: null
                   next_params:
@@ -11183,7 +11183,7 @@ paths:
                           enabled: true
                           frequency: 2
                           scope: 0
-                          text: 价格涨到 400
+                          text: Price rises to 400
                           state:
                             - 1
                           value_map:
@@ -19030,7 +19030,7 @@ paths:
                       benchmark_price: 12.5
                       optimistic_price: 14
                       outlook: Bullish
-                      outlook_desc: 看涨
+                      outlook_desc: Bullish
                       status: 1
                       json_data: '{}'
                       created_at: '2026-06-01T09:30:00Z'
@@ -20017,7 +20017,7 @@ paths:
         - name: └ ∟ unit
           type: string
           required: false
-          description: Unit (e.g. `%`, `亿`)
+          description: Unit (e.g. `%`, `B`)
           x-description-zh: 单位（如 `%`、` 亿`）
           x-description-zh-hk: 單位（如 `%`、` 億`）
       responses:
@@ -20030,12 +20030,12 @@ paths:
                 message: success
                 data:
                   groups:
-                    - group_name: 公司规模与财务
+                    - group_name: Company Size & Financials
                       indicators:
                         - id: '1'
                           key: marketcap
-                          name: 市值
-                          unit: 亿
+                          name: Market Cap
+                          unit: B
                           min: null
                           max: null
         default:
@@ -20202,11 +20202,11 @@ paths:
                 data:
                   strategys:
                     - id: 19
-                      name: 今日大涨股票
+                      name: Stocks that surged today
                       type: platform
                       market: US
                     - id: 20
-                      name: 今年增长冠军
+                      name: Top growth stocks of the year
                       type: platform
                       market: US
         default:
@@ -20525,7 +20525,7 @@ paths:
                 message: success
                 data:
                   id: 19
-                  name: 今日大涨股票
+                  name: Stocks that surged today
                   market: US
                   type: platform
                   filter:
@@ -24088,7 +24088,7 @@ paths:
                   changes:
                     - symbol: TSLA.US
                       name: Tesla Inc.
-                      alert_name: 大宗交易
+                      alert_name: Block Trade
                       alert_time: 1778198400000
                       emotion: 1
                       change_values:
@@ -26221,12 +26221,12 @@ paths:
                 code: 0
                 message: success
                 data:
-                  name: 苹果
+                  name: Apple
                   ticker: AAPL
                   fp_start: 2025.12.28
                   fp_end: 2026.03.28
                   currency: USD
-                  report_desc: 概要：苹果（AAPL）的营业收入是 1112 亿（+16.6%）；每股收益是 2.01（+21.82%）。
+                  report_desc: 'Summary: Apple (AAPL) revenue was 111.18B (+16.6%); EPS was 2.01 (+21.82%).'
                   fo_revenue:
                     value: '111184000000.0000'
                     yoy: '16.6'
@@ -28712,7 +28712,7 @@ paths:
                     chg: '0.0231'
                     ytd_chg: '0.0875'
                     next:
-                      - name: 在线消费电子产品零售
+                      - name: Online Consumer Electronics Retail
                         symbol: ''
                         stock_num: 4
                         chg: '0.0268'
@@ -29709,7 +29709,7 @@ paths:
                   invest_securities:
                     - symbol: HUYA.US
                       company_id: '12345'
-                      company_name: 虎牙直播
+                      company_name: Huya Inc.
                       company_name_en: Huya Inc.
                       company_name_zhcn: 虎牙直播
                       currency: USD
@@ -30017,7 +30017,7 @@ paths:
                         indicators:
                           - field_name: operating_revenue
                             indicator_name: Revenue
-                            indicator_value: 6786 亿
+                            indicator_value: 678.6B
                             yoy: '0.0800'
         default:
           description: Unexpected error
@@ -32736,13 +32736,13 @@ paths:
                       total: '124300000000'
                       currency: USD
                       business:
-                        - name: 美洲
+                        - name: Americas
                           percent: '40.80'
                           value: '31968000000'
-                        - name: 欧洲
+                        - name: Europe
                           percent: '23.64'
                           value: '18521000000'
-                        - name: 大中华区
+                        - name: Greater China
                           percent: '20.72'
                           value: '16233000000'
                       regionals: []
@@ -45173,7 +45173,7 @@ paths:
                 message: success
                 data:
                   temperature: 70
-                  description: 温度温暖并快速上升中
+                  description: Warm & rising quickly
                   valuation: 59
                   sentiment: 82
                   updated_at: '1774317902'
@@ -45690,7 +45690,7 @@ paths:
                 data:
                   items:
                     - id: '627391979864985729'
-                      title: 苹果 | 4 - Apple Inc. (0000320193) (Issuer)
+                      title: 'Apple | 4 - Apple Inc. (0000320193) (Issuer)'
                       description: ''
                       file_name: 4 - Apple Inc. (0000320193) (Issuer)
                       file_urls:

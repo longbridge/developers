@@ -1611,7 +1611,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
                       <h2 id="error-code">{L.errorCode[locale]}</h2>
                       <p className="error-code-note">
                         {L.errorCodeBody[locale]}
-                        <a href={`${localePrefix}/docs/error-codes`}>{L.errorCodeLink[locale]}</a>
+                        <a href={`${apiBase}?page=error-codes`}>{L.errorCodeLink[locale]}</a>
                         {locale === 'en' ? ' page for the full list of error codes.' : '。'}
                       </p>
                     </>

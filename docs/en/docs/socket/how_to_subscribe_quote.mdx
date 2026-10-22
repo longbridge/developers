@@ -21,7 +21,7 @@ WebSocket Endpoint: `wss://openapi-quote.longbridge.com`
 TCP Endpoint: `openapi-quote.longbridge.com:2020`
 :::
 
-Flow：
+Flow:
 
 ```mermaid
 sequenceDiagram
@@ -32,13 +32,13 @@ Client -->> Server: Auth request
 Server -->> Client: Auth response
 
 par Subscribe Market Quote
-Client -->> Server: Subscribe request，req_id: 10, cmd: 6
-Server -->> Client: Subscribe response，req_id: 10, cmd: 6
+Client -->> Server: Subscribe request, req_id: 10, cmd: 6
+Server -->> Client: Subscribe response, req_id: 10, cmd: 6
 
-Server -->> Client: price pushing，cmd: 101
-Server -->> Client: depth pushing，cmd: 102
-Server -->> Client: broker pushing，cmd: 103
-Server -->> Client: transaction pushing，cmd: 104
+Server -->> Client: price pushing, cmd: 101
+Server -->> Client: depth pushing, cmd: 102
+Server -->> Client: broker pushing, cmd: 103
+Server -->> Client: transaction pushing, cmd: 104
 
 end
 
