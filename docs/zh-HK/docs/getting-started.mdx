@@ -430,27 +430,11 @@ OAuth Token 應安全儲存在應用程式中（如加密檔案、安全金鑰�
 
 如果接口返回錯誤碼 `403308`（`Target API's scope is not in authorized scopes`），說明 Token 未被授予該接口所需的 scope。請刪除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授權並勾選該 scope。參見[錯誤碼](/zh-HK/docs/error-codes)。
 
-<a id="oauth-revoke"></a>
+<a id="oauth-signout"></a>
 
-**撤銷 Token**
+**登出**
 
-如需撤銷 Access Token 或 Refresh Token，請以表單格式請求撤銷接口（[RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009)）：
-
-```bash
-curl -X POST https://openapi.longbridge.com/oauth2/revoke \
-     -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "token=YOUR_REFRESH_TOKEN" \
-     -d "token_type_hint=refresh_token" \
-     -d "client_id=YOUR_CLIENT_ID"
-```
-
-| 參數 | 必填 | 描述 |
-| ---- | ---- | ---- |
-| `token` | 是 | 要撤銷的 Access Token 或 Refresh Token |
-| `token_type_hint` | 否 | `access_token` 或 `refresh_token` |
-| `client_id` | 是 | 第一步獲得的 `client_id` |
-
-撤銷後請刪除本地保存的 Token 文件，避免 SDK 繼續使用。也可以在 Longbridge 賬戶安全設置中撤銷授權。
+SDK 暫未提供登出方法。如需登出，刪除本地儲存的 Token 檔案 `~/.longbridge/openapi/tokens/<client_id>` 即可，下次執行時會重新授權。使用 CLI 的用戶可以直接執行 `longbridge auth logout`，它會刪除 Token 檔案和客戶端註冊。
 
 #### 方式二：傳統 API Key（相容）
 
