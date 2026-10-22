@@ -1,0 +1,195 @@
+---
+slug: us_cash_and_buy_power
+title: 美股現金與購買力
+sidebar_position: 12
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US 賬戶
+此方法僅適用於美國數據中心賬戶。
+:::
+
+獲取美股賬戶的購買力、各幣種現金餘額和保證金狀態。
+
+<SDKLinks module="trade" klass="TradeContext" method="us_cash_and_buy_power" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/cash-and-buy-power </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> **SDK 方法參數。** HTTP 接口使用同名的 query 參數。
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| currency | string | 否 | 幣種，例如 `USD` |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_cash_and_buy_power(currency="USD")
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_cash_and_buy_power(currency="USD")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let resp = ctx.us_cash_and_buy_power(Some("USD")).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Example
+
+```json
+{
+  "buy_limit_info": {
+    "currency": "USD",
+    "cash_buy_power": "12500.00",
+    "overnight_buy_power": "10000.00",
+    "day_trade_buy_power": "50000.00",
+    "instant_buy_power": "12500.00",
+    "intraday_margin_buy_power": "25000.00",
+    "option_buy_power": "12500.00",
+    "crypto_buy_power": "12500.00",
+    "mme": "6250.00"
+  },
+  "cash_list": [
+    {
+      "currency": "USD",
+      "total_amount": "13000.00",
+      "available_cash": "12500.00",
+      "withdraw_cash": "12000.00",
+      "frozen_cash": "0.00",
+      "settled_cash": "12500.00",
+      "outstanding": "500.00",
+      "external_amount": "0.00"
+    }
+  ],
+  "margin_status": {
+    "currency": "USD",
+    "nlv": "25000.00",
+    "margin_equity": "25000.00",
+    "margin_maintenance_excess": "18750.00",
+    "mmr": "6250.00",
+    "reg_t_excess": "12500.00",
+    "sma": "12500.00"
+  }
+}
+```
+
+### Response Status
+
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USCashAndBuyPower](#USCashAndBuyPower) |
+| 400    | 請求錯誤 | None   |
+
+## Schemas
+
+### USCashAndBuyPower
+
+<a id="USCashAndBuyPower"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| buy_limit_info | [USBuyLimitInfo](#USBuyLimitInfo) | 是 | 購買力 |
+| cash_list | [USCashDetail](#USCashDetail)[] | 是 | 按幣種分列的現金餘額 |
+| margin_status | [USMarginStatus](#USMarginStatus) | 是 | 保證金賬戶狀態 |
+
+### USBuyLimitInfo
+
+<a id="USBuyLimitInfo"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| currency | string | 貨幣 |
+| cash_buy_power | string | 現金購買力 |
+| overnight_buy_power | string | 隔夜購買力 |
+| day_trade_buy_power | string | 日內交易購買力 |
+| instant_buy_power | string | 即時購買力 |
+| intraday_margin_buy_power | string | 日內保證金購買力 |
+| option_buy_power | string | 期權購買力 |
+| crypto_buy_power | string | 加密貨幣購買力 |
+| mme | string | 用於計算購買力的維持保證金盈餘 |
+
+### USCashDetail
+
+<a id="USCashDetail"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| currency | string | 貨幣 |
+| total_amount | string | 現金總額 |
+| available_cash | string | 可用現金 |
+| withdraw_cash | string | 可取現金 |
+| frozen_cash | string | 待成交訂單凍結的現金 |
+| settled_cash | string | 已結算現金 |
+| outstanding | string | 未結算金額 |
+| external_amount | string | 新股認購或基金申購佔用的金額 |
+
+### USMarginStatus
+
+<a id="USMarginStatus"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| currency | string | 貨幣 |
+| nlv | string | 淨清算價值 |
+| margin_equity | string | 保證金權益 |
+| margin_maintenance_excess | string | 維持保證金盈餘 |
+| mmr | string | 維持保證金要求 |
+| reg_t_excess | string | Reg T 盈餘 |
+| sma | string | 特別備忘賬戶（SMA） |

@@ -650,6 +650,8 @@ The `expired_at` parameter sets when the new token expires (default: **90 days**
 
 ### Get Account Balance
 
+Longbridge US accounts should call [`us_asset_overview`](/docs/trade/asset/us_asset_overview) or [`us_cash_and_buy_power`](/docs/trade/asset/us_cash_and_buy_power) instead of `account_balance`, which is only available for AP (Longbridge HK/SG) accounts.
+
 <Tabs groupId="programming-language">
   <TabItem value="python" label="Python" default>
 

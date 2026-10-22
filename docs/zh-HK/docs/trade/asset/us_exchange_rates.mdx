@@ -1,0 +1,190 @@
+---
+slug: us_exchange_rates
+title: 美股賬戶匯率
+sidebar_position: 15
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US 賬戶
+此方法僅適用於美國數據中心賬戶。
+:::
+
+獲取美股賬戶使用的匯率。
+
+<SDKLinks module="trade" klass="TradeContext" method="us_exchange_rates" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/exchange-rates </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> **SDK 方法參數。**
+
+無需參數。
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_exchange_rates()
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_exchange_rates()
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let resp = ctx.us_exchange_rates().await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+HTTP 接口以兩級映射返回匯率：`universal_exchanges` 以第一層分組鍵映射到一個對象，該對象的 `spec_exchanges` 再以第二層分組鍵映射到匯率列表。
+
+SDK 會將該映射展開為單個 `exchanges` 列表，每條記錄除匯率字段外，還以 `universal_key` 和 `spec_key` 保留兩層分組鍵。
+
+### Response Example
+
+HTTP 接口：
+
+```json
+{
+  "universal_exchanges": {
+    "1": {
+      "spec_exchanges": {
+        "1": {
+          "exchanges": [
+            {
+              "base_currency": "USD",
+              "other_currency": "HKD",
+              "bid_rate": "7.7850",
+              "offer_rate": "7.7950",
+              "average_rate": "7.7900"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+SDK（展開後）：
+
+```json
+{
+  "exchanges": [
+    {
+      "universal_key": "1",
+      "spec_key": "1",
+      "base_currency": "USD",
+      "other_currency": "HKD",
+      "bid_rate": "7.7850",
+      "offer_rate": "7.7950",
+      "average_rate": "7.7900"
+    }
+  ]
+}
+```
+
+### Response Status
+
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USExchangeRates](#USExchangeRates) |
+| 400    | 請求錯誤 | None   |
+
+## Schemas
+
+### USExchangeRates
+
+<a id="USExchangeRates"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| universal_exchanges | map&lt;string, [USUniversalExchanges](#USUniversalExchanges)&gt; | 是 | 按第一層分組鍵分組的匯率 |
+
+### USUniversalExchanges
+
+<a id="USUniversalExchanges"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| spec_exchanges | map&lt;string, [USSpecExchanges](#USSpecExchanges)&gt; | 是 | 按第二層分組鍵分組的匯率 |
+
+### USSpecExchanges
+
+<a id="USSpecExchanges"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| exchanges | [USExchangeRate](#USExchangeRate)[] | 是 | 該分組下的匯率 |
+
+### USExchangeRate
+
+<a id="USExchangeRate"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| base_currency | string | 基礎貨幣 |
+| other_currency | string | 報價貨幣 |
+| bid_rate | string | 買入匯率。HTTP 接口可能以數字返回，SDK 統一返回字符串 |
+| offer_rate | string | 賣出匯率。HTTP 接口可能以數字返回，SDK 統一返回字符串 |
+| average_rate | string | 平均匯率。HTTP 接口可能以數字返回，SDK 統一返回字符串 |
+
+SDK 返回的每條 `exchanges` 記錄還包含：
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| universal_key | string | 該匯率所在的 `universal_exchanges` 分組鍵 |
+| spec_key | string | 該匯率所在的 `spec_exchanges` 分組鍵 |

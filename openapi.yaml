@@ -38079,11 +38079,23 @@ paths:
       x-summary-zh: 账户资金
       x-summary-zh-hk: 賬戶資金
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Cash and Buying Power (`us_cash_and_buy_power`) and US Asset Overview (`us_asset_overview`) instead.
+        :::
+
         The API is used to obtain the available, desirable, frozen, to-be-settled, and in-transit
         funds (fund purchase and redemption) information for each currency of the user.
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股现金与购买力（`us_cash_and_buy_power`）和美股资产概览（`us_asset_overview`）。
+        :::
+
         该接口用于获取用户每个币种可用、可取、冻结、待结算金额、在途资金 (基金申购赎回) 信息。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股現金與購買力（`us_cash_and_buy_power`）和美股資產概覽（`us_asset_overview`）。
+        :::
+
         該接口用於獲取用戶每個幣種可用、可取、凍結、待結算金額、在途資金 (基金申購贖回) 信息。
       x-subgroup: Assets
       x-subgroup-zh: 资产
@@ -38351,11 +38363,23 @@ paths:
       x-summary-zh: 资金流水
       x-summary-zh-hk: 資金流水
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Transaction History (`us_transaction_history`) instead.
+        :::
+
         The API is used to obtain capital inflow/outflow direction, capital type, capital amount, occurrence time,
         associated stock code and capital flow description information.
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股交易流水（`us_transaction_history`）。
+        :::
+
         该接口用于获取资金流入/流出方向、资金类别、资金金额、发生时间、关联股票代码和资金流水说明信息。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股交易流水（`us_transaction_history`）。
+        :::
+
         該接口用於獲取資金流入/流出方向、資金類別、資金金額、發生時間、關聯股票代碼和資金流水說明信息。
       x-subgroup: Assets
       x-subgroup-zh: 资产
@@ -38595,11 +38619,23 @@ paths:
       x-summary-zh: 基金持仓
       x-summary-zh-hk: 基金持倉
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts. It is not available for Longbridge US accounts.
+        :::
+
         The API is used to obtain fund position information including account, fund code, holding share, cost net worth,
         current net worth, and currency.
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户不支持此接口。
+        :::
+
         该接口用于获取包括账户、基金代码、持有份额、成本净值、当前净值、币种在内的基金持仓信息。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶不支持此接口。
+        :::
+
         該接口用於獲取包括賬戶、基金代碼、持有份額、成本淨值、當前淨值、幣種在內的基金持倉信息。
       x-subgroup: Assets
       x-subgroup-zh: 资产
@@ -38798,11 +38834,23 @@ paths:
       x-summary-zh: 股票持仓
       x-summary-zh-hk: 股票持倉
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Asset Overview (`us_asset_overview`) instead.
+        :::
+
         The API is used to obtain stock position information including account, stock code, number of shares held,
         number of available shares, average position price (calculated according to account settings), and currency.
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股资产概览（`us_asset_overview`）。
+        :::
+
         该接口用于获取包括账户、股票代码、持仓股数、可用股数、持仓均价（按账户设置计算均价方式）、币种在内的股票持仓信息。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股資產概覽（`us_asset_overview`）。
+        :::
+
         該接口用於獲取包括賬戶、股票代碼、持倉股數、可用股數、持倉均價（按賬戶設置計算均價方式）、幣種在內的股票持倉信息。
       x-subgroup: Assets
       x-subgroup-zh: 资产
@@ -39058,10 +39106,22 @@ paths:
       x-summary-zh: 汇率
       x-summary-zh-hk: 匯率
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Exchange Rates (`us_exchange_rates`) instead.
+        :::
+
         Get current foreign exchange rates for all currency pairs used in your account.
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股账户汇率（`us_exchange_rates`）。
+        :::
+
         获取账户中所有货币对的当前外汇汇率。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股賬戶匯率（`us_exchange_rates`）。
+        :::
+
         獲取賬戶中所有貨幣對的當前外匯匯率。
       x-subgroup: Portfolio
       x-subgroup-zh: 投资组合
@@ -39233,11 +39293,23 @@ paths:
       x-summary-zh: 保证金比例
       x-summary-zh-hk: 保證金比例
       description: |
+        :::warning Longbridge AP Accounts
+        This API is only available for AP (Longbridge HK/SG) accounts. It is not available for Longbridge US accounts.
+        :::
+
         This API is used to obtain the initial margin ratio, maintain the margin ratio and strengthen the
         margin ratio of stocks.
       x-description-zh: |
+        :::warning Longbridge AP 账户
+        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户不支持此接口。
+        :::
+
         该接口用于获取股票初始保证金比例、维持保证金比例、强平保证金比例。
       x-description-zh-hk: |
+        :::warning Longbridge AP 賬戶
+        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶不支持此接口。
+        :::
+
         該接口用於獲取股票初始保證金比例、維持保證金比例、強平保證金比例。
       x-subgroup: Assets
       x-subgroup-zh: 资产
@@ -39851,6 +39923,984 @@ paths:
                       - amount: '-85.20'
                         period: 1
                         rate: '-0.0215'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/us/assets/cash-and-buy-power:
+    get:
+      operationId: us_cash_and_buy_power
+      summary: US Cash and Buying Power
+      x-summary-zh: 美股现金与购买力
+      x-summary-zh-hk: 美股現金與購買力
+      description: |
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
+
+        Get the buying power, per-currency cash balances, and margin status of a US account.
+      x-description-zh: |
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
+
+        获取美股账户的购买力、各币种现金余额和保证金状态。
+      x-description-zh-hk: |
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
+
+        獲取美股賬戶的購買力、各幣種現金餘額和保證金狀態。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
+      tags:
+        - Trade
+      x-parameters:
+        - name: currency
+          in: query
+          type: string
+          required: false
+          description: 'Currency, e.g. `USD`'
+          x-description-zh: '币种，例如 `USD`'
+          x-description-zh-hk: '幣種，例如 `USD`'
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/us/assets/cash-and-buy-power\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: buy_limit_info
+          type: USBuyLimitInfo
+          required: true
+          description: Buying power
+          x-description-zh: 购买力
+          x-description-zh-hk: 購買力
+        - name: currency
+          type: string
+          required: false
+          description: Currency
+          x-description-zh: 货币
+          x-description-zh-hk: 貨幣
+        - name: cash_buy_power
+          type: string
+          required: false
+          description: Cash buying power
+          x-description-zh: 现金购买力
+          x-description-zh-hk: 現金購買力
+        - name: overnight_buy_power
+          type: string
+          required: false
+          description: Overnight buying power
+          x-description-zh: 隔夜购买力
+          x-description-zh-hk: 隔夜購買力
+        - name: day_trade_buy_power
+          type: string
+          required: false
+          description: Day-trade buying power
+          x-description-zh: 日内交易购买力
+          x-description-zh-hk: 日內交易購買力
+        - name: instant_buy_power
+          type: string
+          required: false
+          description: Instant buying power
+          x-description-zh: 即时购买力
+          x-description-zh-hk: 即時購買力
+        - name: intraday_margin_buy_power
+          type: string
+          required: false
+          description: Intraday margin buying power
+          x-description-zh: 日内保证金购买力
+          x-description-zh-hk: 日內保證金購買力
+        - name: option_buy_power
+          type: string
+          required: false
+          description: Option buying power
+          x-description-zh: 期权购买力
+          x-description-zh-hk: 期權購買力
+        - name: crypto_buy_power
+          type: string
+          required: false
+          description: Crypto buying power
+          x-description-zh: 加密货币购买力
+          x-description-zh-hk: 加密貨幣購買力
+        - name: mme
+          type: string
+          required: false
+          description: Margin maintenance excess used for buying power
+          x-description-zh: 用于计算购买力的维持保证金盈余
+          x-description-zh-hk: 用於計算購買力的維持保證金盈餘
+        - name: cash_list
+          type: 'USCashDetail[]'
+          required: true
+          description: Cash balances by currency
+          x-description-zh: 按币种分列的现金余额
+          x-description-zh-hk: 按幣種分列的現金餘額
+        - name: total_amount
+          type: string
+          required: false
+          description: Total cash
+          x-description-zh: 现金总额
+          x-description-zh-hk: 現金總額
+        - name: available_cash
+          type: string
+          required: false
+          description: Available cash
+          x-description-zh: 可用现金
+          x-description-zh-hk: 可用現金
+        - name: withdraw_cash
+          type: string
+          required: false
+          description: Withdrawable cash
+          x-description-zh: 可取现金
+          x-description-zh-hk: 可取現金
+        - name: frozen_cash
+          type: string
+          required: false
+          description: Cash frozen for pending orders
+          x-description-zh: 待成交订单冻结的现金
+          x-description-zh-hk: 待成交訂單凍結的現金
+        - name: settled_cash
+          type: string
+          required: false
+          description: Settled cash
+          x-description-zh: 已结算现金
+          x-description-zh-hk: 已結算現金
+        - name: outstanding
+          type: string
+          required: false
+          description: Outstanding (unsettled) amount
+          x-description-zh: 未结算金额
+          x-description-zh-hk: 未結算金額
+        - name: external_amount
+          type: string
+          required: false
+          description: Amount held for IPO or fund subscriptions
+          x-description-zh: 新股认购或基金申购占用的金额
+          x-description-zh-hk: 新股認購或基金申購佔用的金額
+        - name: margin_status
+          type: USMarginStatus
+          required: true
+          description: Margin account status
+          x-description-zh: 保证金账户状态
+          x-description-zh-hk: 保證金賬戶狀態
+        - name: nlv
+          type: string
+          required: false
+          description: Net liquidation value
+          x-description-zh: 净清算价值
+          x-description-zh-hk: 淨清算價值
+        - name: margin_equity
+          type: string
+          required: false
+          description: Margin equity
+          x-description-zh: 保证金权益
+          x-description-zh-hk: 保證金權益
+        - name: margin_maintenance_excess
+          type: string
+          required: false
+          description: Margin maintenance excess
+          x-description-zh: 维持保证金盈余
+          x-description-zh-hk: 維持保證金盈餘
+        - name: mmr
+          type: string
+          required: false
+          description: Maintenance margin requirement
+          x-description-zh: 维持保证金要求
+          x-description-zh-hk: 維持保證金要求
+        - name: reg_t_excess
+          type: string
+          required: false
+          description: Regulation T excess
+          x-description-zh: Reg T 盈余
+          x-description-zh-hk: Reg T 盈餘
+        - name: sma
+          type: string
+          required: false
+          description: Special memorandum account (SMA)
+          x-description-zh: 特别备忘账户（SMA）
+          x-description-zh-hk: 特別備忘賬戶（SMA）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                buy_limit_info:
+                  currency: USD
+                  cash_buy_power: '12500.00'
+                  overnight_buy_power: '10000.00'
+                  day_trade_buy_power: '50000.00'
+                  instant_buy_power: '12500.00'
+                  intraday_margin_buy_power: '25000.00'
+                  option_buy_power: '12500.00'
+                  crypto_buy_power: '12500.00'
+                  mme: '6250.00'
+                cash_list:
+                  - currency: USD
+                    total_amount: '13000.00'
+                    available_cash: '12500.00'
+                    withdraw_cash: '12000.00'
+                    frozen_cash: '0.00'
+                    settled_cash: '12500.00'
+                    outstanding: '500.00'
+                    external_amount: '0.00'
+                margin_status:
+                  currency: USD
+                  nlv: '25000.00'
+                  margin_equity: '25000.00'
+                  margin_maintenance_excess: '18750.00'
+                  mmr: '6250.00'
+                  reg_t_excess: '12500.00'
+                  sma: '12500.00'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/us/assets/available-holding:
+    get:
+      operationId: us_available_holding
+      summary: US Available Holding
+      x-summary-zh: 美股可用持仓
+      x-summary-zh-hk: 美股可用持倉
+      description: |
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
+
+        Get the quantity of a US holding that is available to trade: the quantity available to sell for a long position, or to buy to cover for a short position.
+      x-description-zh: |
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
+
+        获取美股账户某个持仓的可交易数量：多头持仓为可卖出数量，空头持仓为可买入平仓数量。
+      x-description-zh-hk: |
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
+
+        獲取美股賬戶某個持倉的可交易數量：多頭持倉為可賣出數量，空頭持倉為可買入平倉數量。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
+      tags:
+        - Trade
+      x-parameters:
+        - name: symbol
+          in: query
+          type: string
+          required: true
+          description: 'Security symbol, e.g. `AAPL.US`, an option symbol such as `AAPL261120C345000.US`, or a crypto pair such as `BTCUSD.BKKT`'
+          x-description-zh: '标的代码，例如 `AAPL.US`；也可以是期权代码（如 `AAPL261120C345000.US`）或加密货币交易对（如 `BTCUSD.BKKT`）'
+          x-description-zh-hk: '標的代碼，例如 `AAPL.US`；也可以是期權代碼（如 `AAPL261120C345000.US`）或加密貨幣交易對（如 `BTCUSD.BKKT`）'
+        - name: equity_type
+          in: query
+          type: string
+          required: false
+          description: 'Holding type: `STOCK`, `OPTION` or `CRYPTO` (default: `STOCK`)'
+          x-description-zh: '持仓类型：`STOCK`、`OPTION` 或 `CRYPTO`（默认：`STOCK`）'
+          x-description-zh-hk: '持倉類型：`STOCK`、`OPTION` 或 `CRYPTO`（默認：`STOCK`）'
+        - name: position_side
+          in: query
+          type: string
+          required: false
+          description: 'Position side: `LONG` or `SHORT` (default: `LONG`)'
+          x-description-zh: '持仓方向：`LONG` 或 `SHORT`（默认：`LONG`）'
+          x-description-zh-hk: '持倉方向：`LONG` 或 `SHORT`（默認：`LONG`）'
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/us/assets/available-holding?symbol=<symbol>' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/us/assets/available-holding",
+                headers={"Authorization": "Bearer <access_token>"},
+                params={"symbol": "<symbol>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/us/assets/available-holding",
+                        headers={"Authorization": "Bearer <access_token>"},
+                        params={"symbol": "<symbol>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const url = new URL("https://openapi.longbridge.com/v1/us/assets/available-holding")
+            url.searchParams.set("symbol", "<symbol>")
+
+            const resp = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/available-holding?symbol=<symbol>"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/us/assets/available-holding")
+                    .header("Authorization", "Bearer <access_token>")
+                    .query(&[("symbol", "<symbol>")])
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/available-holding?symbol=<symbol>");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/us/assets/available-holding?symbol=<symbol>\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: available_qty
+          type: string
+          required: true
+          description: Quantity available to sell (long position) or to buy to cover (short position); negative for a short position
+          x-description-zh: 可卖出数量（多头持仓）或可买入平仓数量（空头持仓）；空头持仓时为负数
+          x-description-zh-hk: 可賣出數量（多頭持倉）或可買入平倉數量（空頭持倉）；空頭持倉時為負數
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                available_qty: '10'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/us/assets/transaction-history:
+    post:
+      operationId: us_transaction_history
+      summary: US Transaction History
+      x-summary-zh: 美股交易流水
+      x-summary-zh-hk: 美股交易流水
+      description: |
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
+
+        Get the transaction history of a US account (deposits and withdrawals, trades, corporate actions, transfers, margin financing, and so on), one page at a time.
+
+        The response does not include a total count. A page with fewer items than `size` is the last page.
+      x-description-zh: |
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
+
+        分页获取美股账户的交易流水，包括存取款、交易、公司行动、转仓、融资等。
+
+        响应不返回总条数。当某页返回的记录数少于 `size` 时，即为最后一页。
+      x-description-zh-hk: |
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
+
+        分頁獲取美股賬戶的交易流水，包括存取款、交易、公司行動、轉倉、融資等。
+
+        響應不返回總條數。當某頁返回的記錄數少於 `size` 時，即為最後一頁。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
+      tags:
+        - Trade
+      x-parameters:
+        - name: start
+          in: body
+          type: integer
+          required: true
+          description: 'Start time (Unix seconds), inclusive'
+          x-description-zh: 开始时间（Unix 秒），包含
+          x-description-zh-hk: 開始時間（Unix 秒），包含
+        - name: end
+          in: body
+          type: integer
+          required: true
+          description: 'End time (Unix seconds), inclusive'
+          x-description-zh: 结束时间（Unix 秒），包含
+          x-description-zh-hk: 結束時間（Unix 秒），包含
+        - name: page
+          in: body
+          type: integer
+          required: false
+          description: 'Page number, starting at `1` (default: `1`)'
+          x-description-zh: '页码，从 `1` 开始（默认：`1`）'
+          x-description-zh-hk: '頁碼，從 `1` 開始（默認：`1`）'
+        - name: size
+          in: body
+          type: integer
+          required: false
+          description: 'Page size (default: `20`)'
+          x-description-zh: '每页数量（默认：`20`）'
+          x-description-zh-hk: '每頁數量（默認：`20`）'
+        - name: types
+          in: body
+          type: 'string[]'
+          required: false
+          description: 'Transaction types to include; omit for all types. Values: `TT_DEPOSIT_AND_WITHDRAWAL`, `TT_STOCKS_AND_ETFS_TRADING`, `TT_OPTIONS_TRADING`, `TT_CRYPTO_TRADING`, `TT_CORPORATE_ACTION`, `TT_TRANSFER_IN_AND_OUT`, `TT_CRYPTO_TRANSFER`, `TT_MARGIN_FINANCING`, `TT_OTHER`'
+          x-description-zh: '要查询的流水类型，不传则返回全部类型。取值：`TT_DEPOSIT_AND_WITHDRAWAL`, `TT_STOCKS_AND_ETFS_TRADING`, `TT_OPTIONS_TRADING`, `TT_CRYPTO_TRADING`, `TT_CORPORATE_ACTION`, `TT_TRANSFER_IN_AND_OUT`, `TT_CRYPTO_TRANSFER`, `TT_MARGIN_FINANCING`, `TT_OTHER`'
+          x-description-zh-hk: '要查詢的流水類型，不傳則返回全部類型。取值：`TT_DEPOSIT_AND_WITHDRAWAL`, `TT_STOCKS_AND_ETFS_TRADING`, `TT_OPTIONS_TRADING`, `TT_CRYPTO_TRADING`, `TT_CORPORATE_ACTION`, `TT_TRANSFER_IN_AND_OUT`, `TT_CRYPTO_TRANSFER`, `TT_MARGIN_FINANCING`, `TT_OTHER`'
+        - name: currency
+          in: body
+          type: string
+          required: false
+          description: 'Currency filter, e.g. `USD`; omit for all currencies'
+          x-description-zh: '按币种筛选，例如 `USD`，不传则返回全部币种'
+          x-description-zh-hk: '按幣種篩選，例如 `USD`，不傳則返回全部幣種'
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/us/assets/transaction-history' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"start":0,"end":0,"page":1,"size":20}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/us/assets/transaction-history",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"start": 0, "end": 0, "page": 1, "size": 20},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/us/assets/transaction-history",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"start": 0, "end": 0, "page": 1, "size": 20},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/us/assets/transaction-history", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ start: 0, end: 0, page: 1, size: 20 }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/transaction-history"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"start\":0,\"end\":0,\"page\":1,\"size\":20}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/us/assets/transaction-history")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "start": 0 , "end": 0 , "page": 1 , "size": 20 }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/transaction-history");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"start\":0,\"end\":0,\"page\":1,\"size\":20}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/us/assets/transaction-history\", strings.NewReader(`{\"start\":0,\"end\":0,\"page\":1,\"size\":20}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: current_page
+          type: integer
+          required: true
+          description: Current page number
+          x-description-zh: 当前页码
+          x-description-zh-hk: 當前頁碼
+        - name: items
+          type: 'USTransaction[]'
+          required: true
+          description: Records on this page
+          x-description-zh: 本页记录
+          x-description-zh-hk: 本頁記錄
+        - name: title
+          type: string
+          required: false
+          description: Display title
+          x-description-zh: 展示标题
+          x-description-zh-hk: 展示標題
+        - name: biz_code
+          type: string
+          required: false
+          description: Business code
+          x-description-zh: 业务代码
+          x-description-zh-hk: 業務代碼
+        - name: biz_code_name
+          type: string
+          required: false
+          description: Business code name
+          x-description-zh: 业务代码名称
+          x-description-zh-hk: 業務代碼名稱
+        - name: amount
+          type: string
+          required: false
+          description: Amount; negative for outflows
+          x-description-zh: 金额，流出时为负数
+          x-description-zh-hk: 金額，流出時為負數
+        - name: currency
+          type: string
+          required: false
+          description: Currency
+          x-description-zh: 货币
+          x-description-zh-hk: 貨幣
+        - name: symbol
+          type: string
+          required: false
+          description: 'Security symbol, e.g. `AAPL.US`, when the record relates to a security'
+          x-description-zh: '关联的标的代码，例如 `AAPL.US`（仅当记录与证券相关时返回）'
+          x-description-zh-hk: '關聯的標的代碼，例如 `AAPL.US`（僅當記錄與證券相關時返回）'
+        - name: market
+          type: string
+          required: false
+          description: Market
+          x-description-zh: 市场
+          x-description-zh-hk: 市場
+        - name: equity_type
+          type: string
+          required: false
+          description: Holding type
+          x-description-zh: 持仓类型
+          x-description-zh-hk: 持倉類型
+        - name: position_side
+          type: string
+          required: false
+          description: Position side
+          x-description-zh: 持仓方向
+          x-description-zh-hk: 持倉方向
+        - name: quantity
+          type: string
+          required: false
+          description: Quantity
+          x-description-zh: 数量
+          x-description-zh-hk: 數量
+        - name: quantity_description
+          type: string
+          required: false
+          description: Quantity description
+          x-description-zh: 数量描述
+          x-description-zh-hk: 數量描述
+        - name: ref_no
+          type: string
+          required: false
+          description: Reference number
+          x-description-zh: 参考编号
+          x-description-zh-hk: 參考編號
+        - name: remark
+          type: string
+          required: false
+          description: Remark
+          x-description-zh: 备注
+          x-description-zh-hk: 備註
+        - name: create_at
+          type: integer
+          required: false
+          description: Creation time (Unix seconds)
+          x-description-zh: 创建时间（Unix 秒）
+          x-description-zh-hk: 創建時間（Unix 秒）
+        - name: done_at
+          type: integer
+          required: false
+          description: Completion time (Unix seconds)
+          x-description-zh: 完成时间（Unix 秒）
+          x-description-zh-hk: 完成時間（Unix 秒）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                current_page: 1
+                items:
+                  - title: Buy AAPL
+                    biz_code: STOCK_BUY
+                    biz_code_name: Stock Buy
+                    amount: '-1850.00'
+                    currency: USD
+                    symbol: AAPL.US
+                    market: US
+                    equity_type: STOCK
+                    position_side: LONG
+                    quantity: '10'
+                    quantity_description: 10 shares
+                    ref_no: '202603150001'
+                    remark: ''
+                    create_at: 1773590400
+                    done_at: 1773590460
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/us/assets/exchange-rates:
+    get:
+      operationId: us_exchange_rates
+      summary: US Exchange Rates
+      x-summary-zh: 美股账户汇率
+      x-summary-zh-hk: 美股賬戶匯率
+      description: |
+        :::warning Longbridge US Accounts
+        This method is only available for US data-center accounts.
+        :::
+
+        Get the exchange rates used by a US account.
+
+        The rates are returned as a two-level map: `universal_exchanges` maps a grouping key to an object whose `spec_exchanges` maps a second grouping key to a list of rates. The SDKs flatten this map into a single `exchanges` list, and each entry carries the two grouping keys as `universal_key` and `spec_key`.
+      x-description-zh: |
+        :::warning Longbridge US 账户
+        此方法仅适用于美国数据中心账户。
+        :::
+
+        获取美股账户使用的汇率。
+
+        汇率以两级映射返回：`universal_exchanges` 以第一层分组键映射到一个对象，该对象的 `spec_exchanges` 再以第二层分组键映射到汇率列表。SDK 会将该映射展开为单个 `exchanges` 列表，每条记录以 `universal_key` 和 `spec_key` 保留两层分组键。
+      x-description-zh-hk: |
+        :::warning Longbridge US 賬戶
+        此方法僅適用於美國數據中心賬戶。
+        :::
+
+        獲取美股賬戶使用的匯率。
+
+        匯率以兩級映射返回：`universal_exchanges` 以第一層分組鍵映射到一個對象，該對象的 `spec_exchanges` 再以第二層分組鍵映射到匯率列表。SDK 會將該映射展開為單個 `exchanges` 列表，每條記錄以 `universal_key` 和 `spec_key` 保留兩層分組鍵。
+      x-subgroup: Assets
+      x-subgroup-zh: 资产
+      x-subgroup-zh-hk: 資產
+      tags:
+        - Trade
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/us/assets/exchange-rates' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/us/assets/exchange-rates",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/us/assets/exchange-rates",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/us/assets/exchange-rates", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/exchange-rates"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/us/assets/exchange-rates")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/exchange-rates");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/us/assets/exchange-rates\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: universal_exchanges
+          type: 'map<string, USUniversalExchanges>'
+          required: true
+          description: 'Exchange rates, grouped by a first grouping key'
+          x-description-zh: 按第一层分组键分组的汇率
+          x-description-zh-hk: 按第一層分組鍵分組的匯率
+        - name: spec_exchanges
+          type: 'map<string, USSpecExchanges>'
+          required: true
+          description: 'Exchange rates, grouped by a second grouping key'
+          x-description-zh: 按第二层分组键分组的汇率
+          x-description-zh-hk: 按第二層分組鍵分組的匯率
+        - name: exchanges
+          type: 'USExchangeRate[]'
+          required: true
+          description: Exchange rates in this group
+          x-description-zh: 该分组下的汇率
+          x-description-zh-hk: 該分組下的匯率
+        - name: base_currency
+          type: string
+          required: false
+          description: Base currency
+          x-description-zh: 基础货币
+          x-description-zh-hk: 基礎貨幣
+        - name: other_currency
+          type: string
+          required: false
+          description: Quote currency
+          x-description-zh: 报价货币
+          x-description-zh-hk: 報價貨幣
+        - name: bid_rate
+          type: string
+          required: false
+          description: Bid rate (may be returned as a number)
+          x-description-zh: 买入汇率（可能以数字返回）
+          x-description-zh-hk: 買入匯率（可能以數字返回）
+        - name: offer_rate
+          type: string
+          required: false
+          description: Offer rate (may be returned as a number)
+          x-description-zh: 卖出汇率（可能以数字返回）
+          x-description-zh-hk: 賣出匯率（可能以數字返回）
+        - name: average_rate
+          type: string
+          required: false
+          description: Average rate (may be returned as a number)
+          x-description-zh: 平均汇率（可能以数字返回）
+          x-description-zh-hk: 平均匯率（可能以數字返回）
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                universal_exchanges:
+                  '1':
+                    spec_exchanges:
+                      '1':
+                        exchanges:
+                          - base_currency: USD
+                            other_currency: HKD
+                            bid_rate: '7.7850'
+                            offer_rate: '7.7950'
+                            average_rate: '7.7900'
         default:
           description: Unexpected error
           content:

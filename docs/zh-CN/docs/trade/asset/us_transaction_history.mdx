@@ -1,0 +1,228 @@
+---
+slug: us_transaction_history
+title: 美股交易流水
+sidebar_position: 14
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US 账户
+此方法仅适用于美国数据中心账户。
+:::
+
+分页获取美股账户的交易流水，包括存取款、交易、公司行动、转仓、融资等。
+
+<SDKLinks module="trade" klass="TradeContext" method="us_transaction_history" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/transaction-history </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> Content-Type: application/json; charset=utf-8
+>
+> SDK 方法使用 `start_at` 和 `end_at`（日期时间类型）代替 `start` 和 `end`，其余参数同名。
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| start | integer | 是 | 开始时间（Unix 秒），包含 |
+| end | integer | 是 | 结束时间（Unix 秒），包含 |
+| page | integer | 否 | 页码，从 `1` 开始（默认：`1`） |
+| size | integer | 否 | 每页数量（默认：`20`） |
+| types | string[] | 否 | 要查询的流水类型，不传则返回全部类型，见[流水类型](#transaction-types) |
+| currency | string | 否 | 按币种筛选，例如 `USD`，不传则返回全部币种 |
+
+### 流水类型
+
+<a id="transaction-types"></a>
+
+| 取值 | 描述 |
+| ---- | ---- |
+| `TT_DEPOSIT_AND_WITHDRAWAL` | 存取款 |
+| `TT_STOCKS_AND_ETFS_TRADING` | 股票和 ETF 交易 |
+| `TT_OPTIONS_TRADING` | 期权交易 |
+| `TT_CRYPTO_TRADING` | 加密货币交易 |
+| `TT_CORPORATE_ACTION` | 公司行动 |
+| `TT_TRANSFER_IN_AND_OUT` | 转入转出 |
+| `TT_CRYPTO_TRANSFER` | 加密货币转账 |
+| `TT_MARGIN_FINANCING` | 融资 |
+| `TT_OTHER` | 其他 |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from datetime import datetime
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_transaction_history(
+    start_at=datetime(2026, 1, 1),
+    end_at=datetime(2026, 3, 31),
+    page=1,
+    size=20,
+    types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from datetime import datetime
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_transaction_history(
+        start_at=datetime(2026, 1, 1),
+        end_at=datetime(2026, 3, 31),
+        page=1,
+        size=20,
+        types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+    )
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{
+    oauth::OAuthBuilder,
+    trade::{GetUSTransactionHistoryOptions, TradeContext},
+    Config,
+};
+use time::macros::datetime;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let mut opts = GetUSTransactionHistoryOptions::new(
+        datetime!(2026-01-01 0:00 UTC),
+        datetime!(2026-03-31 0:00 UTC),
+    );
+    opts.types = vec![
+        "TT_DEPOSIT_AND_WITHDRAWAL".to_string(),
+        "TT_STOCKS_AND_ETFS_TRADING".to_string(),
+    ];
+    let resp = ctx.us_transaction_history(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+响应不返回总条数。当某页返回的记录数少于 `size` 时，即为最后一页。
+
+### Response Example
+
+```json
+{
+  "current_page": 1,
+  "items": [
+    {
+      "title": "Buy AAPL",
+      "biz_code": "STOCK_BUY",
+      "biz_code_name": "Stock Buy",
+      "amount": "-1850.00",
+      "currency": "USD",
+      "symbol": "AAPL.US",
+      "market": "US",
+      "equity_type": "STOCK",
+      "position_side": "LONG",
+      "quantity": "10",
+      "quantity_description": "10 shares",
+      "ref_no": "202603150001",
+      "remark": "",
+      "create_at": 1773590400,
+      "done_at": 1773590460
+    },
+    {
+      "title": "Deposit",
+      "biz_code": "DEPOSIT",
+      "biz_code_name": "Deposit",
+      "amount": "5000.00",
+      "currency": "USD",
+      "symbol": "",
+      "market": "",
+      "equity_type": "",
+      "position_side": "",
+      "quantity": "",
+      "quantity_description": "",
+      "ref_no": "202603010001",
+      "remark": "",
+      "create_at": 1772323200,
+      "done_at": 1772326800
+    }
+  ]
+}
+```
+
+### Response Status
+
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USTransactionHistory](#USTransactionHistory) |
+| 400    | 请求错误 | None   |
+
+## Schemas
+
+### USTransactionHistory
+
+<a id="USTransactionHistory"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| current_page | integer | 是 | 当前页码 |
+| items | [USTransaction](#USTransaction)[] | 是 | 本页记录 |
+
+### USTransaction
+
+<a id="USTransaction"></a>
+
+| 名称 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| title | string | 展示标题 |
+| biz_code | string | 业务代码 |
+| biz_code_name | string | 业务代码名称 |
+| amount | string | 金额，流出时为负数 |
+| currency | string | 货币 |
+| symbol | string | 关联的标的代码，例如 `AAPL.US`（仅当记录与证券相关时返回） |
+| market | string | 市场 |
+| equity_type | string | 持仓类型 |
+| position_side | string | 持仓方向 |
+| quantity | string | 数量 |
+| quantity_description | string | 数量描述 |
+| ref_no | string | 参考编号 |
+| remark | string | 备注 |
+| create_at | integer | 创建时间（Unix 秒） |
+| done_at | integer | 完成时间（Unix 秒） |

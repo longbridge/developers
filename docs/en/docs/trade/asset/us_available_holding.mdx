@@ -1,0 +1,128 @@
+---
+slug: us_available_holding
+title: US Available Holding
+sidebar_position: 13
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US Accounts
+This method is only available for US data-center accounts.
+:::
+
+Get the quantity of a US holding that is available to trade: the quantity available to sell for a long position, or to buy to cover for a short position.
+
+<SDKLinks module="trade" klass="TradeContext" method="us_available_holding" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/available-holding </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> **SDK method parameters.** The HTTP API takes the same names as query parameters.
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| symbol | string | YES | Security symbol, e.g. `AAPL.US`, an option symbol such as `AAPL261120C345000.US`, or a crypto pair such as `BTCUSD.BKKT` |
+| equity_type | string | NO | Holding type: `STOCK` \| `OPTION` \| `CRYPTO` (default: `STOCK`) |
+| position_side | string | NO | Position side: `LONG` \| `SHORT` (default: `LONG`) |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_available_holding("AAPL.US", equity_type="STOCK", position_side="LONG")
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_available_holding("AAPL.US", equity_type="STOCK", position_side="LONG")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{
+    oauth::OAuthBuilder,
+    trade::{GetUSAvailableHoldingOptions, TradeContext},
+    Config,
+};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let opts = GetUSAvailableHoldingOptions {
+        symbol: "AAPL.US".to_string(),
+        equity_type: "STOCK".to_string(),
+        position_side: "LONG".to_string(),
+    };
+    let resp = ctx.us_available_holding(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Example
+
+```json
+{
+  "available_qty": "10"
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [USAvailableHolding](#USAvailableHolding) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### USAvailableHolding
+
+<a id="USAvailableHolding"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| available_qty | string | true | Quantity available to sell (long position) or to buy to cover (short position); negative for a short position |

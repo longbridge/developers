@@ -1,0 +1,228 @@
+---
+slug: us_transaction_history
+title: US Transaction History
+sidebar_position: 14
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US Accounts
+This method is only available for US data-center accounts.
+:::
+
+Get the transaction history of a US account (deposits and withdrawals, trades, corporate actions, transfers, margin financing, and so on), one page at a time.
+
+<SDKLinks module="trade" klass="TradeContext" method="us_transaction_history" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/transaction-history </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> Content-Type: application/json; charset=utf-8
+>
+> The SDK method takes `start_at` and `end_at` (date-time values) instead of `start` and `end`; the other parameters use the same names.
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| start | integer | YES | Start time (Unix seconds), inclusive |
+| end | integer | YES | End time (Unix seconds), inclusive |
+| page | integer | NO | Page number, starting at `1` (default: `1`) |
+| size | integer | NO | Page size (default: `20`) |
+| types | string[] | NO | Transaction types to include; omit for all types. See [Transaction Types](#transaction-types) |
+| currency | string | NO | Currency filter, e.g. `USD`; omit for all currencies |
+
+### Transaction Types
+
+<a id="transaction-types"></a>
+
+| Value | Description |
+| ----- | ----------- |
+| `TT_DEPOSIT_AND_WITHDRAWAL` | Deposits and withdrawals |
+| `TT_STOCKS_AND_ETFS_TRADING` | Stock and ETF trading |
+| `TT_OPTIONS_TRADING` | Option trading |
+| `TT_CRYPTO_TRADING` | Crypto trading |
+| `TT_CORPORATE_ACTION` | Corporate actions |
+| `TT_TRANSFER_IN_AND_OUT` | Transfers in and out |
+| `TT_CRYPTO_TRANSFER` | Crypto transfers |
+| `TT_MARGIN_FINANCING` | Margin financing |
+| `TT_OTHER` | Other |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from datetime import datetime
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_transaction_history(
+    start_at=datetime(2026, 1, 1),
+    end_at=datetime(2026, 3, 31),
+    page=1,
+    size=20,
+    types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from datetime import datetime
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_transaction_history(
+        start_at=datetime(2026, 1, 1),
+        end_at=datetime(2026, 3, 31),
+        page=1,
+        size=20,
+        types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+    )
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{
+    oauth::OAuthBuilder,
+    trade::{GetUSTransactionHistoryOptions, TradeContext},
+    Config,
+};
+use time::macros::datetime;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let mut opts = GetUSTransactionHistoryOptions::new(
+        datetime!(2026-01-01 0:00 UTC),
+        datetime!(2026-03-31 0:00 UTC),
+    );
+    opts.types = vec![
+        "TT_DEPOSIT_AND_WITHDRAWAL".to_string(),
+        "TT_STOCKS_AND_ETFS_TRADING".to_string(),
+    ];
+    let resp = ctx.us_transaction_history(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+The response does not include a total count. A page with fewer items than `size` is the last page.
+
+### Response Example
+
+```json
+{
+  "current_page": 1,
+  "items": [
+    {
+      "title": "Buy AAPL",
+      "biz_code": "STOCK_BUY",
+      "biz_code_name": "Stock Buy",
+      "amount": "-1850.00",
+      "currency": "USD",
+      "symbol": "AAPL.US",
+      "market": "US",
+      "equity_type": "STOCK",
+      "position_side": "LONG",
+      "quantity": "10",
+      "quantity_description": "10 shares",
+      "ref_no": "202603150001",
+      "remark": "",
+      "create_at": 1773590400,
+      "done_at": 1773590460
+    },
+    {
+      "title": "Deposit",
+      "biz_code": "DEPOSIT",
+      "biz_code_name": "Deposit",
+      "amount": "5000.00",
+      "currency": "USD",
+      "symbol": "",
+      "market": "",
+      "equity_type": "",
+      "position_side": "",
+      "quantity": "",
+      "quantity_description": "",
+      "ref_no": "202603010001",
+      "remark": "",
+      "create_at": 1772323200,
+      "done_at": 1772326800
+    }
+  ]
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [USTransactionHistory](#USTransactionHistory) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### USTransactionHistory
+
+<a id="USTransactionHistory"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| current_page | integer | true | Current page number |
+| items | [USTransaction](#USTransaction)[] | true | Records on this page |
+
+### USTransaction
+
+<a id="USTransaction"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| title | string | Display title |
+| biz_code | string | Business code |
+| biz_code_name | string | Business code name |
+| amount | string | Amount; negative for outflows |
+| currency | string | Currency |
+| symbol | string | Security symbol, e.g. `AAPL.US`, when the record relates to a security |
+| market | string | Market |
+| equity_type | string | Holding type |
+| position_side | string | Position side |
+| quantity | string | Quantity |
+| quantity_description | string | Quantity description |
+| ref_no | string | Reference number |
+| remark | string | Remark |
+| create_at | integer | Creation time (Unix seconds) |
+| done_at | integer | Completion time (Unix seconds) |
