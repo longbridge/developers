@@ -308,18 +308,18 @@ func main() {
 | ---- | ---- | ---- |
 | symbol | string | 不带市场后缀的加密货币交易对代码，例如 `BTCUSD`；市场在 `market` 字段中单独返回。其他接口（包括[美股交易流水](/zh-CN/docs/trade/asset/us_transaction_history)）使用 `TICKER.MARKET` 格式 `BTCUSD.BKKT` |
 | counter_id | string | 内部标的标识，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回 |
-| market | string | 市场：`BKKT`。由 HTTP 接口返回 |
-| name | string | 加密货币名称，例如 `Bitcoin`。由 HTTP 接口返回 |
-| quantity | string | 持有数量。由 HTTP 接口返回 |
+| market | string | 市场：`BKKT` |
+| name | string | 加密货币名称，例如 `Bitcoin` |
+| quantity | string | 持有数量 |
 | average_cost | string | 平均持仓成本价 |
 | currency | string | 计价货币 |
 | asset_type | string | 资产类型：`CRYPTO` |
 | industry_name | string | 行业/分类名称 |
-| position_side | string | 持仓方向，例如 `LONG`。由 HTTP 接口返回 |
-| trade_status | string | 交易状态代码，例如 `105`。由 HTTP 接口返回 |
-| prev_close | string | 上一收盘价。由 HTTP 接口返回 |
-| last_done | string | 最新成交价。由 HTTP 接口返回 |
-| market_price | string | 当前市场价格。由 HTTP 接口返回 |
-| today_pl | string | 当日盈亏。由 HTTP 接口返回 |
+| position_side | string | 持仓方向，例如 `LONG` |
+| trade_status | string | 交易状态代码，例如 `105` |
+| prev_close | string | 上一收盘价 |
+| last_done | string | 最新成交价 |
+| market_price | string | 当前市场价格 |
+| today_pl | string | 当日盈亏 |
 
-HTTP 接口返回的加密货币记录除 `full_symbol` 外与股票记录字段相同；SDK 的加密货币类型可能只包含上表中未标注“由 HTTP 接口返回”的字段。
+HTTP 接口返回的加密货币记录除 `full_symbol` 外与股票记录字段相同。SDK 的加密货币类型包含上表除 `counter_id` 外的全部字段。

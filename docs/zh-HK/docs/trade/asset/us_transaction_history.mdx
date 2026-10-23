@@ -64,15 +64,15 @@ headingLevel: 2
   <TabItem value="python" label="Python">
 
 ```python
-from datetime import datetime
+from datetime import datetime, timezone
 from longbridge.openapi import TradeContext, Config, OAuthBuilder
 
 oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
 config = Config.from_oauth(oauth)
 ctx = TradeContext(config)
 resp = ctx.us_transaction_history(
-    start_at=datetime(2026, 1, 1),
-    end_at=datetime(2026, 3, 31),
+    start_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+    end_at=datetime(2026, 3, 31, 23, 59, 59, tzinfo=timezone.utc),
     page=1,
     size=20,
     types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
@@ -85,7 +85,7 @@ print(resp)
 
 ```python
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
 
 async def main() -> None:
@@ -93,8 +93,8 @@ async def main() -> None:
     config = Config.from_oauth(oauth)
     ctx = AsyncTradeContext.create(config)
     resp = await ctx.us_transaction_history(
-        start_at=datetime(2026, 1, 1),
-        end_at=datetime(2026, 3, 31),
+        start_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+        end_at=datetime(2026, 3, 31, 23, 59, 59, tzinfo=timezone.utc),
         page=1,
         size=20,
         types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
@@ -119,7 +119,7 @@ async function main() {
   const ctx = TradeContext.new(config)
   const resp = await ctx.usTransactionHistory({
     startAt: new Date('2026-01-01T00:00:00Z'),
-    endAt: new Date('2026-03-31T00:00:00Z'),
+    endAt: new Date('2026-03-31T23:59:59Z'),
     page: 1,
     size: 20,
     types: ['TT_DEPOSIT_AND_WITHDRAWAL', 'TT_STOCKS_AND_ETFS_TRADING'],
@@ -148,7 +148,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ctx = TradeContext::new(config);
     let mut opts = GetUSTransactionHistoryOptions::new(
         datetime!(2026-01-01 0:00 UTC),
-        datetime!(2026-03-31 0:00 UTC),
+        datetime!(2026-03-31 23:59:59 UTC),
     );
     opts.types = vec![
         "TT_DEPOSIT_AND_WITHDRAWAL".to_string(),
@@ -194,7 +194,7 @@ func main() {
 	defer c.Close()
 	resp, err := c.USTransactionHistory(context.Background(), &trade.GetUSTransactionHistory{
 		StartAt: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
-		EndAt:   time.Date(2026, 3, 31, 0, 0, 0, 0, time.UTC),
+		EndAt:   time.Date(2026, 3, 31, 23, 59, 59, 0, time.UTC),
 		Page:    1,
 		Size:    20,
 		Types:   []string{"TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"},
