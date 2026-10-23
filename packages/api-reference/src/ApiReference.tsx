@@ -1326,6 +1326,7 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   const showWs = !!activeWsCmd
   const showPage = !!activePg && !showWs
   const showEndpoint = !!activeEndpoint && !showWs
+  const hasRail = (showEndpoint && isDocsModel) || showWs
 
   // Breadcrumb trail (Home is prepended by DocsBreadcrumb).
   const crumbs: { text: string; href?: string }[] =
@@ -1454,8 +1455,8 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
       </aside>
 
       <div className="docs-body">
-        <div className="docs-inner">
-          <div className={`docs-main${(showEndpoint && isDocsModel) || showWs ? ' has-rail' : ''}`}>
+        <div className={`docs-inner${hasRail ? ' has-rail' : ''}`}>
+          <div className={`docs-main${hasRail ? ' has-rail' : ''}`}>
             <article className="docs-content">
               <DocsBreadcrumb items={crumbs} locale={locale} />
               {/* ── WebSocket command detail (center) ── */}
