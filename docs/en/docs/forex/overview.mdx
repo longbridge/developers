@@ -1,0 +1,57 @@
+---
+id: forex_overview
+title: Overview
+slug: forex-overview
+sidebar_position: 1
+---
+
+# Forex Overview
+
+The forex (currency exchange) channel lets you convert a balance from one
+currency into another. Conversion is asynchronous and follows three steps:
+
+1. **Get Quote** — call [Get Quote](./quote) to lock in an execution rate and
+   obtain a `quote_id`. The quote is bound to you and expires after a short
+   window.
+2. **Submit Order** — call [Submit Order](./submit) with that `quote_id` and
+   your own `client_order_id` to place the conversion. Acceptance is
+   acknowledged synchronously, but the conversion itself is processed
+   asynchronously.
+3. **Query Order** — poll [Query Order](./query) with the same
+   `client_order_id` until the order reaches a terminal state (success or
+   failed).
+
+<table>
+    <thead>
+    <tr>
+        <td>Type</td>
+        <td>Introduction</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="3">Forex</td>
+        <td><a href="./quote">Get Quote</a></td>
+    </tr>
+    <tr>
+        <td><a href="./submit">Submit Order</a></td>
+    </tr>
+    <tr>
+        <td><a href="./query">Query Order</a></td>
+    </tr>
+    </tbody>
+</table>
+
+## Error Codes
+
+| Code   | Description                                                                 |
+| ------ | --------------------------------------------------------------------------- |
+| 603001 | Parameter error                                                             |
+| 603002 | Unsupported currency pair                                                    |
+| 603004 | Quote not found                                                             |
+| 603005 | Quote expired (re-quote)                                                     |
+| 603006 | Quote already used (re-quote)                                                |
+| 603007 | Insufficient convertible balance                                            |
+| 603008 | Unauthorized / no exchange permission / outside service hours               |
+| 603009 | Order not found                                                             |
+| 603010 | Service temporarily unavailable, retry later                                |
