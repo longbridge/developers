@@ -9,6 +9,10 @@ description: 'Longbridge OpenAPI、CLI、MCP 與 SDK 的更新日誌，按時間
 
 ## 2026-10-23
 
+### CLI v0.31.0
+
+- **[CLI 支援 Longbridge US 賬戶](/zh-HK/docs/cli/release-notes)** — 資產、資金流水、匯率、訂單與成交命令在 US 賬戶上改用 US 接口，`--format json` 輸出與 AP 賬戶結構一致
+
 ### SDK v5.3.0
 
 - **[美股賬戶資產](/zh-HK/docs/trade/asset/us_cash_and_buy_power)** — Longbridge US 賬戶有了專屬的資產接口：現金與購買力、可賣數量、交易流水和匯率 (`GET /v1/us/assets/*`、`POST /v1/us/assets/transaction-history`),Rust、Python、Node.js 的 `TradeContext` 提供對應方法

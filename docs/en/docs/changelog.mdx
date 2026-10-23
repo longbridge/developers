@@ -9,6 +9,10 @@ description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest fi
 
 ## 2026-10-23
 
+### CLI v0.31.0
+
+- **[Longbridge US accounts work in the CLI](/docs/cli/release-notes)** — asset, cash-flow, exchange-rate, order and execution commands call the US APIs for US accounts, with the same `--format json` shape as AP accounts
+
 ### SDK v5.3.0
 
 - **[US account assets](/docs/trade/asset/us_cash_and_buy_power)** — Longbridge US accounts get their own asset APIs: cash and buying power, available holdings, transaction history and exchange rates (`GET /v1/us/assets/*`, `POST /v1/us/assets/transaction-history`), with matching `TradeContext` methods in Rust, Python and Node.js
