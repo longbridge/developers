@@ -270,13 +270,13 @@ func main() {
 <a id="schematoday_executions_rsp"></a>
 <a id="schematoday_executions_rsp"></a>
 
-| Name            | Type     | Required | Description                                                  |
-| --------------- | -------- | -------- | ------------------------------------------------------------ |
-| trades          | object[] | false    | Execution Detail                                             |
-| ∟ order_id      | string   | true     | Order ID                                                     |
-| ∟ trade_id      | string   | true     | Execution ID                                                 |
-| ∟ symbol        | string   | true     | Stock symbol, use `ticker.region` format, example: `AAPL.US` |
-| ∟ trade_done_at | string   | true     | Trade done time, formatted as a timestamp (second)           |
-| ∟ quantity      | string   | true     | Executed quantity                                            |
-| ∟ price         | string   | true     | Executed price                                               |
-| ∟ side          | string   | false    | Trade side; absent on Longbridge US accounts (SDKs report Unknown)<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`  |
+| Name            | Type     | Required | Description                                                                                                         |
+| --------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| trades          | object[] | false    | Execution Detail                                                                                                    |
+| ∟ order_id      | string   | true     | Order ID                                                                                                            |
+| ∟ trade_id      | string   | true     | Execution ID                                                                                                        |
+| ∟ symbol        | string   | true     | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                        |
+| ∟ trade_done_at | string   | true     | Trade done time, formatted as a timestamp (second)                                                                  |
+| ∟ quantity      | string   | true     | Executed quantity                                                                                                   |
+| ∟ price         | string   | true     | Executed price                                                                                                      |
+| ∟ side          | string   | false    | Trade side; absent on Longbridge US accounts (SDKs report Unknown)<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell` |

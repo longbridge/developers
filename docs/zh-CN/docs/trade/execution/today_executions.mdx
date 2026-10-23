@@ -269,13 +269,13 @@ func main() {
 <a id="schematoday_executions_rsp"></a>
 <a id="schematoday_executions_rsp"></a>
 
-| Name            | Type     | Required | Description                                          |
-| --------------- | -------- | -------- | ---------------------------------------------------- |
-| trades          | object[] | false    | 成交明细信息                                         |
-| ∟ order_id      | string   | true     | 订单 ID                                              |
-| ∟ trade_id      | string   | true     | 成交 ID                                              |
-| ∟ symbol        | string   | true     | 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US` |
-| ∟ trade_done_at | string   | true     | 成交时间，格式为时间戳 (秒)                          |
-| ∟ quantity      | string   | true     | 成交数量                                             |
-| ∟ price         | string   | true     | 成交价格                                             |
+| Name            | Type     | Required | Description                                                                                                      |
+| --------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| trades          | object[] | false    | 成交明细信息                                                                                                     |
+| ∟ order_id      | string   | true     | 订单 ID                                                                                                          |
+| ∟ trade_id      | string   | true     | 成交 ID                                                                                                          |
+| ∟ symbol        | string   | true     | 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`                                                             |
+| ∟ trade_done_at | string   | true     | 成交时间，格式为时间戳 (秒)                                                                                      |
+| ∟ quantity      | string   | true     | 成交数量                                                                                                         |
+| ∟ price         | string   | true     | 成交价格                                                                                                         |
 | ∟ side          | string   | false    | 买卖方向；美股账户不返回此字段（SDK 报告为 Unknown）<br/><br/> **可选值：**<br/> `Buy` - 买入<br/> `Sell` - 卖出 |
