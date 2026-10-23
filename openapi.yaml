@@ -43618,9 +43618,9 @@ paths:
         - name: └ side
           type: string
           required: false
-          description: Trade side. **Enum Value:**, `Buy`, `Sell`
-          x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出
-          x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出
+          description: Trade side; absent on Longbridge US accounts (SDKs report Unknown). **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向；美股账户不返回此字段（SDK 报告为 Unknown）。**可选值：**, `Buy` - 买入，`Sell` - 卖出
+          x-description-zh-hk: 買賣方向；美股賬戶不返回此欄位（SDK 報告為 Unknown）。**可選值：**, `Buy` - 買入，`Sell` - 賣出
         - name: has_more
           type: boolean
           required: false
@@ -43839,9 +43839,9 @@ paths:
         - name: └ side
           type: string
           required: false
-          description: Trade side. **Enum Value:**, `Buy`, `Sell`
-          x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出
-          x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出
+          description: Trade side; absent on Longbridge US accounts (SDKs report Unknown). **Enum Value:**, `Buy`, `Sell`
+          x-description-zh: 买卖方向；美股账户不返回此字段（SDK 报告为 Unknown）。**可选值：**, `Buy` - 买入，`Sell` - 卖出
+          x-description-zh-hk: 買賣方向；美股賬戶不返回此欄位（SDK 報告為 Unknown）。**可選值：**, `Buy` - 買入，`Sell` - 賣出
         - name: has_more
           type: boolean
           required: false

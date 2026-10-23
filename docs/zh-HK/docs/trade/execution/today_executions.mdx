@@ -278,4 +278,4 @@ func main() {
 | ∟ trade_done_at | string   | true     | 成交時間，格式為時間戳 (秒)                          |
 | ∟ quantity      | string   | true     | 成交數量                                             |
 | ∟ price         | string   | true     | 成交價格                                             |
-| ∟ side          | string   | true     | 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出 |
+| ∟ side          | string   | false    | 買賣方向；美股賬戶不返回此欄位（SDK 報告為 Unknown）<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出 |
