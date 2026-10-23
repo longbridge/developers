@@ -187,7 +187,7 @@ AI client                  Browser                   Longbridge
 2. **Browser redirect** — The client opens a browser tab with the Longbridge login and consent page
 3. **Sign in and approve** — Log in with your Longbridge account and review and accept the requested permission scopes (see [OAuth Scopes](/docs/getting-started#oauth-scopes))
 4. **Session established** — After approval, the client receives credentials and MCP tools become available
-5. **Credential maintenance** — Credentials are refreshed automatically per OAuth policy; to revoke access, visit Longbridge account security settings
+5. **Credential maintenance** — Credentials are refreshed automatically per OAuth policy. You can remove the authorization in your Longbridge account security settings so it can no longer be renewed; tokens already issued remain valid until they expire
 
 ## Client compatibility
 
@@ -206,7 +206,7 @@ If your client has incomplete OAuth support or cannot launch a browser, use an [
 - **Least privilege**: Only approve the scopes required for your current task; avoid over-granting
 - **Trading confirmation**: For any order placement prompt, explicitly instruct the AI to ask for human confirmation before executing
 - **Credential handling**: OAuth credentials are managed by your client; avoid copying them into untrusted environments
-- **Regular review**: Periodically check and revoke unused authorizations in your [Longbridge account](https://longbridge.com/hk/download) security settings
+- **Regular review**: Periodically check and revoke unused authorizations in your [Longbridge account](https://longbridge.com/hk/download) security settings (removing an authorization stops renewal; tokens already issued remain valid until they expire)
 
 ## Recommended usage pattern
 

@@ -187,7 +187,7 @@ AI 客户端                  浏览器                    Longbridge
 2. **浏览器跳转** — 客户端自动打开浏览器，进入 Longbridge 登录与权限确认页
 3. **登录并授权** — 使用 Longbridge 账户登录，查看并同意所请求的权限范围（scope，参见 [OAuth 权限范围](/zh-CN/docs/getting-started#oauth-scopes)）
 4. **建立会话** — 授权完成后，客户端获得凭证，MCP 工具即可使用
-5. **凭证维护** — 凭证按 OAuth 策略自动刷新；如需撤销，前往 Longbridge 账户安全设置
+5. **凭证维护** — 凭证按 OAuth 策略自动刷新。可在 Longbridge 账户安全设置中移除该授权，使其无法再续期；已签发的 Token 在过期前仍然有效
 
 ## 客户端兼容性
 
@@ -206,7 +206,7 @@ Longbridge MCP 依赖 **MCP OAuth 2.1** 标准。若客户端未完整实现该�
 - **最小权限**：授权时仅同意当前任务所需的 scope，避免过度授权
 - **交易确认**：涉及下单等交易操作时，在 AI 提示词中明确要求执行前人工确认
 - **凭证安全**：OAuth 凭证由客户端管理，避免将其复制到不受信任的环境
-- **定期审查**：定期在 [Longbridge 账户](https://longbridge.com/hk/download)安全设置中检查并撤销不再使用的授权
+- **定期审查**：定期在 [Longbridge 账户](https://longbridge.com/hk/download)安全设置中检查并移除不再使用的授权（移除后无法再续期，已签发的 Token 在过期前仍然有效）
 
 ## 推荐使用方式
 
