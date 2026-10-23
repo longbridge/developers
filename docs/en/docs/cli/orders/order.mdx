@@ -8,6 +8,10 @@ sidebar_position: 1
 
 View your orders and trade executions, or submit buy/sell orders directly from the terminal.
 
+:::info Longbridge US Accounts
+`order` (today and `--history`), `order detail` and `order executions` work on US data-center accounts and print the same `--format json` shape as on AP accounts; fields marked `(US only)` in `--schema` appear only on US rows. Execution history comes from `/v1/trade/execution/history`, which is not filtered by execution time and can lag across days, so fills near the range edges may be missing or extra. When an execution has no `side`, it is filled from the account's orders, or shows `Unknown` when the order is not found.
+:::
+
 ## Basic Usage
 
 ```bash
@@ -24,7 +28,26 @@ longbridge order
 
 ## Examples
 
-Only orders in cancellable states (New, PartialFilled, etc.) are accepted. Use `-y` to skip the confirmation prompt in scripts.
+### Place an order
+
+```bash
+# Step 1: preview only. Nothing is sent; the preview ends with a confirmation code
+longbridge order buy TSLA.US 100 --price 250.00
+# Step 2: re-run the identical command with that code to place the order
+longbridge order buy TSLA.US 100 --price 250.00 --execute <CODE>
+```
+
+Replace `<CODE>` with the confirmation code printed by the preview.
+
+### Cancel an open order
+
+```bash
+# Preview the cancellation, then re-run with the confirmation code to cancel
+longbridge order cancel 701276261045858304
+longbridge order cancel 701276261045858304 --execute <CODE>
+```
+
+Only orders in cancellable states (New, PartialFilled, etc.) are accepted.
 
 ### Modify an open order
 
@@ -33,7 +56,7 @@ Only orders in cancellable states (New, PartialFilled, etc.) are accepted. Use `
 longbridge order replace 701276261045858304 --qty 5 --price 350.00
 ```
 
-`--qty` is required. Omit `--price` to keep the current limit price. Use `-y` to skip the confirmation prompt in scripts.
+`--qty` is required. Omit `--price` to keep the current limit price. Like `buy`, `sell` and `cancel`, `replace` only previews the change until you re-run it with `--execute` and the confirmation code.
 
 ## Options
 
@@ -41,6 +64,7 @@ longbridge order replace 701276261045858304 --qty 5 --price 350.00
 | ------ | ----------- | ------- |
 | `--action` | Filter by side: `buy` \| `sell` (US accounts) | — |
 | `--attached` | Show attached child order in `order detail` (US accounts) | false |
+| `--execute` | Confirmation code printed by the preview of `buy`, `sell`, `cancel` or `replace`; without it nothing is sent | — |
 
 ## Requirements
 
@@ -48,4 +72,4 @@ OAuth trade permission is required to place, cancel, or replace orders. See the 
 
 ## Notes
 
-`buy` and `sell` always prompt for confirmation before submitting. Use `-y` with `cancel` and `replace` to skip confirmation in scripting contexts.
+`buy`, `sell`, `cancel` and `replace` are two-step. Run the command without `--execute` to print a preview of the exact request (nothing is sent); the preview ends with a three-digit confirmation code. Re-run the identical command with `--execute` and that code to execute it. The code is single-use, expires in 10 minutes, and stops working if any field changes. The legacy `-y` / `--yes` flag is no longer accepted.

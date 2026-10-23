@@ -70,7 +70,7 @@ Replace `<token>` with the token returned by `authenticate`. Note this points at
 - **Scope is pre-selected on the web** — the code can only grant the permissions you chose on the authorization page; an agent cannot request more than the code carries.
 - **10-minute TTL** — the code expires 10 minutes after it is generated.
 - **One-time use** — the code is consumed on first successful redemption and cannot be reused.
-- **Revocable anytime** — go to your Longbridge account security settings and revoke the **AI Agent** authorization to end access.
+- **Revocable anytime** — go to your Longbridge account security settings and remove the **AI Agent** authorization so it can no longer be renewed. Tokens already issued remain valid until they expire.
 
 Follow least privilege: grant only the scopes the current task needs. For any trading-related grant, instruct the agent to confirm with you before placing orders.
 

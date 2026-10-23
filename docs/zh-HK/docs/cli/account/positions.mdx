@@ -8,6 +8,10 @@ sidebar_position: 2
 
 列出當前股票持倉——標的代碼、數量、可用數量、成本價及市場。
 
+:::info Longbridge US 賬戶
+在美股數據中心賬戶上，`positions` 讀取 [美股資產概覽](/zh-HK/docs/trade/asset/us_asset_overview) 接口，`--format json` 輸出與 AP 賬戶相同結構的數組。股票、期權和加密貨幣持倉位於同一列表，通過 `asset_type` 區分；`longbridge positions --schema` 中標註為 `(US only)` 的欄位（如 `market_price`、`today_pl`）僅出現在美股記錄中。
+:::
+
 ## 基本用法
 
 ```bash

@@ -8,6 +8,10 @@ sidebar_position: 1
 
 Get a full portfolio overview — total P/L, total assets, market value by market (US/HK/CN/SG), and cash balances.
 
+:::info Longbridge US Accounts
+On a US data-center account, `portfolio` prints the same `--format json` shape as on AP accounts. `overview` has only `currency`, `total_asset` and `total_cash` (`total_asset` is absent when the account reports no net liquidation value), and `holdings` are the [`positions`](/docs/cli/account/positions) rows. AP's `market_accounts` and the P/L, margin and risk fields have no US source and are omitted; account type, buying power and margin status are under `us`.
+:::
+
 ## Basic Usage
 
 ```bash

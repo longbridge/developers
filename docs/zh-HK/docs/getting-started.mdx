@@ -413,6 +413,29 @@ int main(int argc, char const* argv[]) {
 OAuth Token 應安全儲存在應用程式中（如加密檔案、安全金鑰鏈），**不要儲存在環境變數中**。
 :::
 
+<a id="oauth-scopes"></a>
+
+**OAuth 權限範圍（scope）**
+
+讀取賬戶數據或交易的接口要求 Token 帶有對應的 scope；行情及其他通用接口無需額外 scope。scope 以 key 標識：
+
+| scope key | 授權內容 |
+| --------- | -------- |
+| `watchlist` | 自選股分組（讀寫） |
+| `account.read` | 賬戶資產、持倉與資金流水（只讀） |
+| `trade.read` | 訂單與成交查詢（只讀） |
+| `trade.write` | 下單、改單、撤單及其他交易寫操作 |
+
+`/oauth2/register` 的響應以數字 ID 列出 scope（例如 `"4 6 10 11 12"`）。這些 ID 因環境而異：在 `openapi.longbridge.com` 上，`4`、`6`、`10`、`11` 分別對應 `watchlist`、`account.read`、`trade.read`、`trade.write`。其他 ID 請視為不透明值，以 scope key 為準。
+
+如果接口返回錯誤碼 `403308`（`Target API's scope is not in authorized scopes`），說明 Token 未被授予該接口所需的 scope。請刪除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授權並勾選該 scope。參見[錯誤碼](/zh-HK/docs/api?page=error-codes)。
+
+<a id="oauth-signout"></a>
+
+**登出**
+
+SDK 沒有提供登出方法。如需登出，刪除本地儲存的 Token 檔案 `~/.longbridge/openapi/tokens/<client_id>` 即可，下次執行時會重新授權。使用 CLI 的用戶可以直接執行 `longbridge auth logout`，它會刪除 Token 檔案和客戶端註冊。刪除檔案只會讓本機不再重用該憑證；已簽發的 access token 在過期前仍然有效。
+
 #### 方式二：傳統 API Key（相容）
 
 **_取得 App Key、App Secret、Access Token 等資訊_**
@@ -652,6 +675,8 @@ int main() {
 ## 場景示範
 
 ### 獲取資產總覽
+
+Longbridge US 賬戶請改用 [`us_asset_overview`](/zh-HK/docs/trade/asset/us_asset_overview) 或 [`us_cash_and_buy_power`](/zh-HK/docs/trade/asset/us_cash_and_buy_power)，`account_balance` 需要 AP 數據中心賬戶（香港/新加坡）。
 
 <Tabs groupId="programming-language">
   <TabItem value="python" label="Python" default>

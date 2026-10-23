@@ -35,15 +35,17 @@ longbridge grid info 700.HK
 ### 提交網格
 
 ```bash
-# 在 700.HK 上按百分比觸發的網格
+# 預覽 700.HK 上按百分比觸發的網格（不發送任何請求，輸出確認碼）
 longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 \
   --trigger-type percent --trigger-up 2 --trigger-down 2 \
   --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
-# 只校驗規則，不實際提交
+# 帶上該確認碼重新執行相同命令以提交
 longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 \
   --trigger-type percent --trigger-up 2 --trigger-down 2 \
-  --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc --dry-run
+  --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc --execute <CODE>
 ```
+
+將 `<CODE>` 替換為預覽輸出的確認碼。
 
 ### 查看
 
@@ -89,7 +91,7 @@ longbridge grid cancel 764609681686573056
 | `--upper-quantity` / `--lower-quantity` | 到達上/下限時處理的數量 | — |
 | `--order-type` | 雙邊訂單類型：`GMO` \| `GLO` \| `GTG`（`--order-type-up` / `--order-type-down` 可分別覆蓋） | — |
 | `--tif` | 有效期：`day` \| `gtc` \| `gtd` | — |
-| `--dry-run` | 只校驗並打印規則，不實際提交 | false |
+| `--execute` | `submit`、`replace`、`cancel`、`suspend`、`restart` 預覽輸出的確認碼；不帶該參數則不發送任何請求 | — |
 
 ## 前置條件
 
@@ -97,4 +99,4 @@ longbridge grid cancel 764609681686573056
 
 ## 說明
 
-`submit`、`replace`、`cancel` 會影響真實資金，執行前會要求確認。可用 `submit --dry-run` 安全校驗規則。
+`submit`、`replace`、`cancel`、`suspend`、`restart` 均為兩步執行。不帶 `--execute` 運行時只校驗並打印預覽，不發送任何請求，預覽末尾給出三位數確認碼；帶上 `--execute` 和該確認碼重新執行相同命令才會真正執行。確認碼只能使用一次，10 分鐘內有效，命令中任一字段變化即失效。由於預覽已是默認行為，舊的 `--dry-run` 參數已移除。

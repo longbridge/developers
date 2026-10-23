@@ -13,6 +13,8 @@ That said, the paper account differs from the live environment in areas such as 
 
 Please visit [Development Center](https://open.longbridge.com/dashboard/) to enable the paper account and obtain the corresponding App Key & Secret and Access Token.
 
+Paper accounts are not available for Longbridge US accounts: the US data center does not provide them (see [Trade Q10](/docs/qa/trade#q10-are-the-us-specific-trade-apis-available-to-paper-accounts)). To test against a paper account, call the API with that paper account's own Access Token or OAuth authorization, because the credential determines whether a request reaches the paper or the live account.
+
 ## Q3: Are the trading permissions for simulation debugging the same as for real accounts?
 
 Quote is the same, trading might be different.

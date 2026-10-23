@@ -8,6 +8,10 @@ sidebar_position: 2
 
 List your current stock positions — symbol, quantity, available quantity, cost price, and market.
 
+:::info Longbridge US Accounts
+On a US data-center account, `positions` reads the [US Asset Overview](/docs/trade/asset/us_asset_overview) API and prints the same `--format json` array as on AP accounts. Stock, option and crypto holdings share the list and are told apart by `asset_type`; fields marked `(US only)` in `longbridge positions --schema`, such as `market_price` and `today_pl`, appear only on US rows.
+:::
+
 ## Basic Usage
 
 ```bash
