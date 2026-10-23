@@ -1,0 +1,101 @@
+---
+id: quote_optionchain_date
+slug: /quote/pull/optionchain-date
+title: Option Expiry Dates
+sidebar_position: 10
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+Get the list of option expiry dates of an underlying security.
+
+Call this first to get valid `expiry_date` values for [Option Chain](./option-chain) (`POST /v1/quote/options/strikes`).
+
+<CliCommand>
+# list all expiry dates for AAPL options
+longbridge option chain AAPL.US
+</CliCommand>
+
+<SDKLinks module="quote" klass="QuoteContext" method="option_chain_expiry_date_list" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/options/expiry-dates</td></tr>
+</tbody>
+</table>
+
+### Request Body
+
+| Name   | Type   | Required | Description                                                         |
+| ------ | ------ | -------- | ------------------------------------------------------------------- |
+| symbol | string | YES      | Underlying security code, in `ticker.region` format, e.g. `AAPL.US` |
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="curl" label="cURL" default>
+
+```bash
+curl -X POST "https://openapi.longbridge.com/v1/quote/options/expiry-dates" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "symbol": "AAPL.US"
+  }'
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "expiry_date": [
+      "20261023",
+      "20261026",
+      "20261030",
+      "20261106",
+      "20261120",
+      "20261218",
+      "20270115"
+    ]
+  }
+}
+```
+
+The list can still include dates that have recently expired; compare against the current date before picking one.
+
+### Response Status
+
+| Status | Description    | Schema                                                              |
+| ------ | -------------- | ------------------------------------------------------------------- |
+| 200    | Success        | [option_expiry_dates_response](#schemaoption_expiry_dates_response) |
+| 500    | Internal error | None                                                                |
+
+## Schemas
+
+### option_expiry_dates_response
+
+<a id="schemaoption_expiry_dates_response"></a>
+
+| Name        | Type     | Required | Description                                  |
+| ----------- | -------- | -------- | -------------------------------------------- |
+| expiry_date | string[] | true     | Option expiry dates, in `YYYYMMDD` format    |

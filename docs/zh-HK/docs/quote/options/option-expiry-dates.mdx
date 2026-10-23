@@ -1,0 +1,101 @@
+---
+id: quote_optionchain_date
+slug: /quote/pull/optionchain-date
+title: 期權到期日
+sidebar_position: 10
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+獲取標的的期權到期日列表。
+
+請先調用本接口獲取有效的 `expiry_date`，再用於[期權鏈](./option-chain)（`POST /v1/quote/options/strikes`）。
+
+<CliCommand>
+# 列出 AAPL 期權的全部到期日
+longbridge option chain AAPL.US
+</CliCommand>
+
+<SDKLinks module="quote" klass="QuoteContext" method="option_chain_expiry_date_list" />
+
+## 請求
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP 方法</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/quote/options/expiry-dates</td></tr>
+</tbody>
+</table>
+
+### 請求參數
+
+| 名稱   | 類型   | 必填 | 描述                                                       |
+| ------ | ------ | ---- | ---------------------------------------------------------- |
+| symbol | string | 是   | 正股標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US`   |
+
+### 請求示例
+
+<Tabs groupId="request-example">
+  <TabItem value="curl" label="cURL" default>
+
+```bash
+curl -X POST "https://openapi.longbridge.com/v1/quote/options/expiry-dates" \
+  -H "Authorization: Bearer <token>" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "symbol": "AAPL.US"
+  }'
+```
+
+  </TabItem>
+</Tabs>
+
+## 響應
+
+### 響應頭
+
+- Content-Type: application/json
+
+### 響應示例
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "expiry_date": [
+      "20261023",
+      "20261026",
+      "20261030",
+      "20261106",
+      "20261120",
+      "20261218",
+      "20270115"
+    ]
+  }
+}
+```
+
+列表中可能仍包含剛過期的日期，選用前請與當前日期比較。
+
+### 響應狀態
+
+| 狀態碼 | 描述       | Schema                                                              |
+| ------ | ---------- | ------------------------------------------------------------------- |
+| 200    | 成功       | [option_expiry_dates_response](#schemaoption_expiry_dates_response) |
+| 500    | 服務端錯誤 | 無                                                                  |
+
+## Schemas
+
+### option_expiry_dates_response
+
+<a id="schemaoption_expiry_dates_response"></a>
+
+| 名稱        | 類型     | 必填 | 描述                                |
+| ----------- | -------- | ---- | ----------------------------------- |
+| expiry_date | string[] | true | 期權到期日列表，使用 `YYYYMMDD` 格式 |
