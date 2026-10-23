@@ -293,7 +293,7 @@ func main() {
 
 | 名称 | 类型 | 描述 |
 | ---- | ---- | ---- |
-| symbol | string | 不带市场后缀的加密货币交易对代码，例如 `BTCUSD`；调用其他接口时请使用 `BTCUSD.BKKT` |
+| symbol | string | 不带市场后缀的加密货币交易对代码，例如 `BTCUSD`；市场在 `market` 字段中单独返回。其他接口（包括[美股交易流水](/zh-CN/docs/trade/asset/us_transaction_history)）使用 `TICKER.MARKET` 格式 `BTCUSD.BKKT` |
 | counter_id | string | 内部标的标识，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回 |
 | market | string | 市场：`BKKT`。由 HTTP 接口返回 |
 | name | string | 加密货币名称，例如 `Bitcoin`。由 HTTP 接口返回 |

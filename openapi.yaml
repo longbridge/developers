@@ -39689,9 +39689,9 @@ paths:
         - name: crypto_list
           type: USCryptoEntry[]
           required: false
-          description: Crypto positions
-          x-description-zh: 加密货币持仓
-          x-description-zh-hk: 加密貨幣持倉
+          description: 'Crypto positions. Each entry''s `symbol` is the bare pair ticker (e.g. `BTCUSD`) with the market in `market` (`BKKT`); other APIs use the `TICKER.MARKET` form `BTCUSD.BKKT`'
+          x-description-zh: '加密货币持仓。每条记录的 `symbol` 为不带后缀的交易对代码（例如 `BTCUSD`），市场在 `market` 字段中（`BKKT`）；其他接口使用 `TICKER.MARKET` 格式 `BTCUSD.BKKT`'
+          x-description-zh-hk: '加密貨幣持倉。每條記錄的 `symbol` 為不帶後綴的交易對代碼（例如 `BTCUSD`），市場在 `market` 欄位中（`BKKT`）；其他接口使用 `TICKER.MARKET` 格式 `BTCUSD.BKKT`'
         - name: multi_leg
           type: object
           required: false
@@ -40666,9 +40666,9 @@ paths:
         - name: symbol
           type: string
           required: false
-          description: 'Security symbol in `TICKER.MARKET` form, e.g. `MULL.US` or `BTCUSD.BKKT`, when the record relates to a security'
-          x-description-zh: '`TICKER.MARKET` 格式的标的代码，例如 `MULL.US` 或 `BTCUSD.BKKT`（仅当记录与证券相关时返回）'
-          x-description-zh-hk: '`TICKER.MARKET` 格式的標的代碼，例如 `MULL.US` 或 `BTCUSD.BKKT`（僅當記錄與證券相關時返回）'
+          description: 'Security symbol in `TICKER.MARKET` form, e.g. `MULL.US` or `BTCUSD.BKKT`, when the record relates to a security. Crypto symbols carry the `.BKKT` suffix here, unlike `crypto_list` in the asset overview, which returns the bare `BTCUSD`'
+          x-description-zh: '`TICKER.MARKET` 格式的标的代码，例如 `MULL.US` 或 `BTCUSD.BKKT`（仅当记录与证券相关时返回）。此处加密货币代码带 `.BKKT` 后缀；美股资产概览的 `crypto_list` 则返回不带后缀的 `BTCUSD`'
+          x-description-zh-hk: '`TICKER.MARKET` 格式的標的代碼，例如 `MULL.US` 或 `BTCUSD.BKKT`（僅當記錄與證券相關時返回）。此處加密貨幣代碼帶 `.BKKT` 後綴；美股資產概覽的 `crypto_list` 則返回不帶後綴的 `BTCUSD`'
         - name: counter_id
           type: string
           required: false

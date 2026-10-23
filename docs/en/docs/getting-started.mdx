@@ -432,7 +432,7 @@ If an API returns error `403308` (`Target API's scope is not in authorized scope
 
 **Sign Out**
 
-The SDK does not provide a logout method yet. To sign out, delete the stored token file `~/.longbridge/openapi/tokens/<client_id>`; the next run asks you to authorize again. If you use the CLI, run `longbridge auth logout`, which removes the token file and the client registration. Deleting the file only stops this machine from reusing it; an access token that has already been issued stays valid until it expires.
+The SDK has no logout method. To sign out, delete the stored token file `~/.longbridge/openapi/tokens/<client_id>`; the next run asks you to authorize again. If you use the CLI, run `longbridge auth logout`, which removes the token file and the client registration. Deleting the file only stops this machine from reusing it; an access token that has already been issued stays valid until it expires.
 
 #### Method 2: Legacy API Key (Compatible)
 

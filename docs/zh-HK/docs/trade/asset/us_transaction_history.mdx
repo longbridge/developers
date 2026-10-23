@@ -290,7 +290,7 @@ HTTP 接口中，`create_at` 和 `done_at` 是以數字字符串表示的 Unix �
 | biz_code_name | string | 業務代碼的展示名稱，例如 `VA Sell Success` |
 | amount | string | 金額 |
 | currency | string | 貨幣，例如 `USD`；可能為空，例如加密貨幣轉入 |
-| symbol | string | `TICKER.MARKET` 格式的標的代碼，例如 `MULL.US` 或 `BTCUSD.BKKT`（僅當記錄與證券相關時返回） |
+| symbol | string | `TICKER.MARKET` 格式的標的代碼，例如 `MULL.US` 或 `BTCUSD.BKKT`（僅當記錄與證券相關時返回）。此處加密貨幣代碼帶 `.BKKT` 後綴；[美股資產概覽](/zh-HK/docs/trade/asset/us_asset_overview)的 `crypto_list` 則返回不帶後綴的 `BTCUSD` |
 | counter_id | string | 與 `symbol` 一同返回的內部標的標識，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回，SDK 類型中可能未包含 |
 | market | string | 市場，例如 `US` 或 `BKKT` |
 | equity_type | string | 持倉類型，例如 `STOCK`、`OPTION`、`CRYPTO` |

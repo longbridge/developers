@@ -445,7 +445,7 @@ OAuth Token 应安全存储在应用程序中（如加密文件、安全密钥�
 
 **退出登录**
 
-SDK 暂未提供退出登录方法。如需退出登录，删除本地保存的 Token 文件 `~/.longbridge/openapi/tokens/<client_id>` 即可，下次运行时会重新授权。使用 CLI 的用户可以直接执行 `longbridge auth logout`，它会删除 Token 文件和客户端注册。删除文件只会让本机不再复用该凭证；已签发的 access token 在过期前仍然有效。
+SDK 没有提供退出登录方法。如需退出登录，删除本地保存的 Token 文件 `~/.longbridge/openapi/tokens/<client_id>` 即可，下次运行时会重新授权。使用 CLI 的用户可以直接执行 `longbridge auth logout`，它会删除 Token 文件和客户端注册。删除文件只会让本机不再复用该凭证；已签发的 access token 在过期前仍然有效。
 
 #### 方式二：传统 API Key（兼容）
 

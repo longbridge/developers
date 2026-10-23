@@ -292,7 +292,7 @@ func main() {
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| symbol | string | Crypto pair ticker without the market suffix, e.g. `BTCUSD`. Use `BTCUSD.BKKT` when calling other APIs |
+| symbol | string | Crypto pair ticker without the market suffix, e.g. `BTCUSD`; the market is returned separately in `market`. Other APIs, including [US Transaction History](/docs/trade/asset/us_transaction_history), use the `TICKER.MARKET` form `BTCUSD.BKKT` |
 | counter_id | string | Internal security identifier, e.g. `VA/BKKT/BTCUSD`. Returned by the HTTP API |
 | market | string | Market: `BKKT`. Returned by the HTTP API |
 | name | string | Crypto name, e.g. `Bitcoin`. Returned by the HTTP API |

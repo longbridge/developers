@@ -290,7 +290,7 @@ In the HTTP API, `create_at` and `done_at` are Unix seconds encoded as numeric s
 | biz_code_name | string | Display name of the business code, e.g. `VA Sell Success` |
 | amount | string | Amount |
 | currency | string | Currency, e.g. `USD`; may be empty, e.g. for a crypto deposit |
-| symbol | string | Security symbol in `TICKER.MARKET` form, e.g. `MULL.US` or `BTCUSD.BKKT`, when the record relates to a security |
+| symbol | string | Security symbol in `TICKER.MARKET` form, e.g. `MULL.US` or `BTCUSD.BKKT`, when the record relates to a security. Crypto symbols carry the `.BKKT` suffix here, unlike `crypto_list` in [US Asset Overview](/docs/trade/asset/us_asset_overview), which returns the bare `BTCUSD` |
 | counter_id | string | Internal security identifier returned alongside `symbol`, e.g. `VA/BKKT/BTCUSD`. Returned by the HTTP API; the SDK types may not expose it |
 | market | string | Market, e.g. `US` or `BKKT` |
 | equity_type | string | Holding type, e.g. `STOCK`, `OPTION`, `CRYPTO` |
