@@ -10,8 +10,8 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-:::warning Longbridge AP 账户
-此接口仅适用于 AP（Longbridge HK/SG）账户，Longbridge US 账户调用会失败；SDK 的 `order_detail` 方法对 US 账户会直接返回区域错误，不会发出请求。Longbridge US 账户请改用[美股委托详情](./us_order_detail)（`GET /v1/us/orders/{order_id}`）。
+:::warning Longbridge US 账户不支持
+此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户；SDK 的 `order_detail` 方法对美股数据中心账户会直接返回区域限制错误，不会发出请求。美股数据中心账户请改用[美股委托详情](./us_order_detail)（`GET /v1/us/orders/{order_id}`）。
 :::
 
 该接口用于订单详情查询。

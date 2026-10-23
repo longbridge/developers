@@ -13838,20 +13838,20 @@ paths:
       x-summary-zh: 订单详情
       x-summary-zh-hk: 訂單詳情
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts; calling it from a Longbridge US account fails. Longbridge US accounts should use US Order Detail (`us_order_detail`, `GET /v1/us/orders/{order_id}`) instead.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and should use US Order Detail (`us_order_detail`, `GET /v1/us/orders/{order_id}`) instead.
         :::
 
         This API is used for order detail query
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户，Longbridge US 账户调用会失败。Longbridge US 账户请改用美股委托详情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户。美股数据中心账户请改用美股委托详情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
         :::
 
         该接口用于订单详情查询。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶，Longbridge US 賬戶調用會失敗。Longbridge US 賬戶請改用美股委託詳情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶。美股數據中心賬戶請改用美股委託詳情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
         :::
 
         該接口用於訂單詳情查詢。
@@ -38094,21 +38094,21 @@ paths:
       x-summary-zh: 账户资金
       x-summary-zh-hk: 賬戶資金
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Cash and Buying Power (`us_cash_and_buy_power`) and US Asset Overview (`us_asset_overview`) instead.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and should use US Cash and Buying Power (`us_cash_and_buy_power`) and US Asset Overview (`us_asset_overview`) instead.
         :::
 
         The API is used to obtain the available, desirable, frozen, to-be-settled, and in-transit
         funds (fund purchase and redemption) information for each currency of the user.
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股现金与购买力（`us_cash_and_buy_power`）和美股资产概览（`us_asset_overview`）。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户。美股数据中心账户请改用美股现金与购买力（`us_cash_and_buy_power`）和美股资产概览（`us_asset_overview`）。
         :::
 
         该接口用于获取用户每个币种可用、可取、冻结、待结算金额、在途资金 (基金申购赎回) 信息。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股現金與購買力（`us_cash_and_buy_power`）和美股資產概覽（`us_asset_overview`）。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶。美股數據中心賬戶請改用美股現金與購買力（`us_cash_and_buy_power`）和美股資產概覽（`us_asset_overview`）。
         :::
 
         該接口用於獲取用戶每個幣種可用、可取、凍結、待結算金額、在途資金 (基金申購贖回) 信息。
@@ -38378,21 +38378,21 @@ paths:
       x-summary-zh: 资金流水
       x-summary-zh-hk: 資金流水
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Transaction History (`us_transaction_history`) instead.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and should use US Transaction History (`us_transaction_history`) instead.
         :::
 
         The API is used to obtain capital inflow/outflow direction, capital type, capital amount, occurrence time,
         associated stock code and capital flow description information.
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股交易流水（`us_transaction_history`）。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户。美股数据中心账户请改用美股交易流水（`us_transaction_history`）。
         :::
 
         该接口用于获取资金流入/流出方向、资金类别、资金金额、发生时间、关联股票代码和资金流水说明信息。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股交易流水（`us_transaction_history`）。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶。美股數據中心賬戶請改用美股交易流水（`us_transaction_history`）。
         :::
 
         該接口用於獲取資金流入/流出方向、資金類別、資金金額、發生時間、關聯股票代碼和資金流水說明信息。
@@ -38634,21 +38634,21 @@ paths:
       x-summary-zh: 基金持仓
       x-summary-zh-hk: 基金持倉
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts. It is not available for Longbridge US accounts.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and have no equivalent API.
         :::
 
         The API is used to obtain fund position information including account, fund code, holding share, cost net worth,
         current net worth, and currency.
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户不支持此接口。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡）。不支持美股数据中心账户，也没有对应的美股接口。
         :::
 
         该接口用于获取包括账户、基金代码、持有份额、成本净值、当前净值、币种在内的基金持仓信息。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶不支持此接口。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡）。不支援美股數據中心賬戶，也沒有對應的美股接口。
         :::
 
         該接口用於獲取包括賬戶、基金代碼、持有份額、成本淨值、當前淨值、幣種在內的基金持倉信息。
@@ -38849,21 +38849,21 @@ paths:
       x-summary-zh: 股票持仓
       x-summary-zh-hk: 股票持倉
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Asset Overview (`us_asset_overview`) instead.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and should use US Asset Overview (`us_asset_overview`) instead.
         :::
 
         The API is used to obtain stock position information including account, stock code, number of shares held,
         number of available shares, average position price (calculated according to account settings), and currency.
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股资产概览（`us_asset_overview`）。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户。美股数据中心账户请改用美股资产概览（`us_asset_overview`）。
         :::
 
         该接口用于获取包括账户、股票代码、持仓股数、可用股数、持仓均价（按账户设置计算均价方式）、币种在内的股票持仓信息。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股資產概覽（`us_asset_overview`）。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶。美股數據中心賬戶請改用美股資產概覽（`us_asset_overview`）。
         :::
 
         該接口用於獲取包括賬戶、股票代碼、持倉股數、可用股數、持倉均價（按賬戶設置計算均價方式）、幣種在內的股票持倉信息。
@@ -39121,20 +39121,20 @@ paths:
       x-summary-zh: 汇率
       x-summary-zh-hk: 匯率
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts. Longbridge US accounts should use US Exchange Rates (`us_exchange_rates`) instead.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and should use US Exchange Rates (`us_exchange_rates`) instead.
         :::
 
         Get current foreign exchange rates for all currency pairs used in your account.
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户请改用美股账户汇率（`us_exchange_rates`）。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户。美股数据中心账户请改用美股账户汇率（`us_exchange_rates`）。
         :::
 
         获取账户中所有货币对的当前外汇汇率。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶請改用美股賬戶匯率（`us_exchange_rates`）。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶。美股數據中心賬戶請改用美股賬戶匯率（`us_exchange_rates`）。
         :::
 
         獲取賬戶中所有貨幣對的當前外匯匯率。
@@ -39308,21 +39308,21 @@ paths:
       x-summary-zh: 保证金比例
       x-summary-zh-hk: 保證金比例
       description: |
-        :::warning Longbridge AP Accounts
-        This API is only available for AP (Longbridge HK/SG) accounts. It is not available for Longbridge US accounts.
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and have no equivalent API.
         :::
 
         This API is used to obtain the initial margin ratio, maintain the margin ratio and strengthen the
         margin ratio of stocks.
       x-description-zh: |
-        :::warning Longbridge AP 账户
-        此接口仅适用于 AP（Longbridge HK/SG）账户。Longbridge US 账户不支持此接口。
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡）。不支持美股数据中心账户，也没有对应的美股接口。
         :::
 
         该接口用于获取股票初始保证金比例、维持保证金比例、强平保证金比例。
       x-description-zh-hk: |
-        :::warning Longbridge AP 賬戶
-        此接口僅適用於 AP（Longbridge HK/SG）賬戶。Longbridge US 賬戶不支持此接口。
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡）。不支援美股數據中心賬戶，也沒有對應的美股接口。
         :::
 
         該接口用於獲取股票初始保證金比例、維持保證金比例、強平保證金比例。
