@@ -12,6 +12,7 @@ description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest fi
 ### CLI v0.31.0
 
 - **[Longbridge US accounts work in the CLI](/docs/cli/release-notes)** — asset, cash-flow, exchange-rate, order and execution commands call the US APIs for US accounts, with the same `--format json` shape as AP accounts
+- **[Longbridge MCP updated in step](/docs/mcp)** — for US accounts, `account_balance`, `stock_positions`, `cash_flow`, `exchange_rate`, `today_orders`, `history_orders` and `order_detail` return the same shape as on AP accounts, the execution tools fill `side` from the account's orders, and AP-only tools name the US alternative
 
 ### SDK v5.3.0
 

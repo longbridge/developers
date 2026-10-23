@@ -9,7 +9,7 @@ sidebar_position: 4
 取得 Longbridge 帳戶中所有貨幣對的當前匯率。
 
 :::info Longbridge US 賬戶
-`exchange-rate` 不支援美股數據中心賬戶，CLI 也沒有查詢美股賬戶匯率的命令。請改用 [美股賬戶匯率](/zh-HK/docs/trade/asset/us_exchange_rates) 接口。
+在美股數據中心賬戶上，`exchange-rate` 讀取 [美股賬戶匯率](/zh-HK/docs/trade/asset/us_exchange_rates) 接口，輸出與 AP 賬戶相同的 `{exchanges: [...]}` 結構，每個貨幣對一行。同一貨幣對有多種匯率類型時，優先使用參考匯率，`spec_key` 顯示所用的類型。
 :::
 
 ## 基本用法

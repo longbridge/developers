@@ -12,6 +12,7 @@ description: 'Longbridge OpenAPI、CLI、MCP 與 SDK 的更新日誌，按時間
 ### CLI v0.31.0
 
 - **[CLI 支援 Longbridge US 賬戶](/zh-HK/docs/cli/release-notes)** — 資產、資金流水、匯率、訂單與成交命令在 US 賬戶上改用 US 接口，`--format json` 輸出與 AP 賬戶結構一致
+- **[Longbridge MCP 同步更新](/zh-HK/docs/mcp)** — US 賬戶上，`account_balance`、`stock_positions`、`cash_flow`、`exchange_rate`、`today_orders`、`history_orders`、`order_detail` 返回與 AP 賬戶一致的結構，成交工具根據賬戶委託補全 `side`,AP 專屬工具會給出應改用的 US 替代方案
 
 ### SDK v5.3.0
 

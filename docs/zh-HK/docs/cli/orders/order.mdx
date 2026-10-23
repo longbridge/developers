@@ -8,6 +8,10 @@ sidebar_position: 1
 
 查看委託記錄和成交明細，或直接在終端提交買入/賣出委託。
 
+:::info Longbridge US 賬戶
+`order`（當日及 `--history`）、`order detail` 和 `order executions` 支援美股數據中心賬戶，`--format json` 輸出與 AP 賬戶結構一致；`--schema` 中標註為 `(US only)` 的欄位僅出現在美股記錄中。歷史成交來自 `/v1/trade/execution/history`,該接口不按成交時間過濾，且可能跨日延遲，因此時間範圍邊緣的成交可能缺失或多出。成交記錄缺少 `side` 時，會根據賬戶的委託補全，找不到對應委託時顯示為 `Unknown`。
+:::
+
 ## 基本用法
 
 ```bash

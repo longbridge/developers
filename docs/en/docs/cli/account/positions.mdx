@@ -9,7 +9,7 @@ sidebar_position: 2
 List your current stock positions — symbol, quantity, available quantity, cost price, and market.
 
 :::info Longbridge US Accounts
-On a US data-center account, `positions` returns the asset overview instead of a stock list. With `--format json`, the output is an object with `account_type`, `cash_buy_power`, `stock_list`, `option_list`, `crypto_list` and `cash_list`. For field meanings, see the [US Asset Overview](/docs/trade/asset/us_asset_overview) API, or run `longbridge positions --schema`, which prints a summary of the output shape.
+On a US data-center account, `positions` reads the [US Asset Overview](/docs/trade/asset/us_asset_overview) API and prints the same `--format json` array as on AP accounts. Stock, option and crypto holdings share the list and are told apart by `asset_type`; fields marked `(US only)` in `longbridge positions --schema`, such as `market_price` and `today_pl`, appear only on US rows.
 :::
 
 ## Basic Usage

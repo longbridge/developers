@@ -9,7 +9,7 @@ sidebar_position: 1
 获取完整投资组合概览——总盈亏、总资产、各市场（美股/港股/A 股/新加坡）市值，以及现金余额。
 
 :::info Longbridge US 账户
-`portfolio` 不支持美股数据中心账户。美股数据中心账户查看持仓请使用 [`positions`](/zh-CN/docs/cli/account/positions)。
+在美股数据中心账户上，`portfolio` 的 `--format json` 输出与 AP 账户结构一致。`overview` 仅包含 `currency`、`total_asset` 和 `total_cash`（账户未返回净清算价值时没有 `total_asset`）,`holdings` 即 [`positions`](/zh-CN/docs/cli/account/positions) 的记录。AP 的 `market_accounts` 以及盈亏、保证金和风险字段没有美股数据来源，会省略；账户类型、购买力与保证金状态位于 `us` 下。
 :::
 
 ## 基本用法

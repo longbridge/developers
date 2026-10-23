@@ -9,7 +9,7 @@ sidebar_position: 3
 View your full account overview — net assets, buying power, margin status, risk level, and cash balances across all currencies.
 
 :::info Longbridge US Accounts
-`assets` does not support US data-center accounts. On a US account, [`positions`](/docs/cli/account/positions) returns the asset overview — holdings, cash, and buying power. For full cash and buying-power details, use the [US Cash and Buying Power](/docs/trade/asset/us_cash_and_buy_power) or [US Asset Overview](/docs/trade/asset/us_asset_overview) API.
+On a US data-center account, `assets` reads the [US Cash and Buying Power](/docs/trade/asset/us_cash_and_buy_power) API and prints the same `--format json` keys as on AP accounts: one element for the account currency, with `currency`, `net_assets`, `total_cash`, `buy_power`, `maintenance_margin` and `cash_infos`. AP-only fields with no US source are omitted (`net_assets` is absent when the account reports no net liquidation value), and buying-power and margin details are under `us`. Run `longbridge assets --schema` to see which fields are `(US only)`.
 :::
 
 ## Basic Usage

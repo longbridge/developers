@@ -9,7 +9,7 @@ sidebar_position: 4
 Get current foreign exchange rates for all currency pairs used in your Longbridge account.
 
 :::info Longbridge US Accounts
-`exchange-rate` does not support US data-center accounts, and the CLI has no command for US account exchange rates. Use the [US Exchange Rates](/docs/trade/asset/us_exchange_rates) API instead.
+On a US data-center account, `exchange-rate` reads the [US Exchange Rates](/docs/trade/asset/us_exchange_rates) API and prints the same `{exchanges: [...]}` shape as on AP accounts, with one row per currency pair. When a pair has several rate types, the reference rate is used, and `spec_key` shows which type it is.
 :::
 
 ## Basic Usage

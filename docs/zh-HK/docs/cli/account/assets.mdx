@@ -9,7 +9,7 @@ sidebar_position: 3
 查看完整帳戶概覽——淨資產、購買力、保證金狀態、風險等級，以及各幣種的現金餘額。
 
 :::info Longbridge US 賬戶
-`assets` 不支援美股數據中心賬戶。在美股賬戶上，[`positions`](/zh-HK/docs/cli/account/positions) 返回資產概覽，包括持倉、現金和購買力。如需完整的現金與購買力明細，請使用 [美股現金與購買力](/zh-HK/docs/trade/asset/us_cash_and_buy_power) 或 [美股資產概覽](/zh-HK/docs/trade/asset/us_asset_overview) 接口。
+在美股數據中心賬戶上，`assets` 讀取 [美股現金與購買力](/zh-HK/docs/trade/asset/us_cash_and_buy_power) 接口，`--format json` 輸出的欄位與 AP 賬戶一致：一個元素對應賬戶幣種，包含 `currency`、`net_assets`、`total_cash`、`buy_power`、`maintenance_margin` 和 `cash_infos`。沒有美股數據來源的 AP 專屬欄位會省略（賬戶未返回淨清算價值時沒有 `net_assets`），購買力與保證金明細位於 `us` 下。運行 `longbridge assets --schema` 可查看哪些欄位標註為 `(US only)`。
 :::
 
 ## 基本用法

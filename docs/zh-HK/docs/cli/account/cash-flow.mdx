@@ -9,7 +9,7 @@ sidebar_position: 4
 查看資金流水歷史——入金、出金、股息到帳、交易結算及其他帳戶變動。
 
 :::info Longbridge US 賬戶
-`cash-flow` 不支援美股數據中心賬戶，CLI 也沒有查詢美股賬戶資金流水的命令。請改用 [美股交易流水](/zh-HK/docs/trade/asset/us_transaction_history) 接口。
+在美股數據中心賬戶上，`cash-flow` 讀取 [美股交易流水](/zh-HK/docs/trade/asset/us_transaction_history) 接口，`--format json` 輸出與 AP 賬戶相同結構的數組。美股記錄會附加 `--schema` 中標註為 `(US only)` 的欄位，如 `direction`、`biz_code` 和 `ref_no`;`balance` 為帶符號的金額，加密貨幣轉賬和費用記錄為 0。
 :::
 
 ## 基本用法

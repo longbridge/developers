@@ -9,7 +9,7 @@ sidebar_position: 4
 获取 Longbridge 账户中所有货币对的当前汇率。
 
 :::info Longbridge US 账户
-`exchange-rate` 不支持美股数据中心账户，CLI 也没有查询美股账户汇率的命令。请改用 [美股账户汇率](/zh-CN/docs/trade/asset/us_exchange_rates) 接口。
+在美股数据中心账户上，`exchange-rate` 读取 [美股账户汇率](/zh-CN/docs/trade/asset/us_exchange_rates) 接口，输出与 AP 账户相同的 `{exchanges: [...]}` 结构，每个货币对一行。同一货币对有多种汇率类型时，优先使用参考汇率，`spec_key` 显示所用的类型。
 :::
 
 ## 基本用法
