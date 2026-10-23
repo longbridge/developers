@@ -9,9 +9,7 @@ import { DOCS_ORDER as AUTO } from './docs-order.generated'
 
 const OVERRIDES: Record<string, number> = {
   // Quote / Options
-  'ws-optionchain-date': 10,
-  option_chain_expiry_date_list: 10,
-  option_chain_info_by_date: 11,
+  'ws-optionchain-strike': 12,
   // Quote / Warrants (own subgroup, docs quote/warrants positions)
   'ws-warrant-quote': 4,
   'ws-issuers': 13,
