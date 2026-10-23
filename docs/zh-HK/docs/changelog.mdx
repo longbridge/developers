@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 description: 'Longbridge OpenAPI、CLI、MCP 與 SDK 的更新日誌，按時間倒序列出新增命令、接口、MCP 工具及其他變更。'
 ---
 
+## 2026-10-23
+
+### SDK v5.3.0
+
+- **[美股賬戶資產](/zh-HK/docs/trade/asset/us_cash_and_buy_power)** — Longbridge US 賬戶有了專屬的資產接口：現金與購買力、可賣數量、交易流水和匯率 (`GET /v1/us/assets/*`、`POST /v1/us/assets/transaction-history`),Rust、Python、Node.js 的 `TradeContext` 提供對應方法
+- **AP 專屬接口在 US 賬戶上直接報錯** — `account_balance`、`cash_flow`、`stock_positions`、`fund_positions`、`margin_ratio`、`order_detail`、`exchange_rate` 不再返回網關錯誤，而是返回區域限制錯誤，並給出應改用的 US 接口
+- **修復：** Longbridge US 賬戶可以正常查詢歷史成交;期權鏈改用 `POST /v1/quote/options/strikes`
+
 ## 2026-09-28
 
 ### CLI v0.29.0

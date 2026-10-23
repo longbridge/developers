@@ -7,6 +7,14 @@ sidebar_icon: newspaper
 description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest first: new commands, API endpoints, MCP tools and other changes.'
 ---
 
+## 2026-10-23
+
+### SDK v5.3.0
+
+- **[US account assets](/docs/trade/asset/us_cash_and_buy_power)** — Longbridge US accounts get their own asset APIs: cash and buying power, available holdings, transaction history and exchange rates (`GET /v1/us/assets/*`, `POST /v1/us/assets/transaction-history`), with matching `TradeContext` methods in Rust, Python and Node.js
+- **AP-only calls fail fast on US accounts** — `account_balance`, `cash_flow`, `stock_positions`, `fund_positions`, `margin_ratio`, `order_detail` and `exchange_rate` return a region error that names the US endpoint to call instead, rather than a gateway error
+- **Fix:** history executions work on Longbridge US accounts, and the option chain uses `POST /v1/quote/options/strikes`
+
 ## 2026-09-28
 
 ### CLI v0.29.0
