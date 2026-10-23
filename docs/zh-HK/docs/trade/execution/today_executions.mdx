@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::info Longbridge US 賬戶
+在美股數據中心賬戶上，響應不包含 `side` 欄位，SDK 會將其報告為 `Unknown`。如需獲取買賣方向，請使用 `order_id` 通過 [美股訂單詳情](/zh-HK/docs/trade/order/us_order_detail) 查詢對應訂單。
+:::
+
 該接口用於獲取當日訂單的成交明細。
 
 <CliCommand>

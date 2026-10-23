@@ -322,4 +322,4 @@ func main() {
 | market_price | string | 當前市場價格 |
 | today_pl | string | 當日盈虧 |
 
-HTTP 接口返回的加密貨幣記錄除 `full_symbol` 外與股票記錄字段相同。SDK 的加密貨幣類型包含上表除 `counter_id` 外的全部字段。
+HTTP 接口返回的加密貨幣記錄除 `full_symbol` 外與股票記錄字段相同。SDK 的加密貨幣類型（`USCryptoEntry`）包含上表除 `counter_id` 外的全部字段。較舊版本的 SDK 在該類型上僅提供 `asset_type`、`average_cost`、`symbol`、`currency` 和 `industry_name`；其餘字段始終可通過 HTTP 接口獲取。

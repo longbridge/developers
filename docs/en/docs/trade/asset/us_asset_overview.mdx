@@ -321,4 +321,4 @@ func main() {
 | market_price | string | Current market price |
 | today_pl | string | Today's P&L |
 
-The HTTP API returns crypto entries with the same fields as stock entries except `full_symbol`. The SDK crypto type has every field above except `counter_id`.
+The HTTP API returns crypto entries with the same fields as stock entries except `full_symbol`. The SDK crypto type (`USCryptoEntry`) has every field above except `counter_id`. Older SDK versions expose only `asset_type`, `average_cost`, `symbol`, `currency` and `industry_name` on this type; the other fields are always available from the HTTP API.

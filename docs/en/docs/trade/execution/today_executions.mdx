@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::info Longbridge US Accounts
+On Longbridge US data-center accounts, the response omits `side`, so the SDKs report it as `Unknown`. To get the side, look up the order by `order_id` with [US Order Detail](/docs/trade/order/us_order_detail).
+:::
+
 This API is used to get today executions.
 
 <CliCommand>

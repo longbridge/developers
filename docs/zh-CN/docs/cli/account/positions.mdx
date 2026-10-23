@@ -8,6 +8,10 @@ sidebar_position: 2
 
 列出当前股票持仓——标的代码、数量、可用数量、成本价及市场。
 
+:::info Longbridge US 账户
+在美股数据中心账户上，`positions` 返回资产概览而非股票持仓列表。使用 `--format json` 时，输出为包含 `account_type`、`cash_buy_power`、`stock_list`、`option_list`、`crypto_list` 和 `cash_list` 的对象。字段含义请参阅 [美股资产概览](/zh-CN/docs/trade/asset/us_asset_overview) 接口，或运行 `longbridge positions --schema` 查看输出结构。
+:::
+
 ## 基本用法
 
 ```bash

@@ -40649,7 +40649,7 @@ paths:
               --url 'https://openapi.longbridge.com/v1/us/assets/transaction-history' \
               --header 'Authorization: Bearer <access_token>' \
               --header 'Content-Type: application/json' \
-              --data '{"start":1767225600,"end":1792661597,"page":1,"size":20}'
+              --data '{"start":1767225600,"end":1775001599,"page":1,"size":20}'
         - lang: Python
           label: Python
           source: |
@@ -40658,7 +40658,7 @@ paths:
             resp = requests.post(
                 "https://openapi.longbridge.com/v1/us/assets/transaction-history",
                 headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                json={"start": 1767225600, "end": 1792661597, "page": 1, "size": 20},
+                json={"start": 1767225600, "end": 1775001599, "page": 1, "size": 20},
             )
             print(resp.json())
         - lang: Python
@@ -40672,7 +40672,7 @@ paths:
                     async with session.post(
                         "https://openapi.longbridge.com/v1/us/assets/transaction-history",
                         headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
-                        json={"start": 1767225600, "end": 1792661597, "page": 1, "size": 20},
+                        json={"start": 1767225600, "end": 1775001599, "page": 1, "size": 20},
                     ) as resp:
                         print(await resp.json())
 
@@ -40686,7 +40686,7 @@ paths:
                 "Authorization": "Bearer <access_token>",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ start: 1767225600, end: 1792661597, page: 1, size: 20 }),
+              body: JSON.stringify({ start: 1767225600, end: 1775001599, page: 1, size: 20 }),
             })
             console.log(await resp.json())
         - lang: Java
@@ -40700,7 +40700,7 @@ paths:
                     .uri(URI.create("https://openapi.longbridge.com/v1/us/assets/transaction-history"))
                     .header("Authorization", "Bearer <access_token>")
                     .header("Content-Type", "application/json")
-                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"start\":1767225600,\"end\":1792661597,\"page\":1,\"size\":20}"))
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"start\":1767225600,\"end\":1775001599,\"page\":1,\"size\":20}"))
                     .build();
             var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(resp.body());
@@ -40711,7 +40711,7 @@ paths:
             let resp = client
                     .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/us/assets/transaction-history")
                     .header("Authorization", "Bearer <access_token>")
-                    .json(&serde_json::json!({ "start": 1767225600 , "end": 1792661597 , "page": 1 , "size": 20 }))
+                    .json(&serde_json::json!({ "start": 1767225600 , "end": 1775001599 , "page": 1 , "size": 20 }))
                     .send()
                     .await?
                     .text()
@@ -40729,7 +40729,7 @@ paths:
                 headers = curl_slist_append(headers, "Content-Type: application/json");
                 curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/us/assets/transaction-history");
                 curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"start\":1767225600,\"end\":1792661597,\"page\":1,\"size\":20}");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"start\":1767225600,\"end\":1775001599,\"page\":1,\"size\":20}");
                 curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
                 curl_easy_perform(curl);
                 curl_easy_cleanup(curl);
@@ -40737,7 +40737,7 @@ paths:
             }
         - lang: Go
           label: Go
-          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/us/assets/transaction-history\", strings.NewReader(`{\"start\":1767225600,\"end\":1792661597,\"page\":1,\"size\":20}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/us/assets/transaction-history\", strings.NewReader(`{\"start\":1767225600,\"end\":1775001599,\"page\":1,\"size\":20}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
       x-response-properties:
         - name: current_page
           type: integer
@@ -43443,10 +43443,22 @@ paths:
       x-summary-zh: 当日成交明细
       x-summary-zh-hk: 當日成交明細
       description: |
+        :::info Longbridge US Accounts
+        On Longbridge US data-center accounts, the response omits `side`, so the SDKs report it as `Unknown`. To get the side, look up the order by `order_id` with US Order Detail (`GET /v1/us/orders/{order_id}`).
+        :::
+
         This API is used to get today executions.
       x-description-zh: |
+        :::info Longbridge US 账户
+        在美股数据中心账户上，响应不包含 `side` 字段，SDK 会将其报告为 `Unknown`。如需获取买卖方向，请使用 `order_id` 通过美股订单详情（`GET /v1/us/orders/{order_id}`）查询对应订单。
+        :::
+
         该接口用于获取当日订单的成交明细。
       x-description-zh-hk: |
+        :::info Longbridge US 賬戶
+        在美股數據中心賬戶上，響應不包含 `side` 欄位，SDK 會將其報告為 `Unknown`。如需獲取買賣方向，請使用 `order_id` 通過美股訂單詳情（`GET /v1/us/orders/{order_id}`）查詢對應訂單。
+        :::
+
         該接口用於獲取當日訂單的成交明細。
       x-subgroup: Execution
       x-subgroup-zh: 成交
@@ -43645,10 +43657,22 @@ paths:
       x-summary-zh: 历史成交明细
       x-summary-zh-hk: 歷史成交明細
       description: |
+        :::info Longbridge US Accounts
+        On Longbridge US data-center accounts, the response omits `side`, so the SDKs report it as `Unknown`. To get the side, look up the order by `order_id` with US Order Detail (`GET /v1/us/orders/{order_id}`). Results are not filtered by execution time and can lag across days, so near the edges of the `start_at` / `end_at` range, executions may be missing or fall outside the range.
+        :::
+
         This API is used to get history executions, including the sell and buy records, and does not support querying today's execution details.
       x-description-zh: |
+        :::info Longbridge US 账户
+        在美股数据中心账户上，响应不包含 `side` 字段，SDK 会将其报告为 `Unknown`。如需获取买卖方向，请使用 `order_id` 通过美股订单详情（`GET /v1/us/orders/{order_id}`）查询对应订单。返回结果不按成交时间过滤，且可能跨日滞后，因此在 `start_at` / `end_at` 范围边缘附近，成交记录可能缺失或落在范围之外。
+        :::
+
         该接口用于获取历史订单的成交明细，包括买入和卖出的成交记录，不支持当日成交明细查询。
       x-description-zh-hk: |
+        :::info Longbridge US 賬戶
+        在美股數據中心賬戶上，響應不包含 `side` 欄位，SDK 會將其報告為 `Unknown`。如需獲取買賣方向，請使用 `order_id` 通過美股訂單詳情（`GET /v1/us/orders/{order_id}`）查詢對應訂單。返回結果不按成交時間過濾，且可能跨日滯後，因此在 `start_at` / `end_at` 範圍邊緣附近，成交記錄可能缺失或落在範圍之外。
+        :::
+
         該接口用於獲取歷史訂單的成交明細，包括買入和賣出的成交記錄，不支持當日成交明細查詢。
       x-subgroup: Execution
       x-subgroup-zh: 成交

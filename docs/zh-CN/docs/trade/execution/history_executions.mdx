@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::info Longbridge US 账户
+在美股数据中心账户上，响应不包含 `side` 字段，SDK 会将其报告为 `Unknown`。如需获取买卖方向，请使用 `order_id` 通过 [美股订单详情](/zh-CN/docs/trade/order/us_order_detail) 查询对应订单。返回结果不按成交时间过滤，且可能跨日滞后，因此在 `start_at` / `end_at` 范围边缘附近，成交记录可能缺失或落在范围之外。
+:::
+
 该接口用于获取历史订单的成交明细，包括买入和卖出的成交记录，不支持当日成交明细查询。
 
 <CliCommand>
