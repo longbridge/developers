@@ -1,0 +1,342 @@
+---
+slug: estimate_multileg_available_quantity
+sidebar_position: 12
+title: Estimate Multi-leg Option Trading Info
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+This API is used to estimate the maximum purchase quantity and the margin impact of a multi-leg option combination strategy before submitting the order.
+
+Constraints:
+
+- Only the US market is supported.
+- All legs must share the same underlying.
+- Each leg must be an option or the underlying stock itself.
+- Duplicate legs (the same symbol with the same side) are not allowed.
+- All legs must share the same settlement currency.
+
+<CliCommand>
+longbridge estimate-multileg --side buy --strategy VerticalCallSpread --quantity 1 --leg QQQ260731C764000.US --leg QQQ260731C767000.US --price 1.5
+</CliCommand>
+
+<SDKLinks module="trade" klass="TradeContext" method="estimate_multileg_available_quantity" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/trade/estimate/multileg </td></tr>
+</tbody>
+</table>
+
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
+
+| Name               | Type     | Required | Description                                                                                                                                                        |
+| ------------------ | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| side               | string   | YES      | Order side of the combination<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                                                                     |
+| order_type         | string   | YES      | [Order Type](../trade-definition#ordertype)                                                                                                                        |
+| submitted_price    | string   | NO       | Estimated order price, example: `1.5`<br/><br/> Required for limit order types such as `LO`                                                                        |
+| submitted_quantity | string   | YES      | Order quantity (number of combinations), example: `1`                                                                                                              |
+| strategy           | string   | YES      | Multi-leg strategy<br/><br/> **Enum Value:**<br/> `CoveredCall` - Covered stock<br/> `CoveredPut` - Covered stock<br/> `VerticalCallSpread` - Vertical spread<br/> `VerticalPutSpread` - Vertical spread<br/> `Collar` - Collar<br/> `Straddle` - Straddle<br/> `Strangle` - Strangle<br/> `CalendarCallSpread` - Calendar<br/> `CalendarPutSpread` - Calendar |
+| legs               | object[] | YES      | Legs of the combination                                                                                                                                            |
+| ∟ symbol           | string   | YES      | Option or underlying stock symbol, use `ticker.region` format, example: `QQQ260731C764000.US`                                                                      |
+| ∟ side             | string   | NO       | Leg order side.<br/><br/>Reserved field, not in use for now.<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell` |
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python" default>
+
+```python
+from decimal import Decimal
+from longbridge.openapi import TradeContext, Config, OrderType, OrderSide, MultiLegStrategy, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+
+# Create a context for trade APIs
+ctx = TradeContext(config)
+
+# Estimate multi-leg option trading info
+resp = ctx.estimate_multileg_available_quantity(
+    OrderSide.Buy,
+    OrderType.LO,
+    Decimal(1),
+    MultiLegStrategy.VerticalCallSpread,
+    ["QQQ260731C764000.US", "QQQ260731C767000.US"],
+    submitted_price=Decimal("1.5"),
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from decimal import Decimal
+from longbridge.openapi import AsyncTradeContext, Config, OrderType, OrderSide, MultiLegStrategy, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+
+    # Create a context for trade APIs
+    ctx = AsyncTradeContext.create(config)
+
+    # Estimate multi-leg option trading info
+    resp = await ctx.estimate_multileg_available_quantity(
+        OrderSide.Buy,
+        OrderType.LO,
+        Decimal(1),
+        MultiLegStrategy.VerticalCallSpread,
+        ["QQQ260731C764000.US", "QQQ260731C767000.US"],
+        submitted_price=Decimal("1.5"),
+    )
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, Decimal, OrderType, OrderSide, MultiLegStrategy } = require('longbridge')
+
+const config = Config.fromEnv()
+const ctx = await TradeContext.new(config)
+const resp = await ctx.estimateMultilegAvailableQuantity({
+  side: OrderSide.Buy,
+  orderType: OrderType.LO,
+  submittedQuantity: new Decimal("1"),
+  strategy: MultiLegStrategy.VerticalCallSpread,
+  legs: [{ symbol: "QQQ260731C764000.US" }, { symbol: "QQQ260731C767000.US" }],
+  submittedPrice: new Decimal("1.5"),
+})
+console.log(resp.toString())
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.trade.*;
+import java.math.BigDecimal;
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             TradeContext ctx = TradeContext.create(config)) {
+            EstimateMultiLegAvailableQuantityOptions opts = new EstimateMultiLegAvailableQuantityOptions(
+                    OrderSide.Buy,
+                    OrderType.LO,
+                    new BigDecimal("1"),
+                    MultiLegStrategy.VerticalCallSpread,
+                    new EstimateMultiLegOrderLeg[] {
+                        new EstimateMultiLegOrderLeg("QQQ260731C764000.US"),
+                        new EstimateMultiLegOrderLeg("QQQ260731C767000.US"),
+                    })
+                    .setSubmittedPrice(new BigDecimal("1.5"));
+            EstimateMultiLegAvailableQuantityResponse resp = ctx.estimateMultilegAvailableQuantity(opts).get();
+            System.out.println(resp);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::{EstimateMultiLegAvailableQuantityOptions, EstimateMultiLegOrderLeg, MultiLegStrategy, OrderSide, OrderType, TradeContext}, Config, Decimal, decimal};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, _) = TradeContext::new(config);
+    let opts = EstimateMultiLegAvailableQuantityOptions::new(
+        OrderSide::Buy,
+        OrderType::LO,
+        decimal!(1i32),
+        MultiLegStrategy::VerticalCallSpread,
+        [
+            EstimateMultiLegOrderLeg::new("QQQ260731C764000.US"),
+            EstimateMultiLegOrderLeg::new("QQQ260731C767000.US"),
+        ],
+    )
+    .submitted_price(decimal!(1.5));
+    let resp = ctx.estimate_multileg_available_quantity(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+#include <iostream>
+#include <longbridge.hpp>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+using namespace longbridge;
+using namespace longbridge::trade;
+
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    TradeContext ctx = TradeContext::create(config);
+
+    EstimateMultiLegAvailableQuantityOptions opts{
+        OrderSide::Buy,
+        OrderType::LO,
+        Decimal("1"),
+        MultiLegStrategy::VerticalCallSpread,
+        { EstimateMultiLegOrderLeg{"QQQ260731C764000.US"}, EstimateMultiLegOrderLeg{"QQQ260731C767000.US"} },
+        Decimal("1.5"),
+    };
+    ctx.estimate_multileg_available_quantity(opts, [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "max_open_qty: " << res->max_open_qty << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
+    });
+
+    std::cin.get();
+    return 0;
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+	"github.com/shopspring/decimal"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	tctx, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tctx.Close()
+	resp, err := tctx.EstimateMultiLegAvailableQuantity(context.Background(), &trade.GetEstimateMultiLegAvailableQuantity{
+		Side:              trade.OrderSideBuy,
+		OrderType:         trade.OrderTypeLO,
+		SubmittedQuantity: decimal.RequireFromString("1"),
+		Strategy:          trade.MultiLegStrategyVerticalCallSpread,
+		SubmittedPrice:    decimal.RequireFromString("1.5"),
+		Legs: []trade.EstimateMultiLegOrderLeg{
+			{Symbol: "QQQ260731C764000.US"},
+			{Symbol: "QQQ260731C767000.US"},
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(resp)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "max_open_qty": "10",
+    "unit_margin": "1500.00",
+    "initial_margin_change": "15000.00",
+    "maintenance_margin_change": "12000.00"
+  }
+}
+```
+
+### Response Status
+
+| Status | Description                                              | Schema                                                                                        |
+| ------ | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 200    | Estimate Multi-leg Option Trading Info Success           | [estimate_multileg_available_quantity_rsp](#schemaestimate_multileg_available_quantity_rsp)   |
+| 400    | The query failed with an error in the request parameter. | None                                                                                          |
+
+<aside className="success">
+</aside>
+
+## Schemas
+
+### estimate_multileg_available_quantity_rsp
+
+<a id="schemaestimate_multileg_available_quantity_rsp"></a>
+<a id="schemaestimate_multileg_available_quantity_rsp"></a>
+
+Estimated Multi-leg Option Trading Info
+
+| Name                      | Type   | Required | Description                                                                  |
+| ------------------------- | ------ | -------- | ---------------------------------------------------------------------------- |
+| max_open_qty              | string | true     | Maximum open quantity of the combination                                     |
+| unit_margin               | string | true     | Margin required per combination unit                                         |
+| initial_margin_change     | string | true     | Change of the initial margin after placing the order (after minus before)    |
+| maintenance_margin_change | string | true     | Change of the maintenance margin after placing the order (after minus before) |
