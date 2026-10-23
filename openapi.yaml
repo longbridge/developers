@@ -4426,244 +4426,9 @@ x-websocket:
             - name: "expiry_date"
               type: "string[]"
               required: false
-              description: "option chain expiry dates list, in YYMMDD format"
-              x-description-zh: "标的对应的期权链到期日列表，使用 YYMMDD 格式"
-              x-description-zh-hk: "標的對應的期權鏈到期日列表，使用 YYMMDD 格式"
-        - id: ws-optionchain-strike
-          x-subgroup: Options
-          name: Option Chain Info
-          x-name-zh: 期权链行权价
-          x-name-zh-hk: 期權鏈行權價
-          cmd: 21
-          direction: request
-          description: |
-            This API is used to obtain a list of option securities by the option chain expiry date.
-
-            ```protobuf
-            message OptionChainDateStrikeInfoRequest {
-              string symbol = 1;
-              string expiry_date = 2;
-            }
-
-            message OptionChainDateStrikeInfoResponse {
-              repeated StrikePriceInfo strike_price_info = 1;
-            }
-            ```
-          x-description-zh: |
-            该接口用于获取标的的期权链到期日期权标的列表。
-
-            ```protobuf
-            message OptionChainDateStrikeInfoRequest {
-              string symbol = 1;
-              string expiry_date = 2;
-            }
-
-            message OptionChainDateStrikeInfoResponse {
-              repeated StrikePriceInfo strike_price_info = 1;
-            }
-            ```
-          x-description-zh-hk: |
-            該接口用於獲取標的的期權鏈到期日期權標的列表。
-
-            ```protobuf
-            message OptionChainDateStrikeInfoRequest {
-              string symbol = 1;
-              string expiry_date = 2;
-            }
-
-            message OptionChainDateStrikeInfoResponse {
-              repeated StrikePriceInfo strike_price_info = 1;
-            }
-            ```
-          x-request-examples:
-            - lang: Python
-              label: "Python"
-              source: |
-                # authed WebSocket `ws` (see Real-Time Market Data for OTP connect + auth)
-                import struct
-                from longport.quote import quote_pb2  # protobuf types generated from the .proto
-
-                body = quote_pb2.OptionChainDateStrikeInfoRequest(symbol="AAPL.US", expiry_date="20220429").SerializeToString()
-
-                # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x01, 21]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
-                ws.send(pkt)  # binary frame
-
-                raw = ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
-                n = int.from_bytes(raw[7:10], "big")
-                resp = quote_pb2.OptionChainDateStrikeInfoResponse()
-                resp.ParseFromString(raw[10:10 + n])
-                print(resp)
-            - lang: Python
-              label: "Python (async)"
-              source: |
-                # authed WebSocket `ws` (see Real-Time Market Data for OTP connect + auth)
-                import struct, asyncio
-                from longport.quote import quote_pb2  # protobuf types generated from the .proto
-
-                body = quote_pb2.OptionChainDateStrikeInfoRequest(symbol="AAPL.US", expiry_date="20220429").SerializeToString()
-
-                # frame: type/verify/gzip/reserve(1) | cmd(1) | request_id(4) | timeout(2) | body_len(3)
-                pkt = bytes([0x01, 21]) + struct.pack(">IH", 1, 5000) + len(body).to_bytes(3, "big") + body
-                await ws.send(pkt)  # binary frame
-
-                raw = await ws.recv()  # response: header, cmd, request_id(4), status, body_len(3), body
-                n = int.from_bytes(raw[7:10], "big")
-                resp = quote_pb2.OptionChainDateStrikeInfoResponse()
-                resp.ParseFromString(raw[10:10 + n])
-                print(resp)  # inside: async def main(): ... asyncio.run(main())
-            - lang: JavaScript
-              label: "Node.js"
-              source: |
-                // authed WebSocket `ws` (see Real-Time Market Data for OTP connect + auth)
-                // message types from protobufjs (loaded from the .proto)
-
-                const body = OptionChainDateStrikeInfoRequest.encode({ symbol: "AAPL.US", expiry_date: "20220429" }).finish()
-                const hdr = Buffer.from([0x01, 21])
-                const meta = Buffer.alloc(6); meta.writeUInt32BE(1, 0); meta.writeUInt16BE(5000, 4)
-                const len = Buffer.from([body.length >> 16, body.length >> 8, body.length])
-                ws.send(Buffer.concat([hdr, meta, len, body]))  // binary frame
-
-                ws.once("message", (raw) => {  // response: header, cmd, request_id(4), status, body_len(3), body
-                  const n = (raw[7] << 16) | (raw[8] << 8) | raw[9]
-                  const resp = OptionChainDateStrikeInfoResponse.decode(raw.subarray(10, 10 + n))
-                  console.log(resp)
-                })
-            - lang: Java
-              label: "Java"
-              source: |
-                // authed WebSocket `ws` (see Real-Time Market Data for connect + auth)
-                // protobuf classes generated from the .proto; java.nio.ByteBuffer for framing
-
-                byte[] body = OptionChainDateStrikeInfoRequest.newBuilder()/* set fields per the Request table */.build().toByteArray();
-                ByteBuffer buf = ByteBuffer.allocate(11 + body.length);
-                buf.put((byte) 0x01).put((byte) 21);          // header, cmd
-                buf.putInt(1).putShort((short) 5000);            // request_id, timeout
-                buf.put((byte)(body.length >> 16)).put((byte)(body.length >> 8)).put((byte) body.length);
-                buf.put(body);
-                ws.sendBinary(buf.array(), true);
-
-                // raw = the received binary frame (header, cmd, request_id(4), status, body_len(3), body)
-                int n = ((raw[7] & 0xff) << 16) | ((raw[8] & 0xff) << 8) | (raw[9] & 0xff);
-                OptionChainDateStrikeInfoResponse resp = OptionChainDateStrikeInfoResponse.parseFrom(Arrays.copyOfRange(raw, 10, 10 + n));
-                System.out.println(resp);
-            - lang: Rust
-              label: "Rust"
-              source: |
-                // authed WebSocket `ws` (see Real-Time Market Data for connect + auth)
-                // prost messages; tokio-tungstenite Message::Binary
-
-                let body = OptionChainDateStrikeInfoRequest { /* set fields per the Request table */ ..Default::default() }.encode_to_vec();
-                let mut pkt = vec![0x01u8, 21];
-                pkt.extend_from_slice(&1u32.to_be_bytes());        // request_id
-                pkt.extend_from_slice(&5000u16.to_be_bytes());     // timeout
-                let bl = body.len();
-                pkt.extend_from_slice(&[(bl >> 16) as u8, (bl >> 8) as u8, bl as u8]);
-                pkt.extend_from_slice(&body);
-                ws.send(Message::Binary(pkt)).await?;
-
-                let raw = ws.next().await.unwrap()?.into_data();  // header, cmd, request_id(4), status, body_len(3), body
-                let n = ((raw[7] as usize) << 16) | ((raw[8] as usize) << 8) | raw[9] as usize;
-                let resp = OptionChainDateStrikeInfoResponse::decode(&raw[10..10 + n])?;
-                println!("{:?}", resp);
-            - lang: C++
-              label: "C++"
-              source: |
-                // authed WebSocket `ws` (see Real-Time Market Data for connect + auth)
-                // protobuf classes generated from the .proto
-
-                OptionChainDateStrikeInfoRequest req; /* set fields per the Request table */
-                std::string body; req.SerializeToString(&body);
-                std::string pkt;
-                pkt.push_back(0x01); pkt.push_back(21);                       // header, cmd
-                uint32_t rid = 1; uint16_t to = 5000;
-                pkt.append({(char)(rid>>24),(char)(rid>>16),(char)(rid>>8),(char)rid});
-                pkt.append({(char)(to>>8),(char)to});
-                size_t bl = body.size();
-                pkt.append({(char)(bl>>16),(char)(bl>>8),(char)bl});
-                pkt += body;
-                ws.sendBinary(pkt);
-
-                // raw = received binary frame (header, cmd, request_id(4), status, body_len(3), body)
-                int n = ((uint8_t)raw[7] << 16) | ((uint8_t)raw[8] << 8) | (uint8_t)raw[9];
-                OptionChainDateStrikeInfoResponse resp; resp.ParseFromString(raw.substr(10, n));
-                std::cout << resp.DebugString();
-            - lang: Go
-              label: "Go"
-              source: |
-                // authed *websocket.Conn `ws` (see Real-Time Market Data for connect + auth)
-                // import "encoding/binary"; protobuf messages via google.golang.org/protobuf/proto
-
-                req := &quote.OptionChainDateStrikeInfoRequest{/* set fields per the Request table */}
-                body, _ := proto.Marshal(req)
-                // frame: header(1) cmd(1) request_id(4) timeout(2) body_len(3) body
-                pkt := []byte{0x01, 21}
-                pkt = binary.BigEndian.AppendUint32(pkt, 1)
-                pkt = binary.BigEndian.AppendUint16(pkt, 5000)
-                pkt = append(pkt, byte(len(body)>>16), byte(len(body)>>8), byte(len(body)))
-                pkt = append(pkt, body...)
-                ws.WriteMessage(websocket.BinaryMessage, pkt)
-
-                _, raw, _ := ws.ReadMessage()  // response: header, cmd, request_id(4), status, body_len(3), body
-                n := int(raw[7])<<16 | int(raw[8])<<8 | int(raw[9])
-                resp := &quote.OptionChainDateStrikeInfoResponse{}
-                proto.Unmarshal(raw[10:10+n], resp)
-                fmt.Println(resp)
-          x-response-example: |
-            {
-              "strike_price_info": [
-                {
-                  "price": "100",
-                  "call_symbol": "AAPL220429C100000.US",
-                  "put_symbol": "AAPL220429P100000.US",
-                  "standard": true
-                }
-              ]
-            }
-          x-fields:
-            - name: "symbol"
-              type: "string"
-              required: true
-              description: "Security code, in ticker.region format, for example: 700.HK"
-              x-description-zh: "标的代码，使用 ticker.region 格式，例如：700.HK"
-              x-description-zh-hk: "標的代碼，使用 ticker.region 格式，例如：700.HK"
-            - name: "expiry_date"
-              type: "string"
-              required: true
-              description: "Option expiry date, in YYMMDD format, for example: 20220429, obtained by Option Expiry Date API"
-              x-description-zh: "期权到期日，使用 YYMMDD 格式，例如：20220429，通过期权到期日接口获取"
-              x-description-zh-hk: "期權到期日，使用 YYMMDD 格式，例如：20220429，通過期權到期日接口獲取"
-          x-response-fields:
-            - name: "strike_price_info"
-              type: "object[]"
-              required: false
-              description: "Option security info"
-              x-description-zh: "到期日期权标的列表"
-              x-description-zh-hk: "到期日期權標的列表"
-            - name: "└ price"
-              type: "string"
-              required: false
-              description: "Strike price"
-              x-description-zh: "行权价"
-              x-description-zh-hk: "行權價"
-            - name: "└ call_symbol"
-              type: "string"
-              required: false
-              description: "Security code of call option"
-              x-description-zh: "CALL 期权标的代码"
-              x-description-zh-hk: "CALL 期權標的代碼"
-            - name: "└ put_symbol"
-              type: "string"
-              required: false
-              description: "Security code of put option"
-              x-description-zh: "PUT 期权标的代码"
-              x-description-zh-hk: "PUT 期權標的代碼"
-            - name: "└ standard"
-              type: "bool"
-              required: false
-              description: "Is standard"
-              x-description-zh: "是否标准期权"
-              x-description-zh-hk: "是否標準期權"
+              description: "Option chain expiry dates, in YYYYMMDD format"
+              x-description-zh: "标的对应的期权链到期日列表，使用 YYYYMMDD 格式"
+              x-description-zh-hk: "標的對應的期權鏈到期日列表，使用 YYYYMMDD 格式"
         - id: ws-issuers
           x-quote-command: warrant
           x-subgroup: Warrants
@@ -24391,6 +24156,380 @@ paths:
                           date_type: ''
                           financial_market_time: ''
                           data_kv: []
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/options/expiry-dates:
+    post:
+      operationId: option_chain_expiry_date_list
+      summary: Option Expiry Dates
+      x-summary-zh: 期权到期日
+      x-summary-zh-hk: 期權到期日
+      description: |
+        Get the list of option expiry dates of an underlying security. Use the returned dates as `expiry_date` for `POST /v1/quote/options/strikes`.
+      x-description-zh: |
+        获取标的的期权到期日列表。返回的日期可作为 `POST /v1/quote/options/strikes` 的 `expiry_date`。
+      x-description-zh-hk: |
+        獲取標的的期權到期日列表。返回的日期可作為 `POST /v1/quote/options/strikes` 的 `expiry_date`。
+      x-subgroup: Options
+      x-subgroup-zh: 期权
+      x-subgroup-zh-hk: 期權
+      tags:
+        - Quote
+      x-parameters:
+        - name: symbol
+          in: body
+          type: string
+          required: true
+          description: 'Underlying security code, in `ticker.region` format, e.g. `AAPL.US`'
+          x-description-zh: '标的代码，使用 `ticker.region` 格式，例如：`AAPL.US`'
+          x-description-zh-hk: '標的代碼，使用 `ticker.region` 格式，例如：`AAPL.US`'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge option chain AAPL.US
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/quote/options/expiry-dates' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbol":"AAPL.US"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/quote/options/expiry-dates",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbol": "AAPL.US"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/quote/options/expiry-dates",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbol": "AAPL.US"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/options/expiry-dates", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ symbol: "AAPL.US" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/options/expiry-dates"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"AAPL.US\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/quote/options/expiry-dates")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbol": "AAPL.US" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/options/expiry-dates");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"AAPL.US\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/options/expiry-dates\", strings.NewReader(`{\"symbol\":\"AAPL.US\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: expiry_date
+          type: string[]
+          required: true
+          description: 'Option expiry dates, in `YYYYMMDD` format. The list can include dates that have recently expired.'
+          x-description-zh: '期权到期日列表，使用 `YYYYMMDD` 格式。列表中可能包含刚过期的日期。'
+          x-description-zh-hk: '期權到期日列表，使用 `YYYYMMDD` 格式。列表中可能包含剛過期的日期。'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  expiry_date:
+                    - '20261023'
+                    - '20261030'
+                    - '20261120'
+                    - '20261218'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/quote/options/strikes:
+    post:
+      operationId: option_chain_info_by_date
+      summary: Option Chain
+      x-summary-zh: 期权链
+      x-summary-zh-hk: 期權鏈
+      description: |
+        Get the option contract list of an underlying security for a given expiry date. Every contract is an independent entry: calls and puts are not paired.
+      x-description-zh: |
+        获取标的在指定到期日下的期权合约列表。每张合约都是独立的一项，认购与认沽不配对。
+      x-description-zh-hk: |
+        獲取標的在指定到期日下的期權合約列表。每張合約都是獨立的一項，認購與認沽不配對。
+      x-subgroup: Options
+      x-subgroup-zh: 期权
+      x-subgroup-zh-hk: 期權
+      tags:
+        - Quote
+      x-parameters:
+        - name: symbol
+          in: body
+          type: string
+          required: true
+          description: 'Underlying security code, in `ticker.region` format, e.g. `BABA.US`'
+          x-description-zh: '标的代码，使用 `ticker.region` 格式，例如：`BABA.US`'
+          x-description-zh-hk: '標的代碼，使用 `ticker.region` 格式，例如：`BABA.US`'
+        - name: expiry_date
+          in: body
+          type: string
+          required: true
+          description: 'Option expiry date, in `YYYYMMDD` format, e.g. `20261218`. Get valid values from `POST /v1/quote/options/expiry-dates`'
+          x-description-zh: '期权到期日，使用 `YYYYMMDD` 格式，例如：`20261218`。有效值通过 `POST /v1/quote/options/expiry-dates` 获取'
+          x-description-zh-hk: '期權到期日，使用 `YYYYMMDD` 格式，例如：`20261218`。有效值通過 `POST /v1/quote/options/expiry-dates` 獲取'
+        - name: standard_only
+          in: body
+          type: boolean
+          required: false
+          description: 'Whether to filter out old contracts generated by corporate actions. `true` returns standard contracts only; omitted or `false` returns all contracts, including those with `standard_attr` = `old`'
+          x-description-zh: '是否过滤公司行动产生的旧合约。`true` 只返回标准合约；不传或 `false` 返回全部合约，包括 `standard_attr` 为 `old` 的合约'
+          x-description-zh-hk: '是否過濾公司行動產生的舊合約。`true` 只返回標準合約；不傳或 `false` 返回全部合約，包括 `standard_attr` 為 `old` 的合約'
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge option chain BABA.US --date 2026-12-18
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request POST \
+              --url 'https://openapi.longbridge.com/v1/quote/options/strikes' \
+              --header 'Authorization: Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{"symbol":"BABA.US","expiry_date":"20261218"}'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.post(
+                "https://openapi.longbridge.com/v1/quote/options/strikes",
+                headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                json={"symbol": "BABA.US", "expiry_date": "20261218"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        "https://openapi.longbridge.com/v1/quote/options/strikes",
+                        headers={"Authorization": "Bearer <access_token>", "Content-Type": "application/json"},
+                        json={"symbol": "BABA.US", "expiry_date": "20261218"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/quote/options/strikes", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ symbol: "BABA.US", expiry_date: "20261218" }),
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/quote/options/strikes"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .header("Content-Type", "application/json")
+                    .method("POST", HttpRequest.BodyPublishers.ofString("{\"symbol\":\"BABA.US\",\"expiry_date\":\"20261218\"}"))
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::POST, "https://openapi.longbridge.com/v1/quote/options/strikes")
+                    .header("Authorization", "Bearer <access_token>")
+                    .json(&serde_json::json!({ "symbol": "BABA.US" , "expiry_date": "20261218" }))
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/quote/options/strikes");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"symbol\":\"BABA.US\",\"expiry_date\":\"20261218\"}");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"POST\", \"https://openapi.longbridge.com/v1/quote/options/strikes\", strings.NewReader(`{\"symbol\":\"BABA.US\",\"expiry_date\":\"20261218\"}`))\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: list
+          type: object[]
+          required: true
+          description: 'Option contract list. Standard contracts come first, then contracts with `standard_attr` = `old`; within each group, entries are ordered by `option_type`, then `strike_price` ascending, then calls before puts'
+          x-description-zh: '期权合约列表。标准合约在前，`standard_attr` 为 `old` 的合约在后；每组内依次按 `option_type`、`strike_price` 升序、先认购后认沽排序'
+          x-description-zh-hk: '期權合約列表。標準合約在前，`standard_attr` 為 `old` 的合約在後；每組內依次按 `option_type`、`strike_price` 升序、先認購後認沽排序'
+        - name: └ expiry_date
+          type: string
+          required: true
+          description: 'Expiry date in US Eastern time, in `YYYYMMDD` format'
+          x-description-zh: '到期日（美东时间），使用 `YYYYMMDD` 格式'
+          x-description-zh-hk: '到期日（美東時間），使用 `YYYYMMDD` 格式'
+        - name: └ strike_price
+          type: string
+          required: true
+          description: 'Strike price'
+          x-description-zh: '行权价'
+          x-description-zh-hk: '行權價'
+        - name: └ direction
+          type: string
+          required: true
+          description: 'Contract direction. `C`: call; `P`: put'
+          x-description-zh: '合约方向。`C`：认购；`P`：认沽'
+          x-description-zh-hk: '合約方向。`C`：認購；`P`：認沽'
+        - name: └ symbol
+          type: string
+          required: true
+          description: 'Option contract code, in `ticker.region` format'
+          x-description-zh: '期权合约代码，使用 `ticker.region` 格式'
+          x-description-zh-hk: '期權合約代碼，使用 `ticker.region` 格式'
+        - name: └ standard_attr
+          type: string
+          required: true
+          description: '`old` marks a legacy contract resulting from a corporate action (e.g. stock split, merger); empty for a normal active contract'
+          x-description-zh: '`old` 表示公司行动（如拆股、合并）产生的旧合约；正常合约为空'
+          x-description-zh-hk: '`old` 表示公司行動（如拆股、合併）產生的舊合約；正常合約為空'
+        - name: └ option_type
+          type: string
+          required: true
+          description: 'Special expiration cycle type. `W`: weekly; `Q`: quarterly; empty for a standard monthly option'
+          x-description-zh: '特殊到期周期类型。`W`：周度期权；`Q`：季度期权；标准月度期权为空'
+          x-description-zh-hk: '特殊到期週期類型。`W`：週度期權；`Q`：季度期權；標準月度期權為空'
+        - name: └ days_to_expiry
+          type: int32
+          required: true
+          description: 'Days remaining until expiry, updated daily at midnight ET. `0` for options expiring today, negative for already-expired options'
+          x-description-zh: '距到期剩余天数，每日美东时间零点更新。当日到期为 `0`，已过期为负数'
+          x-description-zh-hk: '距到期剩餘天數，每日美東時間零點更新。當日到期為 `0`，已過期為負數'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                message: success
+                data:
+                  list:
+                    - expiry_date: '20261218'
+                      strike_price: '50'
+                      direction: C
+                      symbol: BABA261218C50000.US
+                      standard_attr: ''
+                      option_type: ''
+                      days_to_expiry: 106
+                    - expiry_date: '20261218'
+                      strike_price: '50'
+                      direction: P
+                      symbol: BABA261218P50000.US
+                      standard_attr: ''
+                      option_type: ''
+                      days_to_expiry: 106
         default:
           description: Unexpected error
           content:

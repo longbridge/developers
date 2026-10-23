@@ -20,3 +20,8 @@
 # /en 裸前缀 → 站点根。该路径没有对应产物（en 是 root locale，不生成 /en/ 页面），
 # 不存在劫持静态文件的风险。
 /en    /    302
+
+# 已下线的文档 slug → 现行页面。旧页面不再生成产物，不存在劫持静态文件的风险。
+/docs/quote/pull/optionchain-date-strike          /docs/quote/pull/option-chain          301
+/zh-CN/docs/quote/pull/optionchain-date-strike    /zh-CN/docs/quote/pull/option-chain    301
+/zh-HK/docs/quote/pull/optionchain-date-strike    /zh-HK/docs/quote/pull/option-chain    301

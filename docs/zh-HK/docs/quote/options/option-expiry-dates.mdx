@@ -22,6 +22,12 @@ longbridge option chain AAPL.US
 
 <SDKLinks module="quote" klass="QuoteContext" method="option_chain_expiry_date_list" />
 
+:::info
+
+SDK 方法 `option_chain_expiry_date_list` 返回到期日列表（日期類型）。默認通過長連接發送[業務指令](../../socket/biz_command) `20`；將 SDK 的行情傳輸方式設置為 HTTP 時，改為調用本 HTTP 接口。
+
+:::
+
 ## 請求
 
 <table className="http-basic">
