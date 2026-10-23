@@ -426,7 +426,7 @@ APIs that read account data or trade require the token to carry the matching sco
 
 The `/oauth2/register` response lists scopes as numeric ids (for example `"4 6 10 11 12"`). The ids are environment-specific: on `openapi.longbridge.com`, `4`, `6`, `10` and `11` are `watchlist`, `account.read`, `trade.read` and `trade.write`. Treat any other id as opaque and rely on the scope keys.
 
-If an API returns error `403308` (`Target API's scope is not in authorized scopes`), the token was not granted the scope that API needs. Delete the stored token under `~/.longbridge/openapi/tokens/<client_id>`, authorize again and grant that scope. See [Error Codes](/docs/error-codes).
+If an API returns error `403308` (`Target API's scope is not in authorized scopes`), the token was not granted the scope that API needs. Delete the stored token under `~/.longbridge/openapi/tokens/<client_id>`, authorize again and grant that scope. See [Error Codes](/docs/api?page=error-codes).
 
 <a id="oauth-signout"></a>
 

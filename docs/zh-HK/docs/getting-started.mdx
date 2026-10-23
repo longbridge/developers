@@ -428,7 +428,7 @@ OAuth Token 應安全儲存在應用程式中（如加密檔案、安全金鑰�
 
 `/oauth2/register` 的響應以數字 ID 列出 scope（例如 `"4 6 10 11 12"`）。這些 ID 因環境而異：在 `openapi.longbridge.com` 上，`4`、`6`、`10`、`11` 分別對應 `watchlist`、`account.read`、`trade.read`、`trade.write`。其他 ID 請視為不透明值，以 scope key 為準。
 
-如果接口返回錯誤碼 `403308`（`Target API's scope is not in authorized scopes`），說明 Token 未被授予該接口所需的 scope。請刪除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授權並勾選該 scope。參見[錯誤碼](/zh-HK/docs/error-codes)。
+如果接口返回錯誤碼 `403308`（`Target API's scope is not in authorized scopes`），說明 Token 未被授予該接口所需的 scope。請刪除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授權並勾選該 scope。參見[錯誤碼](/zh-HK/docs/api?page=error-codes)。
 
 <a id="oauth-signout"></a>
 
