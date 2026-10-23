@@ -221,6 +221,10 @@ func main() {
       "position_side": "LONG",
       "quantity": "0.01",
       "average_cost": "108000.00",
+      "last_done": "110250.00",
+      "prev_close": "109800.00",
+      "market_price": "110250.00",
+      "today_pl": "4.50",
       "currency": "USD",
       "industry_name": "",
       "trade_status": "105"
@@ -310,5 +314,11 @@ func main() {
 | currency | string | Quote currency |
 | asset_type | string | Asset type: `CRYPTO` |
 | industry_name | string | Industry/category name |
+| position_side | string | Position side, e.g. `LONG`. Returned by the HTTP API |
+| trade_status | string | Trading status code, e.g. `105`. Returned by the HTTP API |
+| prev_close | string | Previous close price. Returned by the HTTP API |
+| last_done | string | Last traded price. Returned by the HTTP API |
+| market_price | string | Current market price. Returned by the HTTP API |
+| today_pl | string | Today's P&L. Returned by the HTTP API |
 
 The HTTP API returns crypto entries with the same fields as stock entries except `full_symbol`; the SDK crypto type may expose only the fields above that lack the "Returned by the HTTP API" note.

@@ -222,6 +222,10 @@ func main() {
       "position_side": "LONG",
       "quantity": "0.01",
       "average_cost": "108000.00",
+      "last_done": "110250.00",
+      "prev_close": "109800.00",
+      "market_price": "110250.00",
+      "today_pl": "4.50",
       "currency": "USD",
       "industry_name": "",
       "trade_status": "105"
@@ -311,5 +315,11 @@ func main() {
 | currency | string | 計價貨幣 |
 | asset_type | string | 資產類型：`CRYPTO` |
 | industry_name | string | 行業/分類名稱 |
+| position_side | string | 持倉方向，例如 `LONG`。由 HTTP 接口返回 |
+| trade_status | string | 交易狀態代碼，例如 `105`。由 HTTP 接口返回 |
+| prev_close | string | 上一收盤價。由 HTTP 接口返回 |
+| last_done | string | 最新成交價。由 HTTP 接口返回 |
+| market_price | string | 當前市場價格。由 HTTP 接口返回 |
+| today_pl | string | 當日盈虧。由 HTTP 接口返回 |
 
 HTTP 接口返回的加密貨幣記錄除 `full_symbol` 外與股票記錄字段相同；SDK 的加密貨幣類型可能只包含上表中未標註「由 HTTP 接口返回」的字段。

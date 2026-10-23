@@ -30,15 +30,17 @@ longbridge order
 # Step 1: preview only. Nothing is sent; the preview ends with a confirmation code
 longbridge order buy TSLA.US 100 --price 250.00
 # Step 2: re-run the identical command with that code to place the order
-longbridge order buy TSLA.US 100 --price 250.00 --execute 473
+longbridge order buy TSLA.US 100 --price 250.00 --execute <CODE>
 ```
+
+Replace `<CODE>` with the confirmation code printed by the preview.
 
 ### Cancel an open order
 
 ```bash
 # Preview the cancellation, then re-run with the confirmation code to cancel
 longbridge order cancel 701276261045858304
-longbridge order cancel 701276261045858304 --execute 473
+longbridge order cancel 701276261045858304 --execute <CODE>
 ```
 
 Only orders in cancellable states (New, PartialFilled, etc.) are accepted.

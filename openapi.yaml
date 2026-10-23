@@ -13839,19 +13839,19 @@ paths:
       x-summary-zh-hk: 訂單詳情
       description: |
         :::warning Not for Longbridge US Accounts
-        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and should use US Order Detail (`us_order_detail`, `GET /v1/us/orders/{order_id}`) instead.
+        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported; the SDK `order_detail` method returns a region restriction error for them without sending the request. US data-center accounts should use US Order Detail (`us_order_detail`, `GET /v1/us/orders/{order_id}`) instead.
         :::
 
         This API is used for order detail query
       x-description-zh: |
         :::warning Longbridge US 账户不支持
-        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户。美股数据中心账户请改用美股委托详情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
+        此接口需要 AP 数据中心账户（香港/新加坡），不支持美股数据中心账户；SDK 的 `order_detail` 方法对美股数据中心账户会直接返回区域限制错误，不会发出请求。美股数据中心账户请改用美股委托详情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
         :::
 
         该接口用于订单详情查询。
       x-description-zh-hk: |
         :::warning Longbridge US 賬戶不支援
-        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶。美股數據中心賬戶請改用美股委託詳情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
+        此接口需要 AP 數據中心賬戶（香港/新加坡），不支援美股數據中心賬戶；SDK 的 `order_detail` 方法對美股數據中心賬戶會直接返回區域限制錯誤，不會發出請求。美股數據中心賬戶請改用美股委託詳情（`us_order_detail`，`GET /v1/us/orders/{order_id}`）。
         :::
 
         該接口用於訂單詳情查詢。
@@ -25060,10 +25060,22 @@ paths:
       x-summary-zh: 全部成交明细
       x-summary-zh-hk: 全部成交明細
       description: |
+        :::warning Not for Longbridge US Accounts
+        This API requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. US data-center accounts should use History Executions (`history_executions`, `GET /v1/trade/execution/history`) instead.
+        :::
+
         This API is used to query execution (fill) records, including both buy and sell records. It supports querying today's and historical executions at the same time.
       x-description-zh: |
+        :::warning Longbridge US 账户不支持
+        此接口需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。美股数据中心账户请改用历史成交明细（`history_executions`，`GET /v1/trade/execution/history`）。
+        :::
+
         该接口用于获取订单的成交明细，包括买入和卖出的成交记录，同时支持当日成交和历史成交查询。
       x-description-zh-hk: |
+        :::warning Longbridge US 賬戶不支援
+        此接口需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。美股數據中心賬戶請改用歷史成交明細（`history_executions`，`GET /v1/trade/execution/history`）。
+        :::
+
         該接口用於獲取訂單的成交明細，包括買入和賣出的成交記錄，同時支持當日成交和歷史成交查詢。
       x-subgroup: Execution
       x-subgroup-zh: 成交
@@ -39680,6 +39692,54 @@ paths:
           description: Stock positions
           x-description-zh: 股票持仓
           x-description-zh-hk: 股票持倉
+        - name: └ symbol
+          type: string
+          required: false
+          description: 'Bare ticker without the market suffix, e.g. `MULL`'
+          x-description-zh: '不带市场后缀的股票代码，例如 `MULL`'
+          x-description-zh-hk: '不帶市場後綴的股票代碼，例如 `MULL`'
+        - name: └ full_symbol
+          type: string
+          required: false
+          description: 'Qualified symbol, e.g. `MULL.US`'
+          x-description-zh: '完整代码，例如 `MULL.US`'
+          x-description-zh-hk: '完整代碼，例如 `MULL.US`'
+        - name: └ quantity
+          type: string
+          required: false
+          description: 'Quantity held'
+          x-description-zh: '持有数量'
+          x-description-zh-hk: '持有數量'
+        - name: └ average_cost
+          type: string
+          required: false
+          description: 'Average cost price'
+          x-description-zh: '平均持仓成本价'
+          x-description-zh-hk: '平均持倉成本價'
+        - name: └ last_done
+          type: string
+          required: false
+          description: 'Last traded price'
+          x-description-zh: '最新成交价'
+          x-description-zh-hk: '最新成交價'
+        - name: └ market_price
+          type: string
+          required: false
+          description: 'Current market price'
+          x-description-zh: '当前市场价格'
+          x-description-zh-hk: '當前市場價格'
+        - name: └ today_pl
+          type: string
+          required: false
+          description: 'Today''s P&L'
+          x-description-zh: '当日盈亏'
+          x-description-zh-hk: '當日盈虧'
+        - name: └ position_side
+          type: string
+          required: false
+          description: 'Position side, e.g. `LONG`'
+          x-description-zh: '持仓方向，例如 `LONG`'
+          x-description-zh-hk: '持倉方向，例如 `LONG`'
         - name: option_list
           type: object[]
           required: false
@@ -39692,6 +39752,48 @@ paths:
           description: 'Crypto positions. Each entry''s `symbol` is the bare pair ticker (e.g. `BTCUSD`) with the market in `market` (`BKKT`); other APIs use the `TICKER.MARKET` form `BTCUSD.BKKT`'
           x-description-zh: '加密货币持仓。每条记录的 `symbol` 为不带后缀的交易对代码（例如 `BTCUSD`），市场在 `market` 字段中（`BKKT`）；其他接口使用 `TICKER.MARKET` 格式 `BTCUSD.BKKT`'
           x-description-zh-hk: '加密貨幣持倉。每條記錄的 `symbol` 為不帶後綴的交易對代碼（例如 `BTCUSD`），市場在 `market` 欄位中（`BKKT`）；其他接口使用 `TICKER.MARKET` 格式 `BTCUSD.BKKT`'
+        - name: └ symbol
+          type: string
+          required: false
+          description: 'Bare pair ticker, e.g. `BTCUSD`'
+          x-description-zh: '不带后缀的交易对代码，例如 `BTCUSD`'
+          x-description-zh-hk: '不帶後綴的交易對代碼，例如 `BTCUSD`'
+        - name: └ market
+          type: string
+          required: false
+          description: 'Market: `BKKT`'
+          x-description-zh: '市场：`BKKT`'
+          x-description-zh-hk: '市場：`BKKT`'
+        - name: └ quantity
+          type: string
+          required: false
+          description: 'Quantity held'
+          x-description-zh: '持有数量'
+          x-description-zh-hk: '持有數量'
+        - name: └ average_cost
+          type: string
+          required: false
+          description: 'Average cost price'
+          x-description-zh: '平均持仓成本价'
+          x-description-zh-hk: '平均持倉成本價'
+        - name: └ last_done
+          type: string
+          required: false
+          description: 'Last traded price. Returned by the HTTP API'
+          x-description-zh: '最新成交价。由 HTTP 接口返回'
+          x-description-zh-hk: '最新成交價。由 HTTP 接口返回'
+        - name: └ market_price
+          type: string
+          required: false
+          description: 'Current market price. Returned by the HTTP API'
+          x-description-zh: '当前市场价格。由 HTTP 接口返回'
+          x-description-zh-hk: '當前市場價格。由 HTTP 接口返回'
+        - name: └ today_pl
+          type: string
+          required: false
+          description: 'Today''s P&L. Returned by the HTTP API'
+          x-description-zh: '当日盈亏。由 HTTP 接口返回'
+          x-description-zh-hk: '當日盈虧。由 HTTP 接口返回'
         - name: multi_leg
           type: object
           required: false
@@ -39743,6 +39845,10 @@ paths:
                     position_side: LONG
                     quantity: '0.01'
                     average_cost: '108000.00'
+                    last_done: '110250.00'
+                    prev_close: '109800.00'
+                    market_price: '110250.00'
+                    today_pl: '4.50'
                     currency: USD
                     industry_name: ''
                     trade_status: '105'
@@ -40672,9 +40778,9 @@ paths:
         - name: └ currency
           type: string
           required: false
-          description: Currency
-          x-description-zh: 货币
-          x-description-zh-hk: 貨幣
+          description: 'Currency, e.g. `USD`; may be empty, e.g. for crypto movements'
+          x-description-zh: '货币，例如 `USD`；可能为空，例如加密货币转入转出记录'
+          x-description-zh-hk: '貨幣，例如 `USD`；可能為空，例如加密貨幣轉入轉出記錄'
         - name: └ symbol
           type: string
           required: false
@@ -42224,19 +42330,19 @@ paths:
       x-summary-zh-hk: 當日訂單
       description: |
         :::tip Longbridge US Accounts
-        Longbridge US accounts should prefer US Order History (`us_query_orders`, `POST /v1/us/orders/query`).
+        This API also works for Longbridge US data-center accounts. US Order History (`us_query_orders`, `POST /v1/us/orders/query`) additionally offers page-based pagination with a total count and a `query_type` filter for pending or filled orders.
         :::
 
         This API is used to get today order or get order by order id.
       x-description-zh: |
         :::tip Longbridge US 账户
-        Longbridge US 账户建议优先使用美股历史委托（`us_query_orders`，`POST /v1/us/orders/query`）。
+        此接口同样适用于 Longbridge US 数据中心账户。美股历史委托（`us_query_orders`，`POST /v1/us/orders/query`）另外提供带总数的分页查询，以及按挂单或已成交筛选的 `query_type` 参数。
         :::
 
         该接口用于获取当日订单和订单查询。
       x-description-zh-hk: |
         :::tip Longbridge US 賬戶
-        Longbridge US 賬戶建議優先使用美股歷史委託（`us_query_orders`，`POST /v1/us/orders/query`）。
+        此接口同樣適用於 Longbridge US 數據中心賬戶。美股歷史委託（`us_query_orders`，`POST /v1/us/orders/query`）另外提供帶總數的分頁查詢，以及按掛單或已成交篩選的 `query_type` 參數。
         :::
 
         該接口用於獲取當日訂單和訂單查詢。
@@ -42686,19 +42792,19 @@ paths:
       x-summary-zh-hk: 歷史訂單
       description: |
         :::tip Longbridge US Accounts
-        Longbridge US accounts should prefer US Order History (`us_query_orders`, `POST /v1/us/orders/query`).
+        This API also works for Longbridge US data-center accounts. US Order History (`us_query_orders`, `POST /v1/us/orders/query`) additionally offers page-based pagination with a total count and a `query_type` filter for pending or filled orders.
         :::
 
         This API is used to get history order.
       x-description-zh: |
         :::tip Longbridge US 账户
-        Longbridge US 账户建议优先使用美股历史委托（`us_query_orders`，`POST /v1/us/orders/query`）。
+        此接口同样适用于 Longbridge US 数据中心账户。美股历史委托（`us_query_orders`，`POST /v1/us/orders/query`）另外提供带总数的分页查询，以及按挂单或已成交筛选的 `query_type` 参数。
         :::
 
         该接口用于获取历史订单。
       x-description-zh-hk: |
         :::tip Longbridge US 賬戶
-        Longbridge US 賬戶建議優先使用美股歷史委託（`us_query_orders`，`POST /v1/us/orders/query`）。
+        此接口同樣適用於 Longbridge US 數據中心賬戶。美股歷史委託（`us_query_orders`，`POST /v1/us/orders/query`）另外提供帶總數的分頁查詢，以及按掛單或已成交篩選的 `query_type` 參數。
         :::
 
         該接口用於獲取歷史訂單。

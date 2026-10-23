@@ -30,15 +30,17 @@ longbridge order
 # 第一步：仅预览，不发送任何请求；预览末尾会给出确认码
 longbridge order buy TSLA.US 100 --price 250.00
 # 第二步：带上该确认码重新执行相同命令，才会真正下单
-longbridge order buy TSLA.US 100 --price 250.00 --execute 473
+longbridge order buy TSLA.US 100 --price 250.00 --execute <CODE>
 ```
+
+将 `<CODE>` 替换为预览输出的确认码。
 
 ### 撤销未成交委托
 
 ```bash
 # 先预览撤单，再带上确认码重新执行以撤单
 longbridge order cancel 701276261045858304
-longbridge order cancel 701276261045858304 --execute 473
+longbridge order cancel 701276261045858304 --execute <CODE>
 ```
 
 仅接受处于可撤状态的委托（New、PartialFilled 等）。
