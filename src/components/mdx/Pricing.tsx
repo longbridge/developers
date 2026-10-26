@@ -5,6 +5,7 @@
  * No AppNav / AppFooter — BaseLayout.astro already renders TopNav + Footer.
  */
 import { useState, useMemo, useEffect } from 'react'
+import { isUSUser } from '@longbridge/openapi-utils'
 import './Pricing.css'
 
 // ── Inline i18n ───────────────────────────────────────────────────────────────
@@ -340,6 +341,11 @@ function getPlanCycle(plan: { cycles: Record<string, PlanCycle> }, cycleKey: str
 export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-CN' | 'zh-HK' } = {}) {
   const [locale, setLocale] = useState<'en' | 'zh-CN' | 'zh-HK'>(initialLocale)
   const [cycle, setCycle] = useState('auto')
+  const [isUS, setIsUS] = useState(false)
+
+  useEffect(() => {
+    isUSUser().then(setIsUS)
+  }, [])
 
   // Detect locale from URL pathname on client (fallback / safety net)
   useEffect(() => {
@@ -452,7 +458,8 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
         </div>
       </section>
 
-      {/* Paid Plans */}
+      {/* Paid Plans（美国用户隐藏） */}
+      {!isUS && (
       <section className="section" style={{ paddingTop: '32px' }}>
         <div className="section-inner">
           <div
@@ -566,6 +573,7 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
           </div>
         </div>
       </section>
+      )}
 
       {/* Feature Matrix */}
       <section className="section" style={{ paddingTop: '48px', paddingBottom: '80px' }}>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { t, type Locale } from '@longbridge/openapi-utils'
+import { t, isUSUser, type Locale } from '@longbridge/openapi-utils'
 import { nav as navEn } from '../../data/nav.en'
 import { nav as navZhCN } from '../../data/nav.zh-CN'
 import { nav as navZhHK } from '../../data/nav.zh-HK'
@@ -78,9 +78,17 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
   // CN region hides Pricing / Docs / the Features menu (legacy CN_HIDDEN_KEYS).
   const isCnRegion = import.meta.env.PUBLIC_REGION === 'cn'
   const CN_HIDDEN_LINKS = new Set(['/pricing', '/docs'])
-  const visibleNavItems = isCnRegion
-    ? navItems.filter((n) => !n.link || !CN_HIDDEN_LINKS.has(n.link))
-    : navItems
+  // 美国用户隐藏 Pricing（判定规则见 isUSUser）
+  const [isUS, setIsUS] = useState(false)
+  useEffect(() => {
+    isUSUser().then(setIsUS)
+  }, [])
+  const visibleNavItems = navItems.filter((n) => {
+    if (!n.link) return true
+    if (isCnRegion && CN_HIDDEN_LINKS.has(n.link)) return false
+    if (isUS && n.link === '/pricing') return false
+    return true
+  })
 
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 
