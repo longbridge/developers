@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::info Longbridge US Accounts
+On Longbridge US data-center accounts, the response omits `side`, so the SDKs report it as `Unknown`. To get the side, look up the order by `order_id` with [US Order Detail](/docs/trade/order/us_order_detail).
+:::
+
 This API is used to get today executions.
 
 <CliCommand>
@@ -266,13 +270,13 @@ func main() {
 <a id="schematoday_executions_rsp"></a>
 <a id="schematoday_executions_rsp"></a>
 
-| Name            | Type     | Required | Description                                                  |
-| --------------- | -------- | -------- | ------------------------------------------------------------ |
-| trades          | object[] | false    | Execution Detail                                             |
-| ∟ order_id      | string   | true     | Order ID                                                     |
-| ∟ trade_id      | string   | true     | Execution ID                                                 |
-| ∟ symbol        | string   | true     | Stock symbol, use `ticker.region` format, example: `AAPL.US` |
-| ∟ trade_done_at | string   | true     | Trade done time, formatted as a timestamp (second)           |
-| ∟ quantity      | string   | true     | Executed quantity                                            |
-| ∟ price         | string   | true     | Executed price                                               |
-| ∟ side          | string   | true     | Trade side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`  |
+| Name            | Type     | Required | Description                                                                                                         |
+| --------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| trades          | object[] | false    | Execution Detail                                                                                                    |
+| ∟ order_id      | string   | true     | Order ID                                                                                                            |
+| ∟ trade_id      | string   | true     | Execution ID                                                                                                        |
+| ∟ symbol        | string   | true     | Stock symbol, use `ticker.region` format, example: `AAPL.US`                                                        |
+| ∟ trade_done_at | string   | true     | Trade done time, formatted as a timestamp (second)                                                                  |
+| ∟ quantity      | string   | true     | Executed quantity                                                                                                   |
+| ∟ price         | string   | true     | Executed price                                                                                                      |
+| ∟ side          | string   | false    | Trade side; absent on Longbridge US accounts (SDKs report Unknown)<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell` |

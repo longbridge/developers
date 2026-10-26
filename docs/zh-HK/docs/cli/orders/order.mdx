@@ -8,6 +8,10 @@ sidebar_position: 1
 
 查看委託記錄和成交明細，或直接在終端提交買入/賣出委託。
 
+:::info Longbridge US 賬戶
+`order`（當日及 `--history`）、`order detail` 和 `order executions` 支援美股數據中心賬戶，`--format json` 輸出與 AP 賬戶結構一致；`--schema` 中標註為 `(US only)` 的欄位僅出現在美股記錄中。歷史成交來自 `/v1/trade/execution/history`,該接口不按成交時間過濾，且可能跨日延遲，因此時間範圍邊緣的成交可能缺失或多出。成交記錄缺少 `side` 時，會根據賬戶的委託補全，找不到對應委託時顯示為 `Unknown`。
+:::
+
 ## 基本用法
 
 ```bash
@@ -24,7 +28,26 @@ longbridge order
 
 ## 示例
 
-僅接受處於可撤狀態的委託（New、PartialFilled 等）。在腳本中使用 `-y` 跳過確認提示。
+### 提交委託
+
+```bash
+# 第一步：僅預覽，不發送任何請求；預覽末尾會給出確認碼
+longbridge order buy TSLA.US 100 --price 250.00
+# 第二步：帶上該確認碼重新執行相同命令，才會真正下單
+longbridge order buy TSLA.US 100 --price 250.00 --execute <CODE>
+```
+
+將 `<CODE>` 替換為預覽輸出的確認碼。
+
+### 撤銷未成交委託
+
+```bash
+# 先預覽撤單，再帶上確認碼重新執行以撤單
+longbridge order cancel 701276261045858304
+longbridge order cancel 701276261045858304 --execute <CODE>
+```
+
+僅接受處於可撤狀態的委託（New、PartialFilled 等）。
 
 ### 修改未成交委託
 
@@ -33,7 +56,7 @@ longbridge order
 longbridge order replace 701276261045858304 --qty 5 --price 350.00
 ```
 
-`--qty` 為必填項。省略 `--price` 則保持當前限價不變。在腳本中使用 `-y` 跳過確認提示。
+`--qty` 為必填項。省略 `--price` 則保持當前限價不變。與 `buy`、`sell`、`cancel` 相同，`replace` 在帶上 `--execute` 和確認碼重新執行之前只做預覽。
 
 ## 選項
 
@@ -41,6 +64,7 @@ longbridge order replace 701276261045858304 --qty 5 --price 350.00
 | ---- | ---- | ------ |
 | `--action` | 方向篩選：`buy` \| `sell`（美股賬戶） | — |
 | `--attached` | 在 `order detail` 中顯示關聯子委託（美股賬戶） | false |
+| `--execute` | `buy`、`sell`、`cancel`、`replace` 預覽輸出的確認碼；不帶該參數則不發送任何請求 | — |
 
 ## 權限要求
 
@@ -48,4 +72,4 @@ longbridge order replace 701276261045858304 --qty 5 --price 350.00
 
 ## 說明
 
-`buy` 和 `sell` 在提交前始終提示確認。在腳本場景中使用 `cancel` 和 `replace` 時，可加 `-y` 跳過確認。
+`buy`、`sell`、`cancel`、`replace` 均為兩步執行。不帶 `--execute` 運行時只打印將要發送的請求預覽，不發送任何請求，預覽末尾給出三位數確認碼；帶上 `--execute` 和該確認碼重新執行相同命令才會真正執行。確認碼只能使用一次，10 分鐘內有效，命令中任一字段變化即失效。舊的 `-y` / `--yes` 參數已不再支援。

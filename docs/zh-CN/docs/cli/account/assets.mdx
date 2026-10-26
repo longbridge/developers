@@ -8,6 +8,10 @@ sidebar_position: 3
 
 查看完整账户概览——净资产、购买力、保证金状态、风险等级，以及各币种的现金余额。
 
+:::info Longbridge US 账户
+在美股数据中心账户上，`assets` 读取 [美股现金与购买力](/zh-CN/docs/trade/asset/us_cash_and_buy_power) 接口，`--format json` 输出的字段与 AP 账户一致：一个元素对应账户币种，包含 `currency`、`net_assets`、`total_cash`、`buy_power`、`maintenance_margin` 和 `cash_infos`。没有美股数据来源的 AP 专属字段会省略（账户未返回净清算价值时没有 `net_assets`），购买力与保证金明细位于 `us` 下。运行 `longbridge assets --schema` 可查看哪些字段标注为 `(US only)`。
+:::
+
 ## 基本用法
 
 ```bash

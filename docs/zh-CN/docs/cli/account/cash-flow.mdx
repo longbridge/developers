@@ -8,6 +8,10 @@ sidebar_position: 4
 
 查看资金流水历史——入金、出金、股息到账、交易结算及其他账户变动。
 
+:::info Longbridge US 账户
+在美股数据中心账户上，`cash-flow` 读取 [美股交易流水](/zh-CN/docs/trade/asset/us_transaction_history) 接口，`--format json` 输出与 AP 账户相同结构的数组。美股记录会附加 `--schema` 中标注为 `(US only)` 的字段，如 `direction`、`biz_code` 和 `ref_no`;`balance` 为带符号的金额，加密货币转账和费用记录为 0。
+:::
+
 ## 基本用法
 
 ```bash

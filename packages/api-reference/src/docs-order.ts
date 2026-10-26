@@ -20,6 +20,10 @@ const OVERRIDES: Record<string, number> = {
   account_balance: 999,
   stock_positions: 999,
   fund_positions: 999,
+  us_cash_and_buy_power: 12,
+  us_available_holding: 13,
+  us_transaction_history: 14,
+  us_exchange_rates: 15,
   // Quote / Analytics
   'ws-capital-flow': 17,
   'ws-capital-dist': 18,

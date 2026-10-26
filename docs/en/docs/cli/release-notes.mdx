@@ -7,6 +7,15 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.31.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.31.0)
+
+- **Longbridge US accounts work end to end** — `assets`, `portfolio`, `positions`, `cash-flow`, `exchange-rate`, `order` (today and `--history`) and `order detail` call the US asset and order APIs for US accounts. Their `--format json` output uses the same keys and shape as AP accounts; US-only fields are marked `(US only)` in `--schema`, and `check --format json` reports `dc_region`
+- **`order executions` works on US accounts** — history comes from `/v1/trade/execution/history`, which is not filtered by execution time and can lag across days near the range edges; `side` is filled from the account's orders and shows `Unknown` when it can't be resolved
+- **AP-only commands say what to use instead** — `fund-positions` and `margin-ratio` on a US account fail with a message naming the alternative, without sending a request
+- **`serve` gains `trade.us_query_orders` and `trade.us_order_detail`** — AP-only methods called from a US account return an error that names the US method to call instead
+- **Safer US cancel / replace** — the preview refuses to issue a confirmation code when the order can't be fetched, and US order ids must be digits
+- **Fix: `rank --count`** is honored
+
 ### [v0.30.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.30.0)
 
 - **Quote commands no longer open a WebSocket** — the one-shot quote commands use the HTTP REST quote API: `quote`, `depth`, `brokers`, `trades`, `intraday`, `kline`, `static`, `calc-index`, `capital`, `participants`, `trading`, `warrant` and `option`, plus the quote lookups in `portfolio`, `sharelist` and order previews. They start faster because there is no WebSocket handshake, and their output is unchanged. The TUI and `longbridge serve` still use the WebSocket

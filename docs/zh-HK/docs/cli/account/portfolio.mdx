@@ -8,6 +8,10 @@ sidebar_position: 1
 
 取得完整投資組合概覽——總盈虧、總資產、各市場（美股/港股/A 股/新加坡）市值，以及現金餘額。
 
+:::info Longbridge US 賬戶
+在美股數據中心賬戶上，`portfolio` 的 `--format json` 輸出與 AP 賬戶結構一致。`overview` 僅包含 `currency`、`total_asset` 和 `total_cash`（賬戶未返回淨清算價值時沒有 `total_asset`）,`holdings` 即 [`positions`](/zh-HK/docs/cli/account/positions) 的記錄。AP 的 `market_accounts` 以及盈虧、保證金和風險欄位沒有美股數據來源，會省略；賬戶類型、購買力與保證金狀態位於 `us` 下。
+:::
+
 ## 基本用法
 
 ```bash

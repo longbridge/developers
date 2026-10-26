@@ -8,6 +8,10 @@ sidebar_position: 4
 
 View your cash flow history — deposits, withdrawals, dividend payments, trade settlements, and other account movements.
 
+:::info Longbridge US Accounts
+On a US data-center account, `cash-flow` reads the [US Transaction History](/docs/trade/asset/us_transaction_history) API and prints the same `--format json` array as on AP accounts. US rows add fields marked `(US only)` in `--schema`, such as `direction`, `biz_code` and `ref_no`; `balance` is the signed amount, and 0 for crypto transfers and fees.
+:::
+
 ## Basic Usage
 
 ```bash

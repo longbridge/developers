@@ -1,0 +1,319 @@
+---
+slug: us_transaction_history
+title: US Transaction History
+sidebar_position: 14
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US Accounts
+This method is only available for US data-center accounts.
+:::
+
+Get the transaction history of a US account (deposits and withdrawals, trades, corporate actions, transfers, margin financing, and so on), one page at a time.
+
+<SDKLinks module="trade" klass="TradeContext" method="us_transaction_history" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/transaction-history </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> Content-Type: application/json; charset=utf-8
+>
+> The SDK method takes `start_at` and `end_at` (date-time values) instead of `start` and `end`; the other parameters use the same names.
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| start | integer | YES | Start time (Unix seconds), inclusive |
+| end | integer | YES | End time (Unix seconds), inclusive |
+| page | integer | NO | Page number, starting at `1` (default: `1`) |
+| size | integer | NO | Page size (default: `20`) |
+| types | string[] | NO | Transaction types to include; omit for all types. See [Transaction Types](#transaction-types) |
+| currency | string | NO | Currency filter, e.g. `USD`; omit for all currencies |
+
+### Transaction Types
+
+<a id="transaction-types"></a>
+
+| Value | Description |
+| ----- | ----------- |
+| `TT_DEPOSIT_AND_WITHDRAWAL` | Deposits and withdrawals |
+| `TT_STOCKS_AND_ETFS_TRADING` | Stock and ETF trading |
+| `TT_OPTIONS_TRADING` | Option trading |
+| `TT_CRYPTO_TRADING` | Crypto trading |
+| `TT_CORPORATE_ACTION` | Corporate actions |
+| `TT_TRANSFER_IN_AND_OUT` | Transfers in and out |
+| `TT_CRYPTO_TRANSFER` | Crypto transfers |
+| `TT_MARGIN_FINANCING` | Margin financing |
+| `TT_OTHER` | Other |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from datetime import datetime, timezone
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_transaction_history(
+    start_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+    end_at=datetime(2026, 3, 31, 23, 59, 59, tzinfo=timezone.utc),
+    page=1,
+    size=20,
+    types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from datetime import datetime, timezone
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_transaction_history(
+        start_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+        end_at=datetime(2026, 3, 31, 23, 59, 59, tzinfo=timezone.utc),
+        page=1,
+        size=20,
+        types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+    )
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.usTransactionHistory({
+    startAt: new Date('2026-01-01T00:00:00Z'),
+    endAt: new Date('2026-03-31T23:59:59Z'),
+    page: 1,
+    size: 20,
+    types: ['TT_DEPOSIT_AND_WITHDRAWAL', 'TT_STOCKS_AND_ETFS_TRADING'],
+  })
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{
+    oauth::OAuthBuilder,
+    trade::{GetUSTransactionHistoryOptions, TradeContext},
+    Config,
+};
+use time::macros::datetime;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let mut opts = GetUSTransactionHistoryOptions::new(
+        datetime!(2026-01-01 0:00 UTC),
+        datetime!(2026-03-31 23:59:59 UTC),
+    );
+    opts.types = vec![
+        "TT_DEPOSIT_AND_WITHDRAWAL".to_string(),
+        "TT_STOCKS_AND_ETFS_TRADING".to_string(),
+    ];
+    let resp = ctx.us_transaction_history(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.USTransactionHistory(context.Background(), &trade.GetUSTransactionHistory{
+		StartAt: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+		EndAt:   time.Date(2026, 3, 31, 23, 59, 59, 0, time.UTC),
+		Page:    1,
+		Size:    20,
+		Types:   []string{"TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+The response does not include a total count. A page with fewer items than `size` is the last page.
+
+In the HTTP API, `create_at` and `done_at` are Unix seconds encoded as numeric strings (for example `"1790203596"`); the SDKs convert them to date-time values.
+
+### Response Example
+
+```json
+{
+  "current_page": 1,
+  "items": [
+    {
+      "title": "VA Sell Success: ETHUSD",
+      "biz_code": "LVASAD",
+      "biz_code_name": "VA Sell Success",
+      "amount": "1185.42",
+      "currency": "USD",
+      "symbol": "ETHUSD.BKKT",
+      "counter_id": "VA/BKKT/ETHUSD",
+      "market": "BKKT",
+      "equity_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.3",
+      "quantity_description": "0.3 ETH",
+      "ref_no": "202609240001",
+      "remark": "",
+      "create_at": "1790203596",
+      "done_at": "1790203596"
+    },
+    {
+      "title": "Cryptocurrency Deposit: BTCUSD",
+      "biz_code": "LVAVNSCR",
+      "biz_code_name": "Cryptocurrency Deposit",
+      "amount": "0",
+      "currency": "",
+      "symbol": "BTCUSD.BKKT",
+      "counter_id": "VA/BKKT/BTCUSD",
+      "market": "BKKT",
+      "equity_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.01",
+      "quantity_description": "0.01 BTC",
+      "ref_no": "202610090001",
+      "remark": "",
+      "create_at": "1791478565",
+      "done_at": "1791478565"
+    }
+  ]
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [USTransactionHistory](#USTransactionHistory) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### USTransactionHistory
+
+<a id="USTransactionHistory"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| current_page | integer | true | Current page number |
+| items | [USTransaction](#USTransaction)[] | true | Records on this page |
+
+### USTransaction
+
+<a id="USTransaction"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| title | string | Display title, e.g. `VA Sell Success: ETHUSD` |
+| biz_code | string | Business code, e.g. `LVASAD`. See [Business Codes](#biz-codes) |
+| biz_code_name | string | Display name of the business code, e.g. `VA Sell Success` |
+| amount | string | Amount |
+| currency | string | Currency, e.g. `USD`; may be empty, e.g. for a crypto deposit |
+| symbol | string | Security symbol in `TICKER.MARKET` form, e.g. `MULL.US` or `BTCUSD.BKKT`, when the record relates to a security. Crypto symbols carry the `.BKKT` suffix here, unlike `crypto_list` in [US Asset Overview](/docs/trade/asset/us_asset_overview), which returns the bare `BTCUSD` |
+| counter_id | string | Internal security identifier returned alongside `symbol`, e.g. `VA/BKKT/BTCUSD`. Returned by the HTTP API; the SDK types may not expose it |
+| market | string | Market, e.g. `US` or `BKKT` |
+| equity_type | string | Holding type, e.g. `STOCK`, `OPTION`, `CRYPTO` |
+| position_side | string | Position side: `LONG` \| `SHORT` |
+| quantity | string | Quantity |
+| quantity_description | string | Quantity description |
+| ref_no | string | Reference number |
+| remark | string | Remark |
+| create_at | string | Creation time, Unix seconds as a numeric string. The SDKs return a date-time value |
+| done_at | string | Completion time, Unix seconds as a numeric string. The SDKs return a date-time value |
+
+### Business Codes
+
+<a id="biz-codes"></a>
+
+`biz_code` identifies the kind of record. Values seen in production include:
+
+| biz_code | Description |
+| -------- | ----------- |
+| `LVABAD` | Crypto buy filled (`biz_code_name`: `VA Buy Success`) |
+| `LVASAD` | Crypto sell filled (`biz_code_name`: `VA Sell Success`) |
+| `LVAVNSCR` | Crypto deposit (`biz_code_name`: `Cryptocurrency Deposit`) |
+| `LCSTBD` | Seen in production; use `biz_code_name` for its display name |
+| `LCWD` | Seen in production; use `biz_code_name` for its display name |
+
+The list is not exhaustive, and other codes may appear. `title` and `biz_code_name` are display text whose language can vary, so use `biz_code` in program logic.

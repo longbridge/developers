@@ -1,0 +1,272 @@
+---
+slug: us_exchange_rates
+title: 美股賬戶匯率
+sidebar_position: 15
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US 賬戶
+此方法僅適用於美國數據中心賬戶。
+:::
+
+獲取美股賬戶使用的匯率。
+
+<SDKLinks module="trade" klass="TradeContext" method="us_exchange_rates" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/exchange-rates </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> **SDK 方法參數。**
+
+無需參數。
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_exchange_rates()
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_exchange_rates()
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.usExchangeRates()
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let resp = ctx.us_exchange_rates().await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.USExchangeRates(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+HTTP 接口以兩級映射返回匯率：
+
+- `universal_exchanges` 的外層鍵為賬戶通道，例如 `us_lb_apex`。
+- `spec_exchanges` 的內層鍵為匯率類型，例如 `am` 或 `reference`。
+
+可能出現其他鍵，請遍歷映射讀取，不要寫死鍵名。HTTP 接口中匯率字段為 JSON 數字。
+
+SDK 會將該映射展開為單個 `exchanges` 列表，每條記錄除匯率字段外，還以 `universal_key` 和 `spec_key` 保留兩層鍵，匯率以字符串返回。
+
+### Response Example
+
+HTTP 接口：
+
+```json
+{
+  "universal_exchanges": {
+    "us_lb_apex": {
+      "spec_exchanges": {
+        "am": {
+          "exchanges": [
+            {
+              "base_currency": "USD",
+              "other_currency": "USD",
+              "bid_rate": 1,
+              "offer_rate": 1,
+              "average_rate": 1
+            }
+          ]
+        },
+        "reference": {
+          "exchanges": [
+            {
+              "base_currency": "USD",
+              "other_currency": "USD",
+              "bid_rate": 1,
+              "offer_rate": 1,
+              "average_rate": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+SDK（展開後）：
+
+```json
+{
+  "exchanges": [
+    {
+      "universal_key": "us_lb_apex",
+      "spec_key": "am",
+      "base_currency": "USD",
+      "other_currency": "USD",
+      "bid_rate": "1",
+      "offer_rate": "1",
+      "average_rate": "1"
+    },
+    {
+      "universal_key": "us_lb_apex",
+      "spec_key": "reference",
+      "base_currency": "USD",
+      "other_currency": "USD",
+      "bid_rate": "1",
+      "offer_rate": "1",
+      "average_rate": "1"
+    }
+  ]
+}
+```
+
+### Response Status
+
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USExchangeRates](#USExchangeRates) |
+| 400    | 請求錯誤 | None   |
+
+## Schemas
+
+### USExchangeRates
+
+<a id="USExchangeRates"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| universal_exchanges | map&lt;string, [USUniversalExchanges](#USUniversalExchanges)&gt; | 是 | 以賬戶通道為鍵的匯率，例如 `us_lb_apex` |
+
+### USUniversalExchanges
+
+<a id="USUniversalExchanges"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| spec_exchanges | map&lt;string, [USSpecExchanges](#USSpecExchanges)&gt; | 是 | 以匯率類型為鍵的匯率，例如 `am` 或 `reference` |
+
+### USSpecExchanges
+
+<a id="USSpecExchanges"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| exchanges | [USExchangeRate](#USExchangeRate)[] | 是 | 該匯率類型下的匯率 |
+
+### USExchangeRate
+
+<a id="USExchangeRate"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| base_currency | string | 基礎貨幣 |
+| other_currency | string | 報價貨幣 |
+| bid_rate | number | 買入匯率。SDK 以字符串返回 |
+| offer_rate | number | 賣出匯率。SDK 以字符串返回 |
+| average_rate | number | 平均匯率。SDK 以字符串返回 |
+
+SDK 返回的每條 `exchanges` 記錄還包含：
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| universal_key | string | 該匯率所屬的賬戶通道（`universal_exchanges` 的鍵），例如 `us_lb_apex` |
+| spec_key | string | 該匯率的類型（`spec_exchanges` 的鍵），例如 `am` 或 `reference` |
