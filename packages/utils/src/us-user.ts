@@ -12,6 +12,12 @@
 // 与 packages/tryit/src/utils/app-id.ts、BaseLayout 的 apiProxyBootstrap 中的美国租户 app_id 一致
 const US_APP_IDS = ['longbridge_us', 'longbridge_us_uat']
 
+/** Longbridge US Terms of Service / Privacy Policy (PDF) */
+export const US_LEGAL_LINKS = {
+  terms: 'https://assets.lbkrs.com/uploads/317ef02f-85e7-4afa-9e76-8acd8c0b42fe/Terms-of-Service-final-.pdf',
+  privacy: 'https://assets.lbkrs.com/uploads/e4890745-e18b-42f2-9817-da63148e0ac4/Privacy-Policy-final-.pdf',
+}
+
 let cached: Promise<boolean> | undefined
 
 function readCookie(name: string): string | undefined {
