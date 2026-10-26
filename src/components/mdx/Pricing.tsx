@@ -5,6 +5,7 @@
  * No AppNav / AppFooter — BaseLayout.astro already renders TopNav + Footer.
  */
 import { useState, useMemo, useEffect } from 'react'
+import { isUSUser } from '@longbridge/openapi-utils'
 import './Pricing.css'
 
 // ── Inline i18n ───────────────────────────────────────────────────────────────
@@ -224,38 +225,51 @@ const LOCALE = {
 
 // ── Static data ───────────────────────────────────────────────────────────────
 
-interface PlanCycle {
+// 价格 / 币种 / 可选周期都取自行情商店接口（quote_product_list），这里只保留展示用元数据
+const PAID_PLANS = [
+  { id: 'hk-lv2', packageKey: 'HK_L2_International_OpenAPI', color: 'var(--lb-market-hk)', hasBadge: true },
+  { id: 'opra', packageKey: 'US_OPRA_LV1_OpenAPI', color: 'var(--lb-ai-mention)', hasBadge: false },
+]
+
+interface QuoteSku {
+  card_duration: number
+  currency: string
   price: number
-  discount?: number
-  approxMo?: number
+  real_price: number
+  per_month_price?: number
 }
 
-const PAID_PLANS = [
-  {
-    id: 'hk-lv2',
-    currency: 'HK$',
-    color: 'var(--lb-market-hk)',
-    hasBadge: true,
-    cycles: {
-      auto: { price: 558, discount: 22 },
-      monthly: { price: 718 },
-      quarterly: { price: 1428, discount: 34, approxMo: 476 },
-      annual: { price: 5288, discount: 39, approxMo: 441 },
-    } as Record<string, PlanCycle>,
-  },
-  {
-    id: 'opra',
-    currency: 'HK$',
-    color: 'var(--lb-ai-mention)',
-    hasBadge: false,
-    cycles: {
-      auto: { price: 22, discount: 45 },
-      monthly: { price: 40 },
-      quarterly: { price: 83, discount: 31, approxMo: 28 },
-      annual: { price: 269, discount: 44, approxMo: 22 },
-    } as Record<string, PlanCycle>,
-  },
-]
+// card_duration：1/2/3 = 月/季/年（一次性），5/6/7 = 月/季/年（自动续订），同 h5hub opa CARD_DURATION
+const BILLING_CYCLES = [
+  { key: 'auto', duration: 5, suffix: 'mo' },
+  { key: 'monthly', duration: 1, suffix: 'mo' },
+  { key: 'quarterly', duration: 2, suffix: 'quarter' },
+  { key: 'annual', duration: 3, suffix: 'year', badge: true },
+] as const
+
+type CycleKey = (typeof BILLING_CYCLES)[number]['key']
+
+/** 拉取行情商店 SKU，按 package_key 分组（PAID_PLANS 只取 *_OpenAPI 包）；失败返回 null */
+async function fetchOpenApiSkus(): Promise<Record<string, QuoteSku[]> | null> {
+  const base = window.__API_PROXY_URL__
+  if (!base) return null
+  try {
+    const res = await fetch(`${base}/api/forward/v2/rewards/quote_product_list?account_channel=lb`, {
+      headers: { 'x-app-id': 'longbridge' },
+    })
+    const json = await res.json()
+    if (json?.code !== 0) return null
+    const map: Record<string, QuoteSku[]> = {}
+    for (const section of json.data?.section ?? []) {
+      for (const product of section.products ?? []) {
+        map[product.package_key] = product.skus ?? []
+      }
+    }
+    return map
+  } catch {
+    return null
+  }
+}
 
 const FREE_ICONS = [
   { icon: 'shield', color: 'var(--lb-up)' },
@@ -263,12 +277,6 @@ const FREE_ICONS = [
   { icon: 'bolt', color: 'var(--lb-brand)' },
 ]
 
-const BILLING_CYCLES = [
-  { key: 'auto' },
-  { key: 'monthly' },
-  { key: 'quarterly' },
-  { key: 'annual', badge: true },
-]
 
 const MATRIX_ROW_DATA = [
   [1, 1, 1, 1, 1],
@@ -331,15 +339,19 @@ const CheckCircleIcon = () => (
 
 // ── Helper ────────────────────────────────────────────────────────────────────
 
-function getPlanCycle(plan: { cycles: Record<string, PlanCycle> }, cycleKey: string): PlanCycle {
-  return plan.cycles[cycleKey] ?? plan.cycles.monthly
-}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-CN' | 'zh-HK' } = {}) {
   const [locale, setLocale] = useState<'en' | 'zh-CN' | 'zh-HK'>(initialLocale)
-  const [cycle, setCycle] = useState('auto')
+  const [cycle, setCycle] = useState<CycleKey | null>(null)
+  const [skus, setSkus] = useState<Record<string, QuoteSku[]> | null>(null)
+  const [isUS, setIsUS] = useState(false)
+
+  useEffect(() => {
+    isUSUser().then(setIsUS)
+    fetchOpenApiSkus().then(setSkus)
+  }, [])
 
   // Detect locale from URL pathname on client (fallback / safety net)
   useEffect(() => {
@@ -351,11 +363,15 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
 
   const content = useMemo(() => LOCALE[locale], [locale])
 
-  const cycleSuffix = useMemo(() => {
-    if (cycle === 'quarterly') return content.suffix.quarter
-    if (cycle === 'annual') return content.suffix.year
-    return content.suffix.mo
-  }, [cycle, content])
+  const availableCycles = useMemo(
+    () =>
+      BILLING_CYCLES.filter((c) =>
+        PAID_PLANS.some((p) => skus?.[p.packageKey]?.some((sku) => sku.card_duration === c.duration))
+      ),
+    [skus]
+  )
+  const activeCycle = availableCycles.find((c) => c.key === cycle) ?? availableCycles[0]
+  const cycleSuffix = activeCycle ? content.suffix[activeCycle.suffix] : content.suffix.mo
 
   const cycleLabels = useMemo<Record<string, string>>(
     () => ({
@@ -452,7 +468,8 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
         </div>
       </section>
 
-      {/* Paid Plans */}
+      {/* Paid Plans（美国用户隐藏） */}
+      {!isUS && (
       <section className="section" style={{ paddingTop: '32px' }}>
         <div className="section-inner">
           <div
@@ -478,15 +495,15 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
             <div className="pricing-cycle">
               <span className="pricing-cycle-label">{content.billing.label}</span>
               <div className="pricing-cycle-tabs">
-                {BILLING_CYCLES.map((c) => (
+                {availableCycles.map((c) => (
                   <button
                     key={c.key}
                     type="button"
-                    className={`pricing-cycle-tab${cycle === c.key ? ' is-active' : ''}`}
+                    className={`pricing-cycle-tab${activeCycle?.key === c.key ? ' is-active' : ''}`}
                     onClick={() => setCycle(c.key)}
                   >
                     {cycleLabels[c.key]}
-                    {c.badge && (
+                    {'badge' in c && (
                       <span className="pricing-cycle-badge">{content.cycle.badge}</span>
                     )}
                   </button>
@@ -497,7 +514,10 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
 
           <div className="pricing-plans-grid">
             {plans.map((p) => {
-              const pc = getPlanCycle(p, cycle)
+              const sku = skus?.[p.packageKey]?.find((x) => x.card_duration === activeCycle?.duration)
+              const discount =
+                sku && sku.price > sku.real_price ? Math.round((1 - sku.real_price / sku.price) * 100) : 0
+              const showApprox = sku?.per_month_price && activeCycle?.suffix !== 'mo'
               return (
                 <div key={p.id} className="pricing-plan-card">
                   <div className="pricing-plan-head">
@@ -514,20 +534,20 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
                   </div>
                   <h3 className="pricing-plan-name">{p.name}</h3>
                   <div className="pricing-plan-price">
-                    <span className="pricing-plan-cur">{p.currency}</span>
-                    <span className="pricing-plan-num">{pc.price}</span>
-                    <span className="pricing-plan-suf">{cycleSuffix}</span>
-                    {pc.discount && (
-                      <span className="pricing-plan-discount">-{pc.discount}%</span>
-                    )}
+                    <span className="pricing-plan-cur">{sku?.currency}</span>
+                    <span className="pricing-plan-num">{sku ? sku.real_price : '—'}</span>
+                    {sku && <span className="pricing-plan-suf">{cycleSuffix}</span>}
+                    {discount > 0 && <span className="pricing-plan-discount">-{discount}%</span>}
                   </div>
-                  {pc.approxMo ? (
+                  {showApprox ? (
                     <div className="pricing-plan-approx">
-                      ≈{p.currency}{pc.approxMo}{content.suffix.mo}
+                      ≈{sku.currency} {sku.per_month_price}
+                      {content.suffix.mo}
                     </div>
-                  ) : pc.discount ? (
+                  ) : null}
+                  {discount > 0 ? (
                     <div className="pricing-plan-was">
-                      {content.plan.was} <s>{p.currency}{p.cycles.monthly.price}{content.suffix.mo}</s>
+                      {content.plan.was} <s>{sku?.currency} {sku?.price}</s>
                     </div>
                   ) : null}
                   <p className="pricing-plan-tag">{p.tagline}</p>
@@ -566,6 +586,7 @@ export function Pricing({ locale: initialLocale = 'en' }: { locale?: 'en' | 'zh-
           </div>
         </div>
       </section>
+      )}
 
       {/* Feature Matrix */}
       <section className="section" style={{ paddingTop: '48px', paddingBottom: '80px' }}>
