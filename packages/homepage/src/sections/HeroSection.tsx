@@ -14,7 +14,7 @@ const LOCALE = {
     cta1: 'Get Started',
     cta2: 'Read the Docs',
     highlights: [
-      { u: 'markets', d: 'US · HK · SG · CN' },
+      { v: 'Global', u: 'markets', d: 'Stocks · ETFs · Options' },
       { u: 'SDKs', d: 'Python · Rust · Node · Go · Java · C · C++' },
       { u: 'endpoints', d: 'Quote · Trade · Research · News' },
       { u: 'OpenAPI access', d: 'No monthly fees' },
@@ -28,7 +28,7 @@ const LOCALE = {
     cta1: '开始使用',
     cta2: '阅读文档',
     highlights: [
-      { u: '个市场', d: 'US · HK · SG · CN' },
+      { v: '全球', u: '市场', d: '股票 · ETF · 期权' },
       { u: '个 SDK', d: 'Python · Rust · Node · Go · Java · C · C++' },
       { u: '+ 个接口', d: '行情 · 交易 · 研究 · 资讯' },
       { u: 'OpenAPI 接入费', d: '集成账户免费' },
@@ -42,7 +42,7 @@ const LOCALE = {
     cta1: '開始使用',
     cta2: '閱讀文件',
     highlights: [
-      { u: '個市場', d: 'US · HK · SG · CN' },
+      { v: '全球', u: '市場', d: '股票 · ETF · 期權' },
       { u: '個 SDK', d: 'Python · Rust · Node · Go · Java · C · C++' },
       { u: '+ 個接口', d: '行情 · 交易 · 研究 · 資訊' },
       { u: 'OpenAPI 接入費', d: '整合帳戶免費' },
@@ -50,8 +50,9 @@ const LOCALE = {
   },
 }
 
-// Stat values are locale-independent (legacy `heroHighlights` computed).
-const HIGHLIGHT_VALUES = ['4', '7', '100+', '$0']
+// Stat values are locale-independent (legacy `heroHighlights` computed);
+// a highlight with its own `v` overrides the shared value.
+const HIGHLIGHT_VALUES = ['', '7', '100+', '$0']
 
 const HERO_CSS = `
 /* ---- legacy utilities, scoped to the hero so they don't leak ---- */
@@ -351,7 +352,7 @@ function localePath(locale: Locale, path: string) {
 
 export function HeroSection({ locale }: HeroSectionProps) {
   const content = LOCALE[locale] ?? LOCALE.en
-  const highlights = content.highlights.map((h, i) => ({ ...h, v: HIGHLIGHT_VALUES[i] }))
+  const highlights = content.highlights.map((h, i) => ({ ...h, v: 'v' in h ? h.v : HIGHLIGHT_VALUES[i] }))
   const docsHref = localePath(locale, '/docs')
 
   return (

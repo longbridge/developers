@@ -5,7 +5,9 @@ sidebar_position: 0
 
 ## Q1: Do I need to open a live account to call Longbridge Developers?
 
-No. The platform provides a **paper account** — you can develop and debug quote and trading interfaces without opening a real securities account. The **paper account** supports real-time quotes for HK, US, and A-share markets, as well as basic trading functionality for HK and US stocks and ETFs, making it suitable for API integration and feature verification.
+It depends on the account region. For AP (Longbridge HK / SG) accounts, the platform provides a **paper account** — you can develop and debug quote and trading interfaces without opening a real securities account. The **paper account** supports real-time quotes for HK, US, and A-share markets, as well as basic trading functionality for HK and US stocks and ETFs, making it suitable for API integration and feature verification.
+
+Longbridge US accounts have no paper account, because the US data center does not provide one (see Q2).
 
 That said, the paper account differs from the live environment in areas such as order matching and cash rules. If you want to experience the platform's full capabilities, we recommend opening a live account as well.
 
@@ -23,9 +25,13 @@ Paper accounts and live accounts share the same App Key & Secret, but have diffe
 
 ## Q4: Which markets and types of securities are supported for quote and trading in paper account debugging?
 
-Market: Supports real-time market data for Hong Kong stocks, US stocks, and A-share markets. For advanced market data such as full US market data and Hong Kong Level2 data, they can be purchased through the online market store and accessed via OpenAPI.
+Paper accounts are available for AP (Longbridge HK / SG) accounts only; Longbridge US accounts have no paper account.
 
-Trading: Supports trading of Hong Kong and US stocks, ETFs, Hong Kong warrant trading, and US options. Short selling is supported for US stocks. OTC stocks and pre & post market trading are not supported in paper accounts.
+Market: AP paper accounts support real-time market data for Hong Kong stocks, US stocks, and A-share markets. For advanced market data such as full US market data and Hong Kong Level2 data, they can be purchased through the online market store and accessed via OpenAPI.
+
+Trading: AP paper accounts support trading of Hong Kong and US stocks, ETFs, Hong Kong warrants, and US options.
+
+For live accounts, coverage depends on the account region: HK stocks, A-shares, and HK warrants are available to AP accounts, while Longbridge US accounts cover US stocks (including exchange-traded ADRs), ETFs, options, and crypto.
 
 ## Q5: Interface call frequency limits
 
