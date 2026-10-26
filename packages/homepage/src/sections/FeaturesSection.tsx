@@ -40,7 +40,7 @@ const LOCALE = {
       {
         label: 'Paper Trading',
         title: 'Sandbox at zero cost',
-        desc: 'Test orders with real market data — simulated matching based on live bid-ask spreads. No securities account required.',
+        desc: 'Test orders with real market data — simulated matching based on live bid-ask spreads. Available for Longbridge HK / SG accounts.',
         tags: ['Sandbox', 'Zero Cost'],
       },
       {
@@ -85,7 +85,7 @@ const LOCALE = {
       {
         label: '模拟交易',
         title: '零成本沙盒环境',
-        desc: '用真实市场数据测试订单——基于实时买卖价差进行模拟撮合。无需证券账户。',
+        desc: '用真实市场数据测试订单——基于实时买卖价差进行模拟撮合。面向 Longbridge HK / SG 账户提供。',
         tags: ['沙盒', '零成本'],
       },
       {
@@ -130,7 +130,7 @@ const LOCALE = {
       {
         label: '模擬交易',
         title: '零成本沙盒環境',
-        desc: '用真實市場數據測試訂單——基於即時買賣價差進行模擬撮合。無需證券帳戶。',
+        desc: '用真實市場數據測試訂單——基於即時買賣價差進行模擬撮合。面向 Longbridge HK / SG 帳戶提供。',
         tags: ['沙盒', '零成本'],
       },
       {
