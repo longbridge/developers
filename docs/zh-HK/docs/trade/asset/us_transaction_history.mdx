@@ -1,0 +1,319 @@
+---
+slug: us_transaction_history
+title: 美股交易流水
+sidebar_position: 14
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US 賬戶
+此方法僅適用於美國數據中心賬戶。
+:::
+
+分頁獲取美股賬戶的交易流水，包括存取款、交易、公司行動、轉倉、融資等。
+
+<SDKLinks module="trade" klass="TradeContext" method="us_transaction_history" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/transaction-history </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> Content-Type: application/json; charset=utf-8
+>
+> SDK 方法使用 `start_at` 和 `end_at`（日期時間類型）代替 `start` 和 `end`，其餘參數同名。
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| start | integer | 是 | 開始時間（Unix 秒），包含 |
+| end | integer | 是 | 結束時間（Unix 秒），包含 |
+| page | integer | 否 | 頁碼，從 `1` 開始（默認：`1`） |
+| size | integer | 否 | 每頁數量（默認：`20`） |
+| types | string[] | 否 | 要查詢的流水類型，不傳則返回全部類型，見[流水類型](#transaction-types) |
+| currency | string | 否 | 按幣種篩選，例如 `USD`，不傳則返回全部幣種 |
+
+### 流水類型
+
+<a id="transaction-types"></a>
+
+| 取值 | 描述 |
+| ---- | ---- |
+| `TT_DEPOSIT_AND_WITHDRAWAL` | 存取款 |
+| `TT_STOCKS_AND_ETFS_TRADING` | 股票和 ETF 交易 |
+| `TT_OPTIONS_TRADING` | 期權交易 |
+| `TT_CRYPTO_TRADING` | 加密貨幣交易 |
+| `TT_CORPORATE_ACTION` | 公司行動 |
+| `TT_TRANSFER_IN_AND_OUT` | 轉入轉出 |
+| `TT_CRYPTO_TRANSFER` | 加密貨幣轉賬 |
+| `TT_MARGIN_FINANCING` | 融資 |
+| `TT_OTHER` | 其他 |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from datetime import datetime, timezone
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_transaction_history(
+    start_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+    end_at=datetime(2026, 3, 31, 23, 59, 59, tzinfo=timezone.utc),
+    page=1,
+    size=20,
+    types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+)
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from datetime import datetime, timezone
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_transaction_history(
+        start_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+        end_at=datetime(2026, 3, 31, 23, 59, 59, tzinfo=timezone.utc),
+        page=1,
+        size=20,
+        types=["TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"],
+    )
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.usTransactionHistory({
+    startAt: new Date('2026-01-01T00:00:00Z'),
+    endAt: new Date('2026-03-31T23:59:59Z'),
+    page: 1,
+    size: 20,
+    types: ['TT_DEPOSIT_AND_WITHDRAWAL', 'TT_STOCKS_AND_ETFS_TRADING'],
+  })
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{
+    oauth::OAuthBuilder,
+    trade::{GetUSTransactionHistoryOptions, TradeContext},
+    Config,
+};
+use time::macros::datetime;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let mut opts = GetUSTransactionHistoryOptions::new(
+        datetime!(2026-01-01 0:00 UTC),
+        datetime!(2026-03-31 23:59:59 UTC),
+    );
+    opts.types = vec![
+        "TT_DEPOSIT_AND_WITHDRAWAL".to_string(),
+        "TT_STOCKS_AND_ETFS_TRADING".to_string(),
+    ];
+    let resp = ctx.us_transaction_history(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.USTransactionHistory(context.Background(), &trade.GetUSTransactionHistory{
+		StartAt: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+		EndAt:   time.Date(2026, 3, 31, 23, 59, 59, 0, time.UTC),
+		Page:    1,
+		Size:    20,
+		Types:   []string{"TT_DEPOSIT_AND_WITHDRAWAL", "TT_STOCKS_AND_ETFS_TRADING"},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+響應不返回總條數。當某頁返回的記錄數少於 `size` 時，即為最後一頁。
+
+HTTP 接口中，`create_at` 和 `done_at` 是以數字字符串表示的 Unix 秒（例如 `"1790203596"`），SDK 會將其轉換為日期時間類型。
+
+### Response Example
+
+```json
+{
+  "current_page": 1,
+  "items": [
+    {
+      "title": "VA Sell Success: ETHUSD",
+      "biz_code": "LVASAD",
+      "biz_code_name": "VA Sell Success",
+      "amount": "1185.42",
+      "currency": "USD",
+      "symbol": "ETHUSD.BKKT",
+      "counter_id": "VA/BKKT/ETHUSD",
+      "market": "BKKT",
+      "equity_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.3",
+      "quantity_description": "0.3 ETH",
+      "ref_no": "202609240001",
+      "remark": "",
+      "create_at": "1790203596",
+      "done_at": "1790203596"
+    },
+    {
+      "title": "Cryptocurrency Deposit: BTCUSD",
+      "biz_code": "LVAVNSCR",
+      "biz_code_name": "Cryptocurrency Deposit",
+      "amount": "0",
+      "currency": "",
+      "symbol": "BTCUSD.BKKT",
+      "counter_id": "VA/BKKT/BTCUSD",
+      "market": "BKKT",
+      "equity_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.01",
+      "quantity_description": "0.01 BTC",
+      "ref_no": "202610090001",
+      "remark": "",
+      "create_at": "1791478565",
+      "done_at": "1791478565"
+    }
+  ]
+}
+```
+
+### Response Status
+
+| 狀態碼 | 描述 | 結構 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USTransactionHistory](#USTransactionHistory) |
+| 400    | 請求錯誤 | None   |
+
+## Schemas
+
+### USTransactionHistory
+
+<a id="USTransactionHistory"></a>
+
+| 名稱 | 類型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| current_page | integer | 是 | 當前頁碼 |
+| items | [USTransaction](#USTransaction)[] | 是 | 本頁記錄 |
+
+### USTransaction
+
+<a id="USTransaction"></a>
+
+| 名稱 | 類型 | 描述 |
+| ---- | ---- | ---- |
+| title | string | 展示標題，例如 `VA Sell Success: ETHUSD` |
+| biz_code | string | 業務代碼，例如 `LVASAD`，參見[業務代碼](#biz-codes) |
+| biz_code_name | string | 業務代碼的展示名稱，例如 `VA Sell Success` |
+| amount | string | 金額 |
+| currency | string | 貨幣，例如 `USD`；可能為空，例如加密貨幣轉入 |
+| symbol | string | `TICKER.MARKET` 格式的標的代碼，例如 `MULL.US` 或 `BTCUSD.BKKT`（僅當記錄與證券相關時返回）。此處加密貨幣代碼帶 `.BKKT` 後綴；[美股資產概覽](/zh-HK/docs/trade/asset/us_asset_overview)的 `crypto_list` 則返回不帶後綴的 `BTCUSD` |
+| counter_id | string | 與 `symbol` 一同返回的內部標的標識，例如 `VA/BKKT/BTCUSD`。由 HTTP 接口返回，SDK 類型中可能未包含 |
+| market | string | 市場，例如 `US` 或 `BKKT` |
+| equity_type | string | 持倉類型，例如 `STOCK`、`OPTION`、`CRYPTO` |
+| position_side | string | 持倉方向：`LONG` \| `SHORT` |
+| quantity | string | 數量 |
+| quantity_description | string | 數量描述 |
+| ref_no | string | 參考編號 |
+| remark | string | 備註 |
+| create_at | string | 創建時間，以數字字符串表示的 Unix 秒；SDK 返回日期時間類型 |
+| done_at | string | 完成時間，以數字字符串表示的 Unix 秒；SDK 返回日期時間類型 |
+
+### 業務代碼
+
+<a id="biz-codes"></a>
+
+`biz_code` 標識記錄的類型。生產環境中出現過的取值包括：
+
+| biz_code | 描述 |
+| -------- | ---- |
+| `LVABAD` | 加密貨幣買入成交（`biz_code_name`：`VA Buy Success`） |
+| `LVASAD` | 加密貨幣賣出成交（`biz_code_name`：`VA Sell Success`） |
+| `LVAVNSCR` | 加密貨幣轉入（`biz_code_name`：`Cryptocurrency Deposit`） |
+| `LCSTBD` | 生產環境中出現過，展示名稱以 `biz_code_name` 為準 |
+| `LCWD` | 生產環境中出現過，展示名稱以 `biz_code_name` 為準 |
+
+以上列表並不完整，可能出現其他取值。`title` 和 `biz_code_name` 為展示文本，語言可能不同，程序邏輯請使用 `biz_code` 判斷。

@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::info Longbridge US Accounts
+On Longbridge US data-center accounts, the response omits `side`, so the SDKs report it as `Unknown`. To get the side, look up the order by `order_id` with [US Order Detail](/docs/trade/order/us_order_detail). Results are not filtered by execution time and can lag across days, so near the edges of the `start_at` / `end_at` range, executions may be missing or fall outside the range.
+:::
+
 This API is used to get history executions, including the sell and buy records, and does not support querying today's execution details.
 
 <CliCommand>
@@ -294,4 +298,4 @@ func main() {
 | ∟ trade_done_at | string   | true     | Trade done time, formatted as a timestamp (second)                                                                                                 |
 | ∟ quantity      | string   | true     | Executed quantity                                                                                                                                  |
 | ∟ price         | string   | true     | Executed price                                                                                                                                     |
-| ∟ side          | string   | true     | Trade side<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                                                                        |
+| ∟ side          | string   | false    | Trade side; absent on Longbridge US accounts (SDKs report Unknown)<br/><br/> **Enum Value:**<br/> `Buy`<br/> `Sell`                                |

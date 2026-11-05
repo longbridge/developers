@@ -19,22 +19,22 @@ longbridge rank
 ```
 Ranking Categories (use second-level key with --key)
 
-| key            | name   | sub-key           | market |
-|----------------|--------|-------------------|--------|
-| hot_all        | 总热度 | hot_all-us        | US     |
-| hot_all        | 总热度 | hot_all-hk        | HK     |
-| hot_up         | 热度上升 | hot_up-us       | US     |
-| hot_up         | 热度上升 | hot_up-hk       | HK     |
-| trade_heat     | 热门交易 | trade_heat-us   | US     |
-| trade_heat     | 热门交易 | trade_heat-hk   | HK     |
-| discuss_heat   | 热议   | discuss_heat-us   | US     |
-| discuss_heat   | 热议   | discuss_heat-hk   | HK     |
-| discuss_heat   | 热议   | discuss_heat-cn   | CN     |
-| discuss_heat   | 热议   | discuss_heat-sg   | SG     |
-| watchlist_heat | 关注度 | watchlist_heat-us | US     |
-| watchlist_heat | 关注度 | watchlist_heat-hk | HK     |
-| watchlist_heat | 关注度 | watchlist_heat-cn | CN     |
-| watchlist_heat | 关注度 | watchlist_heat-sg | SG     |
+| key            | name           | sub-key           | market |
+|----------------|----------------|-------------------|--------|
+| hot_all        | Trending Now   | hot_all-us        | US     |
+| hot_all        | Trending Now   | hot_all-hk        | HK     |
+| hot_up         | On The Rise    | hot_up-us         | US     |
+| hot_up         | On The Rise    | hot_up-hk         | HK     |
+| trade_heat     | Popular Trades | trade_heat-us     | US     |
+| trade_heat     | Popular Trades | trade_heat-hk     | HK     |
+| discuss_heat   | Hot Topics     | discuss_heat-us   | US     |
+| discuss_heat   | Hot Topics     | discuss_heat-hk   | HK     |
+| discuss_heat   | Hot Topics     | discuss_heat-cn   | CN     |
+| discuss_heat   | Hot Topics     | discuss_heat-sg   | SG     |
+| watchlist_heat | Most Followed  | watchlist_heat-us | US     |
+| watchlist_heat | Most Followed  | watchlist_heat-hk | HK     |
+| watchlist_heat | Most Followed  | watchlist_heat-cn | CN     |
+| watchlist_heat | Most Followed  | watchlist_heat-sg | SG     |
 ```
 
 ## Examples
@@ -49,10 +49,10 @@ longbridge rank --key hot_all-us
 ```
 Rank — hot_all-us
 
-| rank | symbol  | name  | price   | chg%    | pre/post | pre/post chg% |
-|------|---------|-------|---------|---------|----------|---------------|
-| 1    | NVDA.US | 英伟达 | 215.330 | -0.0190 | 214.297  | -0.0048       |
-| 2    | AAPL.US | 苹果  | 205.100 | -0.42%  | 204.800  | -0.0015       |
+| rank | symbol  | name   | price   | chg%    | pre/post | pre/post chg% |
+|------|---------|--------|---------|---------|----------|---------------|
+| 1    | NVDA.US | NVIDIA | 215.330 | -0.0190 | 214.297  | -0.0048       |
+| 2    | AAPL.US | Apple  | 205.100 | -0.42%  | 204.800  | -0.0015       |
 ```
 
 ### View HK total heat ranking
@@ -87,7 +87,7 @@ longbridge rank --key hot_all-us --format json
   "lists": [
     {
       "symbol": "NVDA.US",
-      "name": "英伟达",
+      "name": "NVIDIA",
       "last_done": "215.330",
       "chg": "-0.0190",
       "pre_post_price": "214.297",
@@ -121,10 +121,10 @@ longbridge rank --format json
   "first_tags": [
     {
       "key": "hot_all",
-      "name": "总热度",
+      "name": "Trending Now",
       "second_tags": [
-        { "key": "hot_all-us", "market": "US", "name": "美股" },
-        { "key": "hot_all-hk", "market": "HK", "name": "港股" }
+        { "key": "hot_all-us", "market": "US", "name": "US Stocks" },
+        { "key": "hot_all-hk", "market": "HK", "name": "HK Stocks" }
       ]
     }
   ]

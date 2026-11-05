@@ -1,4 +1,5 @@
-import { t } from '@longbridge/openapi-utils'
+import { useEffect, useState } from 'react'
+import { t, isUSUser, US_LEGAL_LINKS } from '@longbridge/openapi-utils'
 import type { Locale } from '@longbridge/openapi-utils'
 
 interface Props {
@@ -22,6 +23,12 @@ function sgBaseUrl(locale: Locale): string {
 export default function Footer({ locale }: Props) {
   const year = new Date().getFullYear()
   const base = sgBaseUrl(locale)
+  const [isUS, setIsUS] = useState(false)
+  useEffect(() => {
+    isUSUser().then(setIsUS)
+  }, [])
+  const termsHref = isUS ? US_LEGAL_LINKS.terms : `${base}/support/topics/us-trade/user-agreement`
+  const privacyHref = isUS ? US_LEGAL_LINKS.privacy : `${base}/support/topics/Other/privacy-policy`
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 
   return (
@@ -121,7 +128,7 @@ export default function Footer({ locale }: Props) {
             <li>
               <a
                 className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]"
-                href={`${base}/support/topics/us-trade/user-agreement`}
+                href={termsHref}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -131,7 +138,7 @@ export default function Footer({ locale }: Props) {
             <li>
               <a
                 className="text-[color:var(--lb-fg-2)] no-underline text-[0.85rem] leading-6 hover:text-[color:var(--lb-brand)]"
-                href={`${base}/support/topics/Other/privacy-policy`}
+                href={privacyHref}
                 target="_blank"
                 rel="noreferrer"
               >

@@ -198,9 +198,9 @@ func main() {
   "data": {
     "groups": [
       {
-        "group_name": "公司规模与财务",
+        "group_name": "Company Size & Financials",
         "indicators": [
-          { "id": "1", "key": "marketcap", "name": "市值", "unit": "亿", "min": null, "max": null }
+          { "id": "1", "key": "marketcap", "name": "Market Cap", "unit": "B", "min": null, "max": null }
         ]
       }
     ]
@@ -233,6 +233,6 @@ The SDK response `data` is a grouped structure. The CLI `--format json` output f
 | ∟ ∟ id | string | false | Indicator ID (string) |
 | ∟ ∟ key | string | false | Indicator key for building filter conditions (no `filter_` prefix) |
 | ∟ ∟ name | string | false | Indicator display name |
-| ∟ ∟ unit | string | false | Unit (e.g. `%`, `亿`) |
+| ∟ ∟ unit | string | false | Unit (e.g. `%`, `B`) |
 | ∟ ∟ min | string | false | Global lower bound; null means no lower bound |
 | ∟ ∟ max | string | false | Global upper bound; null means no upper bound |

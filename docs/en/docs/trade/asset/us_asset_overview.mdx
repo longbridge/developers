@@ -23,6 +23,15 @@ longbridge positions
 
 <SDKLinks module="trade" klass="TradeContext" method="us_asset_overview" />
 
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/overview </td></tr>
+</tbody>
+</table>
+
 ## Parameters
 
 > **SDK method parameters.**
@@ -166,8 +175,8 @@ func main() {
 
 ```json
 {
-  "account_type": "US",
-  "asset_timestamp": 1751866334,
+  "account_type": "1",
+  "asset_timestamp": "1792661597",
   "cash_buy_power": "12500.00",
   "overnight_buy_power": "10000.00",
   "currency": "USD",
@@ -183,25 +192,47 @@ func main() {
   ],
   "stock_list": [
     {
-      "symbol": "AAPL.US",
+      "symbol": "MULL",
+      "full_symbol": "MULL.US",
+      "counter_id": "ETF/US/MULL",
+      "name": "GraniteShares 2x Long MU Daily ETF",
+      "market": "US",
+      "asset_type": "STOCK",
+      "position_side": "LONG",
       "quantity": "10",
       "currency": "USD",
-      "average_cost": "180.00",
-      "last_done": "185.00",
-      "prev_close": "183.00",
-      "asset_type": "stock",
-      "trade_status": "Normal"
+      "average_cost": "48.20",
+      "last_done": "51.35",
+      "prev_close": "50.10",
+      "market_price": "51.35",
+      "today_pl": "12.50",
+      "industry_name": "",
+      "trade_status": "201"
     }
   ],
+  "option_list": [],
   "crypto_list": [
     {
-      "symbol": "BTCUSD.BKKT",
-      "average_cost": "50000.00",
+      "symbol": "BTCUSD",
+      "counter_id": "VA/BKKT/BTCUSD",
+      "name": "Bitcoin",
+      "market": "BKKT",
+      "asset_type": "CRYPTO",
+      "position_side": "LONG",
+      "quantity": "0.01",
+      "average_cost": "108000.00",
+      "last_done": "110250.00",
+      "prev_close": "109800.00",
+      "market_price": "110250.00",
+      "today_pl": "4.50",
       "currency": "USD",
-      "asset_type": "crypto",
-      "industry_name": "Cryptocurrency"
+      "industry_name": "",
+      "trade_status": "105"
     }
-  ]
+  ],
+  "multi_leg": {
+    "holdings": []
+  }
 }
 ```
 
@@ -221,8 +252,8 @@ func main() {
 
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| account_type | string | true | Account type identifier |
-| asset_timestamp | string | true | Snapshot time (Unix seconds) |
+| account_type | string | true | Account type identifier, e.g. `"1"` |
+| asset_timestamp | string | true | Snapshot time, Unix seconds as a numeric string (e.g. `"1792661597"`). The SDKs return an integer |
 | cash_buy_power | string | true | Available buying power (cash) |
 | overnight_buy_power | string | true | Overnight buying power |
 | currency | string | true | Base currency |
@@ -230,6 +261,7 @@ func main() {
 | stock_list | USStockEntry[] | false | Stock positions |
 | option_list | object[] | false | Option positions |
 | crypto_list | USCryptoEntry[] | false | Crypto positions |
+| multi_leg | object | false | Multi-leg (option strategy) holdings, in a `holdings` list. Returned by the HTTP API |
 
 ### USCashEntry
 
@@ -250,14 +282,15 @@ func main() {
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| symbol | string | Ticker symbol (e.g. `AAPL`) |
-| full_symbol | string | Qualified symbol (e.g. `AAPL.US`) |
-| asset_type | string | Asset type |
+| symbol | string | Bare ticker without the market suffix, e.g. `MULL` |
+| full_symbol | string | Qualified symbol, e.g. `MULL.US` |
+| counter_id | string | Internal security identifier, e.g. `ETF/US/MULL`. Returned by the HTTP API |
+| asset_type | string | Asset type, e.g. `STOCK` |
 | quantity | string | Quantity held |
 | currency | string | Currency code |
 | average_cost | string | Average cost price |
 | market | string | Market identifier |
-| trade_status | string | Trading status |
+| trade_status | string | Trading status code, e.g. `201` |
 | prev_close | string | Previous close price |
 | last_done | string | Last traded price |
 | market_price | string | Current market price |
@@ -272,8 +305,20 @@ func main() {
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| symbol | string | Crypto trading-pair symbol (e.g. `BTCUSD.BKKT`) |
+| symbol | string | Crypto pair ticker without the market suffix, e.g. `BTCUSD`; the market is returned separately in `market`. Other APIs, including [US Transaction History](/docs/trade/asset/us_transaction_history), use the `TICKER.MARKET` form `BTCUSD.BKKT` |
+| counter_id | string | Internal security identifier, e.g. `VA/BKKT/BTCUSD`. Returned by the HTTP API |
+| market | string | Market: `BKKT` |
+| name | string | Crypto name, e.g. `Bitcoin` |
+| quantity | string | Quantity held |
 | average_cost | string | Average cost price |
 | currency | string | Quote currency |
-| asset_type | string | Asset type |
+| asset_type | string | Asset type: `CRYPTO` |
 | industry_name | string | Industry/category name |
+| position_side | string | Position side, e.g. `LONG` |
+| trade_status | string | Trading status code, e.g. `105` |
+| prev_close | string | Previous close price |
+| last_done | string | Last traded price |
+| market_price | string | Current market price |
+| today_pl | string | Today's P&L |
+
+The HTTP API returns crypto entries with the same fields as stock entries except `full_symbol`. The SDK crypto type (`USCryptoEntry`) has every field above except `counter_id`. Older SDK versions expose only `asset_type`, `average_cost`, `symbol`, `currency` and `industry_name` on this type; the other fields are always available from the HTTP API.

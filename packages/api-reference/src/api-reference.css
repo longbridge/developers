@@ -1454,17 +1454,11 @@
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
     no-repeat right 8px center;
 }
-/* The API reference is a 3-column console. Instead of the docs pages' asymmetric
-   header-aligned gutter (which left a big empty left margin), center the whole
-   app block (nav + content + rail) at a fixed max width with equal side gutters,
-   and let the content region fill that centered width. */
-@media (min-width: 1024px) {
-  [data-lbus-component='api-reference'].docs-layout {
-    max-width: none;
-    padding-left: 0;
-  }
-}
-[data-lbus-component='api-reference'] .docs-inner {
+/* Sidebar left gutter comes from `.docs-layout` in docs.css (aligned under the
+   header logo), same as the docs pages — do not override it here. */
+/* Only endpoint pages with the right rail go full width; content-only pages keep
+   the docs `.docs-inner` cap + centering so their gutter matches the docs pages. */
+[data-lbus-component='api-reference'] .docs-inner.has-rail {
   max-width: none;
   margin: 0;
 }
@@ -1485,12 +1479,12 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* Content column: capped to a comfortable measure and horizontally centered
-   within its track — on every page (standalone content pages and the 1fr cell
-   beside a right rail). */
+/* Content column: capped to a comfortable measure and left-aligned right after
+   the sidebar, like the docs pages. Do not center it with auto margins: that
+   leaves a gap after the sidebar and lets the column size to its content and
+   overlap the right rail. */
 [data-lbus-component='api-reference'] .docs-content {
   max-width: 52rem;
-  margin-inline: auto;
 }
 
 

@@ -7,6 +7,15 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### [v0.31.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.31.0)
+
+- **Longbridge US 賬戶全面可用** — `assets`、`portfolio`、`positions`、`cash-flow`、`exchange-rate`、`order`(當日與 `--history`) 和 `order detail` 在 US 賬戶上改用 US 資產與訂單接口。`--format json` 的輸出與 AP 賬戶使用相同的字段和結構，僅 US 賬戶有的字段在 `--schema` 中標注 `(US only)`;`check --format json` 會輸出 `dc_region`
+- **`order executions` 支援 US 賬戶** — 歷史成交來自 `/v1/trade/execution/history`,不按成交時間過濾，範圍邊界附近可能跨日延遲;`side` 從賬戶訂單補全，無法確定時顯示 `Unknown`
+- **AP 專屬命令給出替代方案** — US 賬戶執行 `fund-positions`、`margin-ratio` 時直接報錯並指出應改用的命令，不會發出請求
+- **`serve` 新增 `trade.us_query_orders` 與 `trade.us_order_detail`** — US 賬戶調用 AP 專屬方法時，報錯會給出應改用的 US 方法
+- **US 撤單 / 改單更安全** — 取不到訂單時預覽不再簽發確認碼;US 訂單號必須為純數字
+- **修復：`rank --count` 生效**
+
 ### [v0.30.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.30.0)
 
 - **行情命令不再建立 WebSocket 連接** — 以下一次性行情命令改用 HTTP REST 行情接口：`quote`、`depth`、`brokers`、`trades`、`intraday`、`kline`、`static`、`calc-index`、`capital`、`participants`、`trading`、`warrant`、`option`,以及 `portfolio`、`sharelist` 和下單預覽中的行情查詢。省去了 WebSocket 握手，啟動更快，輸出保持不變。TUI 和 `longbridge serve` 仍使用 WebSocket

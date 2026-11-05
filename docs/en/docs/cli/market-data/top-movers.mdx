@@ -17,10 +17,10 @@ longbridge top-movers
 ```
 
 ```
-| time                 | symbol  | change% | reason           | tags             |
-|----------------------|---------|---------|------------------|------------------|
-| 2026-05-22T17:44:45Z | TSLA.US | +3.24%  | 波动超 20 日均值 | 汽车制造商       |
-| 2026-05-22T14:42:36Z | RKLB.US | +11.32% | 波动超 20 日均值 | 航空航天与国防   |
+| time                 | symbol  | change% | reason                        | tags                      |
+|----------------------|---------|---------|-------------------------------|---------------------------|
+| 2026-05-22T17:44:45Z | TSLA.US | +3.24%  | Volatility exceeds 20-day avg | Automobile Manufacturers  |
+| 2026-05-22T14:42:36Z | RKLB.US | +11.32% | Volatility exceeds 20-day avg | Aerospace and Defense     |
 ```
 
 ## Examples
@@ -67,17 +67,17 @@ longbridge top-movers --market US --format json
 {
   "events": [
     {
-      "alert_reason": "波动超 20 日均值",
+      "alert_reason": "Volatility exceeds 20-day avg",
       "alert_type": 11,
       "timestamp": "1779471885",
       "stock": {
         "symbol": "TSLA.US",
         "code": "TSLA",
         "market": "US",
-        "name": "特斯拉",
+        "name": "Tesla, Inc.",
         "change": "0.0324",
         "last_done": "426.010",
-        "labels": ["汽车制造商"]
+        "labels": ["Automobile Manufacturers"]
       }
     }
   ],

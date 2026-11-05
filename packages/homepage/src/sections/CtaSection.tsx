@@ -1,4 +1,5 @@
-import type { Locale } from '@longbridge/openapi-utils'
+import { useEffect, useState } from 'react'
+import { isUSUser, type Locale } from '@longbridge/openapi-utils'
 
 // 1:1 port of the legacy VitePress "Final CTA" section (NewHomePage/index.vue,
 // the `.final-cta` section). Markup, copy, inline styles, and CSS mirror the
@@ -53,6 +54,10 @@ function localePath(locale: Locale, path: string) {
 }
 
 export function CtaSection({ locale }: CtaSectionProps) {
+  const [isUS, setIsUS] = useState(false)
+  useEffect(() => {
+    isUSUser().then(setIsUS)
+  }, [])
   const content = LOCALE[locale] ?? LOCALE.en
 
   return (
@@ -79,9 +84,11 @@ export function CtaSection({ locale }: CtaSectionProps) {
                 <path d="m12 5 7 7-7 7" />
               </svg>
             </a>
-            <a className="btn btn-outline btn-lg" href={localePath(locale, '/pricing')}>
-              {content.btn2}
-            </a>
+            {!isUS && (
+              <a className="btn btn-outline btn-lg" href={localePath(locale, '/pricing')}>
+                {content.btn2}
+              </a>
+            )}
           </div>
         </div>
       </section>

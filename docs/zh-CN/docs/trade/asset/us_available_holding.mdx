@@ -1,0 +1,189 @@
+---
+slug: us_available_holding
+title: 美股可用持仓
+sidebar_position: 13
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US 账户
+此方法仅适用于美国数据中心账户。
+:::
+
+获取美股账户某个持仓的可交易数量：多头持仓为可卖出数量，空头持仓为可买入平仓数量。
+
+<SDKLinks module="trade" klass="TradeContext" method="us_available_holding" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/available-holding </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> **SDK 方法参数。** HTTP 接口使用同名的 query 参数。
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| symbol | string | 是 | 标的代码，例如 `AAPL.US`；也可以是期权代码（如 `AAPL261120C345000.US`）或加密货币交易对（如 `BTCUSD.BKKT`） |
+| equity_type | string | 否 | 持仓类型：`STOCK` \| `OPTION` \| `CRYPTO`（默认：`STOCK`） |
+| position_side | string | 否 | 持仓方向：`LONG` \| `SHORT`（默认：`LONG`） |
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_available_holding("AAPL.US", equity_type="STOCK", position_side="LONG")
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_available_holding("AAPL.US", equity_type="STOCK", position_side="LONG")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.usAvailableHolding('AAPL.US', 'STOCK', 'LONG')
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{
+    oauth::OAuthBuilder,
+    trade::{GetUSAvailableHoldingOptions, TradeContext},
+    Config,
+};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let opts = GetUSAvailableHoldingOptions {
+        symbol: "AAPL.US".to_string(),
+        equity_type: "STOCK".to_string(),
+        position_side: "LONG".to_string(),
+    };
+    let resp = ctx.us_available_holding(opts).await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.USAvailableHolding(context.Background(), &trade.GetUSAvailableHolding{
+		Symbol:       "AAPL.US",
+		EquityType:   "STOCK",
+		PositionSide: "LONG",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Example
+
+```json
+{
+  "available_qty": "10"
+}
+```
+
+### Response Status
+
+| 状态码 | 描述 | 结构 |
+| ------ | ---- | ---- |
+| 200    | 成功 | [USAvailableHolding](#USAvailableHolding) |
+| 400    | 请求错误 | None   |
+
+## Schemas
+
+### USAvailableHolding
+
+<a id="USAvailableHolding"></a>
+
+| 名称 | 类型 | 必填 | 描述 |
+| ---- | ---- | ---- | ---- |
+| available_qty | string | 是 | 可卖出数量（多头持仓）或可买入平仓数量（空头持仓）；空头持仓时为负数 |

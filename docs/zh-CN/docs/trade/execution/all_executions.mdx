@@ -10,6 +10,10 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
+:::warning Longbridge US 账户不支持
+此接口需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。美股数据中心账户请改用[历史成交明细](./history_executions)（`GET /v1/trade/execution/history`）。
+:::
+
 该接口用于获取订单的成交明细，包括买入和卖出的成交记录，同时支持当日成交和历史成交查询。
 
 <SDKLinks module="trade" klass="TradeContext" method="all_executions" />

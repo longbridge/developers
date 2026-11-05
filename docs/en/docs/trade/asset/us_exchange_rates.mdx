@@ -1,0 +1,272 @@
+---
+slug: us_exchange_rates
+title: US Exchange Rates
+sidebar_position: 15
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+:::warning Longbridge US Accounts
+This method is only available for US data-center accounts.
+:::
+
+Get the exchange rates used by a US account.
+
+<SDKLinks module="trade" klass="TradeContext" method="us_exchange_rates" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/us/assets/exchange-rates </td></tr>
+</tbody>
+</table>
+
+## Parameters
+
+> **SDK method parameters.**
+
+No parameters required.
+
+## Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python">
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.us_exchange_rates()
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.us_exchange_rates()
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.usExchangeRates()
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = TradeContext::new(config);
+    let resp = ctx.us_exchange_rates().await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+	resp, err := c.USExchangeRates(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", resp)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+The HTTP API returns the rates as a two-level map:
+
+- The outer key of `universal_exchanges` is the account channel, e.g. `us_lb_apex`.
+- The inner key of `spec_exchanges` is the rate type, e.g. `am` or `reference`.
+
+Other keys may appear, so iterate over the maps rather than hard-coding the keys. The rate fields are JSON numbers in the HTTP API.
+
+The SDKs flatten this map into a single `exchanges` list. Each entry carries the two keys as `universal_key` and `spec_key`, alongside the rate fields, and returns the rates as strings.
+
+### Response Example
+
+HTTP API:
+
+```json
+{
+  "universal_exchanges": {
+    "us_lb_apex": {
+      "spec_exchanges": {
+        "am": {
+          "exchanges": [
+            {
+              "base_currency": "USD",
+              "other_currency": "USD",
+              "bid_rate": 1,
+              "offer_rate": 1,
+              "average_rate": 1
+            }
+          ]
+        },
+        "reference": {
+          "exchanges": [
+            {
+              "base_currency": "USD",
+              "other_currency": "USD",
+              "bid_rate": 1,
+              "offer_rate": 1,
+              "average_rate": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+SDK (flattened):
+
+```json
+{
+  "exchanges": [
+    {
+      "universal_key": "us_lb_apex",
+      "spec_key": "am",
+      "base_currency": "USD",
+      "other_currency": "USD",
+      "bid_rate": "1",
+      "offer_rate": "1",
+      "average_rate": "1"
+    },
+    {
+      "universal_key": "us_lb_apex",
+      "spec_key": "reference",
+      "base_currency": "USD",
+      "other_currency": "USD",
+      "bid_rate": "1",
+      "offer_rate": "1",
+      "average_rate": "1"
+    }
+  ]
+}
+```
+
+### Response Status
+
+| Status | Description | Schema |
+| ------ | ----------- | ------ |
+| 200    | Success     | [USExchangeRates](#USExchangeRates) |
+| 400    | Bad request | None   |
+
+## Schemas
+
+### USExchangeRates
+
+<a id="USExchangeRates"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| universal_exchanges | map&lt;string, [USUniversalExchanges](#USUniversalExchanges)&gt; | true | Exchange rates keyed by account channel, e.g. `us_lb_apex` |
+
+### USUniversalExchanges
+
+<a id="USUniversalExchanges"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| spec_exchanges | map&lt;string, [USSpecExchanges](#USSpecExchanges)&gt; | true | Exchange rates keyed by rate type, e.g. `am` or `reference` |
+
+### USSpecExchanges
+
+<a id="USSpecExchanges"></a>
+
+| Name | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| exchanges | [USExchangeRate](#USExchangeRate)[] | true | Exchange rates of this rate type |
+
+### USExchangeRate
+
+<a id="USExchangeRate"></a>
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| base_currency | string | Base currency |
+| other_currency | string | Quote currency |
+| bid_rate | number | Bid rate. The SDKs return it as a string |
+| offer_rate | number | Offer rate. The SDKs return it as a string |
+| average_rate | number | Average rate. The SDKs return it as a string |
+
+In the SDK response, each `exchanges` entry also has:
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| universal_key | string | The account channel the rate came from (the `universal_exchanges` key), e.g. `us_lb_apex` |
+| spec_key | string | The rate type the rate came from (the `spec_exchanges` key), e.g. `am` or `reference` |

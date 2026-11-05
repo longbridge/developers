@@ -22,10 +22,10 @@ const LOCALE = {
     title: 'Production-grade SDKs with real-time streaming.',
     desc: '7 SDKs built on a shared Rust core — subscribe to live data, place orders, and monitor positions with async/await patterns and built-in rate limiting.',
     feats: [
-      { h: 'Multi-Market', body: 'US · HK · SG · CN (SH/SZ) — stocks, ETFs, options, warrants.' },
+      { h: 'Global Markets', body: 'Stocks, ETFs and options, plus warrants where the market offers them.' },
       {
         h: 'Free & Paper Trading',
-        body: 'No additional API charges. Paper trading with real market data, no securities account required.',
+        body: 'No additional API charges. Paper trading with real market data is available for Longbridge HK / SG accounts.',
         strong: '$0 API charges',
       },
       {
@@ -44,10 +44,10 @@ const LOCALE = {
     title: '生产级 SDK，支持实时流式数据',
     desc: '7 个 SDK 共享 Rust 内核——订阅实时数据、下达订单、监控持仓，支持 async/await 模式与内置限速控制。',
     feats: [
-      { h: '多市场覆盖', body: 'US · HK · SG · CN（沪深）——股票、ETF、期权、权证。' },
+      { h: '全球市场', body: '股票、ETF、期权，以及所在市场提供的权证。' },
       {
         h: '免费及模拟交易',
-        body: '无额外 API 费用。用真实市场数据进行模拟交易，无需证券账户。',
+        body: '无额外 API 费用。Longbridge HK / SG 账户可用真实市场数据进行模拟交易。',
         strong: '零 API 费用',
       },
       {
@@ -63,10 +63,10 @@ const LOCALE = {
     title: '生產級 SDK，支援即時串流數據',
     desc: '7 個 SDK 共享 Rust 核心——訂閱即時數據、下達訂單、監控持倉，支援 async/await 模式與內建限速控制。',
     feats: [
-      { h: '多市場覆蓋', body: 'US · HK · SG · CN（滬深）——股票、ETF、期權、權證。' },
+      { h: '全球市場', body: '股票、ETF、期權，以及所在市場提供的權證。' },
       {
         h: '免費及模擬交易',
-        body: '無額外 API 費用。用真實市場數據進行模擬交易，無需證券帳戶。',
+        body: '無額外 API 費用。Longbridge HK / SG 帳戶可用真實市場數據進行模擬交易。',
         strong: '零 API 費用',
       },
       {
@@ -782,21 +782,6 @@ const SDK_CSS = `
   color: var(--lb-fg-2);
   margin-top: 4px;
 }
-.sdk-feat-pills {
-  display: flex;
-  gap: 4px;
-  margin-top: 6px;
-  flex-wrap: wrap;
-}
-.sdk-feat-pills span {
-  font-family: var(--app-mono);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 3px;
-  background: var(--lb-bg-2);
-  color: var(--lb-fg-1);
-}
 .sdk-feat-strong {
   font-size: 18px;
   font-weight: 700;
@@ -936,14 +921,7 @@ export function SdkSection({ locale }: SdkSectionProps) {
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="sdk-feat-h">{content.feats[0].h}</div>
-                  <div className="sdk-feat-body">
-                    {content.feats[0].body}
-                    <div className="sdk-feat-pills">
-                      {['US', 'HK', 'SG', 'CN'].map((m) => (
-                        <span key={m}>{m}</span>
-                      ))}
-                    </div>
-                  </div>
+                  <div className="sdk-feat-body">{content.feats[0].body}</div>
                 </div>
               </div>
               {/* Free & Paper Trading */}

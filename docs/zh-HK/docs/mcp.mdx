@@ -42,7 +42,7 @@ Longbridge MCP 暴露 160+ 工具，覆蓋六大能力域，客戶端連接後�
 
 ## 前置條件
 
-- 已擁有 [Longbridge 帳戶](https://longbridge.com/hk/download)並完成開戶，或開通模擬帳戶
+- 已擁有 [Longbridge 帳戶](https://longbridge.com/hk/download)並完成開戶，或開通模擬帳戶（Longbridge US 帳戶不提供模擬帳戶）
 - 支援 MCP OAuth 2.1 的其他 AI 客戶端（見下方相容性說明）
 
 ## 客戶端接入
@@ -185,9 +185,9 @@ AI 客戶端                  瀏覽器                    Longbridge
 
 1. **發起連線** — 在客戶端添加 Longbridge MCP 配置後，首次調用會觸發授權
 2. **瀏覽器跳轉** — 客戶端自動開啟瀏覽器，進入 Longbridge 登入與權限確認頁
-3. **登入並授權** — 使用 Longbridge 帳戶登入，查看並同意所請求的權限範圍（scope）
+3. **登入並授權** — 使用 Longbridge 帳戶登入，查看並同意所請求的權限範圍（scope，參見 [OAuth 權限範圍](/zh-HK/docs/getting-started#oauth-scopes)）
 4. **建立會話** — 授權完成後，客戶端取得憑證，MCP 工具即可使用
-5. **憑證維護** — 憑證依 OAuth 策略自動刷新；如需撤銷，前往 Longbridge 帳戶安全設定
+5. **憑證維護** — 憑證依 OAuth 策略自動刷新。可在 Longbridge 帳戶安全設定中移除該授權，使其無法再續期；已簽發的 Token 在過期前仍然有效
 
 ## 客戶端相容性
 
@@ -206,7 +206,7 @@ Longbridge MCP 依賴 **MCP OAuth 2.1** 標準。若客戶端未完整實作該�
 - **最小權限**：授權時僅同意當前任務所需的 scope，避免過度授權
 - **交易確認**：涉及下單等交易操作時，在 AI 提示詞中明確要求執行前人工確認
 - **憑證安全**：OAuth 憑證由客戶端管理，避免將其複製至不受信任的環境
-- **定期審查**：定期在 [Longbridge 帳戶](https://longbridge.com/hk/download)安全設定中檢查並撤銷不再使用的授權
+- **定期審查**：定期在 [Longbridge 帳戶](https://longbridge.com/hk/download)安全設定中檢查並移除不再使用的授權（移除後無法再續期，已簽發的 Token 在過期前仍然有效）
 
 ## 推薦使用方式
 
@@ -231,3 +231,4 @@ Longbridge MCP 依賴 **MCP OAuth 2.1** 標準。若客戶端未完整實作該�
 
 - 檢查帳戶的交易權限和市場可交易資格
 - 確認當前 MCP 會話的 OAuth scope 包含交易相關權限
+- 錯誤碼 `403308`（`Target API's scope is not in authorized scopes`）表示會話未被授予該工具所需的 scope（如 `account.read`、`trade.read` 或 `trade.write`）：請移除並重新添加 MCP 配置，授權時勾選該 scope。帳戶未開通對應市場的證券帳戶或交易權限時也可能出現該錯誤。參見 [OAuth 權限範圍](/zh-HK/docs/getting-started#oauth-scopes)
