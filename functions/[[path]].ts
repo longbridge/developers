@@ -146,7 +146,7 @@ const GONE_PAGES: Record<string, string> = {
   // 美股账户订单 → 通用订单接口
   '/docs/trade/order/us_query_orders': '/docs/trade/order/history_orders',
   '/docs/trade/order/us_order_detail': '/docs/trade/order/order_detail',
-  // 美股加密货币行情 → 通用行情(WebSocket 拉取)
+  // 美股加密货币行情 → 通用行情 (WebSocket 拉取)
   '/docs/quote/stocks/us_crypto_overview': '/docs/quote/pull/quote',
   // 美股基本面 → 通用基本面接口
   '/docs/fundamental/fundamental/us_company_overview': '/docs/fundamental/fundamental/company-profile',
