@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
-import { resolveUrl, resolveLocale } from '@longbridge/openapi-utils'
+import { resolveUrl, resolveLocale, isSiteRoot } from '@longbridge/openapi-utils'
 import { endpointList, wsCommandList } from '@longbridge/openapi-api-reference/markdown'
 import rawYaml from '../../openapi.yaml?raw'
 
@@ -10,6 +10,10 @@ export const GET: APIRoute = async ({ site }) => {
 
   const lines = enEntries
     .filter((entry) => !resolveUrl(entry).endsWith('/docs/api'))
+    // 首页没有 markdown 孪生页：resolveUrl 给的是 `/`，拼出来是 `/.md`，
+    // 而 .md 端点对它生成的是 slug=undefined 的空路由，实际取不到文件。
+    // 首页是营销页，没有值得给 crawler 的正文，直接不列。
+    .filter((entry) => !isSiteRoot(resolveUrl(entry)))
     .map((entry) => {
       const url = resolveUrl(entry)
       const title = entry.data.title ?? url

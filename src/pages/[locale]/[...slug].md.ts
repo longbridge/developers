@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
-import { resolveUrl, resolveLocale } from '@longbridge/openapi-utils'
+import { resolveUrl, resolveLocale, isSiteRoot } from '@longbridge/openapi-utils'
 
 export async function getStaticPaths() {
   const all = await getCollection('docs')
@@ -10,12 +10,14 @@ export async function getStaticPaths() {
     .filter((entry) => resolveLocale(entry) !== 'en')
     // /<locale>/docs/api.md is served from openapi.yaml by [locale]/docs/api.md.ts.
     .filter((entry) => !resolveUrl(entry).endsWith('/docs/api'))
+    // Each locale's homepage has no markdown twin: stripping the locale leaves an
+    // empty slug, i.e. the route `/zh-CN/.md`, which resolves to no file. See isSiteRoot.
+    .filter((entry) => !isSiteRoot(resolveUrl(entry)))
     .map((entry) => {
     const url = resolveUrl(entry)
     const locale = resolveLocale(entry)
     const bareUrl = locale === 'en' ? url : url.replace(new RegExp(`^/${locale}`), '')
-    const slug = bareUrl === '/' ? undefined : bareUrl.replace(/^\//, '')
-    return { params: { locale, slug }, props: { entry } }
+    return { params: { locale, slug: bareUrl.replace(/^\//, '') }, props: { entry } }
   })
 }
 

@@ -2936,8 +2936,8 @@ x-websocket:
           cmd: 15
           direction: request
           description: |
-            :::warning Not for Longbridge US Accounts
-            This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+            :::warning Longbridge HK / SG accounts only
+            This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
             :::
 
             This API is used to obtain the real-time broker queue data of security.
@@ -2954,8 +2954,8 @@ x-websocket:
             }
             ```
           x-description-zh: |
-            :::warning Longbridge US 账户不支持
-            此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+            :::warning 仅支持 Longbridge 香港 / 新加坡账户
+            此方法仅支持 Longbridge 香港 / 新加坡账户，可查询任意标的，包括美股。
             :::
 
             该接口用于获取标的的实时经纪队列数据。
@@ -2972,8 +2972,8 @@ x-websocket:
             }
             ```
           x-description-zh-hk: |
-            :::warning Longbridge US 賬戶不支援
-            此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+            :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+            此方法僅支援 Longbridge 香港 / 新加坡賬戶，可查詢任意標的，包括美股。
             :::
 
             該接口用於獲取標的的實時經紀隊列數據。
@@ -7901,8 +7901,8 @@ x-websocket:
           cmd: 103
           direction: push
           description: |
-            :::warning Not for Longbridge US Accounts
-            This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+            :::warning Longbridge HK / SG accounts only
+            This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
             :::
 
             Real-time brokers data push of the subscribed security.
@@ -7916,8 +7916,8 @@ x-websocket:
             }
             ```
           x-description-zh: |
-            :::warning Longbridge US 账户不支持
-            此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+            :::warning 仅支持 Longbridge 香港 / 新加坡账户
+            此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
             :::
 
             已订阅标的的实时经纪队列数据推送。
@@ -7931,8 +7931,8 @@ x-websocket:
             }
             ```
           x-description-zh-hk: |
-            :::warning Longbridge US 賬戶不支援
-            此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+            :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+            此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
             :::
 
             訂閱標的的實時經紀隊列數據。
@@ -17388,20 +17388,20 @@ paths:
       x-summary-zh: 创建定投
       x-summary-zh-hk: 創建定投
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Create a new recurring investment plan for a security.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         为指定证券创建新的定投。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         為指定證券創建新的定投。
@@ -17586,20 +17586,20 @@ paths:
       x-summary-zh: 更新定投
       x-summary-zh-hk: 更新定投
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Pause or resume an existing recurring investment plan.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         暂停或恢复已有的定投。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         暫停或恢復已有的定投。
@@ -17777,20 +17777,20 @@ paths:
       x-summary-zh: 暂停 / 恢复 / 终止定投计划
       x-summary-zh-hk: 暫停 / 恢復 / 終止定投計劃
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Change the status of an existing DCA plan: pause, resume, or permanently stop it.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         更改现有定投计划的状态：暂停、恢复或永久终止。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         更改現有定投計劃的狀態：暫停、恢復或永久終止。
@@ -17937,20 +17937,20 @@ paths:
       x-summary-zh: 检查定投支持
       x-summary-zh-hk: 檢查定投支持
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Check whether the given securities support DCA recurring investment.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         检查指定标的是否支持定投。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         檢查指定標的是否支持定投。
@@ -18115,20 +18115,20 @@ paths:
       x-summary-zh: 计算定投日期
       x-summary-zh-hk: 計算定投日期
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Calculate the next projected trade date for given DCA plan parameters.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         根据给定的定投计划参数，计算下一次预计交易日期。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         根據給定的定投計劃參數，計算下一次預計交易日期。
@@ -18298,20 +18298,20 @@ paths:
       x-summary-zh: 设置定投提醒
       x-summary-zh-hk: 設置定投提醒
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Set the advance reminder time for DCA plans. Supported values: `1`, `6`, or `12` hours.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         设置定投计划的提前提醒时间。支持的值：`1`、`6` 或 `12` 小时。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         設置定投計劃的提前提醒時間。支持的值：`1`、`6` 或 `12` 小時。
@@ -21564,20 +21564,20 @@ paths:
       x-summary-zh: 经纪商持仓
       x-summary-zh-hk: 經紀商持倉
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         View broker holding positions for HK-listed stocks, including top buyers/sellers and full detail.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可查询任意标的，包括美股。
         :::
 
         查看港股券商持仓情况，包含主要买卖方和详细持仓列表。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可查詢任意標的，包括美股。
         :::
 
         查看港股券商持倉情況，包含主要買賣方和詳細持倉列表。
@@ -21801,20 +21801,20 @@ paths:
       x-summary-zh: 经纪商每日持仓历史
       x-summary-zh-hk: 經紀商每日持倉歷史
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Get daily holding history for a specific broker in an HK-listed security.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可查询任意标的，包括美股。
         :::
 
         获取某一经纪商在港股上市证券中的每日持仓历史记录。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可查詢任意標的，包括美股。
         :::
 
         獲取某一經紀商在港股上市證券中的每日持倉歷史記錄。
@@ -21999,20 +21999,20 @@ paths:
       x-summary-zh: 经纪商持仓详情
       x-summary-zh-hk: 經紀商持倉詳情
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Get full broker holding detail list for an HK-listed security (all brokers and their positions).
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可查询任意标的，包括美股。
         :::
 
         获取港股上市证券的完整经纪商持仓详情列表（所有经纪商及其持仓数量）。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可查詢任意標的，包括美股。
         :::
 
         獲取港股上市證券的完整經紀商持倉詳情列表（所有經紀商及其持倉數量）。
@@ -29246,20 +29246,20 @@ paths:
       x-summary-zh: 经营数据
       x-summary-zh-hk: 經營數據
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Get operating metrics and financial indicator summaries by report period.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可查询任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可查询任意标的，包括美股。
         :::
 
         按财报期获取经营数据及核心财务指标摘要。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可查詢任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可查詢任意標的，包括美股。
         :::
 
         按財報期獲取經營數據及核心財務指標摘要。
@@ -35626,21 +35626,21 @@ paths:
       x-summary-zh: 基金持仓
       x-summary-zh-hk: 基金持倉
       description: |
-        :::warning Not for Longbridge US Accounts
-        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and have no equivalent API.
+        :::warning Longbridge HK / SG accounts only
+        This API is available to Longbridge HK / SG accounts only.
         :::
 
         The API is used to obtain fund position information including account, fund code, holding share, cost net worth,
         current net worth, and currency.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此接口需要 AP 数据中心账户（香港/新加坡）。不支持美股数据中心账户，也没有对应的美股接口。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此接口仅支持 Longbridge 香港 / 新加坡账户。
         :::
 
         该接口用于获取包括账户、基金代码、持有份额、成本净值、当前净值、币种在内的基金持仓信息。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此接口需要 AP 數據中心賬戶（香港/新加坡）。不支援美股數據中心賬戶，也沒有對應的美股接口。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此接口僅支援 Longbridge 香港 / 新加坡賬戶。
         :::
 
         該接口用於獲取包括賬戶、基金代碼、持有份額、成本淨值、當前淨值、幣種在內的基金持倉信息。
@@ -36276,21 +36276,21 @@ paths:
       x-summary-zh: 保证金比例
       x-summary-zh-hk: 保證金比例
       description: |
-        :::warning Not for Longbridge US Accounts
-        This API requires an AP data-center account (HK / SG). US data-center accounts are not supported and have no equivalent API.
+        :::warning Longbridge HK / SG accounts only
+        This API is available to Longbridge HK / SG accounts only.
         :::
 
         This API is used to obtain the initial margin ratio, maintain the margin ratio and strengthen the
         margin ratio of stocks.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此接口需要 AP 数据中心账户（香港/新加坡）。不支持美股数据中心账户，也没有对应的美股接口。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此接口仅支持 Longbridge 香港 / 新加坡账户。
         :::
 
         该接口用于获取股票初始保证金比例、维持保证金比例、强平保证金比例。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此接口需要 AP 數據中心賬戶（香港/新加坡）。不支援美股數據中心賬戶，也沒有對應的美股接口。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此接口僅支援 Longbridge 香港 / 新加坡賬戶。
         :::
 
         該接口用於獲取股票初始保證金比例、維持保證金比例、強平保證金比例。
@@ -40319,20 +40319,20 @@ paths:
       x-summary-zh: 获取定投列表
       x-summary-zh-hk: 獲取定投列表
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Get all recurring investment (DCA) plans for the current user.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         获取当前用户的所有定投（DCA）计划。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         獲取當前用戶的所有定投（DCA）計劃。
@@ -40633,20 +40633,20 @@ paths:
       x-summary-zh: 定投交易历史
       x-summary-zh-hk: 定投交易歷史
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Get the execution history for a specific DCA plan including trade dates, amounts, and prices.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         获取指定定投的执行历史，包含交易日期、金额和价格。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         獲取指定定投的執行歷史，包含交易日期、金額和價格。
@@ -40884,20 +40884,20 @@ paths:
       x-summary-zh: 定投统计
       x-summary-zh-hk: 定投統計
       description: |
-        :::warning Not for Longbridge US Accounts
-        This method requires an AP data-center account (HK / SG). US data-center accounts will receive a region restriction error. AP accounts can call this method with any supported symbol, including US stocks.
+        :::warning Longbridge HK / SG accounts only
+        This method is available to Longbridge HK / SG accounts only. It works with any supported symbol, including US stocks.
         :::
 
         Get DCA statistics summary including total invested amount and profit/loss.
       x-description-zh: |
-        :::warning Longbridge US 账户不支持
-        此方法需要 AP 数据中心账户（香港/新加坡）。美股数据中心账户将收到区域限制错误。AP 账户可操作任意标的，包括美股。
+        :::warning 仅支持 Longbridge 香港 / 新加坡账户
+        此方法仅支持 Longbridge 香港 / 新加坡账户，可操作任意标的，包括美股。
         :::
 
         获取定投统计汇总信息，包括总投入金额和盈亏情况。
       x-description-zh-hk: |
-        :::warning Longbridge US 賬戶不支援
-        此方法需要 AP 數據中心賬戶（香港/新加坡）。美股數據中心賬戶將收到區域限制錯誤。AP 賬戶可操作任意標的，包括美股。
+        :::warning 僅支援 Longbridge 香港 / 新加坡賬戶
+        此方法僅支援 Longbridge 香港 / 新加坡賬戶，可操作任意標的，包括美股。
         :::
 
         獲取定投統計匯總信息，包括總投入金額和盈虧情況。
