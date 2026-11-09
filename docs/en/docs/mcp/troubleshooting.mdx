@@ -1,0 +1,25 @@
+---
+title: 'Troubleshooting'
+sidebar_position: 7
+sidebar_icon: badge-question-mark
+---
+
+# Troubleshooting
+
+## OAuth sign-in failed
+
+- Confirm your Longbridge account is in good standing and identity verification is complete
+- Remove the existing MCP configuration from the client and re-add it to trigger a fresh authorization
+- Check whether the requested scopes are supported for your account type
+- If your client can't open a browser, use an [Agent Auth Code](/docs/agent-auth) instead
+
+## Connected but some tools are missing
+
+- Client limits: the ChatGPT App and the Claude directory connector do not include trading tools
+- Account or regional restrictions: certain markets or features may be limited by account level or region
+- Scope changes: if tool capabilities have been updated, re-authorize to receive the new scopes
+
+## Permission denied on trading actions
+
+- Verify trading permissions and market eligibility on your account
+- Confirm that the current MCP session's OAuth scopes include trading-related permissions

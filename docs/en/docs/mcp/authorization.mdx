@@ -1,0 +1,44 @@
+---
+title: 'Authorization'
+sidebar_position: 5
+sidebar_icon: book
+---
+
+# Authorization
+
+Longbridge MCP uses standard OAuth 2.1. You never need to paste API keys or tokens into the client.
+
+In ChatGPT, the authorization happens when you add Longbridge from Plugins. In other MCP clients, the first tool call usually starts the browser authorization flow.
+
+## OAuth authorization flow
+
+```
+AI client                  Browser                   Longbridge
+    |                        |                           |
+    |--- initiate MCP ------->|                           |
+    |                        |--- redirect to auth ------>|
+    |                        |<-- show login & consent ---|
+    |                        |--- sign in & approve ------>|
+    |<-- return credentials --|                           |
+    |--- call tools with credentials ----------------------->|
+```
+
+**Steps:**
+
+1. **Initiate connection** — Adding the Longbridge MCP config and calling a tool for the first time triggers the authorization flow
+2. **Browser redirect** — The client opens a browser tab with the Longbridge login and consent page
+3. **Sign in and approve** — Log in with your Longbridge account and review and accept the requested permission scopes
+4. **Session established** — After approval, the client receives credentials and MCP tools become available
+5. **Credential maintenance** — Credentials are refreshed automatically per OAuth policy; to revoke access, visit Longbridge account security settings
+
+## Client compatibility
+
+Longbridge MCP requires clients that fully implement **MCP OAuth 2.1**. Clients with incomplete support will fail during the authorization flow.
+
+Known issue: early versions of Cherry Studio do not support the full OAuth flow. Please upgrade to the latest release.
+
+If another client fails to connect, check its version and MCP support documentation.
+
+:::tip Client can't open the browser?
+If your client has incomplete OAuth support or cannot launch a browser, use an [Agent Auth Code](/docs/agent-auth) instead: generate a one-time code at [https://open.longbridge.com/connect](https://open.longbridge.com/connect), connect to the dedicated endpoint `https://mcp.longbridge.com/agent`, and have the agent redeem it via the `authenticate` tool.
+:::

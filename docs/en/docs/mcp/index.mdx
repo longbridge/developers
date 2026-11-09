@@ -1,0 +1,47 @@
+---
+title: 'Longbridge MCP'
+sidebar_label: 'Overview'
+sidebar_position: 1
+sidebar_icon: book_open
+seo_title: 'Longbridge MCP Server: Connect ChatGPT, Claude & AI Agents'
+description: 'Connect Longbridge to ChatGPT, Claude, Cursor and other AI tools via hosted MCP. After OAuth sign-in, AI agents can query quotes, fundamentals and your portfolio.'
+---
+
+# Longbridge MCP Service
+
+Longbridge provides a hosted MCP (Model Context Protocol) service that lets you use [Longbridge market data](https://longbridge.com/markets) and account capabilities directly from ChatGPT, Claude, AI coding assistants, and other chat tools — without managing API keys manually.
+
+:::tip MCP endpoint
+
+- Global: `https://mcp.longbridge.com`
+- Mainland China: `https://mcp.longbridge.cn` (faster access)
+
+US accounts must use the global endpoint — `.cn` has no route to the US data center and serves AP accounts (Longbridge SG / HK) only. See [Access Points and Data Centers](/docs/getting-started#access-points-and-data-centers).
+:::
+
+## Available capabilities
+
+Longbridge MCP exposes 160+ tools across six capability areas. Your client discovers them automatically on connect — no manual configuration.
+
+| Capability                  | Coverage                                                                                           |
+| --------------------------- | -------------------------------------------------------------------------------------------------- |
+| **[Real-time market data](https://longbridge.com/markets)**   | Quotes, candlesticks, depth, broker queues, trades, intraday capital flow                          |
+| **Fundamentals & research** | Company profiles, [dividends](https://longbridge.com/calendar/dividend), valuations, executive holdings, A/H premium, macroeconomic indicators |
+| **Derivatives**             | Option chains, warrant filters, issuers, warrant quotes                                            |
+| **Account & portfolio**     | Balances, positions, cash flow, watchlists and groups                                              |
+| **Trading**                 | Place / modify / cancel orders, multi-leg options, estimate max purchase quantity                  |
+| **Automation**              | Price alerts, scheduled DCA (dollar-cost averaging) plans, grid trading                            |
+
+Actual tool availability depends on your region, account level, and granted OAuth scopes. See [Tools](/docs/mcp/tools) for the full list.
+
+## Prerequisites
+
+- An active [Longbridge account](https://longbridge.com/hk/download) with onboarding completed, or a paper trading account
+- An AI client that supports MCP OAuth 2.1 (see [Client compatibility](/docs/mcp/authorization#client-compatibility))
+
+## Get started
+
+1. [Connect your AI client](/docs/mcp/setup) — ChatGPT, Claude, Claude Code, Codex, Cursor, and more
+2. [Authorize with your Longbridge account](/docs/mcp/authorization) — standard OAuth 2.1, no API keys to paste
+3. [Trade stocks and options with AI](/docs/mcp/trading) — research, build, and place orders in natural language
+4. Review the [security best practices](/docs/mcp/best-practices) before enabling trading

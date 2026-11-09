@@ -186,25 +186,28 @@ function buildItems(
  * Sidebar scoping — legacy vitepress emits two distinct sidebars (see
  * openapi-website/docs/.vitepress/locales/en/sidebar.ts):
  *   `/docs/cli` → cli-only tree from docs/{locale}/docs/cli/**
- *   `/docs`    → full tree from docs/{locale}/docs/** excluding cli/
+ *   `/docs/mcp` → mcp-only tree from docs/{locale}/docs/mcp/**
+ *   `/docs`    → full tree from docs/{locale}/docs/** excluding cli/ and mcp/
  *
  * Astro layout callers pass a `scope` derived from pathname to
  * `buildSidebar` so users navigating under /docs/cli see the CLI
  * sub-tree instead of the whole docs tree.
  */
-export type SidebarScope = 'docs' | 'cli'
+export type SidebarScope = 'docs' | 'cli' | 'mcp'
 
 export function resolveSidebarScope(pathname: string): SidebarScope {
   // Strip locale prefix if present so `/zh-CN/docs/cli/foo` still resolves.
   const stripped = pathname.replace(/^\/(zh-CN|zh-HK)(?=\/|$)/, '')
-  return stripped.startsWith('/docs/cli') ? 'cli' : 'docs'
+  if (stripped.startsWith('/docs/cli')) return 'cli'
+  if (stripped === '/docs/mcp' || stripped.startsWith('/docs/mcp/')) return 'mcp'
+  return 'docs'
 }
 
 /**
  * Build the sidebar tree for a given locale by reading the filesystem.
- * When `scope` is 'cli', reads docs/{locale}/docs/cli/**. When 'docs'
- * (default), reads docs/{locale}/docs/** with the `cli/` sub-directory
- * excluded so it doesn't leak into the main docs sidebar.
+ * When `scope` is 'cli' or 'mcp', reads docs/{locale}/docs/{scope}/**. When
+ * 'docs' (default), reads docs/{locale}/docs/** with the `cli/` and `mcp/`
+ * sub-directories excluded so they don't leak into the main docs sidebar.
  * Works in both Node.js (vitest) and Astro server contexts.
  */
 export function buildSidebar(
@@ -212,10 +215,10 @@ export function buildSidebar(
   scope: SidebarScope = 'docs',
 ): SidebarNode[] {
   const loc = locale as Locale
-  const rootDir = scope === 'cli'
-    ? path.join(process.cwd(), 'docs', loc, 'docs', 'cli')
-    : path.join(process.cwd(), 'docs', loc, 'docs')
-  const rootRel = scope === 'cli' ? `${loc}/docs/cli` : `${loc}/docs`
+  const rootDir = scope === 'docs'
+    ? path.join(process.cwd(), 'docs', loc, 'docs')
+    : path.join(process.cwd(), 'docs', loc, 'docs', scope)
+  const rootRel = scope === 'docs' ? `${loc}/docs` : `${loc}/docs/${scope}`
 
   // Delegate to buildItems so top-level mdx files (e.g. cli/install.mdx,
   // cli/tui.mdx, cli/release-notes.mdx) become flat sidebar items alongside
@@ -224,15 +227,15 @@ export function buildSidebar(
   // link (its sidebar_position -999 sorts it first).
   const nodes = buildItems(rootDir, loc, rootRel, true)
 
-  // scope='docs' must exclude the cli/ subtree — cli has its own sidebar.
+  // scope='docs' must exclude the cli/ and mcp/ subtrees — each has its own
+  // top-nav tab and sidebar.
   const filtered = scope === 'docs'
     ? nodes.filter(
         (n) =>
           n.label !== 'CLI' &&
           !(n.link ?? '').startsWith('/docs/cli') &&
-          // MCP has its own top-nav tab (like CLI); keep it out of the docs sidebar.
           n.label !== 'MCP' &&
-          (n.link ?? '') !== '/docs/mcp',
+          !(n.link ?? '').startsWith('/docs/mcp'),
       )
     : nodes
 

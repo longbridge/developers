@@ -27,7 +27,7 @@ export function resolveUrl(entry: CollectionEntry<'docs'>): string {
     if (explicit.startsWith('/')) {
       // Legacy vitepress semantics: for files under `<locale>/docs/**`, an
       // absolute slug is relative to the `/docs` route root. E.g.
-      // docs/en/docs/mcp.mdx with `slug: /mcp` → URL `/docs/mcp`, matching
+      // docs/en/docs/agent-auth.mdx with `slug: /agent-auth` → URL `/docs/agent-auth`, matching
       // the vitepress rewriteMarkdownPath output `/{locale}/docs/{slug}`.
       // For files directly under `<locale>/` (marketing pages sdk.mdx,
       // pricing.mdx, skill.mdx), the slug is site-absolute.

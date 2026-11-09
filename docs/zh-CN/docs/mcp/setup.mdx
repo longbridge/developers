@@ -1,0 +1,135 @@
+---
+title: '客户端接入'
+sidebar_position: 2
+sidebar_icon: zap
+---
+
+# 客户端接入
+
+推荐优先从 ChatGPT 开始使用，因为 Longbridge 已经可以直接在 ChatGPT Plugins 中搜索并授权。其他 MCP 客户端的配置格式可能随版本变更，请以客户端官方文档为准。
+
+所有客户端都连接同一个地址 —— `https://mcp.longbridge.com`（中国大陆可使用 `https://mcp.longbridge.cn` 以获得更快访问，详见[概览](/zh-CN/docs/mcp)）。
+
+:::tip 哪些客户端可以交易？
+ChatGPT App 与 Claude 目录连接器为只读：支持行情、研究与账户查询，但不支持下单。如需下单、改单、撤单，请使用直接连接 MCP 地址的客户端，如 Claude Code、Codex、Cursor、Zed 等。详见[用 AI 交易](/zh-CN/docs/mcp/trading)。
+:::
+
+## ChatGPT
+
+Longbridge 已经作为官方 ChatGPT App 提供。
+
+在 ChatGPT 网页版、桌面端或手机客户端中：
+
+1. 打开 **Plugins**
+2. 搜索 `longbridge`，或直接打开 [Longbridge ChatGPT App](https://chatgpt.com/plugins/longbridge)
+3. 选择 **Longbridge**，并按提示完成授权登录
+
+![在 ChatGPT Plugins 中搜索 Longbridge](https://assets.lbkrs.com/uploads/aeb84040-b2c7-442d-af46-adfab66297a1/scr-20260707-nbjr.png)
+
+![授权 Longbridge ChatGPT App](https://assets.lbkrs.com/uploads/a66bcd75-d747-4259-b684-a689d324716c/scr-20260707-nbno.png)
+
+完成授权后，每次提问时需在消息前加上 `@longbridge`，否则 ChatGPT 不会调用 Longbridge 来查询数据。例如：`@longbridge 查询我的当日订单`。
+
+:::warning ChatGPT 中不含交易下单功能
+由于 ChatGPT 平台规则限制，Longbridge ChatGPT App 不含下单及其他交易相关工具。如需使用交易功能，请改用 Claude Code、Cursor 等其他 MCP 客户端。
+:::
+
+## Claude
+
+Longbridge 已作为官方连接器上架 Claude 应用目录。
+
+在 [Claude](https://claude.ai) 网页版或 Claude 桌面端中：
+
+1. 点击 **Customize** → **Connectors**，然后点击 **Add** 按钮
+2. 在下拉菜单中选择 **Browser Connectors**，搜索 `longbridge`
+3. 选择 **Longbridge**，按提示完成授权登录
+
+也可直接打开 [Longbridge Connector](https://claude.ai/directory/longbridge)。
+
+## Claude Code
+
+在终端运行以下命令：
+
+```bash
+claude mcp add --transport http longbridge https://mcp.longbridge.com
+```
+
+然后进入 `claude` 终端界面，输入 `/mcp`，选择 `longbridge`，再选择 **Authenticate** 跟随流程完成 OAuth 授权。
+
+## Codex
+
+在终端运行以下命令：
+
+```bash
+codex mcp add longbridge --url https://mcp.longbridge.com
+```
+
+随后在 Codex 中按提示完成 OAuth 授权流程。
+
+### Codex Desktop
+
+1. 点击右下角 **Settings** → **MCP Servers** → **Add Server**
+2. 在 "Connect to a custom MCP" 界面填写：
+   - Name：`longbridge`
+   - 类型：**Streamable HTTP**
+   - URL：`https://mcp.longbridge.com`
+   - 其他字段留空
+3. 点击 **Save**
+4. 回到 MCP Servers 列表，点击 `longbridge` 条目上的 **Authenticate** 完成 OAuth 授权
+
+## Grok
+
+打开 [Grok Connectors](https://grok.com/connectors)，添加自定义 MCP Server：
+
+1. 在左侧边栏选择 **Skills and Connectors** → **Connectors** → **New Connector** → **Custom**
+2. 填写：
+   - Name：`Longbridge`
+   - Server URL：`https://mcp.longbridge.com`
+3. 点击 **Add Connector**，跟随 Longbridge OAuth 2 授权流程完成添加
+
+![](https://assets.lbkrs.com/uploads/08d07992-5463-4bfd-a4e4-97fab6e9cb41/grok-0.png)
+
+![](https://assets.lbkrs.com/uploads/56eee753-f3d4-4186-b024-ee0145f4eb54/grok-1.png)
+
+## Cursor
+
+Settings → MCP Servers → 添加 Remote MCP Server，填入 `https://mcp.longbridge.com` 即可。
+
+## Zed
+
+在 `settings.json` 的 `context_servers` 字段（key 名称可自定义）中添加：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+## Cherry Studio
+
+设置 → MCP 服务器 → 添加，填入 `https://mcp.longbridge.com` 即可。
+
+## Manus
+
+在 Manus 中打开 **Plugins** 窗口，点击右侧的 **Create** 按钮，从弹出菜单中选择 **Import MCP by JSON**，粘贴以下 JSON 即可完成导入：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "url": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+![](https://assets.lbctrl.com/uploads/f3aa3f71-c7a1-48b3-91dc-ea82a7018b53/scr-20260625-ttzy.png)
+
+## 下一步
+
+- 了解 [OAuth 授权流程](/zh-CN/docs/mcp/authorization)；如客户端无法打开浏览器，可改用授权码授权
+- 浏览全部[可用工具](/zh-CN/docs/mcp/tools)
