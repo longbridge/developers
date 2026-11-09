@@ -11,14 +11,11 @@ description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest fi
 
 ### CLI v0.31.0
 
-- **[Longbridge US accounts work in the CLI](/docs/cli/release-notes)** — asset, cash-flow, exchange-rate, order and execution commands call the US APIs for US accounts, with the same `--format json` shape as AP accounts
-- **[Longbridge MCP updated in step](/docs/mcp)** — for US accounts, `account_balance`, `stock_positions`, `cash_flow`, `exchange_rate`, `today_orders`, `history_orders` and `order_detail` return the same shape as on AP accounts, the execution tools fill `side` from the account's orders, and AP-only tools name the US alternative
+- **Fix:** `rank --count` is honored
 
 ### SDK v5.3.0
 
-- **[US account assets](/docs/trade/asset/us_cash_and_buy_power)** — Longbridge US accounts get their own asset APIs: cash and buying power, available holdings, transaction history and exchange rates (`GET /v1/us/assets/*`, `POST /v1/us/assets/transaction-history`), with matching `TradeContext` methods in Rust, Python and Node.js
-- **AP-only calls fail fast on US accounts** — `account_balance`, `cash_flow`, `stock_positions`, `fund_positions`, `margin_ratio`, `order_detail` and `exchange_rate` return a region error that names the US endpoint to call instead, rather than a gateway error
-- **Fix:** history executions work on Longbridge US accounts, and the option chain uses `POST /v1/quote/options/strikes`
+- **Fix:** the option chain uses `POST /v1/quote/options/strikes`
 
 ## 2026-09-28
 
@@ -64,22 +61,8 @@ description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest fi
 
 ## 2026-07-20
 
-- **US accounts can sign in to Longbridge Developers** — US accounts are now supported for login and API access. Note that the mainland-China `.cn` domains (`openapi.longbridge.cn`, `openapi-quote.longbridge.cn`, `openapi-trade.longbridge.cn`) do not serve US accounts; use the default domains instead
-- **Longbridge MCP supports US accounts** — US accounts can complete OAuth authorization on `https://mcp.longbridge.com` and requests route to the US data center; the `https://mcp.longbridge.cn` endpoint serves AP accounts only
-
-### SDK v4.4.0
-
-- **US market APIs** — 14 new methods across `FundamentalContext` (9), `QuoteContext` (1), `TradeContext` (4); all US data-center only
-
 ### CLI v0.25.0
 
-- **US data center is live** — US accounts can log in through `auth login` (device flow or `--auth-code`), and requests route to the data center matching the token; `auth status` reports the active DC region
-- **US market routing** — `company`, `valuation`, `financial-report`, `consensus`, `dividend`, `order`, `positions` now route to US APIs automatically for US data-center accounts
-- **New `etf-docs` command** — list regulatory documents (prospectus, fact sheets) for US ETFs
-- **New `financial-report key-metrics` subcommand** — key financial metrics for US stocks (annual/quarterly)
-- **New `profit-analysis realized` subcommand** — realized P&L breakdown by asset category for US accounts (stock/option/crypto)
-- **New `order --action` flag** — filter US order history by direction (buy/sell)
-- **New `order detail --attached` flag** — show attached child order for US accounts
 - **Navi scripting on the quant platform** — `quant run` now targets the v2 API and supports Navi alongside PineScript via `--language navi|pine` (Navi is the default)
 
 ## 2026-06-25

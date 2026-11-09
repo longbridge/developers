@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
-import { resolveUrl, resolveLocale } from '@longbridge/openapi-utils'
+import { resolveUrl, resolveLocale, isSiteRoot } from '@longbridge/openapi-utils'
 import { referenceMarkdown } from '@longbridge/openapi-api-reference/markdown'
 import rawYaml from '../../openapi.yaml?raw'
 
@@ -11,6 +11,8 @@ export const GET: APIRoute = async ({ site }) => {
   const header = '# Longbridge Developers\n'
   const sections = enEntries
     .filter((entry) => !resolveUrl(entry).endsWith('/docs/api'))
+    // 首页没有 markdown 孪生页（见 isSiteRoot）——`URL:` 会指向打不开的 `/.md`。
+    .filter((entry) => !isSiteRoot(resolveUrl(entry)))
     .map((entry) => {
       const url = resolveUrl(entry)
       const title = entry.data.title ?? url

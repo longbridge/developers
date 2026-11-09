@@ -58,6 +58,20 @@ function normalize(path: string): string {
 }
 
 /**
+ * Is this URL a site root — `/` (en, the root locale) or a bare locale root
+ * (`/zh-CN`, `/zh-HK`)?
+ *
+ * Those entries are the marketing homepage, which has no markdown twin: a `.md`
+ * URL built from them collapses to `/.md` (or `/zh-CN/.md`), and the `.md`
+ * endpoints generate an empty `slug` for them, so the route resolves to no file.
+ * Callers that enumerate markdown twins (llms.txt, llms-full.txt, the `.md`
+ * endpoints) use this to skip them.
+ */
+export function isSiteRoot(url: string): boolean {
+  return url === '/' || url === '/zh-CN' || url === '/zh-HK'
+}
+
+/**
  * Decide which layout renders a doc entry.
  *
  * astro-mdx auto-resolves a frontmatter `layout:` value as a module path; the

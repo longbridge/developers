@@ -9,11 +9,6 @@ sidebar_icon: newspaper
 
 ### [v0.31.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.31.0)
 
-- **Longbridge US 賬戶全面可用** — `assets`、`portfolio`、`positions`、`cash-flow`、`exchange-rate`、`order`(當日與 `--history`) 和 `order detail` 在 US 賬戶上改用 US 資產與訂單接口。`--format json` 的輸出與 AP 賬戶使用相同的字段和結構，僅 US 賬戶有的字段在 `--schema` 中標注 `(US only)`;`check --format json` 會輸出 `dc_region`
-- **`order executions` 支援 US 賬戶** — 歷史成交來自 `/v1/trade/execution/history`,不按成交時間過濾，範圍邊界附近可能跨日延遲;`side` 從賬戶訂單補全，無法確定時顯示 `Unknown`
-- **AP 專屬命令給出替代方案** — US 賬戶執行 `fund-positions`、`margin-ratio` 時直接報錯並指出應改用的命令，不會發出請求
-- **`serve` 新增 `trade.us_query_orders` 與 `trade.us_order_detail`** — US 賬戶調用 AP 專屬方法時，報錯會給出應改用的 US 方法
-- **US 撤單 / 改單更安全** — 取不到訂單時預覽不再簽發確認碼;US 訂單號必須為純數字
 - **修復：`rank --count` 生效**
 
 ### [v0.30.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.30.0)
@@ -53,15 +48,8 @@ sidebar_icon: newspaper
 
 ### [v0.25.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.25.0)
 
-- **支援美國數據中心** — `auth login`（裝置碼流程與 `--auth-code`）支援美國賬戶授權，所有請求會按 token 自動路由到對應數據中心；`auth status` 展示當前 DC 區域
-- **美股賬戶與基本面接口覆蓋** — 美股 token 下 14 個命令（`positions`、`order`、`company`、`valuation`、`financial-report`、`financial-statement`、`consensus`、`dividend` 等）自動路由到美股專屬接口，並新增 `profit-analysis realized`、`financial-report key-metrics` 子命令
 - **`quant run` 遷移至 v2 接口並支援 Navi** — 新增 `--language navi|pine` 參數（預設 Navi）；圖表渲染同時兼容 v1 與 v2 兩種數據結構
 
-- **美股賬戶路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股數據中心賬戶下自動路由至美股 API
-- **新增 `etf-docs` 命令** — 列出美股 ETF 監管文件（招股書、事實說明書、年報），`--limit` 控制返回數量
-- **新增 `financial-report key-metrics` 子命令** — 美股關鍵財務指標，支持 `--report annual|quarterly`
-- **新增 `profit-analysis realized` 子命令** — 美股賬戶已實現盈虧，支持 `--category stock|option|crypto` 篩選
-- **新增訂單選項** — `--status pending|history|all` 和 `--action buy|sell` 篩選美股歷史委託；`order detail --attached` 獲取關聯子委託
 ### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
 - **新增 `macrodata` 命令** — 瀏覽 400+ 宏觀數據指標，覆蓋美/港/中/歐/日/新六大市場；列表模式支持 `--country` 篩選，歷史模式支持 `--start`/`--end` 日期區間；`--format json` 滿足 AI / 腳本需求

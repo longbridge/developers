@@ -11,14 +11,11 @@ description: 'Longbridge OpenAPI、CLI、MCP 与 SDK 的更新日志，按时间
 
 ### CLI v0.31.0
 
-- **[CLI 支持 Longbridge US 账户](/zh-CN/docs/cli/release-notes)** — 资产、资金流水、汇率、订单与成交命令在 US 账户上改走 US 接口，`--format json` 输出与 AP 账户结构一致
-- **[Longbridge MCP 同步更新](/zh-CN/docs/mcp)** — US 账户上，`account_balance`、`stock_positions`、`cash_flow`、`exchange_rate`、`today_orders`、`history_orders`、`order_detail` 返回与 AP 账户一致的结构，成交工具根据账户委托补全 `side`,AP 专属工具会给出应改用的 US 替代方案
+- **修复：** `rank --count` 生效
 
 ### SDK v5.3.0
 
-- **[美股账户资产](/zh-CN/docs/trade/asset/us_cash_and_buy_power)** — Longbridge US 账户有了专属的资产接口：现金与购买力、可卖数量、交易流水和汇率 (`GET /v1/us/assets/*`、`POST /v1/us/assets/transaction-history`),Rust、Python、Node.js 的 `TradeContext` 提供对应方法
-- **AP 专属接口在 US 账户上直接报错** — `account_balance`、`cash_flow`、`stock_positions`、`fund_positions`、`margin_ratio`、`order_detail`、`exchange_rate` 不再返回网关错误，而是返回区域限制错误，并给出应改用的 US 接口
-- **修复：** Longbridge US 账户可以正常查询历史成交;期权链改用 `POST /v1/quote/options/strikes`
+- **修复：** 期权链改用 `POST /v1/quote/options/strikes`
 
 ## 2026-09-28
 
@@ -64,22 +61,8 @@ description: 'Longbridge OpenAPI、CLI、MCP 与 SDK 的更新日志，按时间
 
 ## 2026-07-20
 
-- **Developers 平台支持美国账户登录** — 美国账户现已支持登录与接口调用。注意国内 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美国账户，请使用默认域名
-- **Longbridge MCP 支持美国账户** — 美国账户可在 `https://mcp.longbridge.com` 完成 OAuth 授权，请求会路由到美国数据中心；`https://mcp.longbridge.cn` 端点仅服务 AP 账户
-
-### SDK v4.4.0
-
-- **美股市场 API** — 新增 14 个方法，覆盖 `FundamentalContext`（9 个）、`QuoteContext`（1 个）、`TradeContext`（4 个），全部仅限美股数据中心账户
-
 ### CLI v0.25.0
 
-- **美国数据中心上线** — 美国账户可通过 `auth login`（设备码或 `--auth-code`）登录，请求按 token 自动路由到对应数据中心；`auth status` 展示当前 DC 区域
-- **美股账户路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend`、`order`、`positions` 在美股数据中心账户下自动路由至美股 API
-- **新增 `etf-docs` 命令** — 列出美股 ETF 的监管文件（招股书、事实说明书等）
-- **新增 `financial-report key-metrics` 子命令** — 美股关键财务指标（支持年报/季报）
-- **新增 `profit-analysis realized` 子命令** — 美股账户按资产类别（股票/期权/加密货币）统计已实现盈亏
-- **新增 `order --action` 选项** — 筛选美股历史委托方向（买入/卖出）
-- **新增 `order detail --attached` 选项** — 获取美股账户关联子委托
 - **量化平台支持 Navi 脚本** — `quant run` 迁移至 v2 接口，通过 `--language navi|pine` 同时支持 Navi 与 PineScript（默认 Navi）
 
 ## 2026-06-25

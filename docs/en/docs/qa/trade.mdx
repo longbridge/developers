@@ -9,7 +9,7 @@ Both paper and live accounts support regular Limit orders, Market orders, and Co
 
 ## Q2: What are the trading hours for paper accounts?
 
-This applies to AP (Longbridge HK / SG) paper accounts only; Longbridge US accounts have no paper account.
+This applies to Longbridge HK / SG paper accounts only.
 
 Trading hours for paper accounts for Hong Kong stocks are the same as in the real environment. Trading pre & post market is not supported for U.S. stocks in the paper environment, only regular trading hours are supported.
 
@@ -19,9 +19,9 @@ To place orders for overnight trading, you can specify overnight trading by pass
 
 ## Q4: What are the trading rules for paper accounts?
 
-This applies to AP (Longbridge HK / SG) paper accounts only; Longbridge US accounts have no paper account.
+This applies to Longbridge HK / SG paper accounts only.
 
-AP paper accounts support trading in Hong Kong and U.S. stocks, ETFs, Hong Kong warrants, and U.S. options. Pre & post market trading is not supported in paper accounts.
+Paper accounts support trading in Hong Kong and U.S. stocks, ETFs, Hong Kong warrants, and U.S. options. Pre & post market trading is not supported in paper accounts.
 
 Trades in the paper environment are matched based on the bid-ask spread from the real market. If the buy order price is higher than or equal to the ask price and the sell order price is lower than or equal to the bid price, a trade can be executed. Market orders are matched by default.
 
@@ -50,15 +50,7 @@ This error usually indicates that the user does not have permission for the corr
 
 Pre-market options trading is not currently supported. We are planning to add this feature, including multi-leg options, which will be released together. We will update the documentation once it becomes available.
 
-## Q10: Are the US-specific trade APIs available to paper accounts?
-
-No. The Longbridge US desk (US DC) does not provide paper accounts, so the entire US region is unavailable in a paper environment. This covers **every** US-specific API, including [US Order History](/docs/trade/order/us_query_orders) and [US Order Detail](/docs/trade/order/us_order_detail).
-
-Calling one of them from a paper account returns an error rather than an empty result — do not treat that failure as "this account has no orders".
-
-If you need a paper environment, use an AP account instead. The data center only determines where your account is held — it does not restrict API connectivity. AP paper accounts can trade U.S. symbols and read them through the generic trade APIs (`today_orders`, `history_orders`, `account_balance`, `stock_positions`, and so on). See Q4 for what paper accounts support.
-
-## Q11: How do I close a position?
+## Q10: How do I close a position?
 
 There is no dedicated close-position API, and the order request has no open/close flag. Closing is a regular order in the opposite direction:
 

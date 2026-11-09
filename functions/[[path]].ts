@@ -122,6 +122,84 @@ const SITES: Record<string, Site> = {
 }
 
 /**
+ * 已下线页面 → 现存的最接近页面。本站唯一一条**不是**照搬 nginx 的规则。
+ *
+ * 美股账户与交易内容下线后这些旧地址直接 404。它们进过 llms.txt，被 AI 工具与
+ * 搜索引擎抓走过，光 404 会让拿着旧地址的 agent 不知道该改用什么，所以逐条 301
+ * 到现存的同类页面，而不是留给 404 页。
+ *
+ * 键 = 去掉 locale 前缀与 `.md` 后缀后的路径，值同形态；locale 前缀与 `.md`
+ * 后缀由 resolveGone() 原样搬到目标上，三语页面与各自的 markdown 孪生地址
+ * （AI 抓的就是这一份）共用这一张表。
+ *
+ * 为什么放 Function 不放 `_redirects`：三语 × 页面/`.md` 共 114 条，写成静态表
+ * 要逐条展开；而且目标要跟着来源的 locale 走，`_redirects` 的 splat 表达不了。
+ */
+const GONE_PAGES: Record<string, string> = {
+  // 美股账户资产 → 通用资产接口
+  '/docs/trade/asset/us_asset_overview': '/docs/trade/asset/account',
+  '/docs/trade/asset/us_cash_and_buy_power': '/docs/trade/asset/account',
+  '/docs/trade/asset/us_available_holding': '/docs/trade/asset/stock',
+  '/docs/trade/asset/us_transaction_history': '/docs/trade/asset/cashflow',
+  '/docs/trade/asset/us_exchange_rates': '/docs/account/portfolio/exchange-rates',
+  '/docs/trade/asset/us_realized_pl': '/docs/account/portfolio/profit-analysis-summary',
+  // 美股账户订单 → 通用订单接口
+  '/docs/trade/order/us_query_orders': '/docs/trade/order/history_orders',
+  '/docs/trade/order/us_order_detail': '/docs/trade/order/order_detail',
+  // 美股加密货币行情 → 通用行情 (WebSocket 拉取)
+  '/docs/quote/stocks/us_crypto_overview': '/docs/quote/pull/quote',
+  // 美股基本面 → 通用基本面接口
+  '/docs/fundamental/fundamental/us_company_overview': '/docs/fundamental/fundamental/company-profile',
+  '/docs/fundamental/fundamental/us_valuation_overview': '/docs/fundamental/fundamental/valuations',
+  '/docs/fundamental/fundamental/us_financial_overview': '/docs/fundamental/fundamental/financial-report',
+  '/docs/fundamental/fundamental/us_financial_statement': '/docs/fundamental/fundamental/financial-report',
+  '/docs/fundamental/fundamental/us_key_financial_metrics':
+    '/docs/fundamental/fundamental/financial-report-snapshot',
+  '/docs/fundamental/fundamental/us_analyst_consensus': '/docs/fundamental/fundamental/consensus',
+  '/docs/fundamental/fundamental/us_etf_dividend_info': '/docs/fundamental/fundamental/dividends',
+  '/docs/fundamental/fundamental/us_company_dividends': '/docs/fundamental/fundamental/dividends',
+  '/docs/fundamental/fundamental/us_etf_files': '/docs/fundamental/fundamental/company-profile',
+  // 美股专属 CLI 子命令
+  '/docs/cli/fundamentals/etf-docs': '/docs/cli/fundamentals/financial-report',
+  // API Reference 孪生页（按 operationId 寻址，目标取同类接口）
+  '/docs/api/us_asset_overview': '/docs/api/account_balance',
+  '/docs/api/us_cash_and_buy_power': '/docs/api/account_balance',
+  '/docs/api/us_available_holding': '/docs/api/stock_positions',
+  '/docs/api/us_transaction_history': '/docs/api/cash_flow',
+  '/docs/api/us_exchange_rates': '/docs/api/exchange_rate',
+  '/docs/api/us_realized_pl': '/docs/api/profit_analysis_summary',
+  '/docs/api/us_query_orders': '/docs/api/history_orders',
+  '/docs/api/us_order_detail': '/docs/api/order_detail',
+  // 通用行情没有 REST 端点，落到 WebSocket 行情命令
+  '/docs/api/us_crypto_overview': '/docs/api/ws-quote',
+  '/docs/api/us_company_overview': '/docs/api/company_profile',
+  '/docs/api/us_valuation_overview': '/docs/api/valuation',
+  '/docs/api/us_financial_overview': '/docs/api/financial_report',
+  '/docs/api/us_financial_statement': '/docs/api/financial_report',
+  '/docs/api/us_key_financial_metrics': '/docs/api/financial_report_snapshot',
+  '/docs/api/us_analyst_consensus': '/docs/api/consensus',
+  '/docs/api/us_etf_dividend_info': '/docs/api/dividends',
+  '/docs/api/us_company_dividends': '/docs/api/dividends',
+  '/docs/api/us_etf_files': '/docs/api/company_profile',
+}
+
+/**
+ * 旧地址 → 目标地址，保留来源的 locale 前缀与 `.md` 后缀；不是已下线页面返回 null。
+ *
+ * en 前缀直接丢掉：en 是 root locale，规则⑥本来就会把 /en 收敛到根，带着它跳会
+ * 变成 301 → 302 两跳。
+ */
+function resolveGone(path: string): string | null {
+  const m = /^\/(en|zh-CN|zh-HK)(\/.*)$/.exec(path)
+  const bare = m ? m[2] : path
+  const isMd = bare.endsWith('.md')
+  const target = GONE_PAGES[isMd ? bare.slice(0, -'.md'.length) : bare]
+  if (!target) return null
+  const prefix = m && m[1] !== 'en' ? `/${m[1]}` : ''
+  return `${prefix}${target}${isMd ? '.md' : ''}`
+}
+
+/**
  * nginx 的 `/docs` 与 `/sdk` location（大小写不敏感、只锚开头，照搬）。用于：
  *  - Markdown 内容协商只在 `/docs` 下生效（_release.conf:88-97）
  *  - 这两类页面不加 X-Frame-Options（nginx 只在 `location /` 里加）
@@ -188,7 +266,12 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     return Response.redirect(new URL(path.replace(/\/+$/, '') + url.search, url).toString(), 302)
   }
 
-  // ⑤ /en 前缀收敛（_release.conf:31）。站点域名上只放行 `_llms.conf` 已接管的
+  // ⑤ 已下线页面 → 301 到现存的同类页面。排在 /en 收敛之前，让 /en/docs/... 一步
+  //    到位；排在末尾斜杠之后，让 .../us_asset_overview/ 先规范化再查表。
+  const gone = resolveGone(path)
+  if (gone) return Response.redirect(new URL(gone + url.search, url).toString(), 301)
+
+  // ⑥ /en 前缀收敛（_release.conf:31）。站点域名上只放行 `_llms.conf` 已接管的
   //    /en/docs/**.md，与 nginx 一致：/en/skill-install.md 等先 302 掉前缀。
   //    不把 install 交给主站的入口（pages.dev，即 installMainSite 为空）放行全部
   //    .md：主站将来会从这类地址回源取 /en/skill/install.md 原文，那里跳转就断了。
@@ -199,7 +282,7 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     if (!keep) return Response.redirect(new URL(path.slice('/en'.length) + url.search, url).toString(), 302)
   }
 
-  // ⑥ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
+  // ⑦ SPA：8 个前缀的页面与 /_app/* 资源转发到 private 仓的 Pages project。
   if (site) {
     const page = SPA_PAGE.exec(path)
     const target = page
@@ -210,14 +293,14 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     if (target) return forward(target, request, 'spa')
   }
 
-  // ⑦ 旧路径 → 301 到主站。必须保留 query——邀请码靠它传到主站的 sub_filter。
+  // ⑧ 旧路径 → 301 到主站。必须保留 query——邀请码靠它传到主站的 sub_filter。
   const legacy = mainSite ? LEGACY_INSTALL.exec(path) : null
   if (legacy) {
     const prefix = legacy[1] ? `${legacy[1]}/` : ''
     return Response.redirect(`https://${mainSite}/${prefix}skill-install.md${url.search}`, 301)
   }
 
-  // ⑧ 新路径 → 反向代理到主站，由主站注入后原样返回（保持 200 + 注入）。
+  // ⑨ 新路径 → 反向代理到主站，由主站注入后原样返回（保持 200 + 注入）。
   const current = mainSite ? CURRENT_INSTALL.exec(path) : null
   if (current) {
     const prefix = current[1] ? `${current[1]}/` : ''
@@ -254,7 +337,7 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
     return new Response(fallback.body, { status: fallback.status, headers })
   }
 
-  // ⑨ /docs 的 Markdown 内容协商（_release.conf:91）：Accept 含 text/markdown 时返回
+  // ⑩ /docs 的 Markdown 内容协商（_release.conf:91）：Accept 含 text/markdown 时返回
   //    同路径的 .md 原文。AI 工具靠它拿干净文本。.md 路径本身在 nginx 里先被
   //    `\.md$` 接走，不进这里。
   const isDocs = DOCS_PAGE.test(path)
@@ -266,7 +349,7 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
   }
 
   const res = await next()
-  // ⑩ X-Frame-Options：nginx 只在 `location /` 里加（_release.conf:123），即除了
+  // ⑪ X-Frame-Options：nginx 只在 `location /` 里加（_release.conf:123），即除了
   //    /docs、/sdk、.md、.zip、robots.txt 之外的页面。照搬范围，不擅自扩大——
   //    扩大到文档页可能弄坏未知的 iframe 嵌入方。
   if (!DOCS_OR_SDK.test(path) && !/\.(?:md|zip)$/i.test(path) && path !== '/robots.txt') {
