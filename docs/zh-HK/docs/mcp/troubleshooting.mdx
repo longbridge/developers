@@ -1,0 +1,25 @@
+---
+title: '故障排查'
+sidebar_position: 7
+sidebar_icon: badge-question-mark
+---
+
+# 故障排查
+
+## OAuth 登入失敗
+
+- 確認 Longbridge 帳戶狀態正常，已完成必要的身份驗證
+- 在客戶端刪除現有配置後重新添加並發起授權
+- 檢查當前帳戶是否支援所請求的 scope
+- 如客戶端無法開啟瀏覽器，可改用[授權碼授權](/zh-HK/docs/agent-auth)
+
+## 已連線但部分工具不可用
+
+- 客戶端限制：ChatGPT App 與 Claude 應用目錄連接器不含交易工具
+- 帳戶或地區限制：特定市場或功能可能受帳戶等級或地區限制
+- scope 變更：如工具能力有更新，可能需要重新授權以取得新 scope
+
+## 交易操作提示權限不足
+
+- 檢查帳戶的交易權限和市場可交易資格
+- 確認當前 MCP 會話的 OAuth scope 包含交易相關權限

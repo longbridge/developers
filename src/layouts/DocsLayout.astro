@@ -23,7 +23,7 @@ interface Props {
 
 const { title, description, locale, entry, headings } = Astro.props
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
-// `sidebar: false` (e.g. mcp.mdx — it has its own top-nav tab) renders the
+// `sidebar: false` renders the
 // docs page full-width with no left navigation, keeping only the TOC.
 const showSidebar = entry.data.sidebar !== false
 
