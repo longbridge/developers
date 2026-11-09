@@ -33,7 +33,7 @@ SDK 会自动选择接入点；若判断不正确，可设置环境变量 `LONGB
 两个容易混淆的概念：
 
 - **接入点**（`.com` / `.cn`）— 仅是网络路由。两者数据一致、鉴权一致，一方签发的 token 另一方同样接受。
-- **数据中心**（`ap` / `us`）— 账户本身所在的位置，决定了哪些美股专属接口可用。
+- **数据中心**（`ap` / `us`）— 账户本身所在的位置。
 
 两者不能自由组合：
 
@@ -437,6 +437,8 @@ OAuth Token 应安全存储在应用程序中（如加密文件、安全密钥�
 | `trade.read` | 订单与成交查询（只读） |
 | `trade.write` | 下单、改单、撤单及其他交易写操作 |
 
+Longbridge US 账户目前仅开放行情权限。
+
 `/oauth2/register` 的响应以数字 ID 列出 scope（例如 `"4 6 10 11 12"`）。这些 ID 因环境而异：在 `openapi.longbridge.com` 上，`4`、`6`、`10`、`11` 分别对应 `watchlist`、`account.read`、`trade.read`、`trade.write`。其他 ID 请视为不透明值，以 scope key 为准。
 
 如果接口返回错误码 `403308`（`Target API's scope is not in authorized scopes`），说明 Token 未被授予该接口所需的 scope。请删除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授权并勾选该 scope。参见[错误码](/zh-CN/docs/api?page=error-codes)。
@@ -685,8 +687,6 @@ int main() {
 ## 场景示范
 
 ### 获取资产总览
-
-Longbridge US 账户请改用 [`us_asset_overview`](/zh-CN/docs/trade/asset/us_asset_overview) 或 [`us_cash_and_buy_power`](/zh-CN/docs/trade/asset/us_cash_and_buy_power)，`account_balance` 需要 AP 数据中心账户（香港/新加坡）。
 
 <Tabs groupId="programming-language">
   <TabItem value="python" label="Python" default>

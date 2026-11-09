@@ -32,7 +32,7 @@ The SDK automatically selects the access point by network. If the SDK selects in
 Two concepts that are easy to confuse:
 
 - **Access point** (`.com` / `.cn`) — network routing only. Both serve identical data and identical auth: a token issued through one is accepted by the other.
-- **Data center** (`ap` / `us`) — where the account itself lives. It determines which US-only APIs are available.
+- **Data center** (`ap` / `us`) — where the account itself lives.
 
 The two cannot be combined freely:
 
@@ -424,6 +424,8 @@ APIs that read account data or trade require the token to carry the matching sco
 | `trade.read` | Order and execution lookup (read-only) |
 | `trade.write` | Placing, replacing and canceling orders, and other trading writes |
 
+Longbridge US accounts currently have market data permission only.
+
 The `/oauth2/register` response lists scopes as numeric ids (for example `"4 6 10 11 12"`). The ids are environment-specific: on `openapi.longbridge.com`, `4`, `6`, `10` and `11` are `watchlist`, `account.read`, `trade.read` and `trade.write`. Treat any other id as opaque and rely on the scope keys.
 
 If an API returns error `403308` (`Target API's scope is not in authorized scopes`), the token was not granted the scope that API needs. Delete the stored token under `~/.longbridge/openapi/tokens/<client_id>`, authorize again and grant that scope. See [Error Codes](/docs/api?page=error-codes).
@@ -672,8 +674,6 @@ The `expired_at` parameter sets when the new token expires (default: **90 days**
 ## Scene Demonstration
 
 ### Get Account Balance
-
-Longbridge US accounts should call [`us_asset_overview`](/docs/trade/asset/us_asset_overview) or [`us_cash_and_buy_power`](/docs/trade/asset/us_cash_and_buy_power) instead of `account_balance`, which requires an AP data-center account (HK / SG).
 
 <Tabs groupId="programming-language">
   <TabItem value="python" label="Python" default>

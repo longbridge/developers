@@ -34,7 +34,7 @@ Longbridge MCP exposes 160+ tools across six capability areas. Your client disco
 | **Trading**                 | Place / modify / cancel orders, estimate max purchase quantity                                     |
 | **Automation**              | Price alerts, scheduled DCA (dollar-cost averaging) plans                                          |
 
-Actual tool availability depends on your region, account level, and granted OAuth scopes.
+Actual tool availability depends on your region, account level, and granted OAuth scopes. Longbridge US accounts currently have market data tools only.
 
 ## Available tools
 
@@ -185,7 +185,7 @@ AI client                  Browser                   Longbridge
 
 1. **Initiate connection** — Adding the Longbridge MCP config and calling a tool for the first time triggers the authorization flow
 2. **Browser redirect** — The client opens a browser tab with the Longbridge login and consent page
-3. **Sign in and approve** — Log in with your Longbridge account and review and accept the requested permission scopes (see [OAuth Scopes](/docs/getting-started#oauth-scopes))
+3. **Sign in and approve** — Log in with your Longbridge account and review and accept the requested permission scopes (see [OAuth Scopes](/docs/getting-started#oauth-scopes)). Longbridge US accounts currently have market data tools only
 4. **Session established** — After approval, the client receives credentials and MCP tools become available
 5. **Credential maintenance** — Credentials are refreshed automatically per OAuth policy. You can remove the authorization in your Longbridge account security settings so it can no longer be renewed; tokens already issued remain valid until they expire
 

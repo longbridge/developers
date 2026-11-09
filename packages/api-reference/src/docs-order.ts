@@ -20,10 +20,6 @@ const OVERRIDES: Record<string, number> = {
   account_balance: 999,
   stock_positions: 999,
   fund_positions: 999,
-  us_cash_and_buy_power: 12,
-  us_available_holding: 13,
-  us_transaction_history: 14,
-  us_exchange_rates: 15,
   // Quote / Analytics
   'ws-capital-flow': 17,
   'ws-capital-dist': 18,
@@ -98,9 +94,7 @@ const OVERRIDES: Record<string, number> = {
 // Force certain leaves to the very end of their subgroup, after even the
 // undocumented items (which fall back to LEAF_FALLBACK).
 export const LEAF_FALLBACK = 1e6
-const TRAIL: Record<string, number> = {
-  us_crypto_overview: 1e7,
-}
+const TRAIL: Record<string, number> = {}
 
 export const DOCS_ORDER: Record<string, number> = { ...AUTO, ...OVERRIDES, ...TRAIL }
 

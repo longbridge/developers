@@ -2,7 +2,6 @@
 // operationId / ws command id to its docs page position. Items without a docs
 // page are absent (they sort after documented items).
 export const DOCS_ORDER: Record<string, number> = {
-  "us_crypto_overview": 10,
   "ws-static": 1,
   "ws-quote": 2,
   "ws-pull-depth": 5,
@@ -80,17 +79,13 @@ export const DOCS_ORDER: Record<string, number> = {
   "sharelist_detail": 5,
   "delete_sharelist": 4,
   "submit_multileg": 8,
-  "us_query_orders": 10,
   "today_orders": 2,
   "history_orders": 3,
-  "us_order_detail": 11,
   "all_executions": 3,
   "today_executions": 2,
   "history_executions": 1,
   "cash_flow": 999,
   "margin_ratio": 999,
-  "us_asset_overview": 10,
-  "us_realized_pl": 11,
   "profit_analysis_summary": 2,
   "profit_analysis_by_market": 4,
   "profit_analysis_detail": 3,
