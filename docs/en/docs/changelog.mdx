@@ -57,19 +57,8 @@ description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest fi
 
 ## 2026-07-20
 
-- **US accounts can sign in to Longbridge Developers** — US accounts are now supported for login and API access. Note that the mainland-China `.cn` domains (`openapi.longbridge.cn`, `openapi-quote.longbridge.cn`, `openapi-trade.longbridge.cn`) do not serve US accounts; use the default domains instead
-- **Longbridge MCP supports US accounts** — US accounts can complete OAuth authorization on `https://mcp.longbridge.com` and requests route to the US data center; the `https://mcp.longbridge.cn` endpoint serves AP accounts only
-
-### SDK v4.4.0
-
-- **US market APIs** — 10 new methods across `FundamentalContext` (9), `QuoteContext` (1); all US data-center only
-
 ### CLI v0.25.0
 
-- **US data center is live** — US accounts can log in through `auth login` (device flow or `--auth-code`), and requests route to the data center matching the token; `auth status` reports the active DC region
-- **US market routing** — `company`, `valuation`, `financial-report`, `consensus`, `dividend` now route to US APIs automatically for US data-center accounts
-- **New `etf-docs` command** — list regulatory documents (prospectus, fact sheets) for US ETFs
-- **New `financial-report key-metrics` subcommand** — key financial metrics for US stocks (annual/quarterly)
 - **Navi scripting on the quant platform** — `quant run` now targets the v2 API and supports Navi alongside PineScript via `--language navi|pine` (Navi is the default)
 
 ## 2026-06-25

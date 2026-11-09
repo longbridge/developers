@@ -9,7 +9,6 @@ sidebar_icon: newspaper
 
 ### [v0.31.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.31.0)
 
-- **AP 專屬命令給出替代方案** — US 賬戶執行 `fund-positions`、`margin-ratio` 時直接報錯並指出應改用的命令，不會發出請求
 - **修復：`rank --count` 生效**
 
 ### [v0.30.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.30.0)
@@ -49,13 +48,8 @@ sidebar_icon: newspaper
 
 ### [v0.25.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.25.0)
 
-- **支援美國數據中心** — `auth login`（裝置碼流程與 `--auth-code`）支援美國賬戶授權，所有請求會按 token 自動路由到對應數據中心；`auth status` 展示當前 DC 區域
-- **美股基本面接口覆蓋** — 美股 token 下基本面命令（`company`、`valuation`、`financial-report`、`financial-statement`、`consensus`、`dividend` 等）自動路由到美股專屬接口，並新增 `financial-report key-metrics` 子命令
 - **`quant run` 遷移至 v2 接口並支援 Navi** — 新增 `--language navi|pine` 參數（預設 Navi）；圖表渲染同時兼容 v1 與 v2 兩種數據結構
 
-- **美股賬戶路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend` 在美股數據中心賬戶下自動路由至美股 API
-- **新增 `etf-docs` 命令** — 列出美股 ETF 監管文件（招股書、事實說明書、年報），`--limit` 控制返回數量
-- **新增 `financial-report key-metrics` 子命令** — 美股關鍵財務指標，支持 `--report annual|quarterly`
 ### [v0.24.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.24.0)
 
 - **新增 `macrodata` 命令** — 瀏覽 400+ 宏觀數據指標，覆蓋美/港/中/歐/日/新六大市場；列表模式支持 `--country` 篩選，歷史模式支持 `--start`/`--end` 日期區間；`--format json` 滿足 AI / 腳本需求

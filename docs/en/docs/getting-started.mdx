@@ -27,21 +27,9 @@ For access in mainland China, you can use `.cn` domains for better connectivity:
 The SDK automatically selects the access point by network. If the SDK selects incorrectly, set the environment variable `LONGBRIDGE_REGION` (e.g. `cn` or `hk`).
 :::
 
-### Access Points and Data Centers
+### Access Points
 
-Two concepts that are easy to confuse:
-
-- **Access point** (`.com` / `.cn`) — network routing only. Both serve identical data and identical auth: a token issued through one is accepted by the other.
-- **Data center** (`ap` / `us`) — where the account itself lives.
-
-The two cannot be combined freely:
-
-| Data center               | `.com`                             | `.cn`         |
-| ------------------------- | ---------------------------------- | ------------- |
-| `us` (US accounts)        | Yes — the only usable access point | Not supported |
-| `ap` (Longbridge SG / HK) | Yes                                | Yes           |
-
-`.cn` has no route to the US data center, so US accounts must always use the `.com` domains — including for login, since the `.cn` login page does not offer US accounts.
+The access point (`.com` / `.cn`) is network routing only. Both serve identical data and identical auth: a token issued through one is accepted by the other.
 
 ## Time Format
 

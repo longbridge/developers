@@ -57,19 +57,8 @@ description: 'Longbridge OpenAPI、CLI、MCP 與 SDK 的更新日誌，按時間
 
 ## 2026-07-20
 
-- **Developers 平台支持美國賬戶登入** — 美國賬戶現已支持登入與接口調用。注意國內 `.cn` 域名（`openapi.longbridge.cn`、`openapi-quote.longbridge.cn`、`openapi-trade.longbridge.cn`）不支持美國賬戶，請使用默認域名
-- **Longbridge MCP 支持美國賬戶** — 美國賬戶可在 `https://mcp.longbridge.com` 完成 OAuth 授權，請求會路由到美國數據中心；`https://mcp.longbridge.cn` 端點僅服務 AP 賬戶
-
-### SDK v4.4.0
-
-- **美股市場 API** — 新增 10 個方法，覆蓋 `FundamentalContext`（9 個）、`QuoteContext`（1 個），全部僅限美股數據中心賬戶
-
 ### CLI v0.25.0
 
-- **美國數據中心上線** — 美國賬戶可通過 `auth login`（設備碼或 `--auth-code`）登入，請求按 token 自動路由到對應數據中心；`auth status` 展示當前 DC 區域
-- **美股賬戶路由** — `company`、`valuation`、`financial-report`、`consensus`、`dividend` 在美股數據中心賬戶下自動路由至美股 API
-- **新增 `etf-docs` 命令** — 列出美股 ETF 的監管文件（招股書、事實說明書等）
-- **新增 `financial-report key-metrics` 子命令** — 美股關鍵財務指標（支持年報/季報）
 - **量化平台支持 Navi 腳本** — `quant run` 遷移至 v2 接口，通過 `--language navi|pine` 同時支持 Navi 與 PineScript（默認 Navi）
 
 ## 2026-06-25
