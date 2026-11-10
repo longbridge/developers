@@ -13197,9 +13197,9 @@ paths:
           in: body
           type: string
           required: true
-          description: 'Submitted quantity, example: `100`'
-          x-description-zh: 下单数量，例如：`100`
-          x-description-zh-hk: 下單數量，例如：`100`
+          description: 'Submitted quantity, example: `100`. US stocks accept fractional quantities, such as `0.05`. Fractional US orders must set `outside_rth` to `RTH_ONLY`; otherwise the order is rejected with error code `603200`.'
+          x-description-zh: 下单数量，例如：`100`。美股支持碎股数量，例如 `0.05`。美股碎股订单必须将 `outside_rth` 设为 `RTH_ONLY`，否则会被拒单，返回错误码 `603200`。
+          x-description-zh-hk: 下單數量，例如：`100`。美股支持碎股數量，例如 `0.05`。美股碎股訂單必須將 `outside_rth` 設為 `RTH_ONLY`，否則會被拒單，返回錯誤碼 `603200`。
         - name: trigger_price
           in: body
           type: string

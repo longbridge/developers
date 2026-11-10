@@ -33,7 +33,7 @@ longbridge order sell TSLA.US 100 --price 260.00
 | symbol             | string | YES      | 股票代码，使用 `ticker.region` 格式，例如：`AAPL.US`                                                                                      |
 | order_type         | string | YES      | [订单类型](../trade-definition#ordertype)                                                                                                 |
 | submitted_price    | string | NO       | 下单价格，例如：`388.5`<br/><br/> `LO` / `ELO` / `ALO` / `ODD` / `LIT` 订单必填                                                           |
-| submitted_quantity | string | YES      | 下单数量，例如：`100`                                                                                                                     |
+| submitted_quantity | string | YES      | 下单数量，例如：`100`<br/><br/>美股支持碎股数量，例如 `0.05`。美股碎股订单必须将 `outside_rth` 设为 `RTH_ONLY`，否则会被拒单，返回错误码 `603200`。                                                                                                                     |
 | trigger_price      | string | NO       | 触发价格，例如：`388.5`<br/><br/> `LIT` / `MIT` 订单必填                                                                                  |
 | limit_offset       | string | NO       | 指定价差，例如 "1.2" 表示价差 1.2 USD (如果是美股)<br/><br/> `TSLPAMT` / `TSLPPCT` 订单在 `limit_depth_level` 为 0 时必填 |
 | trailing_amount    | string | NO       | 跟踪金额<br/><br/> `TSLPAMT` 订单必填                                                                                                     |
