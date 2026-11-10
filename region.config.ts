@@ -42,8 +42,9 @@ export const regionConfig: Record<string, RegionConfig> = {
       '**/docs/cli/install.md',
       '**/docs/cli/release-notes.md',
 
-      // MCP
+      // MCP — the overview plus its sub-pages (setup / tools / trading / …)
       '**/docs/mcp.md',
+      '**/docs/mcp/**',
 
       // Agent Auth Code
       '**/docs/agent-auth.md',
