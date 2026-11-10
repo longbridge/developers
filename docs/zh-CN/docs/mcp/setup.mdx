@@ -77,6 +77,67 @@ codex mcp add longbridge --url https://mcp.longbridge.com
 3. 点击 **Save**
 4. 回到 MCP Servers 列表，点击 `longbridge` 条目上的 **Authenticate** 完成 OAuth 授权
 
+## Gemini CLI
+
+在终端运行以下命令：
+
+```bash
+gemini mcp add --transport http longbridge https://mcp.longbridge.com -s user
+```
+
+随后启动 `gemini`，运行 `/mcp` 确认 `longbridge` 已连接，按提示在浏览器中完成授权。
+
+也可以手动编辑配置，在 `~/.gemini/settings.json` 的 `mcpServers` 中添加 —— 注意字段是 `httpUrl` 而不是 `url`（Gemini CLI 会把 `url` 当作 SSE 端点，导致连接失败）：
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "httpUrl": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+## opencode
+
+在终端运行以下命令：
+
+```bash
+opencode mcp add longbridge --url https://mcp.longbridge.com --global
+```
+
+运行 `opencode mcp list` 确认已注册。也可以手动编辑配置，在 `opencode.json` 中添加：
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "longbridge": {
+        "type": "remote",
+        "url": "https://mcp.longbridge.com"
+      }
+    }
+  }
+}
+```
+
+## OpenClaw
+
+在终端运行以下命令：
+
+```bash
+openclaw mcp add longbridge --url https://mcp.longbridge.com --transport streamable-http
+```
+
+运行 `openclaw mcp doctor longbridge --probe` 验证连接。也可以在 Control UI 的 **Settings** → **MCP** 中添加，选择 **Streamable HTTP** 并填入 URL。
+
+## Warp
+
+1. 打开 **Settings** → **Agents** → **MCP servers**
+2. 点击 **+ Add**，选择 **Streamable HTTP or SSE Server (URL)**
+3. 填入 `https://mcp.longbridge.com` 并保存，随后完成 OAuth 授权
+
 ## Grok
 
 打开 [Grok Connectors](https://grok.com/connectors)，添加自定义 MCP Server：

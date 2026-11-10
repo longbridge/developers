@@ -77,6 +77,67 @@ Then follow the OAuth authorization flow in Codex when prompted.
 3. Click **Save**
 4. Back in the MCP Servers list, click **Authenticate** on the `longbridge` entry to complete OAuth authorization
 
+## Gemini CLI
+
+Run the following command in your terminal:
+
+```bash
+gemini mcp add --transport http longbridge https://mcp.longbridge.com -s user
+```
+
+Then start `gemini` and run `/mcp` to confirm `longbridge` is connected, authorizing in the browser if prompted.
+
+To edit the config by hand instead, add this under `mcpServers` in `~/.gemini/settings.json` — note the key is `httpUrl`, not `url` (Gemini CLI treats `url` as an SSE endpoint, and the connection will fail):
+
+```json
+{
+  "mcpServers": {
+    "longbridge": {
+      "httpUrl": "https://mcp.longbridge.com"
+    }
+  }
+}
+```
+
+## opencode
+
+Run the following command in your terminal:
+
+```bash
+opencode mcp add longbridge --url https://mcp.longbridge.com --global
+```
+
+Run `opencode mcp list` to confirm it registered. To edit the config by hand instead, add this to `opencode.json`:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "longbridge": {
+        "type": "remote",
+        "url": "https://mcp.longbridge.com"
+      }
+    }
+  }
+}
+```
+
+## OpenClaw
+
+Run the following command in your terminal:
+
+```bash
+openclaw mcp add longbridge --url https://mcp.longbridge.com --transport streamable-http
+```
+
+Run `openclaw mcp doctor longbridge --probe` to verify the connection. You can also add it from the Control UI under **Settings** → **MCP**, choosing **Streamable HTTP** and entering the URL.
+
+## Warp
+
+1. Open **Settings** → **Agents** → **MCP servers**
+2. Click **+ Add** and choose **Streamable HTTP or SSE Server (URL)**
+3. Enter `https://mcp.longbridge.com` and save, then complete the OAuth authorization
+
 ## Grok
 
 Open [Grok Connectors](https://grok.com/connectors) and add a custom MCP server:
