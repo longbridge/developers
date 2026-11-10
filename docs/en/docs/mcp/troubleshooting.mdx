@@ -23,3 +23,4 @@ sidebar_icon: badge-question-mark
 
 - Verify trading permissions and market eligibility on your account
 - Confirm that the current MCP session's OAuth scopes include trading-related permissions
+- Error `403308` (`Target API's scope is not in authorized scopes`) means the session was not granted the scope the tool needs, such as `account.read`, `trade.read` or `trade.write`: remove and re-add the MCP configuration and grant that scope. It can also appear when the account has no securities account or trading permission for the market involved. See [OAuth Scopes](/docs/getting-started#oauth-scopes)

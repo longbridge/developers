@@ -23,3 +23,4 @@ sidebar_icon: badge-question-mark
 
 - 检查账户的交易权限和市场可交易资格
 - 确认当前 MCP 会话的 OAuth scope 包含交易相关权限
+- 错误码 `403308`（`Target API's scope is not in authorized scopes`）表示会话未被授予该工具所需的 scope（如 `account.read`、`trade.read` 或 `trade.write`）：请移除并重新添加 MCP 配置，授权时勾选该 scope。账户未开通对应市场的证券账户或交易权限时也可能出现该错误。参见 [OAuth 权限范围](/zh-CN/docs/getting-started#oauth-scopes)
