@@ -59,3 +59,7 @@ sidebar_position: 2
 3. 盘中用市价单（`MO`）。美股盘前、盘后不接受市价单，改用最新价提交限价单（`LO`），并把 `outside_rth` 设为 `ANY_TIME`。传入唯一的 `client_request_id`，避免重试时把仓位平两遍。
 
 提交数量超过 `available_quantity` 时，多出的部分会变成反向开仓。各语言 SDK 的完整可运行示例见[平仓](/zh-CN/docs/trade/order/close_position)。
+
+## Q11: 美股碎股下单为什么返回错误码 603200？
+
+美股碎股订单（例如数量为 `0.05`）仅支持在常规交易时段交易，下单时必须将 `outside_rth` 设为 `RTH_ONLY`。不传 `outside_rth` 或传 `ANY_TIME` 时，订单会被拒，返回 HTTP 500 和错误码 `603200`。返回中的 `cancel` / `evaluate` 字段来自 App 内的提示，无需进行任何评估。将 `outside_rth` 设为 `RTH_ONLY` 后重新提交即可。

@@ -59,3 +59,7 @@ There is no dedicated close-position API, and the order request has no open/clos
 3. Use a market order (`MO`) during regular hours. US pre-market and after-hours do not accept market orders, so submit a limit order (`LO`) at the latest price with `outside_rth` set to `ANY_TIME`. Pass a unique `client_request_id` so a retry cannot close the position twice.
 
 Submitting more than `available_quantity` opens a position in the opposite direction. See [Close a position](/docs/trade/order/close_position) for a complete, runnable example in each SDK language.
+
+## Q11: Why does a fractional U.S. stock order return error code 603200?
+
+Fractional U.S. stock orders (for example, a quantity of `0.05`) are supported during regular trading hours only, and must set `outside_rth` to `RTH_ONLY`. If `outside_rth` is omitted or set to `ANY_TIME`, the order is rejected with HTTP 500 and error code `603200`. The `cancel` / `evaluate` fields in that response come from an in-app prompt; no assessment is needed. Set `outside_rth` to `RTH_ONLY` and submit again.
