@@ -33,14 +33,17 @@ export const regionConfig: Record<string, RegionConfig> = {
     siteHostname: 'https://open.longbridge.cn',
     mcpHostname: 'https://mcp.longbridge.cn',
 
-    excludeNavLinks: ['/', '/docs/api', '/sdk'],
+    // Every tab whose target this region doesn't build. Was split in two: this
+    // list, plus a hard-coded set in TopNav — each missing what the other had,
+    // so Pricing and Docs shipped as 404s on open.longbridge.cn.
+    excludeNavLinks: ['/', '/pricing', '/docs', '/docs/api', '/sdk'],
 
     includePages: [
-      // Only CLI under /docs/
+      // Only CLI under /docs/ — the whole subtree, not just the entry pages:
+      // the CLI sidebar is built from the filesystem and lists every command,
+      // so anything left out of the build shows up as a dead link.
       '**/docs/cli.md',
-      '**/docs/cli/index.md',
-      '**/docs/cli/install.md',
-      '**/docs/cli/release-notes.md',
+      '**/docs/cli/**',
 
       // MCP — the overview plus its sub-pages (setup / tools / trading / …)
       '**/docs/mcp.md',
