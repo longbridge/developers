@@ -22,7 +22,16 @@ interface Props {
 }
 
 const { title, description, locale, entry, headings } = Astro.props
-const pathname = Astro.url.pathname.replace(/\/$/, '') || '/'
+// `build.format: 'file'` makes Astro.url.pathname carry the emitted file name
+// at build time — `/docs/mcp.html`, not `/docs/mcp`. The dev server serves the
+// extensionless URL, so anything comparing this against a sidebar `link` works
+// locally and silently fails in production: prev/next disappears site-wide and
+// `/docs/mcp` falls back to the docs sidebar (only the sub-pages match, via the
+// `/docs/mcp/` prefix). Normalise to the URL shape the sidebar tree uses.
+const pathname = Astro.url.pathname
+  .replace(/\/index\.html$/, '/')
+  .replace(/\.html$/, '')
+  .replace(/\/$/, '') || '/'
 // `sidebar: false` renders the
 // docs page full-width with no left navigation, keeping only the TOC.
 const showSidebar = entry.data.sidebar !== false

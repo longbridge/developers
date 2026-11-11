@@ -196,8 +196,12 @@ function buildItems(
 export type SidebarScope = 'docs' | 'cli' | 'mcp'
 
 export function resolveSidebarScope(pathname: string): SidebarScope {
+  // Tolerate the built file name (`/docs/mcp.html`): callers should hand us the
+  // URL shape, but `build.format: 'file'` hands Astro the emitted path, and the
+  // exact-match arms below would silently fall through to 'docs'.
+  const bare = pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '')
   // Strip locale prefix if present so `/zh-CN/docs/cli/foo` still resolves.
-  const stripped = pathname.replace(/^\/(zh-CN|zh-HK)(?=\/|$)/, '')
+  const stripped = bare.replace(/^\/(zh-CN|zh-HK)(?=\/|$)/, '')
   if (stripped.startsWith('/docs/cli')) return 'cli'
   if (stripped === '/docs/mcp' || stripped.startsWith('/docs/mcp/')) return 'mcp'
   return 'docs'
