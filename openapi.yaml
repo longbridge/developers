@@ -36231,23 +36231,23 @@ paths:
           x-description-zh: 报价货币
           x-description-zh-hk: 報價貨幣
         - name: └ bid_rate
-          type: integer
+          type: number
           required: false
           description: Bid rate
           x-description-zh: 买入汇率
           x-description-zh-hk: 買入匯率
         - name: └ offer_rate
-          type: integer
+          type: number
           required: false
           description: Offer rate
           x-description-zh: 卖出汇率
           x-description-zh-hk: 賣出匯率
         - name: └ average_rate
-          type: integer
+          type: number
           required: false
-          description: Average exchange rate
-          x-description-zh: 平均汇率
-          x-description-zh-hk: 平均匯率
+          description: 'Average exchange rate: the value of 1 `other_currency` in `base_currency`. For example, `base_currency=USD`, `other_currency=HKD`, `average_rate=0.12746` means 1 HKD = 0.12746 USD'
+          x-description-zh: 平均汇率，表示 1 单位 `other_currency` 折合多少 `base_currency`。例如 `base_currency=USD`、`other_currency=HKD`、`average_rate=0.12746` 表示 1 港元 = 0.12746 美元
+          x-description-zh-hk: 平均匯率，表示 1 單位 `other_currency` 折合多少 `base_currency`。例如 `base_currency=USD`、`other_currency=HKD`、`average_rate=0.12746` 表示 1 港元 = 0.12746 美元
       responses:
         '200':
           description: Successful response
@@ -36260,9 +36260,9 @@ paths:
                   exchanges:
                     - base_currency: USD
                       other_currency: HKD
-                      bid_rate: 7.785
-                      offer_rate: 7.795
-                      average_rate: 7.79
+                      bid_rate: 0.12746
+                      offer_rate: 0.12746
+                      average_rate: 0.12746
         default:
           description: Unexpected error
           content:
