@@ -9,8 +9,9 @@
  * static import in McpTools.tsx, so the file MUST exist before check — i.e. at
  * `astro:config:setup` (which runs for both check and build), not only at
  * `astro:build:start`. We therefore:
- *   - astro:config:setup — guarantee the file exists (fetch only when missing;
- *     on failure write an empty stub so the import never breaks the type-check).
+ *   - astro:config:setup — guarantee the file holds a usable manifest (fetch when
+ *     missing, empty or unparseable; on failure write an empty stub so the import
+ *     never breaks the type-check — that stub is not treated as a cache hit).
  *   - astro:build:start  — always refetch so production ships the latest data,
  *     falling back to the cached/stub file on network failure.
  */
@@ -34,11 +35,26 @@ async function fetchAndWrite(): Promise<void> {
   console.log(`[prebuild-mcp-tools] written → ${OUTPUT_FILE}`)
 }
 
-/** Guarantee OUTPUT_FILE exists before type-check; only touches the network
- *  when the file is missing (keeps local dev / check fast). */
+/** Is the cached file a real manifest, rather than the empty stub written when
+ *  an earlier fetch failed? Treating "file exists" as "cache is good" lets one
+ *  failed fetch (e.g. offline laptop) poison local dev forever: the stub keeps
+ *  the type-check happy, `astro:config:setup` never refetches, and `<McpTools />`
+ *  silently renders nothing until someone deletes the file by hand. */
+function hasUsableManifest(): boolean {
+  if (!fs.existsSync(OUTPUT_FILE)) return false
+  try {
+    const cached = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf-8'))
+    return Array.isArray(cached?.tools) && cached.tools.length > 0
+  } catch {
+    return false // unparseable cache is no cache
+  }
+}
+
+/** Guarantee OUTPUT_FILE holds a usable manifest before type-check; only touches
+ *  the network when it doesn't (keeps local dev / check fast). */
 async function ensureManifest(): Promise<void> {
-  if (fs.existsSync(OUTPUT_FILE)) return
-  console.log('[prebuild-mcp-tools] no cached manifest — fetching…')
+  if (hasUsableManifest()) return
+  console.log('[prebuild-mcp-tools] no usable cached manifest — fetching…')
   try {
     await fetchAndWrite()
   } catch (err) {

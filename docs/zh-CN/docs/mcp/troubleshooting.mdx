@@ -1,0 +1,26 @@
+---
+title: '故障排查'
+sidebar_position: 7
+sidebar_icon: badge-question-mark
+---
+
+# 故障排查
+
+## OAuth 登录失败
+
+- 确认 Longbridge 账户状态正常，已完成必要的身份验证
+- 在客户端删除现有配置后重新添加并发起授权
+- 检查当前账户是否支持所请求的 scope
+- 如客户端无法打开浏览器，可改用[授权码授权](/zh-CN/docs/agent-auth)
+
+## 已连接但部分工具不可用
+
+- 客户端限制：ChatGPT App 与 Claude 目录连接器不含交易工具
+- 账户或地区限制：特定市场或功能可能受账户等级或地区限制
+- scope 变更：如工具能力有更新，可能需要重新授权以获得新 scope
+
+## 交易操作提示权限不足
+
+- 检查账户的交易权限和市场可交易资格
+- 确认当前 MCP 会话的 OAuth scope 包含交易相关权限
+- 错误码 `403308`（`Target API's scope is not in authorized scopes`）表示会话未被授予该工具所需的 scope（如 `account.read`、`trade.read` 或 `trade.write`）：请移除并重新添加 MCP 配置，授权时勾选该 scope。账户未开通对应市场的证券账户或交易权限时也可能出现该错误。参见 [OAuth 权限范围](/zh-CN/docs/getting-started#oauth-scopes)

@@ -1,0 +1,224 @@
+---
+title: 'Trade Stocks and Options with AI'
+sidebar_label: 'Trade with AI'
+sidebar_position: 4
+sidebar_icon: trending-up
+---
+
+# Trade Stocks and Options with AI
+
+Connect Claude Code, Codex, Cursor, or another MCP client to your Longbridge account and you can research markets, review your portfolio, analyze option chains, and place orders for US and Hong Kong stocks, ETFs, options, and funds — all in natural language.
+
+This guide walks through the full workflow, from connecting your client to placing your first order.
+
+## Can AI trade stocks through Longbridge?
+
+Yes. Longbridge MCP turns natural-language instructions into real brokerage orders. Before preparing a trade, the AI can check your buying power, positions, real-time quotes, and open orders. Supported order features include:
+
+- **Order types**: limit and market orders, limit/market-if-touched, and trailing stops by amount or percentage. Hong Kong stocks also support enhanced limit, at-auction, and odd-lot orders
+- **Trading sessions**: regular hours, US pre-market and after-hours, and the US overnight session
+- **Take-profit and stop-loss**: attach a take-profit, a stop-loss, or both (bracket) to an order
+- **Order management**: modify the price or quantity of an open order, or cancel it
+- **Validity**: Day, Good-Til-Canceled, and Good-Til-Date orders
+
+Every order goes through a [two-step confirmation](#how-order-confirmation-works) — nothing is sent to the exchange until you approve the exact order.
+
+## What can the AI do with your Longbridge account?
+
+Once authorized, the AI can use [190+ tools](/docs/mcp/tools) on your behalf, including:
+
+- Real-time quotes, candlesticks, order book depth, and capital flow for US, HK, and A-share markets
+- Account balances, positions, P&L analysis, orders, executions, and statements
+- Fundamentals, valuations, analyst ratings, news, and filings
+- Option chains, option quotes with implied volatility and Greeks, and put/call volume
+- Stock orders with attached take-profit / stop-loss
+- Multi-leg option strategies submitted as a single order
+- Fund orders, scheduled DCA (dollar-cost averaging) plans, grid trading, and price alerts
+
+Access is limited to the markets, products, and permissions enabled on your account and to the OAuth scopes you grant.
+
+## Connect your AI client to Longbridge
+
+You need:
+
+- A [Longbridge account](https://longbridge.com/hk/download) with onboarding completed, or a paper trading account
+- An MCP client that supports trading — Claude Code, Codex, Cursor, Zed, or another client connected directly to `https://mcp.longbridge.com`
+
+:::warning ChatGPT and the Claude connector are read-only
+The Longbridge ChatGPT App and the Claude directory connector do not include trading tools. Use them for research and account queries; use a directly connected client for placing orders.
+:::
+
+### Step 1: Add the Longbridge MCP server
+
+For example, in Claude Code:
+
+```bash
+claude mcp add --transport http longbridge https://mcp.longbridge.com
+```
+
+For other clients, see [Connect Your Client](/docs/mcp/setup).
+
+### Step 2: Authorize with your Longbridge account
+
+In Claude Code, type `/mcp`, select `longbridge`, and choose **Authenticate**. Your browser opens the Longbridge login page — sign in and approve the requested permissions. No API keys or tokens are ever pasted into the chat. See [Authorization](/docs/mcp/authorization) for details.
+
+### Step 3: Verify the connection
+
+Ask the AI something that reads your account:
+
+```text
+Show my Longbridge account balance and buying power.
+```
+
+If it returns your cash and buying power, you're connected.
+
+## Research markets and your portfolio
+
+Because the AI combines conversation with live market and account data, you can ask follow-up questions without switching apps.
+
+```text
+Show me my current positions, today's P&L, and which holding moved the most.
+```
+
+```text
+Compare the current price, P/E, and today's performance of NVDA.US, AMD.US, and 700.HK.
+```
+
+```text
+Summarize the latest news and analyst rating changes for TSLA.US.
+```
+
+The AI can also pull your open orders, order history, executions, cash flow, and monthly statements.
+
+## Trade stocks and ETFs
+
+Describe the order you want; the AI prepares it and shows you a preview before anything is sent.
+
+```text
+Buy 10 shares of AAPL.US with a limit price of $200, good for today.
+```
+
+```text
+Buy 100 shares of QQQ.US at market, with a take-profit at $560 and a stop-loss at $480.
+```
+
+```text
+Show my open orders and cancel the TSLA.US limit order.
+```
+
+For extended-hours trading, ask for it explicitly:
+
+```text
+Prepare a limit order to buy 5 shares of NVDA.US at $170 that can fill in pre-market and after-hours. Show me the order details before submitting.
+```
+
+Not sure how much you can afford? Ask first:
+
+```text
+How many shares of MSFT.US can I buy at $420 with my current buying power?
+```
+
+## How order confirmation works
+
+Every tool that places, modifies, or cancels an order runs as a **dry run** by default:
+
+1. The AI calls the order tool without executing. Longbridge validates the order and returns a preview with a three-digit **confirmation code** — nothing reaches the exchange.
+2. The AI shows you the preview: symbol, side, quantity, price, order type, and session.
+3. Only after you explicitly confirm does the AI call the tool again with the confirmation code, and the order is sent.
+
+The confirmation code is single-use, expires in 10 minutes, and is bound to that exact order — if any field changes, a new preview is required. This protects you from orders placed by mistake or from a misread instruction.
+
+## Trade options and analyze option chains
+
+The AI can browse expirations and strikes, then pull quotes with implied volatility and Greeks for the contracts you care about.
+
+```text
+Show me the AAPL.US option chain for contracts expiring next Friday, calls only, strikes within 5% of the current price.
+```
+
+```text
+Show me the delta, gamma, theta, and implied volatility of the AAPL.US $250 call expiring next Friday.
+```
+
+```text
+What is today's put/call volume ratio for NVDA.US, and which contracts are most active?
+```
+
+When you're ready, single-leg option orders follow the same preview-and-confirm flow as stock orders.
+
+## Build multi-leg option strategies
+
+Longbridge supports native multi-leg orders, so all legs of a strategy are submitted as one order and fill together at a single net price. Supported strategies include:
+
+- Vertical call and put spreads
+- Straddles and strangles
+- Calendar call and put spreads
+- Covered calls, covered puts, and collars
+
+```text
+Build a bull call spread on SPY.US expiring in two weeks: buy the $580 call and sell the $590 call. Show me the legs, net debit, and max profit and loss before placing it.
+```
+
+Available strategies depend on your account's options trading level.
+
+## Beyond stocks and options
+
+The same connection also covers:
+
+- **Funds**: browse funds, review performance and holdings, and place fund subscription or redemption orders
+- **DCA plans**: create, pause, resume, or update scheduled recurring investments
+- **Grid trading**: set up grid orders that buy and sell automatically within a price range
+- **Price alerts**: get notified when a stock crosses a price or moves by a percentage
+
+```text
+Set up a monthly DCA plan to invest $500 in VOO.US on the 1st of each month.
+```
+
+```text
+Alert me when NVDA.US falls below $160.
+```
+
+## Practice with a paper account
+
+Not ready to trade with real money? Authorize Longbridge MCP with a paper trading account and rehearse the entire workflow — research, order building, confirmation, and cancellation — with simulated funds. When you authorize with your live account, orders are real brokerage orders.
+
+## Why connect your AI to Longbridge?
+
+- **Research to execution in one conversation**: market data, fundamentals, portfolio context, order building, preview, and execution without switching apps
+- **Multi-market coverage**: US and Hong Kong stocks, ETFs, options, warrants, and funds from one account
+- **Built-in safeguards**: every order requires an explicit confirmation of the exact order, and you control which permissions the AI receives
+- **No API keys**: standard OAuth 2.1 sign-in, revocable at any time from your account security settings
+
+## FAQ
+
+### Can AI trade stocks with Longbridge?
+
+Yes. Clients connected directly to the Longbridge MCP server — such as Claude Code, Codex, and Cursor — can place, modify, and cancel stock and ETF orders in US and Hong Kong markets.
+
+### Can AI trade options with Longbridge?
+
+Yes, including single-leg orders and multi-leg strategies, subject to your account's options trading level.
+
+### Can I trade in ChatGPT or the Claude app?
+
+Not currently. The Longbridge ChatGPT App and the Claude directory connector are read-only and cover research and account queries. Use a client connected directly to `https://mcp.longbridge.com` for trading.
+
+### Will the AI place orders without asking me?
+
+No. Order tools run as a dry run by default and return a preview. The order is only sent after you explicitly confirm that exact order.
+
+### Does trading through AI use real money?
+
+When authorized with your live account, yes — orders are real brokerage orders. You can authorize with a paper trading account to practice with simulated funds.
+
+### Can I trade in pre-market and after-hours?
+
+Yes. Ask the AI to allow the order to fill outside regular trading hours. US orders can also target the overnight session, depending on the security.
+
+### Do I need to write code?
+
+No. You connect your client once, sign in with your Longbridge account, and use natural-language prompts. Developers who prefer code can use the [OpenAPI SDKs](/docs) or the [Longbridge CLI](/docs/cli).
+
+:::warning Disclaimer
+The example prompts on this page are for educational purposes only and do not constitute investment advice. Investing involves risk, including the possible loss of principal. Options trading entails significant risk and is not appropriate for all investors. Always review each order preview carefully before confirming.
+:::

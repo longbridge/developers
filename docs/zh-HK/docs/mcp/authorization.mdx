@@ -1,0 +1,44 @@
+---
+title: '授權'
+sidebar_position: 5
+sidebar_icon: book
+---
+
+# 授權
+
+Longbridge MCP 使用標準 OAuth 2.1 授權，你無需向客戶端提供 API 金鑰或 Token。
+
+在 ChatGPT 中，授權會在從 Plugins 新增 Longbridge 時完成；在其他 MCP 客戶端中，通常由首次工具調用觸發瀏覽器授權流程。
+
+## OAuth 授權流程
+
+```
+AI 客戶端                  瀏覽器                    Longbridge
+    |                        |                           |
+    |--- 發起 MCP 連線 ------>|                           |
+    |                        |-- 跳轉授權頁 ------------>|
+    |                        |<- 展示登入 & 權限確認 ----|
+    |                        |-- 登入並同意 ------------>|
+    |<-- 返回授權憑證 --------|                           |
+    |--- 攜帶憑證存取工具 ----------------------------------->|
+```
+
+**步驟說明：**
+
+1. **發起連線** — 在客戶端添加 Longbridge MCP 配置後，首次調用會觸發授權
+2. **瀏覽器跳轉** — 客戶端自動開啟瀏覽器，進入 Longbridge 登入與權限確認頁
+3. **登入並授權** — 使用 Longbridge 帳戶登入，查看並同意所請求的權限範圍（scope，參見 [OAuth 權限範圍](/zh-HK/docs/getting-started#oauth-scopes)）。Longbridge US 帳戶目前僅開放行情類工具
+4. **建立會話** — 授權完成後，客戶端取得憑證，MCP 工具即可使用
+5. **憑證維護** — 憑證依 OAuth 策略自動刷新。可在 Longbridge 帳戶安全設定中移除該授權，使其無法再續期；已簽發的 Token 在過期前仍然有效
+
+## 客戶端相容性
+
+Longbridge MCP 依賴 **MCP OAuth 2.1** 標準。若客戶端未完整實作該協議，將無法完成授權。
+
+已知問題：Cherry Studio 早期版本不支援完整 OAuth 流程，請升級至最新版本。
+
+如遇其他客戶端連線失敗，請確認客戶端版本並查閱其 MCP 支援文件。
+
+:::tip 客戶端無法開啟瀏覽器？
+若客戶端的 OAuth 實作不完整或無法拉起瀏覽器，可改用[授權碼授權](/zh-HK/docs/agent-auth)：在 [https://open.longbridge.com/connect](https://open.longbridge.com/connect) 產生一次性授權碼，連接專用端點 `https://mcp.longbridge.com/agent`，讓 Agent 透過 `authenticate` 工具兌換。
+:::

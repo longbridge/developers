@@ -161,7 +161,7 @@ export function McpSection({ locale }: McpSectionProps) {
               <div>&nbsp;</div>
               <div style={{ color: 'var(--lb-fg-2)' }}>→ Opening browser for OAuth 2.1…</div>
               <div style={{ color: 'var(--lb-fg-2)' }}>✓ Authenticated as jason@longbridge.com</div>
-              <div style={{ color: 'var(--lb-fg-2)' }}>✓ Connected · 130 tools available</div>
+              <div style={{ color: 'var(--lb-fg-2)' }}>✓ Connected · 190+ tools available</div>
               <div>&nbsp;</div>
               <div>
                 <span className="ln-comment"># Verify the connection</span>
@@ -174,7 +174,7 @@ export function McpSection({ locale }: McpSectionProps) {
                   `.code-body` is `white-space: pre`, so both are visible. */}
               <div style={{ color: 'var(--lb-fg-2)' }}>
                 {' '}
-                longbridge &nbsp; <span style={{ color: 'var(--lb-up)' }}>✓ ready</span> &nbsp; 130 tools{' '}
+                longbridge &nbsp; <span style={{ color: 'var(--lb-up)' }}>✓ ready</span> &nbsp; 190+ tools{' '}
               </div>
             </div>
             <div

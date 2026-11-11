@@ -124,8 +124,8 @@ Where to find the MCP configuration in each client:
 | Claude Desktop | Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows) |
 | Cursor         | Settings → MCP Servers → Add Remote MCP Server                                                                                            |
 | Zed            | `context_servers` key in `~/.config/zed/settings.json`                                                                                    |
-| Gemini CLI     | `mcpServers` key in `~/.gemini/settings.json`                                                                                             |
-| Warp           | Settings → AI → MCP Servers → Add                                                                                                         |
+| Gemini CLI     | `mcpServers` key in `~/.gemini/settings.json` (use `httpUrl`, not `url`)                                                                                             |
+| Warp           | Settings → Agents → MCP servers → + Add                                                                                                         |
 
 The first time you ask a Longbridge question, your client will open a browser tab for OAuth authorization — no API key required.
 
