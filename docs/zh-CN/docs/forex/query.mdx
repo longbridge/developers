@@ -1,0 +1,266 @@
+---
+slug: query
+sidebar_position: 4
+title: 查询兑换订单
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+该接口用于通过 `client_order_id` 查询外汇兑换订单。请轮询查询，直到订单到达终态。
+
+<CliCommand>
+longbridge forex order my-order-0001
+</CliCommand>
+
+<SDKLinks module="forex" klass="ForexContext" method="order" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/forex/order </td></tr>
+</tbody>
+</table>
+
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
+
+| Name            | Type   | Required | Description     |
+| --------------- | ------ | -------- | --------------- |
+| client_order_id | string | YES      | 您的订单 id     |
+
+轮询间隔不要短于 2 秒。大多数订单会在 1 分钟内到达终态；在非服务时段或人工审核时可能更久。
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python" default>
+
+```python
+from longbridge.openapi import ForexContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+
+# Create a context for forex APIs
+ctx = ForexContext(config)
+
+# Query order
+resp = ctx.order("my-order-0001")
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncForexContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+
+    # Create a context for forex APIs
+    ctx = AsyncForexContext.create(config)
+
+    # Query order
+    resp = await ctx.order("my-order-0001")
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, ForexContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = new ForexContext(config)
+  const resp = await ctx.order('my-order-0001')
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.forex.*;
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             ForexContext ctx = ForexContext.create(config)) {
+            ForexOrderDetail resp = ctx.order("my-order-0001").get();
+            System.out.println(resp);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, forex::ForexContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = ForexContext::new(config);
+    let resp = ctx.order("my-order-0001").await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+#include <iostream>
+#include <longbridge.hpp>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+using namespace longbridge;
+using namespace longbridge::forex;
+
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    ForexContext ctx = ForexContext::create(config);
+
+    ctx.order("my-order-0001", [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "state: " << res->state << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
+    });
+
+    std::cin.get();
+    return 0;
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/forex"
+	"github.com/longbridge/openapi-go/oauth"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fctx, err := forex.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fctx.Close()
+	resp, err := fctx.Order(context.Background(), "my-order-0001")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("state:", resp.State)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "state": 1,
+    "rate": "7.7812",
+    "from_amount": "1000",
+    "to_amount": "7781.2",
+    "fail_reason": ""
+  }
+}
+```
+
+`data` 字段说明：
+
+| Name        | Type   | Description                                                            |
+| ----------- | ------ | --------------------------------------------------------------------- |
+| state       | int32  | `0` 处理中（含人工审核，请继续查询）；`1` 成功；`2` 失败（冻结资金已退回） |
+| rate        | string | 执行汇率（标准货币对表示）；未成交时为空                                |
+| from_amount | string | 转出金额（成交后为实际值）                                             |
+| to_amount   | string | 转入金额（成交后为实际值）                                             |
+| fail_reason | string | 失败原因                                                              |
+
+### Response Status
+
+| Status | Description            | Schema |
+| ------ | ---------------------- | ------ |
+| 200    | 订单查询成功。         | None   |
+| 400    | 请求参数错误，查询失败。 | None   |
+
+<aside className="success">
+</aside>

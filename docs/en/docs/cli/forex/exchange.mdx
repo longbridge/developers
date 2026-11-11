@@ -1,0 +1,71 @@
+---
+title: 'currency exchange'
+sidebar_label: 'currency exchange'
+sidebar_position: 1
+---
+
+# longbridge forex
+
+Convert cash between two currencies inside your account, right from the terminal. The flow is three steps and asynchronous: **quote** a rate, **submit** the conversion against that quote, then **query** the order until it settles.
+
+These commands act on your account, so they require login; `submit-order` moves real money and prompts for confirmation unless you pass `--yes`.
+
+## Basic Usage
+
+```bash
+# Lock a rate and get a quote_id (give --amount or --target-amount)
+longbridge forex quote USD HKD --amount 1000
+```
+
+```
+| Field     | Value            |
+|-----------|------------------|
+| quote_id  | Q20260925000123  |
+| rate      | 7.7812           |
+| ccy_pair  | USD/HKD          |
+| expire_at | 1790000000000    |
+```
+
+## Examples
+
+### Quote a rate
+
+```bash
+# By the convert-out amount (the USD you spend)
+longbridge forex quote USD HKD --amount 1000
+# …or by the convert-in amount (the HKD you want to receive)
+longbridge forex quote USD HKD --target-amount 7800
+```
+
+`rate` is quoted on the standard currency pair (`1 BASE = rate QUOTE`, e.g. `USD/HKD`), independent of the direction you ask for. The quote is bound to you and valid for a short window (`expire_at` is a Unix-millisecond timestamp).
+
+### Submit a conversion
+
+```bash
+# Submit against the quote_id, with your own unique client order id
+longbridge forex submit-order Q20260925000123 my-order-0001
+# Skip the confirmation prompt (e.g. for scripting)
+longbridge forex submit-order Q20260925000123 my-order-0001 --yes
+```
+
+Submitting only means the order was **accepted** — the conversion completes asynchronously, so the command re-queries and prints the current order state. Reusing the same `client_order_id` never places a second order; on a timeout, query first and only re-quote + resubmit with the **same** id.
+
+### Query an order
+
+```bash
+longbridge forex order my-order-0001
+```
+
+```
+| Field       | Value   |
+|-------------|---------|
+| state       | 1       |
+| rate        | 7.7812  |
+| from_amount | 1000    |
+| to_amount   | 7781.2  |
+| fail_reason |         |
+```
+
+`state` is `0` processing (keep polling), `1` success, or `2` failed (frozen funds are returned). Poll no more often than every 2 seconds; most orders settle within a minute.
+
+> Add `--format json` to any command for the full machine-readable payload.

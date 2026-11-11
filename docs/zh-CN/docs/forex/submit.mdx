@@ -1,0 +1,262 @@
+---
+slug: submit
+sidebar_position: 3
+title: 提交兑换订单
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+该接口用于基于报价提交外汇兑换订单。是否受理会同步返回；兑换本身为异步处理，请使用 `client_order_id` 查询结果。
+
+<CliCommand>
+longbridge forex submit-order Q20260925000123 my-order-0001
+</CliCommand>
+
+<SDKLinks module="forex" klass="ForexContext" method="submit_order" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>POST</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/forex/order </td></tr>
+</tbody>
+</table>
+
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
+
+| Name            | Type   | Required | Description                                                                 |
+| --------------- | ------ | -------- | --------------------------------------------------------------------------- |
+| quote_id        | string | YES      | 来自获取报价的报价 id；币种和金额取自该报价                                  |
+| client_order_id | string | YES      | 您自己的订单 id，1~64 个字符，由字母/数字/`_`/`-` 组成，在您名下所有账户中必须唯一 |
+
+### 幂等与重试
+
+相同的 `client_order_id` 最多只会生成一笔订单（返回最先创建的订单）。为避免在网络超时或 `5xx` 错误时产生重复兑换，请**不要**更换 `client_order_id`：
+
+- 先用该 `client_order_id` **查询**。
+- 仅当查询不到订单时，再**重新报价**并使用**相同的** `client_order_id` 重新提交。
+- 无论重复的 `client_order_id` 携带哪个 `quote_id`，都会返回最先创建的订单。
+- 每个 `quote_id` 只能成功提交一次（重复使用将返回 `603006`，请重新报价）。
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python" default>
+
+```python
+from longbridge.openapi import ForexContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+
+# Create a context for forex APIs
+ctx = ForexContext(config)
+
+# Submit order
+ctx.submit_order("Q20260925000123", "my-order-0001")
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncForexContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+
+    # Create a context for forex APIs
+    ctx = AsyncForexContext.create(config)
+
+    # Submit order
+    await ctx.submit_order("Q20260925000123", "my-order-0001")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, ForexContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = new ForexContext(config)
+  await ctx.submitOrder('Q20260925000123', 'my-order-0001')
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.forex.*;
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             ForexContext ctx = ForexContext.create(config)) {
+            ctx.submitOrder("Q20260925000123", "my-order-0001").get();
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, forex::{ForexContext, SubmitForexOrderOptions}, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let ctx = ForexContext::new(config);
+    ctx.submit_order(
+        SubmitForexOrderOptions::new("Q20260925000123", "my-order-0001")
+    ).await?;
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+#include <iostream>
+#include <longbridge.hpp>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+using namespace longbridge;
+using namespace longbridge::forex;
+
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    ForexContext ctx = ForexContext::create(config);
+
+    ctx.submit_order("Q20260925000123", "my-order-0001", [](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "accepted" << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
+    });
+
+    std::cin.get();
+    return 0;
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/forex"
+	"github.com/longbridge/openapi-go/oauth"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fctx, err := forex.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fctx.Close()
+	err = fctx.SubmitOrder(context.Background(), &forex.SubmitForexOrder{
+		QuoteID:       "Q20260925000123",
+		ClientOrderID: "my-order-0001",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("accepted")
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "ok": true
+  }
+}
+```
+
+`ok` 表示订单是否受理。兑换为异步处理 — 请使用 `client_order_id` 查询结果。
+
+### Response Status
+
+| Status | Description            | Schema |
+| ------ | ---------------------- | ------ |
+| 200    | 提交成功，订单已受理。 | None   |
+| 400    | 请求参数错误，提交被拒绝。 | None   |
+
+<aside className="success">
+</aside>

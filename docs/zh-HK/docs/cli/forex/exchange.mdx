@@ -1,0 +1,71 @@
+---
+title: '貨幣兌換'
+sidebar_label: '貨幣兌換'
+sidebar_position: 1
+---
+
+# longbridge forex
+
+在終端裡直接把賬戶內的一種貨幣兌換成另一種。流程分三步且為非同步：先**詢價**取得匯率，再用該報價**下單**，然後**查詢**訂單直至進入終態。
+
+這些命令作用於你的賬戶，需要登入；`submit-order` 會動用真實資金，未加 `--yes` 時會提示確認。
+
+## 基本用法
+
+```bash
+# 鎖定匯率並取得 quote_id（--amount 與 --target-amount 二選一）
+longbridge forex quote USD HKD --amount 1000
+```
+
+```
+| Field     | Value            |
+|-----------|------------------|
+| quote_id  | Q20260925000123  |
+| rate      | 7.7812           |
+| ccy_pair  | USD/HKD          |
+| expire_at | 1790000000000    |
+```
+
+## 範例
+
+### 詢價
+
+```bash
+# 按兌出金額（你花出的 USD）
+longbridge forex quote USD HKD --amount 1000
+# …或按兌入金額（你想收到的 HKD）
+longbridge forex quote USD HKD --target-amount 7800
+```
+
+`rate` 按標準幣種對表示（`1 BASE = rate QUOTE`，如 `USD/HKD`），與你請求的兌換方向無關。報價與你綁定，且僅在有效期內可用（`expire_at` 為 Unix 毫秒時間戳）。
+
+### 提交兌換
+
+```bash
+# 用 quote_id 下單，並帶上你自定義的唯一訂單號
+longbridge forex submit-order Q20260925000123 my-order-0001
+# 跳過確認（例如用於腳本）
+longbridge forex submit-order Q20260925000123 my-order-0001 --yes
+```
+
+下單成功只代表訂單**已受理**——兌換為非同步完成，命令會重新查詢並打印當前訂單狀態。相同 `client_order_id` 不會產生第二筆訂單；逾時請先查詢，確有必要再用**同一個**訂單號重新詢價並提交。
+
+### 查詢訂單
+
+```bash
+longbridge forex order my-order-0001
+```
+
+```
+| Field       | Value   |
+|-------------|---------|
+| state       | 1       |
+| rate        | 7.7812  |
+| from_amount | 1000    |
+| to_amount   | 7781.2  |
+| fail_reason |         |
+```
+
+`state` 為 `0` 處理中（請繼續查詢）、`1` 兌換成功、`2` 兌換失敗（凍結資金已退回）。建議輪詢間隔不低於 2 秒；多數訂單在 1 分鐘內進入終態。
+
+> 任意命令加 `--format json` 可取得完整的機器可讀返回。
