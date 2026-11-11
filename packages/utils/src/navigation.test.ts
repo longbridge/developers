@@ -44,6 +44,17 @@ describe('mcp sidebar scope', () => {
     expect(resolveSidebarScope('/docs/mcpx')).toBe('docs')
   })
 
+  // `build.format: 'file'` hands the layout the emitted file name, so these are
+  // the strings production actually passes in — the overview shipped with the
+  // docs sidebar because `/docs/mcp.html` matched neither arm.
+  it('resolves the built .html paths too', () => {
+    expect(resolveSidebarScope('/docs/mcp.html')).toBe('mcp')
+    expect(resolveSidebarScope('/docs/mcp/setup.html')).toBe('mcp')
+    expect(resolveSidebarScope('/zh-CN/docs/mcp.html')).toBe('mcp')
+    expect(resolveSidebarScope('/docs/cli.html')).toBe('cli')
+    expect(resolveSidebarScope('/docs/getting-started.html')).toBe('docs')
+  })
+
   it('builds the mcp tree and keeps it out of the docs tree', () => {
     const mcp = buildSidebar('en', 'mcp')
     expect(mcp[0].link).toBe('/docs/mcp')
