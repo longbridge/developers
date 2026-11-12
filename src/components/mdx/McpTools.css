@@ -86,10 +86,11 @@
 }
 
 [data-lbus-component="mcp-tools"] .mcp-tools-empty {
-  padding: 1rem;
-  text-align: center;
+  padding: 2rem 1rem;
   color: var(--lb-fg-2);
   font-size: 0.9rem;
+  border: 1px dashed var(--lbus-c-divider);
+  border-radius: 8px;
 }
 
 [data-lbus-component="mcp-tools"] .mcp-tools-list {

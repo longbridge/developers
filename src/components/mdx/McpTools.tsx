@@ -127,6 +127,33 @@ function getParams(schema?: ToolSchema, localized?: LocaleToolText): ParamRow[] 
   }))
 }
 
+/**
+ * Lowercased haystack per tool: the name, the English description, and every
+ * locale's title and description. Searching across locales is deliberate —
+ * the overlays are Simplified and Traditional Chinese variants of each other,
+ * so searching "K 线" on the zh-HK page still finds "K 線".
+ */
+function buildSearchIndex(): Record<string, string> {
+  const payload = mcpToolsData as unknown as ToolsPayload
+  const index: Record<string, string> = {}
+  for (const tool of payload.tools) {
+    index[tool.name] = `${tool.name}\n${tool.description}`
+  }
+  for (const entry of Object.values(payload.locales ?? {})) {
+    for (const [name, text] of Object.entries(entry.tools ?? {})) {
+      if (!(name in index)) continue
+      index[name] += `\n${text.title ?? ''}\n${text.description ?? ''}`
+    }
+  }
+  for (const name of Object.keys(index)) {
+    index[name] = index[name].toLowerCase()
+  }
+  return index
+}
+
+/** Built once at module scope — the manifest is static. */
+const searchIndex = buildSearchIndex()
+
 /** The overlay for one locale, or an empty map for English / an unknown locale. */
 function localeTools(locale: string): Record<string, LocaleToolText> {
   const payload = mcpToolsData as unknown as ToolsPayload
@@ -333,18 +360,8 @@ export function McpTools({ locale = 'en' }: McpToolsProps) {
   }, [openValue])
 
   const q = query.trim().toLowerCase()
-  // Match the text the reader can actually see: the localized description on a
-  // translated page, the English one otherwise. The tool name is an identifier
-  // and stays searchable in every locale.
   const filtered = q
-    ? allTools.filter((t) => {
-        const text = i18n[t.name]
-        return (
-          t.name.toLowerCase().includes(q) ||
-          (text?.title ?? '').toLowerCase().includes(q) ||
-          (text?.description ?? t.description).toLowerCase().includes(q)
-        )
-      })
+    ? allTools.filter((t) => searchIndex[t.name]?.includes(q))
     : allTools
 
   function handleToggle(name: string) {
