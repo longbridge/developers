@@ -175,6 +175,11 @@
   padding: 0;
 }
 
+[data-lbus-component="mcp-tools"] .mcp-tool-label {
+  color: var(--lb-fg-3);
+  font-size: 0.8125rem;
+}
+
 /* ── Tool content ── */
 
 [data-lbus-component="mcp-tools"] .mcp-tool-desc {
