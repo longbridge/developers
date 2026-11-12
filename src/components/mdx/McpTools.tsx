@@ -393,13 +393,15 @@ export function McpTools({ locale = 'en' }: McpToolsProps) {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="mcp-tools-empty">
-          {tStr(locale, 'noMatch', { query: query.trim() })}
-        </div>
-      ) : (
-        <div ref={listRef} className="mcp-tools-list">
-          {filtered.map((tool) => (
+      {/* The list frame stays put when a search comes up empty — the message
+          sits inside it, so the page keeps its shape between queries. */}
+      <div ref={listRef} className="mcp-tools-list">
+        {filtered.length === 0 ? (
+          <div className="mcp-tools-empty">
+            {tStr(locale, 'noMatch', { query: query.trim() })}
+          </div>
+        ) : (
+          filtered.map((tool) => (
             <AccordionItem
               key={tool.name}
               tool={tool}
@@ -408,9 +410,9 @@ export function McpTools({ locale = 'en' }: McpToolsProps) {
               locale={locale}
               localized={i18n[tool.name]}
             />
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   )
 }
