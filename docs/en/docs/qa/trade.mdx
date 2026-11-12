@@ -23,6 +23,8 @@ This applies to Longbridge HK / SG paper accounts only.
 
 Paper accounts support trading in Hong Kong and U.S. stocks, ETFs, Hong Kong warrants, and U.S. options. Pre & post market trading is not supported in paper accounts.
 
+Multi-leg option orders are not yet matched in paper accounts. The [Submit Multi-Leg Order](/docs/trade/order/submit_multileg) API accepts the order, but during U.S. regular trading hours paper matching rejects it right away with `Order failed, please try again later.` Do not rely on paper accounts to test automated multi-leg trading.
+
 Trades in the paper environment are matched based on the bid-ask spread from the real market. If the buy order price is higher than or equal to the ask price and the sell order price is lower than or equal to the bid price, a trade can be executed. Market orders are matched by default.
 
 ## Q5: How can I reset the funds in my paper account?
@@ -48,7 +50,7 @@ This error usually indicates that the user does not have permission for the corr
 
 ## Q9: Does U.S. options trading support pre-market trading?
 
-Pre-market options trading is not currently supported. We are planning to add this feature, including multi-leg options, which will be released together. We will update the documentation once it becomes available.
+Pre-market options trading is not currently supported. Multi-leg option orders are available: submit them via [Submit Multi-Leg Order](/docs/trade/order/submit_multileg).
 
 ## Q10: How do I close a position?
 
