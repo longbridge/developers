@@ -39,6 +39,7 @@ headingLevel: 2
 | ∟ ratio_quantity   | string   | YES      | 該腿比例數量，例如：`1`                                                                                                                                             |
 | remark             | string   | NO       | 備註（最多 255 字符）                                                                                                                                               |
 | client_request_id  | string   | NO       | 客戶端請求 ID，用於冪等（最多 64 字符）                                                                                                                             |
+| delayed_until | int64 | NO | 時間條件單：訂單先進入監控（狀態為 `DelayedNotReported`），到達該時間後才提交。Unix 時間戳（秒），例如：`1767225600`<br/><br/>必須晚於當前時間且不超過 90 天，僅支持 `LO` / `MO`。不傳或傳 `0` 表示普通訂單 |
 
 ### Request Example
 
