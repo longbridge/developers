@@ -4,7 +4,7 @@
  * Handles sidebar navigation, URL routing (?op= / ?page=), endpoint detail,
  * page content, param sections, and code panel.
  */
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from 'react'
 import { t } from '@longbridge/openapi-utils'
 import type { Locale } from '@longbridge/openapi-utils'
 import {
@@ -129,6 +129,8 @@ const LOCALE_PREFIX: Record<Locale, string> = {
 export interface ApiReferenceProps {
   rawYaml: string
   locale: Locale
+  /** 当前页的接口 id（operationId 或 WS 命令 id）。静态预渲染时没有 window，靠它渲染出对应接口；不传则落到概览页。 */
+  initialId?: string
 }
 
 // ── Build sections for an endpoint ───────────────────────────────────────────
@@ -412,6 +414,35 @@ const NAV_LEAF_ACTIVE =
   'bg-[color-mix(in_oklab,var(--lb-brand)_10%,transparent)] text-[color:var(--lb-brand)] font-medium'
 const NAV_LEAF_IDLE = 'text-[color:var(--lb-fg-2)] hover:text-[color:var(--lb-brand)]'
 
+const apiHref = (locale: Locale, id: string) => `${LOCALE_PREFIX[locale] ?? ''}/docs/api/${id}`
+
+/** 侧栏接口条目：渲染成真实链接让爬虫能顺着走；普通左键点击仍走站内切换，带修饰键的点击交给浏览器（新标签页等）。 */
+function NavLeaf({
+  href,
+  active,
+  onSelect,
+  children,
+}: {
+  href: string
+  active: boolean
+  onSelect: () => void
+  children: ReactNode
+}) {
+  return (
+    <a
+      href={href}
+      onClick={(e) => {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+        e.preventDefault()
+        onSelect()
+      }}
+      aria-current={active ? 'page' : undefined}
+      className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
+      {children}
+    </a>
+  )
+}
+
 function Caret({ open }: { open: boolean }) {
   return (
     <span
@@ -461,14 +492,10 @@ function EndpointLeaves({
         )
         return (
           <li key={id} className="list-none">
-            <button
-              type="button"
-              onClick={() => onSelect(id)}
-              aria-current={active ? 'page' : undefined}
-              className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
+            <NavLeaf href={apiHref(locale, id)} active={active} onSelect={() => onSelect(id)}>
               <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
               <span className="flex-1 min-w-0 truncate">{summary}</span>
-            </button>
+            </NavLeaf>
           </li>
         )
       })}
@@ -512,58 +539,48 @@ function ApiSidebarSubGroup({
         </span>
         <Caret open={isOpen} />
       </button>
-      {isOpen && (
-        <ul className="list-none py-0 m-0 pl-2 flex flex-col gap-[2px]" role="list">
-          {[
-            ...sub.endpoints.map((ep) => {
-              const id = epId(ep)
-              const active = activeOp === id
-              return {
-                ord: DOCS_ORDER[id] ?? LEAF_FALLBACK,
-                node: (
-                  <li key={`e:${id}`} className="list-none">
-                    <button
-                      type="button"
-                      onClick={() => onSelect(id)}
-                      aria-current={active ? 'page' : undefined}
-                      className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
-                      <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
-                      <span className="flex-1 min-w-0 truncate">
-                        {stripLeadingVerb(
-                          pickLocale(ep.operation.summary, ep.operation['x-summary-zh'], ep.operation['x-summary-zh-hk'], locale),
-                          ep.method
-                        )}
-                      </span>
-                    </button>
-                  </li>
-                ),
-              }
-            }),
-            ...(sub.wsCommands ?? []).map((c) => {
-              const active = activeWs === c.id
-              return {
-                ord: DOCS_ORDER[c.id] ?? LEAF_FALLBACK,
-                node: (
-                  <li key={`w:${c.id}`} className="list-none">
-                    <button
-                      type="button"
-                      onClick={() => onWs(c.id)}
-                      aria-current={active ? 'page' : undefined}
-                      className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
-                      <span className="nav-method method-ws">WS</span>
-                      <span className="flex-1 min-w-0 truncate">
-                        {wsLeafName(pickLocale(c.name, c.nameZh, c.nameZhHk, locale))}
-                      </span>
-                    </button>
-                  </li>
-                ),
-              }
-            }),
-          ]
-            .sort((a, b) => a.ord - b.ord)
-            .map((x) => x.node)}
-        </ul>
-      )}
+      <ul className={`list-none py-0 m-0 pl-2 ${isOpen ? 'flex' : 'hidden'} flex-col gap-[2px]`} role="list">
+        {[
+          ...sub.endpoints.map((ep) => {
+            const id = epId(ep)
+            const active = activeOp === id
+            return {
+              ord: DOCS_ORDER[id] ?? LEAF_FALLBACK,
+              node: (
+                <li key={`e:${id}`} className="list-none">
+                  <NavLeaf href={apiHref(locale, id)} active={active} onSelect={() => onSelect(id)}>
+                    <span className={`nav-method method-${ep.method.toLowerCase()}`}>{ep.method}</span>
+                    <span className="flex-1 min-w-0 truncate">
+                      {stripLeadingVerb(
+                        pickLocale(ep.operation.summary, ep.operation['x-summary-zh'], ep.operation['x-summary-zh-hk'], locale),
+                        ep.method
+                      )}
+                    </span>
+                  </NavLeaf>
+                </li>
+              ),
+            }
+          }),
+          ...(sub.wsCommands ?? []).map((c) => {
+            const active = activeWs === c.id
+            return {
+              ord: DOCS_ORDER[c.id] ?? LEAF_FALLBACK,
+              node: (
+                <li key={`w:${c.id}`} className="list-none">
+                  <NavLeaf href={apiHref(locale, c.id)} active={active} onSelect={() => onWs(c.id)}>
+                    <span className="nav-method method-ws">WS</span>
+                    <span className="flex-1 min-w-0 truncate">
+                      {wsLeafName(pickLocale(c.name, c.nameZh, c.nameZhHk, locale))}
+                    </span>
+                  </NavLeaf>
+                </li>
+              ),
+            }
+          }),
+        ]
+          .sort((a, b) => a.ord - b.ord)
+          .map((x) => x.node)}
+      </ul>
     </li>
   )
 }
@@ -614,34 +631,32 @@ function ApiSidebarGroup({
         </span>
         <Caret open={isOpen} />
       </button>
-      {isOpen && (
-        <ul className="list-none py-0 m-0 flex flex-col gap-[2px]" role="list">
-          <EndpointLeaves endpoints={group.endpoints} activeOp={activeOp} onSelect={onSelect} locale={locale} />
-          {[
-            ...group.subgroups.map((sg) => ({
-              rank: subRank(sg.name),
-              node: (
-                <ApiSidebarSubGroup
-                  key={`s:${sg.name}`}
-                  sub={sg}
-                  activeOp={activeOp}
-                  activeWs={activeWs}
-                  onSelect={onSelect}
-                  onWs={onWs}
-                  locale={locale}
-                  forceOpen={forceOpen}
-                />
-              ),
-            })),
-            ...wsGroups.map((wg) => ({
-              rank: subRank(wg.name),
-              node: <WsSidebarGroup key={`w:${wg.name}`} group={wg} activeWs={activeWs} onSelect={onWs} locale={locale} forceOpen={forceOpen} />,
-            })),
-          ]
-            .sort((a, b) => a.rank - b.rank)
-            .map((x) => x.node)}
-        </ul>
-      )}
+      <ul className={`list-none py-0 m-0 ${isOpen ? 'flex' : 'hidden'} flex-col gap-[2px]`} role="list">
+        <EndpointLeaves endpoints={group.endpoints} activeOp={activeOp} onSelect={onSelect} locale={locale} />
+        {[
+          ...group.subgroups.map((sg) => ({
+            rank: subRank(sg.name),
+            node: (
+              <ApiSidebarSubGroup
+                key={`s:${sg.name}`}
+                sub={sg}
+                activeOp={activeOp}
+                activeWs={activeWs}
+                onSelect={onSelect}
+                onWs={onWs}
+                locale={locale}
+                forceOpen={forceOpen}
+              />
+            ),
+          })),
+          ...wsGroups.map((wg) => ({
+            rank: subRank(wg.name),
+            node: <WsSidebarGroup key={`w:${wg.name}`} group={wg} activeWs={activeWs} onSelect={onWs} locale={locale} forceOpen={forceOpen} />,
+          })),
+        ]
+          .sort((a, b) => a.rank - b.rank)
+          .map((x) => x.node)}
+      </ul>
     </li>
   )
 }
@@ -677,25 +692,19 @@ function WsSidebarGroup({
         </span>
         <Caret open={isOpen} />
       </button>
-      {isOpen && (
-        <ul className="list-none py-0 m-0 pl-2 flex flex-col gap-[2px]" role="list">
-          {group.commands.map((c) => {
-            const active = activeWs === c.id
-            return (
-              <li key={c.id} className="list-none">
-                <button
-                  type="button"
-                  onClick={() => onSelect(c.id)}
-                  aria-current={active ? 'page' : undefined}
-                  className={`${NAV_LEAF} ${active ? NAV_LEAF_ACTIVE : NAV_LEAF_IDLE}`}>
-                  <span className="nav-method method-ws">WS</span>
-                  <span className="flex-1 min-w-0 truncate">{pickLocale(c.name, c.nameZh, c.nameZhHk, locale)}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+      <ul className={`list-none py-0 m-0 pl-2 ${isOpen ? 'flex' : 'hidden'} flex-col gap-[2px]`} role="list">
+        {group.commands.map((c) => {
+          const active = activeWs === c.id
+          return (
+            <li key={c.id} className="list-none">
+              <NavLeaf href={apiHref(locale, c.id)} active={active} onSelect={() => onSelect(c.id)}>
+                <span className="nav-method method-ws">WS</span>
+                <span className="flex-1 min-w-0 truncate">{pickLocale(c.name, c.nameZh, c.nameZhHk, locale)}</span>
+              </NavLeaf>
+            </li>
+          )
+        })}
+      </ul>
     </li>
   )
 }
@@ -963,7 +972,7 @@ function cliSample(ep: EndpointItem | null): string {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
+export function ApiReference({ rawYaml, locale, initialId }: ApiReferenceProps) {
   const localePrefix = LOCALE_PREFIX[locale] ?? ''
 
   // Parse spec once
@@ -982,19 +991,18 @@ export function ApiReference({ rawYaml, locale }: ApiReferenceProps) {
   // Canonical URLs are path-based: `/docs/api/<operationId>` (locale-prefixed).
   // The legacy `?op=` / `?page=` query form is still honored for old links.
   const apiBase = `${localePrefix}/docs/api`
+  // A path segment is a WS command when it matches a known ws id, else an
+  // endpoint operationId.
+  const routeOf = (id: string) =>
+    wsIdSet.has(id) ? { op: null, page: null, ws: id } : { op: id, page: null, ws: null }
   const getRoute = () => {
-    if (typeof window === 'undefined') return { op: null, page: null, ws: null }
+    if (typeof window === 'undefined') {
+      return initialId ? routeOf(initialId) : { op: null, page: null, ws: null }
+    }
     const path = window.location.pathname.replace(/\/+$/, '')
     if (path.startsWith(apiBase + '/')) {
       const seg = path.slice(apiBase.length + 1)
-      if (seg && !seg.includes('/')) {
-        const id = decodeURIComponent(seg)
-        // A path segment is a WS command when it matches a known ws id, else an
-        // endpoint operationId.
-        return wsIdSet.has(id)
-          ? { op: null, page: null, ws: id }
-          : { op: id, page: null, ws: null }
-      }
+      if (seg && !seg.includes('/')) return routeOf(decodeURIComponent(seg))
     }
     const p = new URLSearchParams(window.location.search)
     return { op: p.get('op'), page: p.get('page'), ws: p.get('ws') }
