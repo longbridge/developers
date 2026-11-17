@@ -36518,7 +36518,7 @@ paths:
         Integer fields may arrive as JSON strings (e.g. `"pi_end_at": "0"`), which is how the gateway
         serialises int64 in proto3 JSON. The official SDKs accept both forms and expose integers.
       x-description-zh: |
-        获取当前登录会员的风险测评（适当性问卷）档案：最近一次问卷的风险等级与得分、专业投资者（PI）状态，以及各项资质的审核状态。
+        获取当前登录会员的风险测评（适当性问卷）档案：最近一次问卷的风险等级与得分、专业投资者（PI）状态，以及各审核项的状态。
 
         该接口没有请求参数，始终返回 access token 所属会员的信息。
 
@@ -36532,7 +36532,7 @@ paths:
 
         整数字段可能以 JSON 字符串返回（例如 `"pi_end_at": "0"`），这是网关按 proto3 JSON 序列化 int64 的方式。官方 SDK 两种形式都能解析，并统一以整数暴露。
       x-description-zh-hk: |
-        獲取當前登入會員的風險評估（合適性問卷）檔案：最近一次問卷的風險等級與得分、專業投資者（PI）狀態，以及各項資質的審核狀態。
+        獲取當前登入會員的風險評估（合適性問卷）檔案：最近一次問卷的風險等級與得分、專業投資者（PI）狀態，以及各審核項的狀態。
 
         該接口沒有請求參數，始終返回 access token 所屬會員的資料。
 
@@ -36658,7 +36658,7 @@ paths:
         - name: approvals
           type: object
           required: false
-          description: 'Approval state per item, e.g. `car` / `cka` / `risk_audit` → `pass`. The values are strings, not booleans: `is_corporate_client` arrives as `"false"` / `"true"`.'
+          description: 'Approval state per item, keyed by item name with string values, e.g. `car` / `cka` / `risk_audit` → `pass`. The values are strings, not booleans: `is_corporate_client` arrives as `"false"` / `"true"`.'
           x-description-zh: 各项的审核状态，例如 `car` / `cka` / `risk_audit` → `pass`。值是字符串而非布尔值：`is_corporate_client` 返回 `"false"` / `"true"`。
           x-description-zh-hk: 各項的審核狀態，例如 `car` / `cka` / `risk_audit` → `pass`。值是字串而非布林值：`is_corporate_client` 返回 `"false"` / `"true"`。
         - name: re_authentication
