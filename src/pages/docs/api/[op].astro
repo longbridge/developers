@@ -1,25 +1,24 @@
 ---
 // Path-based route for a single endpoint: /docs/api/<operationId>.
-// Renders the same interactive reference as /docs/api; the React app reads the
-// operationId from the pathname on hydration and focuses that endpoint.
+// initialId lets the static prerender render this endpoint (not the overview);
+// on hydration the React app reads the same id from the pathname.
 import ApiReferenceLayout from '@/layouts/ApiReferenceLayout.astro'
-import { endpointList, wsCommandList } from '@longbridge/openapi-api-reference/markdown'
+import { apiPageMeta } from '@longbridge/openapi-api-reference/markdown'
 import rawYaml from '../../../../openapi.yaml?raw'
 
 export function getStaticPaths() {
-  return [
-    ...endpointList(rawYaml).map((e) => ({
-      params: { op: e.operationId },
-      props: { summary: e.summary },
-    })),
-    ...wsCommandList(rawYaml).map((w) => ({
-      params: { op: w.id },
-      props: { summary: w.name },
-    })),
-  ]
+  return apiPageMeta(rawYaml, 'en').map((m) => ({
+    params: { op: m.id },
+    props: { title: m.title, description: m.description },
+  }))
 }
 
-const { summary } = Astro.props as { summary: string }
+const { title, description } = Astro.props as { title: string; description: string }
 ---
 
-<ApiReferenceLayout title={`${summary} · API Reference`} locale="en" />
+<ApiReferenceLayout
+  title={`${title} · API Reference`}
+  description={description}
+  locale="en"
+  initialId={Astro.params.op}
+/>

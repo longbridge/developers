@@ -186,6 +186,46 @@ export function wsCommandList(
   return allWsCommands(rawYaml).map((c) => ({ id: c.id, name: c.name, cmd: c.cmd, direction: c.direction }))
 }
 
+/** 描述的首段纯文本，去掉 Markdown 标记并截到 160 字符以内，用作 meta description。`:::` 提示块（如账户限制）跳过，没有其他正文时才退回用它。 */
+function metaDescription(md: string): string {
+  const body = md.replace(/^:::[^\n]*\n[\s\S]*?^:::[ \t]*$/gm, '').trim() || md.replace(/^:::.*$/gm, '').trim()
+  const para = body.split(/\n\s*\n/)[0] ?? ''
+  const text = para
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[`*_>#]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return text.length > 160 ? text.slice(0, 159) + '…' : text
+}
+
+/** 每个 API 单页（REST 接口与 WS 命令）的本地化标题与描述，给 /docs/api/<id> 静态页用。 */
+export function apiPageMeta(rawYaml: string, locale: Locale): Array<{ id: string; title: string; description: string }> {
+  const { groups } = parseSpec(rawYaml)
+  const out: Array<{ id: string; title: string; description: string }> = []
+  const seen = new Set<string>()
+  for (const g of groups) {
+    for (const ep of [...g.endpoints, ...g.subgroups.flatMap((sg) => sg.endpoints)]) {
+      const op = ep.operation
+      if (seen.has(op.operationId)) continue
+      seen.add(op.operationId)
+      out.push({
+        id: op.operationId,
+        title: pickLocale(op.summary, op['x-summary-zh'], op['x-summary-zh-hk'], locale),
+        description: metaDescription(pickLocale(op.description, op['x-description-zh'], op['x-description-zh-hk'], locale)),
+      })
+    }
+  }
+  for (const c of allWsCommands(rawYaml)) {
+    out.push({
+      id: c.id,
+      title: pickLocale(c.name, c.nameZh, c.nameZhHk, locale),
+      description: metaDescription(pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale)),
+    })
+  }
+  return out
+}
+
 /** Markdown for a single WS command by id (null if not found). */
 export function wsCommandMarkdownById(rawYaml: string, id: string, locale: Locale): string | null {
   const cmd = allWsCommands(rawYaml).find((c) => c.id === id)
