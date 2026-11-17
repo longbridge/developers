@@ -272,7 +272,7 @@ func main() {
 | approvals            | object   | 否       | 各项的状态，以项名为键、字符串为值，例如 `car` / `cka` / `risk_audit` → `pass`。值是字符串而非布尔值：`is_corporate_client` 返回 `"false"` / `"true"`。 |
 | re_authentication    | string   | 否       | 重新认证标记，原样返回。可能为空。                                                                                             |
 | pi_end_at            | int64    | 否       | 专业投资者状态的结束时间，以原始整数返回，未设置时为 `0`。本接口不定义其单位（秒或毫秒）。可能以 JSON 字符串返回。                 |
-| deadlines            | object   | 否       | 各项的截止时间，以项名为键、整数为值。为原始整数，单位与 `pi_end_at` 一样未被定义。                                          |
+| deadlines            | object   | 否       | `deadlines` 中各项的值，以项名为键、整数为值。为原始整数，单位与 `pi_end_at` 一样未被定义。                                          |
 | risk_assessment_at   | string   | 否       | 服务端返回的最近一次测评日期，例如 `2026-10-14`。可能为空。                                                                        |
 | score                | int32    | 否       | 问卷得分                                                                                                                           |
 | strategy_risk_levels | string[] | 否       | 会员的策略风险等级                                                                                                                 |

@@ -36677,9 +36677,9 @@ paths:
         - name: deadlines
           type: object
           required: false
-          description: Deadline per item, as raw integers with the same undefined unit as `pi_end_at`.
-          x-description-zh: 各项的截止时间，为原始整数，单位与 `pi_end_at` 一样未被定义。
-          x-description-zh-hk: 各項的截止時間，為原始整數，單位與 `pi_end_at` 一樣未被定義。
+          description: The `deadlines` entries, as raw integers with the same undefined unit as `pi_end_at`.
+          x-description-zh: deadlines 中各项的值，为原始整数，单位与 `pi_end_at` 一样未被定义。
+          x-description-zh-hk: deadlines 中各項的值，為原始整數，單位與 `pi_end_at` 一樣未被定義。
         - name: risk_assessment_at
           type: string
           required: false
