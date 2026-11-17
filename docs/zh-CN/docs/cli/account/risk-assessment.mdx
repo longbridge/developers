@@ -69,8 +69,3 @@ longbridge risk-assessment --format json
 - **Professional Investor (PI)**（`pi`）是状态码。接口未定义其取值含义，请当作不透明标识处理。
 - **PI End At**（`pi_end_at`）与 **Deadlines**（`deadlines`）是原始整数。接口未定义其单位（秒或毫秒），将非 0 值转换为时间之前请先确认单位。
 - **Approvals** 的值是字符串而非布尔值：`is_corporate_client=false` 中的 `false` 是字符串 `"false"`。
-
-## 权限要求
-
-此接口不由交易或账户 OAuth 权限控制。若接口返回 `403207 access key product forbidden`，
-说明该凭证尚未开通此接口对应的产品权限，请联系长桥对接人开通。
