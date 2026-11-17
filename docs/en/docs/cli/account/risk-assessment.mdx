@@ -74,4 +74,6 @@ Several values come straight from the account system and are printed as-is:
 
 ## Requirements
 
-OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.
+This endpoint is not gated by the trading or account OAuth scopes. If the API answers
+`403207 access key product forbidden`, the credential has not been granted this endpoint's
+product entitlement yet; ask your Longbridge contact to enable it.
