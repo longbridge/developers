@@ -71,3 +71,7 @@ Several values come straight from the account system and are printed as-is:
 - **Professional Investor (PI)** (`pi`) is a status code. Its code values are not defined by the API; treat it as an opaque identifier.
 - **PI End At** (`pi_end_at`) and **Deadlines** (`deadlines`) are raw integers. Their unit — seconds or milliseconds — is not defined by the API, so confirm it before converting a non-zero value into a timestamp.
 - **Approvals** values are strings, not booleans: `is_corporate_client=false` is the string `"false"`.
+
+## Requirements
+
+A valid OAuth login is required. Run `longbridge auth login` if you have not yet authenticated.

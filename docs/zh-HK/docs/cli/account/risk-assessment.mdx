@@ -69,3 +69,7 @@ longbridge risk-assessment --format json
 - **Professional Investor (PI)**（`pi`）是狀態碼。接口未定義其取值含義，請當作不透明識別碼處理。
 - **PI End At**（`pi_end_at`）與 **Deadlines**（`deadlines`）是原始整數。接口未定義其單位（秒或毫秒），將非 0 值轉換為時間之前請先確認單位。
 - **Approvals** 的值是字串而非布林值：`is_corporate_client=false` 中的 `false` 是字串 `"false"`。
+
+## 前置條件
+
+需要有效的 OAuth 登入。如未認證請先執行 `longbridge auth login`。
