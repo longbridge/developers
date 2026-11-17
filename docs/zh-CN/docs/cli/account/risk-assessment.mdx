@@ -1,0 +1,75 @@
+---
+title: 'risk-assessment'
+sidebar_label: 'risk-assessment'
+sidebar_position: 11
+---
+
+# longbridge risk-assessment
+
+查看自己的风险测评（适当性问卷）档案——最近一次问卷的风险等级与得分、专业投资者（PI）状态，以及各项资质的审核状态。
+
+## 基本用法
+
+```bash
+longbridge risk-assessment
+```
+
+```
+| Field                      | Value                                                          |
+|----------------------------|----------------------------------------------------------------|
+| Risk Level                 | A5                                                             |
+| Score                      | 0                                                              |
+| Assessed At                | 2026-10-14                                                     |
+| Professional Investor (PI) | 0                                                              |
+| PI End At                  | -                                                              |
+| Approvals                  | car=pass, cka=pass, is_corporate_client=false, risk_audit=pass |
+| Deadlines                  | -                                                              |
+| Re-authentication          | -                                                              |
+| Strategy Risk Levels       | -                                                              |
+```
+
+该命令没有参数。映射类字段按 `key=value` 以逗号分隔展示；未设置的值——空字符串、空映射或空列表，以及为 `0` 的 PI 结束时间——显示为 `-`。
+
+## 示例
+
+### 查看当前的风险测评档案
+
+```bash
+longbridge risk-assessment
+# JSON 输出，适合脚本使用
+longbridge risk-assessment --format json
+```
+
+`--format json` 输出完整的 SDK 对象，字段名与接口返回一致。注意网关以 JSON 字符串序列化的整数字段（例如 `"pi_end_at": "0"`）在这里以整数呈现：
+
+```json
+{
+  "risk": "A5",
+  "pi": 0,
+  "approvals": {
+    "car": "pass",
+    "cka": "pass",
+    "is_corporate_client": "false",
+    "risk_audit": "pass"
+  },
+  "re_authentication": "",
+  "pi_end_at": 0,
+  "deadlines": {},
+  "risk_assessment_at": "2026-10-14",
+  "score": 0,
+  "strategy_risk_levels": []
+}
+```
+
+## 如何理解输出
+
+以下几项直接来自账户系统，原样输出：
+
+- **Risk Level**（`risk`）是最近一次问卷的等级字符串，例如 `A5`。接口未定义等级集合，也未定义等级之间的顺序，不要据此判断风险承受能力的高低。
+- **Professional Investor (PI)**（`pi`）是状态码。接口未定义其取值含义，请当作不透明标识处理。
+- **PI End At**（`pi_end_at`）与 **Deadlines**（`deadlines`）是原始整数。接口未定义其单位（秒或毫秒），将非 0 值转换为时间之前请先确认单位。
+- **Approvals** 的值是字符串而非布尔值：`is_corporate_client=false` 中的 `false` 是字符串 `"false"`。
+
+## 权限要求
+
+需要 OAuth 交易或账户权限。详见 [交易权限](/zh-CN/docs/trade/trade-overview) 设置说明。

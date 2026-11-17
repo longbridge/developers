@@ -9552,7 +9552,7 @@ tags:
   - name: Account
     x-name-zh: 账户
     x-name-zh-hk: 帳戶
-    description: Recurring investment (DCA) plans, portfolio, statements, and alert reminders.
+    description: Recurring investment (DCA) plans, portfolio, statements, alert reminders, and the member profile.
     x-subgroups:
       - name: Portfolio
         x-name-zh: 投资组合
@@ -9563,6 +9563,9 @@ tags:
       - name: DCA
         x-name-zh: 定投
         x-name-zh-hk: 定投
+      - name: Profile
+        x-name-zh: 档案
+        x-name-zh-hk: 檔案
   - name: AI Agent
     x-name-zh: AI Agent
     x-name-zh-hk: AI Agent
@@ -36477,6 +36480,244 @@ paths:
                   im_factor: '0.1'
                   mm_factor: '0.1'
                   fm_factor: '0.1'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/members/me/risk-assessment:
+    get:
+      operationId: risk_assessment
+      summary: Risk Assessment
+      x-summary-zh: 风险测评
+      x-summary-zh-hk: 風險評估
+      description: |
+        Get the risk assessment (suitability questionnaire) profile of the logged-in member: the risk
+        level and score of the latest questionnaire, the professional investor (PI) status, and the
+        approval state of each item.
+
+        This API takes no parameters; it always describes the member the access token belongs to.
+
+        The vocabularies of several fields are defined by the account system, not by this API, and are
+        returned as-is:
+
+        - `risk` is the risk level string of the latest questionnaire (e.g. `A5`). This API does not
+          define the set of levels or any ordering between them, so do not infer that one level means a
+          higher or lower risk tolerance than another.
+        - `pi` is a professional investor status code. This API does not define its code values; treat
+          it as an opaque identifier.
+        - `pi_end_at` and `deadlines` are the raw integers returned by the server. This API does not
+          define their unit (seconds or milliseconds), so confirm the unit before converting a non-zero
+          value into a timestamp.
+
+        `approvals` and `deadlines` are keyed by item. The values of `approvals` are
+        strings, not booleans: `is_corporate_client` arrives as `"false"` / `"true"`, so compare the
+        string instead of testing it for truthiness.
+
+        Integer fields may arrive as JSON strings (e.g. `"pi_end_at": "0"`), which is how the gateway
+        serialises int64 in proto3 JSON. The official SDKs accept both forms and expose integers.
+      x-description-zh: |
+        获取当前登录会员的风险测评（适当性问卷）档案：最近一次问卷的风险等级与得分、专业投资者（PI）状态，以及各项资质的审核状态。
+
+        该接口没有请求参数，始终返回 access token 所属会员的信息。
+
+        以下字段的取值由账户系统定义，而非本接口定义，接口原样返回：
+
+        - `risk` 是最近一次问卷的风险等级字符串（例如 `A5`）。本接口不定义等级集合，也不定义等级之间的顺序，请勿据此推断风险承受能力的高低。
+        - `pi` 是专业投资者状态码。本接口不定义其取值含义，请当作不透明标识处理。
+        - `pi_end_at` 与 `deadlines` 是服务端返回的原始整数。本接口不定义其单位（秒或毫秒），将非 0 值转换为时间之前请先确认单位。
+
+        `approvals` 与 `deadlines` 都以项为键。`approvals` 的值是字符串而非布尔值：`is_corporate_client` 返回 `"false"` / `"true"`，请比较字符串，不要直接做真假判断。
+
+        整数字段可能以 JSON 字符串返回（例如 `"pi_end_at": "0"`），这是网关按 proto3 JSON 序列化 int64 的方式。官方 SDK 两种形式都能解析，并统一以整数暴露。
+      x-description-zh-hk: |
+        獲取當前登入會員的風險評估（合適性問卷）檔案：最近一次問卷的風險等級與得分、專業投資者（PI）狀態，以及各項資質的審核狀態。
+
+        該接口沒有請求參數，始終返回 access token 所屬會員的資料。
+
+        以下欄位的取值由賬戶系統定義，而非本接口定義，接口原樣返回：
+
+        - `risk` 是最近一次問卷的風險等級字串（例如 `A5`）。本接口不定義等級集合，也不定義等級之間的順序，請勿據此推斷風險承受能力的高低。
+        - `pi` 是專業投資者狀態碼。本接口不定義其取值含義，請當作不透明識別碼處理。
+        - `pi_end_at` 與 `deadlines` 是服務端返回的原始整數。本接口不定義其單位（秒或毫秒），將非 0 值轉換為時間之前請先確認單位。
+
+        `approvals` 與 `deadlines` 都以項為鍵。`approvals` 的值是字串而非布林值：`is_corporate_client` 返回 `"false"` / `"true"`，請比較字串，不要直接做真假判斷。
+
+        整數欄位可能以 JSON 字串返回（例如 `"pi_end_at": "0"`），這是網關按 proto3 JSON 序列化 int64 的方式。官方 SDK 兩種形式都能解析，並統一以整數暴露。
+      x-subgroup: Profile
+      x-subgroup-zh: 档案
+      x-subgroup-zh-hk: 檔案
+      tags:
+        - Account
+      x-codeSamples:
+        - lang: Shell
+          label: CLI
+          source: |
+            longbridge risk-assessment
+      x-request-examples:
+        - lang: Shell
+          label: cURL
+          source: |
+            curl --request GET \
+              --url 'https://openapi.longbridge.com/v1/members/me/risk-assessment' \
+              --header 'Authorization: Bearer <access_token>'
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            resp = requests.get(
+                "https://openapi.longbridge.com/v1/members/me/risk-assessment",
+                headers={"Authorization": "Bearer <access_token>"},
+            )
+            print(resp.json())
+        - lang: Python
+          label: Python (async)
+          source: |
+            import asyncio
+            import aiohttp
+
+            async def main():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(
+                        "https://openapi.longbridge.com/v1/members/me/risk-assessment",
+                        headers={"Authorization": "Bearer <access_token>"},
+                    ) as resp:
+                        print(await resp.json())
+
+            asyncio.run(main())
+        - lang: JavaScript
+          label: Node.js
+          source: |
+            const resp = await fetch("https://openapi.longbridge.com/v1/members/me/risk-assessment", {
+              method: "GET",
+              headers: {
+                "Authorization": "Bearer <access_token>",
+              },
+            })
+            console.log(await resp.json())
+        - lang: Java
+          label: Java
+          source: |
+            import java.net.URI;
+            import java.net.http.*;
+
+            var client = HttpClient.newHttpClient();
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://openapi.longbridge.com/v1/members/me/risk-assessment"))
+                    .header("Authorization", "Bearer <access_token>")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            var resp = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(resp.body());
+        - lang: Rust
+          label: Rust
+          source: |
+            let client = reqwest::Client::new();
+            let resp = client
+                    .request(reqwest::Method::GET, "https://openapi.longbridge.com/v1/members/me/risk-assessment")
+                    .header("Authorization", "Bearer <access_token>")
+                    .send()
+                    .await?
+                    .text()
+                    .await?;
+            println!("{resp}");
+        - lang: C++
+          label: C++
+          source: |
+            #include <curl/curl.h>
+
+            int main() {
+                CURL *curl = curl_easy_init();
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Authorization: Bearer <access_token>");
+                curl_easy_setopt(curl, CURLOPT_URL, "https://openapi.longbridge.com/v1/members/me/risk-assessment");
+                curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+                curl_easy_perform(curl);
+                curl_easy_cleanup(curl);
+                return 0;
+            }
+        - lang: Go
+          label: Go
+          source: "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://openapi.longbridge.com/v1/members/me/risk-assessment\", nil)\n\treq.Header.Set(\"Authorization\", \"Bearer <access_token>\")\n\tresp, _ := http.DefaultClient.Do(req)\n\tdefer resp.Body.Close()\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}\n"
+      x-response-properties:
+        - name: risk
+          type: string
+          required: false
+          description: 'Risk level of the latest questionnaire, e.g. `A5`. Returned as-is; this API does not define the set of levels or an ordering between them. May be empty.'
+          x-description-zh: 最近一次问卷的风险等级，例如 `A5`。原样返回；本接口不定义等级集合，也不定义等级之间的顺序。可能为空。
+          x-description-zh-hk: 最近一次問卷的風險等級，例如 `A5`。原樣返回；本接口不定義等級集合，也不定義等級之間的順序。可能為空。
+        - name: pi
+          type: int32
+          required: false
+          description: Professional investor (PI) status code, returned as-is. This API does not define its code values.
+          x-description-zh: 专业投资者（PI）状态码，原样返回。本接口不定义其取值含义。
+          x-description-zh-hk: 專業投資者（PI）狀態碼，原樣返回。本接口不定義其取值含義。
+        - name: approvals
+          type: object
+          required: false
+          description: 'Approval state per item, e.g. `car` / `cka` / `risk_audit` → `pass`. The values are strings, not booleans: `is_corporate_client` arrives as `"false"` / `"true"`.'
+          x-description-zh: 各项的审核状态，例如 `car` / `cka` / `risk_audit` → `pass`。值是字符串而非布尔值：`is_corporate_client` 返回 `"false"` / `"true"`。
+          x-description-zh-hk: 各項的審核狀態，例如 `car` / `cka` / `risk_audit` → `pass`。值是字串而非布林值：`is_corporate_client` 返回 `"false"` / `"true"`。
+        - name: re_authentication
+          type: string
+          required: false
+          description: Re-authentication flag, returned as-is. May be empty.
+          x-description-zh: 重新认证标记，原样返回。可能为空。
+          x-description-zh-hk: 重新認證標記，原樣返回。可能為空。
+        - name: pi_end_at
+          type: int64
+          required: false
+          description: 'End time of the professional investor status, returned as the raw integer; `0` when not set. This API does not define the unit (seconds or milliseconds). May arrive as a JSON string, e.g. `"0"`.'
+          x-description-zh: 专业投资者状态的结束时间，以原始整数返回，未设置时为 `0`。本接口不定义其单位（秒或毫秒）。可能以 JSON 字符串返回，例如 `"0"`。
+          x-description-zh-hk: 專業投資者狀態的結束時間，以原始整數返回，未設置時為 `0`。本接口不定義其單位（秒或毫秒）。可能以 JSON 字串返回，例如 `"0"`。
+        - name: deadlines
+          type: object
+          required: false
+          description: Deadline per item, as raw integers with the same undefined unit as `pi_end_at`.
+          x-description-zh: 各项的截止时间，为原始整数，单位与 `pi_end_at` 一样未被定义。
+          x-description-zh-hk: 各項的截止時間，為原始整數，單位與 `pi_end_at` 一樣未被定義。
+        - name: risk_assessment_at
+          type: string
+          required: false
+          description: 'Date of the latest assessment as returned by the server, e.g. `2026-10-14`. May be empty.'
+          x-description-zh: 服务端返回的最近一次测评日期，例如 `2026-10-14`。可能为空。
+          x-description-zh-hk: 服務端返回的最近一次評估日期，例如 `2026-10-14`。可能為空。
+        - name: score
+          type: int32
+          required: false
+          description: Questionnaire score.
+          x-description-zh: 问卷得分。
+          x-description-zh-hk: 問卷得分。
+        - name: strategy_risk_levels
+          type: string[]
+          required: false
+          description: Strategy risk levels of the member.
+          x-description-zh: 会员的策略风险等级。
+          x-description-zh-hk: 會員的策略風險等級。
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                code: 0
+                data:
+                  risk: A5
+                  pi: 0
+                  approvals:
+                    car: pass
+                    cka: pass
+                    is_corporate_client: 'false'
+                    risk_audit: pass
+                  re_authentication: ''
+                  pi_end_at: '0'
+                  deadlines: {}
+                  risk_assessment_at: '2026-10-14'
+                  score: 0
+                  strategy_risk_levels: []
         default:
           description: Unexpected error
           content:

@@ -1,0 +1,289 @@
+---
+slug: risk-assessment
+title: Risk Assessment
+sidebar_position: 1
+language_tabs: false
+toc_footers: []
+includes: []
+search: true
+highlight_theme: ''
+headingLevel: 2
+---
+
+Get the risk assessment (suitability questionnaire) profile of the logged-in member: the risk level
+and score of the latest questionnaire, the professional investor (PI) status, and the approval state
+of each item.
+
+The vocabularies of several fields are defined by the account system, not by this API, and are
+returned as-is:
+
+- `risk` is the risk level string of the latest questionnaire (e.g. `A5`). This API does not define
+  the set of levels or any ordering between them, so do not infer that one level means a higher or
+  lower risk tolerance than another.
+- `pi` is a professional investor status code. This API does not define its code values; treat it as
+  an opaque identifier.
+- `pi_end_at` and `deadlines` are the raw integers returned by the server. This API does not define
+  their unit (seconds or milliseconds), so confirm the unit before converting a non-zero value into a
+  timestamp.
+
+`approvals` and `deadlines` are keyed by item. The values of `approvals` are strings,
+not booleans: `is_corporate_client` arrives as `"false"` / `"true"`, so compare the string instead of
+testing it for truthiness.
+
+Integer fields may arrive as JSON strings (e.g. `"pi_end_at": "0"`), which is how the gateway
+serialises int64 in proto3 JSON. The official SDKs accept both forms and expose integers.
+
+<CliCommand>
+longbridge risk-assessment
+</CliCommand>
+
+<SDKLinks module="trade" klass="TradeContext" method="risk_assessment" />
+
+## Request
+
+<table className="http-basic">
+<tbody>
+<tr><td className="http-basic-key">HTTP Method</td><td>GET</td></tr>
+<tr><td className="http-basic-key">HTTP URL</td><td>/v1/members/me/risk-assessment </td></tr>
+</tbody>
+</table>
+
+### Parameters
+
+> Content-Type: application/json; charset=utf-8
+
+This API takes no parameters. It always describes the member the access token belongs to.
+
+### Request Example
+
+<Tabs groupId="request-example">
+  <TabItem value="python" label="Python" default>
+
+```python
+from longbridge.openapi import TradeContext, Config, OAuthBuilder
+
+oauth = OAuthBuilder("your-client-id").build(lambda url: print("Visit:", url))
+config = Config.from_oauth(oauth)
+ctx = TradeContext(config)
+resp = ctx.risk_assessment()
+print(resp)
+```
+
+  </TabItem>
+  <TabItem value="python-async" label="Python (async)">
+
+```python
+import asyncio
+from longbridge.openapi import AsyncTradeContext, Config, OAuthBuilder
+
+async def main() -> None:
+    oauth = await OAuthBuilder("your-client-id").build_async(lambda url: print("Visit:", url))
+    config = Config.from_oauth(oauth)
+    ctx = AsyncTradeContext.create(config)
+    resp = await ctx.risk_assessment()
+    print(resp)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="Node.js">
+
+```javascript
+const { Config, TradeContext, OAuth } = require('longbridge')
+
+async function main() {
+  const oauth = await OAuth.build('your-client-id', (_, url) => {
+    console.log('Open this URL to authorize: ' + url)
+  })
+  const config = Config.fromOAuth(oauth)
+  const ctx = TradeContext.new(config)
+  const resp = await ctx.riskAssessment()
+  console.log(resp)
+}
+main().catch(console.error)
+```
+
+  </TabItem>
+  <TabItem value="java" label="Java">
+
+```java
+import com.longbridge.*;
+import com.longbridge.trade.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        try (OAuth oauth = new OAuthBuilder("your-client-id").build(url -> System.out.println("Open to authorize: " + url)).get();
+             Config config = Config.fromOAuth(oauth);
+             TradeContext ctx = TradeContext.create(config)) {
+            RiskAssessment resp = ctx.getRiskAssessment().get();
+            System.out.println(resp);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem value="rust" label="Rust">
+
+```rust
+use std::sync::Arc;
+use longbridge::{oauth::OAuthBuilder, trade::TradeContext, Config};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let oauth = OAuthBuilder::new("your-client-id").build(|url| println!("Open this URL to authorize: {url}")).await?;
+    let config = Arc::new(Config::from_oauth(oauth));
+    let (ctx, _) = TradeContext::new(config);
+    let resp = ctx.risk_assessment().await?;
+    println!("{:?}", resp);
+    Ok(())
+}
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+#include <iostream>
+#include <longbridge.hpp>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+using namespace longbridge;
+using namespace longbridge::trade;
+
+static void
+run(const OAuth& oauth)
+{
+    Config config = Config::from_oauth(oauth);
+    TradeContext ctx = TradeContext::create(config);
+
+    ctx.risk_assessment([](auto res) {
+        if (!res) { std::cout << "failed" << std::endl; return; }
+        std::cout << "risk: " << res->risk << std::endl;
+    });
+}
+
+int main(int argc, char const* argv[]) {
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);
+#endif
+
+    const std::string client_id = "your-client-id";
+    OAuthBuilder(client_id).build(
+    [](const std::string& url) {
+        std::cout << "Open this URL to authorize: " << url << std::endl;
+    },
+    [](auto res) {
+        if (!res) {
+            std::cout << "authorization failed: " << *res.status().message() << std::endl;
+            return;
+        }
+        run(*res);
+    });
+
+    std::cin.get();
+    return 0;
+}
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/longbridge/openapi-go/config"
+	"github.com/longbridge/openapi-go/oauth"
+	"github.com/longbridge/openapi-go/trade"
+)
+
+func main() {
+	o := oauth.New("your-client-id").
+		OnOpenURL(func(url string) { fmt.Println("Open this URL to authorize:", url) })
+	if err := o.Build(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	conf, err := config.New(config.WithOAuthClient(o))
+	if err != nil {
+		log.Fatal(err)
+	}
+	tctx, err := trade.NewFromCfg(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tctx.Close()
+	ra, err := tctx.RiskAssessment(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", ra)
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Response
+
+### Response Headers
+
+- Content-Type: application/json
+
+### Response Example
+
+```json
+{
+  "code": 0,
+  "data": {
+    "risk": "A5",
+    "pi": 0,
+    "approvals": {
+      "car": "pass",
+      "cka": "pass",
+      "is_corporate_client": "false",
+      "risk_audit": "pass"
+    },
+    "re_authentication": "",
+    "pi_end_at": "0",
+    "deadlines": {},
+    "risk_assessment_at": "2026-10-14",
+    "score": 0,
+    "strategy_risk_levels": []
+  }
+}
+```
+
+### Response Status
+
+| Status | Description    | Schema                                            |
+| ------ | -------------- | ------------------------------------------------- |
+| 200    | Success        | [risk_assessment_rsp](#schemarisk_assessment_rsp) |
+| 400    | Internal Error | None                                              |
+
+## Schemas
+
+### risk_assessment_rsp
+
+<a id="schemarisk_assessment_rsp"></a>
+
+| Name                 | Type              | Required | Description                                                                                                                                                                              |
+| -------------------- | ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| risk                 | string            | false    | Risk level of the latest questionnaire, e.g. `A5`. Returned as-is; this API does not define the set of levels or an ordering between them. May be empty.                                   |
+| pi                   | int32             | false    | Professional investor (PI) status code, returned as-is. This API does not define its code values.                                                                                          |
+| approvals            | object            | false    | Approval state per item, keyed by item name with string values, e.g. `car` / `cka` / `risk_audit` → `pass`. The values are strings, not booleans: `is_corporate_client` arrives as `"false"` / `"true"`. |
+| re_authentication    | string            | false    | Re-authentication flag, returned as-is. May be empty.                                                                                                                                |
+| pi_end_at            | int64             | false    | End time of the professional investor status, returned as the raw integer; `0` when not set. This API does not define the unit (seconds or milliseconds). May arrive as a JSON string.      |
+| deadlines            | object            | false    | Deadline per item, keyed by item name with integer values. Raw integers with the same undefined unit as `pi_end_at`.                                                         |
+| risk_assessment_at   | string            | false    | Date of the latest assessment as returned by the server, e.g. `2026-10-14`. May be empty.                                                                                                  |
+| score                | int32             | false    | Questionnaire score                                                                                                                                                                        |
+| strategy_risk_levels | string[]          | false    | Strategy risk levels of the member                                                                                                                                                         |

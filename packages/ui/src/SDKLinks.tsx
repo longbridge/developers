@@ -142,6 +142,7 @@ const JAVA_ANCHOR_MAP: Record<string, string> = {
   submitOrder: 'submitOrder(com.longbridge.trade.SubmitOrderOptions)',
   cancelOrder: 'cancelOrder(java.lang.String)',
   getAccountBalance: 'getAccountBalance()',
+  getRiskAssessment: 'getRiskAssessment()',
   getCashFlow: 'getCashFlow(com.longbridge.trade.GetCashFlowOptions)',
   getFundPositions: 'getFundPositions(com.longbridge.trade.GetFundPositionsOptions)',
   getStockPositions: 'getStockPositions(com.longbridge.trade.GetStockPositionsOptions)',
