@@ -6,7 +6,7 @@ sidebar_position: 11
 
 # longbridge risk-assessment
 
-Show your risk assessment (suitability questionnaire) profile — the risk level and score of your latest questionnaire, your professional investor (PI) status, and the approval state of each item.
+Show your risk assessment profile — the risk level and score of your latest assessment, your professional investor (PI) status, and the approval state of each item.
 
 ## Basic Usage
 
@@ -67,7 +67,7 @@ integers here:
 
 Several values come straight from the account system and are printed as-is:
 
-- **Risk Level** (`risk`) is the level string of your latest questionnaire, e.g. `A5`. The set of levels and any ordering between them are not defined by the API, so do not read one level as higher or lower risk tolerance than another.
+- **Risk Level** (`risk`) is the level string of your latest assessment, e.g. `A5`. The set of levels and any ordering between them are not defined by the API, so do not read one level as higher or lower risk tolerance than another.
 - **Professional Investor (PI)** (`pi`) is a status code. Its code values are not defined by the API; treat it as an opaque identifier.
 - **PI End At** (`pi_end_at`) and **Deadlines** (`deadlines`) are raw integers. Their unit — seconds or milliseconds — is not defined by the API, so confirm it before converting a non-zero value into a timestamp.
 - **Approvals** values are strings, not booleans: `is_corporate_client=false` is the string `"false"`.

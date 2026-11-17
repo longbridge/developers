@@ -6,7 +6,7 @@ sidebar_position: 11
 
 # longbridge risk-assessment
 
-查看自己的风险测评（适当性问卷）档案——最近一次问卷的风险等级与得分、专业投资者（PI）状态，以及 `approvals` 中各项的状态。
+查看自己的风险测评档案——最近一次测评的风险等级与得分、专业投资者（PI）状态，以及 `approvals` 中各项的状态。
 
 ## 基本用法
 
@@ -65,7 +65,7 @@ longbridge risk-assessment --format json
 
 以下几项直接来自账户系统，原样输出：
 
-- **Risk Level**（`risk`）是最近一次问卷的等级字符串，例如 `A5`。接口未定义等级集合，也未定义等级之间的顺序，不要据此判断风险承受能力的高低。
+- **Risk Level**（`risk`）是最近一次测评的等级字符串，例如 `A5`。接口未定义等级集合，也未定义等级之间的顺序，不要据此判断风险承受能力的高低。
 - **Professional Investor (PI)**（`pi`）是状态码。接口未定义其取值含义，请当作不透明标识处理。
 - **PI End At**（`pi_end_at`）与 **Deadlines**（`deadlines`）是原始整数。接口未定义其单位（秒或毫秒），将非 0 值转换为时间之前请先确认单位。
 - **Approvals** 的值是字符串而非布尔值：`is_corporate_client=false` 中的 `false` 是字符串 `"false"`。

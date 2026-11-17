@@ -9552,7 +9552,7 @@ tags:
   - name: Account
     x-name-zh: 账户
     x-name-zh-hk: 帳戶
-    description: Recurring investment (DCA) plans, portfolio, statements, alert reminders, and the member profile.
+    description: Recurring investment (DCA) plans, portfolio, statements, alert reminders, and the account profile.
     x-subgroups:
       - name: Portfolio
         x-name-zh: 投资组合
@@ -36493,17 +36493,16 @@ paths:
       x-summary-zh: 风险测评
       x-summary-zh-hk: 風險評估
       description: |
-        Get the risk assessment (suitability questionnaire) profile of the member the access
-        token belongs to: the risk
-        level and score of the latest questionnaire, the professional investor (PI) status, and the
+        Get the risk assessment profile of the account the access token belongs to: the risk
+        level and score of the latest assessment, the professional investor (PI) status, and the
         approval state of each item.
 
-        This API takes no parameters; it always describes the member the access token belongs to.
+        This API takes no parameters; it always describes the account the access token belongs to.
 
         The vocabularies of several fields are defined by the account system, not by this API, and are
         returned as-is:
 
-        - `risk` is the risk level string of the latest questionnaire (e.g. `A5`). This API does not
+        - `risk` is the risk level string of the latest assessment (e.g. `A5`). This API does not
           define the set of levels or any ordering between them, so do not infer that one level means a
           higher or lower risk tolerance than another.
         - `pi` is a professional investor status code. This API does not define its code values; treat
@@ -36519,13 +36518,13 @@ paths:
         Integer fields may arrive as JSON strings (e.g. `"pi_end_at": "0"`), which is how the gateway
         serialises int64 in proto3 JSON. The official SDKs accept both forms and expose integers.
       x-description-zh: |
-        获取 access token 所属会员的风险测评（适当性问卷）档案：最近一次问卷的风险等级与得分、专业投资者（PI）状态，以及 `approvals` 中各项的状态。
+        获取 access token 所属账户的风险测评档案：最近一次测评的风险等级与得分、专业投资者（PI）状态，以及 `approvals` 中各项的状态。
 
-        该接口没有请求参数，始终返回 access token 所属会员的信息。
+        该接口没有请求参数，始终返回 access token 所属账户的信息。
 
         以下字段的取值由账户系统定义，而非本接口定义，接口原样返回：
 
-        - `risk` 是最近一次问卷的风险等级字符串（例如 `A5`）。本接口不定义等级集合，也不定义等级之间的顺序，请勿据此推断风险承受能力的高低。
+        - `risk` 是最近一次测评的风险等级字符串（例如 `A5`）。本接口不定义等级集合，也不定义等级之间的顺序，请勿据此推断风险承受能力的高低。
         - `pi` 是专业投资者状态码。本接口不定义其取值含义，请当作不透明标识处理。
         - `pi_end_at` 与 `deadlines` 是服务端返回的原始整数。本接口不定义其单位（秒或毫秒），将非 0 值转换为时间之前请先确认单位。
 
@@ -36533,13 +36532,13 @@ paths:
 
         整数字段可能以 JSON 字符串返回（例如 `"pi_end_at": "0"`），这是网关按 proto3 JSON 序列化 int64 的方式。官方 SDK 两种形式都能解析，并统一以整数暴露。
       x-description-zh-hk: |
-        獲取 access token 所屬會員的風險評估（合適性問卷）檔案：最近一次問卷的風險等級與得分、專業投資者（PI）狀態，以及 `approvals` 中各項的狀態。
+        獲取 access token 所屬賬戶的風險評估檔案：最近一次測評的風險等級與得分、專業投資者（PI）狀態，以及 `approvals` 中各項的狀態。
 
-        該接口沒有請求參數，始終返回 access token 所屬會員的資料。
+        該接口沒有請求參數，始終返回 access token 所屬賬戶的資料。
 
         以下欄位的取值由賬戶系統定義，而非本接口定義，接口原樣返回：
 
-        - `risk` 是最近一次問卷的風險等級字串（例如 `A5`）。本接口不定義等級集合，也不定義等級之間的順序，請勿據此推斷風險承受能力的高低。
+        - `risk` 是最近一次測評的風險等級字串（例如 `A5`）。本接口不定義等級集合，也不定義等級之間的順序，請勿據此推斷風險承受能力的高低。
         - `pi` 是專業投資者狀態碼。本接口不定義其取值含義，請當作不透明識別碼處理。
         - `pi_end_at` 與 `deadlines` 是服務端返回的原始整數。本接口不定義其單位（秒或毫秒），將非 0 值轉換為時間之前請先確認單位。
 
@@ -36647,9 +36646,9 @@ paths:
         - name: risk
           type: string
           required: false
-          description: 'Risk level of the latest questionnaire, e.g. `A5`. Returned as-is; this API does not define the set of levels or an ordering between them. May be empty.'
-          x-description-zh: 最近一次问卷的风险等级，例如 `A5`。原样返回；本接口不定义等级集合，也不定义等级之间的顺序。可能为空。
-          x-description-zh-hk: 最近一次問卷的風險等級，例如 `A5`。原樣返回；本接口不定義等級集合，也不定義等級之間的順序。可能為空。
+          description: 'Risk level of the latest assessment, e.g. `A5`. Returned as-is; this API does not define the set of levels or an ordering between them. May be empty.'
+          x-description-zh: 最近一次测评的风险等级，例如 `A5`。原样返回；本接口不定义等级集合，也不定义等级之间的顺序。可能为空。
+          x-description-zh-hk: 最近一次測評的風險等級，例如 `A5`。原樣返回；本接口不定義等級集合，也不定義等級之間的順序。可能為空。
         - name: pi
           type: int32
           required: false
@@ -36690,14 +36689,14 @@ paths:
           type: int32
           required: false
           description: Questionnaire score.
-          x-description-zh: 问卷得分。
-          x-description-zh-hk: 問卷得分。
+          x-description-zh: 测评得分。
+          x-description-zh-hk: 測評得分。
         - name: strategy_risk_levels
           type: string[]
           required: false
-          description: Strategy risk levels of the member.
-          x-description-zh: 会员的策略风险等级。
-          x-description-zh-hk: 會員的策略風險等級。
+          description: Strategy risk levels of the account.
+          x-description-zh: 账户的策略风险等级。
+          x-description-zh-hk: 賬戶的策略風險等級。
       responses:
         '200':
           description: Successful response

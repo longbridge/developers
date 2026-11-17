@@ -10,15 +10,15 @@ highlight_theme: ''
 headingLevel: 2
 ---
 
-Get the risk assessment (suitability questionnaire) profile of the member the access token
+Get the risk assessment profile of the account the access token
 belongs to: the risk level
-and score of the latest questionnaire, the professional investor (PI) status, and the approval state
+and score of the latest assessment, the professional investor (PI) status, and the approval state
 of each item.
 
 The vocabularies of several fields are defined by the account system, not by this API, and are
 returned as-is:
 
-- `risk` is the risk level string of the latest questionnaire (e.g. `A5`). This API does not define
+- `risk` is the risk level string of the latest assessment (e.g. `A5`). This API does not define
   the set of levels or any ordering between them, so do not infer that one level means a higher or
   lower risk tolerance than another.
 - `pi` is a professional investor status code. This API does not define its code values; treat it as
@@ -53,7 +53,7 @@ longbridge risk-assessment
 
 > Content-Type: application/json; charset=utf-8
 
-This API takes no parameters. It always describes the member the access token belongs to.
+This API takes no parameters. It always describes the account the access token belongs to.
 
 ### Request Example
 
@@ -279,7 +279,7 @@ func main() {
 
 | Name                 | Type              | Required | Description                                                                                                                                                                              |
 | -------------------- | ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| risk                 | string            | false    | Risk level of the latest questionnaire, e.g. `A5`. Returned as-is; this API does not define the set of levels or an ordering between them. May be empty.                                   |
+| risk                 | string            | false    | Risk level of the latest assessment, e.g. `A5`. Returned as-is; this API does not define the set of levels or an ordering between them. May be empty.                                   |
 | pi                   | int32             | false    | Professional investor (PI) status code, returned as-is. This API does not define its code values.                                                                                          |
 | approvals            | object            | false    | Approval state per item, keyed by item name with string values, e.g. `car` / `cka` / `risk_audit` → `pass`. The values are strings, not booleans: `is_corporate_client` arrives as `"false"` / `"true"`. |
 | re_authentication    | string            | false    | Re-authentication flag, returned as-is. May be empty.                                                                                                                                |
@@ -287,4 +287,4 @@ func main() {
 | deadlines            | object            | false    | The `deadlines` entries, keyed by item name with integer values. Raw integers with the same undefined unit as `pi_end_at`.                                                         |
 | risk_assessment_at   | string            | false    | Date of the latest assessment as returned by the server, e.g. `2026-10-14`. May be empty.                                                                                                  |
 | score                | int32             | false    | Questionnaire score                                                                                                                                                                        |
-| strategy_risk_levels | string[]          | false    | Strategy risk levels of the member                                                                                                                                                         |
+| strategy_risk_levels | string[]          | false    | Strategy risk levels of the account                                                                                                                                                         |

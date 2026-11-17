@@ -6,7 +6,7 @@ sidebar_position: 11
 
 # longbridge risk-assessment
 
-查看自己的風險評估（合適性問卷）檔案——最近一次問卷的風險等級與得分、專業投資者（PI）狀態，以及 `approvals` 中各項的狀態。
+查看自己的風險評估檔案——最近一次測評的風險等級與得分、專業投資者（PI）狀態，以及 `approvals` 中各項的狀態。
 
 ## 基本用法
 
@@ -65,7 +65,7 @@ longbridge risk-assessment --format json
 
 以下幾項直接來自賬戶系統，原樣輸出：
 
-- **Risk Level**（`risk`）是最近一次問卷的等級字串，例如 `A5`。接口未定義等級集合，也未定義等級之間的順序，不要據此判斷風險承受能力的高低。
+- **Risk Level**（`risk`）是最近一次測評的等級字串，例如 `A5`。接口未定義等級集合，也未定義等級之間的順序，不要據此判斷風險承受能力的高低。
 - **Professional Investor (PI)**（`pi`）是狀態碼。接口未定義其取值含義，請當作不透明識別碼處理。
 - **PI End At**（`pi_end_at`）與 **Deadlines**（`deadlines`）是原始整數。接口未定義其單位（秒或毫秒），將非 0 值轉換為時間之前請先確認單位。
 - **Approvals** 的值是字串而非布林值：`is_corporate_client=false` 中的 `false` 是字串 `"false"`。
