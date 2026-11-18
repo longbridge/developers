@@ -13,7 +13,7 @@ WebSocket Endpoint: `wss://openapi-trade.longbridge.com`
 TCP Endpoint: `openapi-trade.longbridge.com`
 :::
 
-Flow：
+Flow:
 
 ```mermaid
 sequenceDiagram
@@ -24,11 +24,11 @@ Client -->> Server: Auth Request
 Server -->> Client: Auth Response
 
 par Subscribe
-Client -->> Server: Subscribe request，req_id: 10, cmd: 16
-Server -->> Client: Subscribe response ，req_id: 10, cmd: 16
+Client -->> Server: Subscribe request, req_id: 10, cmd: 16
+Server -->> Client: Subscribe response, req_id: 10, cmd: 16
 
-Server -->> Client: Push order updating，cmd: 18
-Server -->> Client: Push order updating，cmd: 18
+Server -->> Client: Push order updating, cmd: 18
+Server -->> Client: Push order updating, cmd: 18
 
 end
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { t, type Locale } from '@longbridge/openapi-utils'
+import { t, isUSUser, type Locale } from '@longbridge/openapi-utils'
 import { nav as navEn } from '../../data/nav.en'
 import { nav as navZhCN } from '../../data/nav.zh-CN'
 import { nav as navZhHK } from '../../data/nav.zh-HK'
@@ -10,6 +10,8 @@ import LanguageSwitcher from './LanguageSwitcher'
 import SearchButton from './SearchButton'
 import FeaturesMenu from './FeaturesMenu'
 import { featuresForLocale, localePath } from '../../data/features-menu'
+import { currentRegion } from '@longbridge/openapi-utils'
+import { regionConfig } from '../../../region.config'
 
 interface Props {
   locale: Locale
@@ -75,12 +77,28 @@ export default function TopNav({ locale, pathname: initialPath = '/' }: Props) {
     return () => document.removeEventListener('astro:page-load', onPageLoad)
   }, [])
   const navItems = navForLocale(locale)
-  // CN region hides Pricing / Docs / the Features menu (legacy CN_HIDDEN_KEYS).
+  // A region's nav is pruned by its own `excludeNavLinks` (region.config.ts), so
+  // the list stays next to the page whitelist that decides what actually builds —
+  // a tab whose target isn't whitelisted would 404.
+  //
+  // Entries there are locale-less ('/docs/api'), while nav links carry the locale
+  // ('/zh-CN/docs/api'), so strip the prefix before comparing. The previous
+  // hard-coded set compared them raw and therefore never matched outside `en`,
+  // which is why Pricing and Docs kept showing on open.longbridge.cn.
   const isCnRegion = import.meta.env.PUBLIC_REGION === 'cn'
-  const CN_HIDDEN_LINKS = new Set(['/pricing', '/docs'])
-  const visibleNavItems = isCnRegion
-    ? navItems.filter((n) => !n.link || !CN_HIDDEN_LINKS.has(n.link))
-    : navItems
+  const hiddenNavLinks = new Set(regionConfig[currentRegion()]?.excludeNavLinks ?? [])
+  const stripLocale = (link: string) => link.replace(/^\/(zh-CN|zh-HK|en)(?=\/|$)/, '') || '/'
+  // 美国用户隐藏 Pricing（判定规则见 isUSUser）
+  const [isUS, setIsUS] = useState(false)
+  useEffect(() => {
+    isUSUser().then(setIsUS)
+  }, [])
+  const visibleNavItems = navItems.filter((n) => {
+    if (!n.link) return true
+    if (hiddenNavLinks.has(stripLocale(n.link))) return false
+    if (isUS && stripLocale(n.link) === '/pricing') return false
+    return true
+  })
 
   const homeHref = locale === 'en' ? '/' : `/${locale}/`
 

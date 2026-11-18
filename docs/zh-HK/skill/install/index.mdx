@@ -122,8 +122,8 @@ https://mcp.longbridge.com
 | Claude Desktop | 編輯 `~/Library/Application Support/Claude/claude_desktop_config.json`（macOS）或 `%APPDATA%\Claude\claude_desktop_config.json`（Windows） |
 | Cursor         | Settings → MCP Servers → Add Remote MCP Server                                                                                             |
 | Zed            | `~/.config/zed/settings.json` 中的 `context_servers` 字段                                                                                  |
-| Gemini CLI     | `~/.gemini/settings.json` 中的 `mcpServers` 字段                                                                                           |
-| Warp           | Settings → AI → MCP Servers → Add                                                                                                          |
+| Gemini CLI     | `~/.gemini/settings.json` 中的 `mcpServers` 欄位（用 `httpUrl`，不是 `url`）                                                                                           |
+| Warp           | Settings → Agents → MCP servers → + Add                                                                                                          |
 
 首次提問時客戶端會自動彈出瀏覽器完成 OAuth 授權，無需配置 API Key。
 
@@ -235,4 +235,4 @@ Codex 的 **Cloud 模式**存在同樣的網絡白名單限制。啟動新會話
 
 **撤銷授權**
 
-如需撤銷訪問權限，前往 Longbridge 帳戶 → 安全設定 → 管理已授權應用程式。
+如需移除授權，前往 Longbridge 帳戶 → 安全設定 → 管理已授權應用程式；移除後無法再續期，但已簽發的 Token 在過期前仍然有效。如需在本機登出，執行 `longbridge auth logout`（參見[登出](/zh-HK/docs/getting-started#oauth-signout)）。

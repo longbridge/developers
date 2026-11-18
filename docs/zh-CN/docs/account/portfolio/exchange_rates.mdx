@@ -198,9 +198,9 @@ func main() {
       {
         "base_currency": "USD",
         "other_currency": "HKD",
-        "bid_rate": 7.785,
-        "offer_rate": 7.795,
-        "average_rate": 7.79
+        "bid_rate": 0.12746,
+        "offer_rate": 0.12746,
+        "average_rate": 0.12746
       }
     ]
   }
@@ -227,4 +227,4 @@ func main() {
 | ∟ other_currency | string | true | 报价货币 |
 | ∟ bid_rate | number | false | 买入汇率 |
 | ∟ offer_rate | number | false | 卖出汇率 |
-| ∟ average_rate | number | false | 平均汇率 |
+| ∟ average_rate | number | false | 平均汇率，表示 1 单位 `other_currency` 折合多少 `base_currency`。例如 `base_currency=USD`、`other_currency=HKD`、`average_rate=0.12746` 表示 1 港元 = 0.12746 美元 |

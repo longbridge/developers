@@ -1,0 +1,22 @@
+---
+title: 'Security Best Practices'
+sidebar_label: 'Best Practices'
+sidebar_position: 6
+sidebar_icon: star
+---
+
+# Security Best Practices
+
+## Security recommendations
+
+- **Least privilege**: Only approve the scopes required for your current task; avoid over-granting
+- **Trading confirmation**: Every order tool runs as a dry run first and needs your explicit confirmation before anything is sent (see [How order confirmation works](/docs/mcp/trading#how-order-confirmation-works)); still, tell the AI to ask before executing
+- **Credential handling**: OAuth credentials are managed by your client; avoid copying them into untrusted environments
+- **Regular review**: Periodically check and revoke unused authorizations in your [Longbridge account](https://longbridge.com/hk/download) security settings (removing an authorization stops renewal; tokens already issued remain valid until they expire)
+
+## Recommended usage pattern
+
+1. **Start with read-only tools**: Begin with [market data](https://longbridge.com/markets), account overview, and position queries to learn tool behavior at low risk
+2. **Practice on paper**: Authorize with a paper trading account to rehearse order flows without real money
+3. **Gradually enable trading**: Enable order placement only after verifying scope configuration and your own risk controls
+4. **Add guardrails in prompts**: For example, "keep each trade under X", "always confirm with me before placing an order"

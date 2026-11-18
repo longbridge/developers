@@ -25,6 +25,61 @@ const sitemapLocale = (url: string) =>
 const BUILD_FORMAT = process.env['BUILD_FORMAT'] === 'directory' ? 'directory' : 'file'
 const ASSETS_DIR = process.env['ASSETS_DIR'] === '_docs' ? '_docs' : 'assets'
 
+// Dev-only reverse proxy for the TryIt debugger. Vite's built-in http-proxy
+// returns 502 for these HTTPS upstreams under bun, so forward with fetch (which
+// works). `/api-prod` → production gateway.
+function apiDevProxy() {
+  const TARGETS: Record<string, string> = {
+    '/api-prod': 'https://openapi.longbridge.com',
+    // Legacy default prefix used by <TryIt> when no baseUrl is passed.
+    '/api': 'https://openapi.longbridge.com',
+  }
+  return {
+    name: 'lb-api-dev-proxy',
+    apply: 'serve' as const,
+    configureServer(server: { middlewares: { use: (fn: (req: any, res: any, next: () => void) => void) => void } }) {
+      // Dev only: corporate networks MITM these HTTPS upstreams with a cert the
+      // dev process doesn't trust, so outbound fetch fails. Skip verification —
+      // this never runs in a production build (apply: 'serve').
+      process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+      server.middlewares.use(async (req: any, res: any, next: () => void) => {
+        const url: string = req.url ?? ''
+        const prefix = Object.keys(TARGETS).find((p) => url === p || url.startsWith(p + '/'))
+        if (!prefix) return next()
+        const target = TARGETS[prefix]
+        const path = url.slice(prefix.length) || '/'
+        try {
+          const chunks: Buffer[] = []
+          for await (const c of req) chunks.push(c as Buffer)
+          const method: string = (req.method ?? 'GET').toUpperCase()
+          const headers: Record<string, string> = {}
+          for (const [k, v] of Object.entries(req.headers)) {
+            if (k === 'host' || k === 'connection' || k === 'content-length') continue
+            if (typeof v === 'string') headers[k] = v
+          }
+          const upstream = await fetch(target + path, {
+            method,
+            headers,
+            body: method === 'GET' || method === 'HEAD' || chunks.length === 0 ? undefined : Buffer.concat(chunks),
+          })
+          res.statusCode = upstream.status
+          upstream.headers.forEach((value: string, key: string) => {
+            const k = key.toLowerCase()
+            // Body is already decoded by fetch — don't forward encoding/length.
+            if (k === 'content-encoding' || k === 'content-length' || k === 'transfer-encoding') return
+            res.setHeader(key, value)
+          })
+          res.end(Buffer.from(await upstream.arrayBuffer()))
+        } catch (err) {
+          res.statusCode = 502
+          res.setHeader('content-type', 'application/json; charset=utf-8')
+          res.end(JSON.stringify({ code: -1, msg: `dev proxy error: ${err instanceof Error ? err.message : String(err)}`, data: null }))
+        }
+      })
+    },
+  }
+}
+
 export default defineConfig({
   site: SITE,
   // 产物形态按边缘分轨，默认 'file'：
@@ -33,7 +88,7 @@ export default defineConfig({
   //   一致）；'directory' 产 `foo/index.html` → 规范 URL 变成 `/foo/`，`/foo` 反被 308
   //   到带尾斜杠版本，而 canonical 仍写无尾斜杠，两者自相矛盾（实测见方案 §15.9）。
   // - 阿里云轨（.cn）将来由 OSS 静态网站托管直接承载时才需要 'directory'，配合
-  //   「子目录首页 + 文件404规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
+  //   「子目录首页 + 文件 404 规则=Index」让 /foo 直接 200 且地址栏不变。届时在那条
   //   流水线上设 BUILD_FORMAT=directory 即可。.cn 今天仍走 nginx（由 nginx 补 .html），
   //   所以现在同样用 'file'。
   // 资源目录按「谁来路由这个产物」分轨，默认 'assets'：
@@ -80,6 +135,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [
+      // Dev proxy for the API Reference TryIt debugger: one prefix per
+      // environment so the 生产/测试 toggle can hit either backend without CORS.
+      // Implemented with fetch (not Vite's http-proxy, which 502s under bun for
+      // these HTTPS upstreams). Dev only — prod talks to the real domains.
+      apiDevProxy(),
       tailwind(),
       // Rename mdx frontmatter `layout:` → `docs_layout:` so astro-mdx
       // doesn't try to resolve values like "api-reference" as module

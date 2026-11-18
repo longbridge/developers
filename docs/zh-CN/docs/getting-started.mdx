@@ -28,21 +28,9 @@ description: '开通 Longbridge OpenAPI，获取 App Key、App Secret 与 Access
 SDK 会自动选择接入点；若判断不正确，可设置环境变量 `LONGBRIDGE_REGION`（如 `cn`、`hk`）。
 :::
 
-### 接入点与数据中心
+### 接入点
 
-两个容易混淆的概念：
-
-- **接入点**（`.com` / `.cn`）— 仅是网络路由。两者数据一致、鉴权一致，一方签发的 token 另一方同样接受。
-- **数据中心**（`ap` / `us`）— 账户本身所在的位置，决定了哪些美股专属接口可用。
-
-两者不能自由组合：
-
-| 数据中心              | `.com`               | `.cn`  |
-| --------------------- | -------------------- | ------ |
-| `us`（美国账户）      | 支持，且是唯一接入点 | 不支持 |
-| `ap`（新加坡 / 香港） | 支持                 | 支持   |
-
-`.cn` 没有通往美国数据中心的链路，因此美国账户必须始终使用 `.com` 域名，登录同样如此 —— `.cn` 的登录页不提供美国账户选项。
+接入点（`.com` / `.cn`）仅是网络路由。两者数据一致、鉴权一致，一方签发的 token 另一方同样接受。
 
 ## 时间格式
 
@@ -204,7 +192,7 @@ go get github.com/longbridge/openapi-go
 
 Longbridge Developers 支持两种认证方式：
 
-#### 方式一：OAuth 2.0（推荐） ⭐
+#### 方式一：OAuth 2.0（推荐） ⭐ {#oauth-2-0}
 
 OAuth 2.0 是现代化的认证方式，使用 Bearer Token，无需 HMAC 签名，更加安全便捷。
 
@@ -423,6 +411,31 @@ int main(int argc, char const* argv[]) {
 :::caution Token 安全
 OAuth Token 应安全存储在应用程序中（如加密文件、安全密钥链），**不要存储在环境变量中**。
 :::
+
+<a id="oauth-scopes"></a>
+
+**OAuth 权限范围（scope）**
+
+读取账户数据或交易的接口要求 Token 带有对应的 scope；行情及其他通用接口无需额外 scope。scope 以 key 标识：
+
+| scope key | 授权内容 |
+| --------- | -------- |
+| `watchlist` | 自选股分组（读写） |
+| `account.read` | 账户资产、持仓与资金流水（只读） |
+| `trade.read` | 订单与成交查询（只读） |
+| `trade.write` | 下单、改单、撤单及其他交易写操作 |
+
+Longbridge US 账户目前仅开放行情权限。
+
+`/oauth2/register` 的响应以数字 ID 列出 scope（例如 `"4 6 10 11 12"`）。这些 ID 因环境而异：在 `openapi.longbridge.com` 上，`4`、`6`、`10`、`11` 分别对应 `watchlist`、`account.read`、`trade.read`、`trade.write`。其他 ID 请视为不透明值，以 scope key 为准。
+
+如果接口返回错误码 `403308`（`Target API's scope is not in authorized scopes`），说明 Token 未被授予该接口所需的 scope。请删除 `~/.longbridge/openapi/tokens/<client_id>` 下保存的 Token，重新授权并勾选该 scope。参见[错误码](/zh-CN/docs/api?page=error-codes)。
+
+<a id="oauth-signout"></a>
+
+**退出登录**
+
+SDK 没有提供退出登录方法。如需退出登录，删除本地保存的 Token 文件 `~/.longbridge/openapi/tokens/<client_id>` 即可，下次运行时会重新授权。使用 CLI 的用户可以直接执行 `longbridge auth logout`，它会删除 Token 文件和客户端注册。删除文件只会让本机不再复用该凭证；已签发的 access token 在过期前仍然有效。
 
 #### 方式二：传统 API Key（兼容）
 

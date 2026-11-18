@@ -35,15 +35,17 @@ longbridge grid info 700.HK
 ### Submit a grid
 
 ```bash
-# Percent-triggered grid on 700.HK
+# Preview a percent-triggered grid on 700.HK (nothing is sent; prints a confirmation code)
 longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 \
   --trigger-type percent --trigger-up 2 --trigger-down 2 \
   --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc
-# Validate the rule without submitting
+# Submit it by re-running the identical command with that code
 longbridge grid submit 700.HK --currency HKD --base-price 300 --upper-price 360 --lower-price 240 \
   --trigger-type percent --trigger-up 2 --trigger-down 2 \
-  --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc --dry-run
+  --quantity 100 --upper-quantity 200 --lower-quantity 100 --order-type GMO --tif gtc --execute <CODE>
 ```
+
+Replace `<CODE>` with the confirmation code printed by the preview.
 
 ### Inspect
 
@@ -89,7 +91,7 @@ longbridge grid cancel 764609681686573056
 | `--upper-quantity` / `--lower-quantity` | Quantity handled at the upper/lower bound | — |
 | `--order-type` | Order type applied to both sides: `GMO` \| `GLO` \| `GTG` (`--order-type-up` / `--order-type-down` override) | — |
 | `--tif` | Time in force: `day` \| `gtc` \| `gtd` | — |
-| `--dry-run` | Validate and print the rule without submitting | false |
+| `--execute` | Confirmation code printed by the preview of `submit`, `replace`, `cancel`, `suspend` or `restart`; without it nothing is sent | — |
 
 ## Requirements
 
@@ -97,4 +99,4 @@ OAuth trade permission is required to submit or manage grid orders. Before your 
 
 ## Notes
 
-`submit`, `replace`, and `cancel` affect live capital and prompt for confirmation before running. Use `--dry-run` on `submit` to validate a rule safely.
+`submit`, `replace`, `cancel`, `suspend` and `restart` are two-step. Run the command without `--execute` to validate it and print a preview (nothing is sent) ending in a three-digit confirmation code, then re-run the identical command with `--execute` and that code to execute it. The code is single-use, expires in 10 minutes, and stops working if any field changes. The old `--dry-run` flag has been removed because previewing is now the default.

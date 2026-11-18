@@ -27,21 +27,9 @@ For access in mainland China, you can use `.cn` domains for better connectivity:
 The SDK automatically selects the access point by network. If the SDK selects incorrectly, set the environment variable `LONGBRIDGE_REGION` (e.g. `cn` or `hk`).
 :::
 
-### Access Points and Data Centers
+### Access Points
 
-Two concepts that are easy to confuse:
-
-- **Access point** (`.com` / `.cn`) — network routing only. Both serve identical data and identical auth: a token issued through one is accepted by the other.
-- **Data center** (`ap` / `us`) — where the account itself lives. It determines which US-only APIs are available.
-
-The two cannot be combined freely:
-
-| Data center               | `.com`                             | `.cn`         |
-| ------------------------- | ---------------------------------- | ------------- |
-| `us` (US accounts)        | Yes — the only usable access point | Not supported |
-| `ap` (Longbridge SG / HK) | Yes                                | Yes           |
-
-`.cn` has no route to the US data center, so US accounts must always use the `.com` domains — including for login, since the `.cn` login page does not offer US accounts.
+The access point (`.com` / `.cn`) is network routing only. Both serve identical data and identical auth: a token issued through one is accepted by the other.
 
 ## Time Format
 
@@ -191,7 +179,7 @@ Let's take obtaining assets as an example to demonstrate how to use the SDK.
 
 Longbridge OpenAPI supports two authentication methods:
 
-#### Method 1: OAuth 2.0 (Recommended) ⭐
+#### Method 1: OAuth 2.0 (Recommended) ⭐ {#oauth-2-0}
 
 OAuth 2.0 is the modern authentication method that uses Bearer tokens without requiring HMAC signatures, making it more secure and convenient.
 
@@ -410,6 +398,31 @@ int main(int argc, char const* argv[]) {
 :::caution Token Security
 OAuth tokens should be stored securely in your application (e.g., encrypted file, secure keychain), **not in environment variables** for security reasons.
 :::
+
+<a id="oauth-scopes"></a>
+
+**OAuth Scopes**
+
+APIs that read account data or trade require the token to carry the matching scope; market data and other general APIs need no extra scope. Scopes are identified by key:
+
+| Scope key | Grants |
+| --------- | ------ |
+| `watchlist` | Watchlist groups (read and write) |
+| `account.read` | Account assets, positions and cash flow (read-only) |
+| `trade.read` | Order and execution lookup (read-only) |
+| `trade.write` | Placing, replacing and canceling orders, and other trading writes |
+
+Longbridge US accounts currently have market data permission only.
+
+The `/oauth2/register` response lists scopes as numeric ids (for example `"4 6 10 11 12"`). The ids are environment-specific: on `openapi.longbridge.com`, `4`, `6`, `10` and `11` are `watchlist`, `account.read`, `trade.read` and `trade.write`. Treat any other id as opaque and rely on the scope keys.
+
+If an API returns error `403308` (`Target API's scope is not in authorized scopes`), the token was not granted the scope that API needs. Delete the stored token under `~/.longbridge/openapi/tokens/<client_id>`, authorize again and grant that scope. See [Error Codes](/docs/api?page=error-codes).
+
+<a id="oauth-signout"></a>
+
+**Sign Out**
+
+The SDK has no logout method. To sign out, delete the stored token file `~/.longbridge/openapi/tokens/<client_id>`; the next run asks you to authorize again. If you use the CLI, run `longbridge auth logout`, which removes the token file and the client registration. Deleting the file only stops this machine from reusing it; an access token that has already been issued stays valid until it expires.
 
 #### Method 2: Legacy API Key (Compatible)
 
@@ -1563,7 +1576,7 @@ func main() {
 }
 ```
 
-运行：
+Run:
 
 ```shell
 go run ./
@@ -1915,7 +1928,7 @@ After running, the output is as follows:
 Order {
   order_id: "718437534753550336",
   status: NotReported,
-  stock_name: "腾讯控股 1",
+  stock_name: "TENCENT",
   quantity: 200,
   executed_quantity: None,
   price: Some(50.000),

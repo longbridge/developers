@@ -31,7 +31,7 @@ longbridge option chain TSLA.US --date 2026-04-17
 | Name        | Type   | Required | Description                                                                                                                  |
 | ----------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | symbol      | string | Yes      | Security code, in `ticker.region` format, for example:`700.HK`                                                               |
-| expiry_date | string | Yes      | Option expiry date，in `YYMMDD` format, for example: `20220429`, obtained by [Option Expiry Date](./optionchain-date) API |
+| expiry_date | string | Yes      | Option expiry date, in `YYMMDD` format, for example: `20220429`, obtained by [Option Expiry Date](./optionchain-date) API |
 
 ### Protobuf
 
@@ -305,4 +305,4 @@ message StrikePriceInfo {
 | 3                   | 301600              | Invalid request            | Invalid request parameters or unpacking request failed        |
 | 3                   | 301606              | Request rate limit         | Reduce the frequency of requests                              |
 | 7                   | 301602              | Server error               | Please try again or contact a technician to resolve the issue |
-| 7                   | 301600              | Invalue request parameters | Please check the request parameter: `symbol`，`expiry_date`   |
+| 7                   | 301600              | Invalue request parameters | Please check the request parameter: `symbol`, `expiry_date`   |

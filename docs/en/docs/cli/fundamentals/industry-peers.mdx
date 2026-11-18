@@ -6,12 +6,12 @@ sidebar_position: 17
 
 # longbridge industry-peers
 
-Explore the hierarchical sub-sector tree for an industry group. Takes a BK counter ID from [`industry-rank`](./industry-rank) and expands it into a full competitive landscape — sub-sectors, their sub-sectors, and the stocks in each.
+Explore the hierarchical sub-sector tree for an industry group. Takes a BK symbol from [`industry-rank`](./industry-rank) and expands it into a full competitive landscape — sub-sectors, their sub-sectors, and the stocks in each.
 
 ## Basic Usage
 
 ```bash
-longbridge industry-peers BK/US/IN00258
+longbridge industry-peers IN00258.US
 ```
 
 ```
@@ -35,17 +35,17 @@ Root: Semiconductors (US)
 # Step 1: find a sector
 longbridge industry-rank --market US
 
-# Step 2: drill into it using the counter_id column
-longbridge industry-peers BK/US/IN00258
+# Step 2: drill into it using the symbol column
+longbridge industry-peers IN00258.US
 ```
 
 ### HK sector tree
 
 ```bash
-longbridge industry-peers BK/HK/IN00012
+longbridge industry-peers IN00012.HK
 ```
 
-Works the same way across markets — use counter IDs from `industry-rank --market HK`, `--market CN`, or `--market SG`.
+Works the same way across markets — use symbols from `industry-rank --market HK`, `--market CN`, or `--market SG`.
 
 ## Options
 
@@ -55,5 +55,5 @@ Works the same way across markets — use counter IDs from `industry-rank --mark
 
 ## Notes
 
-- Counter IDs follow the format `BK/<MARKET>/IN<NUMBER>` — copy them directly from `industry-rank` output
+- Symbols follow the format `BK/<MARKET>/IN<NUMBER>` — copy them directly from `industry-rank` output
 - Each node shows stock count, daily change, and YTD change

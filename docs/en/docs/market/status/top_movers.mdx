@@ -203,17 +203,17 @@ func main() {
       {
         "stock": {
           "code": "TSLA",
-          "counter_id": "ST/US/TSLA",
-          "name": "特斯拉",
+          "symbol": "TSLA.US",
+          "name": "Tesla, Inc.",
           "change": "-0.0388",
           "last_done": "404.110",
           "market": "US",
-          "labels": ["汽车制造商"],
+          "labels": ["Automobile Manufacturers"],
           "logo": "https://assets.lbkrs.com/ticker/ST/US/TSLA.png",
           "trade_status": 0
         },
         "timestamp": "1779202097",
-        "alert_reason": "波动超 20 日均值",
+        "alert_reason": "Volatility exceeds 20-day avg",
         "alert_type": 11,
         "post": null
       }
@@ -243,7 +243,7 @@ func main() {
 | events | object[] | false | List of moving stocks |
 | ∟ stock | object | false | Basic stock information |
 | ∟ ∟ code | string | false | Ticker code (e.g. `TSLA`) |
-| ∟ ∟ counter_id | string | false | Counter ID (e.g. `ST/US/TSLA`) |
+| ∟ ∟ symbol | string | false | Symbol (e.g. `TSLA.US`) |
 | ∟ ∟ name | string | false | Security name |
 | ∟ ∟ change | string | false | Price change ratio (e.g. `-0.0388`) |
 | ∟ ∟ last_done | string | false | Latest trade price |

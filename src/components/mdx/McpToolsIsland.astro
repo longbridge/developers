@@ -1,0 +1,37 @@
+---
+/**
+ * Hydration wrapper for <McpTools />.
+ *
+ * Components handed to MDX through the `components` map render server-side
+ * only — Astro has no way to attach a client directive to them, so the tool
+ * list shipped as dead HTML: the search box filtered nothing and the rows
+ * wouldn't expand. `[...slug].astro` works around this for whole-page
+ * components (Pricing, NewHomePage, SkillPage) by rendering them directly with
+ * `client:load`, but McpTools sits inside a page body, so it needs its own
+ * wrapper. Astro components in the map are rendered as normal Astro
+ * components, which is what makes the directive below possible.
+ *
+ * Locale: the map binds the route locale onto React entries via `bindLocale`,
+ * which can't wrap an Astro component — so derive it from the URL instead,
+ * keeping the component's own UI strings (search placeholder, "Parameters",
+ * "required") translated. `.html` is stripped because `build.format: 'file'`
+ * puts the emitted file name in `Astro.url.pathname` (see DocsLayout).
+ */
+import { McpTools } from '@/components/mdx/McpTools'
+import type { Locale } from '@longbridge/openapi-utils'
+
+interface Props {
+  locale?: Locale
+}
+
+function localeFromPath(pathname: string): Locale {
+  const bare = pathname.replace(/\.html$/, '')
+  if (bare === '/zh-CN' || bare.startsWith('/zh-CN/')) return 'zh-CN'
+  if (bare === '/zh-HK' || bare.startsWith('/zh-HK/')) return 'zh-HK'
+  return 'en'
+}
+
+const { locale = localeFromPath(Astro.url.pathname) } = Astro.props
+---
+
+<McpTools client:load locale={locale} />

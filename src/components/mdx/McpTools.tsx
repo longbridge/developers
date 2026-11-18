@@ -4,7 +4,10 @@
  * Data source: .data/mcp-tools.json (written at build time by
  *   src/integrations/prebuild-mcp-tools.ts which fetches from
  *   https://mcp.longbridge.com/mcp/tools.json).
- * Locale: MDX pages don't inject a locale prop, so locale defaults to 'en'.
+ * Locale: McpToolsIsland.astro derives it from the URL and passes it in. The
+ *   manifest ships English tools plus a `locales` overlay (zh-CN / zh-HK /
+ *   ja-JP) keyed by tool name, carrying the title, description and per-param
+ *   descriptions; anything the overlay omits falls back to English.
  */
 import { useRef, useState, useEffect } from 'react'
 import mcpToolsData from '../../../.data/mcp-tools.json'
@@ -35,6 +38,18 @@ interface Tool {
 
 interface ToolsPayload {
   tools: Tool[]
+  /**
+   * Per-locale overlay shipped alongside the English tools. Keyed by locale,
+   * then by tool name; `properties` maps a parameter name to its description.
+   * Partial by design — anything missing falls back to the English entry.
+   */
+  locales?: Record<string, { tools?: Record<string, LocaleToolText> }>
+}
+
+interface LocaleToolText {
+  title?: string
+  description?: string
+  properties?: Record<string, string>
 }
 
 interface ParamRow {
@@ -98,17 +113,51 @@ function formatType(type: string | string[]): string {
   return Array.isArray(type) ? type.join(' | ') : type
 }
 
-function getParams(schema?: ToolSchema): ParamRow[] {
+function getParams(schema?: ToolSchema, localized?: LocaleToolText): ParamRow[] {
   if (!schema?.properties) return []
   const required = new Set(schema.required ?? [])
   return Object.entries(schema.properties).map(([name, def]) => ({
     name,
     type: formatType(def.type),
     required: required.has(name),
-    description: def.description,
+    // Fall back to English when the overlay omits this parameter.
+    description: localized?.properties?.[name] ?? def.description,
     enum: def.enum,
     default: def.default,
   }))
+}
+
+/**
+ * Lowercased haystack per tool: the name, the English description, and every
+ * locale's title and description. Searching across locales is deliberate —
+ * the overlays are Simplified and Traditional Chinese variants of each other,
+ * so searching "K 线" on the zh-HK page still finds "K 線".
+ */
+function buildSearchIndex(): Record<string, string> {
+  const payload = mcpToolsData as unknown as ToolsPayload
+  const index: Record<string, string> = {}
+  for (const tool of payload.tools) {
+    index[tool.name] = `${tool.name}\n${tool.description}`
+  }
+  for (const entry of Object.values(payload.locales ?? {})) {
+    for (const [name, text] of Object.entries(entry.tools ?? {})) {
+      if (!(name in index)) continue
+      index[name] += `\n${text.title ?? ''}\n${text.description ?? ''}`
+    }
+  }
+  for (const name of Object.keys(index)) {
+    index[name] = index[name].toLowerCase()
+  }
+  return index
+}
+
+/** Built once at module scope — the manifest is static. */
+const searchIndex = buildSearchIndex()
+
+/** The overlay for one locale, or an empty map for English / an unknown locale. */
+function localeTools(locale: string): Record<string, LocaleToolText> {
+  const payload = mcpToolsData as unknown as ToolsPayload
+  return payload.locales?.[locale]?.tools ?? {}
 }
 
 // ── SVG Icons ─────────────────────────────────────────────────────────────────
@@ -192,10 +241,11 @@ interface AccordionItemProps {
   isOpen: boolean
   onToggle: () => void
   locale: string
+  localized?: LocaleToolText
 }
 
-function AccordionItem({ tool, isOpen, onToggle, locale }: AccordionItemProps) {
-  const params = getParams(tool.inputSchema)
+function AccordionItem({ tool, isOpen, onToggle, locale, localized }: AccordionItemProps) {
+  const params = getParams(tool.inputSchema, localized)
   const contentRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -213,6 +263,9 @@ function AccordionItem({ tool, isOpen, onToggle, locale }: AccordionItemProps) {
         <span className="mcp-tool-title">
           <WrenchIcon open={isOpen} />
           <code className="mcp-tool-name">{tool.name}</code>
+          {localized?.title && (
+            <span className="mcp-tool-label">{localized.title}</span>
+          )}
         </span>
         <ChevronIcon />
       </button>
@@ -224,7 +277,7 @@ function AccordionItem({ tool, isOpen, onToggle, locale }: AccordionItemProps) {
         hidden={!isOpen}
       >
         <div className="mcp-accordion-content-inner">
-          <p className="mcp-tool-desc">{tool.description}</p>
+          <p className="mcp-tool-desc">{localized?.description ?? tool.description}</p>
 
           {params.length === 0 ? (
             <p className="mcp-tool-no-params">{tStr(locale, 'noParams')}</p>
@@ -277,6 +330,7 @@ export interface McpToolsProps {
 
 export function McpTools({ locale = 'en' }: McpToolsProps) {
   const allTools: Tool[] = (mcpToolsData as unknown as ToolsPayload).tools
+  const i18n = localeTools(locale)
 
   const [query, setQuery] = useState('')
   const [openValue, setOpenValue] = useState<string>('')
@@ -307,11 +361,7 @@ export function McpTools({ locale = 'en' }: McpToolsProps) {
 
   const q = query.trim().toLowerCase()
   const filtered = q
-    ? allTools.filter(
-        (t) =>
-          t.name.toLowerCase().includes(q) ||
-          t.description.toLowerCase().includes(q)
-      )
+    ? allTools.filter((t) => searchIndex[t.name]?.includes(q))
     : allTools
 
   function handleToggle(name: string) {
@@ -343,23 +393,26 @@ export function McpTools({ locale = 'en' }: McpToolsProps) {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="mcp-tools-empty">
-          {tStr(locale, 'noMatch', { query: query.trim() })}
-        </div>
-      ) : (
-        <div ref={listRef} className="mcp-tools-list">
-          {filtered.map((tool) => (
+      {/* The list frame stays put when a search comes up empty — the message
+          sits inside it, so the page keeps its shape between queries. */}
+      <div ref={listRef} className="mcp-tools-list">
+        {filtered.length === 0 ? (
+          <div className="mcp-tools-empty">
+            {tStr(locale, 'noMatch', { query: query.trim() })}
+          </div>
+        ) : (
+          filtered.map((tool) => (
             <AccordionItem
               key={tool.name}
               tool={tool}
               isOpen={openValue === tool.name}
               onToggle={() => handleToggle(tool.name)}
               locale={locale}
+              localized={i18n[tool.name]}
             />
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   )
 }

@@ -12,7 +12,7 @@ import type { Locale } from '@longbridge/openapi-utils'
 import { Tabs, TabItem, TipContainer, CliCommand, SDK, SDKLinks } from '@longbridge/openapi-ui'
 import { SkillPage } from '@/components/mdx/SkillPage'
 import { TryIt } from '@longbridge/openapi-tryit'
-import { McpTools } from '@/components/mdx/McpTools'
+import McpToolsIsland from '@/components/mdx/McpToolsIsland.astro'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { Pricing } from '@/components/mdx/Pricing'
 import { QuotePermission } from '@/components/mdx/QuotePermission'
@@ -62,7 +62,9 @@ export function buildMdxComponents(locale: Locale) {
     // Locale-bound composites
     Skill: bindLocale(SkillPage),
     NewHomePage: bindLocale(NewHomePage),
-    McpTools: bindLocale(McpTools),
+    // Astro component, not React: it carries the client:load that the mdx
+    // `components` map can't express. See McpToolsIsland.astro.
+    McpTools: McpToolsIsland,
     Pricing: bindLocale(Pricing),
     QuotePermission: bindLocale(QuotePermission),
     TryIt: bindLocale(TryIt),

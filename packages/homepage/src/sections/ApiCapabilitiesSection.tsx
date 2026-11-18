@@ -37,8 +37,8 @@ const LOCALE = {
         {
           title: 'Derivatives',
           count: '8+',
-          desc: 'Full option chains with Greeks, warrants listing, and real-time derivative quotes',
-          items: ['Option chains + Greeks', 'Warrant filtering', 'Issuer directory', 'Derivative quotes'],
+          desc: 'Full option chains with Greeks, real-time derivative quotes, and warrant listings where the market offers them',
+          items: ['Option chains + Greeks', 'Option volume', 'Derivative quotes', 'Warrants (where offered)'],
         },
         {
           title: 'Financial Research',
@@ -75,8 +75,8 @@ const LOCALE = {
         {
           title: '衍生品',
           count: '8+',
-          desc: '完整期权链含希腊字母、权证列表及实时衍生品报价',
-          items: ['期权链 + 希腊字母', '权证筛选', '发行商目录', '衍生品报价'],
+          desc: '完整期权链含希腊字母、实时衍生品报价，以及所在市场提供的权证列表',
+          items: ['期权链 + 希腊字母', '期权成交量', '衍生品报价', '权证（视市场而定）'],
         },
         {
           title: '金融研究',
@@ -113,8 +113,8 @@ const LOCALE = {
         {
           title: '衍生品',
           count: '8+',
-          desc: '完整期權鏈含希臘字母、權證列表及即時衍生品報價',
-          items: ['期權鏈 + 希臘字母', '權證篩選', '發行商目錄', '衍生品報價'],
+          desc: '完整期權鏈含希臘字母、即時衍生品報價，以及所在市場提供的權證列表',
+          items: ['期權鏈 + 希臘字母', '期權成交量', '衍生品報價', '權證（視市場而定）'],
         },
         {
           title: '金融研究',

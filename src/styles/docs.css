@@ -289,7 +289,9 @@
   line-height: 1.7;
 }
 html:not([data-mode="dark"]) .docs-content pre.astro-code {
-  background: var(--lb-bg-2) !important;
+  /* White code surface with a hairline so it stays legible on the white page. */
+  background: var(--lb-bg-1) !important;
+  border: 1px solid var(--lb-stroke);
 }
 .docs-content pre code {
   background: transparent;

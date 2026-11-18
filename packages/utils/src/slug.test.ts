@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { resolveUrl, resolveLocale } from './slug'
+import { resolveUrl, resolveLocale, isSiteRoot } from './slug'
 import type { CollectionEntry } from 'astro:content'
 
 function mock(id: string, slug?: string): CollectionEntry<'docs'> {
@@ -50,4 +50,17 @@ describe('resolveUrl (explicit slug)', () => {
 describe('resolveUrl (edge cases)', () => {
   it('strips trailing slash', () => expect(resolveUrl(mock('en/foo/index.mdx'))).toBe('/foo'))
   it('handles nested index', () => expect(resolveUrl(mock('en/a/b/index.mdx'))).toBe('/a/b'))
+})
+
+describe('isSiteRoot', () => {
+  // Callers that enumerate markdown twins (llms.txt, llms-full.txt, the `.md`
+  // endpoints) skip these: a `.md` URL built from a root collapses to `/.md`.
+  it.each(['/', '/zh-CN', '/zh-HK'])('%s is a site root', (url) =>
+    expect(isSiteRoot(url)).toBe(true))
+  it.each(['/docs', '/sdk', '/pricing', '/zh-CN/docs', '/zh-HK/docs/mcp', '/docs/zh-CN'])(
+    '%s is not a site root',
+    (url) => expect(isSiteRoot(url)).toBe(false)
+  )
+  it('does not treat the root-locale prefix as a root', () =>
+    expect(isSiteRoot('/en')).toBe(false))
 })

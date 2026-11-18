@@ -1,0 +1,46 @@
+---
+title: 'Longbridge MCP'
+sidebar_label: '概览'
+sidebar_position: 1
+sidebar_icon: book_open
+seo_title: 'Longbridge MCP 服务：连接 ChatGPT、Claude 等 AI 工具'
+description: '通过托管 MCP 服务把 Longbridge 接入 ChatGPT、Claude、Cursor 等 AI 工具，OAuth 授权后即可让 AI 查询行情、基本面与账户持仓。'
+---
+
+# Longbridge MCP 服务
+
+Longbridge 提供托管的 MCP（Model Context Protocol）服务，让你在 ChatGPT、Claude、AI 编程助手或其他对话工具中直接使用 [Longbridge 的行情](https://longbridge.com/markets)与账户能力，无需手动管理 API 密钥。
+
+:::tip MCP 服务地址
+
+- 全球：`https://mcp.longbridge.com`
+- 中国大陆：`https://mcp.longbridge.cn`（访问更快）
+
+:::
+
+## 可用能力
+
+Longbridge MCP 暴露 190+ 工具，覆盖六大能力域，客户端连接后会自动发现——无需手动配置。
+
+| 能力             | 覆盖范围                                                 |
+| ---------------- | -------------------------------------------------------- |
+| **[实时行情](https://longbridge.com/markets)**     | 报价、K 线、深度、经纪队列、逐笔、分时资金流             |
+| **基本面与研究** | 公司资料、[分红](https://longbridge.com/calendar/dividend)、估值、高管持仓、A/H 溢价、宏观经济指标   |
+| **衍生品**       | 期权链、涡轮筛选、发行商、涡轮报价                       |
+| **账户与组合**   | 余额、持仓、资金流水、自选股及分组                       |
+| **交易**         | 下单、改单、撤单、期权多腿组合、可买量估算               |
+| **自动化**       | 股价提醒、定投（DCA）计划、网格交易                      |
+
+实际可用工具因地区、账户等级与 OAuth 授权范围而异。完整列表见[工具](/zh-CN/docs/mcp/tools)。
+
+## 前置条件
+
+- 已拥有 [Longbridge 账户](https://longbridge.com/hk/download)并完成开户，或开通模拟账户
+- 支持 MCP OAuth 2.1 的 AI 客户端（见[客户端兼容性](/zh-CN/docs/mcp/authorization#客户端兼容性)）
+
+## 快速开始
+
+1. [接入 AI 客户端](/zh-CN/docs/mcp/setup) —— ChatGPT、Claude、Claude Code、Codex、Cursor 等
+2. [使用 Longbridge 账户授权](/zh-CN/docs/mcp/authorization) —— 标准 OAuth 2.1，无需粘贴 API 密钥
+3. [用 AI 交易股票和期权](/zh-CN/docs/mcp/trading) —— 用自然语言完成研究、构建订单和下单
+4. 开启交易前，请先阅读[安全最佳实践](/zh-CN/docs/mcp/best-practices)

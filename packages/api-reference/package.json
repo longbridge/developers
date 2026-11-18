@@ -7,13 +7,18 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./markdown": "./src/openapi-markdown.ts",
     "./src/api-reference.css": "./src/api-reference.css"
   },
   "dependencies": {
+    "@longbridge/openapi-ui": "workspace:*",
+    "@longbridge/openapi-tryit": "workspace:*",
     "js-yaml": "^4",
-    "markdown-it": "^14"
+    "markdown-it": "^14",
+    "markdown-it-container": "^4.0.0"
   },
   "devDependencies": {
-    "@types/markdown-it": "^14"
+    "@types/markdown-it": "^14",
+    "@types/markdown-it-container": "^4.0.1"
   }
 }

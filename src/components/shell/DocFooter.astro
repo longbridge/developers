@@ -19,13 +19,13 @@ const { locale } = Astro.props
 const lp = (path: string) => (locale === 'en' ? path : `/${locale}${path}`)
 const sgBase = locale === 'en' ? 'https://longbridge.com/sg' : 'https://longbridge.com/sg/zh-CN'
 
-type Link = { label: string; href: string; ext?: boolean }
+type Link = { label: string; href: string; ext?: boolean; legal?: 'terms' | 'privacy' }
 
 const leftLinks: Link[] = [
   { label: 'Longbridge', href: 'https://longbridge.com', ext: true },
   { label: t(locale, 'footer.download'), href: 'https://longbridge.com/download', ext: true },
-  { label: t(locale, 'footer.terms'), href: `${sgBase}/support/topics/us-trade/user-agreement`, ext: true },
-  { label: t(locale, 'footer.privacy'), href: `${sgBase}/support/topics/Other/privacy-policy`, ext: true },
+  { label: t(locale, 'footer.terms'), href: `${sgBase}/support/topics/us-trade/user-agreement`, ext: true, legal: 'terms' },
+  { label: t(locale, 'footer.privacy'), href: `${sgBase}/support/topics/Other/privacy-policy`, ext: true, legal: 'privacy' },
 ]
 
 const rightLinks: Link[] = [
@@ -45,7 +45,7 @@ const rightLinks: Link[] = [
   <div class="docs-doc-footer__group">
     {
       leftLinks.map((l) => (
-        <a href={l.href} {...(l.ext ? { target: '_blank', rel: 'noreferrer' } : {})}>
+        <a href={l.href} data-legal={l.legal} {...(l.ext ? { target: '_blank', rel: 'noreferrer' } : {})}>
           {l.label}
         </a>
       ))
@@ -66,3 +66,18 @@ const rightLinks: Link[] = [
     </a>
   </div>
 </footer>
+
+<script>
+  // Statically rendered: swap Terms / Privacy to the US versions on the client for US users (see isUSUser)
+  import { isUSUser, US_LEGAL_LINKS } from '@longbridge/openapi-utils'
+
+  function applyUSLegalLinks() {
+    isUSUser().then((isUS) => {
+      if (!isUS) return
+      document.querySelectorAll<HTMLAnchorElement>('[data-lbus-component="docs-footer"] a[data-legal]').forEach((a) => {
+        a.href = a.dataset.legal === 'terms' ? US_LEGAL_LINKS.terms : US_LEGAL_LINKS.privacy
+      })
+    })
+  }
+  document.addEventListener('astro:page-load', applyUSLegalLinks)
+</script>
