@@ -4,9 +4,6 @@ import type { Locale } from '@longbridge/openapi-utils'
 import { ApiReference } from '@longbridge/openapi-api-reference'
 import '@longbridge/openapi-api-reference/src/api-reference.css'
 
-// Import the raw YAML spec (processed by Vite's ?raw loader)
-import rawYaml from '../../openapi.yaml?raw'
-
 export interface Props {
   title: string
   description?: string
@@ -17,5 +14,5 @@ export interface Props {
 const { title, description = '', locale = 'en', initialId } = Astro.props
 ---
 <BaseLayout title={title} description={description} locale={locale} hideFooter>
-  <ApiReference client:load rawYaml={rawYaml} locale={locale} initialId={initialId} />
+  <ApiReference client:load locale={locale} initialId={initialId} />
 </BaseLayout>
