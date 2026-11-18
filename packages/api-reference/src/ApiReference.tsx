@@ -26,6 +26,9 @@ import {
   type WsGroupData,
   type WsCommandItem,
 } from './openapi-loader'
+// 规格由组件自己引入，不走 island props：props 会被序列化进每个页面的 HTML（约 2.1MB），
+// 把 H1 和正文挤到 Googlebot 只抓的前 2MB 之外。模块引入则打进一个可缓存的 JS chunk。
+import rawYaml from '../../../openapi.yaml?raw'
 import { DOCS_ORDER, LEAF_FALLBACK } from './docs-order'
 import { CodePanel, CodeTabs, CodeDropdown, highlightCode } from './CodeSample'
 import { QuotePermission } from './QuotePermission'
@@ -127,7 +130,6 @@ const LOCALE_PREFIX: Record<Locale, string> = {
 // ── Props ─────────────────────────────────────────────────────────────────────
 
 export interface ApiReferenceProps {
-  rawYaml: string
   locale: Locale
   /** 当前页的接口 id（operationId 或 WS 命令 id）。静态预渲染时没有 window，靠它渲染出对应接口；不传则落到概览页。 */
   initialId?: string
@@ -972,11 +974,11 @@ function cliSample(ep: EndpointItem | null): string {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function ApiReference({ rawYaml, locale, initialId }: ApiReferenceProps) {
+export function ApiReference({ locale, initialId }: ApiReferenceProps) {
   const localePrefix = LOCALE_PREFIX[locale] ?? ''
 
   // Parse spec once
-  const { groups, pages, wsGroups, serverUrl } = useMemo(() => parseSpec(rawYaml), [rawYaml])
+  const { groups, pages, wsGroups, serverUrl } = useMemo(() => parseSpec(rawYaml), [])
 
   // Every WS command id (merged into subgroups + standalone groups) so path-based
   // routing (/docs/api/<id>) can tell a WS command from a REST operationId.
