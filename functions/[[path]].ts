@@ -183,10 +183,11 @@ const GONE_PAGES: Record<string, string> = {
   '/docs/api/us_etf_files': '/docs/api/company_profile',
   // 文档重组后的旧地址：#383 把接入说明、刷新 Token、错误码并进 API Reference
   // （openapi.yaml 的 x-pages）；#1001 把市场类接口拆到 market 类目下。
-  // 错误码在 API Reference 里靠 ?page=error-codes 切换视图（站内链接都用这个地址），
+  // API Reference 靠 ?page= 切换视图，不带 query 落在 Overview：接入说明、刷新 Token
+  // 并进了 authentication，错误码是 error-codes（站内链接都用这个地址）。
   // 目标里的 query 怎么处理见 resolveGone()。
-  '/docs/how-to-access-api': '/docs/api',
-  '/docs/refresh-token-api': '/docs/api',
+  '/docs/how-to-access-api': '/docs/api?page=authentication',
+  '/docs/refresh-token-api': '/docs/api?page=authentication',
   '/docs/error-codes': '/docs/api?page=error-codes',
   '/docs/quote/pull/trade-session': '/docs/market/trade-session',
   '/docs/quote/pull/trade-day': '/docs/market/trade-days',
