@@ -181,6 +181,27 @@ const GONE_PAGES: Record<string, string> = {
   '/docs/api/us_etf_dividend_info': '/docs/api/dividends',
   '/docs/api/us_company_dividends': '/docs/api/dividends',
   '/docs/api/us_etf_files': '/docs/api/company_profile',
+  // 文档重组后的旧地址：#383 把接入说明、刷新 Token、错误码并进 API Reference
+  // （openapi.yaml 的 x-pages）；#1001 把市场类接口拆到 market 类目下。
+  // error-codes 的错误码视图靠 ?page=error-codes 切换，这里先落到 /docs/api。
+  '/docs/how-to-access-api': '/docs/api',
+  '/docs/refresh-token-api': '/docs/api',
+  '/docs/error-codes': '/docs/api',
+  '/docs/quote/pull/trade-session': '/docs/market/trade-session',
+  '/docs/quote/pull/trade-day': '/docs/market/trade-days',
+  '/docs/quote/pull/market_temperature': '/docs/market/market-temperature',
+  '/docs/quote/pull/history_market_temperature': '/docs/market/history-market-temperature',
+  '/docs/fundamental/market/market-status': '/docs/market/market-status',
+  '/docs/fundamental/market/unusual-items': '/docs/market/unusual-items',
+  '/docs/fundamental/calendar/dividend-calendar': '/docs/market/calendar/dividend-calendar',
+  '/docs/fundamental/calendar/earnings-calendar': '/docs/market/calendar/earnings-calendar',
+  '/docs/fundamental/calendar/ipo-calendar': '/docs/market/calendar/ipo-calendar',
+  '/docs/fundamental/calendar/macro-calendar': '/docs/market/calendar/macro-calendar',
+  '/docs/fundamental/calendar/meeting-calendar': '/docs/market/calendar/meeting-calendar',
+  '/docs/fundamental/calendar/merge-calendar': '/docs/market/calendar/merge-calendar',
+  '/docs/fundamental/calendar/split-calendar': '/docs/market/calendar/split-calendar',
+  // 资讯分类目录没有落地页，sitemap 里只有它下面的 news 页
+  '/docs/content/news': '/docs/content/news/news',
 }
 
 /**
