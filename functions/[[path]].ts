@@ -183,10 +183,11 @@ const GONE_PAGES: Record<string, string> = {
   '/docs/api/us_etf_files': '/docs/api/company_profile',
   // 文档重组后的旧地址：#383 把接入说明、刷新 Token、错误码并进 API Reference
   // （openapi.yaml 的 x-pages）；#1001 把市场类接口拆到 market 类目下。
-  // error-codes 的错误码视图靠 ?page=error-codes 切换，这里先落到 /docs/api。
+  // 错误码在 API Reference 里靠 ?page=error-codes 切换视图（站内链接都用这个地址），
+  // 目标里的 query 怎么处理见 resolveGone()。
   '/docs/how-to-access-api': '/docs/api',
   '/docs/refresh-token-api': '/docs/api',
-  '/docs/error-codes': '/docs/api',
+  '/docs/error-codes': '/docs/api?page=error-codes',
   '/docs/quote/pull/trade-session': '/docs/market/trade-session',
   '/docs/quote/pull/trade-day': '/docs/market/trade-days',
   '/docs/quote/pull/market_temperature': '/docs/market/market-temperature',
@@ -209,15 +210,26 @@ const GONE_PAGES: Record<string, string> = {
  *
  * en 前缀直接丢掉：en 是 root locale，规则⑥本来就会把 /en 收敛到根，带着它跳会
  * 变成 301 → 302 两跳。
+ *
+ * 目标可以自带 query（如 `/docs/api?page=error-codes`）：
+ *  - 页面请求：目标 query 在前、来源 query 接在后面，
+ *    `/docs/error-codes?x=1` → `/docs/api?page=error-codes&x=1`；
+ *  - `.md` 请求：`.md` 加在路径上，目标 query 丢掉。`?page=` 只是前端切换视图用的，
+ *    markdown 孪生（如 `/docs/api.md`）本身就是整份原文、已含该视图的内容，
+ *    所以 `/docs/error-codes.md` → `/docs/api.md`，不会变成 `?page=error-codes.md`。
+ *  来源 query 两种情况都原样保留。
  */
-function resolveGone(path: string): string | null {
+function resolveGone(path: string, search: string): string | null {
   const m = /^\/(en|zh-CN|zh-HK)(\/.*)$/.exec(path)
   const bare = m ? m[2] : path
   const isMd = bare.endsWith('.md')
   const target = GONE_PAGES[isMd ? bare.slice(0, -'.md'.length) : bare]
   if (!target) return null
   const prefix = m && m[1] !== 'en' ? `/${m[1]}` : ''
-  return `${prefix}${target}${isMd ? '.md' : ''}`
+  const [targetPath, targetQuery = ''] = target.split('?')
+  if (isMd) return `${prefix}${targetPath}.md${search}`
+  const query = [targetQuery, search.slice(1)].filter(Boolean).join('&')
+  return `${prefix}${targetPath}${query ? `?${query}` : ''}`
 }
 
 /**
@@ -289,8 +301,8 @@ export const onRequest = async ({ request, next }: Ctx): Promise<Response> => {
 
   // ⑤ 已下线页面 → 301 到现存的同类页面。排在 /en 收敛之前，让 /en/docs/... 一步
   //    到位；排在末尾斜杠之后，让 .../us_asset_overview/ 先规范化再查表。
-  const gone = resolveGone(path)
-  if (gone) return Response.redirect(new URL(gone + url.search, url).toString(), 301)
+  const gone = resolveGone(path, url.search)
+  if (gone) return Response.redirect(new URL(gone, url).toString(), 301)
 
   // ⑥ /en 前缀收敛（_release.conf:31）。站点域名上只放行 `_llms.conf` 已接管的
   //    /en/docs/**.md，与 nginx 一致：/en/skill-install.md 等先 302 掉前缀。
