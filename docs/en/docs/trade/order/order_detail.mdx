@@ -266,6 +266,7 @@ func main() {
     "outside_rth": "ANY_TIME",
     "currency": "USD",
     "remark": "1680863603.927165",
+    "delayed_until": "0",
     "free_status": "None",
     "free_amount": "",
     "free_currency": "",
@@ -410,6 +411,7 @@ Order Information
 | currency                   | string   | true     | Currency                                                                                                                                                                                                                                                       |
 | outside_rth                | string   | true     | Enable or disable outside regular trading hours<br/> Default is `UnknownOutsideRth` when the order is not a US stock<br/><br/> **Enum Value:**<br/> `RTH_ONLY` - Regular trading hour only<br/> `ANY_TIME` - Any time<br/> `OVERNIGHT` - Overnight"            |
 | remark                     | string   | true     | Remark                                                                                                                                                                                                                                                         |
+| delayed_until | string | true | Time-condition submit time, formatted as a timestamp (second).<br/><br/>`0` when the order is not a time-condition order |
 | free_status                | string   | true     | Commission-free Status, default value is None<br/><br/> **Enum Value:**<br/> `None` - None<br/> `Calculated` - Commission-free amount to be calculated<br/> `Pending` - Pending commission-free<br/> `Ready` - Commission-free applied                         |
 | free_amount                | string   | true     | Commission-free amount, default value is empty string.                                                                                                                                                                                                         |
 | free_currency              | string   | true     | Commission-free currency, default value is empty string.                                                                                                                                                                                                       |
