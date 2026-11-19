@@ -7618,7 +7618,7 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Depth
+          name: Depth Subscription
           x-name-zh: 实时盘口订阅
           x-name-zh-hk: 盤口訂閱
           cmd: 102
@@ -8167,7 +8167,7 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Trades
+          name: Trades Subscription
           x-name-zh: 实时成交明细订阅
           x-name-zh-hk: 成交明細訂閱
           cmd: 104
@@ -8417,9 +8417,9 @@ x-websocket:
           x-subgroup: Subscribe
           x-subgroup-zh: 订阅
           x-subgroup-zh-hk: 訂閱
-          name: Candlesticks
-          x-name-zh: K 线
-          x-name-zh-hk: K 線
+          name: Candlesticks Subscription
+          x-name-zh: 实时 K 线订阅
+          x-name-zh-hk: K 線訂閱
           cmd: 105
           direction: push
           description: |
@@ -20318,11 +20318,11 @@ paths:
       x-summary-zh: 沽空数据（港股）
       x-summary-zh-hk: 沽空數據（港股）
       description: |
-        Get short interest data for US or HK securities. Market is auto-detected from the symbol suffix: `.HK` → HKEX short position data (daily); others → US FINRA short interest data (bi-monthly).
+        Get short interest data for HK securities from HKEX, updated daily.
       x-description-zh: |
-        获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
+        获取港股沽空持仓数据（港交所），每日更新。
       x-description-zh-hk: |
-        獲取美股或港股沽空持倉數據。市場根據代碼後綴自動識別：`.HK` → 港交所沽空數據（每日更新）；其他 → 美股 FINRA 沽空數據（雙月更新）。
+        獲取港股沽空持倉數據（港交所），每日更新。
       x-subgroup: Analytics
       x-subgroup-zh: 数据分析
       x-subgroup-zh-hk: 數據分析
@@ -20520,11 +20520,11 @@ paths:
       x-summary-zh: 沽空数据（美股）
       x-summary-zh-hk: 沽空數據（美股）
       description: |
-        Get short interest data for US or HK securities. Market is auto-detected from the symbol suffix: `.HK` → HKEX short position data (daily); others → US FINRA short interest data (bi-monthly).
+        Get short interest data for US securities from FINRA, updated bi-monthly.
       x-description-zh: |
-        获取美股或港股沽空持仓数据。市场根据代码后缀自动识别：`.HK` → 港交所沽空数据（每日更新）；其他 → 美股 FINRA 沽空数据（双月更新）。
+        获取美股沽空持仓数据（FINRA），双月更新。
       x-description-zh-hk: |
-        獲取美股或港股沽空持倉數據。市場根據代碼後綴自動識別：`.HK` → 港交所沽空數據（每日更新）；其他 → 美股 FINRA 沽空數據（雙月更新）。
+        獲取美股沽空持倉數據（FINRA），雙月更新。
       x-subgroup: Analytics
       x-subgroup-zh: 数据分析
       x-subgroup-zh-hk: 數據分析
@@ -20728,11 +20728,11 @@ paths:
       x-summary-zh: 每日沽空成交量（港股）
       x-summary-zh-hk: 每日沽空成交量（港股）
       description: |
-        Get daily short sale volume data for a security. Supports US stocks (FINRA/NASDAQ) and HK stocks (HKEX). US data is updated bi-weekly; HK data is updated each trading day.
+        Get daily short sale volume data for an HK stock from HKEX, updated each trading day.
       x-description-zh: |
-        获取个股每日沽空成交量数据，支持美股（FINRA）和港股（HKEX）。美股数据每两周更新一次，港股数据每个交易日更新。
+        获取港股个股每日沽空成交量数据（港交所），每个交易日更新。
       x-description-zh-hk: |
-        獲取個股每日沽空成交量數據，支持美股（FINRA）和港股（HKEX）。美股數據每兩週更新一次，港股數據每個交易日更新。
+        獲取港股個股每日沽空成交量數據（港交所），每個交易日更新。
       x-subgroup: Analytics
       x-subgroup-zh: 数据分析
       x-subgroup-zh-hk: 數據分析
@@ -20929,11 +20929,11 @@ paths:
       x-summary-zh: 每日沽空成交量（美股）
       x-summary-zh-hk: 每日沽空成交量（美股）
       description: |
-        Get daily short sale volume data for a security. Supports US stocks (FINRA/NASDAQ) and HK stocks (HKEX). US data is updated bi-weekly; HK data is updated each trading day.
+        Get daily short sale volume data for a US stock from FINRA/NASDAQ, updated bi-weekly.
       x-description-zh: |
-        获取个股每日沽空成交量数据，支持美股（FINRA）和港股（HKEX）。美股数据每两周更新一次，港股数据每个交易日更新。
+        获取美股个股每日沽空成交量数据（FINRA），每两周更新一次。
       x-description-zh-hk: |
-        獲取個股每日沽空成交量數據，支持美股（FINRA）和港股（HKEX）。美股數據每兩週更新一次，港股數據每個交易日更新。
+        獲取美股個股每日沽空成交量數據（FINRA），每兩週更新一次。
       x-subgroup: Analytics
       x-subgroup-zh: 数据分析
       x-subgroup-zh-hk: 數據分析
@@ -35623,8 +35623,8 @@ paths:
     get:
       operationId: fund_positions
       summary: Fund Positions
-      x-summary-zh: 基金持仓
-      x-summary-zh-hk: 基金持倉
+      x-summary-zh: 账户基金持仓
+      x-summary-zh-hk: 賬戶基金持倉
       description: |
         :::warning Longbridge HK / SG accounts only
         This API is available to Longbridge HK / SG accounts only.
