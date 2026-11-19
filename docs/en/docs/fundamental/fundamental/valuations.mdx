@@ -222,6 +222,6 @@ func main() {
 | metrics | object | true | Valuation metrics map |
 | ∟ pe | object | false | P/E ratio data |
 | ∟∟ current | string | true | Current value |
-| ∟∟ high | string | true | 5-year high |
-| ∟∟ low | string | true | 5-year low |
+| ∟∟ high | string | true | Upper bound of the 5-year fair-value band (not the 5-year maximum; the series can rise above it) |
+| ∟∟ low | string | true | Lower bound of the 5-year fair-value band (not the 5-year minimum; the series can fall below it) |
 | ∟∟ median | string | true | 5-year median |
