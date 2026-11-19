@@ -222,6 +222,6 @@ func main() {
 | metrics | object | 是 | 估值指標映射 |
 | ∟ pe | object | 否 | 市盈率數據 |
 | ∟∟ current | string | 是 | 當前值 |
-| ∟∟ high | string | 是 | 5 年最高值 |
-| ∟∟ low | string | 是 | 5 年最低值 |
+| ∟∟ high | string | 是 | 5 年合理區間上沿（不是 5 年最高值，序列可能高於該值） |
+| ∟∟ low | string | 是 | 5 年合理區間下沿（不是 5 年最低值，序列可能低於該值） |
 | ∟∟ median | string | 是 | 5 年中位值 |
