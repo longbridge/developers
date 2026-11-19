@@ -186,8 +186,9 @@ export function wsCommandList(
   return allWsCommands(rawYaml).map((c) => ({ id: c.id, name: c.name, cmd: c.cmd, direction: c.direction }))
 }
 
-/** 描述的首段纯文本，去掉 Markdown 标记并截到 160 字符以内，用作 meta description。`:::` 提示块（如账户限制）跳过，没有其他正文时才退回用它。 */
-function metaDescription(md: string): string {
+/** 描述的首段纯文本，去掉 Markdown 标记并截到 160 字符以内，用作 meta description。`:::` 提示块（如账户限制）跳过，没有其他正文时才退回用它。
+ *  `prefix`（接口方法和路径）放在最前面、计入 160 字符，截断时保留它，保证和同名文档页的描述不同。 */
+function metaDescription(md: string, prefix = ''): string {
   const body = md.replace(/^:::[^\n]*\n[\s\S]*?^:::[ \t]*$/gm, '').trim() || md.replace(/^:::.*$/gm, '').trim()
   const para = body.split(/\n\s*\n/)[0] ?? ''
   const text = para
@@ -196,10 +197,22 @@ function metaDescription(md: string): string {
     .replace(/[`*_>#]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
-  return text.length > 160 ? text.slice(0, 159) + '…' : text
+  const full = prefix ? `${prefix} — ${text}` : text
+  return full.length > 160 ? full.slice(0, 159) + '…' : full
 }
 
-/** 每个 API 单页（REST 接口与 WS 命令）的本地化标题与描述，给 /docs/api/<id> 静态页用。 */
+/** REST 接口写「方法 路径」，WebSocket 写「WebSocket 路径」或「WebSocket cmd N」。 */
+function endpointLabel(method: string, path: string): string {
+  return `${method.toUpperCase() === 'WEBSOCKET' ? 'WebSocket' : method.toUpperCase()} ${path}`
+}
+
+function wsCommandLabel(c: WsCommandItem): string {
+  return c.cmd != null ? `WebSocket cmd ${c.cmd}` : 'WebSocket'
+}
+
+/** 每个 API 单页（REST 接口与 WS 命令）的本地化标题与描述，给 /docs/api/<id> 静态页用。
+ *  API 单页和同一接口的分类文档页（如 /docs/market/top-movers）标题、首段描述相同，搜索引擎会当成重复页只收一份。
+ *  这里给标题和描述都带上接口方法和路径（WebSocket 命令带 cmd 编号），和文档页区分开。 */
 export function apiPageMeta(rawYaml: string, locale: Locale): Array<{ id: string; title: string; description: string }> {
   const { groups } = parseSpec(rawYaml)
   const out: Array<{ id: string; title: string; description: string }> = []
@@ -209,18 +222,23 @@ export function apiPageMeta(rawYaml: string, locale: Locale): Array<{ id: string
       const op = ep.operation
       if (seen.has(op.operationId)) continue
       seen.add(op.operationId)
+      const label = endpointLabel(ep.method, ep.path)
       out.push({
         id: op.operationId,
-        title: pickLocale(op.summary, op['x-summary-zh'], op['x-summary-zh-hk'], locale),
-        description: metaDescription(pickLocale(op.description, op['x-description-zh'], op['x-description-zh-hk'], locale)),
+        title: `${pickLocale(op.summary, op['x-summary-zh'], op['x-summary-zh-hk'], locale)} (${label})`,
+        description: metaDescription(
+          pickLocale(op.description, op['x-description-zh'], op['x-description-zh-hk'], locale),
+          label
+        ),
       })
     }
   }
   for (const c of allWsCommands(rawYaml)) {
+    const label = wsCommandLabel(c)
     out.push({
       id: c.id,
-      title: pickLocale(c.name, c.nameZh, c.nameZhHk, locale),
-      description: metaDescription(pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale)),
+      title: `${pickLocale(c.name, c.nameZh, c.nameZhHk, locale)} (${label})`,
+      description: metaDescription(pickLocale(c.description, c.descriptionZh, c.descriptionZhHk, locale), label),
     })
   }
   return out
