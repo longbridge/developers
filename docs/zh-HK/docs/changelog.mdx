@@ -7,6 +7,27 @@ sidebar_icon: newspaper
 description: 'Longbridge OpenAPI、CLI、MCP 與 SDK 的更新日誌，按時間倒序列出新增命令、接口、MCP 工具及其他變更。'
 ---
 
+## 2026-11-20
+
+### SDK v5.5.0
+
+- **風險測評** — 新增 `TradeContext.risk_assessment()`，返回 access token 所屬賬戶的風險測評檔案：最近一次測評的風險等級與得分、專業投資者（PI）狀態，以及 `approvals` 中各項的狀態。六種語言均已支持
+- **TLS 改為信任操作系統證書庫** — 在企業 TLS 攔截代理（如 Zscaler）後面，此前所有 HTTPS 請求都會以 `invalid peer certificate: UnknownIssuer` 失敗，儘管同一台機器上的其他客戶端工作正常。系統證書庫與內置根證書取並集，證書庫為空或不可讀的機器行為不變。**注意這會擴大 SDK 的信任面**：安裝在本機上的證書頒發機構從此可以攔截 SDK 流量
+- **`history_orders()` 返回全部分頁** — 該接口單次最多返回 1000 條並用 `has_more` 標記溢出，SDK 此前丟棄了這個標記，窗口內超過 1000 單的調用方會靜默拿到被截斷的列表。返回類型不變，無需改代碼；但調用會按頁發多次請求，範圍過寬時更慢也更吃限流，可收窄 `start_at` / `end_at`（兩者都不傳時服務端默認 90 天）
+- **交易與資產接口接受帶前導零的港股代碼** — `00700.HK`（Longbridge 各客戶端顯示的形式）會被規範化為 `700.HK`。此前 `/v1/asset/stock?symbol=00700.HK` 返回 `200` 但**沒有任何持倉**，看起來像空賬戶而不是寫錯了
+- **安全：OAuth 回調頁對錯誤文本做 HTML 轉義** — 此前作為原始 HTML 插入，任何網頁都能把瀏覽器重定向到 `http://localhost:<端口>/callback?error=<script>…`，在授權等待期間於 `localhost` 源上執行腳本
+- **安全：OAuth 回調對錯誤重定向同樣校驗 `state`** — `state` 不匹配的回調會返回錯誤頁並被忽略，流程繼續等待真正的重定向。此前任何網頁都能用自選的錯誤文本終止一個進行中的授權
+- **OAuth 授權錯誤帶上 `error_description`** — 不再只有錯誤碼，佔位用的 `client_id` 之類問題一眼可辨
+
+## 2026-11-09
+
+### SDK v5.4.0
+
+- **OAuth `revoke()` / `clear()`** — `revoke()` 通過 RFC 7009 的 `POST /oauth2/revoke` 在服務端吊銷當前 token，不觸碰本地副本；`clear()` 只在本地丟棄 token（內存 + 緩存文件），不聯繫服務端。要完全斷開連接，先 `revoke()` 再 `clear()`。六種語言均已支持
+- **授權流程改用 PKCE** — 授權請求攜帶 `code_challenge`（RFC 7636，`S256`），換取 token 時帶上 `code_verifier`
+- **類型化的 OAuth 錯誤碼** — `OAuthError::code()` 返回穩定數值，並在 C（`lb_error_code`）、C++（`Status::code()`）、Java 與 Python（`OpenApiException`）中暴露，調用方無需解析錯誤文本即可區分失敗原因
+- **token 請求有了超時上限** — 刷新與吊銷 30 秒超時，不再無限期持有 token 鎖
+
 ## 2026-10-23
 
 ### CLI v0.31.0
