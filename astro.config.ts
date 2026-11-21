@@ -13,6 +13,7 @@ import remarkDirective from 'remark-directive'
 import { remarkCallout } from './src/integrations/remark-callout'
 import { regionHostnameRewrite } from './src/integrations/region-hostname-rewrite'
 import { sitemapLocaleFiles } from './src/integrations/sitemap-locale-files'
+import { sitemapLastmod } from './src/lib/sitemap-lastmod'
 import { prebuildMcpTools } from './src/integrations/prebuild-mcp-tools'
 import { prebuildSkills } from './src/integrations/prebuild-skills'
 
@@ -118,7 +119,14 @@ export default defineConfig({
         const isZh = /^\/zh-(CN|HK)(\/|$)/.test(new URL(item.url).pathname)
         const links = item.links ?? (isZh ? [] : [{ url: item.url, lang: 'en' }])
         const en = links.find((l) => l.lang === 'en')
-        return { ...item, links: en ? [...links, { url: en.url, lang: 'x-default' }] : item.links }
+        // lastmod = 源文件最近一次提交日期（src/lib/sitemap-lastmod.ts）；
+        // 取不到真实日期的页面（首页、API Reference 等）不写，不用构建当天兜底。
+        const lastmod = sitemapLastmod(item.url)
+        return {
+          ...item,
+          ...(lastmod ? { lastmod } : {}),
+          links: en ? [...links, { url: en.url, lang: 'x-default' }] : item.links,
+        }
       },
       // 按语言分组，再由 sitemapLocaleFiles 落到 /{en,zh-CN,zh-HK}/sitemap.xml，
       // 总索引为 /sitemap.xml。
