@@ -36,7 +36,7 @@ longbridge max-qty TSLA.US
 | symbol     | string | YES      | Stock code, using ticker.region format, for example: `AAPL.US`                                                          |
 | order_type | string | YES      | [Order Type](../trade-definition#ordertype)                                                                             |
 | price      | string | NO       | Estimated order price, for example: `388.5`                                                                             |
-| side       | string | YES      | Order side<br/><br/> **Enum Value**<br/> `Buy` - Buy<br/> `Sell` - Sell (Short selling is only supported for US stocks) |
+| side       | string | YES      | Order side<br/><br/> **Enum Value**<br/> `Buy` - Buy<br/> `Sell` - Sell. For a long position (HK or US), returns how much of it can be sold, capped by the position's `available_quantity`. For a US stock without a position, returns the short-sell quantity. HK stocks do not support short selling, so an HK stock without a position returns `0`. |
 | currency   | string | NO       | Settlement currency                                                                                                     |
 | order_id   | string | NO       | Order ID, required when estimating the maximum purchase quantity for a modified order                                   |
 

@@ -510,7 +510,7 @@ class Main {
 
 - **没有「仅平仓」保护。** 数量超过持仓时，多出的部分会变成反向开仓（融资账户会直接做空）。数量上限一定要取自刚刚查询到的 `available_quantity`，不要使用缓存的持仓数。
 - **提交前重新查询持仓。** 挂单、部分成交、当日买入都会改变 `available_quantity`。
-- **可以用预估接口交叉校验。** [预估最大购买数量](./estimate_available_buy_limit)支持 `side=Sell`，返回账户最多可卖出的数量。
+- **可以用预估接口交叉校验。** [预估最大购买数量](./estimate_available_buy_limit)支持 `side=Sell`：持有多头持仓时，返回可卖出的数量，不会超过持仓的 `available_quantity`；美股没有持仓时返回的是可卖空数量，不能当作平仓数量。
 - **部分平仓。** 用 `available_quantity` 乘以想平的比例，再向下取整到[标的基础信息](/zh-CN/docs/quote/pull/static)中的每手股数。港股碎股需要使用 `order_type=ODD`。
 - **组合期权持仓。** 通过[组合期权下单](./submit_multileg)以相反的 `side` 和相同的腿比例平仓。
 - **幂等。** 超时后用同一个 `client_request_id` 重试，服务端在 10 分钟内会返回原订单，而不是再创建一笔。
