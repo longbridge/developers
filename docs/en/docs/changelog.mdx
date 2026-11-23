@@ -7,6 +7,46 @@ sidebar_icon: newspaper
 description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest first: new commands, API endpoints, MCP tools and other changes.'
 ---
 
+## 2026-11-23
+
+### CLI v0.32.0
+
+- **New [`longbridge risk-assessment`](/docs/cli/account/risk-assessment)** — returns the risk assessment profile of the account the token belongs to: risk level, score, assessment date, professional investor (PI) status and end time, approval states, deadlines, and the strategy risk levels the member may trade. No arguments; available over `serve` as `trade.risk_assessment`, returning the same shape as `--format json`
+- **TLS now trusts the operating system's certificate store** — behind a corporate TLS-inspecting proxy every HTTPS call previously failed with `invalid peer certificate: UnknownIssuer` even though other clients on the same machine worked. The OS store and the bundled roots are unioned, so a machine with an empty or unreadable store behaves exactly as before. **Note that this widens what the CLI trusts**: a certificate authority installed on the machine can now intercept its traffic
+- **Fix: crash on start on x86_64 CPUs without AVX2** — since v0.31.1 the `linux-amd64` and `linux-musl-amd64` release binaries died with an illegal instruction (SIGILL, exit 132) on CPUs such as the Intel N5105 common in NAS boxes. `--version` and `--help` worked, but anything opening a TLS connection crashed, including `check`, `quote` and `update`. Both targets are built with `cross` again, which keeps the binary at a baseline instruction set
+- **Fix: a token encrypted on another machine now says so** — on a host that is replaced regularly the home directory survives but the machine identity does not, so the stored token can no longer be decrypted; every command used to fail with an opaque error, and the message now names the cause and the fix
+- **Fix: `longbridge ai` starts a new conversation after signing in** — the server fixes a chat's callable tools when the chat is created, so asking for positions in the conversation you signed in from kept answering that no account tools are connected
+- **SDK moved to 5.5.0** — which brings `history_orders()` returning every page, trade and asset calls accepting zero-padded HK symbols (`00700.HK`), and two OAuth callback security fixes
+
+### MCP v0.17.0
+
+- **New `risk_assessment` tool** — read-only and parameterless, in the `account.read` scope: risk level, PI status, approval states, assessment date, score, and the strategy risk levels the member may trade
+- **`financial_statement` requires `kind`** — it must be `IS`, `BS` or `CF`; any other value, including the former `ALL`, returns `invalid_params` telling the model to call once per statement. The US-account `kind=ALL` fan-out and the `income_statement` / `balance_sheet` / `cash_flow` output fields are gone, so both paths return the same `{report, currency, empty_fields, list}` envelope. **Callers that passed `ALL` must change**
+- **`financial_statement` returns the newest periods** — a new optional `periods` parameter (default 8) orders periods newest first by `fp_end` and cuts to that many. Each line item's backend display `id` is dropped (`field` remains the stable key), `value` is rounded to 2 dp and `yoy` keeps 6 dp. Generic path only; the US-account endpoint is unchanged
+- **`calc_indexes` returns only what was asked for** — each row holds exactly `symbol` plus the requested indexes, and a requested index the security has no value for comes back as `null` instead of being omitted or filled in
+- **TLS now trusts the operating system's certificate store** — the same fix, and the same trust-widening caveat, as the CLI above
+
+## 2026-11-20
+
+### SDK v5.5.0
+
+- **[Risk assessment](/docs/account/profile/risk-assessment)** — new `TradeContext.risk_assessment()` returns the risk assessment profile of the account the access token belongs to: the risk level and score of the latest assessment, the professional investor (PI) status, and the approval state of each item. Available in all six languages
+- **TLS now trusts the operating system's certificate store** — behind a corporate TLS-inspecting proxy every HTTPS call previously failed with `invalid peer certificate: UnknownIssuer` even though other clients on the same machine worked. The OS store and the bundled roots are unioned, so a machine with an empty or unreadable store behaves exactly as before. **Note that this widens what the SDK trusts**: a certificate authority installed on the machine can now intercept SDK traffic
+- **`history_orders()` returns every page** — the endpoint caps a response at 1000 records and reports the overflow in `has_more`, which the SDK dropped, so a caller whose window held more than 1000 orders silently got a truncated list. The return type is unchanged, so no code needs updating — but the call now issues one request per page, so a wide window is slower and consumes more of your rate limit; narrow `start_at` / `end_at` if that matters (with neither set the server defaults to 90 days)
+- **Trade and asset calls accept zero-padded HK symbols** — `00700.HK`, the form the Longbridge apps display, is canonicalized to `700.HK`. Previously `/v1/asset/stock?symbol=00700.HK` answered `200` with **no** positions, so a padded symbol looked like an empty account rather than a mistake
+- **Security: the OAuth callback page HTML-escapes the error text** — it was previously inserted as raw HTML, so any web page could redirect the browser to `http://localhost:<port>/callback?error=<script>…` and run script on the `localhost` origin while an authorization was pending
+- **Security: the OAuth callback checks `state` on error redirects too** — a callback whose `state` does not match is answered with an error page and ignored, and the flow keeps waiting for the real redirect. Previously any web page could end a pending authorization with an error text of its choosing
+- **OAuth authorization errors include `error_description`** — not just the bare error code, which makes a placeholder `client_id` easy to spot
+
+## 2026-11-09
+
+### SDK v5.4.0
+
+- **OAuth `revoke()` / `clear()`** — `revoke()` revokes the current token on the server (RFC 7009 `POST /oauth2/revoke`) without touching the local copy; `clear()` drops the token locally (in-memory and cached file) without contacting the server. Call `revoke()` then `clear()` to disconnect completely. Available in all six languages
+- **PKCE in the browser authorization flow** — the authorization request carries a `code_challenge` (RFC 7636, `S256`) and the token exchange sends the `code_verifier`
+- **Typed OAuth error codes** — `OAuthError::code()` returns a stable number, exposed as `lb_error_code` (C), `Status::code()` (C++) and on `OpenApiException` (Java, Python), so callers can tell failures apart without parsing messages
+- **Token requests are bounded** — refresh and revoke time out after 30s instead of holding the token lock indefinitely
+
 ## 2026-10-23
 
 ### CLI v0.31.0
