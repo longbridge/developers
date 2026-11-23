@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
 import { resolveUrl, resolveLocale, isSiteRoot } from '@longbridge/openapi-utils'
+import { renderMarkdownExport } from '@/lib/markdown-export'
 
 // Root-level raw-markdown endpoint for the EN locale, mirroring the prefixless
 // page route `[...slug].astro`. Serves `/docs/<path>.md` (no locale prefix),
@@ -23,7 +24,12 @@ export async function getStaticPaths() {
 
 export const GET: APIRoute = async ({ props }) => {
   const entry = (props as any).entry
-  const body = entry.body ?? ''
+  // 补页面标题、展开 SDKLinks / QuotePermission，见 src/lib/markdown-export.ts。
+  const body = renderMarkdownExport({
+    title: entry.data.title,
+    body: entry.body ?? '',
+    locale: resolveLocale(entry),
+  })
   return new Response(body, {
     headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
   })
