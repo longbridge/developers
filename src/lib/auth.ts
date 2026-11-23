@@ -16,7 +16,7 @@ const MOCK_KEY = '__mock_login'
 
 // window.longportInternal / __LB_PROXY__ / … are typed in platform-globals.d.ts.
 
-function readCookie(name: string): string | undefined {
+export function readCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return undefined
   const target = `${name}=`
   for (const part of document.cookie.split(';')) {

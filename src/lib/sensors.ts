@@ -17,6 +17,8 @@
  *   via `sensors.login()` after init.
  */
 
+import { readCookie } from './auth'
+
 // Reporting endpoint & project name per environment.
 const SERVER_URL_MAP = {
   production: 'https://event-tracking.lbkrs.com',
@@ -45,6 +47,36 @@ export interface SensorsInitOptions {
   show_log?: boolean
   /** Set to false to skip the initial $pageview after init(). */
   autoTrack?: boolean
+}
+
+/**
+ * Main-site device id cookie (longbridge-websites COOKIE_KEY.DEVICE_ID), set on
+ * the registrable domain (e.g. .longbridge.com) so open.* can read it.
+ */
+const DEVICE_ID_COOKIE = 'device_id'
+
+/**
+ * Strip the `-<last two hostname labels>` suffix the main site appends to the
+ * device id (e.g. `abc123-longbridge.com` -> `abc123`). Mirrors
+ * longbridge-websites packages/request/src/device-id.ts stripDeviceIdDomainSuffix,
+ * which the main site applies before reporting `web_deviceId`.
+ */
+export function stripDeviceIdDomainSuffix(id: string, hostname: string): string {
+  if (!hostname) return id
+  const suffix = `-${hostname.split('.').slice(-2).join('.')}`
+  return id.endsWith(suffix) ? id.slice(0, -suffix.length) : id
+}
+
+/** Main-site device id for `web_deviceId`; undefined when the cookie is absent. */
+function readMainSiteDeviceId(): string | undefined {
+  try {
+    const raw = readCookie(DEVICE_ID_COOKIE)
+    if (!raw) return undefined
+    return stripDeviceIdDomainSuffix(raw, location.hostname) || undefined
+  } catch {
+    // Malformed cookie value — analytics must not break the page.
+    return undefined
+  }
 }
 
 const READY_POLL_MS = 100
@@ -148,10 +180,15 @@ class Sensors {
 
     this.instance.init(config)
 
+    // Same property names / values as the main site (longbridge-websites
+    // packages/sensors) so events join up: lowercase platform_type, and the
+    // camelCase web_deviceId (omitted when the visitor has no main-site cookie).
+    const webDeviceId = readMainSiteDeviceId()
     this.instance.registerPage({
-      platform_type: 'Web',
+      platform_type: 'web',
       user_agent: navigator.userAgent,
       site: typeof location !== 'undefined' ? location.hostname : '',
+      ...(webDeviceId ? { web_deviceId: webDeviceId } : {}),
     })
 
     // Fire initial $pageview unless explicitly disabled.
