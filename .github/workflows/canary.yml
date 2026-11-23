@@ -17,7 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          # 全量历史：src/lib/last-updated.ts 按提交记录取文档更新日期（sitemap lastmod、页面 Last Updated），浅克隆时取不到
+          fetch-depth: 0
 
       - name: Install ossutil
         run: |
