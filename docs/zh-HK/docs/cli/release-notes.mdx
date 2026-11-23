@@ -9,12 +9,12 @@ sidebar_icon: newspaper
 
 ### [v0.32.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.32.0)
 
-- **新增 `risk-assessment` 命令** — 返回 token 所屬賬戶的風險測評檔案:風險等級、得分、測評日期、專業投資者(PI)狀態與截止時間、各項審批狀態、截止期限,以及該成員可交易的策略風險等級。無參數;`serve` 下對應 `trade.risk_assessment`,返回結構與 `--format json` 一致
-- **TLS 改為信任操作系統證書庫** — 在企業 TLS 攔截代理(如 Zscaler)後面,此前所有 HTTPS 請求都會以 `invalid peer certificate: UnknownIssuer` 失敗。系統證書庫與內置根證書取並集,證書庫為空或不可讀的機器行為不變。**注意這會擴大信任面**:安裝在本機上的證書頒發機構從此可以攔截 CLI 的流量
-- **修復:不支持 AVX2 的 x86_64 CPU 上啓動即崩潰** — 自 v0.31.1 起,`linux-amd64` 與 `linux-musl-amd64` 發佈版在 Intel N5105 這類 CPU(常見於 NAS)上會以非法指令(SIGILL,退出碼 132)崩潰;`--version` 與 `--help` 正常,但凡是建立 TLS 連接的命令都會掛。這兩個目標重新改用 `cross` 構建,保持基線指令集
-- **修復:令牌在另一台機器上加密時會明確説明** — 宿主機被頻繁替換時,家目錄還在但機器身份變了,已保存的令牌無法解密,現在會説明原因和處理辦法
-- **修復:`longbridge ai` 登錄後開啓新對話** — 服務端在創建會話時就固定了該會話可調用的工具,此前在登錄前的會話裏繼續問持倉,仍會回答沒有連接賬戶工具
-- **SDK 升級到 5.5.0** — 隨之帶來 `history_orders()` 返回全部分頁、交易與資產接口接受帶前導零的港股代碼(`00700.HK`),以及兩項 OAuth 回調安全修復
+- **新增 `risk-assessment` 命令** — 返回 token 所屬賬戶的風險測評檔案：風險等級、得分、測評日期、專業投資者 (PI) 狀態與截止時間、各項審批狀態、截止期限，以及該成員可交易的策略風險等級。無參數;`serve` 下對應 `trade.risk_assessment`,返回結構與 `--format json` 一致
+- **TLS 改為信任操作系統證書庫** — 在企業 TLS 攔截代理 (如 Zscaler) 後面，此前所有 HTTPS 請求都會以 `invalid peer certificate: UnknownIssuer` 失敗。系統證書庫與內置根證書取並集，證書庫為空或不可讀的機器行為不變。**注意這會擴大信任面**:安裝在本機上的證書頒發機構從此可以攔截 CLI 的流量
+- **修復：不支持 AVX2 的 x86_64 CPU 上啓動即崩潰** — 自 v0.31.1 起，`linux-amd64` 與 `linux-musl-amd64` 發佈版在 Intel N5105 這類 CPU(常見於 NAS) 上會以非法指令 (SIGILL，退出碼 132) 崩潰;`--version` 與 `--help` 正常，但凡是建立 TLS 連接的命令都會掛。這兩個目標重新改用 `cross` 構建，保持基線指令集
+- **修復：令牌在另一台機器上加密時會明確説明** — 宿主機被頻繁替換時，家目錄還在但機器身份變了，已保存的令牌無法解密，現在會説明原因和處理辦法
+- **修復：`longbridge ai` 登錄後開啓新對話** — 服務端在創建會話時就固定了該會話可調用的工具，此前在登錄前的會話裏繼續問持倉，仍會回答沒有連接賬戶工具
+- **SDK 升級到 5.5.0** — 隨之帶來 `history_orders()` 返回全部分頁、交易與資產接口接受帶前導零的港股代碼 (`00700.HK`),以及兩項 OAuth 回調安全修復
 
 ### [v0.31.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.31.0)
 

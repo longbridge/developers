@@ -11,20 +11,20 @@ description: 'Longbridge OpenAPI、CLI、MCP 与 SDK 的更新日志，按时间
 
 ### CLI v0.32.0
 
-- **新增 `longbridge risk-assessment`** — 返回 token 所属账户的风险测评档案:风险等级、得分、测评日期、专业投资者(PI)状态与截止时间、各项审批状态、截止期限,以及该成员可交易的策略风险等级。无参数;`serve` 下对应 `trade.risk_assessment`,返回结构与 `--format json` 一致
-- **TLS 改为信任操作系统证书库** — 在企业 TLS 拦截代理(如 Zscaler)后面,此前所有 HTTPS 请求都会以 `invalid peer certificate: UnknownIssuer` 失败,尽管同一台机器上的其他客户端工作正常。系统证书库与内置根证书取并集,证书库为空或不可读的机器行为不变。**注意这会扩大信任面**:安装在本机上的证书颁发机构从此可以拦截 CLI 的流量
-- **修复:不支持 AVX2 的 x86_64 CPU 上启动即崩溃** — 自 v0.31.1 起,`linux-amd64` 与 `linux-musl-amd64` 发布版在 Intel N5105 这类 CPU(常见于 NAS)上会以非法指令(SIGILL,退出码 132)崩溃:`--version` 和 `--help` 正常,但凡是建立 TLS 连接的命令都会挂,包括 `check`、`quote` 和 `update`。这两个目标重新改用 `cross` 构建,保持基线指令集
-- **修复:令牌在另一台机器上加密时会明确说明** — 宿主机被频繁替换时(例如云主机重建),家目录还在但机器身份变了,已保存的令牌无法解密,此前每条命令都只报一个看不懂的错误,现在会说明原因和处理办法
-- **修复:`longbridge ai` 登录后开启新对话** — 服务端在创建会话时就固定了该会话可调用的工具,所以在登录前的会话里继续问持仓,仍会回答没有连接账户工具
-- **SDK 升级到 5.5.0** — 随之带来 `history_orders()` 返回全部分页、交易与资产接口接受带前导零的港股代码(`00700.HK`),以及两项 OAuth 回调安全修复
+- **新增 `longbridge risk-assessment`** — 返回 token 所属账户的风险测评档案：风险等级、得分、测评日期、专业投资者 (PI) 状态与截止时间、各项审批状态、截止期限，以及该成员可交易的策略风险等级。无参数;`serve` 下对应 `trade.risk_assessment`,返回结构与 `--format json` 一致
+- **TLS 改为信任操作系统证书库** — 在企业 TLS 拦截代理 (如 Zscaler) 后面，此前所有 HTTPS 请求都会以 `invalid peer certificate: UnknownIssuer` 失败，尽管同一台机器上的其他客户端工作正常。系统证书库与内置根证书取并集，证书库为空或不可读的机器行为不变。**注意这会扩大信任面**:安装在本机上的证书颁发机构从此可以拦截 CLI 的流量
+- **修复：不支持 AVX2 的 x86_64 CPU 上启动即崩溃** — 自 v0.31.1 起，`linux-amd64` 与 `linux-musl-amd64` 发布版在 Intel N5105 这类 CPU(常见于 NAS) 上会以非法指令 (SIGILL，退出码 132) 崩溃：`--version` 和 `--help` 正常，但凡是建立 TLS 连接的命令都会挂，包括 `check`、`quote` 和 `update`。这两个目标重新改用 `cross` 构建，保持基线指令集
+- **修复：令牌在另一台机器上加密时会明确说明** — 宿主机被频繁替换时 (例如云主机重建),家目录还在但机器身份变了，已保存的令牌无法解密，此前每条命令都只报一个看不懂的错误，现在会说明原因和处理办法
+- **修复：`longbridge ai` 登录后开启新对话** — 服务端在创建会话时就固定了该会话可调用的工具，所以在登录前的会话里继续问持仓，仍会回答没有连接账户工具
+- **SDK 升级到 5.5.0** — 随之带来 `history_orders()` 返回全部分页、交易与资产接口接受带前导零的港股代码 (`00700.HK`),以及两项 OAuth 回调安全修复
 
 ### MCP v0.17.0
 
-- **新增 `risk_assessment` 工具** — `account.read` 权限下的只读、无参数工具:风险等级、PI 状态、各项审批状态、测评日期、得分,以及该成员可交易的策略风险等级
-- **`financial_statement` 必须传 `kind`** — 取值只能是 `IS`、`BS` 或 `CF`,其他值(包括原来的 `ALL`)会返回 `invalid_params`,提示模型按报表分别调用。美股账户的 `kind=ALL` 聚合路径,以及 `income_statement` / `balance_sheet` / `cash_flow` 三个输出字段已移除,两条路径现在返回同一个 `{report, currency, empty_fields, list}` 结构。**原先传 `ALL` 的调用方需要修改**
-- **`financial_statement` 返回最近的期数** — 新增可选参数 `periods`(默认 8),按 `fp_end` 从新到旧排序后截取;行项目去掉后端展示用的 `id`(`field` 仍是稳定键),`value` 保留 2 位小数、`yoy` 保留 6 位。仅影响通用路径,美股账户专用接口不变
+- **新增 `risk_assessment` 工具** — `account.read` 权限下的只读、无参数工具：风险等级、PI 状态、各项审批状态、测评日期、得分，以及该成员可交易的策略风险等级
+- **`financial_statement` 必须传 `kind`** — 取值只能是 `IS`、`BS` 或 `CF`,其他值 (包括原来的 `ALL`) 会返回 `invalid_params`,提示模型按报表分别调用。美股账户的 `kind=ALL` 聚合路径，以及 `income_statement` / `balance_sheet` / `cash_flow` 三个输出字段已移除，两条路径现在返回同一个 `{report, currency, empty_fields, list}` 结构。**原先传 `ALL` 的调用方需要修改**
+- **`financial_statement` 返回最近的期数** — 新增可选参数 `periods`(默认 8),按 `fp_end` 从新到旧排序后截取;行项目去掉后端展示用的 `id`(`field` 仍是稳定键),`value` 保留 2 位小数、`yoy` 保留 6 位。仅影响通用路径，美股账户专用接口不变
 - **`calc_indexes` 只返回请求的指标** — 每行只包含 `symbol` 加上所请求的指标;请求了但该标的没有值的指标返回 `null`,而不是省略或填充
-- **TLS 改为信任操作系统证书库** — 与上面 CLI 相同的修复,同样会扩大信任面
+- **TLS 改为信任操作系统证书库** — 与上面 CLI 相同的修复，同样会扩大信任面
 
 ## 2026-11-20
 
