@@ -7,6 +7,25 @@ sidebar_icon: newspaper
 description: 'Release notes for Longbridge OpenAPI, CLI, MCP and SDKs, newest first: new commands, API endpoints, MCP tools and other changes.'
 ---
 
+## 2026-11-23
+
+### CLI v0.32.0
+
+- **New `longbridge risk-assessment`** — returns the risk assessment profile of the account the token belongs to: risk level, score, assessment date, professional investor (PI) status and end time, approval states, deadlines, and the strategy risk levels the member may trade. No arguments; available over `serve` as `trade.risk_assessment`, returning the same shape as `--format json`
+- **TLS now trusts the operating system's certificate store** — behind a corporate TLS-inspecting proxy every HTTPS call previously failed with `invalid peer certificate: UnknownIssuer` even though other clients on the same machine worked. The OS store and the bundled roots are unioned, so a machine with an empty or unreadable store behaves exactly as before. **Note that this widens what the CLI trusts**: a certificate authority installed on the machine can now intercept its traffic
+- **Fix: crash on start on x86_64 CPUs without AVX2** — since v0.31.1 the `linux-amd64` and `linux-musl-amd64` release binaries died with an illegal instruction (SIGILL, exit 132) on CPUs such as the Intel N5105 common in NAS boxes. `--version` and `--help` worked, but anything opening a TLS connection crashed, including `check`, `quote` and `update`. Both targets are built with `cross` again, which keeps the binary at a baseline instruction set
+- **Fix: a token encrypted on another machine now says so** — on a host that is replaced regularly the home directory survives but the machine identity does not, so the stored token can no longer be decrypted; every command used to fail with an opaque error, and the message now names the cause and the fix
+- **Fix: `longbridge ai` starts a new conversation after signing in** — the server fixes a chat's callable tools when the chat is created, so asking for positions in the conversation you signed in from kept answering that no account tools are connected
+- **SDK moved to 5.5.0** — which brings `history_orders()` returning every page, trade and asset calls accepting zero-padded HK symbols (`00700.HK`), and two OAuth callback security fixes
+
+### MCP v0.17.0
+
+- **New `risk_assessment` tool** — read-only and parameterless, in the `account.read` scope: risk level, PI status, approval states, assessment date, score, and the strategy risk levels the member may trade
+- **`financial_statement` requires `kind`** — it must be `IS`, `BS` or `CF`; any other value, including the former `ALL`, returns `invalid_params` telling the model to call once per statement. The US-account `kind=ALL` fan-out and the `income_statement` / `balance_sheet` / `cash_flow` output fields are gone, so both paths return the same `{report, currency, empty_fields, list}` envelope. **Callers that passed `ALL` must change**
+- **`financial_statement` returns the newest periods** — a new optional `periods` parameter (default 8) orders periods newest first by `fp_end` and cuts to that many. Each line item's backend display `id` is dropped (`field` remains the stable key), `value` is rounded to 2 dp and `yoy` keeps 6 dp. Generic path only; the US-account endpoint is unchanged
+- **`calc_indexes` returns only what was asked for** — each row holds exactly `symbol` plus the requested indexes, and a requested index the security has no value for comes back as `null` instead of being omitted or filled in
+- **TLS now trusts the operating system's certificate store** — the same fix, and the same trust-widening caveat, as the CLI above
+
 ## 2026-11-20
 
 ### SDK v5.5.0
