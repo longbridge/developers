@@ -30,22 +30,22 @@ const qpStr = (s: QPLocaleString | undefined, locale: Locale): string =>
   (s ? (s[qpLocaleKey(locale)] ?? s.en ?? '') : '')
 
 /**
- * Render an operation's quote-permission requirement as a Markdown blockquote,
- * resolving `x-quote-command` / `x-quote-level` / `x-quote-market` against
- * quote-permissions.yaml. Returns '' when the operation has no permission marker.
+ * Render a quote-permission requirement as a Markdown blockquote, resolving
+ * `command` / `level` / `market` against quote-permissions.yaml the same way the
+ * <QuotePermission> MDX component does (command.level → level → 'basic'). Shared
+ * by the API Reference `.md` routes and the docs `.md` export
+ * (src/lib/markdown-export.ts). Returns '' when the level is unknown.
  */
-function quotePermissionMarkdown(
-  op: { 'x-quote-command'?: string; 'x-quote-level'?: string; 'x-quote-market'?: string },
+export function quotePermissionCallout(
+  props: { command?: string; level?: string; market?: string },
   locale: Locale
 ): string {
-  const command = op['x-quote-command']
-  if (!command && !op['x-quote-level'] && !op['x-quote-market']) return ''
   const qp = qpData()
-  const cmd = command ? qp.commands?.[command] : undefined
-  const level = cmd?.level ?? op['x-quote-level'] ?? 'basic'
+  const cmd = props.command ? qp.commands?.[props.command] : undefined
+  const level = cmd?.level ?? props.level ?? 'basic'
   const levelDef = qp.levels?.[level]
   if (!levelDef) return ''
-  const market = op['x-quote-market'] ?? cmd?.market
+  const market = props.market ?? cmd?.market
   const title = qpStr(qp.ui?.permission_title, locale)
   const badge = qpStr(levelDef.label, locale)
   const marketLabel = market ? qpStr(qp.ui?.market_labels?.[market], locale) || market : ''
@@ -57,6 +57,18 @@ function quotePermissionMarkdown(
   for (const l of desc.split('\n').map((s) => s.trim()).filter(Boolean)) lines.push(`> ${l}`)
   if (note) lines.push(`> _${note}_`)
   return lines.join('\n') + '\n\n'
+}
+
+/** An operation's quote-permission callout; '' when it has no permission marker. */
+function quotePermissionMarkdown(
+  op: { 'x-quote-command'?: string; 'x-quote-level'?: string; 'x-quote-market'?: string },
+  locale: Locale
+): string {
+  if (!op['x-quote-command'] && !op['x-quote-level'] && !op['x-quote-market']) return ''
+  return quotePermissionCallout(
+    { command: op['x-quote-command'], level: op['x-quote-level'], market: op['x-quote-market'] },
+    locale
+  )
 }
 
 const loc = (
