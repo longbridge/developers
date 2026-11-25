@@ -1,0 +1,33 @@
+---
+title: '更新日誌'
+sidebar_label: '更新日誌'
+sidebar_position: 100
+sidebar_icon: newspaper
+description: 'Longbridge MCP 服務每個版本的變化：新工具、問題修復和交易確認方式的變化。'
+---
+
+# 更新日誌
+
+### 下一版本
+
+- **通過 MCP 提供 Agent Skills**：支持 MCP skills 擴展的客户端（例如 Claude）可以直接從 `mcp.longbridge.com` 加載 [Longbridge skills](https://github.com/longbridge/skills)，無需安裝，隨服務端更新
+- **下單由用户本人確認，不再依賴模型**：客户端支持 MCP `2026-07-28` 和表單輸入時，`submit_order`、`replace_order`、`cancel_order` 會彈出確認表單，只有你在表單裏確認才會下單；拒絕或關閉表單不會下單，改單會重新彈出表單。其他客户端繼續使用兩步確認碼。網格和基金訂單仍使用確認碼
+- **支持 MCP `2026-07-28` 協議**：支持 `server/discover`，不需要 initialize 握手；使用舊版本協議的客户端不受影響
+
+### [v0.17.1](https://github.com/longbridge/longbridge-mcp/releases/tag/v0.17.1)
+
+- **修復 `finance_calendar`**：去掉 `start`..`end` 之外的日期，保留每日數量
+- **修復 `ipo`**：一個市場失敗時仍返回另一個市場；整理 `ipo_detail` 的輸出
+
+### [v0.17.0](https://github.com/longbridge/longbridge-mcp/releases/tag/v0.17.0)
+
+- **新增 `risk_assessment` 工具**：返回賬户的風險等級、分數、評估日期、專業投資者狀態和可交易的策略風險等級
+- **TLS 同時信任操作系統證書庫**和內置根證書
+- **修復 `calc_indexes`**：只返回請求的指標，不可用時為 `null`
+- **修復 `financial_statement`**：返回最新的報告期，精簡科目，`kind` 改為必填
+
+### [v0.16.5](https://github.com/longbridge/longbridge-mcp/releases/tag/v0.16.5)
+
+- **修復 `_jq` 過濾器可能讓服務崩潰**：過濾器改在受內存、CPU 和時間限制的沙箱進程中運行，出錯隻影響這一次調用。禁用 `env`、`debug`、`stderr`、`halt`、`halt_error`，表達式最長 4096 字符，超過 2 秒會被終止
+- **新增錯誤碼** `jq_sandbox_busy`、`jq_sandbox_unavailable`（`recoverable: backoff`）
+- **請求體上限 1 MiB**，超出返回 413
