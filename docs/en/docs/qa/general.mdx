@@ -20,8 +20,8 @@ The SDKs also offer a paper trading switch (`LONGBRIDGE_PAPERTRADING=true`, or `
 :::warning
 This is a **server-side check, not a client-side guarantee**. Two limits apply today, and neither is visible in the response:
 
-- **LBUS (US) accounts have no paper trading environment** — there is no paper account to serve. The server does not reject the request; it answers with the **live** account's data. The SDKs therefore refuse order submission and replacement locally (a `us_`-prefixed credential with the switch on); reads are not refused and still return live data.
-- **Under OAuth authorization the server does not apply this check at all**, in any region: a live-account token is accepted and reads return live data without an error.
+- **LBUS (US) accounts have no paper trading environment** — there is no paper account to serve. The server does not reject the request; it answers with the **live** account's data. The SDKs therefore refuse order submission, replacement and multi-leg submission locally (a `us_`-prefixed credential with the switch on); reads are not refused and still return live data. That local refusal arrives in the SDK release containing this fix; 5.5.0 does not have it.
+- **Under OAuth authorization the server does not apply this check at all**, in any region: a live-account token is accepted and reads return live data without an error. Measured on an HK / SG live account: with the switch on, a positions query returns the same live holdings as without it, and no error.
 
 Do not treat this switch as the only thing separating your strategy from your live funds. Confirm which account you are on before submitting orders.
 :::
