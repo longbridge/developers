@@ -9,8 +9,17 @@ sidebar_icon: newspaper
 
 ### Unreleased
 
-- **New account commands for Hong Kong (AP) accounts** — [`edda`](/docs/cli/account/edda) and [`edda-status`](/docs/cli/account/edda-status) for eDDA authorizations, [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/docs/cli/account/stock-transfers-out) for stock transfer applications, [`rewards`](/docs/cli/account/rewards) for activity reward records, and [`coupons`](/docs/cli/account/coupons) / [`coupon-orders`](/docs/cli/account/coupon-orders) for coupon cards and the orders they were applied to
-- **[`bank-cards`](/docs/cli/account/bank-cards), [`deposits`](/docs/cli/account/deposits) and [`withdrawals`](/docs/cli/account/withdrawals) reshaped** — `bank-cards` now shows each card's review state and authorizations; `deposits` and `withdrawals` gain `--start` / `--end`, and `deposits --states` takes numeric state codes (`0`–`5`). **Output changes**: account numbers are masked to the last 4 digits, times are Hong Kong time (+08:00), and only a documented set of fields is printed — update any script that reads the old JSON
+- **New account commands for Hong Kong (AP) accounts** — [`edda`](/docs/cli/account/edda) and [`edda-status`](/docs/cli/account/edda-status) for eDDA authorizations, [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/docs/cli/account/stock-transfers-out) for stock transfer applications, [`rewards`](/docs/cli/account/rewards) for activity reward records, and [`coupons`](/docs/cli/account/coupons) / [`coupon-orders`](/docs/cli/account/coupon-orders) for coupon cards and the orders they were applied to. A US account gets an error saying the command is not available in the US data center
+- **[`bank-cards`](/docs/cli/account/bank-cards), [`deposits`](/docs/cli/account/deposits) and [`withdrawals`](/docs/cli/account/withdrawals)** — `bank-cards` now shows each card's review state and authorizations; `deposits` and `withdrawals` gain `--start` / `--end` and accept `--size` as an alias of `--count`
+- **Breaking output changes** — update any script that reads the old JSON:
+  - `bank-cards` prints `{"cards": [...]}` instead of a bare JSON array
+  - `bank-cards`: `status` is replaced by `verification` (`unverified` / `under_review` / `verified`)
+  - `bank-cards`: `account` is masked to the last 4 digits, and the account holder's name, address and SWIFT fields are no longer printed
+  - `deposits` no longer prints `total` (it followed the page size, not the record count); use `has_more` to decide whether to fetch the next page
+  - `deposits` and `withdrawals` items carry only the documented fields
+  - Times are RFC 3339 in Hong Kong time (`+08:00`)
+  - `--count` is capped at 50 records per page
+  - `deposits --states` now validates the codes `0`–`5` locally and rejects anything else before sending a request (numeric codes were already the input)
 
 ### [v0.32.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.32.0)
 

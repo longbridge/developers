@@ -9,8 +9,17 @@ sidebar_icon: newspaper
 
 ### Unreleased
 
-- **新增香港（AP）賬戶的賬戶類命令** — [`edda`](/zh-HK/docs/cli/account/edda) 與 [`edda-status`](/zh-HK/docs/cli/account/edda-status) 查看 eDDA 授權，[`stock-transfers-in`](/zh-HK/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/zh-HK/docs/cli/account/stock-transfers-out) 查看股票轉入 / 轉出申請，[`rewards`](/zh-HK/docs/cli/account/rewards) 查看活動獎勵記錄，[`coupons`](/zh-HK/docs/cli/account/coupons) / [`coupon-orders`](/zh-HK/docs/cli/account/coupon-orders) 查看卡券及其關聯訂單
-- **[`bank-cards`](/zh-HK/docs/cli/account/bank-cards)、[`deposits`](/zh-HK/docs/cli/account/deposits)、[`withdrawals`](/zh-HK/docs/cli/account/withdrawals) 輸出調整** — `bank-cards` 現在展示每張卡的審核狀態及授權；`deposits` 與 `withdrawals` 新增 `--start` / `--end`，`deposits --states` 改為接受數字狀態碼（`0`–`5`）。**輸出有變化**：賬號脫敏為僅顯示後 4 位，時間為香港時間（+08:00），只輸出文檔列出的字段——讀取舊 JSON 的腳本需要相應調整
+- **新增香港（AP）賬戶的賬戶類命令** — [`edda`](/zh-HK/docs/cli/account/edda) 與 [`edda-status`](/zh-HK/docs/cli/account/edda-status) 查看 eDDA 授權，[`stock-transfers-in`](/zh-HK/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/zh-HK/docs/cli/account/stock-transfers-out) 查看股票轉入 / 轉出申請，[`rewards`](/zh-HK/docs/cli/account/rewards) 查看活動獎勵記錄，[`coupons`](/zh-HK/docs/cli/account/coupons) / [`coupon-orders`](/zh-HK/docs/cli/account/coupon-orders) 查看卡券及其關聯訂單。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用
+- **[`bank-cards`](/zh-HK/docs/cli/account/bank-cards)、[`deposits`](/zh-HK/docs/cli/account/deposits)、[`withdrawals`](/zh-HK/docs/cli/account/withdrawals)** — `bank-cards` 現在展示每張卡的審核狀態及授權；`deposits` 與 `withdrawals` 新增 `--start` / `--end`，並接受 `--size` 作為 `--count` 的別名
+- **不兼容的輸出變化** — 讀取舊 JSON 的腳本需要相應調整：
+  - `bank-cards` 輸出 `{"cards": [...]}`，不再是裸 JSON 數組
+  - `bank-cards`：`status` 改為 `verification`（`unverified` / `under_review` / `verified`）
+  - `bank-cards`：`account` 脫敏為僅顯示後 4 位，不再輸出賬戶持有人姓名、地址及 SWIFT 相關字段
+  - `deposits` 不再輸出 `total`（該值跟隨每頁條數，並非記錄總數）；請根據 `has_more` 判斷是否繼續取下一頁
+  - `deposits` 與 `withdrawals` 的每條記錄只包含文檔列出的字段
+  - 時間統一為香港時間（`+08:00`）的 RFC 3339 格式
+  - `--count` 每頁上限為 50 條
+  - `deposits --states` 現在會在本地校驗狀態碼 `0`–`5`，其他取值在發出請求前即報錯（此前輸入已是數字狀態碼）
 
 ### [v0.32.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.32.0)
 
