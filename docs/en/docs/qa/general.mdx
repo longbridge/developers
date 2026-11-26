@@ -15,6 +15,19 @@ Please visit [Development Center](https://open.longbridge.com/dashboard/) to ena
 
 To test against a paper account, call the API with that paper account's own Access Token or OAuth authorization, because the credential determines whether a request reaches the paper or the live account.
 
+The SDKs also offer a paper trading switch (`LONGBRIDGE_PAPERTRADING=true`, or `enable_papertrading` when you build a `Config`). With it on, every request carries the `x-papertrading: true` header, which asks the server to serve the paper account and to reject a credential that belongs to a live account.
+
+:::warning
+**In short: under OAuth authorization this switch currently does nothing, and an LBUS account has no paper environment to switch to.**
+
+It is a **server-side check, not a client-side guarantee**, and it has two gaps today, neither of them visible in the response:
+
+- **LBUS (US) accounts have no paper trading environment** — there is no paper account to serve. The server does not reject the request; it answers with the **live** account's data, for orders as well as for reads. Nothing in the response says the switch was ignored.
+- **Under OAuth authorization the server does not apply this check at all**, in any region: a live-account token is accepted and reads return live data without an error. Measured on an HK / SG live account: with the switch on, a positions query returns the same live holdings as without it, and no error.
+
+Do not treat this switch as the only thing separating your strategy from your live funds. It is the credential you authorize with that decides which account you reach — confirm that before you trade, and remember that the positions, orders and balances you read back are the live account's too, so a strategy that only reads is already working from live data.
+:::
+
 ## Q3: Are the trading permissions for simulation debugging the same as for real accounts?
 
 Quote is the same, trading might be different.
