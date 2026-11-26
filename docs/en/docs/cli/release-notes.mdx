@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### Unreleased
+
+- **New account commands for Hong Kong (AP) accounts** — [`edda`](/docs/cli/account/edda) and [`edda-status`](/docs/cli/account/edda-status) for eDDA authorizations, [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/docs/cli/account/stock-transfers-out) for stock transfer applications, [`rewards`](/docs/cli/account/rewards) for activity reward records, and [`coupons`](/docs/cli/account/coupons) / [`coupon-orders`](/docs/cli/account/coupon-orders) for coupon cards and the orders they were applied to
+- **[`bank-cards`](/docs/cli/account/bank-cards), [`deposits`](/docs/cli/account/deposits) and [`withdrawals`](/docs/cli/account/withdrawals) reshaped** — `bank-cards` now shows each card's review state and authorizations; `deposits` and `withdrawals` gain `--start` / `--end`, and `deposits --states` takes numeric state codes (`0`–`5`). **Output changes**: account numbers are masked to the last 4 digits, times are Hong Kong time (+08:00), and only a documented set of fields is printed — update any script that reads the old JSON
+
 ### [v0.32.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.32.0)
 
 - **New [`risk-assessment`](/docs/cli/account/risk-assessment) command** — returns the risk assessment profile of the account the token belongs to: risk level, score, assessment date, professional investor (PI) status and end time, approval states, deadlines, and the strategy risk levels the member may trade. No arguments; available over `serve` as `trade.risk_assessment`, returning the same shape as `--format json`

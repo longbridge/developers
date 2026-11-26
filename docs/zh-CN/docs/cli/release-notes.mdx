@@ -7,6 +7,11 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### Unreleased
+
+- **新增香港（AP）账户的账户类命令** — [`edda`](/zh-CN/docs/cli/account/edda) 与 [`edda-status`](/zh-CN/docs/cli/account/edda-status) 查看 eDDA 授权，[`stock-transfers-in`](/zh-CN/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/zh-CN/docs/cli/account/stock-transfers-out) 查看股票转入 / 转出申请，[`rewards`](/zh-CN/docs/cli/account/rewards) 查看活动奖励记录，[`coupons`](/zh-CN/docs/cli/account/coupons) / [`coupon-orders`](/zh-CN/docs/cli/account/coupon-orders) 查看卡券及其关联订单
+- **[`bank-cards`](/zh-CN/docs/cli/account/bank-cards)、[`deposits`](/zh-CN/docs/cli/account/deposits)、[`withdrawals`](/zh-CN/docs/cli/account/withdrawals) 输出调整** — `bank-cards` 现在展示每张卡的审核状态及授权；`deposits` 与 `withdrawals` 新增 `--start` / `--end`，`deposits --states` 改为接受数字状态码（`0`–`5`）。**输出有变化**：账号脱敏为仅显示后 4 位，时间为香港时间（+08:00），只输出文档列出的字段——读取旧 JSON 的脚本需要相应调整
+
 ### [v0.32.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.32.0)
 
 - **新增 [`risk-assessment`](/zh-CN/docs/cli/account/risk-assessment) 命令** — 返回 token 所属账户的风险测评档案：风险等级、得分、测评日期、专业投资者 (PI) 状态与截止时间、各项审批状态、截止期限，以及该成员可交易的策略风险等级。无参数;`serve` 下对应 `trade.risk_assessment`,返回结构与 `--format json` 一致
