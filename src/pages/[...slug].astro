@@ -10,6 +10,7 @@ import { Pricing } from '@/components/mdx/Pricing'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { SkillPage } from '@/components/mdx/SkillPage'
 import { resolvePageTitle, resolvePageDescription } from '@/lib/page-meta'
+import { homeJsonLd } from '@/lib/structured-data'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -52,7 +53,7 @@ const isSkill = entry.id === 'en/skill/index'
   </ApiReferenceLayout>
 )}
 {layoutKind === 'plain' && (
-  <PlainLayout title={titleStr} description={description} locale="en">
+  <PlainLayout title={titleStr} description={description} locale="en" jsonLd={isHome ? homeJsonLd(Astro.site!.origin, 'en') : undefined}>
     {/* Pricing is a fully interactive island (billing toggle) — render it
         hydrated instead of the SSR-only mdx-component so the toggle works. */}
     {entry.data.id === 'pricing' ? (

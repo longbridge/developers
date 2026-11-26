@@ -11,7 +11,11 @@ import type { TocHeading } from '@components/shell/TOC'
 import PrevNext from '@components/shell/PrevNext'
 import DocMeta from '@components/shell/DocMeta.astro'
 import DocFooter from '@components/shell/DocFooter.astro'
-import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail } from '@longbridge/openapi-utils'
+import { buildSidebar, getPrevNext, resolveSidebarScope, findBreadcrumbTrail, t as translate } from '@longbridge/openapi-utils'
+import { buildSeoLinks } from '@/lib/page-meta'
+import { getPublishedUrls } from '@/lib/published-urls'
+import { getLastUpdated } from '@/lib/last-updated'
+import { breadcrumbListJsonLd, techArticleJsonLd } from '@/lib/structured-data'
 
 interface Props {
   title: string
@@ -58,9 +62,28 @@ const crumbs: BreadcrumbItem[] =
         href: i < trail.length - 1 ? t.href : undefined,
       }))
     : [{ text: entry.data.title ?? '(untitled)' }]
+const showBreadcrumb = showSidebar && !entry.data.hide_breadcrumb
+
+// Structured data mirrors what the page shows: the same breadcrumb trail
+// (Home is prepended by the Breadcrumb component, so prepend it here too) and
+// the article title / description / git "Last Updated" date. The
+// BreadcrumbList is only emitted when the breadcrumb is actually rendered,
+// since Google expects the markup to match visible content.
+const host = Astro.site!.origin
+const pageUrl = buildSeoLinks(Astro.url.pathname, host, await getPublishedUrls()).canonical
+const homeCrumb = { text: translate(locale, 'breadcrumb.home'), href: locale === 'en' ? '/' : `/${locale}/` }
+const breadcrumbLd = showBreadcrumb ? breadcrumbListJsonLd([homeCrumb, ...crumbs], host, pageUrl) : null
+const articleLd = techArticleJsonLd({
+  headline: entry.data.title ?? title,
+  description,
+  locale,
+  url: pageUrl,
+  dateModified: getLastUpdated(entry.id),
+})
+const jsonLd = breadcrumbLd ? [breadcrumbLd, articleLd] : [articleLd]
 ---
 
-<BaseLayout title={title} description={description} locale={locale} hideFooter>
+<BaseLayout title={title} description={description} locale={locale} hideFooter jsonLd={jsonLd}>
   {showSidebar && (
     <LocalNav locale={locale} pathname={pathname} nodes={sidebar} headings={headings} client:load />
   )}
@@ -72,7 +95,7 @@ const crumbs: BreadcrumbItem[] =
       <div class="docs-inner">
         <div class="docs-main">
           <article class="docs-content">
-            {showSidebar && !entry.data.hide_breadcrumb && (
+            {showBreadcrumb && (
               <Breadcrumb locale={locale} items={crumbs} />
             )}
             {injectedTitle && <h1>{injectedTitle}</h1>}
