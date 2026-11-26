@@ -33,7 +33,7 @@ The default table shows `id`, created at, amount, received, currency, method and
 {
   "items": [
     {
-      "id": 1000001,
+      "id": "1000001",
       "created_at": "2026-04-30T15:57:49+08:00",
       "currency": "USD",
       "amount": "3000.00",
@@ -41,6 +41,7 @@ The default table shows `id`, created at, amount, received, currency, method and
       "state": "Credited",
       "state_code": 1,
       "state_label": "credited",
+      "sub_state_code": 0,
       "bank_operation_type_name": "eDDA",
       "can_cancel": false,
       "voucher_count": 0
@@ -97,7 +98,7 @@ Each entry in `items[]` has:
 | --- | --- |
 | `id`, `reference_no` | Deposit id and reference number |
 | `created_at`, `updated_at` | When the deposit was applied for and last updated |
-| `currency`, `amount` | Amount you notified / applied for |
+| `currency`, `amount` | Amount you notified / applied for. Amounts are decimal strings (e.g. `"3000.00"`) |
 | `receivable_amount` | Amount actually received by Longbridge's bank; `0` means not received yet |
 | `state`, `state_code`, `state_label` | Status text, code, and label (`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`) |
 | `sub_state_code` | Sub-state code |

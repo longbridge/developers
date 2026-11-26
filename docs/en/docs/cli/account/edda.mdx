@@ -39,7 +39,7 @@ The default table shows card id, bank, account, flow, currency, authorization, m
 {
   "authorizations": [
     {
-      "card_id": 100001,
+      "card_id": "100001",
       "bank": "Example Bank",
       "account": "****1234",
       "card_binding": "bound",
@@ -48,7 +48,11 @@ The default table shows card id, bank, account, flow, currency, authorization, m
       "currency": "HKD",
       "authorization": "authorized",
       "max_amount_unlimited": true,
-      "long_term_valid": true
+      "daily_max_count_unlimited": true,
+      "long_term_valid": true,
+      "is_support": true,
+      "doc_reviewing": false,
+      "no_prior_deposit_reviewing": false
     }
   ]
 }
@@ -72,10 +76,10 @@ Each entry in `authorizations[]` has:
 | `name`, `currency` | Authorization name and currency |
 | `authorization` | `unauthorized`, `authorized`, `authorizing` or `failed` |
 | `failure_reason` | The bank's message when the authorization failed |
-| `max_amount`, `max_amount_unlimited` | Deposit limit, and whether it is unlimited |
+| `max_amount`, `max_amount_unlimited` | Deposit limit (a decimal string), and whether it is unlimited |
 | `daily_max_count`, `daily_max_count_unlimited` | Daily deposit count limit, and whether it is unlimited |
 | `expiry_date`, `long_term_valid` | Expiry date, and whether the authorization is long-term valid (a long-term authorization has no `expiry_date`) |
-| `is_support` | `1` when the bank supports this flow |
+| `is_support` | `true` when the bank supports this flow |
 | `doc_reviewing` | Documents are under review |
 | `no_prior_deposit_reviewing` | Under review because the card has no prior deposit |
 
@@ -104,7 +108,7 @@ The default table shows `id`, flow, currency, authorization, failure reason, and
 {
   "applications": [
     {
-      "id": 1000004,
+      "id": "1000004",
       "flow_id": "hk_sdda",
       "name": "eDDA",
       "currency": "HKD",
@@ -125,7 +129,7 @@ An empty list means no application was filed for that card and currency; the car
 
 | Flag | Description |
 | --- | --- |
-| `--card-id` | Bank card id (numeric) from [`bank-cards`](/docs/cli/account/bank-cards). Required |
+| `--card-id` | Bank card id (numeric) from [`bank-cards`](/docs/cli/account/bank-cards). Required; a non-numeric id is rejected with an error before any request is sent |
 | `--currency` | Authorized currency, e.g. `HKD` or `USD`. Required |
 
 ### Output fields

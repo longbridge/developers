@@ -94,10 +94,10 @@ Each entry in `rewards[]` has:
 | `record_id`, `activity_title`, `title`, `description` | Record id, the campaign it came from, and the reward's title and description |
 | `card_type`, `card_status` | For coupon rewards |
 | `prize_type`, `prize_type_label` | `physical` means shipped goods |
-| `amount`, `currency` | Reward amount |
+| `amount`, `currency` | Reward amount, as a decimal string (e.g. `"38"`) |
 | `status`, `status_label` | `upcoming`, `cancelled`, `exited_activity`, `unclaimed`, `issuing`, `issued`, `failed`, `exchanged`, `expired` or `refunded` |
-| `deliver_status`, `deliver_status_label` | Issued prizes only: `not_activated`, `activated_or_shipping`, `consumed`, `address_missing`, `shipping`, … |
-| `exit_status` | Exit status code, as returned by the service |
+| `deliver_status`, `deliver_status_label` | Delivery status code, and its label for issued prizes only: `not_activated`, `activated_or_shipping`, `consumed`, `e_voucher_activating`, `e_voucher_expired_before_activation`, `e_voucher_invalid`, `address_missing`, `address_filled` or `shipping` |
+| `exit_status` | Exit status code, as returned by the service; absent when `0` |
 | `send_time`, `start_time`, `end_time`, `effective_time`, `receive_deadline` | Timestamps |
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `send_time` on a reward not issued yet) are omitted the same way.

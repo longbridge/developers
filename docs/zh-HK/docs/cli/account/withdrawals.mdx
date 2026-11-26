@@ -33,7 +33,7 @@ longbridge withdrawals --format json
 {
   "list": [
     {
-      "id": 1000002,
+      "id": "1000002",
       "order_id": "WD000000000001",
       "created_at": "2026-11-18T10:05:12+08:00",
       "currency": "HKD",
@@ -82,7 +82,7 @@ longbridge withdrawals --page 2 --count 50
 | --- | --- |
 | `id`、`order_id` | 提款 id 及單號 |
 | `created_at` | 申請時間 |
-| `currency`、`amount` | 申請金額 |
+| `currency`、`amount` | 申請金額。金額均為十進制字符串（如 `"20000.00"`） |
 | `fee` | 提款手續費 |
 | `settlement_amount` | 實際出賬金額 |
 | `state`、`state_label` | 狀態碼及標籤：`submitted`、`processing`、`rejected`、`cancelled`、`remitted`、`failed`、`refunded`、`approved_awaiting_payout`、`large_amount_review`、`awaiting_confirmation` 等 |

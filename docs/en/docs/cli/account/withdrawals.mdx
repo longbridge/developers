@@ -33,7 +33,7 @@ The default table shows `id`, created at, amount, fee, paid out, currency, state
 {
   "list": [
     {
-      "id": 1000002,
+      "id": "1000002",
       "order_id": "WD000000000001",
       "created_at": "2026-11-18T10:05:12+08:00",
       "currency": "HKD",
@@ -82,7 +82,7 @@ Each entry in `list[]` has:
 | --- | --- |
 | `id`, `order_id` | Withdrawal id and order number |
 | `created_at` | When the withdrawal was applied for |
-| `currency`, `amount` | Amount applied for |
+| `currency`, `amount` | Amount applied for. Amounts are decimal strings (e.g. `"20000.00"`) |
 | `fee` | Withdrawal fee |
 | `settlement_amount` | Amount actually paid out |
 | `state`, `state_label` | State code and label: `submitted`, `processing`, `rejected`, `cancelled`, `remitted`, `failed`, `refunded`, `approved_awaiting_payout`, `large_amount_review`, `awaiting_confirmation`, … |

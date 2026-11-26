@@ -38,7 +38,7 @@ longbridge stock-transfer in --format json
 {
   "records": [
     {
-      "id": 1000005,
+      "id": "1000005",
       "order_id": "TI000000000001",
       "market": "HK",
       "broker": "示例证券有限公司",
@@ -98,7 +98,7 @@ longbridge stock-transfer in --page 2 --count 50
 | 参数 | 说明 |
 | --- | --- |
 | `--market` | `HK`、`US`、`CN` 或 `SG`（默认全部） |
-| `--state` | 状态码：`0` 已提交，`1` 已撤销，`3` 已完成（股票已到账），`5` 处理中，`7` 部分完成，`8` 失败（默认全部） |
+| `--state` | 状态码：`0` 已提交，`1` 已撤销，`3` 已完成（股票已到账），`5` 处理中，`7` 部分完成，`8` 失败（默认全部）。其他状态码会直接报错，不发出请求 |
 | `--start`、`--end` | 创建日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
 | `--page` | 页码（默认 1；传 `0` 按 1 处理） |
 | `--count` | 每页条数（默认 20，最大 50，超过按 50 处理）。别名：`--size`、`--limit` |
@@ -117,8 +117,8 @@ longbridge stock-transfer in --page 2 --count 50
 | `can_modify` | 为 `1` 表示仍可在 App 内撤销或修改 |
 | `app_state`、`user_notified_broker` | `app_state` 为 App 端的步骤；只要有 `app_state` 就会有 `user_notified_broker`，为 `true` 表示你已在 App 内点击「我已通知」转出券商——这是你自己的确认，不是 Longbridge 的操作 |
 | `stocks[]` | 每只股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`、`state_label`（`processing` / `succeeded` / `failed`） |
-| `created_at`、`updated_at`、`process_at`、`exec_at` | 各时间点 |
-| `days_in_process` | 自创建到执行的天数；已撤销或失败的算到结束时，未结束的算到今天 |
+| `created_at`、`updated_at`、`process_at`、`exec_at` | 各时间点。转入记录没有 `agree_at`、`refuse_at` 和 `cancel_at` |
+| `days_in_process` | 自创建到执行的天数；已结束（已撤销、失败、已完成或部分完成）但没有执行时间的，算到最后更新时间，该时间也未知时不输出；未结束的算到今天 |
 | `remark`、`reason` | 失败或撤销原因（如有） |
 
 没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串。未设置的时间（例如尚未执行时的 `exec_at`）同样不输出。
@@ -136,13 +136,13 @@ longbridge stock-transfer out
 longbridge stock-transfer out --format json
 ```
 
-默认表格先打印总数（如有），再显示 `id`、创建时间、券商（有英文名时显示英文名）、市场、股票（代码及数量，如 `700 x200`）、状态、处理天数、是否已通知券商及原因。需要下方列出的全部字段时请使用 `--format json`。
+默认表格显示 `id`、创建时间、券商（有英文名时显示英文名）、市场、股票（代码及数量，如 `700 x200`）、状态、处理天数、是否已通知券商及原因。需要下方列出的全部字段时请使用 `--format json`。
 
 ```json
 {
   "records": [
     {
-      "id": 1000006,
+      "id": "1000006",
       "order_id": "TO000000000001",
       "market": "US",
       "broker": "示例证券有限公司",
@@ -169,8 +169,7 @@ longbridge stock-transfer out --format json
       "exec_at": "2026-09-04T16:30:00+08:00",
       "days_in_process": 3
     }
-  ],
-  "total": 1
+  ]
 }
 ```
 
@@ -200,7 +199,7 @@ longbridge stock-transfer out --page 2 --count 50
 | 参数 | 说明 |
 | --- | --- |
 | `--market` | `HK`、`US`、`CN` 或 `SG`（默认全部） |
-| `--state` | 状态码：`0` 已提交，`1` 处理中，`2` 执行中，`3` 已完成，`4` 已撤销，`5` 部分完成，`6` 失败，`7` 已拒绝（默认全部） |
+| `--state` | 状态码：`0` 已提交，`1` 处理中，`2` 执行中，`3` 已完成，`4` 已撤销，`5` 部分完成，`6` 失败，`7` 已拒绝（默认全部）。其他状态码会直接报错，不发出请求 |
 | `--start`、`--end` | 创建日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
 | `--page` | 页码（默认 1；传 `0` 按 1 处理） |
 | `--count` | 每页条数（默认 20，最大 50，超过按 50 处理）。别名：`--size`、`--limit` |
@@ -219,12 +218,12 @@ longbridge stock-transfer out --page 2 --count 50
 | `app_state`、`user_notified_broker` | 同 [`stock-transfer in`](/zh-CN/docs/cli/account/stock-transfer#stock-transfer-in)：只要有 `app_state` 就会有 `user_notified_broker` |
 | `stocks[]` | 每只股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`、`state_label`（`processing` / `succeeded` / `failed`） |
 | `created_at`、`updated_at`、`agree_at`、`refuse_at`、`cancel_at`、`process_at`、`exec_at` | 各时间点 |
-| `days_in_process` | 算法同 [`stock-transfer in`](/zh-CN/docs/cli/account/stock-transfer#stock-transfer-in) |
+| `days_in_process` | 自创建到执行的天数；已结束（已撤销、已拒绝、失败、已完成或部分完成）但没有执行时间的，算到 `cancel_at`、`refuse_at` 或最后更新时间，均未知时不输出；未结束的算到今天 |
 | `remark`、`reason` | 备注，以及拒绝或撤销原因（如有） |
 
 没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串。未设置的时间（例如未撤销申请的 `cancel_at`）同样不输出。
 
-`total` 为符合条件的记录数（服务端返回时才有）。账户持有人姓名、联系方式及证明文件不会输出。
+转出列表没有 `total`。账户持有人姓名、联系方式及证明文件不会输出。
 
 ## 权限要求
 

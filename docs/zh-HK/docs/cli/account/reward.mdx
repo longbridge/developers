@@ -94,10 +94,10 @@ longbridge reward list --page 2 --count 50
 | `record_id`、`activity_title`、`title`、`description` | 記錄 id、所屬活動，以及獎勵標題和說明 |
 | `card_type`、`card_status` | 卡券類獎勵適用 |
 | `prize_type`、`prize_type_label` | `physical` 表示寄送的實物 |
-| `amount`、`currency` | 獎勵金額 |
+| `amount`、`currency` | 獎勵金額，為十進制字符串（如 `"38"`） |
 | `status`、`status_label` | `upcoming`、`cancelled`、`exited_activity`、`unclaimed`、`issuing`、`issued`、`failed`、`exchanged`、`expired` 或 `refunded` |
-| `deliver_status`、`deliver_status_label` | 僅已發放的獎品：`not_activated`、`activated_or_shipping`、`consumed`、`address_missing`、`shipping` 等 |
-| `exit_status` | 退出狀態碼，按服務端返回原樣輸出 |
+| `deliver_status`、`deliver_status_label` | 物流狀態碼；標籤僅已發放的獎品有：`not_activated`、`activated_or_shipping`、`consumed`、`e_voucher_activating`、`e_voucher_expired_before_activation`、`e_voucher_invalid`、`address_missing`、`address_filled` 或 `shipping` |
+| `exit_status` | 退出狀態碼，按服務端返回原樣輸出；為 `0` 時不輸出 |
 | `send_time`、`start_time`、`end_time`、`effective_time`、`receive_deadline` | 各時間點 |
 
 沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。未設置的時間（例如尚未發放獎勵的 `send_time`）同樣不輸出。

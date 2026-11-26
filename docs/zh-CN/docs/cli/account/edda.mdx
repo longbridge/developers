@@ -39,7 +39,7 @@ longbridge edda list --format json
 {
   "authorizations": [
     {
-      "card_id": 100001,
+      "card_id": "100001",
       "bank": "示例银行",
       "account": "****1234",
       "card_binding": "bound",
@@ -48,7 +48,11 @@ longbridge edda list --format json
       "currency": "HKD",
       "authorization": "authorized",
       "max_amount_unlimited": true,
-      "long_term_valid": true
+      "daily_max_count_unlimited": true,
+      "long_term_valid": true,
+      "is_support": true,
+      "doc_reviewing": false,
+      "no_prior_deposit_reviewing": false
     }
   ]
 }
@@ -72,10 +76,10 @@ longbridge edda list --format json
 | `name`、`currency` | 授权名称及币种 |
 | `authorization` | `unauthorized`、`authorized`、`authorizing` 或 `failed` |
 | `failure_reason` | 授权失败时银行返回的信息 |
-| `max_amount`、`max_amount_unlimited` | 入金上限，以及是否不限额 |
+| `max_amount`、`max_amount_unlimited` | 入金上限（十进制字符串），以及是否不限额 |
 | `daily_max_count`、`daily_max_count_unlimited` | 每日入金次数上限，以及是否不限次数 |
 | `expiry_date`、`long_term_valid` | 到期日，以及是否长期有效（长期有效的授权没有 `expiry_date`） |
-| `is_support` | 为 `1` 表示银行支持此授权方式 |
+| `is_support` | 为 `true` 表示银行支持此授权方式 |
 | `doc_reviewing` | 资料审核中 |
 | `no_prior_deposit_reviewing` | 因该卡无入金记录而审核中 |
 
@@ -104,7 +108,7 @@ longbridge edda status --card-id 100001 --currency HKD --format json
 {
   "applications": [
     {
-      "id": 1000004,
+      "id": "1000004",
       "flow_id": "hk_sdda",
       "name": "eDDA",
       "currency": "HKD",
@@ -125,7 +129,7 @@ longbridge edda status --card-id 100001 --currency HKD --format json
 
 | 参数 | 说明 |
 | --- | --- |
-| `--card-id` | 银行卡 id（数字），取自 [`bank-cards`](/zh-CN/docs/cli/account/bank-cards)。必填 |
+| `--card-id` | 银行卡 id（数字），取自 [`bank-cards`](/zh-CN/docs/cli/account/bank-cards)。必填；非数字的 id 会直接报错，不发出请求 |
 | `--currency` | 授权币种，如 `HKD` 或 `USD`。必填 |
 
 ### 输出字段

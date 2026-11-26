@@ -34,11 +34,11 @@ longbridge bank-cards --format json
 {
   "cards": [
     {
-      "id": 100001,
+      "id": "100001",
       "bank": "示例銀行",
       "bank_code": "EXAMPLE1",
       "account": "****1234",
-      "region": "HK",
+      "region": "HONGKONG",
       "region_name": "香港",
       "country": "Hong Kong",
       "verification": "verified",
@@ -50,7 +50,13 @@ longbridge bank-cards --format json
           "flow_id": "hk_edda",
           "name": "eDDA",
           "currency": "HKD",
-          "authorization": "authorized"
+          "authorization": "authorized",
+          "is_support": true,
+          "max_amount_unlimited": true,
+          "daily_max_count_unlimited": true,
+          "long_term_valid": true,
+          "doc_reviewing": false,
+          "no_prior_deposit_reviewing": false
         }
       ]
     }
@@ -66,7 +72,7 @@ longbridge bank-cards --format json
 
 | 字段 | 說明 |
 | --- | --- |
-| `id` | 銀行卡 id，可傳給 [`edda status --card-id`](/zh-HK/docs/cli/account/edda#edda-status) |
+| `id` | 銀行卡 id（數字字符串），可傳給 [`edda status --card-id`](/zh-HK/docs/cli/account/edda#edda-status) |
 | `bank`、`bank_en`、`bank_code` | 銀行名稱、英文名稱及銀行代碼 |
 | `account` | 銀行賬號，**脫敏為僅顯示後 4 位**（如 `****1234`） |
 | `account_type`、`region`、`region_name`、`country` | 賬戶類型及銀行賬戶所在地（`country` 是地區，不是貨幣） |
@@ -76,7 +82,7 @@ longbridge bank-cards --format json
 | `review_days` | 卡片添加至今的天數，僅 `under_review` 時返回 |
 | `bind_tip`、`remark` | App 中展示的審核提示及備註 |
 | `created_at` | 添加時間 |
-| `auth_list[]` | 該卡的授權：`flow_id`（`hk_edda` / `hk_sdda`：eDDA，`hk_bank_sec`：銀證轉賬，`hk_fps`：FPS）、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`max_amount`、`max_amount_unlimited`、`daily_max_count`、`daily_max_count_unlimited`、`expiry_date`、`long_term_valid`、`is_support`、`doc_reviewing`、`no_prior_deposit_reviewing` |
+| `auth_list[]` | 該卡的授權：`flow_id`（`hk_edda` / `hk_sdda`：eDDA，`hk_bank_sec`：銀證轉賬，`hk_fps`：FPS）、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`max_amount`、`max_amount_unlimited`、`daily_max_count`、`daily_max_count_unlimited`、`expiry_date`、`long_term_valid`、`is_support`（為 `true` 表示銀行支持此授權方式）、`doc_reviewing`、`no_prior_deposit_reviewing` |
 
 只返回上述字段；沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串（例如卡片不在 `under_review` 時沒有 `review_days`）。完整賬號、賬戶持有人姓名、身份證明文件圖片、收款人地址及 SWIFT 信息不會輸出。只查看 eDDA 授權可使用 [`edda list`](/zh-HK/docs/cli/account/edda#edda-list)。
 

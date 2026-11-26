@@ -33,7 +33,7 @@ longbridge deposits --format json
 {
   "items": [
     {
-      "id": 1000001,
+      "id": "1000001",
       "created_at": "2026-04-30T15:57:49+08:00",
       "currency": "USD",
       "amount": "3000.00",
@@ -41,6 +41,7 @@ longbridge deposits --format json
       "state": "已入賬",
       "state_code": 1,
       "state_label": "credited",
+      "sub_state_code": 0,
       "bank_operation_type_name": "eDDA",
       "can_cancel": false,
       "voucher_count": 0
@@ -97,7 +98,7 @@ longbridge deposits --page 2 --count 50
 | --- | --- |
 | `id`、`reference_no` | 入金 id 及參考號 |
 | `created_at`、`updated_at` | 申請時間及最後更新時間 |
-| `currency`、`amount` | 你通知 / 申請的金額 |
+| `currency`、`amount` | 你通知 / 申請的金額。金額均為十進制字符串（如 `"3000.00"`） |
 | `receivable_amount` | Longbridge 銀行實際到賬金額；`0` 表示尚未收到 |
 | `state`、`state_code`、`state_label` | 狀態文案、狀態碼及標籤（`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`） |
 | `sub_state_code` | 子狀態碼 |

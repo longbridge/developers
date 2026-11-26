@@ -38,7 +38,7 @@ The default table prints the total, then `id`, created at, broker (English name 
 {
   "records": [
     {
-      "id": 1000005,
+      "id": "1000005",
       "order_id": "TI000000000001",
       "market": "HK",
       "broker": "Example Securities Ltd",
@@ -98,7 +98,7 @@ longbridge stock-transfer in --page 2 --count 50
 | Flag | Description |
 | --- | --- |
 | `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
-| `--state` | State code: `0` submitted, `1` cancelled, `3` completed (shares received), `5` processing, `7` partially completed, `8` failed (default: all) |
+| `--state` | State code: `0` submitted, `1` cancelled, `3` completed (shares received), `5` processing, `7` partially completed, `8` failed (default: all). Any other code is rejected with an error before any request is sent |
 | `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
 | `--page` | Page number (default: 1; `0` is read as 1) |
 | `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
@@ -117,8 +117,8 @@ Each entry in `records[]` has:
 | `can_modify` | `1` when the application can still be cancelled or changed in the app |
 | `app_state`, `user_notified_broker` | `app_state` is the app-side step; `user_notified_broker` (present whenever `app_state` is) is `true` when you tapped "I have notified the broker" in the app — your own confirmation, not a Longbridge action |
 | `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state`, `state_label` (`processing` / `succeeded` / `failed`) |
-| `created_at`, `updated_at`, `process_at`, `exec_at` | Timestamps |
-| `days_in_process` | Days from creation until execution; for a cancelled or failed application until it ended; for an open one until today |
+| `created_at`, `updated_at`, `process_at`, `exec_at` | Timestamps. Transfer-in records have no `agree_at`, `refuse_at` or `cancel_at` |
+| `days_in_process` | Days from creation until execution; for a finished application (cancelled, failed, completed or partially completed) without an execution time, until its last update — absent when that is unknown too; for an open one until today |
 | `remark`, `reason` | The failure or cancellation reason, when there is one |
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `exec_at` before execution) are omitted the same way.
@@ -136,13 +136,13 @@ longbridge stock-transfer out
 longbridge stock-transfer out --format json
 ```
 
-The default table prints the total (when there is one), then `id`, created at, broker (English name when available), market, stocks (code and quantity, e.g. `700 x200`), state, days in process, whether you notified the broker, and reason. Use `--format json` for the fields listed below.
+The default table shows `id`, created at, broker (English name when available), market, stocks (code and quantity, e.g. `700 x200`), state, days in process, whether you notified the broker, and reason. Use `--format json` for the fields listed below.
 
 ```json
 {
   "records": [
     {
-      "id": 1000006,
+      "id": "1000006",
       "order_id": "TO000000000001",
       "market": "US",
       "broker": "Example Securities Ltd",
@@ -169,8 +169,7 @@ The default table prints the total (when there is one), then `id`, created at, b
       "exec_at": "2026-09-04T16:30:00+08:00",
       "days_in_process": 3
     }
-  ],
-  "total": 1
+  ]
 }
 ```
 
@@ -200,7 +199,7 @@ longbridge stock-transfer out --page 2 --count 50
 | Flag | Description |
 | --- | --- |
 | `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
-| `--state` | State code: `0` submitted, `1` processing, `2` executing, `3` completed, `4` cancelled, `5` partially completed, `6` failed, `7` rejected (default: all) |
+| `--state` | State code: `0` submitted, `1` processing, `2` executing, `3` completed, `4` cancelled, `5` partially completed, `6` failed, `7` rejected (default: all). Any other code is rejected with an error before any request is sent |
 | `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
 | `--page` | Page number (default: 1; `0` is read as 1) |
 | `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
@@ -219,12 +218,12 @@ Each entry in `records[]` has:
 | `app_state`, `user_notified_broker` | As in [`stock-transfer in`](/docs/cli/account/stock-transfer#stock-transfer-in): `user_notified_broker` is present whenever `app_state` is |
 | `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state`, `state_label` (`processing` / `succeeded` / `failed`) |
 | `created_at`, `updated_at`, `agree_at`, `refuse_at`, `cancel_at`, `process_at`, `exec_at` | Timestamps |
-| `days_in_process` | Computed as in [`stock-transfer in`](/docs/cli/account/stock-transfer#stock-transfer-in) |
+| `days_in_process` | Days from creation until execution; for a finished application (cancelled, rejected, failed, completed or partially completed) without an execution time, until `cancel_at`, `refuse_at` or the last update — absent when none of these is known; for an open one until today |
 | `remark`, `reason` | Remark, and the rejection or cancellation reason, when there is one |
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `cancel_at` on an application that was not cancelled) are omitted the same way.
 
-`total` is the number of matching records, when the service reports it. The account holder's name, contact details and proof documents are never printed.
+The transfer-out list has no `total`. The account holder's name, contact details and proof documents are never printed.
 
 ## Requirements
 
