@@ -1,0 +1,33 @@
+---
+title: 'Release Notes'
+sidebar_label: 'Release Notes'
+sidebar_position: 100
+sidebar_icon: newspaper
+description: 'What changed in each Longbridge MCP server release: new tools, fixes, and changes to trading confirmation.'
+---
+
+# Release Notes
+
+### Next release
+
+- **Agent Skills served over MCP** — clients that support the MCP skills extension (such as Claude) can load the [Longbridge skills](https://github.com/longbridge/skills) straight from `mcp.longbridge.com`. Nothing to install, and the skills update with the server
+- **Order confirmation by the user, not the model** — on clients that speak MCP `2026-07-28` and support form input, `submit_order`, `replace_order` and `cancel_order` show the order in a confirmation form. The order is placed only when you confirm that form; declining or closing it places nothing, and editing the order brings up a new form. Other clients keep the two-step confirmation-code flow. Grid and fund orders still use confirmation codes
+- **MCP `2026-07-28` protocol** — the server also accepts the new protocol version (`server/discover`, no initialize handshake). Existing clients on older versions keep working
+
+### [v0.17.1](https://github.com/longbridge/longbridge-mcp/releases/tag/v0.17.1)
+
+- **Fix: `finance_calendar`** drops dates outside `start`..`end` and keeps the per-date count
+- **Fix: `ipo`** returns the other market when one market fails; `ipo_detail` output is cleaned up
+
+### [v0.17.0](https://github.com/longbridge/longbridge-mcp/releases/tag/v0.17.0)
+
+- **New `risk_assessment` tool** — returns the account's risk level, score, assessment date, professional investor status and the strategy risk levels it may trade
+- **TLS trusts the operating system's certificate store** in addition to the bundled roots
+- **Fix: `calc_indexes`** returns only the requested indexes, with `null` when one is unavailable
+- **Fix: `financial_statement`** returns the newest periods, trims line items and requires `kind`
+
+### [v0.16.5](https://github.com/longbridge/longbridge-mcp/releases/tag/v0.16.5)
+
+- **Fix: a `_jq` filter could crash the server** — filters now run in a sandboxed worker with memory, CPU and time limits, so a broken filter fails only its own call. `env`, `debug`, `stderr`, `halt` and `halt_error` are disabled, expressions are capped at 4096 characters, and a filter is stopped after 2 seconds
+- **New error codes** `jq_sandbox_busy` and `jq_sandbox_unavailable` (`recoverable: backoff`)
+- **Request bodies are capped at 1 MiB**; larger bodies get 413
