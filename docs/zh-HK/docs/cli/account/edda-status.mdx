@@ -1,0 +1,66 @@
+---
+title: 'edda-status'
+sidebar_label: 'edda-status'
+sidebar_position: 24
+---
+
+# longbridge edda-status
+
+列出某張綁定銀行卡在某個幣種下提交過的 eDDA 授權申請。
+
+:::info 僅支持香港（AP）賬戶
+此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+:::
+
+多數 eDDA 授權（例如銀行端推送的授權）沒有申請單，因此該列表通常為空。要確認某張卡是否已授權，請先使用 [`edda`](/zh-HK/docs/cli/account/edda)；只在需要查申請單時使用本命令。
+
+## 基本用法
+
+```bash
+longbridge edda-status --card-id 102345 --currency HKD
+```
+
+## 示例
+
+### 查詢某張卡的申請
+
+```bash
+# 銀行卡 id 取自 `longbridge bank-cards`（id）或 `longbridge edda`（card_id）
+longbridge edda-status --card-id 102345 --currency HKD
+# 美元授權，JSON 輸出
+longbridge edda-status --card-id 102345 --currency USD --format json
+```
+
+```json
+{
+  "applications": [
+    {
+      "id": 88001,
+      "flow_id": "hk_sdda",
+      "name": "eDDA",
+      "currency": "HKD",
+      "authorization": "failed",
+      "failure_reason": "Account name does not match",
+      "created_at": "2026-10-08T14:20:05+08:00",
+      "updated_at": "2026-10-09T09:12:40+08:00"
+    }
+  ]
+}
+```
+
+列表為空表示該卡在該幣種下沒有提交過申請，此時該卡當前的 eDDA 狀態請看 [`edda`](/zh-HK/docs/cli/account/edda)。
+
+## 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--card-id` | 銀行卡 id（數字），取自 [`bank-cards`](/zh-HK/docs/cli/account/bank-cards)。必填 |
+| `--currency` | 授權幣種，如 `HKD` 或 `USD`。必填 |
+
+## 輸出字段
+
+`applications[]` 中每項包含 `id`、`flow_id`、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`created_at` 和 `updated_at`。輸出中不含銀行賬號。
+
+## 權限要求
+
+需要 OAuth 賬戶權限。參見[賬戶權限設置](/zh-HK/docs/trade/trade-overview)。

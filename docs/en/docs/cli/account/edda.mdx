@@ -1,0 +1,75 @@
+---
+title: 'edda'
+sidebar_label: 'edda'
+sidebar_position: 23
+---
+
+# longbridge edda
+
+List the eDDA (electronic direct debit authorization) of every bank card linked to your account — whether each card is authorized, the deposit limits, the expiry and any failure reason from the bank.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+:::
+
+## Basic Usage
+
+```bash
+longbridge edda
+```
+
+## Examples
+
+### Check eDDA authorizations
+
+```bash
+longbridge edda
+# Output as JSON for scripting
+longbridge edda --format json
+```
+
+```json
+{
+  "authorizations": [
+    {
+      "card_id": 102345,
+      "bank": "China Merchants Bank",
+      "account": "****9779",
+      "card_binding": "bound",
+      "flow": "hk_edda",
+      "name": "eDDA",
+      "currency": "HKD",
+      "authorization": "authorized"
+    }
+  ]
+}
+```
+
+An empty list means no linked card has an eDDA authorization.
+
+## Output fields
+
+Each entry in `authorizations[]` has:
+
+| Field | Description |
+| --- | --- |
+| `card_id` | Bank card id (same as `id` in [`bank-cards`](/docs/cli/account/bank-cards)) |
+| `bank`, `bank_en` | Bank name and English name |
+| `account` | Account number, **masked to the last 4 digits** |
+| `card_binding` | Card binding state: `binding`, `bound` or `failed` |
+| `flow` | `hk_edda` (authorized at the bank) or `hk_sdda` (authorized in the app) |
+| `name`, `currency` | Authorization name and currency |
+| `authorization` | `unauthorized`, `authorized`, `authorizing` or `failed` |
+| `failure_reason` | The bank's message when the authorization failed |
+| `max_amount`, `max_amount_unlimited` | Deposit limit, and whether it is unlimited |
+| `daily_max_count`, `daily_max_count_unlimited` | Daily deposit count limit, and whether it is unlimited |
+| `expiry_date`, `long_term_valid` | Expiry date, and whether the authorization is long-term valid |
+| `is_support` | `1` when the bank supports this flow |
+| `doc_reviewing` | Documents are under review |
+| `no_prior_deposit_reviewing` | Under review because the card has no prior deposit |
+
+This is the current state of each card. [`edda-status`](/docs/cli/account/edda-status) lists only the applications filed for one card, and is usually empty.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

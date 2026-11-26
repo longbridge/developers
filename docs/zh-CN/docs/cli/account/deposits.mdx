@@ -6,22 +6,16 @@ sidebar_position: 22
 
 # longbridge deposits
 
-查看入金历史记录，支持按状态和货币筛选。
+查看入金历史记录（按时间倒序），支持按状态、货币和日期筛选。
+
+:::info 仅支持香港（AP）账户
+此命令读取 AP（香港）数据中心的数据，仅支持香港账户。输出中的时间均为香港时间（+08:00），`--start` / `--end` 传入的日期也按香港日期处理。
+:::
 
 ## 基本用法
 
 ```bash
 longbridge deposits
-```
-
-```
-Total: 3
-
-| id      | date                 | amount   | currency | type | state  |
-|---------|----------------------|----------|----------|------|--------|
-| 2096375 | 2026-04-30T07:57:49Z | 3000.00  | USD      | 电汇 | 已入账 |
-| 2036889 | 2026-03-27T02:54:49Z | 10000.00 | USD      | 电汇 | 已入账 |
-| 1980183 | 2026-03-02T02:32:11Z | 3132.60  | USD      | 电汇 | 已入账 |
 ```
 
 ## 示例
@@ -30,14 +24,38 @@ Total: 3
 
 ```bash
 longbridge deposits
+longbridge deposits --format json
+```
+
+```json
+{
+  "items": [
+    {
+      "id": 2096375,
+      "created_at": "2026-04-30T15:57:49+08:00",
+      "currency": "USD",
+      "amount": "3000.00",
+      "receivable_amount": "3000.00",
+      "state": "已入账",
+      "state_code": 1,
+      "state_label": "credited",
+      "bank_operation_type_name": "eDDA",
+      "can_cancel": false,
+      "voucher_count": 0
+    }
+  ],
+  "has_more": false
+}
 ```
 
 ### 按状态筛选
 
 ```bash
-# 0=待处理, 1=已入账, 2=失败
-longbridge deposits --states 1
+# 0=处理中, 1=已入账, 2=失败, 3=已撤销, 4=已失效, 5=已驳回
+longbridge deposits --states 0,2
 ```
+
+`--states` 接受上述数字状态码，以逗号分隔。
 
 ### 按货币筛选
 
@@ -45,11 +63,45 @@ longbridge deposits --states 1
 longbridge deposits --currencies HKD,USD
 ```
 
+### 按申请日期筛选
+
+```bash
+longbridge deposits --start 2026-04-01 --end 2026-04-30
+```
+
 ### 翻页
 
 ```bash
 longbridge deposits --page 2 --count 50
 ```
+
+## 参数
+
+| 参数 | 说明 |
+| --- | --- |
+| `--states` | 逗号分隔的状态码：`0` 处理中，`1` 已入账，`2` 失败，`3` 已撤销，`4` 已失效，`5` 已驳回 |
+| `--currencies` | 逗号分隔的货币代码，如 `HKD,USD` |
+| `--start`、`--end` | 申请日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 页码（默认 1） |
+| `--count` | 每页条数（默认 20） |
+
+## 输出字段
+
+`items[]` 中每项包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `id`、`reference_no` | 入金 id 及参考号 |
+| `created_at`、`updated_at` | 申请时间及最后更新时间 |
+| `currency`、`amount` | 你通知 / 申请的金额 |
+| `receivable_amount` | Longbridge 银行实际到账金额；`0` 表示尚未收到 |
+| `state`、`state_code`、`state_label` | 状态文案、状态码及标签（`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`） |
+| `sub_state_code` | 子状态码 |
+| `bank_operation_type_name` | 入金方式，如 eDDA、FPS、银行转账 |
+| `can_cancel` | 是否仍可撤销 |
+| `voucher_count` | 已上传凭证张数 |
+
+`has_more` 为 `true` 表示返回了满页，可继续取下一页。没有可靠的总条数。凭证图片不会输出，只返回张数。
 
 ## 权限要求
 

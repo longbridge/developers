@@ -1,0 +1,101 @@
+---
+title: 'stock-transfers-out'
+sidebar_label: 'stock-transfers-out'
+sidebar_position: 26
+---
+
+# longbridge stock-transfers-out
+
+List your stock transfer-out applications — shares moving from your Longbridge account to another broker — newest first.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+:::
+
+## Basic Usage
+
+```bash
+longbridge stock-transfers-out
+```
+
+## Examples
+
+### List all transfer-out applications
+
+```bash
+longbridge stock-transfers-out
+longbridge stock-transfers-out --format json
+```
+
+```json
+{
+  "records": [
+    {
+      "id": 40987,
+      "broker": "HSBC Broking",
+      "code": "B05678",
+      "account": "****4321",
+      "state": "Completed",
+      "state_code": 3,
+      "state_label": "completed",
+      "stocks": [
+        { "code": "AAPL", "name": "Apple", "amount": "50", "state": 1, "state_label": "succeeded" }
+      ],
+      "created_at": "2026-09-01T11:02:00+08:00",
+      "exec_at": "2026-09-04T16:30:00+08:00",
+      "days_in_process": 3
+    }
+  ]
+}
+```
+
+### Filter by market and state
+
+```bash
+# Submitted US transfers (state 0 — the only state that can still be cancelled)
+longbridge stock-transfers-out --market US --state 0
+```
+
+### Filter by creation date
+
+```bash
+longbridge stock-transfers-out --start 2026-09-01 --end 2026-09-30
+```
+
+### Paginate
+
+```bash
+longbridge stock-transfers-out --page 2 --size 50
+```
+
+## Options
+
+| Flag | Description |
+| --- | --- |
+| `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
+| `--state` | State code: `0` submitted, `1` processing, `2` executing, `3` completed, `4` cancelled, `5` partially completed, `6` failed, `7` rejected (default: all) |
+| `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
+| `--page` | Page number (default: 1) |
+| `--size` | Records per page (default: 20, max 50) |
+
+## Output fields
+
+Each entry in `records[]` has:
+
+| Field | Description |
+| --- | --- |
+| `id` | Application id |
+| `broker`, `broker_en`, `code` | The receiving broker's name, English name and broker code |
+| `account` | Your account at the other broker, **masked to the last 4 digits** |
+| `state`, `state_code`, `state_label` | Status text, code, and label (`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`). Only state `0` can still be cancelled |
+| `app_state`, `user_notified_broker` | As in [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) |
+| `stocks[]` | `code`, `name`, `amount`, `state`, `state_label` (`processing` / `succeeded` / `failed`) for each stock |
+| `created_at`, `updated_at`, `agree_at`, `refuse_at`, `cancel_at`, `process_at`, `exec_at` | Timestamps; unset placeholders are omitted |
+| `days_in_process` | Computed as in [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) |
+| `reason` | The rejection or cancellation reason, when there is one |
+
+The account holder's name, contact details and proof documents are never printed.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

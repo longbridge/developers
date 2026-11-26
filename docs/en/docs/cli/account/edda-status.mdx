@@ -1,0 +1,66 @@
+---
+title: 'edda-status'
+sidebar_label: 'edda-status'
+sidebar_position: 24
+---
+
+# longbridge edda-status
+
+List the eDDA authorization applications filed for one linked bank card in one currency.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+:::
+
+Most eDDA authorizations — for example one pushed by the bank — have no application, so this list is usually empty. To see whether a card is authorized, use [`edda`](/docs/cli/account/edda) first; use this command only to look up an application.
+
+## Basic Usage
+
+```bash
+longbridge edda-status --card-id 102345 --currency HKD
+```
+
+## Examples
+
+### Look up the applications for a card
+
+```bash
+# Card id comes from `longbridge bank-cards` (id) or `longbridge edda` (card_id)
+longbridge edda-status --card-id 102345 --currency HKD
+# USD authorization, as JSON
+longbridge edda-status --card-id 102345 --currency USD --format json
+```
+
+```json
+{
+  "applications": [
+    {
+      "id": 88001,
+      "flow_id": "hk_sdda",
+      "name": "eDDA",
+      "currency": "HKD",
+      "authorization": "failed",
+      "failure_reason": "Account name does not match",
+      "created_at": "2026-10-08T14:20:05+08:00",
+      "updated_at": "2026-10-09T09:12:40+08:00"
+    }
+  ]
+}
+```
+
+An empty list means no application was filed for that card and currency; the card's current eDDA state is then in [`edda`](/docs/cli/account/edda).
+
+## Options
+
+| Flag | Description |
+| --- | --- |
+| `--card-id` | Bank card id (numeric) from [`bank-cards`](/docs/cli/account/bank-cards). Required |
+| `--currency` | Authorized currency, e.g. `HKD` or `USD`. Required |
+
+## Output fields
+
+Each entry in `applications[]` has `id`, `flow_id`, `name`, `currency`, `authorization` (`unauthorized` / `authorized` / `authorizing` / `failed`), `failure_reason`, `created_at` and `updated_at`. The output carries no account number.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

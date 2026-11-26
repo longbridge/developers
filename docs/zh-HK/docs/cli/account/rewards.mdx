@@ -1,0 +1,99 @@
+---
+title: 'rewards'
+sidebar_label: 'rewards'
+sidebar_position: 27
+---
+
+# longbridge rewards
+
+列出賬戶獲得的活動獎勵發放記錄——現金、卡券、禮品及任務獎勵，按時間倒序。
+
+:::info 僅支持香港（AP）賬戶
+此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00），`--start` / `--end` 傳入的日期也按香港日期處理。
+:::
+
+## 基本用法
+
+```bash
+longbridge rewards
+```
+
+## 示例
+
+### 查看獎勵記錄
+
+```bash
+longbridge rewards
+longbridge rewards --format json
+```
+
+```json
+{
+  "rewards": [
+    {
+      "reward_type": 0,
+      "reward_type_label": "cash",
+      "record_id": "7300125",
+      "activity_title": "新客入金獎勵",
+      "title": "100 港元現金獎勵",
+      "amount": "100",
+      "currency": "HKD",
+      "status": 12,
+      "status_label": "issued",
+      "send_time": "2026-10-12T09:00:00+08:00"
+    }
+  ],
+  "total": 1
+}
+```
+
+### 按類型篩選
+
+```bash
+# cash、gift、coupon 或 task
+longbridge rewards --kind coupon
+```
+
+### 按日期範圍查找
+
+```bash
+longbridge rewards --start 2026-10-01 --end 2026-10-31
+```
+
+帶 `--start` / `--end` 時，命令按 `send_time` 篩選，並自動翻頁讀取最多 300 條記錄（忽略 `--page`）。此時輸出以 `searched_all` 代替 `total`：為 `false` 表示更早的記錄未讀取，要找的獎勵可能在其中。尚未發放（無 `send_time`）的記錄總會包含在內。
+
+### 翻頁
+
+```bash
+longbridge rewards --page 2 --size 50
+```
+
+## 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--kind` | `cash`、`gift`、`coupon` 或 `task`（預設全部） |
+| `--start`、`--end` | 按 `send_time` 篩選的發放日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 頁碼（預設 1；帶 `--start` / `--end` 時忽略） |
+| `--size` | 每頁條數（預設 20，最大 50） |
+
+## 輸出字段
+
+`rewards[]` 中每項包含：
+
+| 字段 | 說明 |
+| --- | --- |
+| `reward_type`、`reward_type_label` | `cash`、`gift`、`coupon` 或 `task`（與 `--kind` 取值一致） |
+| `record_id`、`activity_title`、`title`、`description` | 記錄 id、所屬活動，以及獎勵標題和說明 |
+| `card_type`、`card_status` | 卡券類獎勵適用 |
+| `prize_type`、`prize_type_label` | `physical` 表示寄送的實物 |
+| `amount`、`currency` | 獎勵金額 |
+| `status`、`status_label` | `upcoming`、`cancelled`、`exited_activity`、`unclaimed`、`issuing`、`issued`、`failed`、`exchanged`、`expired` 或 `refunded` |
+| `deliver_status`、`deliver_status_label` | 僅已發放的獎品：`not_activated`、`activated_or_shipping`、`consumed`、`address_missing`、`shipping` 等 |
+| `send_time`、`start_time`、`end_time`、`effective_time`、`receive_deadline` | 各時間點；未設置的佔位值不輸出 |
+
+`total` 為所選類型的全部記錄數（僅不帶 `--start` / `--end` 時返回）。一筆獎勵由 `activity_title` 和 `send_time` 確定；獎勵發放的卡券用 [`coupons`](/zh-HK/docs/cli/account/coupons) 查看。兌換碼、券密、收貨地址及電話不會輸出。
+
+## 權限要求
+
+需要 OAuth 賬戶權限。參見[賬戶權限設置](/zh-HK/docs/trade/trade-overview)。

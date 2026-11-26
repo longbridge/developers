@@ -6,22 +6,16 @@ sidebar_position: 22
 
 # longbridge deposits
 
-View your deposit history with optional filtering by state and currency.
+View your deposit history, newest first, with optional filtering by state, currency and date.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+:::
 
 ## Basic Usage
 
 ```bash
 longbridge deposits
-```
-
-```
-Total: 3
-
-| id      | date                 | amount   | currency | type | state    |
-|---------|----------------------|----------|----------|------|----------|
-| 2096375 | 2026-04-30T07:57:49Z | 3000.00  | USD      | Wire | Credited |
-| 2036889 | 2026-03-27T02:54:49Z | 10000.00 | USD      | Wire | Credited |
-| 1980183 | 2026-03-02T02:32:11Z | 3132.60  | USD      | Wire | Credited |
 ```
 
 ## Examples
@@ -30,14 +24,38 @@ Total: 3
 
 ```bash
 longbridge deposits
+longbridge deposits --format json
+```
+
+```json
+{
+  "items": [
+    {
+      "id": 2096375,
+      "created_at": "2026-04-30T15:57:49+08:00",
+      "currency": "USD",
+      "amount": "3000.00",
+      "receivable_amount": "3000.00",
+      "state": "Credited",
+      "state_code": 1,
+      "state_label": "credited",
+      "bank_operation_type_name": "eDDA",
+      "can_cancel": false,
+      "voucher_count": 0
+    }
+  ],
+  "has_more": false
+}
 ```
 
 ### Filter by state
 
 ```bash
-# 0=pending, 1=credited, 2=failed
-longbridge deposits --states 1
+# 0=processing, 1=credited, 2=failed, 3=cancelled, 4=invalidated, 5=rejected
+longbridge deposits --states 0,2
 ```
+
+`--states` takes the numeric codes above, comma-separated.
 
 ### Filter by currency
 
@@ -45,11 +63,45 @@ longbridge deposits --states 1
 longbridge deposits --currencies HKD,USD
 ```
 
+### Filter by application date
+
+```bash
+longbridge deposits --start 2026-04-01 --end 2026-04-30
+```
+
 ### Paginate
 
 ```bash
 longbridge deposits --page 2 --count 50
 ```
+
+## Options
+
+| Flag | Description |
+| --- | --- |
+| `--states` | Comma-separated state codes: `0` processing, `1` credited, `2` failed, `3` cancelled, `4` invalidated, `5` rejected |
+| `--currencies` | Comma-separated currency codes, e.g. `HKD,USD` |
+| `--start`, `--end` | Application date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
+| `--page` | Page number (default: 1) |
+| `--count` | Records per page (default: 20) |
+
+## Output fields
+
+Each entry in `items[]` has:
+
+| Field | Description |
+| --- | --- |
+| `id`, `reference_no` | Deposit id and reference number |
+| `created_at`, `updated_at` | When the deposit was applied for and last updated |
+| `currency`, `amount` | Amount you notified / applied for |
+| `receivable_amount` | Amount actually received by Longbridge's bank; `0` means not received yet |
+| `state`, `state_code`, `state_label` | Status text, code, and label (`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`) |
+| `sub_state_code` | Sub-state code |
+| `bank_operation_type_name` | Deposit method, e.g. eDDA, FPS, bank transfer |
+| `can_cancel` | Whether the deposit can still be cancelled |
+| `voucher_count` | Number of receipts uploaded |
+
+`has_more` is `true` when a full page came back — ask for the next page. There is no reliable total count. Receipt images are never printed, only their count.
 
 ## Requirements
 

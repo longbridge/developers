@@ -6,19 +6,16 @@ sidebar_position: 20
 
 # longbridge bank-cards
 
-List the bank cards linked to your Longbridge account.
+List the bank cards linked to your Longbridge account, with each card's review state and its authorizations (eDDA, bank-securities transfer, FPS).
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+:::
 
 ## Basic Usage
 
 ```bash
 longbridge bank-cards
-```
-
-```
-| bank                         | account          | currency | swift    | region         | status |
-|------------------------------|------------------|----------|----------|----------------|--------|
-| DBS Bank                     | 2712065366       | SGD      | DBSSSGSG | Singapore      | active |
-| China Merchants Bank         | 6212998605139779 | ALL      | CMBCHKHH | Hong Kong      | active |
 ```
 
 ## Examples
@@ -27,10 +24,57 @@ longbridge bank-cards
 
 ```bash
 longbridge bank-cards
+# Output as JSON for scripting
 longbridge bank-cards --format json
 ```
 
-Shows all linked bank cards with bank name, masked account number, currency, SWIFT code, and status.
+```json
+{
+  "cards": [
+    {
+      "id": 102345,
+      "bank": "China Merchants Bank",
+      "bank_code": "CMBCHKHH",
+      "account": "****9779",
+      "region": "HK",
+      "region_name": "Hong Kong",
+      "country": "Hong Kong",
+      "verification": "verified",
+      "witness": "witnessed",
+      "binding": "bound",
+      "created_at": "2026-03-02T10:32:11+08:00",
+      "auth_list": [
+        {
+          "flow_id": "hk_edda",
+          "name": "eDDA",
+          "currency": "HKD",
+          "authorization": "authorized"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Output fields
+
+Each entry in `cards[]` has:
+
+| Field | Description |
+| --- | --- |
+| `id` | Bank card id — pass it to [`edda-status --card-id`](/docs/cli/account/edda-status) |
+| `bank`, `bank_en`, `bank_code` | Bank name, English name and bank code |
+| `account` | Account number, **masked to the last 4 digits** (e.g. `****9779`) |
+| `account_type`, `region`, `region_name`, `country` | Account type and where the bank account is held (`country` is a place, not a currency) |
+| `verification` | `unverified` (not verified yet — a deposit from this card, or an eDDA / bank-securities authorization, verifies it), `under_review` (manual review after binding; the card cannot be used meanwhile) or `verified` |
+| `witness` | `not_required`, `pending` or `witnessed` |
+| `binding` | `binding`, `bound` or `failed` |
+| `review_days` | Days since the card was added — only while `under_review` |
+| `bind_tip`, `remark` | Review hint shown in the app, and remark |
+| `created_at` | When the card was added |
+| `auth_list[]` | Authorizations on the card: `flow_id` (`hk_edda` / `hk_sdda`: eDDA, `hk_bank_sec`: bank-securities transfer, `hk_fps`: FPS), `name`, `currency`, `authorization` (`unauthorized` / `authorized` / `authorizing` / `failed`), `failure_reason`, `max_amount`, `max_amount_unlimited`, `daily_max_count`, `daily_max_count_unlimited`, `expiry_date`, `long_term_valid`, `is_support`, `doc_reviewing`, `no_prior_deposit_reviewing` |
+
+Only the fields above are returned. The full account number, ID document images and the payee address are never printed. To look at eDDA authorizations only, use [`edda`](/docs/cli/account/edda).
 
 ## Requirements
 

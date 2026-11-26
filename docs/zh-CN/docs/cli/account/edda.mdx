@@ -1,0 +1,75 @@
+---
+title: 'edda'
+sidebar_label: 'edda'
+sidebar_position: 23
+---
+
+# longbridge edda
+
+列出账户下每张绑定银行卡的 eDDA（电子直接扣款授权）：是否已授权、入金限额、有效期，以及银行返回的失败原因。
+
+:::info 仅支持香港（AP）账户
+此命令读取 AP（香港）数据中心的数据，仅支持香港账户。输出中的时间均为香港时间（+08:00）。
+:::
+
+## 基本用法
+
+```bash
+longbridge edda
+```
+
+## 示例
+
+### 查看 eDDA 授权
+
+```bash
+longbridge edda
+# JSON 输出，适合脚本使用
+longbridge edda --format json
+```
+
+```json
+{
+  "authorizations": [
+    {
+      "card_id": 102345,
+      "bank": "招商银行",
+      "account": "****9779",
+      "card_binding": "bound",
+      "flow": "hk_edda",
+      "name": "eDDA",
+      "currency": "HKD",
+      "authorization": "authorized"
+    }
+  ]
+}
+```
+
+列表为空表示没有任何绑定银行卡做过 eDDA 授权。
+
+## 输出字段
+
+`authorizations[]` 中每项包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `card_id` | 银行卡 id（与 [`bank-cards`](/zh-CN/docs/cli/account/bank-cards) 中的 `id` 相同） |
+| `bank`、`bank_en` | 银行名称及英文名称 |
+| `account` | 银行账号，**脱敏为仅显示后 4 位** |
+| `card_binding` | 绑卡状态：`binding`、`bound` 或 `failed` |
+| `flow` | `hk_edda`（在银行授权）或 `hk_sdda`（在 App 内授权） |
+| `name`、`currency` | 授权名称及币种 |
+| `authorization` | `unauthorized`、`authorized`、`authorizing` 或 `failed` |
+| `failure_reason` | 授权失败时银行返回的信息 |
+| `max_amount`、`max_amount_unlimited` | 入金上限，以及是否不限额 |
+| `daily_max_count`、`daily_max_count_unlimited` | 每日入金次数上限，以及是否不限次数 |
+| `expiry_date`、`long_term_valid` | 到期日，以及是否长期有效 |
+| `is_support` | 为 `1` 表示银行支持此授权方式 |
+| `doc_reviewing` | 资料审核中 |
+| `no_prior_deposit_reviewing` | 因该卡无入金记录而审核中 |
+
+这里是每张卡的当前状态。[`edda-status`](/zh-CN/docs/cli/account/edda-status) 只列出某张卡提交过的申请，通常为空。
+
+## 权限要求
+
+需要 OAuth 账户权限。参见[账户权限设置](/zh-CN/docs/trade/trade-overview)。

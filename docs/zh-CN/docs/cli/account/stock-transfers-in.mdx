@@ -1,0 +1,107 @@
+---
+title: 'stock-transfers-in'
+sidebar_label: 'stock-transfers-in'
+sidebar_position: 25
+---
+
+# longbridge stock-transfers-in
+
+列出股票转入申请（从其他券商转入 Longbridge 账户），按时间倒序。
+
+:::info 仅支持香港（AP）账户
+此命令读取 AP（香港）数据中心的数据，仅支持香港账户。输出中的时间均为香港时间（+08:00），`--start` / `--end` 传入的日期也按香港日期处理。
+:::
+
+## 基本用法
+
+```bash
+longbridge stock-transfers-in
+```
+
+## 示例
+
+### 查看全部转入申请
+
+```bash
+longbridge stock-transfers-in
+longbridge stock-transfers-in --format json
+```
+
+```json
+{
+  "records": [
+    {
+      "id": 51234,
+      "order_id": "TI202611050001",
+      "market": "HK",
+      "broker": "富途证券",
+      "code": "B01234",
+      "account": "****5678",
+      "state": "处理中",
+      "state_code": 5,
+      "state_label": "processing",
+      "can_modify": 0,
+      "user_notified_broker": true,
+      "stocks": [
+        { "code": "700", "name": "腾讯控股", "amount": "200", "state": 0, "state_label": "processing" }
+      ],
+      "created_at": "2026-11-05T10:15:00+08:00",
+      "days_in_process": 21
+    }
+  ],
+  "total": 1
+}
+```
+
+### 按市场和状态筛选
+
+```bash
+# 仍在处理中（状态 5）的港股转入
+longbridge stock-transfers-in --market HK --state 5
+```
+
+### 按创建日期筛选
+
+```bash
+longbridge stock-transfers-in --start 2026-10-01 --end 2026-10-31
+```
+
+### 翻页
+
+```bash
+longbridge stock-transfers-in --page 2 --size 50
+```
+
+## 参数
+
+| 参数 | 说明 |
+| --- | --- |
+| `--market` | `HK`、`US`、`CN` 或 `SG`（默认全部） |
+| `--state` | 状态码：`0` 已提交，`1` 已撤销，`3` 已完成（已入仓），`5` 处理中，`7` 部分完成，`8` 失败（默认全部） |
+| `--start`、`--end` | 创建日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 页码（默认 1） |
+| `--size` | 每页条数（默认 20，最大 50） |
+
+## 输出字段
+
+`records[]` 中每项包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `id`、`order_id` | 申请 id 及单号 |
+| `market` | 股票所属市场 |
+| `broker`、`broker_en`、`code` | 对方券商名称、英文名称及券商代码 |
+| `account` | 你在对方券商的账号，**脱敏为仅显示后 4 位** |
+| `state`、`state_code`、`state_label` | 状态文案、状态码及标签（`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`） |
+| `can_modify` | 为 `1` 表示仍可在 App 内撤销或修改 |
+| `app_state`、`user_notified_broker` | `user_notified_broker` 为 `true` 表示你已在 App 内点击「我已通知」转出券商——这是你自己的确认，不是 Longbridge 的操作 |
+| `stocks[]` | 每只股票的 `code`、`name`、`amount`、`state`、`state_label`（`processing` / `succeeded` / `failed`） |
+| `created_at`、`updated_at`、`process_at`、`exec_at` | 各时间点；未设置的占位值不输出 |
+| `days_in_process` | 自创建到执行的天数；已撤销或失败的算到结束时，未结束的算到今天 |
+| `remark`、`reason` | 失败或撤销原因（如有） |
+
+`total` 为符合条件的记录数。账户持有人姓名、联系方式及证明文件不会输出。
+
+## 权限要求
+
+需要 OAuth 账户权限。参见[账户权限设置](/zh-CN/docs/trade/trade-overview)。

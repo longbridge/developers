@@ -1,0 +1,112 @@
+---
+title: 'coupons'
+sidebar_label: 'coupons'
+sidebar_position: 28
+---
+
+# longbridge coupons
+
+列出賬戶中的卡券——免佣卡、平台費抵扣卡、股票卡、行情 / 基本面卡、現金卡、打新卡等。
+
+:::info 僅支持香港（AP）賬戶
+此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+:::
+
+## 基本用法
+
+```bash
+longbridge coupons
+```
+
+## 示例
+
+### 查看未過期卡券
+
+```bash
+longbridge coupons
+longbridge coupons --format json
+```
+
+```json
+{
+  "cards": [
+    {
+      "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+      "card_type": "commission",
+      "title": "港股免佣卡",
+      "card_status": 0,
+      "card_status_label": "unused",
+      "start_time": "2026-11-01T00:00:00+08:00",
+      "end_time": "2026-12-31T23:59:59+08:00",
+      "commission": {
+        "markets": ["HK"],
+        "targets": ["stocks", "ETF"]
+      }
+    }
+  ],
+  "total": 1,
+  "expired_count": 3
+}
+```
+
+### 查看已過期卡券
+
+```bash
+longbridge coupons --status expired
+```
+
+### 按卡券類型篩選
+
+```bash
+# commission、platform_fee_deduct、stock、quote、cash 等
+longbridge coupons --card-type platform_fee_deduct
+```
+
+### 返回完整使用須知
+
+```bash
+longbridge coupons --with-terms
+```
+
+預設 `description` 會截短、不返回 `detail`；帶 `--with-terms` 時兩者都返回全文。
+
+### 翻頁
+
+```bash
+longbridge coupons --page 2 --size 50
+```
+
+App 置頂或置底展示的卡券只在第 1 頁返回。
+
+## 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--status` | `valid`（預設，未過期：未使用、使用中或已使用）或 `expired` |
+| `--card-type` | 卡券類型，如 `commission`、`platform_fee_deduct`、`stock`、`quote`、`cash`（預設全部） |
+| `--with-terms` | 返回每張卡券的完整使用須知（`description`、`detail`） |
+| `--page` | 頁碼（預設 1） |
+| `--size` | 每頁條數（預設 20，最大 50） |
+
+## 輸出字段
+
+`cards[]` 中每項包含：
+
+| 字段 | 說明 |
+| --- | --- |
+| `card_id` | 卡券 id（32 位十六進制），可傳給 [`coupon-orders --card-id`](/zh-HK/docs/cli/account/coupon-orders) |
+| `card_type`、`title`、`title_sec`、`description`、`detail` | 卡券類型、標題及使用須知 |
+| `card_status`、`card_status_label` | `unused`、`used`、`expired`、`redeeming`、`in_use` 或 `processing` |
+| `start_time`、`end_time` | 有效期。永久有效的卡券沒有 `end_time`，返回 `no_expiry: true` |
+| `activate_time` | 激活時間 |
+| `amount`、`currency` | 卡券面值（如適用） |
+| `available_trade_session`、`trade_sessions` | 可使用的交易時段 |
+| `commission` | `markets`、`targets`（適用標的：`stocks` / `options` / `warrants` / `ETF` / `LOF`）、`rebate_rate`、`bz_types`、`commission_balance`、`commission_expired_time` |
+| `quote` | `markets`、`quote_market`、`current_end_time` |
+| `stock`、`platform_fee_deduct` 等 | 各類型卡券的專屬信息 |
+
+`total` 為符合篩選條件的卡券數，`expired_count` 為已過期卡券數。輸出中不含任何賬號。
+
+## 權限要求
+
+需要 OAuth 賬戶權限。參見[賬戶權限設置](/zh-HK/docs/trade/trade-overview)。

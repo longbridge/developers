@@ -1,0 +1,112 @@
+---
+title: 'coupons'
+sidebar_label: 'coupons'
+sidebar_position: 28
+---
+
+# longbridge coupons
+
+List the coupon cards in your account — commission-free cards, platform-fee deduction cards, stock cards, quote / fundamental data cards, cash cards, IPO cards and more.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+:::
+
+## Basic Usage
+
+```bash
+longbridge coupons
+```
+
+## Examples
+
+### List valid coupons
+
+```bash
+longbridge coupons
+longbridge coupons --format json
+```
+
+```json
+{
+  "cards": [
+    {
+      "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+      "card_type": "commission",
+      "title": "HK stocks commission-free card",
+      "card_status": 0,
+      "card_status_label": "unused",
+      "start_time": "2026-11-01T00:00:00+08:00",
+      "end_time": "2026-12-31T23:59:59+08:00",
+      "commission": {
+        "markets": ["HK"],
+        "targets": ["stocks", "ETF"]
+      }
+    }
+  ],
+  "total": 1,
+  "expired_count": 3
+}
+```
+
+### List expired coupons
+
+```bash
+longbridge coupons --status expired
+```
+
+### Filter by card type
+
+```bash
+# commission, platform_fee_deduct, stock, quote, cash, …
+longbridge coupons --card-type platform_fee_deduct
+```
+
+### Include the full terms of use
+
+```bash
+longbridge coupons --with-terms
+```
+
+By default `description` is shortened and `detail` is omitted; `--with-terms` returns both in full.
+
+### Paginate
+
+```bash
+longbridge coupons --page 2 --size 50
+```
+
+Cards the app pins to the top or bottom of the list are included on page 1 only.
+
+## Options
+
+| Flag | Description |
+| --- | --- |
+| `--status` | `valid` (default — not expired: unused, in use or used) or `expired` |
+| `--card-type` | Card type, e.g. `commission`, `platform_fee_deduct`, `stock`, `quote`, `cash` (default: all) |
+| `--with-terms` | Include each card's full terms of use (`description`, `detail`) |
+| `--page` | Page number (default: 1) |
+| `--size` | Records per page (default: 20, max 50) |
+
+## Output fields
+
+Each entry in `cards[]` has:
+
+| Field | Description |
+| --- | --- |
+| `card_id` | Coupon id (32 hex characters) — pass it to [`coupon-orders --card-id`](/docs/cli/account/coupon-orders) |
+| `card_type`, `title`, `title_sec`, `description`, `detail` | Card type, titles and terms |
+| `card_status`, `card_status_label` | `unused`, `used`, `expired`, `redeeming`, `in_use` or `processing` |
+| `start_time`, `end_time` | Validity period. A card that never expires has no `end_time` and carries `no_expiry: true` |
+| `activate_time` | When the card was activated |
+| `amount`, `currency` | Card value, where applicable |
+| `available_trade_session`, `trade_sessions` | Trading sessions the card can be used in |
+| `commission` | `markets`, `targets` (instruments the card applies to: `stocks` / `options` / `warrants` / `ETF` / `LOF`), `rebate_rate`, `bz_types`, `commission_balance`, `commission_expired_time` |
+| `quote` | `markets`, `quote_market`, `current_end_time` |
+| `stock`, `platform_fee_deduct`, … | Type-specific details |
+
+`total` is the number of cards matching the filter and `expired_count` the number of expired cards. The output carries no account numbers.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

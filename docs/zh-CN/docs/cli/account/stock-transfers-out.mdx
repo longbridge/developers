@@ -1,0 +1,101 @@
+---
+title: 'stock-transfers-out'
+sidebar_label: 'stock-transfers-out'
+sidebar_position: 26
+---
+
+# longbridge stock-transfers-out
+
+列出股票转出申请（从 Longbridge 账户转到其他券商），按时间倒序。
+
+:::info 仅支持香港（AP）账户
+此命令读取 AP（香港）数据中心的数据，仅支持香港账户。输出中的时间均为香港时间（+08:00），`--start` / `--end` 传入的日期也按香港日期处理。
+:::
+
+## 基本用法
+
+```bash
+longbridge stock-transfers-out
+```
+
+## 示例
+
+### 查看全部转出申请
+
+```bash
+longbridge stock-transfers-out
+longbridge stock-transfers-out --format json
+```
+
+```json
+{
+  "records": [
+    {
+      "id": 40987,
+      "broker": "汇丰证券",
+      "code": "B05678",
+      "account": "****4321",
+      "state": "已完成",
+      "state_code": 3,
+      "state_label": "completed",
+      "stocks": [
+        { "code": "AAPL", "name": "苹果", "amount": "50", "state": 1, "state_label": "succeeded" }
+      ],
+      "created_at": "2026-09-01T11:02:00+08:00",
+      "exec_at": "2026-09-04T16:30:00+08:00",
+      "days_in_process": 3
+    }
+  ]
+}
+```
+
+### 按市场和状态筛选
+
+```bash
+# 已提交的美股转出（状态 0，唯一仍可撤销的状态）
+longbridge stock-transfers-out --market US --state 0
+```
+
+### 按创建日期筛选
+
+```bash
+longbridge stock-transfers-out --start 2026-09-01 --end 2026-09-30
+```
+
+### 翻页
+
+```bash
+longbridge stock-transfers-out --page 2 --size 50
+```
+
+## 参数
+
+| 参数 | 说明 |
+| --- | --- |
+| `--market` | `HK`、`US`、`CN` 或 `SG`（默认全部） |
+| `--state` | 状态码：`0` 已提交，`1` 处理中，`2` 执行中，`3` 已完成，`4` 已撤销，`5` 部分完成，`6` 失败，`7` 已拒绝（默认全部） |
+| `--start`、`--end` | 创建日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 页码（默认 1） |
+| `--size` | 每页条数（默认 20，最大 50） |
+
+## 输出字段
+
+`records[]` 中每项包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `id` | 申请 id |
+| `broker`、`broker_en`、`code` | 接收券商名称、英文名称及券商代码 |
+| `account` | 你在对方券商的账号，**脱敏为仅显示后 4 位** |
+| `state`、`state_code`、`state_label` | 状态文案、状态码及标签（`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`）。仅状态 `0` 仍可撤销 |
+| `app_state`、`user_notified_broker` | 同 [`stock-transfers-in`](/zh-CN/docs/cli/account/stock-transfers-in) |
+| `stocks[]` | 每只股票的 `code`、`name`、`amount`、`state`、`state_label`（`processing` / `succeeded` / `failed`） |
+| `created_at`、`updated_at`、`agree_at`、`refuse_at`、`cancel_at`、`process_at`、`exec_at` | 各时间点；未设置的占位值不输出 |
+| `days_in_process` | 算法同 [`stock-transfers-in`](/zh-CN/docs/cli/account/stock-transfers-in) |
+| `reason` | 拒绝或撤销原因（如有） |
+
+账户持有人姓名、联系方式及证明文件不会输出。
+
+## 权限要求
+
+需要 OAuth 账户权限。参见[账户权限设置](/zh-CN/docs/trade/trade-overview)。

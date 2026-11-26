@@ -1,0 +1,71 @@
+---
+title: 'coupon-orders'
+sidebar_label: 'coupon-orders'
+sidebar_position: 29
+---
+
+# longbridge coupon-orders
+
+列出某張卡券（如免佣卡、平台費抵扣卡）用在了哪些訂單。
+
+:::info 僅支持香港（AP）賬戶
+此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+:::
+
+## 基本用法
+
+```bash
+longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b
+```
+
+## 示例
+
+### 查看卡券關聯的訂單
+
+```bash
+# 卡券 id 為 `longbridge coupons` 返回的 card_id（32 位十六進制）
+longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b
+longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b --format json
+```
+
+```json
+{
+  "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+  "locked": [],
+  "settled": [
+    {
+      "order_id": "1083215640912345678",
+      "state": "Filled",
+      "state_val": "FilledStatus",
+      "executed_price": "385.20",
+      "executed_quantity": "200",
+      "currency": "HKD",
+      "rebate": "15.00",
+      "rebate_dt": "2026-11-04T18:00:00+08:00",
+      "settlement_currency": "HKD"
+    }
+  ]
+}
+```
+
+純數字的 id 是銀行卡 id，不是卡券——請使用 [`coupons`](/zh-HK/docs/cli/account/coupons) 返回的 id，而不是 `bank-cards` 的。
+
+## 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--card-id` | 卡券 id（[`coupons`](/zh-HK/docs/cli/account/coupons) 返回的 `card_id`）。必填 |
+
+## 輸出字段
+
+| 字段 | 說明 |
+| --- | --- |
+| `card_id` | 查詢的卡券 id |
+| `locked[]` | 佔用該卡、返還尚未結算的訂單 |
+| `settled[]` | 已結算返還的訂單 |
+
+每個訂單包含 `order_id`、`state`、`state_val`、`executed_price`、`executed_quantity`、`currency`、`rebate`、`rebate_dt` 和 `settlement_currency`。輸出中不含任何賬號。
+
+## 權限要求
+
+需要 OAuth 賬戶權限。參見[賬戶權限設置](/zh-HK/docs/trade/trade-overview)。

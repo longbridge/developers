@@ -1,0 +1,71 @@
+---
+title: 'coupon-orders'
+sidebar_label: 'coupon-orders'
+sidebar_position: 29
+---
+
+# longbridge coupon-orders
+
+List the orders a coupon card — such as a commission-free or platform-fee deduction card — was applied to.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+:::
+
+## Basic Usage
+
+```bash
+longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b
+```
+
+## Examples
+
+### See which orders used a coupon
+
+```bash
+# Card id is card_id from `longbridge coupons` (32 hex characters)
+longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b
+longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b --format json
+```
+
+```json
+{
+  "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+  "locked": [],
+  "settled": [
+    {
+      "order_id": "1083215640912345678",
+      "state": "Filled",
+      "state_val": "FilledStatus",
+      "executed_price": "385.20",
+      "executed_quantity": "200",
+      "currency": "HKD",
+      "rebate": "15.00",
+      "rebate_dt": "2026-11-04T18:00:00+08:00",
+      "settlement_currency": "HKD"
+    }
+  ]
+}
+```
+
+A numeric id is a bank card id, not a coupon — take the id from [`coupons`](/docs/cli/account/coupons), not from `bank-cards`.
+
+## Options
+
+| Flag | Description |
+| --- | --- |
+| `--card-id` | Coupon id (`card_id` from [`coupons`](/docs/cli/account/coupons)). Required |
+
+## Output fields
+
+| Field | Description |
+| --- | --- |
+| `card_id` | The coupon id you asked for |
+| `locked[]` | Orders holding the card whose rebate is not settled yet |
+| `settled[]` | Orders whose rebate has been settled |
+
+Each order has `order_id`, `state`, `state_val`, `executed_price`, `executed_quantity`, `currency`, `rebate`, `rebate_dt` and `settlement_currency`. The output carries no account numbers.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

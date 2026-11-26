@@ -6,21 +6,16 @@ sidebar_position: 21
 
 # longbridge withdrawals
 
-View your withdrawal history.
+View your withdrawal history, newest first, with optional filtering by date.
+
+:::info Hong Kong (AP) accounts only
+This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+:::
 
 ## Basic Usage
 
 ```bash
 longbridge withdrawals
-```
-
-```
-Total: 5
-
-| id      | date                 | amount   | currency | type | state    |
-|---------|----------------------|----------|----------|------|----------|
-| 2096375 | 2026-04-30T07:57:49Z | 3000.00  | USD      | Wire | Credited |
-| 2036889 | 2026-03-27T02:54:49Z | 10000.00 | USD      | Wire | Credited |
 ```
 
 ## Examples
@@ -29,6 +24,36 @@ Total: 5
 
 ```bash
 longbridge withdrawals
+longbridge withdrawals --format json
+```
+
+```json
+{
+  "list": [
+    {
+      "id": 1873402,
+      "order_id": "WD202611180001",
+      "created_at": "2026-11-18T10:05:12+08:00",
+      "currency": "HKD",
+      "amount": "20000.00",
+      "fee": "0.00",
+      "settlement_amount": "20000.00",
+      "state": 4,
+      "state_label": "remitted",
+      "state_description": "Remitted",
+      "bank_account": "****9779",
+      "user_bank_swift_code": "CMBCHKHH"
+    }
+  ],
+  "total": 1,
+  "has_more": false
+}
+```
+
+### Filter by application date
+
+```bash
+longbridge withdrawals --start 2026-11-01 --end 2026-11-30
 ```
 
 ### Paginate through records
@@ -36,6 +61,32 @@ longbridge withdrawals
 ```bash
 longbridge withdrawals --page 2 --count 50
 ```
+
+## Options
+
+| Flag | Description |
+| --- | --- |
+| `--start`, `--end` | Application date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
+| `--page` | Page number (default: 1) |
+| `--count` | Records per page (default: 20) |
+
+## Output fields
+
+Each entry in `list[]` has:
+
+| Field | Description |
+| --- | --- |
+| `id`, `order_id` | Withdrawal id and order number |
+| `created_at` | When the withdrawal was applied for |
+| `currency`, `amount` | Amount applied for |
+| `fee` | Withdrawal fee (empty on old records) |
+| `settlement_amount` | Amount actually paid out |
+| `state`, `state_label` | State code and label: `submitted`, `processing`, `rejected`, `cancelled`, `remitted`, `failed`, `refunded`, `approved_awaiting_payout`, `large_amount_review`, `awaiting_confirmation`, … |
+| `state_description` | Status text as the app shows it; prefer it when present |
+| `bank_account` | Receiving account, **masked to the last 4 digits** — matches `account` in [`bank-cards`](/docs/cli/account/bank-cards) |
+| `display_bank_account`, `user_bank_swift_code` | Account as displayed in the app, and SWIFT code |
+
+`has_more` is `true` when a full page came back — ask for the next page. An estimated processing time and back-office remarks are not available.
 
 ## Requirements
 
