@@ -10,6 +10,7 @@ import { Pricing } from '@/components/mdx/Pricing'
 import { NewHomePage } from '@longbridge/openapi-homepage'
 import { SkillPage } from '@/components/mdx/SkillPage'
 import { resolvePageTitle, resolvePageDescription } from '@/lib/page-meta'
+import { homeJsonLd } from '@/lib/structured-data'
 
 export async function getStaticPaths() {
   const region = currentRegion()
@@ -46,7 +47,7 @@ const isSkill = entry.id === 'zh-HK/skill/index'
   </ApiReferenceLayout>
 )}
 {layoutKind === 'plain' && (
-  <PlainLayout title={titleStr} description={description} locale="zh-HK">
+  <PlainLayout title={titleStr} description={description} locale="zh-HK" jsonLd={isHome ? homeJsonLd(Astro.site!.origin, 'zh-HK') : undefined}>
     {entry.data.id === 'pricing' ? (
       <Pricing client:load locale="zh-HK" />
     ) : isHome ? (

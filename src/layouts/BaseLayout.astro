@@ -7,6 +7,7 @@ import Footer from '../components/shell/Footer'
 import type { Locale } from '@longbridge/openapi-utils'
 import { buildSeoLinks } from '@/lib/page-meta'
 import { getPublishedUrls } from '@/lib/published-urls'
+import { OG_IMAGE, serializeJsonLd } from '@/lib/structured-data'
 
 export interface Props {
   title: string
@@ -16,8 +17,10 @@ export interface Props {
    *  docs render only a slim link-row footer (DocFooter) inside the article,
    *  never the marketing footer. */
   hideFooter?: boolean
+  /** schema.org 结构化数据，每项输出一个 application/ld+json 脚本（见 lib/structured-data）。 */
+  jsonLd?: unknown[]
 }
-const { title, description = '', locale = 'en', hideFooter = false } = Astro.props
+const { title, description = '', locale = 'en', hideFooter = false, jsonLd = [] } = Astro.props
 const pathname = new URL(Astro.request.url).pathname
 
 // Platform globals + analytics — resolved at build time, ported 1:1 from the
@@ -38,7 +41,7 @@ const gtagInit = `window.dataLayer = window.dataLayer||[];\nfunction gtag(){data
 const seoHost = Astro.site!.origin
 const seo = buildSeoLinks(pathname, seoHost, await getPublishedUrls())
 const canonicalUrl = seo.canonical
-const ogImage = 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e076876ac1/longbridge-og.png'
+const ogImage = OG_IMAGE
 ---
 <!doctype html>
 <html lang={locale} data-mode="light" data-theme="default" data-nb-pref="system">
@@ -58,6 +61,7 @@ const ogImage = 'https://assets.lbctrl.com/uploads/b510b04f-9238-4fe0-b39d-11e07
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
+    {jsonLd.map((data) => <script is:inline type="application/ld+json" set:html={serializeJsonLd(data)} />)}
 
     <ClientRouter />
     <script is:inline>
