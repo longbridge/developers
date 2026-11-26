@@ -66,7 +66,7 @@ Each entry in `cards[]` has:
 
 | Field | Description |
 | --- | --- |
-| `id` | Bank card id — pass it to [`edda-status --card-id`](/docs/cli/account/edda-status) |
+| `id` | Bank card id — pass it to [`edda status --card-id`](/docs/cli/account/edda#edda-status) |
 | `bank`, `bank_en`, `bank_code` | Bank name, English name and bank code |
 | `account` | Account number, **masked to the last 4 digits** (e.g. `****1234`) |
 | `account_type`, `region`, `region_name`, `country` | Account type and where the bank account is held (`country` is a place, not a currency) |
@@ -78,7 +78,7 @@ Each entry in `cards[]` has:
 | `created_at` | When the card was added |
 | `auth_list[]` | Authorizations on the card: `flow_id` (`hk_edda` / `hk_sdda`: eDDA, `hk_bank_sec`: bank-securities transfer, `hk_fps`: FPS), `name`, `currency`, `authorization` (`unauthorized` / `authorized` / `authorizing` / `failed`), `failure_reason`, `max_amount`, `max_amount_unlimited`, `daily_max_count`, `daily_max_count_unlimited`, `expiry_date`, `long_term_valid`, `is_support`, `doc_reviewing`, `no_prior_deposit_reviewing` |
 
-Only the fields above are returned, and fields with no value are omitted from the JSON — they are not printed as `null` or an empty string (for example, `review_days` is absent unless the card is `under_review`). The full account number, the account holder's name, ID document images, the payee address and SWIFT details are never printed. To look at eDDA authorizations only, use [`edda`](/docs/cli/account/edda).
+Only the fields above are returned, and fields with no value are omitted from the JSON — they are not printed as `null` or an empty string (for example, `review_days` is absent unless the card is `under_review`). The full account number, the account holder's name, ID document images, the payee address and SWIFT details are never printed. To look at eDDA authorizations only, use [`edda list`](/docs/cli/account/edda#edda-list).
 
 ## Requirements
 

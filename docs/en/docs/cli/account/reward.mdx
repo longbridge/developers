@@ -1,12 +1,12 @@
 ---
-title: 'rewards'
-sidebar_label: 'rewards'
-sidebar_position: 27
+title: 'reward'
+sidebar_label: 'reward'
+sidebar_position: 25
 ---
 
-# longbridge rewards
+# longbridge reward
 
-List the activity rewards granted to your account — cash, coupon cards, gifts and task rewards — newest first.
+View the activity rewards granted to your account.
 
 :::info Hong Kong (AP) accounts only
 This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
@@ -15,16 +15,19 @@ This command reads data from the AP (Hong Kong) data center. A US account gets a
 ## Basic Usage
 
 ```bash
-longbridge rewards
+# Activity reward records
+longbridge reward list
 ```
 
-## Examples
+## reward list
+
+List the activity rewards granted to your account — cash, coupon cards, gifts and task rewards — newest first.
 
 ### List reward records
 
 ```bash
-longbridge rewards
-longbridge rewards --format json
+longbridge reward list
+longbridge reward list --format json
 ```
 
 The default table shows sent (time), type, activity, reward, amount (with currency) and status (with the delivery status for issued prizes), followed by the total — or, with `--start` / `--end`, a warning when older records were not searched. Use `--format json` for the fields listed below.
@@ -55,13 +58,13 @@ Example values are illustrative.
 
 ```bash
 # cash, gift (alias prize), coupon (alias card), task, or all
-longbridge rewards --kind coupon
+longbridge reward list --kind coupon
 ```
 
 ### Search a date range
 
 ```bash
-longbridge rewards --start 2026-10-01 --end 2026-10-31
+longbridge reward list --start 2026-10-01 --end 2026-10-31
 ```
 
 With `--start` / `--end`, the command filters on `send_time` and pages through the history by itself, in fixed pages of 50 records and at most 6 pages (300 records); `--page` and `--count` are ignored. The output then carries `searched_all` instead of `total`: `false` means older records were not read, so a reward you are looking for may be among them. Records not issued yet (no `send_time`) are always included.
@@ -69,10 +72,10 @@ With `--start` / `--end`, the command filters on `send_time` and pages through t
 ### Paginate
 
 ```bash
-longbridge rewards --page 2 --count 50
+longbridge reward list --page 2 --count 50
 ```
 
-## Options
+### Options
 
 | Flag | Description |
 | --- | --- |
@@ -81,7 +84,7 @@ longbridge rewards --page 2 --count 50
 | `--page` | Page number (default: 1; `0` is read as 1). Ignored with `--start` / `--end` |
 | `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit`. Ignored with `--start` / `--end` |
 
-## Output fields
+### Output fields
 
 Each entry in `rewards[]` has:
 
@@ -99,7 +102,7 @@ Each entry in `rewards[]` has:
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `send_time` on a reward not issued yet) are omitted the same way.
 
-`total` is the number of records of the selected type (only without `--start` / `--end`). A reward is identified by `activity_title` and `send_time`; the coupon cards it granted are listed by [`coupons`](/docs/cli/account/coupons). Redemption codes, voucher secrets, delivery addresses and phone numbers are never printed.
+`total` is the number of records of the selected type (only without `--start` / `--end`). A reward is identified by `activity_title` and `send_time`; the coupon cards it granted are listed by [`coupon list`](/docs/cli/account/coupon#coupon-list). Redemption codes, voucher secrets, delivery addresses and phone numbers are never printed.
 
 ## Requirements
 

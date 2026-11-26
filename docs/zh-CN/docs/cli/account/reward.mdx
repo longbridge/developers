@@ -1,12 +1,12 @@
 ---
-title: 'rewards'
-sidebar_label: 'rewards'
-sidebar_position: 27
+title: 'reward'
+sidebar_label: 'reward'
+sidebar_position: 25
 ---
 
-# longbridge rewards
+# longbridge reward
 
-列出账户获得的活动奖励（现金、卡券、礼品及任务奖励），按时间倒序。
+查看账户获得的活动奖励。
 
 :::info 仅支持香港（AP）账户
 此命令读取 AP（香港）数据中心的数据。美国账户执行时会返回错误，提示该命令在美国数据中心不可用；美国没有对应的命令，重试也不会成功。输出中的时间均为香港时间（+08:00），`--start` / `--end` 传入的日期也按香港日期处理。
@@ -15,16 +15,19 @@ sidebar_position: 27
 ## 基本用法
 
 ```bash
-longbridge rewards
+# 活动奖励记录
+longbridge reward list
 ```
 
-## 示例
+## reward list
+
+列出账户获得的活动奖励（现金、卡券、礼品及任务奖励），按时间倒序。
 
 ### 查看奖励记录
 
 ```bash
-longbridge rewards
-longbridge rewards --format json
+longbridge reward list
+longbridge reward list --format json
 ```
 
 默认表格显示发放时间、类型、活动、奖励、金额（含币种）及状态（已发放奖品附带物流状态），最后打印总数；使用 `--start` / `--end` 时，若有更早的记录未检索会打印提示。需要下方列出的全部字段时请使用 `--format json`。
@@ -55,13 +58,13 @@ longbridge rewards --format json
 
 ```bash
 # cash、gift（别名 prize）、coupon（别名 card）、task 或 all
-longbridge rewards --kind coupon
+longbridge reward list --kind coupon
 ```
 
 ### 按日期范围查找
 
 ```bash
-longbridge rewards --start 2026-10-01 --end 2026-10-31
+longbridge reward list --start 2026-10-01 --end 2026-10-31
 ```
 
 带 `--start` / `--end` 时，命令按 `send_time` 筛选，并自动翻页检索：每页固定 50 条，最多 6 页（300 条），此时忽略 `--page` 和 `--count`。输出用 `searched_all` 代替 `total`：为 `false` 表示更早的记录未被读取，你要找的奖励可能在其中。尚未发放（没有 `send_time`）的记录总会包含在内。
@@ -69,10 +72,10 @@ longbridge rewards --start 2026-10-01 --end 2026-10-31
 ### 翻页
 
 ```bash
-longbridge rewards --page 2 --count 50
+longbridge reward list --page 2 --count 50
 ```
 
-## 参数
+### 参数
 
 | 参数 | 说明 |
 | --- | --- |
@@ -81,7 +84,7 @@ longbridge rewards --page 2 --count 50
 | `--page` | 页码（默认 1；传 `0` 按 1 处理）。带 `--start` / `--end` 时忽略 |
 | `--count` | 每页条数（默认 20，最大 50，超过按 50 处理）。别名：`--size`、`--limit`。带 `--start` / `--end` 时忽略 |
 
-## 输出字段
+### 输出字段
 
 `rewards[]` 中每项包含：
 
@@ -99,7 +102,7 @@ longbridge rewards --page 2 --count 50
 
 没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串。未设置的时间（例如尚未发放奖励的 `send_time`）同样不输出。
 
-`total` 为所选类型的全部记录数（仅不带 `--start` / `--end` 时返回）。一笔奖励由 `activity_title` 和 `send_time` 确定；奖励发放的卡券用 [`coupons`](/zh-CN/docs/cli/account/coupons) 查看。兑换码、券密、收货地址及电话不会输出。
+`total` 为所选类型的全部记录数（仅不带 `--start` / `--end` 时返回）。一笔奖励由 `activity_title` 和 `send_time` 确定；奖励发放的卡券用 [`coupon list`](/zh-CN/docs/cli/account/coupon#coupon-list) 查看。兑换码、券密、收货地址及电话不会输出。
 
 ## 权限要求
 

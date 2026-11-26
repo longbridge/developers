@@ -9,7 +9,7 @@ sidebar_icon: newspaper
 
 ### Unreleased
 
-- **新增香港（AP）账户的账户类命令** — [`edda`](/zh-CN/docs/cli/account/edda) 与 [`edda-status`](/zh-CN/docs/cli/account/edda-status) 查看 eDDA 授权，[`stock-transfers-in`](/zh-CN/docs/cli/account/stock-transfers-in) / [`stock-transfers-out`](/zh-CN/docs/cli/account/stock-transfers-out) 查看股票转入 / 转出申请，[`rewards`](/zh-CN/docs/cli/account/rewards) 查看活动奖励记录，[`coupons`](/zh-CN/docs/cli/account/coupons) / [`coupon-orders`](/zh-CN/docs/cli/account/coupon-orders) 查看卡券及其关联订单。美国账户执行时会返回错误，提示该命令在美国数据中心不可用
+- **新增香港（AP）账户的账户类命令** — [`edda list`](/zh-CN/docs/cli/account/edda#edda-list) 与 [`edda status`](/zh-CN/docs/cli/account/edda#edda-status) 查看 eDDA 授权，[`stock-transfer in`](/zh-CN/docs/cli/account/stock-transfer#stock-transfer-in) / [`stock-transfer out`](/zh-CN/docs/cli/account/stock-transfer#stock-transfer-out) 查看股票转入 / 转出申请，[`reward list`](/zh-CN/docs/cli/account/reward#reward-list) 查看活动奖励记录，[`coupon list`](/zh-CN/docs/cli/account/coupon#coupon-list) / [`coupon orders`](/zh-CN/docs/cli/account/coupon#coupon-orders) 查看卡券及其关联订单。美国账户执行时会返回错误，提示该命令在美国数据中心不可用
 - **[`bank-cards`](/zh-CN/docs/cli/account/bank-cards)、[`deposits`](/zh-CN/docs/cli/account/deposits)、[`withdrawals`](/zh-CN/docs/cli/account/withdrawals)** — `bank-cards` 现在展示每张卡的审核状态及授权；`deposits` 与 `withdrawals` 新增 `--start` / `--end`，并接受 `--size` 作为 `--count` 的别名
 - **不兼容的输出变化** — 读取旧 JSON 的脚本需要相应调整：
   - `bank-cards` 输出 `{"cards": [...]}`，不再是裸 JSON 数组

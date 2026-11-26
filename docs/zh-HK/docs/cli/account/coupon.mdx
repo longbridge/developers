@@ -1,30 +1,35 @@
 ---
-title: 'coupons'
-sidebar_label: 'coupons'
-sidebar_position: 28
+title: 'coupon'
+sidebar_label: 'coupon'
+sidebar_position: 26
 ---
 
-# longbridge coupons
+# longbridge coupon
 
-列出賬戶中的卡券：免佣卡、平台費抵扣卡、股票卡、行情 / 基本面數據卡、現金卡、IPO 卡等。
+查看賬戶中的卡券，以及每張卡券所使用的訂單。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00）。
+這些命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。`coupon list` 輸出中的時間均為香港時間（+08:00）。
 :::
 
 ## 基本用法
 
 ```bash
-longbridge coupons
+# 賬戶中的卡券
+longbridge coupon list
+# 某張卡券所使用的訂單
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef
 ```
 
-## 示例
+## coupon list
+
+列出賬戶中的卡券：免佣卡、平台費抵扣卡、股票卡、行情 / 基本面數據卡、現金卡、IPO 卡等。
 
 ### 查看有效卡券
 
 ```bash
-longbridge coupons
-longbridge coupons --format json
+longbridge coupon list
+longbridge coupon list --format json
 ```
 
 預設表格顯示卡券 id、類型、標題、金額（有面值時含幣種）、狀態、生效時間及到期時間（永久有效顯示 `no expiry`），最後打印總數及已過期數。需要下方列出的全部字段時請使用 `--format json`。
@@ -57,20 +62,20 @@ longbridge coupons --format json
 ### 查看已過期卡券
 
 ```bash
-longbridge coupons --status expired
+longbridge coupon list --status expired
 ```
 
 ### 按卡券類型篩選
 
 ```bash
 # commission、platform_fee_deduct、stock、quote、cash 等
-longbridge coupons --card-type platform_fee_deduct
+longbridge coupon list --card-type platform_fee_deduct
 ```
 
 ### 包含完整使用須知
 
 ```bash
-longbridge coupons --with-terms
+longbridge coupon list --with-terms
 ```
 
 預設 `description` 會被截短，`detail` 不輸出；`--with-terms` 會完整返回兩者。
@@ -78,12 +83,12 @@ longbridge coupons --with-terms
 ### 翻頁
 
 ```bash
-longbridge coupons --page 2 --count 50
+longbridge coupon list --page 2 --count 50
 ```
 
 App 置頂或置底展示的卡券只在第 1 頁返回。
 
-## 參數
+### 參數
 
 | 參數 | 說明 |
 | --- | --- |
@@ -93,13 +98,13 @@ App 置頂或置底展示的卡券只在第 1 頁返回。
 | `--page` | 頁碼（預設 1；傳 `0` 按 1 處理） |
 | `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit` |
 
-## 輸出字段
+### 輸出字段
 
 `cards[]` 中每項包含：
 
 | 字段 | 說明 |
 | --- | --- |
-| `card_id` | 卡券 id（32 位十六進制），可傳給 [`coupon-orders --card-id`](/zh-HK/docs/cli/account/coupon-orders) |
+| `card_id` | 卡券 id（32 位十六進制），可傳給 [`coupon orders --card-id`](/zh-HK/docs/cli/account/coupon#coupon-orders) |
 | `card_type`、`title`、`title_sec`、`description`、`detail` | 卡券類型、標題及使用須知 |
 | `card_status`、`card_status_label` | `unused`、`used`、`expired`、`redeeming`、`in_use` 或 `processing` |
 | `start_time`、`end_time` | 有效期。永久有效的卡券沒有 `end_time`，返回 `no_expiry: true` |
@@ -113,6 +118,62 @@ App 置頂或置底展示的卡券只在第 1 頁返回。
 沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如從未激活的卡券沒有 `activate_time`。
 
 `total` 為符合篩選條件的卡券數，`expired_count` 為已過期卡券數。輸出中不含任何賬號。
+
+## coupon orders
+
+列出某張卡券（如免佣卡、平台費抵扣卡）所使用的訂單。
+
+### 查看使用了某張卡券的訂單
+
+```bash
+# 卡券 id 為 `longbridge coupon list` 中的 card_id（32 位十六進制）
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef --format json
+```
+
+預設表格每個訂單一行，顯示分組（`locked` 或 `settled`）、訂單號、狀態、價格、數量、幣種、返還金額及返還日期。需要下方列出的全部字段時請使用 `--format json`。
+
+```json
+{
+  "card_id": "0123456789abcdef0123456789abcdef",
+  "locked": [],
+  "settled": [
+    {
+      "order_id": "100000000000000001",
+      "state": "Filled",
+      "state_val": "FilledStatus",
+      "executed_price": "385.20",
+      "executed_quantity": "200",
+      "currency": "HKD",
+      "rebate": "15.00",
+      "rebate_dt": "2026-11-04",
+      "settlement_currency": "HKD"
+    }
+  ]
+}
+```
+
+示例中的值僅作說明。
+
+純數字的 id 是銀行卡 id，不是卡券。請使用 [`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 中的 id，而不是 `bank-cards` 中的 id。
+
+### 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--card-id` | 卡券 id（[`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 中的 `card_id`）。必填 |
+
+### 輸出字段
+
+| 字段 | 說明 |
+| --- | --- |
+| `card_id` | 查詢的卡券 id |
+| `locked[]` | 佔用該卡、返還尚未結算的訂單 |
+| `settled[]` | 已結算返還的訂單 |
+
+每個訂單包含 `order_id`、`state`、`state_val`、`executed_price`、`executed_quantity`、`currency`、`rebate`、`rebate_dt` 和 `settlement_currency`。`rebate_dt` 為返還日期，按服務端返回原樣輸出，CLI 不做時區轉換。輸出中不含任何賬號。
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如返還尚無日期時沒有 `rebate_dt`。
 
 ## 權限要求
 

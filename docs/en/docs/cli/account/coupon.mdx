@@ -1,30 +1,35 @@
 ---
-title: 'coupons'
-sidebar_label: 'coupons'
-sidebar_position: 28
+title: 'coupon'
+sidebar_label: 'coupon'
+sidebar_position: 26
 ---
 
-# longbridge coupons
+# longbridge coupon
 
-List the coupon cards in your account — commission-free cards, platform-fee deduction cards, stock cards, quote / fundamental data cards, cash cards, IPO cards and more.
+View the coupon cards in your account and the orders each card was applied to.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00).
+These commands read data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the `coupon list` output are Hong Kong time (+08:00).
 :::
 
 ## Basic Usage
 
 ```bash
-longbridge coupons
+# Coupon cards in your account
+longbridge coupon list
+# Orders a coupon card was applied to
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef
 ```
 
-## Examples
+## coupon list
+
+List the coupon cards in your account — commission-free cards, platform-fee deduction cards, stock cards, quote / fundamental data cards, cash cards, IPO cards and more.
 
 ### List valid coupons
 
 ```bash
-longbridge coupons
-longbridge coupons --format json
+longbridge coupon list
+longbridge coupon list --format json
 ```
 
 The default table shows card id, type, title, amount (with currency, where the card has one), status, valid from and valid until (`no expiry` for a card that never expires), followed by the total and the expired count. Use `--format json` for the fields listed below.
@@ -57,20 +62,20 @@ Example values are illustrative.
 ### List expired coupons
 
 ```bash
-longbridge coupons --status expired
+longbridge coupon list --status expired
 ```
 
 ### Filter by card type
 
 ```bash
 # commission, platform_fee_deduct, stock, quote, cash, …
-longbridge coupons --card-type platform_fee_deduct
+longbridge coupon list --card-type platform_fee_deduct
 ```
 
 ### Include the full terms of use
 
 ```bash
-longbridge coupons --with-terms
+longbridge coupon list --with-terms
 ```
 
 By default `description` is shortened and `detail` is omitted; `--with-terms` returns both in full.
@@ -78,12 +83,12 @@ By default `description` is shortened and `detail` is omitted; `--with-terms` re
 ### Paginate
 
 ```bash
-longbridge coupons --page 2 --count 50
+longbridge coupon list --page 2 --count 50
 ```
 
 Cards the app pins to the top or bottom of the list are included on page 1 only.
 
-## Options
+### Options
 
 | Flag | Description |
 | --- | --- |
@@ -93,13 +98,13 @@ Cards the app pins to the top or bottom of the list are included on page 1 only.
 | `--page` | Page number (default: 1; `0` is read as 1) |
 | `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
 
-## Output fields
+### Output fields
 
 Each entry in `cards[]` has:
 
 | Field | Description |
 | --- | --- |
-| `card_id` | Coupon id (32 hex characters) — pass it to [`coupon-orders --card-id`](/docs/cli/account/coupon-orders) |
+| `card_id` | Coupon id (32 hex characters) — pass it to [`coupon orders --card-id`](/docs/cli/account/coupon#coupon-orders) |
 | `card_type`, `title`, `title_sec`, `description`, `detail` | Card type, titles and terms |
 | `card_status`, `card_status_label` | `unused`, `used`, `expired`, `redeeming`, `in_use` or `processing` |
 | `start_time`, `end_time` | Validity period. A card that never expires has no `end_time` and carries `no_expiry: true` |
@@ -113,6 +118,62 @@ Each entry in `cards[]` has:
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `activate_time` is absent on a card that was never activated.
 
 `total` is the number of cards matching the filter and `expired_count` the number of expired cards. The output carries no account numbers.
+
+## coupon orders
+
+List the orders a coupon card — such as a commission-free or platform-fee deduction card — was applied to.
+
+### See which orders used a coupon
+
+```bash
+# Card id is card_id from `longbridge coupon list` (32 hex characters)
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef --format json
+```
+
+The default table shows one row per order — section (`locked` or `settled`), order id, state, price, quantity, currency, rebate and rebate date. Use `--format json` for the fields listed below.
+
+```json
+{
+  "card_id": "0123456789abcdef0123456789abcdef",
+  "locked": [],
+  "settled": [
+    {
+      "order_id": "100000000000000001",
+      "state": "Filled",
+      "state_val": "FilledStatus",
+      "executed_price": "385.20",
+      "executed_quantity": "200",
+      "currency": "HKD",
+      "rebate": "15.00",
+      "rebate_dt": "2026-11-04",
+      "settlement_currency": "HKD"
+    }
+  ]
+}
+```
+
+Example values are illustrative.
+
+A numeric id is a bank card id, not a coupon — take the id from [`coupon list`](/docs/cli/account/coupon#coupon-list), not from `bank-cards`.
+
+### Options
+
+| Flag | Description |
+| --- | --- |
+| `--card-id` | Coupon id (`card_id` from [`coupon list`](/docs/cli/account/coupon#coupon-list)). Required |
+
+### Output fields
+
+| Field | Description |
+| --- | --- |
+| `card_id` | The coupon id you asked for |
+| `locked[]` | Orders holding the card whose rebate is not settled yet |
+| `settled[]` | Orders whose rebate has been settled |
+
+Each order has `order_id`, `state`, `state_val`, `executed_price`, `executed_quantity`, `currency`, `rebate`, `rebate_dt` and `settlement_currency`. `rebate_dt` is the rebate date exactly as the service returns it — the CLI does not convert it to a time zone. The output carries no account numbers.
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `rebate_dt` is absent until the rebate has a date.
 
 ## Requirements
 
