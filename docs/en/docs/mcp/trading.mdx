@@ -178,6 +178,16 @@ Set up a monthly DCA plan to invest $500 in VOO.US on the 1st of each month.
 Alert me when NVDA.US falls below $160.
 ```
 
+## Backtest a strategy before trading
+
+Have the AI write your trading rules as a strategy script, test it on historical data with the Longbridge CLI, and only then decide whether to place any order. The [Backtest guide](/docs/cli/quant/backtest) includes a ready-to-copy prompt, a sample script, and how to read the report, including net profit, max drawdown, Sharpe ratio, and win rate.
+
+```text
+Write a Longbridge backtest script in Navi for a 20/50-day EMA crossover on AAPL.US, and give me the longbridge quant run command to test it from 2024-01-01 to 2025-12-31.
+```
+
+Backtests use historical data and do not predict future results.
+
 ## Practice with a paper account
 
 Not ready to trade with real money? Authorize Longbridge MCP with a paper trading account and rehearse the entire workflow — research, order building, confirmation, and cancellation — with simulated funds. When you authorize with your live account, orders are real brokerage orders.

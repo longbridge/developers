@@ -16,6 +16,68 @@ Use `strategy()` mode to simulate a trading strategy over historical data. The s
 - Use `--format json` to get the full performance report
 - Parse the report with `jq`: `.report_json | fromjson`
 
+## Generate a Strategy Script with AI
+
+You don't have to write the script yourself. Describe the strategy to an AI assistant such as Claude, ChatGPT, or Cursor, ask for a Navi `strategy()` script, then backtest it with `longbridge quant run`.
+
+### Step 1: Ask the AI for a script
+
+Copy this prompt and change the symbol, rules, and dates to fit your idea:
+
+```text
+Write a Longbridge backtest script in Navi (syntax reference: https://navi-lang.org/llms-full.txt).
+Requirements:
+- Start with strategy(); initial capital 50000, commission 0.1% of trade value, each entry uses 10% of equity
+- Buy when the 20-day EMA crosses above the 50-day EMA; close the position when it crosses below
+- Use strategy.entry() and strategy.close() for orders
+- Symbol AAPL.US, daily bars, from 2024-01-01 to 2025-12-31
+Return the full longbridge quant run command with --format json and the script in --script.
+```
+
+### Step 2: Run the backtest
+
+A typical answer looks like this. The settings follow [Strategy Settings](#strategy-settings) and the entry and exit logic follows the [EMA Crossover Strategy](#ema-crossover-strategy):
+
+```bash
+longbridge quant run AAPL.US \
+  --start 2024-01-01 --end 2025-12-31 \
+  --format json \
+  --script '
+strategy(
+    "EMA 20/50 Cross",
+    overlay: true,
+    initial_capital: 50000,
+    commission_type: CommissionType.Percent,
+    commission_value: 0.1,
+    default_qty_type: DefaultQtyType.PercentOfEquity,
+    default_qty_value: 10
+);
+let fast = ta.ema(close, 20);
+let slow = ta.ema(close, 50);
+if ta.cross_over(fast, slow) {
+    strategy.entry("Long", Direction.Long);
+}
+if ta.cross_under(fast, slow) {
+    strategy.close("Long");
+}
+' | jq '.report_json | fromjson | .performanceAll'
+```
+
+If the command returns a syntax error, paste the error back to the AI and ask it to fix the script.
+
+### Step 3: Read the report
+
+Start with these fields in `performanceAll`, then see [Report Reference](#report-reference) for the rest:
+
+- `netProfitPercent` vs. `buyHoldReturnPercent`: did the strategy beat simply holding the stock?
+- `maxDrawdownPercent`: the largest drop from an equity peak
+- `totalClosedTrades` and `percentProfitable`: how many trades, and how many made money
+- `sharpeRatio`: return relative to volatility
+
+To try a variation, ask the AI to change one rule at a time (for example, the EMA lengths or an added stop-loss) and run the backtest again. Backtests use historical data and do not predict future results.
+
+Once you have a strategy you want to follow, see [Trade Stocks and Options with AI](/docs/mcp/trading) to research and place orders through an AI client.
+
 ## Strategy Settings
 
 Common parameters for the `strategy()` declaration and their defaults:
