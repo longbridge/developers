@@ -16,6 +16,68 @@ slug: '/cli/quant/backtest'
 - 使用 `--format json` 获取完整绩效报告
 - 用 `jq` 解析报告：`.report_json | fromjson`
 
+## 用 AI 生成策略脚本
+
+不一定要自己写脚本。向 Claude、ChatGPT、Cursor 等 AI 助手描述策略，让它写一个 Navi `strategy()` 脚本，再用 `longbridge quant run` 回测。
+
+### 第一步：让 AI 写脚本
+
+复制下面的提示词，按你的想法修改标的、规则和日期：
+
+```text
+请用 Navi 写一个 Longbridge 回测脚本（语法参考：https://navi-lang.org/llms-full.txt）。
+要求：
+- 以 strategy() 开头；初始资金 50000，手续费为成交金额的 0.1%，每次开仓用 10% 权益
+- 20 日 EMA 上穿 50 日 EMA 时买入；下穿时平仓
+- 用 strategy.entry() 和 strategy.close() 下单
+- 标的 AAPL.US，日 K，2024-01-01 至 2025-12-31
+请给出完整的 longbridge quant run 命令，带 --format json，脚本放在 --script 里。
+```
+
+### 第二步：运行回测
+
+AI 通常会给出类似下面的结果。参数写法见[策略设置](#策略设置)，开仓和平仓逻辑与 [EMA 金叉策略](#ema-金叉策略)相同：
+
+```bash
+longbridge quant run AAPL.US \
+  --start 2024-01-01 --end 2025-12-31 \
+  --format json \
+  --script '
+strategy(
+    "EMA 20/50 Cross",
+    overlay: true,
+    initial_capital: 50000,
+    commission_type: CommissionType.Percent,
+    commission_value: 0.1,
+    default_qty_type: DefaultQtyType.PercentOfEquity,
+    default_qty_value: 10
+);
+let fast = ta.ema(close, 20);
+let slow = ta.ema(close, 50);
+if ta.cross_over(fast, slow) {
+    strategy.entry("Long", Direction.Long);
+}
+if ta.cross_under(fast, slow) {
+    strategy.close("Long");
+}
+' | jq '.report_json | fromjson | .performanceAll'
+```
+
+如果命令返回语法错误，把错误信息贴回给 AI，让它修改脚本。
+
+### 第三步：看报告
+
+先看 `performanceAll` 中的这几个字段，其余见[报告参考](#报告参考)：
+
+- `netProfitPercent` 对比 `buyHoldReturnPercent`：策略有没有跑赢一直持有？
+- `maxDrawdownPercent`：权益从高点回落的最大幅度
+- `totalClosedTrades` 和 `percentProfitable`：交易了多少次、多少次盈利
+- `sharpeRatio`：相对波动的收益
+
+想试其他版本，可以让 AI 每次只改一条规则（比如 EMA 周期，或加一个止损），再回测一次。回测基于历史数据，不代表未来表现。
+
+确定想跟的策略后，可参考[用 AI 交易股票和期权](/zh-CN/docs/mcp/trading)，通过 AI 客户端研究市场和下单。
+
 ## 策略设置
 
 `strategy()` 声明的常用参数及默认值：
