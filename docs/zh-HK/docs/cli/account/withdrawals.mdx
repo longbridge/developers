@@ -85,7 +85,7 @@ longbridge withdrawals --page 2 --count 50
 | `currency`、`amount` | 申請金額。金額均為十進制字符串（如 `"20000.00"`） |
 | `fee` | 提款手續費 |
 | `settlement_amount` | 實際出賬金額 |
-| `state`、`state_label` | 狀態碼及標籤：`submitted`、`processing`、`rejected`、`cancelled`、`remitted`、`failed`、`refunded`、`approved_awaiting_payout`、`large_amount_review`、`awaiting_confirmation` 等 |
+| `state`、`state_label` | 服務端原始狀態碼，及其標籤（CLI 未知的狀態碼沒有標籤）：`submitted`、`processing`、`rejected`、`cancelled`、`remitted`、`failed`、`refunded`、`approved_awaiting_payout`、`large_amount_review`、`awaiting_confirmation` 等 |
 | `state_description` | App 展示的狀態文案，有值時優先使用 |
 | `bank_account` | 收款賬號，**脫敏為僅顯示後 4 位**，與 [`bank-cards`](/zh-HK/docs/cli/account/bank-cards) 的 `account` 對應 |
 | `display_bank_account`、`user_bank_swift_code` | App 中展示的賬號及 SWIFT 代碼 |

@@ -85,7 +85,7 @@ Each entry in `list[]` has:
 | `currency`, `amount` | Amount applied for. Amounts are decimal strings (e.g. `"20000.00"`) |
 | `fee` | Withdrawal fee |
 | `settlement_amount` | Amount actually paid out |
-| `state`, `state_label` | State code and label: `submitted`, `processing`, `rejected`, `cancelled`, `remitted`, `failed`, `refunded`, `approved_awaiting_payout`, `large_amount_review`, `awaiting_confirmation`, … |
+| `state`, `state_label` | The service's raw state code, and its label (absent for a code the CLI does not know): `submitted`, `processing`, `rejected`, `cancelled`, `remitted`, `failed`, `refunded`, `approved_awaiting_payout`, `large_amount_review`, `awaiting_confirmation`, … |
 | `state_description` | Status text as the app shows it; prefer it when present |
 | `bank_account` | Receiving account, **masked to the last 4 digits** — matches `account` in [`bank-cards`](/docs/cli/account/bank-cards) |
 | `display_bank_account`, `user_bank_swift_code` | Account as displayed in the app, and SWIFT code |

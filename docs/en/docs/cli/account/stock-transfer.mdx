@@ -113,10 +113,10 @@ Each entry in `records[]` has:
 | `market` | Market of the shares |
 | `broker`, `broker_en`, `code` | The other broker's name, English name and broker code |
 | `account` | Your account at the other broker, **masked to the last 4 digits** |
-| `state`, `state_code`, `state_label` | Status text, code, and label (`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`) |
+| `state`, `state_code`, `state_label` | Status text, the service's raw state code, and its label — absent for a code the CLI does not know (`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`) |
 | `can_modify` | `1` when the application can still be cancelled or changed in the app |
 | `app_state`, `user_notified_broker` | `app_state` is the app-side step; `user_notified_broker` (present whenever `app_state` is) is `true` when you tapped "I have notified the broker" in the app — your own confirmation, not a Longbridge action |
-| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state`, `state_label` (`processing` / `succeeded` / `failed`) |
+| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state` (the service's raw code), `state_label` (`processing` / `succeeded` / `failed`) |
 | `created_at`, `updated_at`, `process_at`, `exec_at` | Timestamps. Transfer-in records have no `agree_at`, `refuse_at` or `cancel_at` |
 | `days_in_process` | Days from creation until execution; for a finished application (cancelled, failed, completed or partially completed) without an execution time, until its last update — absent when that is unknown too; for an open one until today |
 | `remark`, `reason` | The failure or cancellation reason, when there is one |
@@ -214,9 +214,9 @@ Each entry in `records[]` has:
 | `market` | Market of the shares |
 | `broker`, `broker_en`, `code` | The receiving broker's name, English name and broker code |
 | `account` | Your account at the other broker, **masked to the last 4 digits** |
-| `state`, `state_code`, `state_label` | Status text, code, and label (`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`). Only state `0` can still be cancelled |
+| `state`, `state_code`, `state_label` | Status text, the service's raw state code, and its label — absent for a code the CLI does not know (`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`). Only state `0` can still be cancelled |
 | `app_state`, `user_notified_broker` | As in [`stock-transfer in`](/docs/cli/account/stock-transfer#stock-transfer-in): `user_notified_broker` is present whenever `app_state` is |
-| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state`, `state_label` (`processing` / `succeeded` / `failed`) |
+| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state` (the service's raw code), `state_label` (`processing` / `succeeded` / `failed`) |
 | `created_at`, `updated_at`, `agree_at`, `refuse_at`, `cancel_at`, `process_at`, `exec_at` | Timestamps |
 | `days_in_process` | Days from creation until execution; for a finished application (cancelled, rejected, failed, completed or partially completed) without an execution time, until `cancel_at`, `refuse_at` or the last update — absent when none of these is known; for an open one until today |
 | `remark`, `reason` | Remark, and the rejection or cancellation reason, when there is one |

@@ -114,7 +114,7 @@ App 置頂或置底展示的卡券只在第 1 頁返回。
 | --- | --- |
 | `card_id` | 卡券 id（32 位十六進制），可傳給 [`coupon orders --card-id`](/zh-HK/docs/cli/account/coupon#coupon-orders) |
 | `card_type`、`title`、`title_sec`、`description`、`detail` | 卡券類型、標題及使用須知 |
-| `card_status`、`card_status_label` | 狀態碼及標籤：`unused`、`used`、`expired`、`redeeming`、`in_use` 或 `processing` |
+| `card_status`、`card_status_label` | 服務端原始狀態碼，及其標籤（CLI 未知的狀態碼沒有標籤）：`unused`、`used`、`expired`、`redeeming`、`in_use` 或 `processing` |
 | `start_time`、`end_time` | 有效期。永久有效的卡券沒有 `end_time`，返回 `no_expiry: true` |
 | `activate_time` | 激活時間 |
 | `amount`、`currency` | 卡券面值（如適用），為十進制字符串，如 `"1000.00"` |
@@ -140,14 +140,24 @@ App 置頂或置底展示的卡券只在第 1 頁返回。
 | `coffee_coupon` | `coupon_channel`, `coupon_id`, `coupon_no`, `is_available_all_store`, `period_type`, `settled_store_id`, `store_id_list`, `store_list[]` {`store_id`, `store_name`}, `threshold`, `use_limit` |
 | `ai_benefit` | `benefit_days`, `benefit_start`, `benefit_end`, `benefit_tag` |
 
-這些對象中的代碼均為數字，CLI 無法識別的代碼不輸出：
+這些對象中的代碼均為服務端原始數字，CLI 未知的代碼也會原樣輸出：
 
-- `bz_types`（`commission` 與 `platform_fee_deduct` 中）及 `stock_fragment.underlying_type`：`0` 股票，`1` 美股期權，`2` 港股窩輪，`3` ETF，`4` LOF。`commission.targets` 為同一組代碼的名稱（`stocks` / `options` / `warrants` / `ETF` / `LOF`），只要有 `bz_types` 就會有
+- `bz_types`（`commission` 與 `platform_fee_deduct` 中）及 `stock_fragment.underlying_type`：`0` 股票，`1` 美股期權，`2` 港股窩輪，`3` ETF，`4` LOF。`commission.targets` 為其中已知代碼的名稱（`stocks` / `options` / `warrants` / `ETF` / `LOF`），`bz_types` 中至少有一個已知代碼時才會出現
 - `ipo_commission.bz_types`：`1` 融資認購新股，`2` 現金認購新股
-- `commission.unlimited`：`0` proportionate，`1` full，`2` lifetime，`6` by amount per，`7` by rate per
+- `commission.unlimited`：`0` 限時免佣，`1` 返佣，`2` 抵扣，`6` 按次使用、每次固定金額的卡（`amount` / `usage_count`），`7` 按次使用、每次優惠以 `amount_limit` 為上限的折扣卡
 - `investor_type`（`quote` / `fundamental` 中）：`0` 不限，`1` 非專業投資者，`2` 專業投資者
 
-`usage_count` 與 `lave_usage_count` 為已使用次數和剩餘次數；`superposition` 為 `true` 表示可與其他卡券疊加使用。`commission.commission_balance`、`stock.amount` 和 `finance_interest.discount_rate` 為十進制字符串，其餘取值按服務端返回原樣輸出。卡券尚未在門店核銷時沒有 `coffee_coupon.settled_store_id`。這些對象中的時間（`commission_expired_time`、`current_end_time`、`benefit_start`、`benefit_end`）均為香港時間（+08:00），未設置的時間不輸出。
+其他取值：
+
+- `commission.commission_duration` 與 `quote_duration` 以秒為單位；200 年及以上表示終身免費
+- `commission.amount_limit` 為 `unlimited` 為 `7` 的卡每次使用的優惠上限
+- `usage_count` 與 `lave_usage_count` 為已使用次數和剩餘次數；`superposition` 為 `true` 表示可與其他卡券疊加使用
+- `ai_benefit.benefit_days` 以天為單位
+- `ipo_interest.discount_rate` 為年化利率
+- `coffee_coupon.coupon_no` 為券的模板編碼（如 `coffee-50`），不是個人兌換碼；卡券尚未在門店核銷時沒有 `settled_store_id`
+- `cash.receive_duration` 及 `finance_interest` 各字段的含義尚未確認，按服務端返回原樣輸出
+
+`commission.commission_balance`、`stock.amount` 和 `finance_interest.discount_rate` 為十進制字符串，其餘取值按服務端返回原樣輸出。這些對象中的時間（`commission_expired_time`、`current_end_time`、`benefit_start`、`benefit_end`）均為香港時間（+08:00），未設置的時間不輸出。
 
 沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如從未激活的卡券沒有 `activate_time`。
 

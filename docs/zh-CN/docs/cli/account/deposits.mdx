@@ -100,7 +100,7 @@ longbridge deposits --page 2 --count 50
 | `created_at`、`updated_at` | 申请时间及最后更新时间 |
 | `currency`、`amount` | 你通知 / 申请的金额。金额均为十进制字符串（如 `"3000.00"`） |
 | `receivable_amount` | Longbridge 银行实际到账金额；`0` 表示尚未收到 |
-| `state`、`state_code`、`state_label` | 状态文案、状态码及标签（`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`） |
+| `state`、`state_code`、`state_label` | 状态文案、服务端原始状态码及标签（CLI 未知的状态码没有标签；`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`） |
 | `sub_state_code` | 子状态码 |
 | `bank_operation_type_name` | 入金方式，如 eDDA、FPS、银行转账 |
 | `can_cancel` | 是否仍可撤销 |

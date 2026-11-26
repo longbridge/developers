@@ -45,6 +45,7 @@ The default table shows sent (time), type, activity, reward, amount (with curren
       "currency": "HKD",
       "status": 12,
       "status_label": "issued",
+      "deliver_status": 0,
       "send_time": "2026-10-12T09:00:00+08:00"
     }
   ],
@@ -90,19 +91,19 @@ Each entry in `rewards[]` has:
 
 | Field | Description |
 | --- | --- |
-| `reward_type`, `reward_type_label` | `cash`, `gift`, `coupon` or `task` (the same values as `--kind`) |
+| `reward_type`, `reward_type_label` | `reward_type` is the service's code, absent when it sent none. `reward_type_label` is `cash`, `gift`, `coupon` or `task` (the same values as `--kind`), named after a known code and otherwise after the record's details |
 | `record_id`, `activity_title`, `title`, `description` | Record id, the campaign it came from, and the reward's title and description |
-| `card_type`, `card_status` | For coupon rewards |
+| `card_type`, `card_status` | For coupon rewards; `card_status` is the service's raw code |
 | `prize_type`, `prize_type_label` | `physical` means shipped goods |
 | `amount`, `currency` | Reward amount, as a decimal string (e.g. `"38"`) |
-| `status`, `status_label` | `upcoming`, `cancelled`, `exited_activity`, `unclaimed`, `issuing`, `issued`, `failed`, `exchanged`, `expired` or `refunded` |
-| `deliver_status`, `deliver_status_label` | Delivery status code, and its label for issued prizes only: `not_activated`, `activated_or_shipping`, `consumed`, `e_voucher_activating`, `e_voucher_expired_before_activation`, `e_voucher_invalid`, `address_missing`, `address_filled` or `shipping` |
+| `status`, `status_label` | The service's raw status code, and its label (absent for a code the CLI does not know): `upcoming`, `cancelled`, `exited_activity`, `unclaimed`, `issuing`, `issued`, `failed`, `exchanged`, `expired` or `refunded` |
+| `deliver_status`, `deliver_status_label` | The service's raw delivery status code. The label is given only for an issued prize (prize details with `status` `12`): `not_activated`, `activated_or_shipping`, `consumed`, `e_voucher_activating`, `e_voucher_expired_before_activation`, `e_voucher_invalid`, `address_missing`, `address_filled` (code `9` or `11`) or `shipping` |
 | `exit_status` | Exit status code, as returned by the service; absent when `0` |
 | `send_time`, `start_time`, `end_time`, `effective_time`, `receive_deadline` | Timestamps |
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `send_time` on a reward not issued yet) are omitted the same way.
 
-`total` is the number of records of the selected type (only without `--start` / `--end`). A reward is identified by `activity_title` and `send_time`; the coupon cards it granted are listed by [`coupon list`](/docs/cli/account/coupon#coupon-list). Redemption codes, voucher secrets, delivery addresses and phone numbers are never printed.
+`total` is the number of records of the selected type (only without `--start` / `--end`). A reward is identified by `activity_title` and `send_time`; the coupon cards it granted are listed by [`coupon list`](/docs/cli/account/coupon#coupon-list). Redemption secrets (such as a voucher secret or a cash card code), delivery addresses and phone numbers are never printed. A coupon's template code is not a secret and is shown — for example `coffee_coupon.coupon_no` in [`coupon list`](/docs/cli/account/coupon#coupon-list).
 
 ## Requirements
 

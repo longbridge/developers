@@ -114,7 +114,7 @@ Each entry in `cards[]` has:
 | --- | --- |
 | `card_id` | Coupon id (32 hex characters) — pass it to [`coupon orders --card-id`](/docs/cli/account/coupon#coupon-orders) |
 | `card_type`, `title`, `title_sec`, `description`, `detail` | Card type, titles and terms |
-| `card_status`, `card_status_label` | Status code and label: `unused`, `used`, `expired`, `redeeming`, `in_use` or `processing` |
+| `card_status`, `card_status_label` | The service's raw status code, and its label (absent for a code the CLI does not know): `unused`, `used`, `expired`, `redeeming`, `in_use` or `processing` |
 | `start_time`, `end_time` | Validity period. A card that never expires has no `end_time` and carries `no_expiry: true` |
 | `activate_time` | When the card was activated |
 | `amount`, `currency` | Card value as a decimal string (e.g. `"1000.00"`), where applicable |
@@ -140,14 +140,24 @@ Each card also carries the terms object of its own `card_type` — for example `
 | `coffee_coupon` | `coupon_channel`, `coupon_id`, `coupon_no`, `is_available_all_store`, `period_type`, `settled_store_id`, `store_id_list`, `store_list[]` {`store_id`, `store_name`}, `threshold`, `use_limit` |
 | `ai_benefit` | `benefit_days`, `benefit_start`, `benefit_end`, `benefit_tag` |
 
-Codes in these objects are numbers. A code the CLI does not recognise is left out.
+Codes in these objects are the service's raw numbers; a code the CLI does not know is printed as is.
 
-- `bz_types` (in `commission` and `platform_fee_deduct`) and `stock_fragment.underlying_type`: `0` stocks, `1` US options, `2` HK warrants, `3` ETF, `4` LOF. `commission.targets` names the same codes (`stocks` / `options` / `warrants` / `ETF` / `LOF`) and is present whenever `bz_types` is
+- `bz_types` (in `commission` and `platform_fee_deduct`) and `stock_fragment.underlying_type`: `0` stocks, `1` US options, `2` HK warrants, `3` ETF, `4` LOF. `commission.targets` names the known codes (`stocks` / `options` / `warrants` / `ETF` / `LOF`) and is present when `bz_types` holds at least one of them
 - `ipo_commission.bz_types`: `1` financing (margin) IPO, `2` cash IPO
-- `commission.unlimited`: `0` proportionate, `1` full, `2` lifetime, `6` by amount per, `7` by rate per
+- `commission.unlimited`: `0` time-limited free commission, `1` rebate, `2` deduction, `6` per-use card with a fixed amount per use (`amount` / `usage_count`), `7` per-use discount card capped at `amount_limit` per use
 - `investor_type` (in `quote` / `fundamental`): `0` any, `1` non-professional, `2` professional
 
-`usage_count` and `lave_usage_count` are the times used and the uses left; `superposition` is `true` when the card can be combined with other coupons. `commission.commission_balance`, `stock.amount` and `finance_interest.discount_rate` are decimal strings; the other values are printed as the service returns them. `coffee_coupon.settled_store_id` is absent until the card is settled at a store. Times inside these objects (`commission_expired_time`, `current_end_time`, `benefit_start`, `benefit_end`) are Hong Kong time (+08:00), and unset times are omitted.
+Other values:
+
+- `commission.commission_duration` and `quote_duration` are in seconds; 200 years or more means lifetime free
+- `commission.amount_limit` is the per-use cap of an `unlimited` `7` card
+- `usage_count` and `lave_usage_count` are the times used and the uses left; `superposition` is `true` when the card can be combined with other coupons
+- `ai_benefit.benefit_days` is in days
+- `ipo_interest.discount_rate` is an annual rate
+- `coffee_coupon.coupon_no` is the voucher's template code (e.g. `coffee-50`), not a personal redemption code; `settled_store_id` is absent until the card is settled at a store
+- The meaning of `cash.receive_duration` and of the `finance_interest` fields is not confirmed; they are printed as the service returns them
+
+`commission.commission_balance`, `stock.amount` and `finance_interest.discount_rate` are decimal strings; the other values are printed as the service returns them. Times inside these objects (`commission_expired_time`, `current_end_time`, `benefit_start`, `benefit_end`) are Hong Kong time (+08:00), and unset times are omitted.
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `activate_time` is absent on a card that was never activated.
 

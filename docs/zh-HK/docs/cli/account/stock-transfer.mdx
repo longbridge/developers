@@ -113,10 +113,10 @@ longbridge stock-transfer in --page 2 --count 50
 | `market` | 股票所屬市場 |
 | `broker`、`broker_en`、`code` | 對方券商名稱、英文名稱及券商代碼 |
 | `account` | 你在對方券商的賬號，**脫敏為僅顯示後 4 位** |
-| `state`、`state_code`、`state_label` | 狀態文案、狀態碼及標籤（`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`） |
+| `state`、`state_code`、`state_label` | 狀態文案、服務端原始狀態碼及標籤（CLI 未知的狀態碼沒有標籤；`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`） |
 | `can_modify` | 為 `1` 表示仍可在 App 內撤銷或修改 |
 | `app_state`、`user_notified_broker` | `app_state` 為 App 端的步驟；只要有 `app_state` 就會有 `user_notified_broker`，為 `true` 表示你已在 App 內點擊「我已通知」轉出券商——這是你自己的確認，不是 Longbridge 的操作 |
-| `stocks[]` | 每隻股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`、`state_label`（`processing` / `succeeded` / `failed`） |
+| `stocks[]` | 每隻股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`（服務端原始狀態碼）、`state_label`（`processing` / `succeeded` / `failed`） |
 | `created_at`、`updated_at`、`process_at`、`exec_at` | 各時間點。轉入記錄沒有 `agree_at`、`refuse_at` 和 `cancel_at` |
 | `days_in_process` | 自創建到執行的天數；已結束（已撤銷、失敗、已完成或部分完成）但沒有執行時間的，算到最後更新時間，該時間也未知時不輸出；未結束的算到今天 |
 | `remark`、`reason` | 失敗或撤銷原因（如有） |
@@ -214,9 +214,9 @@ longbridge stock-transfer out --page 2 --count 50
 | `market` | 股票所屬市場 |
 | `broker`、`broker_en`、`code` | 接收券商名稱、英文名稱及券商代碼 |
 | `account` | 你在對方券商的賬號，**脫敏為僅顯示後 4 位** |
-| `state`、`state_code`、`state_label` | 狀態文案、狀態碼及標籤（`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`）。僅狀態 `0` 仍可撤銷 |
+| `state`、`state_code`、`state_label` | 狀態文案、服務端原始狀態碼及標籤（CLI 未知的狀態碼沒有標籤；`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`）。僅狀態 `0` 仍可撤銷 |
 | `app_state`、`user_notified_broker` | 同 [`stock-transfer in`](/zh-HK/docs/cli/account/stock-transfer#stock-transfer-in)：只要有 `app_state` 就會有 `user_notified_broker` |
-| `stocks[]` | 每隻股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`、`state_label`（`processing` / `succeeded` / `failed`） |
+| `stocks[]` | 每隻股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`（服務端原始狀態碼）、`state_label`（`processing` / `succeeded` / `failed`） |
 | `created_at`、`updated_at`、`agree_at`、`refuse_at`、`cancel_at`、`process_at`、`exec_at` | 各時間點 |
 | `days_in_process` | 自創建到執行的天數；已結束（已撤銷、已拒絕、失敗、已完成或部分完成）但沒有執行時間的，算到 `cancel_at`、`refuse_at` 或最後更新時間，均未知時不輸出；未結束的算到今天 |
 | `remark`、`reason` | 備註，以及拒絕或撤銷原因（如有） |

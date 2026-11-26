@@ -79,10 +79,11 @@ longbridge bank-cards --format json
 | `verification` | `unverified`（尚未認證：用這張卡入金任意金額，或完成 eDDA / 銀證轉賬授權即可認證）、`under_review`（綁卡後人工審核中，期間不能使用）或 `verified`（已認證） |
 | `witness` | `not_required`、`pending` 或 `witnessed` |
 | `binding` | `binding`、`bound` 或 `failed` |
+| `status`、`witness_state`、`bind_state` | 服務端原始狀態碼，僅在 `verification`、`witness` 或 `binding` 沒有對應的已知標籤時出現 |
 | `review_days` | 卡片添加至今的天數，僅 `under_review` 時返回 |
 | `bind_tip`、`remark` | App 中展示的審核提示及備註 |
 | `created_at` | 添加時間 |
-| `auth_list[]` | 該卡的授權：`flow_id`（`hk_edda` / `hk_sdda`：eDDA，`hk_bank_sec`：銀證轉賬，`hk_fps`：FPS）、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`max_amount`、`max_amount_unlimited`、`daily_max_count`、`daily_max_count_unlimited`、`expiry_date`、`long_term_valid`、`is_support`（為 `true` 表示銀行支持此授權方式）、`doc_reviewing`、`no_prior_deposit_reviewing` |
+| `auth_list[]` | 該卡的授權：`flow_id`（`hk_edda` / `hk_sdda`：eDDA，`hk_bank_sec`：銀證轉賬，`hk_fps`：FPS）、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`status`（原始狀態碼，僅在 `authorization` 沒有已知標籤時出現）、`failure_reason`、`max_amount`、`max_amount_unlimited`、`daily_max_count`、`daily_max_count_unlimited`、`expiry_date`、`long_term_valid`、`is_support`（為 `true` 表示銀行支持此授權方式）、`doc_reviewing`、`no_prior_deposit_reviewing` |
 
 只返回上述字段；沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串（例如卡片不在 `under_review` 時沒有 `review_days`）。完整賬號、賬戶持有人姓名、身份證明文件圖片、收款人地址及 SWIFT 信息不會輸出。只查看 eDDA 授權可使用 [`edda list`](/zh-HK/docs/cli/account/edda#edda-list)。
 

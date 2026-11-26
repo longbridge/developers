@@ -75,6 +75,7 @@ longbridge edda list --format json
 | `flow` | `hk_edda`（在銀行授權）或 `hk_sdda`（在 App 內授權） |
 | `name`、`currency` | 授權名稱及幣種 |
 | `authorization` | `unauthorized`、`authorized`、`authorizing` 或 `failed` |
+| `status` | 原始授權狀態碼，僅在 `authorization` 沒有已知標籤時出現 |
 | `failure_reason` | 授權失敗時銀行返回的信息 |
 | `max_amount`、`max_amount_unlimited` | 入金上限（十進制字符串），以及是否不限額 |
 | `daily_max_count`、`daily_max_count_unlimited` | 每日入金次數上限，以及是否不限次數 |
@@ -134,7 +135,7 @@ longbridge edda status --card-id 100001 --currency HKD --format json
 
 ### 輸出字段
 
-`applications[]` 中每項包含 `id`、`flow_id`、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`created_at` 和 `updated_at`。輸出中不含銀行賬號。
+`applications[]` 中每項包含 `id`、`flow_id`、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`status`（原始狀態碼，僅在 `authorization` 沒有已知標籤時出現）、`failure_reason`、`created_at` 和 `updated_at`。輸出中不含銀行賬號。
 
 沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如申請未失敗時沒有 `failure_reason`。
 

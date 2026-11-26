@@ -100,7 +100,7 @@ Each entry in `items[]` has:
 | `created_at`, `updated_at` | When the deposit was applied for and last updated |
 | `currency`, `amount` | Amount you notified / applied for. Amounts are decimal strings (e.g. `"3000.00"`) |
 | `receivable_amount` | Amount actually received by Longbridge's bank; `0` means not received yet |
-| `state`, `state_code`, `state_label` | Status text, code, and label (`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`) |
+| `state`, `state_code`, `state_label` | Status text, the service's raw state code, and its label — absent for a code the CLI does not know (`processing` / `credited` / `failed` / `cancelled` / `invalidated` / `rejected`) |
 | `sub_state_code` | Sub-state code |
 | `bank_operation_type_name` | Deposit method, e.g. eDDA, FPS, bank transfer |
 | `can_cancel` | Whether the deposit can still be cancelled |

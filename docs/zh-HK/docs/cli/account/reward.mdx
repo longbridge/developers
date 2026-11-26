@@ -45,6 +45,7 @@ longbridge reward list --format json
       "currency": "HKD",
       "status": 12,
       "status_label": "issued",
+      "deliver_status": 0,
       "send_time": "2026-10-12T09:00:00+08:00"
     }
   ],
@@ -90,19 +91,19 @@ longbridge reward list --page 2 --count 50
 
 | 字段 | 說明 |
 | --- | --- |
-| `reward_type`、`reward_type_label` | `cash`、`gift`、`coupon` 或 `task`（與 `--kind` 取值一致） |
+| `reward_type`、`reward_type_label` | `reward_type` 為服務端返回的類型碼，未返回時不輸出。`reward_type_label` 為 `cash`、`gift`、`coupon` 或 `task`（與 `--kind` 取值一致），類型碼已知時按類型碼命名，否則按記錄所帶的明細命名 |
 | `record_id`、`activity_title`、`title`、`description` | 記錄 id、所屬活動，以及獎勵標題和說明 |
-| `card_type`、`card_status` | 卡券類獎勵適用 |
+| `card_type`、`card_status` | 卡券類獎勵適用；`card_status` 為服務端原始狀態碼 |
 | `prize_type`、`prize_type_label` | `physical` 表示寄送的實物 |
 | `amount`、`currency` | 獎勵金額，為十進制字符串（如 `"38"`） |
-| `status`、`status_label` | `upcoming`、`cancelled`、`exited_activity`、`unclaimed`、`issuing`、`issued`、`failed`、`exchanged`、`expired` 或 `refunded` |
-| `deliver_status`、`deliver_status_label` | 物流狀態碼；標籤僅已發放的獎品有：`not_activated`、`activated_or_shipping`、`consumed`、`e_voucher_activating`、`e_voucher_expired_before_activation`、`e_voucher_invalid`、`address_missing`、`address_filled` 或 `shipping` |
+| `status`、`status_label` | 服務端原始狀態碼，及其標籤（CLI 未知的狀態碼沒有標籤）：`upcoming`、`cancelled`、`exited_activity`、`unclaimed`、`issuing`、`issued`、`failed`、`exchanged`、`expired` 或 `refunded` |
+| `deliver_status`、`deliver_status_label` | 服務端原始物流狀態碼。僅已發放的獎品（獎品明細的 `status` 為 `12`）才有標籤：`not_activated`、`activated_or_shipping`、`consumed`、`e_voucher_activating`、`e_voucher_expired_before_activation`、`e_voucher_invalid`、`address_missing`、`address_filled`（狀態碼 `9` 或 `11`）或 `shipping` |
 | `exit_status` | 退出狀態碼，按服務端返回原樣輸出；為 `0` 時不輸出 |
 | `send_time`、`start_time`、`end_time`、`effective_time`、`receive_deadline` | 各時間點 |
 
 沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。未設置的時間（例如尚未發放獎勵的 `send_time`）同樣不輸出。
 
-`total` 為所選類型的全部記錄數（僅不帶 `--start` / `--end` 時返回）。一筆獎勵由 `activity_title` 和 `send_time` 確定；獎勵發放的卡券用 [`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 查看。兌換碼、券密、收貨地址及電話不會輸出。
+`total` 為所選類型的全部記錄數（僅不帶 `--start` / `--end` 時返回）。一筆獎勵由 `activity_title` 和 `send_time` 確定；獎勵發放的卡券用 [`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 查看。兌換密鑰（如券密、現金卡卡密）、收貨地址及電話不會輸出。卡券的模板編碼不屬於密鑰，會照常輸出，例如 [`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 中的 `coffee_coupon.coupon_no`。
 
 ## 權限要求
 

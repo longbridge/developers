@@ -75,6 +75,7 @@ Each entry in `authorizations[]` has:
 | `flow` | `hk_edda` (authorized at the bank) or `hk_sdda` (authorized in the app) |
 | `name`, `currency` | Authorization name and currency |
 | `authorization` | `unauthorized`, `authorized`, `authorizing` or `failed` |
+| `status` | The raw authorization code — present only when `authorization` has no known label |
 | `failure_reason` | The bank's message when the authorization failed |
 | `max_amount`, `max_amount_unlimited` | Deposit limit (a decimal string), and whether it is unlimited |
 | `daily_max_count`, `daily_max_count_unlimited` | Daily deposit count limit, and whether it is unlimited |
@@ -134,7 +135,7 @@ An empty list means no application was filed for that card and currency; the car
 
 ### Output fields
 
-Each entry in `applications[]` has `id`, `flow_id`, `name`, `currency`, `authorization` (`unauthorized` / `authorized` / `authorizing` / `failed`), `failure_reason`, `created_at` and `updated_at`. The output carries no account number.
+Each entry in `applications[]` has `id`, `flow_id`, `name`, `currency`, `authorization` (`unauthorized` / `authorized` / `authorizing` / `failed`), `status` (the raw code, only when `authorization` has no known label), `failure_reason`, `created_at` and `updated_at`. The output carries no account number.
 
 Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `failure_reason` is absent unless the application failed.
 
