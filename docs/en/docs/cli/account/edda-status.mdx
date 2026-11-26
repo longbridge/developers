@@ -9,7 +9,7 @@ sidebar_position: 24
 List the eDDA authorization applications filed for one linked bank card in one currency.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00).
 :::
 
 Most eDDA authorizations — for example one pushed by the bank — have no application, so this list is usually empty. To see whether a card is authorized, use [`edda`](/docs/cli/account/edda) first; use this command only to look up an application.
@@ -17,7 +17,7 @@ Most eDDA authorizations — for example one pushed by the bank — have no appl
 ## Basic Usage
 
 ```bash
-longbridge edda-status --card-id 102345 --currency HKD
+longbridge edda-status --card-id 100001 --currency HKD
 ```
 
 ## Examples
@@ -26,16 +26,18 @@ longbridge edda-status --card-id 102345 --currency HKD
 
 ```bash
 # Card id comes from `longbridge bank-cards` (id) or `longbridge edda` (card_id)
-longbridge edda-status --card-id 102345 --currency HKD
-# USD authorization, as JSON
-longbridge edda-status --card-id 102345 --currency USD --format json
+longbridge edda-status --card-id 100001 --currency HKD
+# The same applications as JSON
+longbridge edda-status --card-id 100001 --currency HKD --format json
 ```
+
+The default table shows `id`, flow, currency, authorization, failure reason, and the created / updated times to the minute. Use `--format json` for the fields listed below.
 
 ```json
 {
   "applications": [
     {
-      "id": 88001,
+      "id": 1000004,
       "flow_id": "hk_sdda",
       "name": "eDDA",
       "currency": "HKD",
@@ -47,6 +49,8 @@ longbridge edda-status --card-id 102345 --currency USD --format json
   ]
 }
 ```
+
+Example values are illustrative.
 
 An empty list means no application was filed for that card and currency; the card's current eDDA state is then in [`edda`](/docs/cli/account/edda).
 
@@ -60,6 +64,8 @@ An empty list means no application was filed for that card and currency; the car
 ## Output fields
 
 Each entry in `applications[]` has `id`, `flow_id`, `name`, `currency`, `authorization` (`unauthorized` / `authorized` / `authorizing` / `failed`), `failure_reason`, `created_at` and `updated_at`. The output carries no account number.
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `failure_reason` is absent unless the application failed.
 
 ## Requirements
 

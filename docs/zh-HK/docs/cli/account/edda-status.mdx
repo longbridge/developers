@@ -9,7 +9,7 @@ sidebar_position: 24
 列出某張綁定銀行卡在某個幣種下提交過的 eDDA 授權申請。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00）。
 :::
 
 多數 eDDA 授權（例如銀行端推送的授權）沒有申請單，因此該列表通常為空。要確認某張卡是否已授權，請先使用 [`edda`](/zh-HK/docs/cli/account/edda)；只在需要查申請單時使用本命令。
@@ -17,7 +17,7 @@ sidebar_position: 24
 ## 基本用法
 
 ```bash
-longbridge edda-status --card-id 102345 --currency HKD
+longbridge edda-status --card-id 100001 --currency HKD
 ```
 
 ## 示例
@@ -26,16 +26,18 @@ longbridge edda-status --card-id 102345 --currency HKD
 
 ```bash
 # 銀行卡 id 取自 `longbridge bank-cards`（id）或 `longbridge edda`（card_id）
-longbridge edda-status --card-id 102345 --currency HKD
-# 美元授權，JSON 輸出
-longbridge edda-status --card-id 102345 --currency USD --format json
+longbridge edda-status --card-id 100001 --currency HKD
+# 同一查詢，JSON 輸出
+longbridge edda-status --card-id 100001 --currency HKD --format json
 ```
+
+預設表格顯示 `id`、授權方式、幣種、授權狀態、失敗原因，以及精確到分鐘的創建 / 更新時間。需要下方列出的全部字段時請使用 `--format json`。
 
 ```json
 {
   "applications": [
     {
-      "id": 88001,
+      "id": 1000004,
       "flow_id": "hk_sdda",
       "name": "eDDA",
       "currency": "HKD",
@@ -47,6 +49,8 @@ longbridge edda-status --card-id 102345 --currency USD --format json
   ]
 }
 ```
+
+示例中的值僅作說明。
 
 列表為空表示該卡在該幣種下沒有提交過申請，此時該卡當前的 eDDA 狀態請看 [`edda`](/zh-HK/docs/cli/account/edda)。
 
@@ -60,6 +64,8 @@ longbridge edda-status --card-id 102345 --currency USD --format json
 ## 輸出字段
 
 `applications[]` 中每項包含 `id`、`flow_id`、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`created_at` 和 `updated_at`。輸出中不含銀行賬號。
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如申請未失敗時沒有 `failure_reason`。
 
 ## 權限要求
 

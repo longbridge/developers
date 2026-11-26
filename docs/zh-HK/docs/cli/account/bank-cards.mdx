@@ -9,7 +9,7 @@ sidebar_position: 20
 查看綁定至 Longbridge 賬戶的銀行卡列表，包括每張卡的審核狀態及其授權（eDDA、銀證轉賬、FPS）。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00）。
 :::
 
 ## 基本用法
@@ -28,14 +28,16 @@ longbridge bank-cards
 longbridge bank-cards --format json
 ```
 
+預設表格顯示 `id`、銀行、賬號、賬戶類型、認證狀態、見證狀態、綁卡狀態、審核天數及各項授權（每項的授權方式、幣種和狀態，授權失敗時在括號中附上失敗原因）。需要下方列出的全部字段時請使用 `--format json`。
+
 ```json
 {
   "cards": [
     {
-      "id": 102345,
-      "bank": "招商銀行",
-      "bank_code": "CMBCHKHH",
-      "account": "****9779",
+      "id": 100001,
+      "bank": "示例銀行",
+      "bank_code": "EXAMPLE1",
+      "account": "****1234",
       "region": "HK",
       "region_name": "香港",
       "country": "Hong Kong",
@@ -56,6 +58,8 @@ longbridge bank-cards --format json
 }
 ```
 
+示例中的值僅作說明。
+
 ## 輸出字段
 
 `cards[]` 中每項包含：
@@ -64,7 +68,7 @@ longbridge bank-cards --format json
 | --- | --- |
 | `id` | 銀行卡 id，可傳給 [`edda-status --card-id`](/zh-HK/docs/cli/account/edda-status) |
 | `bank`、`bank_en`、`bank_code` | 銀行名稱、英文名稱及銀行代碼 |
-| `account` | 銀行賬號，**脫敏為僅顯示後 4 位**（如 `****9779`） |
+| `account` | 銀行賬號，**脫敏為僅顯示後 4 位**（如 `****1234`） |
 | `account_type`、`region`、`region_name`、`country` | 賬戶類型及銀行賬戶所在地（`country` 是地區，不是貨幣） |
 | `verification` | `unverified`（尚未認證：用這張卡入金任意金額，或完成 eDDA / 銀證轉賬授權即可認證）、`under_review`（綁卡後人工審核中，期間不能使用）或 `verified`（已認證） |
 | `witness` | `not_required`、`pending` 或 `witnessed` |
@@ -74,7 +78,7 @@ longbridge bank-cards --format json
 | `created_at` | 添加時間 |
 | `auth_list[]` | 該卡的授權：`flow_id`（`hk_edda` / `hk_sdda`：eDDA，`hk_bank_sec`：銀證轉賬，`hk_fps`：FPS）、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`failure_reason`、`max_amount`、`max_amount_unlimited`、`daily_max_count`、`daily_max_count_unlimited`、`expiry_date`、`long_term_valid`、`is_support`、`doc_reviewing`、`no_prior_deposit_reviewing` |
 
-只返回上述字段，完整賬號、身份證明文件圖片及收款人地址不會輸出。只查看 eDDA 授權可使用 [`edda`](/zh-HK/docs/cli/account/edda)。
+只返回上述字段；沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串（例如卡片不在 `under_review` 時沒有 `review_days`）。完整賬號、賬戶持有人姓名、身份證明文件圖片、收款人地址及 SWIFT 信息不會輸出。只查看 eDDA 授權可使用 [`edda`](/zh-HK/docs/cli/account/edda)。
 
 ## 權限要求
 

@@ -9,7 +9,7 @@ sidebar_position: 23
 列出賬戶下每張綁定銀行卡的 eDDA（電子直接扣款授權）：是否已授權、入金限額、有效期，以及銀行返回的失敗原因。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00）。
 :::
 
 ## 基本用法
@@ -28,22 +28,28 @@ longbridge edda
 longbridge edda --format json
 ```
 
+預設表格顯示銀行卡 id、銀行、賬號、授權方式、幣種、授權狀態、入金上限（不限額時顯示 `unlimited`）、有效期（長期有效時顯示 `long-term`）及失敗原因。需要下方列出的全部字段時請使用 `--format json`。
+
 ```json
 {
   "authorizations": [
     {
-      "card_id": 102345,
-      "bank": "招商銀行",
-      "account": "****9779",
+      "card_id": 100001,
+      "bank": "示例銀行",
+      "account": "****1234",
       "card_binding": "bound",
       "flow": "hk_edda",
       "name": "eDDA",
       "currency": "HKD",
-      "authorization": "authorized"
+      "authorization": "authorized",
+      "max_amount_unlimited": true,
+      "long_term_valid": true
     }
   ]
 }
 ```
+
+示例中的值僅作說明。
 
 列表為空表示沒有任何綁定銀行卡做過 eDDA 授權。
 
@@ -63,10 +69,12 @@ longbridge edda --format json
 | `failure_reason` | 授權失敗時銀行返回的信息 |
 | `max_amount`、`max_amount_unlimited` | 入金上限，以及是否不限額 |
 | `daily_max_count`、`daily_max_count_unlimited` | 每日入金次數上限，以及是否不限次數 |
-| `expiry_date`、`long_term_valid` | 到期日，以及是否長期有效 |
+| `expiry_date`、`long_term_valid` | 到期日，以及是否長期有效（長期有效的授權沒有 `expiry_date`） |
 | `is_support` | 為 `1` 表示銀行支持此授權方式 |
 | `doc_reviewing` | 資料審核中 |
 | `no_prior_deposit_reviewing` | 因該卡無入金記錄而審核中 |
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如未設置上限時沒有 `max_amount`。
 
 這裡是每張卡的當前狀態。[`edda-status`](/zh-HK/docs/cli/account/edda-status) 只列出某張卡提交過的申請，通常為空。
 

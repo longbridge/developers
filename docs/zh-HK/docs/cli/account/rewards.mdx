@@ -6,10 +6,10 @@ sidebar_position: 27
 
 # longbridge rewards
 
-列出賬戶獲得的活動獎勵發放記錄——現金、卡券、禮品及任務獎勵，按時間倒序。
+列出賬戶獲得的活動獎勵（現金、卡券、禮品及任務獎勵），按時間倒序。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00），`--start` / `--end` 傳入的日期也按香港日期處理。
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00），`--start` / `--end` 傳入的日期也按香港日期處理。
 :::
 
 ## 基本用法
@@ -27,14 +27,16 @@ longbridge rewards
 longbridge rewards --format json
 ```
 
+預設表格顯示發放時間、類型、活動、獎勵、金額（含幣種）及狀態（已發放獎品附帶物流狀態），最後打印總數；使用 `--start` / `--end` 時，若有更早的記錄未檢索會打印提示。需要下方列出的全部字段時請使用 `--format json`。
+
 ```json
 {
   "rewards": [
     {
       "reward_type": 0,
       "reward_type_label": "cash",
-      "record_id": "7300125",
-      "activity_title": "新客入金獎勵",
+      "record_id": "1000003",
+      "activity_title": "示例入金活動",
       "title": "100 港元現金獎勵",
       "amount": "100",
       "currency": "HKD",
@@ -47,10 +49,12 @@ longbridge rewards --format json
 }
 ```
 
+示例中的值僅作說明。
+
 ### 按類型篩選
 
 ```bash
-# cash、gift、coupon 或 task
+# cash、gift（別名 prize）、coupon（別名 card）、task 或 all
 longbridge rewards --kind coupon
 ```
 
@@ -60,22 +64,22 @@ longbridge rewards --kind coupon
 longbridge rewards --start 2026-10-01 --end 2026-10-31
 ```
 
-帶 `--start` / `--end` 時，命令按 `send_time` 篩選，並自動翻頁讀取最多 300 條記錄（忽略 `--page`）。此時輸出以 `searched_all` 代替 `total`：為 `false` 表示更早的記錄未讀取，要找的獎勵可能在其中。尚未發放（無 `send_time`）的記錄總會包含在內。
+帶 `--start` / `--end` 時，命令按 `send_time` 篩選，並自動翻頁檢索：每頁固定 50 條，最多 6 頁（300 條），此時忽略 `--page` 和 `--count`。輸出用 `searched_all` 代替 `total`：為 `false` 表示更早的記錄未被讀取，你要找的獎勵可能在其中。尚未發放（沒有 `send_time`）的記錄總會包含在內。
 
 ### 翻頁
 
 ```bash
-longbridge rewards --page 2 --size 50
+longbridge rewards --page 2 --count 50
 ```
 
 ## 參數
 
 | 參數 | 說明 |
 | --- | --- |
-| `--kind` | `cash`、`gift`、`coupon` 或 `task`（預設全部） |
-| `--start`、`--end` | 按 `send_time` 篩選的發放日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
-| `--page` | 頁碼（預設 1；帶 `--start` / `--end` 時忽略） |
-| `--size` | 每頁條數（預設 20，最大 50） |
+| `--kind` | `cash`、`gift`（別名 `prize`）、`coupon`（別名 `card`）、`task`，或 `all`（預設） |
+| `--start`、`--end` | 按 `send_time` 的發放日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 頁碼（預設 1；傳 `0` 按 1 處理）。帶 `--start` / `--end` 時忽略 |
+| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit`。帶 `--start` / `--end` 時忽略 |
 
 ## 輸出字段
 
@@ -90,7 +94,10 @@ longbridge rewards --page 2 --size 50
 | `amount`、`currency` | 獎勵金額 |
 | `status`、`status_label` | `upcoming`、`cancelled`、`exited_activity`、`unclaimed`、`issuing`、`issued`、`failed`、`exchanged`、`expired` 或 `refunded` |
 | `deliver_status`、`deliver_status_label` | 僅已發放的獎品：`not_activated`、`activated_or_shipping`、`consumed`、`address_missing`、`shipping` 等 |
-| `send_time`、`start_time`、`end_time`、`effective_time`、`receive_deadline` | 各時間點；未設置的佔位值不輸出 |
+| `exit_status` | 退出狀態碼，按服務端返回原樣輸出 |
+| `send_time`、`start_time`、`end_time`、`effective_time`、`receive_deadline` | 各時間點 |
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。未設置的時間（例如尚未發放獎勵的 `send_time`）同樣不輸出。
 
 `total` 為所選類型的全部記錄數（僅不帶 `--start` / `--end` 時返回）。一筆獎勵由 `activity_title` 和 `send_time` 確定；獎勵發放的卡券用 [`coupons`](/zh-HK/docs/cli/account/coupons) 查看。兌換碼、券密、收貨地址及電話不會輸出。
 

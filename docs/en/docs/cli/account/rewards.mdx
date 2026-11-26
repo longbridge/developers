@@ -9,7 +9,7 @@ sidebar_position: 27
 List the activity rewards granted to your account — cash, coupon cards, gifts and task rewards — newest first.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
 :::
 
 ## Basic Usage
@@ -27,14 +27,16 @@ longbridge rewards
 longbridge rewards --format json
 ```
 
+The default table shows sent (time), type, activity, reward, amount (with currency) and status (with the delivery status for issued prizes), followed by the total — or, with `--start` / `--end`, a warning when older records were not searched. Use `--format json` for the fields listed below.
+
 ```json
 {
   "rewards": [
     {
       "reward_type": 0,
       "reward_type_label": "cash",
-      "record_id": "7300125",
-      "activity_title": "New client deposit bonus",
+      "record_id": "1000003",
+      "activity_title": "Example deposit campaign",
       "title": "HKD 100 cash reward",
       "amount": "100",
       "currency": "HKD",
@@ -47,10 +49,12 @@ longbridge rewards --format json
 }
 ```
 
+Example values are illustrative.
+
 ### Filter by type
 
 ```bash
-# cash, gift, coupon or task
+# cash, gift (alias prize), coupon (alias card), task, or all
 longbridge rewards --kind coupon
 ```
 
@@ -60,22 +64,22 @@ longbridge rewards --kind coupon
 longbridge rewards --start 2026-10-01 --end 2026-10-31
 ```
 
-With `--start` / `--end`, the command filters on `send_time` and pages through up to 300 records by itself (`--page` is ignored). The output then carries `searched_all` instead of `total`: `false` means older records were not read, so a reward you are looking for may be among them. Records not issued yet (no `send_time`) are always included.
+With `--start` / `--end`, the command filters on `send_time` and pages through the history by itself, in fixed pages of 50 records and at most 6 pages (300 records); `--page` and `--count` are ignored. The output then carries `searched_all` instead of `total`: `false` means older records were not read, so a reward you are looking for may be among them. Records not issued yet (no `send_time`) are always included.
 
 ### Paginate
 
 ```bash
-longbridge rewards --page 2 --size 50
+longbridge rewards --page 2 --count 50
 ```
 
 ## Options
 
 | Flag | Description |
 | --- | --- |
-| `--kind` | `cash`, `gift`, `coupon` or `task` (default: all) |
+| `--kind` | `cash`, `gift` (alias `prize`), `coupon` (alias `card`), `task`, or `all` (default) |
 | `--start`, `--end` | Issue date range on `send_time`, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
-| `--page` | Page number (default: 1; ignored with `--start` / `--end`) |
-| `--size` | Records per page (default: 20, max 50) |
+| `--page` | Page number (default: 1; `0` is read as 1). Ignored with `--start` / `--end` |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit`. Ignored with `--start` / `--end` |
 
 ## Output fields
 
@@ -90,7 +94,10 @@ Each entry in `rewards[]` has:
 | `amount`, `currency` | Reward amount |
 | `status`, `status_label` | `upcoming`, `cancelled`, `exited_activity`, `unclaimed`, `issuing`, `issued`, `failed`, `exchanged`, `expired` or `refunded` |
 | `deliver_status`, `deliver_status_label` | Issued prizes only: `not_activated`, `activated_or_shipping`, `consumed`, `address_missing`, `shipping`, … |
-| `send_time`, `start_time`, `end_time`, `effective_time`, `receive_deadline` | Timestamps; unset placeholders are omitted |
+| `exit_status` | Exit status code, as returned by the service |
+| `send_time`, `start_time`, `end_time`, `effective_time`, `receive_deadline` | Timestamps |
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `send_time` on a reward not issued yet) are omitted the same way.
 
 `total` is the number of records of the selected type (only without `--start` / `--end`). A reward is identified by `activity_title` and `send_time`; the coupon cards it granted are listed by [`coupons`](/docs/cli/account/coupons). Redemption codes, voucher secrets, delivery addresses and phone numbers are never printed.
 

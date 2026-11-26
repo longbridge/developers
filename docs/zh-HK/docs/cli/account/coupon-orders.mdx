@@ -6,55 +6,59 @@ sidebar_position: 29
 
 # longbridge coupon-orders
 
-列出某張卡券（如免佣卡、平台費抵扣卡）用在了哪些訂單。
+列出某張卡券（如免佣卡、平台費抵扣卡）所使用的訂單。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。
 :::
 
 ## 基本用法
 
 ```bash
-longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b
+longbridge coupon-orders --card-id 0123456789abcdef0123456789abcdef
 ```
 
 ## 示例
 
-### 查看卡券關聯的訂單
+### 查看使用了某張卡券的訂單
 
 ```bash
-# 卡券 id 為 `longbridge coupons` 返回的 card_id（32 位十六進制）
-longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b
-longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b --format json
+# 卡券 id 為 `longbridge coupons` 中的 card_id（32 位十六進制）
+longbridge coupon-orders --card-id 0123456789abcdef0123456789abcdef
+longbridge coupon-orders --card-id 0123456789abcdef0123456789abcdef --format json
 ```
+
+預設表格每個訂單一行，顯示分組（`locked` 或 `settled`）、訂單號、狀態、價格、數量、幣種、返還金額及返還日期。需要下方列出的全部字段時請使用 `--format json`。
 
 ```json
 {
-  "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+  "card_id": "0123456789abcdef0123456789abcdef",
   "locked": [],
   "settled": [
     {
-      "order_id": "1083215640912345678",
+      "order_id": "100000000000000001",
       "state": "Filled",
       "state_val": "FilledStatus",
       "executed_price": "385.20",
       "executed_quantity": "200",
       "currency": "HKD",
       "rebate": "15.00",
-      "rebate_dt": "2026-11-04T18:00:00+08:00",
+      "rebate_dt": "2026-11-04",
       "settlement_currency": "HKD"
     }
   ]
 }
 ```
 
-純數字的 id 是銀行卡 id，不是卡券——請使用 [`coupons`](/zh-HK/docs/cli/account/coupons) 返回的 id，而不是 `bank-cards` 的。
+示例中的值僅作說明。
+
+純數字的 id 是銀行卡 id，不是卡券。請使用 [`coupons`](/zh-HK/docs/cli/account/coupons) 中的 id，而不是 `bank-cards` 中的 id。
 
 ## 參數
 
 | 參數 | 說明 |
 | --- | --- |
-| `--card-id` | 卡券 id（[`coupons`](/zh-HK/docs/cli/account/coupons) 返回的 `card_id`）。必填 |
+| `--card-id` | 卡券 id（[`coupons`](/zh-HK/docs/cli/account/coupons) 中的 `card_id`）。必填 |
 
 ## 輸出字段
 
@@ -64,7 +68,9 @@ longbridge coupon-orders --card-id 3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b --format jso
 | `locked[]` | 佔用該卡、返還尚未結算的訂單 |
 | `settled[]` | 已結算返還的訂單 |
 
-每個訂單包含 `order_id`、`state`、`state_val`、`executed_price`、`executed_quantity`、`currency`、`rebate`、`rebate_dt` 和 `settlement_currency`。輸出中不含任何賬號。
+每個訂單包含 `order_id`、`state`、`state_val`、`executed_price`、`executed_quantity`、`currency`、`rebate`、`rebate_dt` 和 `settlement_currency`。`rebate_dt` 為返還日期，按服務端返回原樣輸出，CLI 不做時區轉換。輸出中不含任何賬號。
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如返還尚無日期時沒有 `rebate_dt`。
 
 ## 權限要求
 

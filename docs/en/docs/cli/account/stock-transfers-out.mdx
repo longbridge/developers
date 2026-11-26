@@ -9,7 +9,7 @@ sidebar_position: 26
 List your stock transfer-out applications — shares moving from your Longbridge account to another broker — newest first.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
 :::
 
 ## Basic Usage
@@ -27,27 +27,45 @@ longbridge stock-transfers-out
 longbridge stock-transfers-out --format json
 ```
 
+The default table prints the total (when there is one), then `id`, created at, broker (English name when available), market, stocks (code and quantity, e.g. `700 x200`), state, days in process, whether you notified the broker, and reason. Use `--format json` for the fields listed below.
+
 ```json
 {
   "records": [
     {
-      "id": 40987,
-      "broker": "HSBC Broking",
-      "code": "B05678",
-      "account": "****4321",
+      "id": 1000006,
+      "order_id": "TO000000000001",
+      "market": "US",
+      "broker": "Example Securities Ltd",
+      "broker_en": "Example Securities Ltd",
+      "code": "B00002",
+      "account": "****1234",
       "state": "Completed",
       "state_code": 3,
       "state_label": "completed",
       "stocks": [
-        { "code": "AAPL", "name": "Apple", "amount": "50", "state": 1, "state_label": "succeeded" }
+        {
+          "code": "AAPL",
+          "name": "Apple",
+          "name_en": "Apple Inc.",
+          "market": "US",
+          "counter_id": "ST/US/AAPL",
+          "amount": "50",
+          "currency": "USD",
+          "state": 1,
+          "state_label": "succeeded"
+        }
       ],
       "created_at": "2026-09-01T11:02:00+08:00",
       "exec_at": "2026-09-04T16:30:00+08:00",
       "days_in_process": 3
     }
-  ]
+  ],
+  "total": 1
 }
 ```
+
+Example values are illustrative.
 
 ### Filter by market and state
 
@@ -65,7 +83,7 @@ longbridge stock-transfers-out --start 2026-09-01 --end 2026-09-30
 ### Paginate
 
 ```bash
-longbridge stock-transfers-out --page 2 --size 50
+longbridge stock-transfers-out --page 2 --count 50
 ```
 
 ## Options
@@ -75,8 +93,8 @@ longbridge stock-transfers-out --page 2 --size 50
 | `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
 | `--state` | State code: `0` submitted, `1` processing, `2` executing, `3` completed, `4` cancelled, `5` partially completed, `6` failed, `7` rejected (default: all) |
 | `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
-| `--page` | Page number (default: 1) |
-| `--size` | Records per page (default: 20, max 50) |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
 
 ## Output fields
 
@@ -84,17 +102,20 @@ Each entry in `records[]` has:
 
 | Field | Description |
 | --- | --- |
-| `id` | Application id |
+| `id`, `order_id` | Application id and order number |
+| `market` | Market of the shares |
 | `broker`, `broker_en`, `code` | The receiving broker's name, English name and broker code |
 | `account` | Your account at the other broker, **masked to the last 4 digits** |
 | `state`, `state_code`, `state_label` | Status text, code, and label (`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`). Only state `0` can still be cancelled |
-| `app_state`, `user_notified_broker` | As in [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) |
-| `stocks[]` | `code`, `name`, `amount`, `state`, `state_label` (`processing` / `succeeded` / `failed`) for each stock |
-| `created_at`, `updated_at`, `agree_at`, `refuse_at`, `cancel_at`, `process_at`, `exec_at` | Timestamps; unset placeholders are omitted |
+| `app_state`, `user_notified_broker` | As in [`stock-transfers-in`](/docs/cli/account/stock-transfers-in): `user_notified_broker` is present whenever `app_state` is |
+| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state`, `state_label` (`processing` / `succeeded` / `failed`) |
+| `created_at`, `updated_at`, `agree_at`, `refuse_at`, `cancel_at`, `process_at`, `exec_at` | Timestamps |
 | `days_in_process` | Computed as in [`stock-transfers-in`](/docs/cli/account/stock-transfers-in) |
-| `reason` | The rejection or cancellation reason, when there is one |
+| `remark`, `reason` | Remark, and the rejection or cancellation reason, when there is one |
 
-The account holder's name, contact details and proof documents are never printed.
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `cancel_at` on an application that was not cancelled) are omitted the same way.
+
+`total` is the number of matching records, when the service reports it. The account holder's name, contact details and proof documents are never printed.
 
 ## Requirements
 

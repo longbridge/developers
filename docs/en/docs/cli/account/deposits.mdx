@@ -9,7 +9,7 @@ sidebar_position: 22
 View your deposit history, newest first, with optional filtering by state, currency and date.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
 :::
 
 ## Basic Usage
@@ -27,11 +27,13 @@ longbridge deposits
 longbridge deposits --format json
 ```
 
+The default table shows `id`, created at, amount, received, currency, method and state, followed by a hint when another page may exist. Use `--format json` for the fields listed below.
+
 ```json
 {
   "items": [
     {
-      "id": 2096375,
+      "id": 1000001,
       "created_at": "2026-04-30T15:57:49+08:00",
       "currency": "USD",
       "amount": "3000.00",
@@ -48,6 +50,8 @@ longbridge deposits --format json
 }
 ```
 
+Example values are illustrative.
+
 ### Filter by state
 
 ```bash
@@ -55,7 +59,7 @@ longbridge deposits --format json
 longbridge deposits --states 0,2
 ```
 
-`--states` takes the numeric codes above, comma-separated.
+`--states` takes the numeric codes above, comma-separated. They are checked locally: anything other than `0`–`5` is rejected before a request is sent.
 
 ### Filter by currency
 
@@ -82,8 +86,8 @@ longbridge deposits --page 2 --count 50
 | `--states` | Comma-separated state codes: `0` processing, `1` credited, `2` failed, `3` cancelled, `4` invalidated, `5` rejected |
 | `--currencies` | Comma-separated currency codes, e.g. `HKD,USD` |
 | `--start`, `--end` | Application date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
-| `--page` | Page number (default: 1) |
-| `--count` | Records per page (default: 20) |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
 
 ## Output fields
 
@@ -101,7 +105,9 @@ Each entry in `items[]` has:
 | `can_cancel` | Whether the deposit can still be cancelled |
 | `voucher_count` | Number of receipts uploaded |
 
-`has_more` is `true` when a full page came back — ask for the next page. There is no reliable total count. Receipt images are never printed, only their count.
+Only the fields above are returned, and fields with no value are omitted from the JSON — they are not printed as `null` or an empty string (for example, `reference_no` is absent when the deposit has none).
+
+`has_more` is `true` when a full page came back — ask for the next page. There is no reliable total count, so the output has no `total`. Receipt images are never printed, only their count.
 
 ## Requirements
 

@@ -6,10 +6,10 @@ sidebar_position: 28
 
 # longbridge coupons
 
-列出賬戶中的卡券——免佣卡、平台費抵扣卡、股票卡、行情 / 基本面卡、現金卡、打新卡等。
+列出賬戶中的卡券：免佣卡、平台費抵扣卡、股票卡、行情 / 基本面數據卡、現金卡、IPO 卡等。
 
 :::info 僅支持香港（AP）賬戶
-此命令讀取 AP（香港）數據中心的數據，僅支持香港賬戶。輸出中的時間均為香港時間（+08:00）。
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00）。
 :::
 
 ## 基本用法
@@ -20,18 +20,20 @@ longbridge coupons
 
 ## 示例
 
-### 查看未過期卡券
+### 查看有效卡券
 
 ```bash
 longbridge coupons
 longbridge coupons --format json
 ```
 
+預設表格顯示卡券 id、類型、標題、金額（有面值時含幣種）、狀態、生效時間及到期時間（永久有效顯示 `no expiry`），最後打印總數及已過期數。需要下方列出的全部字段時請使用 `--format json`。
+
 ```json
 {
   "cards": [
     {
-      "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+      "card_id": "0123456789abcdef0123456789abcdef",
       "card_type": "commission",
       "title": "港股免佣卡",
       "card_status": 0,
@@ -40,6 +42,7 @@ longbridge coupons --format json
       "end_time": "2026-12-31T23:59:59+08:00",
       "commission": {
         "markets": ["HK"],
+        "bz_types": [0, 3],
         "targets": ["stocks", "ETF"]
       }
     }
@@ -48,6 +51,8 @@ longbridge coupons --format json
   "expired_count": 3
 }
 ```
+
+示例中的值僅作說明。
 
 ### 查看已過期卡券
 
@@ -62,18 +67,18 @@ longbridge coupons --status expired
 longbridge coupons --card-type platform_fee_deduct
 ```
 
-### 返回完整使用須知
+### 包含完整使用須知
 
 ```bash
 longbridge coupons --with-terms
 ```
 
-預設 `description` 會截短、不返回 `detail`；帶 `--with-terms` 時兩者都返回全文。
+預設 `description` 會被截短，`detail` 不輸出；`--with-terms` 會完整返回兩者。
 
 ### 翻頁
 
 ```bash
-longbridge coupons --page 2 --size 50
+longbridge coupons --page 2 --count 50
 ```
 
 App 置頂或置底展示的卡券只在第 1 頁返回。
@@ -84,9 +89,9 @@ App 置頂或置底展示的卡券只在第 1 頁返回。
 | --- | --- |
 | `--status` | `valid`（預設，未過期：未使用、使用中或已使用）或 `expired` |
 | `--card-type` | 卡券類型，如 `commission`、`platform_fee_deduct`、`stock`、`quote`、`cash`（預設全部） |
-| `--with-terms` | 返回每張卡券的完整使用須知（`description`、`detail`） |
-| `--page` | 頁碼（預設 1） |
-| `--size` | 每頁條數（預設 20，最大 50） |
+| `--with-terms` | 返回每張卡券完整的使用須知（`description`、`detail`） |
+| `--page` | 頁碼（預設 1；傳 `0` 按 1 處理） |
+| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit` |
 
 ## 輸出字段
 
@@ -101,9 +106,11 @@ App 置頂或置底展示的卡券只在第 1 頁返回。
 | `activate_time` | 激活時間 |
 | `amount`、`currency` | 卡券面值（如適用） |
 | `available_trade_session`、`trade_sessions` | 可使用的交易時段 |
-| `commission` | `markets`、`targets`（適用標的：`stocks` / `options` / `warrants` / `ETF` / `LOF`）、`rebate_rate`、`bz_types`、`commission_balance`、`commission_expired_time` |
+| `commission` | `markets`、`bz_types`（適用標的類型碼）、`targets`（同一組類型碼的名稱：`stocks` / `options` / `warrants` / `ETF` / `LOF`，只要有 `bz_types` 就會有）、`rebate_rate`、`commission_balance`、`commission_expired_time` |
 | `quote` | `markets`、`quote_market`、`current_end_time` |
 | `stock`、`platform_fee_deduct` 等 | 各類型卡券的專屬信息 |
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如從未激活的卡券沒有 `activate_time`。
 
 `total` 為符合篩選條件的卡券數，`expired_count` 為已過期卡券數。輸出中不含任何賬號。
 

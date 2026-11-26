@@ -9,7 +9,7 @@ sidebar_position: 25
 List your stock transfer-in applications — shares moving from another broker into your Longbridge account — newest first.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
 :::
 
 ## Basic Usage
@@ -27,23 +27,37 @@ longbridge stock-transfers-in
 longbridge stock-transfers-in --format json
 ```
 
+The default table prints the total, then `id`, created at, broker (English name when available), market, stocks (code and quantity, e.g. `700 x200`), state, days in process, whether you notified the broker, and reason. Use `--format json` for the fields listed below.
+
 ```json
 {
   "records": [
     {
-      "id": 51234,
-      "order_id": "TI202611050001",
+      "id": 1000005,
+      "order_id": "TI000000000001",
       "market": "HK",
-      "broker": "Futu Securities",
-      "code": "B01234",
-      "account": "****5678",
+      "broker": "Example Securities Ltd",
+      "broker_en": "Example Securities Ltd",
+      "code": "B00001",
+      "account": "****1234",
       "state": "Processing",
       "state_code": 5,
       "state_label": "processing",
       "can_modify": 0,
+      "app_state": "noticed",
       "user_notified_broker": true,
       "stocks": [
-        { "code": "700", "name": "Tencent", "amount": "200", "state": 0, "state_label": "processing" }
+        {
+          "code": "700",
+          "name": "Tencent Holdings",
+          "name_en": "Tencent Holdings",
+          "market": "HK",
+          "counter_id": "ST/HK/700",
+          "amount": "200",
+          "currency": "HKD",
+          "state": 0,
+          "state_label": "processing"
+        }
       ],
       "created_at": "2026-11-05T10:15:00+08:00",
       "days_in_process": 21
@@ -52,6 +66,8 @@ longbridge stock-transfers-in --format json
   "total": 1
 }
 ```
+
+Example values are illustrative.
 
 ### Filter by market and state
 
@@ -69,7 +85,7 @@ longbridge stock-transfers-in --start 2026-10-01 --end 2026-10-31
 ### Paginate
 
 ```bash
-longbridge stock-transfers-in --page 2 --size 50
+longbridge stock-transfers-in --page 2 --count 50
 ```
 
 ## Options
@@ -79,8 +95,8 @@ longbridge stock-transfers-in --page 2 --size 50
 | `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
 | `--state` | State code: `0` submitted, `1` cancelled, `3` completed (shares received), `5` processing, `7` partially completed, `8` failed (default: all) |
 | `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
-| `--page` | Page number (default: 1) |
-| `--size` | Records per page (default: 20, max 50) |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
 
 ## Output fields
 
@@ -94,11 +110,13 @@ Each entry in `records[]` has:
 | `account` | Your account at the other broker, **masked to the last 4 digits** |
 | `state`, `state_code`, `state_label` | Status text, code, and label (`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`) |
 | `can_modify` | `1` when the application can still be cancelled or changed in the app |
-| `app_state`, `user_notified_broker` | `user_notified_broker` is `true` when you tapped "I have notified the broker" in the app — your own confirmation, not a Longbridge action |
-| `stocks[]` | `code`, `name`, `amount`, `state`, `state_label` (`processing` / `succeeded` / `failed`) for each stock |
-| `created_at`, `updated_at`, `process_at`, `exec_at` | Timestamps; unset placeholders are omitted |
+| `app_state`, `user_notified_broker` | `app_state` is the app-side step; `user_notified_broker` (present whenever `app_state` is) is `true` when you tapped "I have notified the broker" in the app — your own confirmation, not a Longbridge action |
+| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state`, `state_label` (`processing` / `succeeded` / `failed`) |
+| `created_at`, `updated_at`, `process_at`, `exec_at` | Timestamps |
 | `days_in_process` | Days from creation until execution; for a cancelled or failed application until it ended; for an open one until today |
 | `remark`, `reason` | The failure or cancellation reason, when there is one |
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `exec_at` before execution) are omitted the same way.
 
 `total` is the number of matching records. The account holder's name, contact details and proof documents are never printed.
 

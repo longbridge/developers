@@ -9,7 +9,7 @@ sidebar_position: 28
 List the coupon cards in your account — commission-free cards, platform-fee deduction cards, stock cards, quote / fundamental data cards, cash cards, IPO cards and more.
 
 :::info Hong Kong (AP) accounts only
-This command reads data from the AP (Hong Kong) data center and is available to Hong Kong accounts only. All times in the output are Hong Kong time (+08:00).
+This command reads data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00).
 :::
 
 ## Basic Usage
@@ -27,11 +27,13 @@ longbridge coupons
 longbridge coupons --format json
 ```
 
+The default table shows card id, type, title, amount (with currency, where the card has one), status, valid from and valid until (`no expiry` for a card that never expires), followed by the total and the expired count. Use `--format json` for the fields listed below.
+
 ```json
 {
   "cards": [
     {
-      "card_id": "3f2a9c0d4b7e4e2f8a1c6d5b9e0f1a2b",
+      "card_id": "0123456789abcdef0123456789abcdef",
       "card_type": "commission",
       "title": "HK stocks commission-free card",
       "card_status": 0,
@@ -40,6 +42,7 @@ longbridge coupons --format json
       "end_time": "2026-12-31T23:59:59+08:00",
       "commission": {
         "markets": ["HK"],
+        "bz_types": [0, 3],
         "targets": ["stocks", "ETF"]
       }
     }
@@ -48,6 +51,8 @@ longbridge coupons --format json
   "expired_count": 3
 }
 ```
+
+Example values are illustrative.
 
 ### List expired coupons
 
@@ -73,7 +78,7 @@ By default `description` is shortened and `detail` is omitted; `--with-terms` re
 ### Paginate
 
 ```bash
-longbridge coupons --page 2 --size 50
+longbridge coupons --page 2 --count 50
 ```
 
 Cards the app pins to the top or bottom of the list are included on page 1 only.
@@ -85,8 +90,8 @@ Cards the app pins to the top or bottom of the list are included on page 1 only.
 | `--status` | `valid` (default — not expired: unused, in use or used) or `expired` |
 | `--card-type` | Card type, e.g. `commission`, `platform_fee_deduct`, `stock`, `quote`, `cash` (default: all) |
 | `--with-terms` | Include each card's full terms of use (`description`, `detail`) |
-| `--page` | Page number (default: 1) |
-| `--size` | Records per page (default: 20, max 50) |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
 
 ## Output fields
 
@@ -101,9 +106,11 @@ Each entry in `cards[]` has:
 | `activate_time` | When the card was activated |
 | `amount`, `currency` | Card value, where applicable |
 | `available_trade_session`, `trade_sessions` | Trading sessions the card can be used in |
-| `commission` | `markets`, `targets` (instruments the card applies to: `stocks` / `options` / `warrants` / `ETF` / `LOF`), `rebate_rate`, `bz_types`, `commission_balance`, `commission_expired_time` |
+| `commission` | `markets`, `bz_types` (instrument type codes), `targets` (the same codes named: `stocks` / `options` / `warrants` / `ETF` / `LOF`; present whenever `bz_types` is), `rebate_rate`, `commission_balance`, `commission_expired_time` |
 | `quote` | `markets`, `quote_market`, `current_end_time` |
 | `stock`, `platform_fee_deduct`, … | Type-specific details |
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `activate_time` is absent on a card that was never activated.
 
 `total` is the number of cards matching the filter and `expired_count` the number of expired cards. The output carries no account numbers.
 

@@ -9,7 +9,7 @@ sidebar_position: 21
 查看提款历史记录（按时间倒序），支持按日期筛选。
 
 :::info 仅支持香港（AP）账户
-此命令读取 AP（香港）数据中心的数据，仅支持香港账户。输出中的时间均为香港时间（+08:00），`--start` / `--end` 传入的日期也按香港日期处理。
+此命令读取 AP（香港）数据中心的数据。美国账户执行时会返回错误，提示该命令在美国数据中心不可用；美国没有对应的命令，重试也不会成功。输出中的时间均为香港时间（+08:00），`--start` / `--end` 传入的日期也按香港日期处理。
 :::
 
 ## 基本用法
@@ -27,12 +27,14 @@ longbridge withdrawals
 longbridge withdrawals --format json
 ```
 
+默认表格显示 `id`、申请时间、金额、手续费、实际出账、币种、状态（有 App 状态文案时显示文案）及收款账号，可能还有下一页时会附上提示。需要下方列出的全部字段时请使用 `--format json`。
+
 ```json
 {
   "list": [
     {
-      "id": 1873402,
-      "order_id": "WD202611180001",
+      "id": 1000002,
+      "order_id": "WD000000000001",
       "created_at": "2026-11-18T10:05:12+08:00",
       "currency": "HKD",
       "amount": "20000.00",
@@ -41,14 +43,16 @@ longbridge withdrawals --format json
       "state": 4,
       "state_label": "remitted",
       "state_description": "已汇出",
-      "bank_account": "****9779",
-      "user_bank_swift_code": "CMBCHKHH"
+      "bank_account": "****1234",
+      "user_bank_swift_code": "EXAMPLE1"
     }
   ],
   "total": 1,
   "has_more": false
 }
 ```
+
+示例中的值仅作说明。
 
 ### 按申请日期筛选
 
@@ -67,8 +71,8 @@ longbridge withdrawals --page 2 --count 50
 | 参数 | 说明 |
 | --- | --- |
 | `--start`、`--end` | 申请日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
-| `--page` | 页码（默认 1） |
-| `--count` | 每页条数（默认 20） |
+| `--page` | 页码（默认 1；传 `0` 按 1 处理） |
+| `--count` | 每页条数（默认 20，最大 50，超过按 50 处理）。别名：`--size`、`--limit` |
 
 ## 输出字段
 
@@ -79,14 +83,16 @@ longbridge withdrawals --page 2 --count 50
 | `id`、`order_id` | 提款 id 及单号 |
 | `created_at` | 申请时间 |
 | `currency`、`amount` | 申请金额 |
-| `fee` | 提款手续费（旧记录为空） |
+| `fee` | 提款手续费 |
 | `settlement_amount` | 实际出账金额 |
 | `state`、`state_label` | 状态码及标签：`submitted`、`processing`、`rejected`、`cancelled`、`remitted`、`failed`、`refunded`、`approved_awaiting_payout`、`large_amount_review`、`awaiting_confirmation` 等 |
 | `state_description` | App 展示的状态文案，有值时优先使用 |
 | `bank_account` | 收款账号，**脱敏为仅显示后 4 位**，与 [`bank-cards`](/zh-CN/docs/cli/account/bank-cards) 的 `account` 对应 |
 | `display_bank_account`、`user_bank_swift_code` | App 中展示的账号及 SWIFT 代码 |
 
-`has_more` 为 `true` 表示返回了满页，可继续取下一页。不含预计处理时间和后台备注。
+只返回上述字段；没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串。例如旧记录完全没有 `fee` 字段。
+
+`total` 为符合条件的记录数。`has_more` 为 `true` 表示返回了满页，可继续取下一页。不含预计处理时间和后台备注。
 
 ## 权限要求
 
