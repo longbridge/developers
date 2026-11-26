@@ -1,0 +1,144 @@
+---
+title: 'edda'
+sidebar_label: 'edda'
+sidebar_position: 23
+---
+
+# longbridge edda
+
+查看绑定银行卡的 eDDA（电子直接扣款授权），以及为其提交的授权申请。
+
+:::info 仅支持香港（AP）账户
+这些命令读取 AP（香港）数据中心的数据。美国账户执行时会返回错误，提示该命令在美国数据中心不可用；美国没有对应的命令，重试也不会成功。输出中的时间均为香港时间（+08:00）。
+:::
+
+## 基本用法
+
+```bash
+# 每张绑定银行卡的 eDDA 授权
+longbridge edda list
+# 某张卡在某个币种下提交过的授权申请
+longbridge edda status --card-id 100001 --currency HKD
+```
+
+## edda list
+
+列出账户下每张绑定银行卡的 eDDA（电子直接扣款授权）：是否已授权、入金限额、有效期，以及银行返回的失败原因。
+
+### 查看 eDDA 授权
+
+```bash
+longbridge edda list
+# JSON 输出，适合脚本使用
+longbridge edda list --format json
+```
+
+默认表格显示银行卡 id、银行、账号、授权方式、币种、授权状态、入金上限（不限额时显示 `unlimited`）、有效期（长期有效时显示 `long-term`）及失败原因。需要下方列出的全部字段时请使用 `--format json`。
+
+```json
+{
+  "authorizations": [
+    {
+      "card_id": "100001",
+      "bank": "示例银行",
+      "account": "****1234",
+      "card_binding": "bound",
+      "flow": "hk_edda",
+      "name": "eDDA",
+      "currency": "HKD",
+      "authorization": "authorized",
+      "max_amount_unlimited": true,
+      "daily_max_count_unlimited": true,
+      "long_term_valid": true,
+      "is_support": true,
+      "doc_reviewing": false,
+      "no_prior_deposit_reviewing": false
+    }
+  ]
+}
+```
+
+示例中的值仅作说明。
+
+列表为空表示没有任何绑定银行卡做过 eDDA 授权。
+
+### 输出字段
+
+`authorizations[]` 中每项包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `card_id` | 银行卡 id（与 [`bank-cards`](/zh-CN/docs/cli/account/bank-cards) 中的 `id` 相同） |
+| `bank`、`bank_en` | 银行名称及英文名称 |
+| `account` | 银行账号，**脱敏为仅显示后 4 位** |
+| `card_binding` | 绑卡状态：`binding`、`bound` 或 `failed` |
+| `flow` | `hk_edda`（在银行授权）或 `hk_sdda`（在 App 内授权） |
+| `name`、`currency` | 授权名称及币种 |
+| `authorization` | `unauthorized`、`authorized`、`authorizing` 或 `failed` |
+| `status` | 原始授权状态码，仅在 `authorization` 没有已知标签时出现 |
+| `failure_reason` | 授权失败时银行返回的信息 |
+| `max_amount`、`max_amount_unlimited` | 入金上限（十进制字符串），以及是否不限额 |
+| `daily_max_count`、`daily_max_count_unlimited` | 每日入金次数上限，以及是否不限次数 |
+| `expiry_date`、`long_term_valid` | 到期日，以及是否长期有效（长期有效的授权没有 `expiry_date`） |
+| `is_support` | 为 `true` 表示银行支持此授权方式 |
+| `doc_reviewing` | 资料审核中 |
+| `no_prior_deposit_reviewing` | 因该卡无入金记录而审核中 |
+
+没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串。例如未设置上限时没有 `max_amount`。
+
+这里是每张卡的当前状态。[`edda status`](/zh-CN/docs/cli/account/edda#edda-status) 只列出某张卡提交过的申请，通常为空。
+
+## edda status
+
+列出某张绑定银行卡在某个币种下提交过的 eDDA 授权申请。
+
+多数 eDDA 授权（例如银行端推送的授权）没有申请单，因此该列表通常为空。要确认某张卡是否已授权，请先使用 [`edda list`](/zh-CN/docs/cli/account/edda#edda-list)；只在需要查申请单时使用本命令。
+
+### 查询某张卡的申请
+
+```bash
+# 银行卡 id 取自 `longbridge bank-cards`（id）或 `longbridge edda list`（card_id）
+longbridge edda status --card-id 100001 --currency HKD
+# 同一查询，JSON 输出
+longbridge edda status --card-id 100001 --currency HKD --format json
+```
+
+默认表格显示 `id`、授权方式、币种、授权状态、失败原因，以及精确到分钟的创建 / 更新时间。需要下方列出的全部字段时请使用 `--format json`。
+
+```json
+{
+  "applications": [
+    {
+      "id": "1000004",
+      "flow_id": "hk_sdda",
+      "name": "eDDA",
+      "currency": "HKD",
+      "authorization": "failed",
+      "failure_reason": "Account name does not match",
+      "created_at": "2026-10-08T14:20:05+08:00",
+      "updated_at": "2026-10-09T09:12:40+08:00"
+    }
+  ]
+}
+```
+
+示例中的值仅作说明。
+
+列表为空表示该卡在该币种下没有提交过申请，此时该卡当前的 eDDA 状态请看 [`edda list`](/zh-CN/docs/cli/account/edda#edda-list)。
+
+### 参数
+
+| 参数 | 说明 |
+| --- | --- |
+| `--card-id` | 银行卡 id（数字），取自 [`bank-cards`](/zh-CN/docs/cli/account/bank-cards)。必填；非数字的 id 会直接报错，不发出请求 |
+| `--currency` | 授权币种，如 `HKD` 或 `USD`。必填 |
+
+### 输出字段
+
+`applications[]` 中每项包含 `id`、`flow_id`、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`status`（原始状态码，仅在 `authorization` 没有已知标签时出现）、`failure_reason`、`created_at` 和 `updated_at`。输出中不含银行账号。
+
+没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串。例如申请未失败时没有 `failure_reason`。
+
+## 权限要求
+
+需要 OAuth 账户权限。参见[账户权限设置](/zh-CN/docs/trade/trade-overview)。

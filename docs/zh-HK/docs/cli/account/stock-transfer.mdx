@@ -1,0 +1,230 @@
+---
+title: 'stock-transfer'
+sidebar_label: 'stock-transfer'
+sidebar_position: 24
+---
+
+# longbridge stock-transfer
+
+查看股票轉入 / 轉出申請（股票在其他券商與你的 Longbridge 賬戶之間轉移）。
+
+:::info 僅支持香港（AP）賬戶
+這些命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00），`--start` / `--end` 傳入的日期也按香港日期處理。
+:::
+
+## 基本用法
+
+```bash
+# 股票轉入申請（轉入 Longbridge）
+longbridge stock-transfer in
+# 股票轉出申請（轉到其他券商）
+longbridge stock-transfer out
+```
+
+## stock-transfer in
+
+列出股票轉入申請（股票從其他券商轉入你的 Longbridge 賬戶），按時間倒序。
+
+### 查看全部轉入申請
+
+```bash
+longbridge stock-transfer in
+longbridge stock-transfer in --format json
+```
+
+預設表格先打印總數，再顯示 `id`、創建時間、券商（有英文名時顯示英文名）、市場、股票（代碼及數量，如 `700 x200`）、狀態、處理天數、是否已通知券商及原因。需要下方列出的全部字段時請使用 `--format json`。
+
+```json
+{
+  "records": [
+    {
+      "id": "1000005",
+      "order_id": "TI000000000001",
+      "market": "HK",
+      "broker": "示例證券有限公司",
+      "broker_en": "Example Securities Ltd",
+      "code": "B00001",
+      "account": "****1234",
+      "state": "處理中",
+      "state_code": 5,
+      "state_label": "processing",
+      "can_modify": 0,
+      "app_state": "noticed",
+      "user_notified_broker": true,
+      "stocks": [
+        {
+          "code": "700",
+          "name": "騰訊控股",
+          "name_en": "Tencent Holdings",
+          "market": "HK",
+          "counter_id": "ST/HK/700",
+          "amount": "200",
+          "currency": "HKD",
+          "state": 0,
+          "state_label": "processing"
+        }
+      ],
+      "created_at": "2026-11-05T10:15:00+08:00",
+      "days_in_process": 21
+    }
+  ],
+  "total": 1
+}
+```
+
+示例中的值僅作說明。
+
+### 按市場和狀態篩選
+
+```bash
+# 仍在處理中（狀態 5）的港股轉入
+longbridge stock-transfer in --market HK --state 5
+```
+
+### 按創建日期篩選
+
+```bash
+longbridge stock-transfer in --start 2026-10-01 --end 2026-10-31
+```
+
+### 翻頁
+
+```bash
+longbridge stock-transfer in --page 2 --count 50
+```
+
+### 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--market` | `HK`、`US`、`CN` 或 `SG`（預設全部） |
+| `--state` | 狀態碼：`0` 已提交，`1` 已撤銷，`3` 已完成（股票已到賬），`5` 處理中，`7` 部分完成，`8` 失敗（預設全部）。其他狀態碼會直接報錯，不發出請求 |
+| `--start`、`--end` | 創建日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 頁碼（預設 1；傳 `0` 按 1 處理） |
+| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit` |
+
+### 輸出字段
+
+`records[]` 中每項包含：
+
+| 字段 | 說明 |
+| --- | --- |
+| `id`、`order_id` | 申請 id 及單號 |
+| `market` | 股票所屬市場 |
+| `broker`、`broker_en`、`code` | 對方券商名稱、英文名稱及券商代碼 |
+| `account` | 你在對方券商的賬號，**脫敏為僅顯示後 4 位** |
+| `state`、`state_code`、`state_label` | 狀態文案、服務端原始狀態碼及標籤（CLI 未知的狀態碼沒有標籤；`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`） |
+| `can_modify` | 為 `1` 表示仍可在 App 內撤銷或修改 |
+| `app_state`、`user_notified_broker` | `app_state` 為 App 端的步驟；只要有 `app_state` 就會有 `user_notified_broker`，為 `true` 表示你已在 App 內點擊「我已通知」轉出券商——這是你自己的確認，不是 Longbridge 的操作 |
+| `stocks[]` | 每隻股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`（服務端原始狀態碼）、`state_label`（`processing` / `succeeded` / `failed`） |
+| `created_at`、`updated_at`、`process_at`、`exec_at` | 各時間點。轉入記錄沒有 `agree_at`、`refuse_at` 和 `cancel_at` |
+| `days_in_process` | 自創建到執行的天數；已結束（已撤銷、失敗、已完成或部分完成）但沒有執行時間的，算到最後更新時間，該時間也未知時不輸出；未結束的算到今天 |
+| `remark`、`reason` | 失敗或撤銷原因（如有） |
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。未設置的時間（例如尚未執行時的 `exec_at`）同樣不輸出。
+
+`total` 為符合條件的記錄數。賬戶持有人姓名、聯繫方式及證明文件不會輸出。
+
+## stock-transfer out
+
+列出股票轉出申請（股票從你的 Longbridge 賬戶轉到其他券商），按時間倒序。
+
+### 查看全部轉出申請
+
+```bash
+longbridge stock-transfer out
+longbridge stock-transfer out --format json
+```
+
+預設表格顯示 `id`、創建時間、券商（有英文名時顯示英文名）、市場、股票（代碼及數量，如 `700 x200`）、狀態、處理天數、是否已通知券商及原因。需要下方列出的全部字段時請使用 `--format json`。
+
+```json
+{
+  "records": [
+    {
+      "id": "1000006",
+      "order_id": "TO000000000001",
+      "market": "US",
+      "broker": "示例證券有限公司",
+      "broker_en": "Example Securities Ltd",
+      "code": "B00002",
+      "account": "****1234",
+      "state": "已完成",
+      "state_code": 3,
+      "state_label": "completed",
+      "stocks": [
+        {
+          "code": "AAPL",
+          "name": "蘋果",
+          "name_en": "Apple Inc.",
+          "market": "US",
+          "counter_id": "ST/US/AAPL",
+          "amount": "50",
+          "currency": "USD",
+          "state": 1,
+          "state_label": "succeeded"
+        }
+      ],
+      "created_at": "2026-09-01T11:02:00+08:00",
+      "exec_at": "2026-09-04T16:30:00+08:00",
+      "days_in_process": 3
+    }
+  ]
+}
+```
+
+示例中的值僅作說明。
+
+### 按市場和狀態篩選
+
+```bash
+# 已提交的美股轉出（狀態 0，唯一仍可撤銷的狀態）
+longbridge stock-transfer out --market US --state 0
+```
+
+### 按創建日期篩選
+
+```bash
+longbridge stock-transfer out --start 2026-09-01 --end 2026-09-30
+```
+
+### 翻頁
+
+```bash
+longbridge stock-transfer out --page 2 --count 50
+```
+
+### 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--market` | `HK`、`US`、`CN` 或 `SG`（預設全部） |
+| `--state` | 狀態碼：`0` 已提交，`1` 處理中，`2` 執行中，`3` 已完成，`4` 已撤銷，`5` 部分完成，`6` 失敗，`7` 已拒絕（預設全部）。其他狀態碼會直接報錯，不發出請求 |
+| `--start`、`--end` | 創建日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 頁碼（預設 1；傳 `0` 按 1 處理） |
+| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit` |
+
+### 輸出字段
+
+`records[]` 中每項包含：
+
+| 字段 | 說明 |
+| --- | --- |
+| `id`、`order_id` | 申請 id 及單號 |
+| `market` | 股票所屬市場 |
+| `broker`、`broker_en`、`code` | 接收券商名稱、英文名稱及券商代碼 |
+| `account` | 你在對方券商的賬號，**脫敏為僅顯示後 4 位** |
+| `state`、`state_code`、`state_label` | 狀態文案、服務端原始狀態碼及標籤（CLI 未知的狀態碼沒有標籤；`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`）。僅狀態 `0` 仍可撤銷 |
+| `app_state`、`user_notified_broker` | 同 [`stock-transfer in`](/zh-HK/docs/cli/account/stock-transfer#stock-transfer-in)：只要有 `app_state` 就會有 `user_notified_broker` |
+| `stocks[]` | 每隻股票的 `code`、`name`、`name_en`、`market`、`counter_id`、`amount`、`currency`、`state`（服務端原始狀態碼）、`state_label`（`processing` / `succeeded` / `failed`） |
+| `created_at`、`updated_at`、`agree_at`、`refuse_at`、`cancel_at`、`process_at`、`exec_at` | 各時間點 |
+| `days_in_process` | 自創建到執行的天數；已結束（已撤銷、已拒絕、失敗、已完成或部分完成）但沒有執行時間的，算到 `cancel_at`、`refuse_at` 或最後更新時間，均未知時不輸出；未結束的算到今天 |
+| `remark`、`reason` | 備註，以及拒絕或撤銷原因（如有） |
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。未設置的時間（例如未撤銷申請的 `cancel_at`）同樣不輸出。
+
+轉出列表沒有 `total`。賬戶持有人姓名、聯繫方式及證明文件不會輸出。
+
+## 權限要求
+
+需要 OAuth 賬戶權限。參見[賬戶權限設置](/zh-HK/docs/trade/trade-overview)。

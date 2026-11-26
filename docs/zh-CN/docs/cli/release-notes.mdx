@@ -7,6 +7,21 @@ sidebar_icon: newspaper
 
 # Release Notes
 
+### Unreleased
+
+- **新增香港（AP）账户的账户类命令** — [`edda list`](/zh-CN/docs/cli/account/edda#edda-list) 与 [`edda status`](/zh-CN/docs/cli/account/edda#edda-status) 查看 eDDA 授权，[`stock-transfer in`](/zh-CN/docs/cli/account/stock-transfer#stock-transfer-in) / [`stock-transfer out`](/zh-CN/docs/cli/account/stock-transfer#stock-transfer-out) 查看股票转入 / 转出申请，[`reward list`](/zh-CN/docs/cli/account/reward#reward-list) 查看活动奖励记录，[`coupon list`](/zh-CN/docs/cli/account/coupon#coupon-list) / [`coupon orders`](/zh-CN/docs/cli/account/coupon#coupon-orders) 查看卡券及其关联订单。美国账户执行时会返回错误，提示该命令在美国数据中心不可用
+- **[`bank-cards`](/zh-CN/docs/cli/account/bank-cards)、[`deposits`](/zh-CN/docs/cli/account/deposits)、[`withdrawals`](/zh-CN/docs/cli/account/withdrawals)** — `bank-cards` 现在展示每张卡的审核状态及授权；`deposits` 与 `withdrawals` 新增 `--start` / `--end`，并接受 `--size` 作为 `--count` 的别名
+- **不兼容的输出变化** — 读取旧 JSON 的脚本需要相应调整：
+  - `bank-cards` 输出 `{"cards": [...]}`，不再是裸 JSON 数组
+  - `bank-cards`：`status` 改为 `verification`（`unverified` / `under_review` / `verified`）；只有状态码没有已知标签时才输出原始 `status`
+  - `bank-cards`：`account` 脱敏为仅显示后 4 位，不再输出账户持有人姓名、地址及 SWIFT 相关字段
+  - `deposits` 不再输出 `total`（该值跟随每页条数，并非记录总数）；请根据 `has_more` 判断是否继续取下一页
+  - `deposits` 与 `withdrawals` 的每条记录只包含文档列出的字段
+  - 时间统一为香港时间（`+08:00`）的 RFC 3339 格式
+  - `--count` 每页上限为 50 条（`deposits` 为 20 条）
+  - `bank-cards`、`deposits` 与 `withdrawals` 对美国数据中心的账户现在会直接报错，提示该命令在美国数据中心不可用、无需重试
+  - `deposits --states` 现在会在本地校验状态码 `0`–`5`，其他取值在发出请求前即报错（此前输入已是数字状态码）
+
 ### [v0.32.0](https://github.com/longbridge/longbridge-terminal/releases/tag/v0.32.0)
 
 - **新增 [`risk-assessment`](/zh-CN/docs/cli/account/risk-assessment) 命令** — 返回 token 所属账户的风险测评档案：风险等级、得分、测评日期、专业投资者 (PI) 状态与截止时间、各项审批状态、截止期限，以及该成员可交易的策略风险等级。无参数;`serve` 下对应 `trade.risk_assessment`,返回结构与 `--format json` 一致

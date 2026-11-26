@@ -1,0 +1,230 @@
+---
+title: 'stock-transfer'
+sidebar_label: 'stock-transfer'
+sidebar_position: 24
+---
+
+# longbridge stock-transfer
+
+View your stock transfer applications — shares moving between another broker and your Longbridge account.
+
+:::info Hong Kong (AP) accounts only
+These commands read data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the output are Hong Kong time (+08:00), and the dates you pass to `--start` / `--end` are Hong Kong dates.
+:::
+
+## Basic Usage
+
+```bash
+# Transfer-in applications (shares moving into Longbridge)
+longbridge stock-transfer in
+# Transfer-out applications (shares moving to another broker)
+longbridge stock-transfer out
+```
+
+## stock-transfer in
+
+List your stock transfer-in applications — shares moving from another broker into your Longbridge account — newest first.
+
+### List all transfer-in applications
+
+```bash
+longbridge stock-transfer in
+longbridge stock-transfer in --format json
+```
+
+The default table prints the total, then `id`, created at, broker (English name when available), market, stocks (code and quantity, e.g. `700 x200`), state, days in process, whether you notified the broker, and reason. Use `--format json` for the fields listed below.
+
+```json
+{
+  "records": [
+    {
+      "id": "1000005",
+      "order_id": "TI000000000001",
+      "market": "HK",
+      "broker": "Example Securities Ltd",
+      "broker_en": "Example Securities Ltd",
+      "code": "B00001",
+      "account": "****1234",
+      "state": "Processing",
+      "state_code": 5,
+      "state_label": "processing",
+      "can_modify": 0,
+      "app_state": "noticed",
+      "user_notified_broker": true,
+      "stocks": [
+        {
+          "code": "700",
+          "name": "Tencent Holdings",
+          "name_en": "Tencent Holdings",
+          "market": "HK",
+          "counter_id": "ST/HK/700",
+          "amount": "200",
+          "currency": "HKD",
+          "state": 0,
+          "state_label": "processing"
+        }
+      ],
+      "created_at": "2026-11-05T10:15:00+08:00",
+      "days_in_process": 21
+    }
+  ],
+  "total": 1
+}
+```
+
+Example values are illustrative.
+
+### Filter by market and state
+
+```bash
+# HK transfers that are still processing (state 5)
+longbridge stock-transfer in --market HK --state 5
+```
+
+### Filter by creation date
+
+```bash
+longbridge stock-transfer in --start 2026-10-01 --end 2026-10-31
+```
+
+### Paginate
+
+```bash
+longbridge stock-transfer in --page 2 --count 50
+```
+
+### Options
+
+| Flag | Description |
+| --- | --- |
+| `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
+| `--state` | State code: `0` submitted, `1` cancelled, `3` completed (shares received), `5` processing, `7` partially completed, `8` failed (default: all). Any other code is rejected with an error before any request is sent |
+| `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
+
+### Output fields
+
+Each entry in `records[]` has:
+
+| Field | Description |
+| --- | --- |
+| `id`, `order_id` | Application id and order number |
+| `market` | Market of the shares |
+| `broker`, `broker_en`, `code` | The other broker's name, English name and broker code |
+| `account` | Your account at the other broker, **masked to the last 4 digits** |
+| `state`, `state_code`, `state_label` | Status text, the service's raw state code, and its label — absent for a code the CLI does not know (`submitted` / `cancelled` / `completed` / `processing` / `partially_completed` / `failed`) |
+| `can_modify` | `1` when the application can still be cancelled or changed in the app |
+| `app_state`, `user_notified_broker` | `app_state` is the app-side step; `user_notified_broker` (present whenever `app_state` is) is `true` when you tapped "I have notified the broker" in the app — your own confirmation, not a Longbridge action |
+| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state` (the service's raw code), `state_label` (`processing` / `succeeded` / `failed`) |
+| `created_at`, `updated_at`, `process_at`, `exec_at` | Timestamps. Transfer-in records have no `agree_at`, `refuse_at` or `cancel_at` |
+| `days_in_process` | Days from creation until execution; for a finished application (cancelled, failed, completed or partially completed) without an execution time, until its last update — absent when that is unknown too; for an open one until today |
+| `remark`, `reason` | The failure or cancellation reason, when there is one |
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `exec_at` before execution) are omitted the same way.
+
+`total` is the number of matching records. The account holder's name, contact details and proof documents are never printed.
+
+## stock-transfer out
+
+List your stock transfer-out applications — shares moving from your Longbridge account to another broker — newest first.
+
+### List all transfer-out applications
+
+```bash
+longbridge stock-transfer out
+longbridge stock-transfer out --format json
+```
+
+The default table shows `id`, created at, broker (English name when available), market, stocks (code and quantity, e.g. `700 x200`), state, days in process, whether you notified the broker, and reason. Use `--format json` for the fields listed below.
+
+```json
+{
+  "records": [
+    {
+      "id": "1000006",
+      "order_id": "TO000000000001",
+      "market": "US",
+      "broker": "Example Securities Ltd",
+      "broker_en": "Example Securities Ltd",
+      "code": "B00002",
+      "account": "****1234",
+      "state": "Completed",
+      "state_code": 3,
+      "state_label": "completed",
+      "stocks": [
+        {
+          "code": "AAPL",
+          "name": "Apple",
+          "name_en": "Apple Inc.",
+          "market": "US",
+          "counter_id": "ST/US/AAPL",
+          "amount": "50",
+          "currency": "USD",
+          "state": 1,
+          "state_label": "succeeded"
+        }
+      ],
+      "created_at": "2026-09-01T11:02:00+08:00",
+      "exec_at": "2026-09-04T16:30:00+08:00",
+      "days_in_process": 3
+    }
+  ]
+}
+```
+
+Example values are illustrative.
+
+### Filter by market and state
+
+```bash
+# Submitted US transfers (state 0 — the only state that can still be cancelled)
+longbridge stock-transfer out --market US --state 0
+```
+
+### Filter by creation date
+
+```bash
+longbridge stock-transfer out --start 2026-09-01 --end 2026-09-30
+```
+
+### Paginate
+
+```bash
+longbridge stock-transfer out --page 2 --count 50
+```
+
+### Options
+
+| Flag | Description |
+| --- | --- |
+| `--market` | `HK`, `US`, `CN` or `SG` (default: all) |
+| `--state` | State code: `0` submitted, `1` processing, `2` executing, `3` completed, `4` cancelled, `5` partially completed, `6` failed, `7` rejected (default: all). Any other code is rejected with an error before any request is sent |
+| `--start`, `--end` | Creation date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
+
+### Output fields
+
+Each entry in `records[]` has:
+
+| Field | Description |
+| --- | --- |
+| `id`, `order_id` | Application id and order number |
+| `market` | Market of the shares |
+| `broker`, `broker_en`, `code` | The receiving broker's name, English name and broker code |
+| `account` | Your account at the other broker, **masked to the last 4 digits** |
+| `state`, `state_code`, `state_label` | Status text, the service's raw state code, and its label — absent for a code the CLI does not know (`submitted` / `processing` / `executing` / `completed` / `cancelled` / `partially_completed` / `failed` / `rejected`). Only state `0` can still be cancelled |
+| `app_state`, `user_notified_broker` | As in [`stock-transfer in`](/docs/cli/account/stock-transfer#stock-transfer-in): `user_notified_broker` is present whenever `app_state` is |
+| `stocks[]` | For each stock: `code`, `name`, `name_en`, `market`, `counter_id`, `amount`, `currency`, `state` (the service's raw code), `state_label` (`processing` / `succeeded` / `failed`) |
+| `created_at`, `updated_at`, `agree_at`, `refuse_at`, `cancel_at`, `process_at`, `exec_at` | Timestamps |
+| `days_in_process` | Days from creation until execution; for a finished application (cancelled, rejected, failed, completed or partially completed) without an execution time, until `cancel_at`, `refuse_at` or the last update — absent when none of these is known; for an open one until today |
+| `remark`, `reason` | Remark, and the rejection or cancellation reason, when there is one |
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. Unset timestamps (for example `cancel_at` on an application that was not cancelled) are omitted the same way.
+
+The transfer-out list has no `total`. The account holder's name, contact details and proof documents are never printed.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

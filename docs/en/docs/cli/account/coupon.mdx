@@ -1,0 +1,224 @@
+---
+title: 'coupon'
+sidebar_label: 'coupon'
+sidebar_position: 26
+---
+
+# longbridge coupon
+
+View the coupon cards in your account and the orders each card was applied to.
+
+:::info Hong Kong (AP) accounts only
+These commands read data from the AP (Hong Kong) data center. A US account gets an error saying the command is not available for accounts in the US data center; there is no US equivalent, so do not retry. All times in the `coupon list` output are Hong Kong time (+08:00).
+:::
+
+## Basic Usage
+
+```bash
+# Coupon cards in your account
+longbridge coupon list
+# Orders a coupon card was applied to
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef
+```
+
+## coupon list
+
+List the coupon cards in your account — commission-free cards, platform-fee deduction cards, stock cards, quote / fundamental data cards, cash cards, IPO cards and more.
+
+### List valid coupons
+
+```bash
+longbridge coupon list
+longbridge coupon list --format json
+```
+
+The default table shows card id, type, title, amount (with currency, where the card has one), status, valid from and valid until (`no expiry` for a card that never expires), followed by the total and the expired count. Use `--format json` for the fields listed below.
+
+```json
+{
+  "cards": [
+    {
+      "card_id": "0123456789abcdef0123456789abcdef",
+      "card_type": "commission",
+      "title": "HK stocks commission-free card",
+      "card_status": 0,
+      "card_status_label": "unused",
+      "start_time": "2026-11-01T00:00:00+08:00",
+      "end_time": "2026-12-31T23:59:59+08:00",
+      "trade_sessions": [],
+      "commission": {
+        "markets": ["HK"],
+        "targets": ["stocks", "ETF"],
+        "rebate_rate": "1",
+        "bz_types": [0, 3],
+        "commission_duration": 0,
+        "unlimited": 1,
+        "usage_count": 0,
+        "lave_usage_count": 0,
+        "amount_limit": 0,
+        "superposition": false
+      }
+    }
+  ],
+  "total": 1,
+  "expired_count": 3
+}
+```
+
+Example values are illustrative.
+
+### List expired coupons
+
+```bash
+longbridge coupon list --status expired
+```
+
+### Filter by card type
+
+```bash
+# commission, platform_fee_deduct, stock, quote, cash, …
+longbridge coupon list --card-type platform_fee_deduct
+```
+
+### Include the full terms of use
+
+```bash
+longbridge coupon list --with-terms
+```
+
+By default `description` is shortened and `detail` is omitted; `--with-terms` returns both in full.
+
+### Paginate
+
+```bash
+longbridge coupon list --page 2 --count 50
+```
+
+Cards the app pins to the top or bottom of the list are included on page 1 only.
+
+### Options
+
+| Flag | Description |
+| --- | --- |
+| `--status` | `valid` (default — not expired: unused, in use or used) or `expired` |
+| `--card-type` | Card type, e.g. `commission`, `platform_fee_deduct`, `stock`, `quote`, `cash` (default: all) |
+| `--with-terms` | Include each card's full terms of use (`description`, `detail`) |
+| `--page` | Page number (default: 1; `0` is read as 1) |
+| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
+
+### Output fields
+
+Each entry in `cards[]` has:
+
+| Field | Description |
+| --- | --- |
+| `card_id` | Coupon id (32 hex characters) — pass it to [`coupon orders --card-id`](/docs/cli/account/coupon#coupon-orders) |
+| `card_type`, `title`, `title_sec`, `description`, `detail` | Card type, titles and terms |
+| `card_status`, `card_status_label` | The service's raw status code, and its label (absent for a code the CLI does not know): `unused`, `used`, `expired`, `redeeming`, `in_use` or `processing` |
+| `start_time`, `end_time` | Validity period. A card that never expires has no `end_time` and carries `no_expiry: true` |
+| `activate_time` | When the card was activated |
+| `amount`, `currency` | Card value as a decimal string (e.g. `"1000.00"`), where applicable |
+| `available_trade_session`, `trade_sessions` | Trading sessions the card can be used in (display text, and the service's values) |
+| `subscription_id` | Subscription id, as returned by the service |
+
+Each card also carries the terms object of its own `card_type` — for example `commission` on a commission card. The objects of the other types are absent.
+
+| Object | Fields |
+| --- | --- |
+| `commission` | `markets`, `targets`, `rebate_rate`, `bz_types`, `commission_balance`, `commission_duration`, `unlimited`, `commission_expired_time`, `usage_count`, `lave_usage_count`, `settlement_model`, `amount_limit`, `superposition` |
+| `platform_fee_deduct` | `bz_types`, `counter_id`, `counter_name`, `markets`, `usage_count`, `lave_usage_count`, `superposition` |
+| `cash` | `receive_duration` |
+| `stock` | `counter_id`, `counter_name`, `amount`, `redemption_type`, `send_way`, `optional_counters[]` {`counter_id`, `shares`}, `fallback` {`enabled`, `type`, `counter_id`, `shares`} |
+| `stock_fragment` | `counter_id`, `counter_name`, `market`, `markets`, `underlying_type`, `amounts` |
+| `quote`, `fundamental` | `current_end_time`, `inapplicable`, `investor_type`, `manual_activate`, `markets`, `member_investor_type`, `pair_spu_no`, `quote_duration`, `quote_market`, `quote_tags`, `superposition` |
+| `ipo` | `subscription_id` |
+| `ipo_commission` | `bz_types`, `counter_id`, `counter_name`, `financing_limit` |
+| `ipo_interest` | `discount_rate` |
+| `finance_interest` | `discount_mode`, `discount_rate`, `superposition` |
+| `fund_deduct` | `max_risk_level`, `min_order_amount`, `order_types`, `underlying_type`, `underlying_values`, `underlying_names` |
+| `crypto` | `fallback` {`enabled`, `counter_id`}, `optional_counters[]` {`counter_id`} |
+| `coffee_coupon` | `coupon_channel`, `coupon_id`, `coupon_no`, `is_available_all_store`, `period_type`, `settled_store_id`, `store_id_list`, `store_list[]` {`store_id`, `store_name`}, `threshold`, `use_limit` |
+| `ai_benefit` | `benefit_days`, `benefit_start`, `benefit_end`, `benefit_tag` |
+
+Codes in these objects are the service's raw numbers; a code the CLI does not know is printed as is.
+
+- `bz_types` (in `commission` and `platform_fee_deduct`) and `stock_fragment.underlying_type`: `0` stocks, `1` US options, `2` HK warrants, `3` ETF, `4` LOF. `commission.targets` names the known codes (`stocks` / `options` / `warrants` / `ETF` / `LOF`) and is present when `bz_types` holds at least one of them
+- `ipo_commission.bz_types`: `1` financing (margin) IPO, `2` cash IPO
+- `commission.unlimited`: `0` time-limited free commission, `1` rebate, `2` deduction, `6` per-use card with a fixed amount per use (`amount` / `usage_count`), `7` per-use discount card capped at `amount_limit` per use
+- `investor_type` (in `quote` / `fundamental`): `0` any, `1` non-professional, `2` professional
+
+Other values:
+
+- `commission.commission_duration` and `quote_duration` are in seconds; 200 years or more means lifetime free
+- `commission.amount_limit` is the per-use cap of an `unlimited` `7` card
+- `usage_count` and `lave_usage_count` are the times used and the uses left; `superposition` is `true` when the card can be combined with other coupons
+- `ai_benefit.benefit_days` is in days
+- `ipo_interest.discount_rate` is an annual rate
+- `coffee_coupon.coupon_no` is the voucher's template code (e.g. `coffee-50`), not a personal redemption code; `settled_store_id` is absent until the card is settled at a store
+- The meaning of `cash.receive_duration` and of the `finance_interest` fields is not confirmed; they are printed as the service returns them
+
+`commission.commission_balance`, `stock.amount` and `finance_interest.discount_rate` are decimal strings; the other values are printed as the service returns them. Times inside these objects (`commission_expired_time`, `current_end_time`, `benefit_start`, `benefit_end`) are Hong Kong time (+08:00), and unset times are omitted.
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `activate_time` is absent on a card that was never activated.
+
+`total` is the number of cards matching the filter and `expired_count` the number of expired cards. The output carries no account numbers.
+
+## coupon orders
+
+List the orders a coupon card — such as a commission-free or platform-fee deduction card — was applied to.
+
+### See which orders used a coupon
+
+```bash
+# Card id is card_id from `longbridge coupon list` (32 hex characters)
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef
+longbridge coupon orders --card-id 0123456789abcdef0123456789abcdef --format json
+```
+
+The default table shows one row per order — section (`locked` or `settled`), order id, state, price, quantity, currency, rebate and rebate date. Use `--format json` for the fields listed below.
+
+```json
+{
+  "card_id": "0123456789abcdef0123456789abcdef",
+  "locked": [],
+  "settled": [
+    {
+      "order_id": "100000000000000001",
+      "state": "Filled",
+      "state_val": "FilledStatus",
+      "executed_price": "385.20",
+      "executed_quantity": "200",
+      "currency": "HKD",
+      "settlement_currency": "HKD",
+      "rebate": "15.00",
+      "rebate_dt": "2026-11-04"
+    }
+  ]
+}
+```
+
+Example values are illustrative.
+
+A numeric id is a bank card id, not a coupon — take the id from [`coupon list`](/docs/cli/account/coupon#coupon-list), not from `bank-cards`. An id that is not 32 hex characters is rejected with an error before any request is sent, with a hint when it looks like a bank card id.
+
+### Options
+
+| Flag | Description |
+| --- | --- |
+| `--card-id` | Coupon id (`card_id` from [`coupon list`](/docs/cli/account/coupon#coupon-list)). Required |
+
+### Output fields
+
+| Field | Description |
+| --- | --- |
+| `card_id` | The coupon id you asked for |
+| `locked[]` | Orders holding the card whose rebate is not settled yet |
+| `settled[]` | Orders whose rebate has been settled |
+
+Each order has `order_id`, `state`, `state_val`, `executed_price`, `executed_quantity`, `currency`, `settlement_currency`, `rebate` and `rebate_dt`; `executed_price`, `executed_quantity` and `rebate` are decimal strings. `rebate_dt` is the rebate date exactly as the service returns it — the CLI does not convert it to a time zone. The output carries no account numbers.
+
+Fields with no value are omitted from the JSON — they are not printed as `null` or an empty string. For example, `rebate_dt` is absent until the rebate has a date.
+
+## Requirements
+
+OAuth account permission required. See the [account permission setup](/docs/trade/trade-overview) guide.

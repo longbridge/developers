@@ -1,0 +1,110 @@
+---
+title: 'reward'
+sidebar_label: 'reward'
+sidebar_position: 25
+---
+
+# longbridge reward
+
+查看賬戶獲得的活動獎勵。
+
+:::info 僅支持香港（AP）賬戶
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00），`--start` / `--end` 傳入的日期也按香港日期處理。
+:::
+
+## 基本用法
+
+```bash
+# 活動獎勵記錄
+longbridge reward list
+```
+
+## reward list
+
+列出賬戶獲得的活動獎勵（現金、卡券、禮品及任務獎勵），按時間倒序。
+
+### 查看獎勵記錄
+
+```bash
+longbridge reward list
+longbridge reward list --format json
+```
+
+預設表格顯示發放時間、類型、活動、獎勵、金額（含幣種）及狀態（已發放獎品附帶物流狀態），最後打印總數；使用 `--start` / `--end` 時，若有更早的記錄未檢索會打印提示。需要下方列出的全部字段時請使用 `--format json`。
+
+```json
+{
+  "rewards": [
+    {
+      "reward_type": 0,
+      "reward_type_label": "cash",
+      "record_id": "1000003",
+      "activity_title": "示例入金活動",
+      "title": "100 港元現金獎勵",
+      "amount": "100",
+      "currency": "HKD",
+      "status": 12,
+      "status_label": "issued",
+      "deliver_status": 0,
+      "send_time": "2026-10-12T09:00:00+08:00"
+    }
+  ],
+  "total": 1
+}
+```
+
+示例中的值僅作說明。
+
+### 按類型篩選
+
+```bash
+# cash、gift（別名 prize）、coupon（別名 card）、task 或 all
+longbridge reward list --kind coupon
+```
+
+### 按日期範圍查找
+
+```bash
+longbridge reward list --start 2026-10-01 --end 2026-10-31
+```
+
+帶 `--start` / `--end` 時，命令按 `send_time` 篩選，並自動翻頁檢索：每頁固定 50 條，最多 6 頁（300 條），此時忽略 `--page` 和 `--count`。輸出用 `searched_all` 代替 `total`：為 `false` 表示更早的記錄未被讀取，你要找的獎勵可能在其中。尚未發放（沒有 `send_time`）的記錄總會包含在內。
+
+### 翻頁
+
+```bash
+longbridge reward list --page 2 --count 50
+```
+
+### 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--kind` | `cash`、`gift`（別名 `prize`）、`coupon`（別名 `card`）、`task`，或 `all`（預設） |
+| `--start`、`--end` | 按 `send_time` 的發放日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 頁碼（預設 1；傳 `0` 按 1 處理）。帶 `--start` / `--end` 時忽略 |
+| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit`。帶 `--start` / `--end` 時忽略 |
+
+### 輸出字段
+
+`rewards[]` 中每項包含：
+
+| 字段 | 說明 |
+| --- | --- |
+| `reward_type`、`reward_type_label` | `reward_type` 為服務端返回的類型碼，未返回時不輸出。`reward_type_label` 為 `cash`、`gift`、`coupon` 或 `task`（與 `--kind` 取值一致），類型碼已知時按類型碼命名，否則按記錄所帶的明細命名 |
+| `record_id`、`activity_title`、`title`、`description` | 記錄 id、所屬活動，以及獎勵標題和說明 |
+| `card_type`、`card_status` | 卡券類獎勵適用；`card_status` 為服務端原始狀態碼 |
+| `prize_type`、`prize_type_label` | `physical` 表示寄送的實物 |
+| `amount`、`currency` | 獎勵金額，為十進制字符串（如 `"38"`） |
+| `status`、`status_label` | 服務端原始狀態碼，及其標籤（CLI 未知的狀態碼沒有標籤）：`upcoming`、`cancelled`、`exited_activity`、`unclaimed`、`issuing`、`issued`、`failed`、`exchanged`、`expired` 或 `refunded` |
+| `deliver_status`、`deliver_status_label` | 服務端原始物流狀態碼。僅已發放的獎品（獎品明細的 `status` 為 `12`）才有標籤：`not_activated`、`activated_or_shipping`、`consumed`、`e_voucher_activating`、`e_voucher_expired_before_activation`、`e_voucher_invalid`、`address_missing`、`address_filled`（狀態碼 `9` 或 `11`）或 `shipping` |
+| `exit_status` | 退出狀態碼，按服務端返回原樣輸出；為 `0` 時不輸出 |
+| `send_time`、`start_time`、`end_time`、`effective_time`、`receive_deadline` | 各時間點 |
+
+沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。未設置的時間（例如尚未發放獎勵的 `send_time`）同樣不輸出。
+
+`total` 為所選類型的全部記錄數（僅不帶 `--start` / `--end` 時返回）。一筆獎勵由 `activity_title` 和 `send_time` 確定；獎勵發放的卡券用 [`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 查看。兌換密鑰（如券密、現金卡卡密）、收貨地址及電話不會輸出。卡券的模板編碼不屬於密鑰，會照常輸出，例如 [`coupon list`](/zh-HK/docs/cli/account/coupon#coupon-list) 中的 `coffee_coupon.coupon_no`。
+
+## 權限要求
+
+需要 OAuth 賬戶權限。參見[賬戶權限設置](/zh-HK/docs/trade/trade-overview)。

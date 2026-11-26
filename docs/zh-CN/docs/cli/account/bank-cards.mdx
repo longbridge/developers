@@ -6,19 +6,16 @@ sidebar_position: 20
 
 # longbridge bank-cards
 
-查看绑定至 Longbridge 账户的银行卡列表。
+查看绑定至 Longbridge 账户的银行卡列表，包括每张卡的审核状态及其授权（eDDA、银证转账、FPS）。
+
+:::info 仅支持香港（AP）账户
+此命令读取 AP（香港）数据中心的数据。美国账户执行时会返回错误，提示该命令在美国数据中心不可用；美国没有对应的命令，重试也不会成功。输出中的时间均为香港时间（+08:00）。
+:::
 
 ## 基本用法
 
 ```bash
 longbridge bank-cards
-```
-
-```
-| bank                 | account          | currency | swift    | region   | status |
-|----------------------|------------------|----------|----------|----------|--------|
-| DBS Bank             | 2712065366       | SGD      | DBSSSGSG | 新加坡   | active |
-| 招商银行             | 6212998605139779 | ALL      | CMBCHKHH | 香港     | active |
 ```
 
 ## 示例
@@ -27,10 +24,68 @@ longbridge bank-cards
 
 ```bash
 longbridge bank-cards
+# JSON 输出，适合脚本使用
 longbridge bank-cards --format json
 ```
 
-展示所有绑定银行卡的银行名称、账户号码（脱敏）、货币、SWIFT 代码及状态。
+默认表格显示 `id`、银行、账号、账户类型、认证状态、见证状态、绑卡状态、审核天数及各项授权（每项的授权方式、币种和状态，授权失败时在括号中附上失败原因）。需要下方列出的全部字段时请使用 `--format json`。
+
+```json
+{
+  "cards": [
+    {
+      "id": "100001",
+      "bank": "示例银行",
+      "bank_code": "EXAMPLE1",
+      "account": "****1234",
+      "region": "HONGKONG",
+      "region_name": "香港",
+      "country": "Hong Kong",
+      "verification": "verified",
+      "witness": "witnessed",
+      "binding": "bound",
+      "created_at": "2026-03-02T10:32:11+08:00",
+      "auth_list": [
+        {
+          "flow_id": "hk_edda",
+          "name": "eDDA",
+          "currency": "HKD",
+          "authorization": "authorized",
+          "is_support": true,
+          "max_amount_unlimited": true,
+          "daily_max_count_unlimited": true,
+          "long_term_valid": true,
+          "doc_reviewing": false,
+          "no_prior_deposit_reviewing": false
+        }
+      ]
+    }
+  ]
+}
+```
+
+示例中的值仅作说明。
+
+## 输出字段
+
+`cards[]` 中每项包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `id` | 银行卡 id（数字字符串），可传给 [`edda status --card-id`](/zh-CN/docs/cli/account/edda#edda-status) |
+| `bank`、`bank_en`、`bank_code` | 银行名称、英文名称及银行代码 |
+| `account` | 银行账号，**脱敏为仅显示后 4 位**（如 `****1234`） |
+| `account_type`、`region`、`region_name`、`country` | 账户类型及银行账户所在地（`country` 是地区，不是货币） |
+| `verification` | `unverified`（尚未认证：用这张卡入金任意金额，或完成 eDDA / 银证转账授权即可认证）、`under_review`（绑卡后人工审核中，期间不能使用）或 `verified`（已认证） |
+| `witness` | `not_required`、`pending` 或 `witnessed` |
+| `binding` | `binding`、`bound` 或 `failed` |
+| `status`、`witness_state`、`bind_state` | 服务端原始状态码，仅在 `verification`、`witness` 或 `binding` 没有对应的已知标签时出现 |
+| `review_days` | 卡片添加至今的天数，仅 `under_review` 时返回 |
+| `bind_tip`、`remark` | App 中展示的审核提示及备注 |
+| `created_at` | 添加时间 |
+| `auth_list[]` | 该卡的授权：`flow_id`（`hk_edda` / `hk_sdda`：eDDA，`hk_bank_sec`：银证转账，`hk_fps`：FPS）、`name`、`currency`、`authorization`（`unauthorized` / `authorized` / `authorizing` / `failed`）、`status`（原始状态码，仅在 `authorization` 没有已知标签时出现）、`failure_reason`、`max_amount`、`max_amount_unlimited`、`daily_max_count`、`daily_max_count_unlimited`、`expiry_date`、`long_term_valid`、`is_support`（为 `true` 表示银行支持此授权方式）、`doc_reviewing`、`no_prior_deposit_reviewing` |
+
+只返回上述字段；没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串（例如卡片不在 `under_review` 时没有 `review_days`）。完整账号、账户持有人姓名、身份证明文件图片、收款人地址及 SWIFT 信息不会输出。只查看 eDDA 授权可使用 [`edda list`](/zh-CN/docs/cli/account/edda#edda-list)。
 
 ## 权限要求
 

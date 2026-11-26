@@ -6,7 +6,11 @@ sidebar_position: 21
 
 # longbridge withdrawals
 
-查看出金歷史記錄。
+查看提款歷史記錄（按時間倒序），支持按日期篩選。
+
+:::info 僅支持香港（AP）賬戶
+此命令讀取 AP（香港）數據中心的數據。美國賬戶執行時會返回錯誤，提示該命令在美國數據中心不可用；美國沒有對應的命令，重試也不會成功。輸出中的時間均為香港時間（+08:00），`--start` / `--end` 傳入的日期也按香港日期處理。
+:::
 
 ## 基本用法
 
@@ -14,21 +18,46 @@ sidebar_position: 21
 longbridge withdrawals
 ```
 
-```
-Total: 5
-
-| id      | date                 | amount   | currency | type | state  |
-|---------|----------------------|----------|----------|------|--------|
-| 2096375 | 2026-04-30T07:57:49Z | 3000.00  | USD      | 電匯 | 已入賬 |
-| 2036889 | 2026-03-27T02:54:49Z | 10000.00 | USD      | 電匯 | 已入賬 |
-```
-
 ## 示例
 
-### 查看出金記錄
+### 查看提款記錄
 
 ```bash
 longbridge withdrawals
+longbridge withdrawals --format json
+```
+
+預設表格顯示 `id`、申請時間、金額、手續費、實際出賬、幣種、狀態（有 App 狀態文案時顯示文案）及收款賬號，可能還有下一頁時會附上提示。需要下方列出的全部字段時請使用 `--format json`。
+
+```json
+{
+  "list": [
+    {
+      "id": "1000002",
+      "order_id": "WD000000000001",
+      "created_at": "2026-11-18T10:05:12+08:00",
+      "currency": "HKD",
+      "amount": "20000.00",
+      "fee": "0.00",
+      "settlement_amount": "20000.00",
+      "state": 4,
+      "state_label": "remitted",
+      "state_description": "已匯出",
+      "bank_account": "****1234",
+      "user_bank_swift_code": "EXAMPLE1"
+    }
+  ],
+  "total": 1,
+  "has_more": false
+}
+```
+
+示例中的值僅作說明。
+
+### 按申請日期篩選
+
+```bash
+longbridge withdrawals --start 2026-11-01 --end 2026-11-30
 ```
 
 ### 翻頁
@@ -36,6 +65,34 @@ longbridge withdrawals
 ```bash
 longbridge withdrawals --page 2 --count 50
 ```
+
+## 參數
+
+| 參數 | 說明 |
+| --- | --- |
+| `--start`、`--end` | 申請日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
+| `--page` | 頁碼（預設 1；傳 `0` 按 1 處理） |
+| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit` |
+
+## 輸出字段
+
+`list[]` 中每項包含：
+
+| 字段 | 說明 |
+| --- | --- |
+| `id`、`order_id` | 提款 id 及單號 |
+| `created_at` | 申請時間 |
+| `currency`、`amount` | 申請金額。金額均為十進制字符串（如 `"20000.00"`） |
+| `fee` | 提款手續費 |
+| `settlement_amount` | 實際出賬金額 |
+| `state`、`state_label` | 服務端原始狀態碼，及其標籤（CLI 未知的狀態碼沒有標籤）：`submitted`、`processing`、`rejected`、`cancelled`、`remitted`、`failed`、`refunded`、`approved_awaiting_payout`、`large_amount_review`、`awaiting_confirmation` 等 |
+| `state_description` | App 展示的狀態文案，有值時優先使用 |
+| `bank_account` | 收款賬號，**脫敏為僅顯示後 4 位**，與 [`bank-cards`](/zh-HK/docs/cli/account/bank-cards) 的 `account` 對應 |
+| `display_bank_account`、`user_bank_swift_code` | App 中展示的賬號及 SWIFT 代碼 |
+
+只返回上述字段；沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串。例如舊記錄完全沒有 `fee` 字段。
+
+`total` 為符合條件的記錄數。`has_more` 為 `true` 表示返回了滿頁，可繼續取下一頁。不含預計處理時間和後台備註。
 
 ## 權限要求
 
