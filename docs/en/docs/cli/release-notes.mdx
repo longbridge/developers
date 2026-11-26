@@ -18,7 +18,7 @@ sidebar_icon: newspaper
   - `deposits` no longer prints `total` (it followed the page size, not the record count); use `has_more` to decide whether to fetch the next page
   - `deposits` and `withdrawals` items carry only the documented fields
   - Times are RFC 3339 in Hong Kong time (`+08:00`)
-  - `--count` is capped at 50 records per page
+  - `--count` is capped at 50 records per page (20 for `deposits`)
   - `bank-cards`, `deposits` and `withdrawals` now fail for accounts in the US data center with an error saying the command is not available there and should not be retried
   - `deposits --states` now validates the codes `0`–`5` locally and rejects anything else before sending a request (numeric codes were already the input)
 

@@ -77,7 +77,7 @@ longbridge deposits --start 2026-04-01 --end 2026-04-30
 ### 翻页
 
 ```bash
-longbridge deposits --page 2 --count 50
+longbridge deposits --page 2 --count 20
 ```
 
 ## 参数
@@ -88,7 +88,7 @@ longbridge deposits --page 2 --count 50
 | `--currencies` | 逗号分隔的货币代码，如 `HKD,USD` |
 | `--start`、`--end` | 申请日期范围，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
 | `--page` | 页码（默认 1；传 `0` 按 1 处理） |
-| `--count` | 每页条数（默认 20，最大 50，超过按 50 处理）。别名：`--size`、`--limit` |
+| `--count` | 每页条数（默认 20，最大 20，超过按 20 处理：每页条数为 21 至 50 时，入金列表只返回 10 条）。别名：`--size`、`--limit` |
 
 ## 输出字段
 
@@ -108,7 +108,7 @@ longbridge deposits --page 2 --count 50
 
 只返回上述字段；没有值的字段不会出现在 JSON 中，而不是输出为 `null` 或空字符串（例如没有参考号的入金不含 `reference_no`）。
 
-`has_more` 为 `true` 表示返回了满页，可继续取下一页。没有可靠的总条数，因此输出中没有 `total`。凭证图片不会输出，只返回张数。
+`has_more` 为 `true` 表示返回了满页（按实际发送的每页条数计算，最多 20 条），可继续取下一页。没有可靠的总条数，因此输出中没有 `total`。凭证图片不会输出，只返回张数。
 
 ## 权限要求
 

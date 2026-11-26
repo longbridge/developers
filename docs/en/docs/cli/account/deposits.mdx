@@ -77,7 +77,7 @@ longbridge deposits --start 2026-04-01 --end 2026-04-30
 ### Paginate
 
 ```bash
-longbridge deposits --page 2 --count 50
+longbridge deposits --page 2 --count 20
 ```
 
 ## Options
@@ -88,7 +88,7 @@ longbridge deposits --page 2 --count 50
 | `--currencies` | Comma-separated currency codes, e.g. `HKD,USD` |
 | `--start`, `--end` | Application date range, `yyyy-mm-dd` (Hong Kong date) or RFC 3339 |
 | `--page` | Page number (default: 1; `0` is read as 1) |
-| `--count` | Records per page (default: 20, max 50 — a larger value is capped at 50). Aliases: `--size`, `--limit` |
+| `--count` | Records per page (default: 20, max 20 — a larger value is sent as 20, because the deposit list returns only 10 records for any page size from 21 to 50). Aliases: `--size`, `--limit` |
 
 ## Output fields
 
@@ -108,7 +108,7 @@ Each entry in `items[]` has:
 
 Only the fields above are returned, and fields with no value are omitted from the JSON — they are not printed as `null` or an empty string (for example, `reference_no` is absent when the deposit has none).
 
-`has_more` is `true` when a full page came back — ask for the next page. There is no reliable total count, so the output has no `total`. Receipt images are never printed, only their count.
+`has_more` is `true` when a full page (of the page size actually sent, at most 20) came back — ask for the next page. There is no reliable total count, so the output has no `total`. Receipt images are never printed, only their count.
 
 ## Requirements
 

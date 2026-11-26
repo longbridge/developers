@@ -77,7 +77,7 @@ longbridge deposits --start 2026-04-01 --end 2026-04-30
 ### 翻頁
 
 ```bash
-longbridge deposits --page 2 --count 50
+longbridge deposits --page 2 --count 20
 ```
 
 ## 參數
@@ -88,7 +88,7 @@ longbridge deposits --page 2 --count 50
 | `--currencies` | 逗號分隔的貨幣代碼，如 `HKD,USD` |
 | `--start`、`--end` | 申請日期範圍，`yyyy-mm-dd`（香港日期）或 RFC 3339 |
 | `--page` | 頁碼（預設 1；傳 `0` 按 1 處理） |
-| `--count` | 每頁條數（預設 20，最大 50，超過按 50 處理）。別名：`--size`、`--limit` |
+| `--count` | 每頁條數（預設 20，最大 20，超過按 20 處理：每頁條數為 21 至 50 時，入金列表只返回 10 條）。別名：`--size`、`--limit` |
 
 ## 輸出字段
 
@@ -108,7 +108,7 @@ longbridge deposits --page 2 --count 50
 
 只返回上述字段；沒有值的字段不會出現在 JSON 中，而不是輸出為 `null` 或空字符串（例如沒有參考號的入金不含 `reference_no`）。
 
-`has_more` 為 `true` 表示返回了滿頁，可繼續取下一頁。沒有可靠的總條數，因此輸出中沒有 `total`。憑證圖片不會輸出，只返回張數。
+`has_more` 為 `true` 表示返回了滿頁（按實際發送的每頁條數計算，最多 20 條），可繼續取下一頁。沒有可靠的總條數，因此輸出中沒有 `total`。憑證圖片不會輸出，只返回張數。
 
 ## 權限要求
 

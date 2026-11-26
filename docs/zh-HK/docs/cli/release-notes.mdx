@@ -18,7 +18,7 @@ sidebar_icon: newspaper
   - `deposits` 不再輸出 `total`（該值跟隨每頁條數，並非記錄總數）；請根據 `has_more` 判斷是否繼續取下一頁
   - `deposits` 與 `withdrawals` 的每條記錄只包含文檔列出的字段
   - 時間統一為香港時間（`+08:00`）的 RFC 3339 格式
-  - `--count` 每頁上限為 50 條
+  - `--count` 每頁上限為 50 條（`deposits` 為 20 條）
   - `bank-cards`、`deposits` 與 `withdrawals` 對美國數據中心的賬戶現在會直接報錯，提示該命令在美國數據中心不可用、無需重試
   - `deposits --states` 現在會在本地校驗狀態碼 `0`–`5`，其他取值在發出請求前即報錯（此前輸入已是數字狀態碼）
 
