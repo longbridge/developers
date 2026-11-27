@@ -27,10 +27,10 @@ longbridge finance-calendar split --market HK
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | start | string | YES | Start date, YYYY-MM-DD |
-| end | string | YES | End date, YYYY-MM-DD |
+| end | string | YES | End date, YYYY-MM-DD. Not a hard bound: the response may include later dates, so filter on the client |
 | market | string | NO | Market filter: `US`, `HK`, `SH`, `SZ`. Omit for all. |
-| count | integer | NO | Max events per page; server default when omitted |
-| offset | integer | NO | Number of events to skip from the start of the window |
+| count | integer | NO | Max events per date group (server default when omitted). A group whose `infos` is shorter than its `count` was truncated; fetch the rest with `offset` |
+| offset | integer | NO | Events to skip within a date group; to finish a truncated date, call again with `start` = `end` = that date and `offset` = events already received |
 | next | CalendarPageDirection | NO | Page direction from the `next_date` cursor: `Later` or `Earlier` |
 
 ## Request Example
@@ -256,7 +256,7 @@ func main() {
 | Name | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | date | string | true | Date |
-| count | integer | false | Number of events on this date |
+| count | integer | false | Total events on this date for the query; may exceed the number returned in `infos` |
 | infos | object[] | true | List of calendar events, see [CalendarEventInfo](#CalendarEventInfo) |
 
 ### CalendarEventInfo

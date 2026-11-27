@@ -23895,16 +23895,37 @@ paths:
           in: query
           type: string
           required: true
-          description: Start date, `YYYYMMDD`. Paginate by passing the returned `next_date`.
-          x-description-zh: 起始日期，`YYYYMMDD`。用返回的 `next_date` 翻页。
-          x-description-zh-hk: 起始日期，`YYYYMMDD`。用返回的 `next_date` 翻頁。
+          description: Start date, `YYYY-MM-DD`. Paginate by passing the returned `next_date`.
+          x-description-zh: 起始日期，`YYYY-MM-DD`。用返回的 `next_date` 翻页。
+          x-description-zh-hk: 起始日期，`YYYY-MM-DD`。用返回的 `next_date` 翻頁。
         - name: date_end
           in: query
           type: string
           required: true
-          description: End date, `YYYYMMDD`.
-          x-description-zh: 结束日期，`YYYYMMDD`。
-          x-description-zh-hk: 結束日期，`YYYYMMDD`。
+          description: End date, `YYYY-MM-DD`. Not a hard upper bound; the response may include date groups after it, so filter by `date <= date_end` on the client.
+          x-description-zh: 结束日期，`YYYY-MM-DD`。不是严格上界，响应可能包含晚于它的日期分组，请在客户端按 `date <= date_end` 过滤。
+          x-description-zh-hk: 結束日期，`YYYY-MM-DD`。不是嚴格上界，回應可能包含晚於它的日期分組，請在客戶端按 `date <= date_end` 過濾。
+        - name: count
+          in: query
+          type: integer
+          required: false
+          description: Max events returned **per date group**. A group's `count` field is the date's total, so `infos` shorter than `count` means the date was truncated; fetch the rest with `offset`.
+          x-description-zh: 每个**日期分组**最多返回的事件数。分组的 `count` 字段是该日期的总数，`infos` 少于 `count` 说明该日期被截断，用 `offset` 取剩余部分。
+          x-description-zh-hk: 每個**日期分組**最多返回的事件數。分組的 `count` 欄位是該日期的總數，`infos` 少於 `count` 說明該日期被截斷，用 `offset` 取剩餘部分。
+        - name: offset
+          in: query
+          type: integer
+          required: false
+          description: Events to skip within a date group. To fetch the rest of a truncated date, request `date=date_end=<that date>` with `offset` set to the number of events already received.
+          x-description-zh: 在日期分组内跳过的事件数。要取被截断日期的剩余事件，请求 `date=date_end=该日期`，`offset` 设为已取到的条数。
+          x-description-zh-hk: 在日期分組內跳過的事件數。要取被截斷日期的剩餘事件，請求 `date=date_end=該日期`，`offset` 設為已取到的條數。
+        - name: next
+          in: query
+          type: string
+          required: false
+          description: 'Page direction from `date`: `later` or `earlier`.'
+          x-description-zh: 从 `date` 翻页的方向：`later` 或 `earlier`。
+          x-description-zh-hk: 從 `date` 翻頁的方向：`later` 或 `earlier`。
         - name: types[]
           in: query
           type: string
@@ -24033,12 +24054,18 @@ paths:
           description: List of calendar date groups
           x-description-zh: 日历日期分组列表，
           x-description-zh-hk: 日曆日期分組列表，
+        - name: next_date
+          type: string
+          required: false
+          description: Cursor for the next date group (`YYYY-MM-DD`); empty when there are no more. It moves past truncated dates, so check each group's `count` before relying on it.
+          x-description-zh: 下一个日期分组的游标（`YYYY-MM-DD`），没有更多时为空。它会越过被截断的日期，依赖它之前请先核对各分组的 `count`。
+          x-description-zh-hk: 下一個日期分組的游標（`YYYY-MM-DD`），沒有更多時為空。它會越過被截斷的日期，依賴它之前請先核對各分組的 `count`。
         - name: count
           type: integer
           required: false
-          description: Number of events on this date
-          x-description-zh: 该日期的事件数量
-          x-description-zh-hk: 該日期的事件數量
+          description: Total events on this date for the query; may exceed the number returned in `infos`
+          x-description-zh: 该日期在当前查询条件下的事件总数，可能多于 `infos` 中返回的条数
+          x-description-zh-hk: 該日期在當前查詢條件下的事件總數，可能多於 `infos` 中返回的條數
         - name: infos
           type: object[]
           required: true
