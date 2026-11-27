@@ -510,7 +510,7 @@ The function returns the `order_id` of the closing order. Once it fills, [Stock 
 
 - **There is no close-only protection.** If the quantity exceeds the position, the excess opens a position in the opposite direction (a margin account will go short). Always cap the quantity at `available_quantity` from a fresh call, never at a cached number.
 - **Read the position right before you submit.** Pending orders, partial fills and same-day buys all change `available_quantity`.
-- **Cross-check with the estimate API.** [Estimate Maximum Purchase Quantity](./estimate_available_buy_limit) accepts `side=Sell` and returns the largest quantity the account can sell.
+- **Cross-check with the estimate API.** [Estimate Maximum Purchase Quantity](./estimate_available_buy_limit) accepts `side=Sell`. For a long position it returns how much can be sold, which never exceeds the position's `available_quantity`. For a US stock you do not hold it returns the short-sell quantity instead, so do not use it as a close quantity there.
 - **Partial close.** Multiply `available_quantity` by the ratio you want, then round down to the lot size from [Static Info](/docs/quote/pull/static). Odd lots on the HK market need `order_type=ODD`.
 - **Multi-leg option positions.** Close them with [Submit Multi-leg Order](./submit_multileg) using the opposite `side` and the same leg ratios.
 - **Idempotency.** Retry with the same `client_request_id` after a timeout. The server returns the original order for 10 minutes instead of creating a second one.

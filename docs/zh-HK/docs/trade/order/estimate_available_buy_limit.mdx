@@ -36,7 +36,7 @@ longbridge max-qty TSLA.US
 | symbol     | string | YES      | 股票代碼，使用 `ticker.region` 格式，例如：`AAPL.US`                                        |
 | order_type | string | YES      | [訂單類型](../trade-definition#ordertype)                                                   |
 | price      | string | NO       | 預估下單價格，例如：`388.5`                                                                 |
-| side       | string | YES      | 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出 賣出只支持美股賣空查詢 |
+| side       | string | YES      | 買賣方向<br/><br/> **可選值：**<br/> `Buy` - 買入<br/> `Sell` - 賣出。持有多頭持倉（港股、美股）時，返回該持倉可賣出的數量，不超過持倉的 `available_quantity`；美股沒有持倉時返回可賣空數量；港股不支持賣空，沒有持倉時返回 `0` |
 | currency   | string | NO       | 結算貨幣                                                                                    |
 | order_id   | string | NO       | 訂單 ID，獲取改單預估最大購買數量時必填                                                     |
 

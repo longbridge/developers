@@ -38896,9 +38896,9 @@ paths:
           in: query
           type: string
           required: true
-          description: Order side. **Enum Value**, `Buy` - Buy, `Sell` - Sell (Short selling is only supported for US stocks)
-          x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出 卖出只支持美股卖空查询
-          x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出 賣出只支持美股賣空查詢
+          description: Order side. **Enum Value**, `Buy` - Buy, `Sell` - Sell. For a long position (HK or US), returns how much of it can be sold, capped by the position's `available_quantity`. For a US stock without a position, returns the short-sell quantity. HK stocks do not support short selling, so an HK stock without a position returns `0`.
+          x-description-zh: 买卖方向。**可选值：**, `Buy` - 买入，`Sell` - 卖出。持有多头持仓（港股、美股）时，返回该持仓可卖出的数量，不超过持仓的 `available_quantity`；美股没有持仓时返回可卖空数量；港股不支持卖空，没有持仓时返回 `0`
+          x-description-zh-hk: 買賣方向。**可選值：**, `Buy` - 買入，`Sell` - 賣出。持有多頭持倉（港股、美股）時，返回該持倉可賣出的數量，不超過持倉的 `available_quantity`；美股沒有持倉時返回可賣空數量；港股不支持賣空，沒有持倉時返回 `0`
         - name: currency
           in: query
           type: string

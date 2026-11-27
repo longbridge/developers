@@ -510,7 +510,7 @@ class Main {
 
 - **沒有「僅平倉」保護。** 數量超過持倉時，多出的部分會變成反向開倉（融資賬戶會直接做空）。數量上限一定要取自剛剛查詢到的 `available_quantity`，不要使用緩存的持倉數。
 - **提交前重新查詢持倉。** 掛單、部分成交、當日買入都會改變 `available_quantity`。
-- **可以用預估接口交叉校驗。** [預估最大購買數量](./estimate_available_buy_limit)支持 `side=Sell`，返回賬戶最多可賣出的數量。
+- **可以用預估接口交叉校驗。** [預估最大購買數量](./estimate_available_buy_limit)支持 `side=Sell`：持有多頭持倉時，返回可賣出的數量，不會超過持倉的 `available_quantity`；美股沒有持倉時返回的是可賣空數量，不能當作平倉數量。
 - **部分平倉。** 用 `available_quantity` 乘以想平的比例，再向下取整到[標的基礎信息](/zh-HK/docs/quote/pull/static)中的每手股數。港股碎股需要使用 `order_type=ODD`。
 - **組合期權持倉。** 通過[組合期權下單](./submit_multileg)以相反的 `side` 和相同的腿比例平倉。
 - **冪等。** 超時後用同一個 `client_request_id` 重試，服務端在 10 分鐘內會返回原訂單，而不是再創建一筆。
